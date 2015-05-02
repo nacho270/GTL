@@ -1,0 +1,43 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ar.com.textillevel.lectorcb.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resultado: " />
+
+        <EditText
+            android:id="@+id/txtResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textViewTitle"
+            android:layout_marginTop="14dp"
+            android:clickable="false"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/btnScanAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtResult"
+            android:layout_marginTop="68dp"
+            android:layout_toRightOf="@+id/textViewTitle"
+            android:text="ESCANEAR OTRO" />
+
+    </RelativeLayout>
+
+</FrameLayout>
+
