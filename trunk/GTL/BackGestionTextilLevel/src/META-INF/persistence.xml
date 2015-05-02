@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+	<persistence-unit name="GTLDS" transaction-type="JTA">
+		<jta-data-source>java:/GTLDS</jta-data-source>
+		<!--
+		<class>ar.com.clarin.grandt.entidades.BasesTorneo</class>
+		<class>ar.com.clarin.grandt.entidades.ComoParticipar</class>
+		<class>ar.com.clarin.grandt.entidades.Reglamento</class>
+		<class>ar.com.clarin.grandt.entidades.TerminosYCondiciones</class>
+		-->
+		<properties>
+
+			
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+			 
+			
+			<!-- http://opensource.atlassian.com/projects/hibernate/browse/HHH-2159
+				Bug en Hibernate 3.2.4sp1. Corregido en 3.3. 
+			 -->
+			<property name="hibernate.query.jpaql_strict_compliance" value="false"/>
+			
+			
+			<!-- Clustered cache with TreeCache -->
+			<property name="hibernate.cache.use_second_level_cache" value="true" />
+			
+			<property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook" />
+			<property name="treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/>
+
+			<!-- 
+			para pruebas: 
+				<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
+			para produccion:
+				<property name="hibernate.cache.provider_class" value="org.jboss.ejb3.entity.TreeCacheProviderHook" />
+				<property name="treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/>
+			 -->
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<!-- <property name="hibernate.cache.region_prefix" value="GDT"/>  -->
+			<!-- el insert de equipos toma, en forma optima, 15jug+1eq+1cambio=17 -->
+			<property name="hibernate.jdbc.batch_size" value="20"/>
+			<property name="hibernate.generate_statistics" value="true"/>
+
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			
+			<!-- 
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			 -->
+
+			 <!-- <property name="hibernate.ejb.cfgfile" value="ar/com/clarin/grandt/dao/hibernate.cfg.xml"/>  -->
+		</properties>
+	</persistence-unit>
+		
+	
+</persistence>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contrato_aprueba" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="HEADER" class="java.lang.String"/>
+	<parameter name="PRIMERO" class="java.lang.String"/>
+	<parameter name="SEGUNDO" class="java.lang.String"/>
+	<parameter name="TERCERO" class="java.lang.String"/>
+	<parameter name="CUARTO" class="java.lang.String"/>
+	<parameter name="QUINTO" class="java.lang.String"/>
+	<parameter name="SEXTO" class="java.lang.String"/>
+	<parameter name="SEPTIMO" class="java.lang.String"/>
+	<parameter name="FOOTER" class="java.lang.String"/>
+	<parameter name="INTERMEDIO" class="java.lang.String"/>
+	<parameter name="OCTAVO" class="java.lang.String"/>
+	<title>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="126" y="12" width="335" height="30"/>
+				<textElement textAlignment="Justified">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTRATO DE TRABAJO A PLAZO FIJO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="662" splitType="Stretch">
+			<staticText>
+				<reportElement x="54" y="110" width="58" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRIMERO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="155" width="58" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEGUNDO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="210" width="58" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TERCERO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="253" width="47" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUARTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="364" width="46" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[QUINTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="463" width="57" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEPTIMO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="621" width="71" height="20"/>
+				<textElement/>
+				<text><![CDATA[EMPLEADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="621" width="52" height="20"/>
+				<textElement/>
+				<text><![CDATA[EMPRESA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="506" width="53" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OCTAVO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="55" y="5" width="459" height="90"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{HEADER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="416" width="398" height="47"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SEXTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="126" y="155" width="398" height="55"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SEGUNDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="253" width="398" height="55"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CUARTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="364" width="398" height="52"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{QUINTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="463" width="398" height="43"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SEPTIMO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="126" y="110" width="398" height="45"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PRIMERO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="210" width="398" height="43"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TERCERO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="68" y="535" width="459" height="55"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FOOTER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="126" y="319" width="398" height="45"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{INTERMEDIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="68" y="416" width="46" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SEXTO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="126" y="506" width="398" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{OCTAVO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

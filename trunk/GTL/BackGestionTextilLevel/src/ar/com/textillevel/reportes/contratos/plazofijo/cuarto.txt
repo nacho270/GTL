@@ -1,0 +1,1 @@
+Este contrato tendrá vigencia de @/cant_dias_prueba@/ días, contados a partir del día @/dia_contrato@/ venciendo en consecuencia la relación laboral de pleno derecho el día @/fecha_vencimiento@/ inclusive, sin necesidad de preaviso alguno por parte de la empresa.

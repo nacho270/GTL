@@ -1,0 +1,1 @@
+El empleado se desempeñará como @/puesto_empleado@/. El empleado prestará sus servicios en el domicilio de la empresa, cumpliendo un horario de @/horario_empleado@/.

@@ -1,0 +1,1 @@
+La remuneración por @/mes_quincena@/ que percibirá el empleado por su labor será de $@/remuneracion_mes_quincena@/ - + 20% premio Asistencia por @/mes_quincena@/, monto al que deberán descontarse las retenciones de Ley.

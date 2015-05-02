@@ -1,0 +1,8 @@
+<jboss-app>
+	<module> 
+		<service>META-INF/schedulerInitChatServer-service.xml</service>
+	</module>
+	<module> 
+		<service>META-INF/schedulerWatcherFichadasExcel-service.xml</service>
+	</module>
+</jboss-app>

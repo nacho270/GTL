@@ -1,0 +1,1 @@
+La remuneración bruta que percibirá el empleado por su labor, será de $@/precio_hora_empleado@/ por hora + 20% Premio Asistencia por @/quincena_mes@/, monto al que deberán descontarse las retenciones de Ley. Y adicionársele las asignaciones no remunerativas que designe el gobierno.

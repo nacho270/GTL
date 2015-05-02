@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vale_anticipo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="USUARIO" class="java.lang.String"/>
+	<parameter name="NOMBRE_EMPLEADO" class="java.lang.String"/>
+	<parameter name="CONCEPTO" class="java.lang.String"/>
+	<parameter name="TOTAL" class="java.lang.String"/>
+	<parameter name="MONTO_LETRAS" class="java.lang.String"/>
+	<parameter name="DIA_FECHA" class="java.lang.String"/>
+	<parameter name="MES_FECHA" class="java.lang.String"/>
+	<parameter name="ANIO_FECHA" class="java.lang.String"/>
+	<title>
+		<band height="82" splitType="Stretch">
+			<rectangle>
+				<reportElement x="513" y="16" width="42" height="20" backcolor="#CCFFFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="9" y="55" width="85" height="15"/>
+				<textElement>
+					<font size="11" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Textil Level S.A.
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="513" y="16" width="42" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ANIO_FECHA}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="468" y="16" width="23" height="20" backcolor="#CCFFFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="171" y="16" width="228" height="26"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALE ANTICIPO DE SUELDO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="420" y="16" width="23" height="20" backcolor="#CCFFFF"/>
+			</rectangle>
+			<textField>
+				<reportElement x="420" y="16" width="23" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DIA_FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="468" y="16" width="25" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MES_FECHA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="75" width="554" height="1"/>
+			</line>
+			<image hAlign="Center">
+				<reportElement x="2" y="5" width="100" height="50"/>
+				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="204" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="8" width="391" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOMBRE_EMPLEADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="21" y="36" width="73" height="20"/>
+				<textElement/>
+				<text><![CDATA[Concepto:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="100" y="36" width="391" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="9" y="176" width="44" height="18"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="53" y="176" width="141" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="392" y="154" width="163" height="20" backcolor="#CCFFFF"/>
+			</rectangle>
+			<textField>
+				<reportElement x="415" y="154" width="140" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="392" y="154" width="11" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="206" y="174" width="61" height="20"/>
+				<textElement/>
+				<text><![CDATA[Son pesos:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="267" y="174" width="288" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MONTO_LETRAS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="21" y="122" width="184" height="1"/>
+			</line>
+			<line>
+				<reportElement x="344" y="123" width="184" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="94" y="122" width="37" height="20"/>
+				<textElement/>
+				<text><![CDATA[Firma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="123" width="56" height="20"/>
+				<textElement/>
+				<text><![CDATA[Aclacración]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="71" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="21" y="8" width="73" height="20"/>
+				<textElement/>
+				<text><![CDATA[Empleado:]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
