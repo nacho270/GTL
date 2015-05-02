@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+   	<constant name="struts.serve.static" value="false" />
+   
+  	<package name="acciones" namespace="/actions" extends="struts-default" >
+  		<interceptors>
+  			<interceptor name="cacheInterceptor" class="ar.com.textillevel.web.struts2.interceptors.CacheHeadersInterceptor"></interceptor>
+  			<interceptor-stack name="stack">
+  				<interceptor-ref name="cacheInterceptor"/>
+  				<interceptor-ref name="defaultStack"/>
+  			</interceptor-stack>
+  		</interceptors>
+  	</package>
+  	
+  	<package name="session" namespace="/session" extends="struts-default">
+  		<interceptors>
+  			<interceptor name="cacheInterceptor" class="ar.com.textillevel.web.struts2.interceptors.CacheHeadersInterceptor"></interceptor>
+  			<interceptor name="sessionInterceptor" class="ar.com.textillevel.web.struts2.interceptors.SessionValidationInterceptor"></interceptor>
+  			<interceptor-stack name="sessionStack">
+  				<interceptor-ref name="sessionInterceptor"/>
+  				<interceptor-ref name="cacheInterceptor"/>
+  				<interceptor-ref name="defaultStack"/>
+  			</interceptor-stack>
+  		</interceptors>
+  		
+  		<global-results>
+			<result name="login">/html/login.html</result>
+		</global-results>
+  	</package>
+  
+    <!--  <package name="demo-struts" extends="struts-default">
+        <action name="index">
+            <result>/index.jsp</result>
+        </action>
+        <action name="saludo" class="com.nacho.actions.TestAction">
+		    <result>/index.jsp</result>
+		</action>
+    </package>-->
+</struts>

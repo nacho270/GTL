@@ -1,0 +1,6 @@
+<head>
+<script type="text/javascript">
+ var pos = window.location.href.indexOf("?")+1;
+ window.location.href = "html/login.html?"+ (pos<=0?"":window.location.href.substring(pos)+"&") + "s="+(new String(Math.random())).substring(2,8)+(((new Date()).getTime()));
+</script>
+</head>

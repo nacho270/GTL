@@ -1,0 +1,141 @@
+@CHARSET "ISO-8859-1";
+
+a {
+	cursor: pointer;
+}
+
+body {
+	font-family: Arial;
+}
+
+.basic {
+	width: 100%;
+	text-align: center;
+	color: #6A40B0;
+}
+
+.link {
+	cursor: pointer;
+}
+
+.link:HOVER {
+	text-decoration: underline;
+}
+
+.error {
+	color: red;
+}
+
+#header {
+	height: 60px;
+	padding-bottom: 10px;
+	border-bottom: 3px solid #FE0000;
+}
+
+#header h1,h3 {
+	margin: 0px;
+	padding: 0px;
+}
+
+#header h3,#header div {
+	position: relative;
+	top: -70px;
+	left: 400px;
+	color: #FE0000;
+	font-weight: bold;
+}
+
+#header a {
+	color: #FE0000;
+	position: relative;
+	top: -70px;
+	left: 401px;
+}
+
+#menu {
+	height: 20px;
+	background-color: #FE0000;
+	color: white;
+	text-align: left;
+	margin-bottom: 20px;
+}
+
+#body {
+	padding-top: 10px;
+	min-height: 450px;
+	height: auto;
+}
+
+#body #displayData {
+	margin-top: 10px;
+}
+
+#body #displayData table {
+	border-collapse: collapse;
+	border-color: #FE0000;
+	border-width: 2px;
+	margin-bottom: 20px;
+}
+
+#footer {
+	border-top: 3px solid #FE0000;
+}
+
+#loginBody {
+	position: absolute;
+	margin: auto;
+	top: -220px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 220px;
+	width: 565px;
+}
+
+#loginContainer {
+	display: block;
+	border: 50px solid red;
+	height: 220px;
+	width: 565px;
+}
+
+#loginContainer #frmLogin {
+	margin-left: 320px;
+	margin-top: 60px;
+	position: relative;
+}
+
+#loginContainer .login_input{
+	margin-top: 10px;
+}
+
+#loginContainer .login_input input{
+	width: 150px;
+}
+
+#loginContainer .login_input label{
+	display: block;
+	width: 100px;
+}
+
+#loginContainer #imgLogin {
+	width: 300px;
+	position: absolute;
+	height: 200px;
+	margin-top: -170px;
+}
+
+#loginContainer .error {
+	margin-top: 15px;
+	position: absolute;
+	margin-left: 320px;
+}
+
+#footer #frmLogout a:HOVER {
+	text-decoration: underline;
+}
+
+#footer #frmLogout a {
+	color: red;
+	text-decoration: none;
+}
