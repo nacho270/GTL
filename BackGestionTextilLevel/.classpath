@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5.0_22"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CoreGestionTextilLevel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWJava"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLibJEE"/>
+	<classpathentry kind="lib" path="lib/barcode4j.jar"/>
+	<classpathentry kind="lib" path="lib/batik-anim-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-awt-util-1.6-1.jar"/>
+	<classpathentry kind="lib" path="lib/batik-bridge-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-css-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-dom-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-ext-1.6-1.jar"/>
+	<classpathentry kind="lib" path="lib/batik-ext-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-gvt-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-parser-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-script-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-svg-dom-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-util-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/batik-xml.jar"/>
+	<classpathentry kind="lib" path="lib/iText-2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/jasperreports-3.7.3.jar"/>
+	<classpathentry kind="lib" path="lib/jnotify-0.93.jar"/>
+	<classpathentry kind="lib" path="lib/swt-4.2.1-x64.jar"/>
+	<classpathentry kind="lib" path="lib/swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
