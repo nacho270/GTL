@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="vertical" >
+
+        <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cv_cabecera_fact"
+        card_view:cardUseCompatPadding="true"
+  		card_view:cardCornerRadius="4dp"
+	  	card_view:contentPadding="2dp"
+        >
+        
+            <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rl_cab_fact"
+            android:padding="5dp">
+        
+            <TextView
+         		android:id="@+id/factura_tipo"
+         		android:layout_width="match_parent"
+         		android:layout_height="25dp"
+         		android:gravity="center_horizontal"
+         		android:paddingBottom="5dp"
+         		android:textSize="14sp"
+         		android:textColor="@color/black"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/factura_fecha"
+                android:paddingBottom="10dp"
+                android:layout_below="@+id/factura_tipo"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/black"
+                />
+
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/factura_nro_remito"
+                android:layout_toRightOf="@+id/factura_fecha"
+                android:layout_below="@+id/factura_tipo"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="10dp"
+                android:gravity="right"
+                android:paddingLeft="10dp"
+                android:textColor="@color/black"
+                />
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:id="@+id/factura_owner"
+                android:layout_below="@+id/factura_nro_remito"
+                android:textColor="@color/black"
+                />
+
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:id="@+id/factura_owner_dir"
+                android:layout_below="@+id/factura_owner"
+                android:textColor="@color/black"
+                />
+
+             
+            </RelativeLayout>
+        
+         </android.support.v7.widget.CardView>
+
+		<TextView
+                android:layout_width="fill_parent"
+                android:id="@+id/sep_items"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/gray"
+                android:textColor="@color/black"
+                android:layout_below="@+id/cv_cabecera_fact"
+        />
+
+		<android.support.v7.widget.RecyclerView
+             android:id="@+id/cardList"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/sep_items"
+             android:textColor="@color/black"
+       	/>
+
+</RelativeLayout>

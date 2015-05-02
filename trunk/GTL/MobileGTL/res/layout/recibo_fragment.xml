@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cabecera_recibo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="2dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/nro_recibo"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/fecha_recibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nro_recibo"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/owner_recibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fecha_recibo"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/owner_recibo_dir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/owner_recibo"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/owner_recibo_iva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/owner_recibo_dir"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/owner_recibo_cuit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/owner_recibo_iva"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/recibo_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/owner_recibo_cuit"
+                android:paddingBottom="5dp"
+                android:textColor="@color/red" />
+            
+            <TextView
+                android:id="@+id/recibo_cant_pesos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recibo_total"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="1000dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cabecera_recibo"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="horizontal" >
+
+            <TableLayout
+                android:id="@+id/recibo_internal_scroll_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5sp"
+                android:stretchColumns="*" >
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/recibo_title_pagos"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:gravity="center"
+                        android:text="@string/title_pagos"
+                        android:textColor="@color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/recibo_container_pagos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:contentPadding="2dp" >
+
+                        <TableLayout
+                            android:id="@+id/recibo_tableLayoutPagos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5sp"
+                            android:stretchColumns="*" >
+                        </TableLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/recibo_tr_title_nc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/recibo_title_nc"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:gravity="center"
+                        android:text="@string/title_NC"
+                        android:textColor="@color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/recibo_tr_container_nc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/recibo_container_nc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:contentPadding="2dp" >
+
+                        <TableLayout
+                            android:id="@+id/recibo_tableLayoutNC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5sp"
+                            android:stretchColumns="*" >
+                        </TableLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/recibo_tr_title_cheque"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/recibo_title_cheque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:gravity="center"
+                        android:text="@string/title_Cheques"
+                        android:textColor="@color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/recibo_tr_container_cheque"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/recibo_container_chque"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:contentPadding="2dp" >
+
+                        <TableLayout
+                            android:id="@+id/recibo_tableLayoutCheque"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5sp"
+                            android:stretchColumns="*" >
+                        </TableLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/recibo_tr_title_transf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/recibo_title_transf"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:gravity="center"
+                        android:text="@string/title_transf"
+                        android:textColor="@color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/recibo_tr_container_transf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/recibo_container_transf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:contentPadding="2dp" >
+
+                        <TableLayout
+                            android:id="@+id/recibo_tableLayoutTransf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5sp"
+                            android:stretchColumns="*" >
+                        </TableLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/recibo_title_totales"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:gravity="center"
+                        android:text="@string/title_totales"
+                        android:textColor="@color/black" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/recibo_container_totales"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:contentPadding="2dp" >
+
+                        <TableLayout
+                            android:id="@+id/recibo_tableLayoutTotales"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5sp"
+                            android:stretchColumns="*" >
+                        </TableLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+
+</RelativeLayout>

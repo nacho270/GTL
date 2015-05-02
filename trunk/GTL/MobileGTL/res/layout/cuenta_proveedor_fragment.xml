@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:scrollbars="vertical|horizontal">
+
+	<LinearLayout
+	    android:id="@+id/cabecera"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/lblInputCuenta"
+	        android:labelFor="@id/textView1"
+	        android:textColor="@color/black"
+	        android:layout_marginLeft="10sp"
+	        android:layout_marginTop="5sp" />
+	    
+	    <EditText
+	        android:id="@+id/editText1"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_marginLeft="32dp"
+	        android:textColor="@color/black"
+	        android:maxWidth="80sp"
+	        android:maxLines="1">
+	
+	        <requestFocus />
+	    </EditText>
+	    
+	    <Spinner 
+	        android:id="@+id/spinnerCantMovs"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="32dp"
+	        android:background="@color/black"
+	        >
+	        
+	    </Spinner>
+	    
+	    <Button
+	        android:id="@+id/btnBuscar"
+	        style="?android:attr/buttonStyleSmall"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/txtBuscar"
+	        android:layout_marginTop="5dp"
+	        android:layout_marginLeft="5dp"
+	       	android:textColor="@color/black"
+	       	android:background="@color/gray" />
+	    
+	</LinearLayout>
+    
+    <ScrollView android:id="@+id/scroll"
+        		android:layout_width="1000dp"
+			    android:layout_height="wrap_content"
+			    android:layout_below="@+id/cabecera"
+			    android:scrollbars="vertical"
+			    android:fillViewport="true">
+	    <HorizontalScrollView
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:fillViewport="true"
+		        android:scrollbars="horizontal">
+		    <TableLayout
+			    android:id="@+id/tableLayoutMovimientos"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="5sp"
+			    android:stretchColumns="*">
+			</TableLayout>
+		</HorizontalScrollView>
+	</ScrollView>
+</RelativeLayout>

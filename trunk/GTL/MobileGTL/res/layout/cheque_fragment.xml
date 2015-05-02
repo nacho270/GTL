@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scroll_cheque"
+        android:layout_width="1000dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical" >
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="horizontal" >
+
+            <TableLayout
+                android:id="@+id/cheque_internal_scroll_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5sp"
+                android:stretchColumns="*" >
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cabecera_cheque"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:contentPadding="2dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_nro_int"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="center_horizontal"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_monto"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_owner"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_estado"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_fecha_entrada"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_fecha_deposito"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_fecha_salida"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_banco"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_numero"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_cuit"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="4dp"
+                        card_view:contentPadding="5dp" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp" >
+
+                            <TextView
+                                android:id="@+id/cheque_cap_o_int"
+                                android:layout_width="match_parent"
+                                android:layout_height="25dp"
+                                android:gravity="left"
+                                android:paddingBottom="5dp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+                </TableRow>
+            </TableLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+
+</RelativeLayout>
