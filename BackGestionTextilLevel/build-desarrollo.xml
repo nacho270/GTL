@@ -1,0 +1,387 @@
+<?xml version="1.0"?>
+
+<project name="GTL" default="deploy-desarrollo" basedir="." >
+
+	<import file="commons-build.xml"/>
+	<property name="client.jar.name" value="backgtl-client.jar" />
+	<property name="keystore" value="C:/Temp/myKeys" />
+
+	<target name="deploy-como-produccion">
+			
+		<property name="resources-server" location="resources/META-INF/"/>
+		<property name="deploy-cerrado" value="true"/>
+		
+		<copy file="${resources-server}/gtl-ds.xml" todir="${deploy.dir}" overwrite="true" />
+		
+		<ear destfile="GTL.ear" appxml="resources/META-INF/application.xml">
+			<zipfileset dir="${ear.dir}" >
+				<include name="**/*"/>
+			</zipfileset>		
+		</ear>
+
+		<echo level="info">Se creo el archivo BackDT.ear en el root del proyecto BackDT 2.0, haga refresh y uselo</echo>
+		<echo level="info">Se hizo deploy del ear en su jboss local. Puede probar el EAR.</echo>
+		
+	</target>
+	
+	<target name="deploy-desarrollo" >
+		
+		<copy file="${resources}/gtl-ds.xml" todir="${deploy.dir}" overwrite="true" />
+		<copy file="${workspace.home}/CoreGestionTextilLevel/lib/jasperreports-3.7.3.jar" todir="${ear.dir}" overwrite="true" />
+		<copy file="${workspace.home}/CoreGestionTextilLevel/lib/jnotify-0.93.jar" todir="${ear.dir}" overwrite="true" />
+		<property name="resources-server" value="bin"/>
+		<property name="deploy-cerrado" value="true"/>
+		<antcall target="deploy-ambiente-comun" ></antcall>
+		
+	</target>
+
+	<!-- ================================================== -->
+	<!-- Sign Jars                                          -->
+	<!-- ================================================== -->
+	<target name="sign" depends="create-client-jar-A" description="Firma ${client.jar.name}">
+		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
+	</target>
+	
+	<target name="sign-B" depends="create-client-jar-B" description="Firma ${client.jar.name}">
+		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
+	</target>
+	
+	<target name="create-client-jar-B" description="Crea ${client.jar.name} en la raíz del proyecto" >
+		<jar jarfile="${client.jar.name}" duplicate="preserve">
+			<fileset dir="bin">
+				<include name="ar/**" />
+				<include name="main/**" />
+				<include name="jndi.properties" />
+				<include name="organizacionMenues.xml" />
+			</fileset>
+
+			<fileset dir="resources-b">
+				<include name="JNLP-INF/**" />
+			</fileset>
+
+	
+			<fileset dir="../FWJava/classes">
+				<include name="ar/**" />
+				<include name="fwjava.properties" />
+				<exclude name="**/*.hbm.xml" />
+			</fileset>
+
+			<fileset dir="../CoreGestionTextilLevel/bin">
+				<include name="ar/com/textillevel/entidades/**" />
+				<include name="ar/com/textillevel/facade/api/remote/**" />
+				<include name="ar/com/textillevel/util/**" />
+				<include name="ar/com/textillevel/modulos/chat/mensajes/**" />
+				<include name="ar/com/textillevel/modulos/personal/entidades/**" />
+				<include name="ar/com/textillevel/modulos/personal/utils/**" />
+				<include name="ar/com/textillevel/modulos/personal/enums/**" />
+				<include name="ar/com/textillevel/modulos/personal/facade/api/remote/**" />
+				
+				<include name="ar/com/textillevel/modulos/odt/entidades/**" />
+				<include name="ar/com/textillevel/modulos/odt/to/**" />
+				<include name="ar/com/textillevel/modulos/odt/enums/**" />
+				<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
+				
+				<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
+				<include name="ar/com/textillevel/modulos/alertas/enums/**" />
+				<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
+
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="create-client-jar-A" description="Crea ${client.jar.name} en la raíz del proyecto" >
+		<jar jarfile="${client.jar.name}" duplicate="preserve">
+			<fileset dir="bin">
+				<include name="ar/**" />
+				<include name="main/**" />
+				<include name="jndi.properties" />
+				<include name="organizacionMenues.xml" />
+			</fileset>
+
+			<fileset dir="resources">
+				<include name="JNLP-INF/**" />
+			</fileset>
+
+			<fileset dir="../FWJava/classes">
+				<include name="ar/**" />
+				<include name="fwjava.properties" />
+				<exclude name="**/*.hbm.xml" />
+			</fileset>
+
+			<fileset dir="../CoreGestionTextilLevel/bin">
+				<include name="ar/com/textillevel/entidades/**" />
+				<include name="ar/com/textillevel/facade/api/remote/**" />
+				<include name="ar/com/textillevel/util/**" />
+				<include name="ar/com/textillevel/modulos/chat/mensajes/**" />
+				<include name="ar/com/textillevel/modulos/personal/entidades/**" />
+				<include name="ar/com/textillevel/modulos/personal/utils/**" />
+				<include name="ar/com/textillevel/modulos/personal/enums/**" />
+				<include name="ar/com/textillevel/modulos/personal/facade/api/remote/**" />
+				
+				<include name="ar/com/textillevel/modulos/odt/entidades/**" />
+				<include name="ar/com/textillevel/modulos/odt/to/**" />
+				<include name="ar/com/textillevel/modulos/odt/enums/**" />
+				<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
+				
+				<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
+				<include name="ar/com/textillevel/modulos/alertas/enums/**" />
+				<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
+
+			</fileset>
+		</jar>
+	</target>
+	
+	
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: deploy-backdt-war
+         - - - - - - - - - - - - - - - - - -->
+    <target name="deploy-backdt-war" >
+		<condition property="no-uso-backdt-war">
+			<resourcecount count="1" when="less">
+				<fileset dir="../">
+					<include name="BackDT-Web/**/*"/>
+				</fileset>
+			</resourcecount>
+		</condition>
+    	
+    	<antcall target="deploy-backdt-war-si"></antcall>
+    	<antcall target="deploy-backdt-war-no"></antcall>
+
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: deploy-backdt-war-si: hay que hacerlo
+          		  deploy-backdt-war-no: hay que simular que se hizo
+         - - - - - - - - - - - - - - - - - -->
+    <target name="deploy-backdt-war-si" unless="no-uso-backdt-war">
+    	<echo>si</echo>
+    	<ant antfile="build.xml" target="build" inheritall="true" dir="../BackDT-Web" ></ant>
+		<ant antfile="build.xml" target="copy-WAR-FILES-BACKDT" inheritall="true" dir="../BackDT-Web"/>            
+    </target>
+    <target name="deploy-backdt-war-no" if="no-uso-backdt-war">
+    	<echo>deploy-backdt-war-no</echo>
+    	<!-- <copyfile dest="${deploy.dir}/BackDT.ear/backdt.war" src=""/> -->
+    	<copy todir="${deploy.dir}/BackDT.ear">
+    		<fileset dir="./resources/utils/cosas_de_mentira">
+    			<filename name="backdt.war"/>
+    		</fileset>
+    	</copy>
+    </target>
+
+	<target name="deploy-desarrollo-ajax" >
+		<copy file="${resources}/oracle-ds.xml" todir="${deploy.dir}" overwrite="true" />
+		<copy file="${resources}/secundario-ro-ds.xml" todir="${deploy.dir}" overwrite="true" />
+		<copy todir="${deploy.dir}" file="${lib.location.dir}/configuraciongdt.jar" overwrite="true" />
+		<property name="resources-server" value="bin"/>
+		<antcall target="deploy-ambiente-comun"></antcall>
+		<antcall target="copy-WAR-AJAX-FILES"></antcall>
+		
+	</target>
+	
+
+	<target name="deploy-ambiente-comun">
+		<mkdir dir="${ear.dir}" />
+			<mkdir dir="${ear.dir}/META-INF" />
+			<copy todir="${ear.dir}">
+				<fileset refid="fwlib"/>
+				<fileset refid="fwLibJee"/>
+			</copy>
+			
+			<antcall target="deploy-jar"></antcall>
+			<antcall target="COPY-WAR-FILES"></antcall>
+			
+			<copy todir="${ear.dir}/META-INF" overwrite="true">
+				<fileset dir="resources/META-INF">
+					<include name="application.xml" />
+					<include name="jboss-app.xml" />
+					<include name="scheduler*-service.xml" />
+				</fileset>
+			</copy>
+			
+	</target>	
+	
+
+	<target name="ear" >
+    	<ear destfile="${directories.build}/${project.name}.ear" appxml="config/server/application.xml">
+
+    		<zipfileset dir="${directories.build}">
+    			<!-- libs de este proyecto 
+	    		<include name="${project.name}_ejb.jar"/>
+	    		<include name="${project.name}_entities.jar"/>
+	    		-->
+    			<!-- libs de proyectos dependencias  
+    			<include name="fwjava.jar"/>
+        		<include name="fwsgp.jar"/>
+        		<include name="fwsgpcategorias.jar"/>
+        		<include name="fwsgpclientes.jar"/>
+        		<include name="fwsgpentidades.jar"/>
+	    		<include name="fwsgpentidadesmapcentral.jar"/>
+        		<include name="sgpseguridad.jar"/>
+        		-->
+    			<include name="backdt-all.jar"/>
+    		</zipfileset>
+    		
+    		<zipfileset dir="lib" >
+    			<!--
+    			<include name="hibernate3.1.jar"/>
+				-->
+    			<include name="axis.jar"/>
+    			<include name="commons-discovery-0.2.jar"/>
+    			<include name="jaxrpc.jar"/>
+    			<include name="jdom.jar"/>
+    			<include name="saaj.jar"/>
+    			<include name="skinlf.jar"/>
+    			<include name="gson-1.3.jar"/>
+    			
+  			</zipfileset>
+    		
+    		<!--
+    		<zipfileset dir="../migracion/build" >
+    			<include name="clarin-migracion_impl.jar"/>
+  			</zipfileset>
+    		-->
+    		
+    		<zipfileset dir="config/server" prefix="META-INF">
+        		<include name="jboss-app.xml"/>
+  			</zipfileset>
+    	</ear>
+    </target>
+
+	<target name="sign-jar">
+	</target>
+
+	<target name="make-client" depends="sign">
+    	<mkdir dir="${directories.build}/${project.name}"/>
+    	<mkdir dir="${directories.build}/${project.name}/bin"/> 
+    	<mkdir dir="${directories.build}/${project.name}/lib"/>
+	</target>
+
+	
+	<target name="deploy-jar">
+		<antcall target="deploy-jar-cerrado"></antcall>
+		<antcall target="deploy-jar-abierto"></antcall>
+	</target>
+
+	
+	<target name="deploy-jar-cerrado" if="deploy-cerrado" >
+		<!--
+		<jar jarfile="${ear.dir}/backdt-server.jar" update="true">
+		-->
+		<mkdir dir="${basedir}/tmp"/>
+		<delete file="${basedir}/tmp/gtlback-server.jar" />
+		<jar jarfile="${basedir}/tmp/gtlback-server.jar" update="true">
+			<!--fileset refid="fs-jar-clases"-->
+			<fileset refid="fs-jar-resources"/>
+			<fileset refid="fs-jar-clases-fwjava"/>
+			<fileset refid="fs-jar-clases-gtlcore"/>
+			<fileset refid="fs-ejb-jar.xml"/>
+		</jar>
+		<copy file="${basedir}/tmp/gtlback-server.jar" todir="${ear.dir}" />
+	</target>	
+	
+	<target name="deploy-jar-abierto" if="deploy-abierto">
+			<copy todir="${ear.dir}/backdt-server.jar">
+				<fileset refid="fs-jar-clases"/>
+				<fileset refid="fs-jar-resources"/>
+				<fileset refid="fs-jar-clases-fwjava"/>
+				<fileset refid="fs-jar-clases-vpp" />
+				<fileset refid="fs-jar-clases-gdt2"/>
+				<fileset refid="fs-jar-clases-fwjuegos"/>
+				<fileset refid="fs-jar-clases-fwcuentas"/>
+				<!--<fileset refid="fs-jar-clases-geoservice"/>-->
+				<fileset refid="fs-ejb-jar.xml"/>
+			</copy> 
+	</target>
+	
+	<fileset dir="bin" id="fs-jar-clases">
+		<exclude name="ar/com/clarin/backdt/gui/torneo/**/*" />
+		<exclude name="ar/com/clarin/backdt/imagenes/**/*" />
+		<!--<include name="META-INF/ejb-jar.xml"/>-->
+		<exclude name="**/*" />
+		<!--  include name="ar/**"  -->
+	</fileset>
+
+	<fileset dir="${resources-server}" id="fs-jar-resources">
+		<include name="META-INF/persistence.xml" />
+		<!--
+		<include name="META-INF/jboss.xml" />
+		-->
+	</fileset>
+	
+	<fileset dir="../FWJava/classes" id="fs-jar-clases-fwjava">
+		<include name="ar/**" />
+		<include name="fwjava.properties" />
+		<exclude name="**/*.hbm.xml" />
+		<exclude name="ar/clarin/fwjava/facade/impl/BossDate.class"/>
+		<exclude name="ar/clarin/fwjava/facade/api/local/BossDateLocal.class"/>
+		<exclude name="ar/clarin/fwjava/facade/api/remote/BossDateRemote.class"/>
+		<exclude name="ar/clarin/fwjava/imagenes/**/*" />
+		<exclude name="ar/clarin/fwjava/imagenes/**/*" />
+		<exclude name="ar/clarin/automata/**/*" />
+		<exclude name="ar/clarin/fwjava/templates/**/*" />
+		<exclude name="ar/clarin/fwjava/sound/**/*" />
+		<exclude name="ar/clarin/fwjava/analizador_archivos/**/*" />
+		<exclude name="ar/clarin/fwjava/dao/impl/ConfiguracionDAO*" />
+		<exclude name="ar/clarin/fwjava/dao/api/local/ConfiguracionDAO*" />
+		<exclude name="ar/clarin/fwjava/facade/impl/Configuracion*" />
+		<exclude name="ar/clarin/fwjava/facade/api/**/Configuracion*" />
+	</fileset>
+
+	
+	<fileset dir="../CoreGestionTextilLevel/bin" id="fs-jar-clases-gtlcore">
+		<include name="ar/**" />
+	</fileset>	 		
+	
+	<fileset dir="../WebGestionTextilLevel/webapp/WEB-INF/classes" id="fs-web-classes">
+		<include name="ar/**" />
+		<include name="*"/>
+	</fileset>
+	
+	<target name="COPY-WAR-FILES">
+		<mkdir dir="${ear.dir}/GTL-Web.war/WEB-INF/classes"/>
+		<delete>
+			<fileset dir="${ear.dir}/GTL-Web.war/WEB-INF/classes">
+				<include name="**/*"></include>
+			</fileset>
+		</delete>
+		<echo>COPIO WEB CLASSES</echo>
+		<copy todir="${ear.dir}/GTL-Web.war/WEB-INF/classes" failonerror="false">
+			<fileset refid="fs-web-classes"></fileset>
+		</copy>
+		<copy todir="${ear.dir}/GTL-Web.war/WEB-INF/lib" failonerror="false">
+			<fileset dir="../WebGestionTextilLevel/webapp/WEB-INF/lib">
+				<include name="*"></include>
+			</fileset>
+		</copy>
+		<copy todir="${ear.dir}/GTL-Web.war/WEB-INF/tags" failonerror="false">
+			<fileset dir="../WebGestionTextilLevel/webapp/WEB-INF/tags">
+				<include name="*"></include>
+			</fileset>
+		</copy>
+		<copy todir="${ear.dir}/GTL-Web.war/WEB-INF/spring" failonerror="false">
+			<fileset dir="../WebGestionTextilLevel/webapp/WEB-INF/spring">
+				<include name="*"></include>
+			</fileset>
+		</copy>
+		
+		<copy todir="${ear.dir}/GTL-Web.war/WEB-INF" failonerror="false">
+			<fileset dir="../WebGestionTextilLevel/webapp/WEB-INF">
+				<include name="*"></include>
+			</fileset>
+		</copy>
+		<echo>COPIO CONTENIDO ESTATICO</echo>
+		<copy todir="${ear.dir}/GTL-Web.war">
+            <fileset dir="../WebGestionTextilLevel/webapp">
+           		<include name="css/**/*" />
+           		<include name="jsp/**/*" />
+            	<include name="html/**/*" />
+            	<include name="img/**/*" />
+            	<include name="js/**/*" />
+            	<include name="struts/**/*" />
+            	<include name="*" />
+            </fileset>
+		</copy>
+	</target>
+	
+</project>

@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odt" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="5" bottomMargin="20">
+	<parameter name="BAR_CODE" class="java.lang.String"/>
+	<parameter name="METROS" class="java.lang.String"/>
+	<parameter name="KILOS" class="java.lang.String"/>
+	<parameter name="GRAMAJE" class="java.lang.String"/>
+	<parameter name="NRO_REMITO" class="java.lang.Integer"/>
+	<parameter name="CLIENTE" class="java.lang.String"/>
+	<parameter name="PIEZAS" class="java.lang.Integer"/>
+	<parameter name="ARTICULO" class="java.lang.String"/>
+	<parameter name="COLOR" class="java.lang.String"/>
+	<parameter name="TARIMA" class="java.lang.String"/>
+	<parameter name="MAQUINA" class="java.lang.String"/>
+	<parameter name="ANCHO_CRUDO" class="java.lang.String"/>
+	<parameter name="ANCHO_FINAL" class="java.lang.String"/>
+	<parameter name="CODIGO_ODT" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\dev\\dev_ws\\BackGestionTextilLevel\\src\\ar\\com\\textillevel\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pasosDS" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="piezasDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="piezasDS2" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="con" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="RESUMEN_SECTOR_ESTAMPADO" class="java.lang.String"/>
+	<parameter name="RESUMEN_SECTOR_HUMEDO" class="java.lang.String"/>
+	<parameter name="RESUMEN_SECTOR_SECO" class="java.lang.String"/>
+	<pageHeader>
+		<band height="193" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="67" y="54" width="85" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{METROS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="216" y="54" width="87" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="63" y="81" width="71" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLIENTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="198" y="81" width="73" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{PIEZAS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="312" y="81" width="85" height="43"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ARTICULO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="384" y="54" width="70" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{GRAMAJE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="505" y="54" width="62" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{NRO_REMITO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="453" y="81" width="114" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{COLOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="373" y="8" width="199" height="32"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CODIGO_ODT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="138" y="8" width="222" height="32"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDEN DE TRABAJO]]></text>
+			</staticText>
+			<image hAlign="Center">
+				<reportElement x="0" y="3" width="85" height="43"/>
+				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="48" width="572" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="3" y="54" width="60" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[METROS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="161" y="54" width="55" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KILOS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="312" y="54" width="73" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRAMAJE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="54" width="37" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RTO:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="77" width="572" height="1"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="155" y="48" width="1" height="29"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="306" y="48" width="1" height="29"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="460" y="48" width="1" height="29"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="0" y="49" width="1" height="29"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="571" y="49" width="1" height="29"/>
+			</line>
+			<staticText>
+				<reportElement x="3" y="81" width="60" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="81" width="55" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PIEZAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="81" width="32" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ART:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="81" width="52" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COLOR:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="124" width="570" height="1"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="0" y="78" width="1" height="111"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="138" y="77" width="1" height="47"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="275" y="77" width="1" height="47"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="398" y="78" width="1" height="47"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="571" y="78" width="1" height="111"/>
+			</line>
+			<staticText>
+				<reportElement x="3" y="128" width="57" height="20"/>
+				<textElement>
+					<font size="13" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[TARIMA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="62" y="128" width="99" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TARIMA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="167" y="128" width="37" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MAQ:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="207" y="128" width="150" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MAQUINA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="362" y="128" width="55" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CRUDO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="417" y="128" width="58" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ANCHO_CRUDO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="476" y="128" width="43" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FINAL:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="519" y="128" width="53" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ANCHO_FINAL}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="131" y="156" width="151" height="32"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$P{BAR_CODE}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<componentElement>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="363" y="156" width="151" height="32"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$P{BAR_CODE}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<line>
+				<reportElement x="0" y="150" width="572" height="1"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="164" y="125" width="1" height="25"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="359" y="125" width="1" height="25"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement x="475" y="125" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement x="1" y="188" width="572" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="42" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="565" height="40"/>
+				<dataSourceExpression><![CDATA[$P{pasosDS}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_pasos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="86">
+			<staticText>
+				<reportElement x="216" y="5" width="105" height="29"/>
+				<textElement>
+					<font size="20" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[RESUMEN]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="16" y="39" width="549" height="41"/>
+				<subreportParameter name="RESUMEN_SECTOR_HUMEDO">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_HUMEDO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="RESUMEN_SECTOR_ESTAMPADO">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="RESUMEN_SECTOR_SECO">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_SECO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{con}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_resumen.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement x="294" y="7" width="200" height="37"/>
+				<dataSourceExpression><![CDATA[$P{piezasDS2}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-secuencia_tabla-piezas-2.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="16" y="7" width="228" height="37"/>
+				<dataSourceExpression><![CDATA[$P{piezasDS1}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-secuencia_tabla-piezas-1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="82">
+			<staticText>
+				<reportElement x="5" y="12" width="257" height="20"/>
+				<textElement/>
+				<text><![CDATA[TOTAL MTS. CRUDO:.............................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="42" width="257" height="20"/>
+				<textElement/>
+				<text><![CDATA[TOTAL MTS. REALES:.............................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="12" width="290" height="20"/>
+				<textElement/>
+				<text><![CDATA[TOTAL MTS. TERMINADO:.............................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="42" width="289" height="20"/>
+				<textElement/>
+				<text><![CDATA[TOTAL DE PIEZAS:.........................................................]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="207" y="0" width="50" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="257" y="0" width="40" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="16" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CT:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="16" y="0" width="71" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLIENTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CODIGO_ODT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="306" y="0" width="29" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MTS:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="335" y="0" width="48" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{METROS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="399" y="0" width="22" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[KG:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="421" y="0" width="58" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="485" y="0" width="34" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[RTO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="519" y="0" width="53" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{NRO_REMITO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

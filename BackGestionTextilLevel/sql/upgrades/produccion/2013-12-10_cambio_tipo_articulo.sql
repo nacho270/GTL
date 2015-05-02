@@ -1,0 +1,6 @@
+insert into T_TIPO_ART_TIPO_ART_ASOC values (3, 2);
+insert into T_TIPO_ART_TIPO_ART_ASOC values (3, 5);
+
+ALTER TABLE t_tipo_articulo DROP FOREIGN KEY FK96E0D4DBA9C9CA26;
+ALTER TABLE t_tipo_articulo DROP COLUMN F_TIPO_ARTICULO_PADRE_P_ID;
+

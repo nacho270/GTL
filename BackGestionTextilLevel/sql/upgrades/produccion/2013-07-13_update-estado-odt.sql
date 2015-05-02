@@ -1,0 +1,1 @@
+update t_orden_de_trabajo  set a_id_estado = a_id_estado + 2 where a_id_estado > 1;

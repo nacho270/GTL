@@ -1,0 +1,1 @@
+ALTER TABLE t_pers_param_generales DROP COLUMN A_DIAS_AVISO_FIN_CONTRATO;

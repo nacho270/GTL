@@ -1,0 +1,1 @@
+El empleado realizará tareas de @/puesto_empleado@/. Las mismas serán desarrolladas en el domicilio de la empresa el horario de: @/horario_empleado@/.

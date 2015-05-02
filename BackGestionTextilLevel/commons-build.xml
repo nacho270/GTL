@@ -1,0 +1,52 @@
+<project name="BackDT-commons"  basedir="." >
+
+	<loadproperties srcfile="build.properties"></loadproperties>
+	<property name="project.name" value="GTL"/>
+	<property name="deploy.dir" location="${jboss.deploy.dir}" />
+	<property name="resources" location="resources" />
+	<property name="ear.dir" location="${deploy.dir}/${project.name}.ear" />
+	<property name="gtl.classes.dir" location="${workspace.home}/CoreGestionTextilLevel/bin"/>
+	<property name="lib.location.dir" location="lib"/>
+	<property name="FWLib.lib.dir" location="${workspace.home}/FWLib/lib" />
+	<property name="lib.FWLibJEE.dir" location="${workspace.home}/FWLibJEE/lib"/>
+	<property name="directories.build" location="${workspace.home}/BackDT 2.0/build"/>
+	<property name="directories.configuration" location="${workspace.home}/BackDT 2.0/config/server/"/>
+
+	<fileset id="fwlib" dir="${FWLib.lib.dir}">
+		<include name="commons-collections-3.2.1.jar"/>
+		<include name="commons-lang-2.0.jar"/>
+		<include name="commons-io-1.1.jar"/>
+		<include name="commons-lang*.jar"/>
+		<include name="jasperreports-1.2.5.jar" />
+		<include name="commons-javaflow-20060411.jar"/>
+		<include name="itext-1.4.3.jar" />
+		<include name="axis.jar" />
+		<include name="commons-discovery-0.2.jar" />
+		<include name="jdom.jar" />
+		<!--
+		<include name="jpedalSTD.jar" />
+		-->
+		<include name="saxon9.jar" />
+		<include name="saxon9-s9api.jar" />
+		<include name="bcprov-jdk14-119.jar" />
+		<include name="xstream-1.1.3.jar" />
+		<include name="poi-2.5.1-final-20040804.jar" />
+		<include name="gson-1.3.jar"/>
+		<include name="j2ssh-common-0.2.9.jar"/>
+		<include name="j2ssh-core-0.2.9.jar"/>
+	</fileset>	
+	
+	<fileset id="fwLibJee" dir="${lib.FWLibJEE.dir}">
+		<include name="el-api.jar" />
+		<include name="el-ri.jar" />
+		<include name="commons-fileupload.jar" />
+		<!--
+		<include name="jcaptcha-all-1.0-RC4.jar" />
+		-->
+	</fileset>	
+
+	<fileset dir="bin" id="fs-ejb-jar.xml" >
+		<include name="META-INF/ejb-jar.xml"/>
+	</fileset>
+
+</project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+	<mbean code="org.jboss.varia.scheduler.Scheduler" name="initChatServer:service=Scheduler">
+		<attribute name="StartAtStartup">true</attribute>
+		<attribute name="SchedulableClass">ar.com.textillevel.modulos.chat.schedule.ScheduleStartChatServer</attribute>
+		<attribute name="InitialStartDate">NOW</attribute>
+		<attribute name="SchedulePeriod">1000</attribute>
+		<attribute name="InitialRepetitions">1</attribute>
+		<depends>
+			<mbean code="javax.management.timer.Timer" name="initChatServer:service=Timer"></mbean>
+		</depends>
+		<depends-list>
+			<depends-list-element>jboss.j2ee:ear=GTL.ear,jar=gtlback-server.jar,name=UsuarioSistemaFacade,service=EJB3</depends-list-element>
+		</depends-list>
+	</mbean>
+</server> 

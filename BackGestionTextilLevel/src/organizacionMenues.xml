@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menues>
+	<GrupoModulos nombre="Módulos" esDefault="true">
+		<listaModulos>
+			<GrupoModulos nombre="Cheques">
+				<listaModulos>
+					<newItem
+					class="ar.com.textillevel.gui.modulos.cheques.ModuloCheques"
+					nombre="Administrar Cheques" id="1" />
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Contactos">
+				<listaModulos>
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.gente.GuiABMCliente"
+					nombre="Administrar Clientes" id="2" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.gente.GuiABMProveedor"
+					nombre="Administrar Proveedores" id="3" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.gente.GuiABMPersona"
+					nombre="Administrar Personas" id="4" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.agenda.ModuloAgenda"
+					nombre="Agenda" id="5" />
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Productos">
+				<listaModulos>
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMProductos"
+					nombre="Administrar Productos" id="6" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMListaDePrecios"
+					nombre="Administrar Listas de Precios" id="7" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMArticulos"
+					nombre="Administrar Artículos" id="8" />
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Materias primas y stock">
+				<listaModulos>
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.materiaprima.GuiABMMateriaPrima"
+					nombre="Administrar Materias primas" id="32" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.materiaprima.GuiABMTipoAnilina"
+					nombre="Administrar tipos de anilina" id="33" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMListaDePreciosProveedor"
+					nombre="Administrar Lista de Precios" id="34" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.materiaprima.GuiABMContenedoresMatPrima"
+					nombre="Administrar Contenedores" id="50" />
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Configuración">
+				<listaModulos>
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.gente.GuiABMInfoLocalidad"
+					nombre="Administrar Localidades" id="10" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.gente.GuiABMRubro"
+					nombre="Administrar Rubros" id="11" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMColor"
+					nombre="Administrar Colores" id="12" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMGamas"
+					nombre="Administrar Gamas de colores" id="13" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMDibujoEstampado"
+					nombre="Administrar Dibujos de Estampados" id="14" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMBancos"
+					nombre="Administrar Bancos" id="15" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMCondicionDeVenta"
+					nombre="Administrar Condiciones de venta" id="16" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMImpuestos"
+					nombre="Administrar Impuestos" id="54" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.GuiABMServicios"
+					nombre="Administrar Servicios" id="75" />
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Seguridad">
+				<listaModulos>
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.portal.GuiABMPerfil"
+					nombre="Administrar Perfiles de usuario" id="17" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.portal.GuiAsignacionAlertasPerfil"
+					nombre="Administrar Alertas para Perfiles de Usuario" id="109" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.portal.GuiABMUsuarioSistema"
+					nombre="Administrar usuarios" id="18" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.abm.portal.GuiABMAccionesPorPerfil"
+					nombre="Administrar Acciones por Perfil" id="65" />
+					<newItem
+					class="ar.com.textillevel.gui.modulos.eventos.ModuloVisorEventos"
+					nombre="Visor de eventos" id="31" />
+				</listaModulos>
+			</GrupoModulos>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Facturación" esDefault="false">
+		<listaModulos>
+			<GrupoModulos nombre="Agregar Remito">
+				<listaModulos>
+					<newItem
+						class="main.acciones.facturacion.AgregarRemitoEntradaAction"
+						nombre="Entrada" id="19" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.AgregarRemitoSalidaAction"
+						nombre="Salida" id="20" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.CompletarPiezasRemitoEntradaStockAction"
+						nombre="Completar Remito de Entrada" id="71" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Agregar Factura">
+				<listaModulos>
+					<newItem
+						class="main.acciones.facturacion.AgregarFacturaAction"
+						nombre="Factura" id="21" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.AccionAgregarFacturaSinRemitoAction"
+						nombre="Factura sin remito" id="43" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.AgregarCorreccionAction"
+						nombre="Nota de débito / crédito" id="22" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<newItem
+				class="main.acciones.facturacion.AgregarReciboAction"
+				nombre="Agregar Recibo" id="23" action="true"/>
+			<GrupoModulos nombre="Consultas">
+				<listaModulos>
+					<newItem
+						class="main.acciones.facturacion.ConsultarFacturaAction"
+						nombre="Consultar factura" id="24" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.ConsultarCorreccionesAction"
+						nombre="Consultar notas de crédito y débito" id="25" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.ConsultarRemitoEntradaAction"
+						nombre="Consultar remito de entrada" id="26" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.ConsultarRemitoSalidaAction"
+						nombre="Consultar remito de salida" id="27" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.ConsultarReciboAction"
+						nombre="Consultar recibo" id="28" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Telas 01">
+				<listaModulos>
+					<newItem
+						class="main.acciones.facturacion.AgregarRemitoEntradaStockAction"
+						nombre="Entrada de 01" id="70" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.AgregarRemitoSalidaStockAction"
+						nombre="Salida de 01" id="68" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Compra/Venta de Tela">
+				<listaModulos>
+					<newItem
+						class="main.acciones.facturacion.AgregarRemitoEntradaVentaTelaAction"
+						nombre="Entrada" id="73" action="true"/>
+					<newItem
+						class="main.acciones.facturacion.AgregarRemitoSalidaVentaTelaAction"
+						nombre="Salida" id="74" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Compras" esDefault="false">
+		<listaModulos>
+			<GrupoModulos nombre="Agregar remito">
+				<listaModulos>
+					<newItem
+						class="main.acciones.compras.AgregarRemitoEntradaProveedorAction"
+						nombre="Entrada de proveedor" id="36" action="true"/>
+					<newItem
+						class="main.acciones.compras.AgregarRemitoSalidaProveedorAction"
+						nombre="Salida de proveedor" id="47" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Agregar facturas de proveedor">
+				<listaModulos>
+					<newItem
+						class="main.acciones.compras.AgregarFacturaProveedorAction"
+						nombre="Factura de proveedor" id="42" action="true"/>
+					<newItem
+						class="main.acciones.compras.AgregarFacturaProveedorServicioAction"
+						nombre="Factura de servicios" id="76" action="true"/>
+					<newItem
+						class="main.acciones.compras.AgregarNotaCreditoProveedorAction"
+						nombre="Nota de débito / crédito de proveedor" id="49" action="true"/>
+					<newItem
+						class="main.acciones.compras.AgregarFacturaSinRemitoProveedorAction"
+						nombre="Factura sin remito" id="63" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Consultas">
+				<listaModulos>
+					<newItem
+						class="main.acciones.compras.ConsultarRemitoEntradaProveedorAction"
+						nombre="Consultar remito de Entrada de proveedor" id="37" action="true"/>
+				<newItem
+						class="main.acciones.compras.ConsultarFacturaProveedorAction"
+						nombre="Consultar factura de proveedor" id="44" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Producción" esDefault="false">
+		<listaModulos>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.odt.ModuloODT"
+				nombre="Administrar ODTs" id="102" />
+			<newItem
+				class="main.acciones.odt.VerEstadoProduccionAction"
+				nombre="Estado Producción" id="103" action="true"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.odt.gui.GuiABMTipoMaquina"
+				nombre="Administrar Sectores" id="104" action="false"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.odt.gui.maquinas.GuiABMMaquina"
+				nombre="Administrar Máquinas" id="105" action="false"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.odt.gui.tenido.VerAdministrarFormulasAction"
+				nombre="Administrar Fórmulas de Teñido por Cliente" id="106" action="true"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.odt.gui.secuencias.GuiABMSecuencias"
+				nombre="Administrar Secuencias de Trabajo" id="107" action="false"/>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Pagos" esDefault="false">
+		<listaModulos>
+			<GrupoModulos nombre="Orden de pago">
+				<listaModulos>
+					<newItem
+						class="main.acciones.pagos.CargarOrdenDePagoAction"
+						nombre="Crear orden de pago" id="46" action="true"/>
+					<newItem
+						class="main.acciones.pagos.EditarOrdenDePagoAction"
+						nombre="Editar orden de pago" id="62" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<newItem 
+				class="main.acciones.pagos.CargarOrdenDeDepositoAction"
+				nombre="Cargar orden de depósito" id="51" action="true"/>
+			<newItem
+				class="main.acciones.pagos.CargarOrdenDePagoAPersonaAction"
+				nombre="Cargar orden de pago a persona" id="66" action="true"/>
+			<newItem
+				class="main.acciones.pagos.CargarFacturaDePersonaAction"
+				nombre="Cargar factura persona" id="72" action="true"/>
+			<GrupoModulos nombre="Consultas">
+				<listaModulos>
+					<newItem
+					class="main.acciones.pagos.ConsultarOrdenDePagoAction"
+					nombre="Consultar orden de pago" id="48" action="true"/>
+					<newItem
+					class="main.acciones.pagos.ConsultarOrdenDeDepositoAction"
+					nombre="Consultar orden de depósito" id="52" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Stock" esDefault="false">
+		<listaModulos>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.stock.ModuloStock"
+				nombre="Controlar stock" id="41"/>
+			<newItem
+				class="main.acciones.stock.RealizarBajaDeStockAction"
+				nombre="Realizar baja de stock" id="55" action="true"/>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Cuentas" esDefault="false">
+		<listaModulos>
+			<newItem
+				class="main.acciones.cuentas.VerMovimientosCuentaAction"
+				nombre="Clientes" id="29" action="true"/>
+			<newItem
+				class="main.acciones.cuentas.VerMovimientosCuentaProveedorAction"
+				nombre="Proveedores" id="45" action="true"/>
+			<newItem
+				class="main.acciones.cuentas.VerMovimientosCuentaBancoAction"
+				nombre="Bancos" id="53" action="true"/>
+			<newItem
+				class="main.acciones.cuentas.VerMovimientosCuentaPersonaAction"
+				nombre="Personas" id="67" action="true"/>
+			<newItem
+				class="main.acciones.cuentas.VerMovimientosCuentaArticuloAction"
+				nombre="Telas" id="69" action="true"/>
+			<newItem
+				class="main.acciones.cuentas.CorregirCuentaClienteAction"
+				nombre="Corrector clientes/proveedores" id="95" action="true"/>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Personal" esDefault="false">
+		<listaModulos>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.personal.abm.empleados.GuiABMEmpleados"
+				nombre="Administrar empleados" id="77"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.personal.modulos.legajos.ModuloLegajos"
+				nombre="Administrar legajos" id="84"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.ModuloReciboSueldo"
+				nombre="Recibos de Sueldo" id="94"/>
+			<newItem
+				class="ar.com.textillevel.gui.modulos.personal.modulos.vales.ModuloValesAnticipo"
+				nombre="Vales de anticipo" id="97"/>
+			<GrupoModulos nombre="Informes">
+				<listaModulos>
+					<newItem
+						class="main.acciones.personal.informes.InformesVacacionesPersonalAction"
+						nombre="Histórico de vacaciones" id="99" action="true"/>
+					<newItem
+						class="main.acciones.personal.informes.PlanificacionVacacionesPersonalAction"
+						nombre="Planificacion de vacaciones" id="101" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			<GrupoModulos nombre="Configuración">
+				<listaModulos>
+					<newItem
+						class="main.acciones.personal.parametrosgenerales.ModificarParametrosGeneralesPersonalAction"
+						nombre="Modificar parametros generales" id="91" action="true"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.configuracion.GuiABMArt"
+						nombre="Administrar ARTs" id="78" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.configuracion.GuiABMEmpresaSeguros"
+						nombre="Administrar Empresas de seguro" id="79" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.calenlaboral.GuiAdministrarCalendarioLaboral"
+						nombre="Administrar Calendario Laboral" id="80" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.tareas.GuiABMObraSocial"
+						nombre="Administrar Obras Sociales" id="85" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.tareas.GuiABMSindicato"
+						nombre="Administrar Sindicatos" id="81" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.tareas.GuiABMPuesto"
+						nombre="Administrar Puestos" id="82" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.tareas.GuiABMCategoria"
+						nombre="Administrar Categorías" id="83" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.tareas.GuiABMConfigValorHoraCategoria"
+						nombre="Configurar Valor Hora por Puesto" id="86" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.contribuciones.GuiABMContribuciones"
+						nombre="Administrar Contribuciones" id="87" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.antiguedad.GuiABMConfiguracionAntiguedades"
+						nombre="Configurar Antigüedades" id="88" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.conceptosrecibosueldo.GuiABMConceptosReciboSueldo"
+						nombre="Configurar conceptos recibo de sueldo" id="89" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.asignaciones.GuiABMAsignaciones"
+						nombre="Administrar Asignaciones" id="90" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.presentismo.GuiABMPresentismo"
+						nombre="Administrar Presentismo" id="96" action="false"/>
+					<newItem
+						class="ar.com.textillevel.gui.modulos.personal.abm.vacaciones.GuiABMConfiguracionVacaciones"
+						nombre="Configurar vacaciones" id="98" action="false"/>
+				</listaModulos>
+				
+			</GrupoModulos>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Informes" esDefault="false">
+		<listaModulos>
+			<GrupoModulos nombre="IVA / Ing. Brutos">
+				<listaModulos>
+					<newItem
+						class="main.acciones.informes.InformeIVAVentasAction"
+						nombre="IVA - Ventas" id="35" action="true"/>
+					<newItem
+						class="main.acciones.informes.InformeIVAComprasAction"
+						nombre="IVA/IIBB - Compras" id="59" action="true"/>
+				</listaModulos>
+			</GrupoModulos>
+			
+			<newItem
+				class="main.acciones.informes.InformeProduccionAction"
+				nombre="Informe de producción" id="56" action="true"/>
+			<newItem
+				class="main.acciones.informes.InformeMorososAction"
+				nombre="Informe de clientes con deuda" id="58" action="true"/>
+			<newItem
+				class="main.acciones.informes.InformeDeudasConProveedoresAction"
+				nombre="Informe de deudas con proveedores" id="60" action="true"/>
+			<newItem
+				class="main.acciones.informes.InformeStockAction"
+				nombre="Informe de Stock" id="61" action="true"/>
+			<newItem
+				class="main.acciones.informes.InformeRecibosAction"
+				nombre="Informe de Recibos" id="64" action="true"/>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<GrupoModulos nombre="Configuración" esDefault="false">
+		<listaModulos>
+			<newItem
+				class="main.acciones.parametrosgenerales.ModificarParametrosGeneralesAction"
+				nombre="Modificar parametros generales" id="30" action="true"/>
+		</listaModulos>
+	</GrupoModulos>
+	
+	<!-- 	
+		AUN-NO-IMPLEMENTADO
+		reordena-alf: reordena x orden alfabetico
+		ignora: (default) no importa el orden
+		ord-declarado: toma el orden en que se declararon los items/grupos
+	<ordenacion metodo="reordena-alf" />
+	 -->
+</menues>
