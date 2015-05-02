@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cabecera_rs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="2dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rs_rl_cabecera"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/rs_nro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:gravity="left"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@+id/rs_nro"
+                android:gravity="right"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_cant_piezas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/rs_fecha"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_peso_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rs_fecha"
+                android:layout_toRightOf="@+id/rs_cant_piezas"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_metros_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/rs_fecha"
+                android:layout_toRightOf="@+id/rs_peso_total"
+                android:gravity="right"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_odts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/rs_cant_piezas"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_productos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/rs_odts"
+                android:gravity="left"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rs_productos"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_owner_dir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rs_owner"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_cond_iva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/rs_owner_dir"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/rs_cond_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/rs_cond_iva"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+            
+                <TextView
+                android:id="@+id/rs_cuit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/rs_cond_venta"
+                android:gravity="left"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/sep_items"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cabecera_rs"
+        android:background="@color/gray"
+        android:gravity="center"
+        android:text="@string/title_piezas"
+        android:textColor="@color/black" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rs_cardList_piezas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sep_items"
+        android:textColor="@color/black" />
+
+</RelativeLayout>
