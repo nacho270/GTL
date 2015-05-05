@@ -59,6 +59,9 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 	private JComboBox cmbTipoFactura;
 	private CLJTextField txtMontoFinal;
 	
+	
+	
+	
 	private Persona persona;
 	private FacturaPersona factura;
 	private FacturaPersonaFacadeRemote facturaFacade;
