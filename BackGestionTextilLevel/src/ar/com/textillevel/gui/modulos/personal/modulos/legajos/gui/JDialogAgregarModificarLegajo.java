@@ -42,6 +42,7 @@ import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.clarin.fwjava.entidades.Dia;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
@@ -56,12 +57,15 @@ import ar.com.textillevel.modulos.personal.entidades.contratos.ETipoContrato;
 import ar.com.textillevel.modulos.personal.entidades.legajos.ContratoEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.HorarioDia;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
+import ar.com.textillevel.modulos.personal.entidades.legajos.RangoDias;
+import ar.com.textillevel.modulos.personal.entidades.legajos.RangoHorario;
 import ar.com.textillevel.modulos.personal.entidades.legajos.VigenciaEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Categoria;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Puesto;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
 import ar.com.textillevel.modulos.personal.facade.api.remote.CategoriaFacadeRemote;
 import ar.com.textillevel.modulos.personal.facade.api.remote.ContratoFacadeRemote;
+import ar.com.textillevel.modulos.personal.facade.api.remote.DiaFacadeRemote;
 import ar.com.textillevel.modulos.personal.facade.api.remote.EmpleadoFacadeRemote;
 import ar.com.textillevel.modulos.personal.facade.api.remote.PuestoFacadeRemote;
 import ar.com.textillevel.modulos.personal.facade.api.remote.SindicatoFacadeRemote;
@@ -100,6 +104,8 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 	private boolean acepto;
 	private LegajoEmpleado legajo;
 	private ContratoEmpleado contratoEmpleado;
+	
+	private DiaFacadeRemote diaFacade;
 
 	public JDialogAgregarModificarLegajo(Frame frame) {
 		super(frame);
@@ -109,6 +115,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		setUpComponentes();
 		getTxtNumeroLegajo().setText(String.valueOf(GTLPersonalBeanFactory.getInstance().getBean2(EmpleadoFacadeRemote.class).getProximoNumeroLegajo()));
 		getTxtNumeroLegajo().requestFocus();
+		getTablaHorarios().refreshTable(true);
 	}
 
 	public JDialogAgregarModificarLegajo(Frame frame, LegajoEmpleado legajoAModificar, ContratoEmpleado contratoEmpleado) {
@@ -138,7 +145,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		getCmbPuestos().setSelectedItem(getLegajo().getPuesto());
 		getCmbCategorias().setSelectedItem(getLegajo().getCategoria());
 		getTxtPrecioHora().setText(GenericUtils.getDecimalFormat().format(getLegajo().getValorHora()));
-		getTablaHorarios().refreshTable();
+		getTablaHorarios().refreshTable(false);
 		getCmbContratos().setSelectedItem(getContratoEmpleado().getContrato());
 		getPanelFechaAltaContrato().setSelectedDate(getContratoEmpleado().getFechaDesde());
 		getTxtDuracionContrato().setValue(getContratoEmpleado().getCantidadDias().longValue());
@@ -281,7 +288,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 			dialog.setVisible(true);
 			if (dialog.isAcepto()) {
 				getLegajo().getHorario().add(dialog.getHorarioDia());
-				refreshTable();
+				refreshTable(false);
 			}
 			return false;
 		}
@@ -290,7 +297,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		public boolean validarQuitar() {
 			int filaSeleccionda = getTabla().getSelectedRow();
 			getLegajo().getHorario().remove(filaSeleccionda);
-			refreshTable();
+			refreshTable(false);
 			return false;
 		}
 
@@ -305,13 +312,16 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 				if (dialog.isAcepto()) {
 					horarios.add(filaSeleccionada, hd);
 					horarios.set(filaSeleccionada, dialog.getHorarioDia());
-					refreshTable();
+					refreshTable(false);
 				}
 			}
 		}
 
-		private void refreshTable() {
+		private void refreshTable(boolean addHorarioDefault) {
 			getTabla().removeAllRows();
+			if(addHorarioDefault) {//Muestro por default 8:18
+				getLegajo().getHorario().add(getHorarioDiaPorDefault());
+			}
 			for (HorarioDia hd : getLegajo().getHorario()) {
 				agregarElemento(hd);
 			}
@@ -412,7 +422,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 	private CLJTextField getTxtPrecioHora() {
 		if (txtPrecioHora == null) {
 			txtPrecioHora = new CLJTextField();
-			txtPrecioHora.setEditable(GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin());
+//			txtPrecioHora.setEditable(GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin());
 			txtPrecioHora.setPreferredSize(new Dimension(80, 20));
 			txtPrecioHora.addFocusListener(new FocusAdapter() {
 
@@ -856,4 +866,34 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 			getTxtFechaFinContrato().setText("");
 		}
 	}
+
+	private DiaFacadeRemote getDiaFacade() {
+		if(diaFacade == null) {
+			this.diaFacade = GTLPersonalBeanFactory.getInstance().getBean2(DiaFacadeRemote.class);			
+		}
+		return diaFacade;
+	}
+
+	private HorarioDia getHorarioDiaPorDefault() {
+		HorarioDia hd = new HorarioDia();
+		List<Dia> allDias = getDiaFacade().getAllDias();
+		RangoDias rd = new RangoDias();
+		for(Dia d : allDias) {
+			if(d.getNroDia() == 1) {//lunes
+				rd.setDiaDesde(d);
+			}
+			if(d.getNroDia() == 5) {//viernes
+				rd.setDiaHasta(d);
+			}
+		}
+		hd.setRangoDias(rd);
+		RangoHorario rh = new RangoHorario();
+		rh.setHoraDesde(8);
+		rh.setMinutosDesde(0);
+		rh.setHoraHasta(16);
+		rh.setMinutosHasta(0);
+		hd.setRangoHorario(rh);
+		return hd;
+	}
+
 }
