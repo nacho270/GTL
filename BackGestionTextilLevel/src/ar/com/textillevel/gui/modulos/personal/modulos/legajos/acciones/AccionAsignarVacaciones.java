@@ -68,13 +68,13 @@ public class AccionAsignarVacaciones extends Accion<Empleado>{
 	public boolean esValida(AccionEvent<Empleado> e) {
 		if( e.getSelectedElements().size() == 1){
 			LegajoEmpleado legajo = e.getSelectedElements().get(0).getLegajo();
-			if(legajo!=null){
-				List<VigenciaEmpleado> historialVigencias = legajo.getHistorialVigencias();
+			List<VigenciaEmpleado> historialVigencias = legajo.getHistorialVigencias();
+			if(legajo!=null && !historialVigencias.isEmpty()){
 				VigenciaEmpleado ultima = historialVigencias.get(historialVigencias.size()-1);
 				return legajo!=null && ultima.getFechaBaja()==null;
 			}
-			return false;
 		}
 		return false;
 	}
+
 }
