@@ -173,15 +173,14 @@ public class ChatWindow extends JFrame {
 						if(nick.equals(GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName())){
 							return;
 						}
-						TabConversacion tab = null;
 						if(conversacionesAbiertas.get(nick)==null){
-							tab = new TabConversacion(nick);
+							TabConversacion tab = new TabConversacion(nick);
 							conversacionesAbiertas.put(nick, tab);
+							getConversacionesAbiertas().put(nick, tab);
+							getPanelTabsChat().addTab(tab.getUsuario(), tab);
+							getPanelTabsChat().setSelectedComponent(tab);
+							tab.getTxtInput().requestFocus();
 						}
-						getConversacionesAbiertas().put(nick, tab);
-						getPanelTabsChat().addTab(tab.getUsuario(), tab);
-						getPanelTabsChat().setSelectedComponent(tab);
-						tab.getTxtInput().requestFocus();
 					}
 				}
 			});

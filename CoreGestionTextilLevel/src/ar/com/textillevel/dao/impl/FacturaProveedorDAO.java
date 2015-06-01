@@ -147,7 +147,7 @@ public class FacturaProveedorDAO extends GenericDAO<FacturaProveedor, Integer> i
 			nativeQuery.setParameter("fechaDesde", fechaDesde);
 		}
 		if(fechaHasta != null) {
-			nativeQuery.setParameter("fechaHasta", DateUtil.getManiana(fechaHasta));
+			nativeQuery.setParameter("fechaHasta", fechaHasta);
 		}
 		List<Object[]> resultList = (List<Object[]>)nativeQuery.getResultList();
 		return resultList;

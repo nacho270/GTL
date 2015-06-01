@@ -241,7 +241,8 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		if(correcciones!=null && !correcciones.isEmpty()){
 			for(CorreccionFactura c : correcciones){
 				DescripcionFacturaIVAVentasTO dfiv = new DescripcionFacturaIVAVentasTO();
-				String nro =  StringUtil.fillLeftWithZeros(String.valueOf(nroSucursal), 4) + 
+				String nro = c.getTipoFactura().getDescripcion() +  
+							StringUtil.fillLeftWithZeros(String.valueOf(nroSucursal), 4) + 
 							 "-" + StringUtil.fillLeftWithZeros(String.valueOf(c.getNroFactura()), 8);
 				dfiv.setNroCte(nro);
 				dfiv.setNroComprobanteSort(c.getNroFactura());

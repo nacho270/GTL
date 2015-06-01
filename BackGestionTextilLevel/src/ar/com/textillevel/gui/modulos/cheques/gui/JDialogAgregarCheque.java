@@ -210,9 +210,7 @@ public class JDialogAgregarCheque extends JDialog {
 		setCheque(cheque);
 		setParaAgregar(paraAgregar);
 		setConsulta(isConsulta);
-		if(!isConsulta){
-			setModificacion(true);
-		}
+		setModificacion(!isConsulta && !paraAgregar);
 		setPadre(padre);
 		setUpComponentes();
 		if(isConsulta){

@@ -1068,7 +1068,7 @@ public class JFrameVerMovimientos extends JFrame {
 	public void anularRecibo(Recibo recibo) {
 		try {
 			getReciboFacade().anularRecibo(recibo, getUsuarioAdministrador().getUsrName());
-			CLJOptionPane.showInformationMessage(this, "El recibo ha sido rechazado con éxito", "Información");
+			CLJOptionPane.showInformationMessage(this, "El recibo ha sido anulado con éxito", "Información");
 			buscarMovimientos();
 		} catch (CLException cle) {
 			BossError.gestionarError(cle);

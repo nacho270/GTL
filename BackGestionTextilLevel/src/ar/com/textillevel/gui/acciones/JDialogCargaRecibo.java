@@ -218,7 +218,7 @@ public class JDialogCargaRecibo extends JDialog {
 	private void setUpScreen() {
 		setSize(850, 740);
 		setTitle("Alta de recibo");
-		setResizable(false);
+		setResizable(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 

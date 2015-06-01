@@ -8,7 +8,6 @@ import java.sql.Date;
 import javax.swing.Action;
 
 import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
@@ -57,7 +56,7 @@ public class InformeIVAVentasAction implements Action{
 			Cliente cliente = jdiiv.getCliente();
 			IVAVentasTO ivaVentas = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class).calcularIVAVentas(fechaDesde,  fechaHasta, jdiiv.getTipoFactura(),cliente);
 			if(ivaVentas.getFacturas()!=null && !ivaVentas.getFacturas().isEmpty()){
-				JDialogReporteIVAVentasPreview jDialogReporteIVAVentasPreview = new JDialogReporteIVAVentasPreview(frame, ivaVentas, fechaDesde, DateUtil.getManiana(fechaHasta));
+				JDialogReporteIVAVentasPreview jDialogReporteIVAVentasPreview = new JDialogReporteIVAVentasPreview(frame, ivaVentas, fechaDesde, fechaHasta);
 				jDialogReporteIVAVentasPreview.setVisible(true);
 			}else{
 				CLJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");

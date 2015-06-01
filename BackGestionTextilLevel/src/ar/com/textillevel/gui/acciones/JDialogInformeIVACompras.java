@@ -145,7 +145,7 @@ public class JDialogInformeIVACompras extends JDialog {
 						Date fechaDesde = getFechaDesde();
 						Date fechaHasta = getFechaHasta();
 						Proveedor proveedor = getProveedor();
-						IVAComprasTO ivaCompras = GTLBeanFactory.getInstance().getBean2(FacturaProveedorFacadeRemote.class).calcularIVACompras(DateUtil.getManiana(fechaDesde),  fechaHasta, proveedor);
+						IVAComprasTO ivaCompras = GTLBeanFactory.getInstance().getBean2(FacturaProveedorFacadeRemote.class).calcularIVACompras(fechaDesde,  fechaHasta, proveedor);
 						if(!ivaCompras.getItems().isEmpty()) {
 							IvaComprasParam ivaComprasParam = new IvaComprasParam(fechaDesde,  fechaHasta, proveedor);
 							JDialogReporteIVAComprasPreview jDialogReporteIVAComprasPreview = new JDialogReporteIVAComprasPreview(frame, ivaCompras, ivaComprasParam);

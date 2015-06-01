@@ -8,7 +8,6 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import ar.clarin.fwjava.dao.impl.GenericDAO;
-import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.NumUtil;
 import ar.com.textillevel.dao.api.local.CorreccionFacturaProveedorDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
@@ -98,7 +97,7 @@ public class CorreccionFacturaProveedorDAO extends GenericDAO<CorreccionFacturaP
 			nativeQuery.setParameter("fechaDesde", fechaDesde);
 		}
 		if(fechaHasta != null) {
-			nativeQuery.setParameter("fechaHasta", DateUtil.getManiana(fechaHasta));
+			nativeQuery.setParameter("fechaHasta", fechaHasta);
 		}
 		List<Object[]> resultList = nativeQuery.getResultList();
 		return resultList;

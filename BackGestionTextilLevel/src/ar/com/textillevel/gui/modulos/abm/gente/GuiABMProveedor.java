@@ -319,7 +319,11 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 			getTxtCuit().requestFocus();
 			return false;
 		}
-
+		if(StringUtil.isNullOrEmpty(getTxtNombreCorto().getText())) {
+			CLJOptionPane.showErrorMessage(this, "Debe ingresar el 'NOMBRE CORTO'", "Advertencia");
+			getTxtNombreCorto().requestFocus();
+			return false;
+		}
 		if (getTxtIngBrutos().getText().trim().length() == 0) {
 			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'ING. BRUTOS'.", "Advertencia");
 			getTxtIngBrutos().requestFocus();
@@ -340,7 +344,6 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 			CLJOptionPane.showErrorMessage(GuiABMProveedor.this, "Debe ingresar al menos un telefono", "Administrar proveedores");
 			return false;
 		}
-
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if (textoErrorTelefono != null) {
 			CLJOptionPane.showErrorMessage(GuiABMProveedor.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
