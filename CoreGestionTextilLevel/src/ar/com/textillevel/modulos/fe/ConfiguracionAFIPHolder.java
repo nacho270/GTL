@@ -11,7 +11,7 @@ public class ConfiguracionAFIPHolder {
 	private static volatile ConfiguracionAFIPHolder instance;
 	private ConfiguracionFacturaElectronica configFE;
 	private AuthAFIPData authAFIPData;
-	private long lastAuthRequestMillis = -1l;
+	private volatile long lastAuthRequestMillis = -1l;
 
 	public static ConfiguracionAFIPHolder getInstance() {
 		if (instance == null) {
