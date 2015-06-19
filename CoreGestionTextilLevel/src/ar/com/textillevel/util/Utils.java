@@ -28,4 +28,11 @@ public class Utils {
 		}
 		return format;
 	}
+	
+	public static boolean esAfirmativo(String texto) {
+		texto = texto.toLowerCase();
+		return texto.equals("si") || texto.equals("yes") || 
+			   texto.equals("1") || texto.equals("true") ||
+			   texto.equals("verdadero");
+	}
 }
