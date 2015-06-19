@@ -52,7 +52,8 @@ public class ConfiguracionAFIPHolder {
 			authAFIPData = ClienteAutenticacionAFIP.crearAutorizacion(configFE);
 			lastAuthRequestMillis = System.currentTimeMillis();
 		} catch (Exception e) {
-			logger.equals(e);
+			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

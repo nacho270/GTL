@@ -66,7 +66,16 @@
     -->
     
     <attribute name="Properties">
-		textillevel.chat.server.port = 7777
+		textillevel.chat.server.port=7777
+		textillevel.fe.habilitada=si
+		textillevel.fe.endpointAutenticacion=https://wsaahomo.afip.gov.ar/ws/services/LoginCms
+		textillevel.fe.endpointNegocio=https://wswhomo.afip.gov.ar/wsfe/service.asmx
+		textillevel.fe.servicio=wsfe
+		textillevel.fe.destinoServicio=cn=wsaahomo,o=afip,c=ar,serialNumber=CUIT 33693450239
+		textillevel.fe.keyStore=/home/ignacio.cicero/dev/salem/afip/salem.p12
+		textillevel.fe.keyStoreSigner=Diego Salem
+		textillevel.fe.keyStorePass=soloio
+		textillevel.fe.duracion=3600000
     </attribute>
     
   </mbean>

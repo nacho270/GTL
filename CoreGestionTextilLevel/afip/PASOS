@@ -1,0 +1,33 @@
+Archivo guia: http://www.afip.gob.ar/ws/WSAA/WSAA.ObtenerCertificado.pdf
+
+1- Generar clave privada
+
+openssl genrsa -out clave-privada.txt 1024
+
+2- Generar CSR
+
+openssl req -new -key clave-privada.txt -subj "/C=AR/O=TEXTIL LEVEL S.A/CN=Diego Salem/serialNumber=CUIT 20319632264" -out pedido
+
+3- Genear certificado en AFIP (clave publica.txt)
+
+4- Generar archivo p12
+
+openssl pkcs12 -export -in clave-publica.txt -inkey clave-privada.txt -name "Diego Salem" -out salem.p12
+
+Pais: AR
+Organization: TEXTIL LEVEL S.A
+serialNumber: CUIT 20319632264
+
+5- Bajarse certificado de la AFIP (cert-wsaahomo.crt) desde la URL: http://www.afip.gob.ar/ws/
+
+6- Importar el certificado a java.
+	6.1- Ir <dir_java>/jre/lib/security
+	6.2- Pegar el archivo descargado en el punto 5
+	6.3- Correr: sudo keytool -import -alias ca -file cert-wsaahomo.crt -keystore cacerts -storepass changeit
+
+7- Borrar todo lo que sea "trustStore" de java para forzar el uso del default.
+
+8- En el archivo properties apuntar correctamente:
+	-endpoint
+	-dstdn
+	-A raiz del punto 4, poner en "keystore-signer": Diego Salem 
