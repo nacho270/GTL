@@ -12,6 +12,8 @@ import ar.com.textillevel.modulos.fe.cliente.ServiceLocator;
 import ar.com.textillevel.modulos.fe.cliente.ServiceSoap;
 import ar.com.textillevel.modulos.fe.cliente.requests.FEAuthRequest;
 import ar.com.textillevel.modulos.fe.cliente.requests.FECAERequest;
+import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
 
 public class AFIPConnector {
@@ -46,4 +48,12 @@ public class AFIPConnector {
 		return new DatosRespuestaAFIP(resultado, reproceso, cae);
 	}
 	
+	public DocTipoResponse getTiposDoc() throws RemoteException{
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		return servicios.FEParamGetTiposDoc(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
+	}
+	
+	public DummyResponse funciona() throws RemoteException{
+		return servicios.FEDummy();
+	}
 }
