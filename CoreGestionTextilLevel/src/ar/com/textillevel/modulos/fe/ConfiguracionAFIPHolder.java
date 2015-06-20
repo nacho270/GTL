@@ -69,4 +69,12 @@ public class ConfiguracionAFIPHolder {
 		}
 		return null;
 	}
+	
+	public boolean isHabilitado() {
+		return configFE != null && configFE.isHabilitada();
+	}
+	
+	public String getURLNegocio(){
+		return configFE.getEndpointNegocio();
+	}
 }

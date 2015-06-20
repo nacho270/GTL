@@ -76,6 +76,7 @@
 		textillevel.fe.keyStoreSigner=Diego Salem
 		textillevel.fe.keyStorePass=soloio
 		textillevel.fe.duracion=3600000
+		textillevel.fe.cuitEmpresa=20319632264
     </attribute>
     
   </mbean>

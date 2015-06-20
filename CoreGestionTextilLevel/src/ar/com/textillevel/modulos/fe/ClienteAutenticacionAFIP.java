@@ -108,7 +108,8 @@ public class ClienteAutenticacionAFIP {
 
 		String token = tokenDoc.valueOf("/loginTicketResponse/credentials/token");
 		String sign = tokenDoc.valueOf("/loginTicketResponse/credentials/sign");
-
-		return new AuthAFIPData(token, sign);
+		Long cuitEmpresa = Long.valueOf(System.getProperty("textillevel.fe.cuitEmpresa"));
+		
+		return new AuthAFIPData(token, sign, cuitEmpresa);
 	}
 }
