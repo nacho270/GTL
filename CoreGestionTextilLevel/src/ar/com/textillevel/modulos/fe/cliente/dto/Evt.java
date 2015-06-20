@@ -1,72 +1,72 @@
 /**
- * FELastCMPtype.java
+ * Evt.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente;
+package ar.com.textillevel.modulos.fe.cliente.dto;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class FELastCMPtype  implements java.io.Serializable {
-    private int ptoVta;
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class Evt  implements java.io.Serializable {
+    private int code;
 
-    private int tipoCbte;
+    private java.lang.String msg;
 
-    public FELastCMPtype() {
+    public Evt() {
     }
 
-    public FELastCMPtype(
-           int ptoVta,
-           int tipoCbte) {
-           this.ptoVta = ptoVta;
-           this.tipoCbte = tipoCbte;
-    }
-
-
-    /**
-     * Gets the ptoVta value for this FELastCMPtype.
-     * 
-     * @return ptoVta
-     */
-    public int getPtoVta() {
-        return ptoVta;
+    public Evt(
+           int code,
+           java.lang.String msg) {
+           this.code = code;
+           this.msg = msg;
     }
 
 
     /**
-     * Sets the ptoVta value for this FELastCMPtype.
+     * Gets the code value for this Evt.
      * 
-     * @param ptoVta
+     * @return code
      */
-    public void setPtoVta(int ptoVta) {
-        this.ptoVta = ptoVta;
+    public int getCode() {
+        return code;
     }
 
 
     /**
-     * Gets the tipoCbte value for this FELastCMPtype.
+     * Sets the code value for this Evt.
      * 
-     * @return tipoCbte
+     * @param code
      */
-    public int getTipoCbte() {
-        return tipoCbte;
+    public void setCode(int code) {
+        this.code = code;
     }
 
 
     /**
-     * Sets the tipoCbte value for this FELastCMPtype.
+     * Gets the msg value for this Evt.
      * 
-     * @param tipoCbte
+     * @return msg
      */
-    public void setTipoCbte(int tipoCbte) {
-        this.tipoCbte = tipoCbte;
+    public java.lang.String getMsg() {
+        return msg;
+    }
+
+
+    /**
+     * Sets the msg value for this Evt.
+     * 
+     * @param msg
+     */
+    public void setMsg(java.lang.String msg) {
+        this.msg = msg;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof FELastCMPtype)) return false;
-        FELastCMPtype other = (FELastCMPtype) obj;
+        if (!(obj instanceof Evt)) return false;
+        Evt other = (Evt) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -75,8 +75,10 @@ public class FELastCMPtype  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            this.ptoVta == other.getPtoVta() &&
-            this.tipoCbte == other.getTipoCbte();
+            this.code == other.getCode() &&
+            ((this.msg==null && other.getMsg()==null) || 
+             (this.msg!=null &&
+              this.msg.equals(other.getMsg())));
         __equalsCalc = null;
         return _equals;
     }
@@ -88,28 +90,31 @@ public class FELastCMPtype  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += getPtoVta();
-        _hashCode += getTipoCbte();
+        _hashCode += getCode();
+        if (getMsg() != null) {
+            _hashCode += getMsg().hashCode();
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(FELastCMPtype.class, true);
+        new org.apache.axis.description.TypeDesc(Evt.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "FELastCMPtype"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Evt"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("ptoVta");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "PtoVta"));
+        elemField.setFieldName("code");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Code"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("tipoCbte");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "TipoCbte"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setFieldName("msg");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Msg"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

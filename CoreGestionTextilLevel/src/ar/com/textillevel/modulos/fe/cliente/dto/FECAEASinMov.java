@@ -1,96 +1,96 @@
 /**
- * FEAuthRequest.java
+ * FECAEASinMov.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente.requests;
+package ar.com.textillevel.modulos.fe.cliente.dto;
 
 @SuppressWarnings({"serial","rawtypes","unused"})
-public class FEAuthRequest  implements java.io.Serializable {
-    private java.lang.String token;
+public class FECAEASinMov  implements java.io.Serializable {
+    private java.lang.String CAEA;
 
-    private java.lang.String sign;
+    private java.lang.String fchProceso;
 
-    private long cuit;
+    private int ptoVta;
 
-    public FEAuthRequest() {
+    public FECAEASinMov() {
     }
 
-    public FEAuthRequest(
-           java.lang.String token,
-           java.lang.String sign,
-           long cuit) {
-           this.token = token;
-           this.sign = sign;
-           this.cuit = cuit;
-    }
-
-
-    /**
-     * Gets the token value for this FEAuthRequest.
-     * 
-     * @return token
-     */
-    public java.lang.String getToken() {
-        return token;
+    public FECAEASinMov(
+           java.lang.String CAEA,
+           java.lang.String fchProceso,
+           int ptoVta) {
+           this.CAEA = CAEA;
+           this.fchProceso = fchProceso;
+           this.ptoVta = ptoVta;
     }
 
 
     /**
-     * Sets the token value for this FEAuthRequest.
+     * Gets the CAEA value for this FECAEASinMov.
      * 
-     * @param token
+     * @return CAEA
      */
-    public void setToken(java.lang.String token) {
-        this.token = token;
+    public java.lang.String getCAEA() {
+        return CAEA;
     }
 
 
     /**
-     * Gets the sign value for this FEAuthRequest.
+     * Sets the CAEA value for this FECAEASinMov.
      * 
-     * @return sign
+     * @param CAEA
      */
-    public java.lang.String getSign() {
-        return sign;
+    public void setCAEA(java.lang.String CAEA) {
+        this.CAEA = CAEA;
     }
 
 
     /**
-     * Sets the sign value for this FEAuthRequest.
+     * Gets the fchProceso value for this FECAEASinMov.
      * 
-     * @param sign
+     * @return fchProceso
      */
-    public void setSign(java.lang.String sign) {
-        this.sign = sign;
+    public java.lang.String getFchProceso() {
+        return fchProceso;
     }
 
 
     /**
-     * Gets the cuit value for this FEAuthRequest.
+     * Sets the fchProceso value for this FECAEASinMov.
      * 
-     * @return cuit
+     * @param fchProceso
      */
-    public long getCuit() {
-        return cuit;
+    public void setFchProceso(java.lang.String fchProceso) {
+        this.fchProceso = fchProceso;
     }
 
 
     /**
-     * Sets the cuit value for this FEAuthRequest.
+     * Gets the ptoVta value for this FECAEASinMov.
      * 
-     * @param cuit
+     * @return ptoVta
      */
-    public void setCuit(long cuit) {
-        this.cuit = cuit;
+    public int getPtoVta() {
+        return ptoVta;
+    }
+
+
+    /**
+     * Sets the ptoVta value for this FECAEASinMov.
+     * 
+     * @param ptoVta
+     */
+    public void setPtoVta(int ptoVta) {
+        this.ptoVta = ptoVta;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof FEAuthRequest)) return false;
-        FEAuthRequest other = (FEAuthRequest) obj;
+        if (!(obj instanceof FECAEASinMov)) return false;
+        FECAEASinMov other = (FECAEASinMov) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -99,13 +99,13 @@ public class FEAuthRequest  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.token==null && other.getToken()==null) || 
-             (this.token!=null &&
-              this.token.equals(other.getToken()))) &&
-            ((this.sign==null && other.getSign()==null) || 
-             (this.sign!=null &&
-              this.sign.equals(other.getSign()))) &&
-            this.cuit == other.getCuit();
+            ((this.CAEA==null && other.getCAEA()==null) || 
+             (this.CAEA!=null &&
+              this.CAEA.equals(other.getCAEA()))) &&
+            ((this.fchProceso==null && other.getFchProceso()==null) || 
+             (this.fchProceso!=null &&
+              this.fchProceso.equals(other.getFchProceso()))) &&
+            this.ptoVta == other.getPtoVta();
         __equalsCalc = null;
         return _equals;
     }
@@ -117,41 +117,41 @@ public class FEAuthRequest  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getToken() != null) {
-            _hashCode += getToken().hashCode();
+        if (getCAEA() != null) {
+            _hashCode += getCAEA().hashCode();
         }
-        if (getSign() != null) {
-            _hashCode += getSign().hashCode();
+        if (getFchProceso() != null) {
+            _hashCode += getFchProceso().hashCode();
         }
-        _hashCode += new Long(getCuit()).hashCode();
+        _hashCode += getPtoVta();
         __hashCodeCalc = false;
         return _hashCode;
     }
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(FEAuthRequest.class, true);
+        new org.apache.axis.description.TypeDesc(FECAEASinMov.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "FEAuthRequest"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "FECAEASinMov"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("token");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Token"));
+        elemField.setFieldName("CAEA");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "CAEA"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("sign");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Sign"));
+        elemField.setFieldName("fchProceso");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "FchProceso"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cuit");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Cuit"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setFieldName("ptoVta");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "PtoVta"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

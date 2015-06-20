@@ -7,84 +7,84 @@
 
 package ar.com.textillevel.modulos.fe.cliente.responses;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
+@SuppressWarnings({"serial","rawtypes","unused"})
 public class DummyResponse  implements java.io.Serializable {
-    private java.lang.String appserver;
+    private java.lang.String appServer;
 
-    private java.lang.String dbserver;
+    private java.lang.String dbServer;
 
-    private java.lang.String authserver;
+    private java.lang.String authServer;
 
     public DummyResponse() {
     }
 
     public DummyResponse(
-           java.lang.String appserver,
-           java.lang.String dbserver,
-           java.lang.String authserver) {
-           this.appserver = appserver;
-           this.dbserver = dbserver;
-           this.authserver = authserver;
+           java.lang.String appServer,
+           java.lang.String dbServer,
+           java.lang.String authServer) {
+           this.appServer = appServer;
+           this.dbServer = dbServer;
+           this.authServer = authServer;
     }
 
 
     /**
-     * Gets the appserver value for this DummyResponse.
+     * Gets the appServer value for this DummyResponse.
      * 
-     * @return appserver
+     * @return appServer
      */
-    public java.lang.String getAppserver() {
-        return appserver;
+    public java.lang.String getAppServer() {
+        return appServer;
     }
 
 
     /**
-     * Sets the appserver value for this DummyResponse.
+     * Sets the appServer value for this DummyResponse.
      * 
-     * @param appserver
+     * @param appServer
      */
-    public void setAppserver(java.lang.String appserver) {
-        this.appserver = appserver;
+    public void setAppServer(java.lang.String appServer) {
+        this.appServer = appServer;
     }
 
 
     /**
-     * Gets the dbserver value for this DummyResponse.
+     * Gets the dbServer value for this DummyResponse.
      * 
-     * @return dbserver
+     * @return dbServer
      */
-    public java.lang.String getDbserver() {
-        return dbserver;
+    public java.lang.String getDbServer() {
+        return dbServer;
     }
 
 
     /**
-     * Sets the dbserver value for this DummyResponse.
+     * Sets the dbServer value for this DummyResponse.
      * 
-     * @param dbserver
+     * @param dbServer
      */
-    public void setDbserver(java.lang.String dbserver) {
-        this.dbserver = dbserver;
+    public void setDbServer(java.lang.String dbServer) {
+        this.dbServer = dbServer;
     }
 
 
     /**
-     * Gets the authserver value for this DummyResponse.
+     * Gets the authServer value for this DummyResponse.
      * 
-     * @return authserver
+     * @return authServer
      */
-    public java.lang.String getAuthserver() {
-        return authserver;
+    public java.lang.String getAuthServer() {
+        return authServer;
     }
 
 
     /**
-     * Sets the authserver value for this DummyResponse.
+     * Sets the authServer value for this DummyResponse.
      * 
-     * @param authserver
+     * @param authServer
      */
-    public void setAuthserver(java.lang.String authserver) {
-        this.authserver = authserver;
+    public void setAuthServer(java.lang.String authServer) {
+        this.authServer = authServer;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -99,15 +99,15 @@ public class DummyResponse  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.appserver==null && other.getAppserver()==null) || 
-             (this.appserver!=null &&
-              this.appserver.equals(other.getAppserver()))) &&
-            ((this.dbserver==null && other.getDbserver()==null) || 
-             (this.dbserver!=null &&
-              this.dbserver.equals(other.getDbserver()))) &&
-            ((this.authserver==null && other.getAuthserver()==null) || 
-             (this.authserver!=null &&
-              this.authserver.equals(other.getAuthserver())));
+            ((this.appServer==null && other.getAppServer()==null) || 
+             (this.appServer!=null &&
+              this.appServer.equals(other.getAppServer()))) &&
+            ((this.dbServer==null && other.getDbServer()==null) || 
+             (this.dbServer!=null &&
+              this.dbServer.equals(other.getDbServer()))) &&
+            ((this.authServer==null && other.getAuthServer()==null) || 
+             (this.authServer!=null &&
+              this.authServer.equals(other.getAuthServer())));
         __equalsCalc = null;
         return _equals;
     }
@@ -119,14 +119,14 @@ public class DummyResponse  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getAppserver() != null) {
-            _hashCode += getAppserver().hashCode();
+        if (getAppServer() != null) {
+            _hashCode += getAppServer().hashCode();
         }
-        if (getDbserver() != null) {
-            _hashCode += getDbserver().hashCode();
+        if (getDbServer() != null) {
+            _hashCode += getDbServer().hashCode();
         }
-        if (getAuthserver() != null) {
-            _hashCode += getAuthserver().hashCode();
+        if (getAuthServer() != null) {
+            _hashCode += getAuthServer().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -137,24 +137,24 @@ public class DummyResponse  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(DummyResponse.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "DummyResponse"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "DummyResponse"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("appserver");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "appserver"));
+        elemField.setFieldName("appServer");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "AppServer"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("dbserver");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "dbserver"));
+        elemField.setFieldName("dbServer");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "DbServer"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("authserver");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "authserver"));
+        elemField.setFieldName("authServer");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "AuthServer"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

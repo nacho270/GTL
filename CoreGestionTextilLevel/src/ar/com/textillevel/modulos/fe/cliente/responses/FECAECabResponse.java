@@ -1,48 +1,39 @@
 /**
- * FERecuperaQTY.java
+ * FECAECabResponse.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente;
+package ar.com.textillevel.modulos.fe.cliente.responses;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class FERecuperaQTY  implements java.io.Serializable {
-    private int value;
-
-    public FERecuperaQTY() {
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class FECAECabResponse  extends ar.com.textillevel.modulos.fe.cliente.responses.FECabResponse  implements java.io.Serializable {
+    public FECAECabResponse() {
     }
 
-    public FERecuperaQTY(
-           int value) {
-           this.value = value;
-    }
-
-
-    /**
-     * Gets the value value for this FERecuperaQTY.
-     * 
-     * @return value
-     */
-    public int getValue() {
-        return value;
-    }
-
-
-    /**
-     * Sets the value value for this FERecuperaQTY.
-     * 
-     * @param value
-     */
-    public void setValue(int value) {
-        this.value = value;
+    public FECAECabResponse(
+           long cuit,
+           int ptoVta,
+           int cbteTipo,
+           java.lang.String fchProceso,
+           int cantReg,
+           java.lang.String resultado,
+           java.lang.String reproceso) {
+        super(
+            cuit,
+            ptoVta,
+            cbteTipo,
+            fchProceso,
+            cantReg,
+            resultado,
+            reproceso);
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof FERecuperaQTY)) return false;
-        FERecuperaQTY other = (FERecuperaQTY) obj;
+        if (!(obj instanceof FECAECabResponse)) return false;
+        FECAECabResponse other = (FECAECabResponse) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -50,8 +41,7 @@ public class FERecuperaQTY  implements java.io.Serializable {
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = true && 
-            this.value == other.getValue();
+        _equals = super.equals(obj);
         __equalsCalc = null;
         return _equals;
     }
@@ -62,24 +52,17 @@ public class FERecuperaQTY  implements java.io.Serializable {
             return 0;
         }
         __hashCodeCalc = true;
-        int _hashCode = 1;
-        _hashCode += getValue();
+        int _hashCode = super.hashCode();
         __hashCodeCalc = false;
         return _hashCode;
     }
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(FERecuperaQTY.class, true);
+        new org.apache.axis.description.TypeDesc(FECAECabResponse.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "FERecuperaQTY"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("value");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "value"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "FECAECabResponse"));
     }
 
     /**

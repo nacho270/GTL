@@ -1,72 +1,72 @@
 /**
- * FEConsultaCAEResponse.java
+ * Obs.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente.responses;
+package ar.com.textillevel.modulos.fe.cliente.dto;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class FEConsultaCAEResponse  implements java.io.Serializable {
-    private int resultado;
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class Obs  implements java.io.Serializable {
+    private int code;
 
-    private ar.com.textillevel.modulos.fe.cliente.VError RError;
+    private java.lang.String msg;
 
-    public FEConsultaCAEResponse() {
+    public Obs() {
     }
 
-    public FEConsultaCAEResponse(
-           int resultado,
-           ar.com.textillevel.modulos.fe.cliente.VError RError) {
-           this.resultado = resultado;
-           this.RError = RError;
-    }
-
-
-    /**
-     * Gets the resultado value for this FEConsultaCAEResponse.
-     * 
-     * @return resultado
-     */
-    public int getResultado() {
-        return resultado;
+    public Obs(
+           int code,
+           java.lang.String msg) {
+           this.code = code;
+           this.msg = msg;
     }
 
 
     /**
-     * Sets the resultado value for this FEConsultaCAEResponse.
+     * Gets the code value for this Obs.
      * 
-     * @param resultado
+     * @return code
      */
-    public void setResultado(int resultado) {
-        this.resultado = resultado;
+    public int getCode() {
+        return code;
     }
 
 
     /**
-     * Gets the RError value for this FEConsultaCAEResponse.
+     * Sets the code value for this Obs.
      * 
-     * @return RError
+     * @param code
      */
-    public ar.com.textillevel.modulos.fe.cliente.VError getRError() {
-        return RError;
+    public void setCode(int code) {
+        this.code = code;
     }
 
 
     /**
-     * Sets the RError value for this FEConsultaCAEResponse.
+     * Gets the msg value for this Obs.
      * 
-     * @param RError
+     * @return msg
      */
-    public void setRError(ar.com.textillevel.modulos.fe.cliente.VError RError) {
-        this.RError = RError;
+    public java.lang.String getMsg() {
+        return msg;
+    }
+
+
+    /**
+     * Sets the msg value for this Obs.
+     * 
+     * @param msg
+     */
+    public void setMsg(java.lang.String msg) {
+        this.msg = msg;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof FEConsultaCAEResponse)) return false;
-        FEConsultaCAEResponse other = (FEConsultaCAEResponse) obj;
+        if (!(obj instanceof Obs)) return false;
+        Obs other = (Obs) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -75,10 +75,10 @@ public class FEConsultaCAEResponse  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            this.resultado == other.getResultado() &&
-            ((this.RError==null && other.getRError()==null) || 
-             (this.RError!=null &&
-              this.RError.equals(other.getRError())));
+            this.code == other.getCode() &&
+            ((this.msg==null && other.getMsg()==null) || 
+             (this.msg!=null &&
+              this.msg.equals(other.getMsg())));
         __equalsCalc = null;
         return _equals;
     }
@@ -90,9 +90,9 @@ public class FEConsultaCAEResponse  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += getResultado();
-        if (getRError() != null) {
-            _hashCode += getRError().hashCode();
+        _hashCode += getCode();
+        if (getMsg() != null) {
+            _hashCode += getMsg().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -100,20 +100,20 @@ public class FEConsultaCAEResponse  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(FEConsultaCAEResponse.class, true);
+        new org.apache.axis.description.TypeDesc(Obs.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "FEConsultaCAEResponse"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Obs"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("resultado");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "Resultado"));
+        elemField.setFieldName("code");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Code"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("RError");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "RError"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "vError"));
+        elemField.setFieldName("msg");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Msg"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

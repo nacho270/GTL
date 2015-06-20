@@ -10,7 +10,8 @@ package ar.com.textillevel.modulos.fe.cliente;
 public interface Service extends javax.xml.rpc.Service {
 
 /**
- * AFIP Web Service de Facturacion Electronica - Version 1
+ * Web Service orientado  al  servicio  de Facturacion electronica
+ * RG2485 V1
  */
     public java.lang.String getServiceSoapAddress();
 

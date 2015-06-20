@@ -7,11 +7,12 @@
 
 package ar.com.textillevel.modulos.fe.cliente;
 
-@SuppressWarnings({"rawtypes","unchecked","serial"})
+@SuppressWarnings({"serial","rawtypes","unchecked"})
 public class ServiceLocator extends org.apache.axis.client.Service implements ar.com.textillevel.modulos.fe.cliente.Service {
 
 /**
- * AFIP Web Service de Facturacion Electronica - Version 1
+ * Web Service orientado  al  servicio  de Facturacion electronica
+ * RG2485 V1
  */
 
     public ServiceLocator() {
@@ -27,7 +28,7 @@ public class ServiceLocator extends org.apache.axis.client.Service implements ar
     }
 
     // Use to get a proxy class for ServiceSoap
-    private java.lang.String ServiceSoap_address = "https://wswhomo.afip.gov.ar/wsfe/service.asmx";
+    private java.lang.String ServiceSoap_address = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";
 
     public java.lang.String getServiceSoapAddress() {
         return ServiceSoap_address;
@@ -57,7 +58,7 @@ public class ServiceLocator extends org.apache.axis.client.Service implements ar
 
     public ar.com.textillevel.modulos.fe.cliente.ServiceSoap getServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-        	ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub _stub = new ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub(portAddress, this);
+            ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub _stub = new ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub(portAddress, this);
             _stub.setPortName(getServiceSoapWSDDServiceName());
             return _stub;
         }
@@ -78,7 +79,7 @@ public class ServiceLocator extends org.apache.axis.client.Service implements ar
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (ar.com.textillevel.modulos.fe.cliente.ServiceSoap.class.isAssignableFrom(serviceEndpointInterface)) {
-            	ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub _stub = new ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub(new java.net.URL(ServiceSoap_address), this);
+                ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub _stub = new ar.com.textillevel.modulos.fe.cliente.ServiceSoapStub(new java.net.URL(ServiceSoap_address), this);
                 _stub.setPortName(getServiceSoapWSDDServiceName());
                 return _stub;
             }
@@ -110,7 +111,7 @@ public class ServiceLocator extends org.apache.axis.client.Service implements ar
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "Service");
+        return new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Service");
     }
 
     private java.util.HashSet ports = null;
@@ -118,7 +119,7 @@ public class ServiceLocator extends org.apache.axis.client.Service implements ar
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "ServiceSoap"));
+            ports.add(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "ServiceSoap"));
         }
         return ports.iterator();
     }

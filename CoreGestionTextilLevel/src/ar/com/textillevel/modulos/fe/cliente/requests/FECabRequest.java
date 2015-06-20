@@ -1,5 +1,5 @@
 /**
- * FECabeceraRequest.java
+ * FECabRequest.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,90 +7,90 @@
 
 package ar.com.textillevel.modulos.fe.cliente.requests;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class FECabeceraRequest  implements java.io.Serializable {
-    private long id;
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class FECabRequest  implements java.io.Serializable {
+    private int cantReg;
 
-    private int cantidadreg;
+    private int ptoVta;
 
-    private int presta_serv;
+    private int cbteTipo;
 
-    public FECabeceraRequest() {
+    public FECabRequest() {
     }
 
-    public FECabeceraRequest(
-           long id,
-           int cantidadreg,
-           int presta_serv) {
-           this.id = id;
-           this.cantidadreg = cantidadreg;
-           this.presta_serv = presta_serv;
-    }
-
-
-    /**
-     * Gets the id value for this FECabeceraRequest.
-     * 
-     * @return id
-     */
-    public long getId() {
-        return id;
+    public FECabRequest(
+           int cantReg,
+           int ptoVta,
+           int cbteTipo) {
+           this.cantReg = cantReg;
+           this.ptoVta = ptoVta;
+           this.cbteTipo = cbteTipo;
     }
 
 
     /**
-     * Sets the id value for this FECabeceraRequest.
+     * Gets the cantReg value for this FECabRequest.
      * 
-     * @param id
+     * @return cantReg
      */
-    public void setId(long id) {
-        this.id = id;
+    public int getCantReg() {
+        return cantReg;
     }
 
 
     /**
-     * Gets the cantidadreg value for this FECabeceraRequest.
+     * Sets the cantReg value for this FECabRequest.
      * 
-     * @return cantidadreg
+     * @param cantReg
      */
-    public int getCantidadreg() {
-        return cantidadreg;
+    public void setCantReg(int cantReg) {
+        this.cantReg = cantReg;
     }
 
 
     /**
-     * Sets the cantidadreg value for this FECabeceraRequest.
+     * Gets the ptoVta value for this FECabRequest.
      * 
-     * @param cantidadreg
+     * @return ptoVta
      */
-    public void setCantidadreg(int cantidadreg) {
-        this.cantidadreg = cantidadreg;
+    public int getPtoVta() {
+        return ptoVta;
     }
 
 
     /**
-     * Gets the presta_serv value for this FECabeceraRequest.
+     * Sets the ptoVta value for this FECabRequest.
      * 
-     * @return presta_serv
+     * @param ptoVta
      */
-    public int getPresta_serv() {
-        return presta_serv;
+    public void setPtoVta(int ptoVta) {
+        this.ptoVta = ptoVta;
     }
 
 
     /**
-     * Sets the presta_serv value for this FECabeceraRequest.
+     * Gets the cbteTipo value for this FECabRequest.
      * 
-     * @param presta_serv
+     * @return cbteTipo
      */
-    public void setPresta_serv(int presta_serv) {
-        this.presta_serv = presta_serv;
+    public int getCbteTipo() {
+        return cbteTipo;
+    }
+
+
+    /**
+     * Sets the cbteTipo value for this FECabRequest.
+     * 
+     * @param cbteTipo
+     */
+    public void setCbteTipo(int cbteTipo) {
+        this.cbteTipo = cbteTipo;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof FECabeceraRequest)) return false;
-        FECabeceraRequest other = (FECabeceraRequest) obj;
+        if (!(obj instanceof FECabRequest)) return false;
+        FECabRequest other = (FECabRequest) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -99,9 +99,9 @@ public class FECabeceraRequest  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            this.id == other.getId() &&
-            this.cantidadreg == other.getCantidadreg() &&
-            this.presta_serv == other.getPresta_serv();
+            this.cantReg == other.getCantReg() &&
+            this.ptoVta == other.getPtoVta() &&
+            this.cbteTipo == other.getCbteTipo();
         __equalsCalc = null;
         return _equals;
     }
@@ -113,34 +113,34 @@ public class FECabeceraRequest  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += new Long(getId()).hashCode();
-        _hashCode += getCantidadreg();
-        _hashCode += getPresta_serv();
+        _hashCode += getCantReg();
+        _hashCode += getPtoVta();
+        _hashCode += getCbteTipo();
         __hashCodeCalc = false;
         return _hashCode;
     }
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(FECabeceraRequest.class, true);
+        new org.apache.axis.description.TypeDesc(FECabRequest.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "FECabeceraRequest"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "FECabRequest"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("id");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "id"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cantidadreg");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "cantidadreg"));
+        elemField.setFieldName("cantReg");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "CantReg"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("presta_serv");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "presta_serv"));
+        elemField.setFieldName("ptoVta");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "PtoVta"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("cbteTipo");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "CbteTipo"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

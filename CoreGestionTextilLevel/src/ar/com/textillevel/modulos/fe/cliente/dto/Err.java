@@ -1,72 +1,72 @@
 /**
- * FERecuperaLastCMPResponse.java
+ * Err.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente.responses;
+package ar.com.textillevel.modulos.fe.cliente.dto;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class FERecuperaLastCMPResponse  implements java.io.Serializable {
-    private int cbte_nro;
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class Err  implements java.io.Serializable {
+    private int code;
 
-    private ar.com.textillevel.modulos.fe.cliente.VError RError;
+    private java.lang.String msg;
 
-    public FERecuperaLastCMPResponse() {
+    public Err() {
     }
 
-    public FERecuperaLastCMPResponse(
-           int cbte_nro,
-           ar.com.textillevel.modulos.fe.cliente.VError RError) {
-           this.cbte_nro = cbte_nro;
-           this.RError = RError;
-    }
-
-
-    /**
-     * Gets the cbte_nro value for this FERecuperaLastCMPResponse.
-     * 
-     * @return cbte_nro
-     */
-    public int getCbte_nro() {
-        return cbte_nro;
+    public Err(
+           int code,
+           java.lang.String msg) {
+           this.code = code;
+           this.msg = msg;
     }
 
 
     /**
-     * Sets the cbte_nro value for this FERecuperaLastCMPResponse.
+     * Gets the code value for this Err.
      * 
-     * @param cbte_nro
+     * @return code
      */
-    public void setCbte_nro(int cbte_nro) {
-        this.cbte_nro = cbte_nro;
+    public int getCode() {
+        return code;
     }
 
 
     /**
-     * Gets the RError value for this FERecuperaLastCMPResponse.
+     * Sets the code value for this Err.
      * 
-     * @return RError
+     * @param code
      */
-    public ar.com.textillevel.modulos.fe.cliente.VError getRError() {
-        return RError;
+    public void setCode(int code) {
+        this.code = code;
     }
 
 
     /**
-     * Sets the RError value for this FERecuperaLastCMPResponse.
+     * Gets the msg value for this Err.
      * 
-     * @param RError
+     * @return msg
      */
-    public void setRError(ar.com.textillevel.modulos.fe.cliente.VError RError) {
-        this.RError = RError;
+    public java.lang.String getMsg() {
+        return msg;
+    }
+
+
+    /**
+     * Sets the msg value for this Err.
+     * 
+     * @param msg
+     */
+    public void setMsg(java.lang.String msg) {
+        this.msg = msg;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof FERecuperaLastCMPResponse)) return false;
-        FERecuperaLastCMPResponse other = (FERecuperaLastCMPResponse) obj;
+        if (!(obj instanceof Err)) return false;
+        Err other = (Err) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -75,10 +75,10 @@ public class FERecuperaLastCMPResponse  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            this.cbte_nro == other.getCbte_nro() &&
-            ((this.RError==null && other.getRError()==null) || 
-             (this.RError!=null &&
-              this.RError.equals(other.getRError())));
+            this.code == other.getCode() &&
+            ((this.msg==null && other.getMsg()==null) || 
+             (this.msg!=null &&
+              this.msg.equals(other.getMsg())));
         __equalsCalc = null;
         return _equals;
     }
@@ -90,9 +90,9 @@ public class FERecuperaLastCMPResponse  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += getCbte_nro();
-        if (getRError() != null) {
-            _hashCode += getRError().hashCode();
+        _hashCode += getCode();
+        if (getMsg() != null) {
+            _hashCode += getMsg().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -100,20 +100,20 @@ public class FERecuperaLastCMPResponse  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(FERecuperaLastCMPResponse.class, true);
+        new org.apache.axis.description.TypeDesc(Err.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "FERecuperaLastCMPResponse"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Err"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cbte_nro");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "cbte_nro"));
+        elemField.setFieldName("code");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Code"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("RError");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "RError"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "vError"));
+        elemField.setFieldName("msg");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Msg"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

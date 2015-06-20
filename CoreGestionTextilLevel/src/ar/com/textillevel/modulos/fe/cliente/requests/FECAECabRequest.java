@@ -1,48 +1,31 @@
 /**
- * UltNroResponse.java
+ * FECAECabRequest.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente.responses;
+package ar.com.textillevel.modulos.fe.cliente.requests;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class UltNroResponse  implements java.io.Serializable {
-    private long value;
-
-    public UltNroResponse() {
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class FECAECabRequest  extends ar.com.textillevel.modulos.fe.cliente.requests.FECabRequest  implements java.io.Serializable {
+    public FECAECabRequest() {
     }
 
-    public UltNroResponse(
-           long value) {
-           this.value = value;
-    }
-
-
-    /**
-     * Gets the value value for this UltNroResponse.
-     * 
-     * @return value
-     */
-    public long getValue() {
-        return value;
-    }
-
-
-    /**
-     * Sets the value value for this UltNroResponse.
-     * 
-     * @param value
-     */
-    public void setValue(long value) {
-        this.value = value;
+    public FECAECabRequest(
+           int cantReg,
+           int ptoVta,
+           int cbteTipo) {
+        super(
+            cantReg,
+            ptoVta,
+            cbteTipo);
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof UltNroResponse)) return false;
-        UltNroResponse other = (UltNroResponse) obj;
+        if (!(obj instanceof FECAECabRequest)) return false;
+        FECAECabRequest other = (FECAECabRequest) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -50,8 +33,7 @@ public class UltNroResponse  implements java.io.Serializable {
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = true && 
-            this.value == other.getValue();
+        _equals = super.equals(obj);
         __equalsCalc = null;
         return _equals;
     }
@@ -62,24 +44,17 @@ public class UltNroResponse  implements java.io.Serializable {
             return 0;
         }
         __hashCodeCalc = true;
-        int _hashCode = 1;
-        _hashCode += new Long(getValue()).hashCode();
+        int _hashCode = super.hashCode();
         __hashCodeCalc = false;
         return _hashCode;
     }
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(UltNroResponse.class, true);
+        new org.apache.axis.description.TypeDesc(FECAECabRequest.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "UltNroResponse"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("value");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "value"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "FECAECabRequest"));
     }
 
     /**

@@ -11,8 +11,8 @@ import ar.com.textillevel.modulos.fe.ConfiguracionAFIPHolder;
 import ar.com.textillevel.modulos.fe.cliente.ServiceLocator;
 import ar.com.textillevel.modulos.fe.cliente.ServiceSoap;
 import ar.com.textillevel.modulos.fe.cliente.requests.FEAuthRequest;
-import ar.com.textillevel.modulos.fe.cliente.requests.FERequest;
-import ar.com.textillevel.modulos.fe.cliente.responses.FEResponse;
+import ar.com.textillevel.modulos.fe.cliente.requests.FECAERequest;
+import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
 
 public class AFIPConnector {
 
@@ -38,13 +38,12 @@ public class AFIPConnector {
 	
 	public DatosRespuestaAFIP autorizarDocumento(DocumentoContableCliente documento) throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
-		FERequest request = null;
-		FEResponse response = servicios.FEAutRequest(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
-		String resultado = response.getFecResp().getResultado();
-		String motivo = response.getFecResp().getMotivo();
-		String reproceso = response.getFecResp().getReproceso();
-		String cae = response.getFedResp()[0].getCae();
-		return new DatosRespuestaAFIP(resultado, motivo, reproceso, cae);
+		FECAERequest request = null;
+		FECAEResponse response = servicios.FECAESolicitar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
+		String resultado = response.getFeCabResp().getResultado();
+		String reproceso = response.getFeCabResp().getReproceso();
+		String cae = response.getFeDetResp()[0].getCAE();
+		return new DatosRespuestaAFIP(resultado, reproceso, cae);
 	}
 	
 }

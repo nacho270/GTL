@@ -1,72 +1,72 @@
 /**
- * VError.java
+ * PaisTipo.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package ar.com.textillevel.modulos.fe.cliente;
+package ar.com.textillevel.modulos.fe.cliente.dto;
 
-@SuppressWarnings({"rawtypes","serial","unused"})
-public class VError  implements java.io.Serializable {
-    private int percode;
+@SuppressWarnings({"serial","rawtypes","unused"})
+public class PaisTipo  implements java.io.Serializable {
+    private short id;
 
-    private java.lang.String perrmsg;
+    private java.lang.String desc;
 
-    public VError() {
+    public PaisTipo() {
     }
 
-    public VError(
-           int percode,
-           java.lang.String perrmsg) {
-           this.percode = percode;
-           this.perrmsg = perrmsg;
-    }
-
-
-    /**
-     * Gets the percode value for this VError.
-     * 
-     * @return percode
-     */
-    public int getPercode() {
-        return percode;
+    public PaisTipo(
+           short id,
+           java.lang.String desc) {
+           this.id = id;
+           this.desc = desc;
     }
 
 
     /**
-     * Sets the percode value for this VError.
+     * Gets the id value for this PaisTipo.
      * 
-     * @param percode
+     * @return id
      */
-    public void setPercode(int percode) {
-        this.percode = percode;
+    public short getId() {
+        return id;
     }
 
 
     /**
-     * Gets the perrmsg value for this VError.
+     * Sets the id value for this PaisTipo.
      * 
-     * @return perrmsg
+     * @param id
      */
-    public java.lang.String getPerrmsg() {
-        return perrmsg;
+    public void setId(short id) {
+        this.id = id;
     }
 
 
     /**
-     * Sets the perrmsg value for this VError.
+     * Gets the desc value for this PaisTipo.
      * 
-     * @param perrmsg
+     * @return desc
      */
-    public void setPerrmsg(java.lang.String perrmsg) {
-        this.perrmsg = perrmsg;
+    public java.lang.String getDesc() {
+        return desc;
+    }
+
+
+    /**
+     * Sets the desc value for this PaisTipo.
+     * 
+     * @param desc
+     */
+    public void setDesc(java.lang.String desc) {
+        this.desc = desc;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof VError)) return false;
-        VError other = (VError) obj;
+        if (!(obj instanceof PaisTipo)) return false;
+        PaisTipo other = (PaisTipo) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -75,10 +75,10 @@ public class VError  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            this.percode == other.getPercode() &&
-            ((this.perrmsg==null && other.getPerrmsg()==null) || 
-             (this.perrmsg!=null &&
-              this.perrmsg.equals(other.getPerrmsg())));
+            this.id == other.getId() &&
+            ((this.desc==null && other.getDesc()==null) || 
+             (this.desc!=null &&
+              this.desc.equals(other.getDesc())));
         __equalsCalc = null;
         return _equals;
     }
@@ -90,9 +90,9 @@ public class VError  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += getPercode();
-        if (getPerrmsg() != null) {
-            _hashCode += getPerrmsg().hashCode();
+        _hashCode += getId();
+        if (getDesc() != null) {
+            _hashCode += getDesc().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -100,19 +100,19 @@ public class VError  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(VError.class, true);
+        new org.apache.axis.description.TypeDesc(PaisTipo.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "vError"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "PaisTipo"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("percode");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "percode"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setFieldName("id");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Id"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "short"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("perrmsg");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.facturaelectronica/", "perrmsg"));
+        elemField.setFieldName("desc");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://ar.gov.afip.dif.FEV1/", "Desc"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
