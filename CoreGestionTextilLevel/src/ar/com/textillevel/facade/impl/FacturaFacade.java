@@ -1,6 +1,7 @@
 package ar.com.textillevel.facade.impl;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -49,6 +50,7 @@ import ar.com.textillevel.facade.api.local.RemitoSalidaFacadeLocal;
 import ar.com.textillevel.facade.api.local.UsuarioSistemaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 
@@ -430,5 +432,14 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			}
 		}
 		return max;
+	}
+
+	public void pruebaAutorizar() {
+		try {
+			AFIPConnector.getInstance().autorizarDocumento(facturaDao.getById(3873),parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal(),1);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

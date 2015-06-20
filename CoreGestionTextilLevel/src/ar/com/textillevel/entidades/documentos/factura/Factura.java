@@ -21,6 +21,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import ar.clarin.fwjava.util.StringUtil;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
@@ -132,6 +133,12 @@ public class Factura extends DocumentoContableCliente implements Serializable {
 			lista.add(String.valueOf(r.getNroRemito()));
 		}
 		return StringUtil.getCadena(lista, " / ");
+	}
+
+	@Override
+	@Transient
+	public ETipoDocumento getTipoDocumento() {
+		return ETipoDocumento.FACTURA;
 	}
 
 }

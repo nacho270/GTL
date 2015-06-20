@@ -34,5 +34,5 @@ public interface FacturaFacadeRemote {
 	public List<Factura> getAllFacturasByCliente(Integer idCliente);
 	public Integer getProximoNroFactura(EPosicionIVA posIva);
 	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura);
-
+	public void pruebaAutorizar();
 }

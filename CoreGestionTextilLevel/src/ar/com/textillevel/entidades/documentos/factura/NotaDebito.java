@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.cheque.Cheque;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 
@@ -89,5 +90,11 @@ public class NotaDebito extends CorreccionFactura {
 
 	public void setIsParaRechazarCheque(Boolean isParaRechazarCheque) {
 		this.isParaRechazarCheque = isParaRechazarCheque;
+	}
+	
+	@Override
+	@Transient
+	public ETipoDocumento getTipoDocumento() {
+		return ETipoDocumento.NOTA_DEBITO;
 	}
 }

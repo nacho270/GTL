@@ -2,12 +2,15 @@ package ar.com.textillevel.modulos.fe;
 
 import java.rmi.RemoteException;
 
+import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.modulos.fe.cliente.responses.CbteTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.IvaTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
+import ar.com.textillevel.util.GTLBeanFactory;
 
 public class TestAFIP {
 
@@ -22,6 +25,10 @@ public class TestAFIP {
 		System.setProperty("textillevel.fe.keyStorePass", "soloio");
 		System.setProperty("textillevel.fe.duracion", "3600000");
 		System.setProperty("textillevel.fe.cuitEmpresa","30709129186");
+		System.getProperties().setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
+		System.getProperties().setProperty("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
+		System.getProperties().setProperty("cltimezone","GMT-3");
+		System.getProperties().setProperty("java.naming.provider.url", "localhost:1099");
 	}
 
 	public static void main(String[] args) {
@@ -35,7 +42,11 @@ public class TestAFIP {
 			MonedaResponse tiposMoneda = AFIPConnector.getInstance().getTiposMoneda();
 			IvaTipoResponse tiposIVA = AFIPConnector.getInstance().getTiposIVA();
 			System.out.println("a");
+			GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class).pruebaAutorizar();
 		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (CLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

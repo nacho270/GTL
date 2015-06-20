@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -175,6 +176,9 @@ public abstract class DocumentoContableCliente implements Serializable {
 		this.porcentajeIVAInscripto = porcentajeIVAInscripto;
 	}
 
+	@Transient
+	public abstract ETipoDocumento getTipoDocumento();
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

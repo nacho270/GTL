@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 
 @Entity
@@ -53,5 +54,11 @@ public class NotaCredito extends CorreccionFactura {
 	@Transient
 	public ETipoCorreccionFactura getTipo() {
 		return ETipoCorreccionFactura.NOTA_CREDITO;
+	}
+	
+	@Override
+	@Transient
+	public ETipoDocumento getTipoDocumento() {
+		return ETipoDocumento.NOTA_CREDITO;
 	}
 }
