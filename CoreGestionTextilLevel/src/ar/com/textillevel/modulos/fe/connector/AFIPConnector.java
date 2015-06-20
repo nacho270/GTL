@@ -2,6 +2,7 @@ package ar.com.textillevel.modulos.fe.connector;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -12,9 +13,12 @@ import ar.com.textillevel.modulos.fe.cliente.ServiceLocator;
 import ar.com.textillevel.modulos.fe.cliente.ServiceSoap;
 import ar.com.textillevel.modulos.fe.cliente.requests.FEAuthRequest;
 import ar.com.textillevel.modulos.fe.cliente.requests.FECAERequest;
+import ar.com.textillevel.modulos.fe.cliente.responses.CbteTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.IvaTipoResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
 
 public class AFIPConnector {
 
@@ -38,9 +42,9 @@ public class AFIPConnector {
 		}
 	}
 	
-	public DatosRespuestaAFIP autorizarDocumento(DocumentoContableCliente documento) throws RemoteException {
+	public DatosRespuestaAFIP autorizarDocumento(DocumentoContableCliente documento, int nroSucursal, int idTipoComprobanteAFIP) throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
-		FECAERequest request = null;
+		FECAERequest request = AFIPConverter.crearRequest(Arrays.asList(documento), nroSucursal, idTipoComprobanteAFIP);
 		FECAEResponse response = servicios.FECAESolicitar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
 		String resultado = response.getFeCabResp().getResultado();
 		String reproceso = response.getFeCabResp().getReproceso();
@@ -53,7 +57,22 @@ public class AFIPConnector {
 		return servicios.FEParamGetTiposDoc(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
 	}
 	
-	public DummyResponse funciona() throws RemoteException{
+	public CbteTipoResponse getTiposComprobante() throws RemoteException{
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		return servicios.FEParamGetTiposCbte(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
+	}
+	
+	public MonedaResponse getTiposMoneda() throws RemoteException {
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		return servicios.FEParamGetTiposMonedas(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
+	}
+	
+	public IvaTipoResponse getTiposIVA() throws RemoteException {
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		return servicios.FEParamGetTiposIva(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
+	}
+	
+	public DummyResponse informeEstadoServicio() throws RemoteException{
 		return servicios.FEDummy();
 	}
 }

@@ -2,7 +2,11 @@ package ar.com.textillevel.modulos.fe;
 
 import java.rmi.RemoteException;
 
+import ar.com.textillevel.modulos.fe.cliente.responses.CbteTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.IvaTipoResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 
 public class TestAFIP {
@@ -26,7 +30,10 @@ public class TestAFIP {
 		System.out.println("TOKEN: " + authData.getToken());
 		try {
 			DocTipoResponse tiposDoc = AFIPConnector.getInstance().getTiposDoc();
-//			DummyResponse funciona = AFIPConnector.getInstance().funciona();
+			DummyResponse funciona = AFIPConnector.getInstance().informeEstadoServicio();
+			CbteTipoResponse tiposComprobante = AFIPConnector.getInstance().getTiposComprobante();
+			MonedaResponse tiposMoneda = AFIPConnector.getInstance().getTiposMoneda();
+			IvaTipoResponse tiposIVA = AFIPConnector.getInstance().getTiposIVA();
 			System.out.println("a");
 		} catch (RemoteException e) {
 			e.printStackTrace();
