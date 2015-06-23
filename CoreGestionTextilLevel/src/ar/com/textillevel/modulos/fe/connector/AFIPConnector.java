@@ -17,6 +17,7 @@ import ar.com.textillevel.modulos.fe.cliente.responses.CbteTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.FERecuperaLastCbteResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.IvaTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
 
@@ -74,5 +75,10 @@ public class AFIPConnector {
 	
 	public DummyResponse informeEstadoServicio() throws RemoteException{
 		return servicios.FEDummy();
+	}
+
+	public FERecuperaLastCbteResponse getUltimoComprobante(int nroSucursal, int idTipoComprobanteAFIP) throws RemoteException {
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		return servicios.FECompUltimoAutorizado(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), nroSucursal, idTipoComprobanteAFIP);
 	}
 }
