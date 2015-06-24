@@ -18,6 +18,7 @@ public class FacturaTO implements Serializable {
 	private String subTotal;
 	private String totalIvaInscr;
 	private String totalFactura;
+	private String caeAFIP;
 	private List<ItemFacturaTO> items;
 
 	public String getNroFactura() {
@@ -115,4 +116,13 @@ public class FacturaTO implements Serializable {
 	public void setItems(List<ItemFacturaTO> items) {
 		this.items = items;
 	}
+
+	public String getCaeAFIP() {
+		return caeAFIP;
+	}
+
+	public void setCaeAFIP(String caeAFIP) {
+		this.caeAFIP = caeAFIP;
+	}
+
 }
