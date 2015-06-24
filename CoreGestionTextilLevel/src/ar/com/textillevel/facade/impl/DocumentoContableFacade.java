@@ -47,7 +47,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public synchronized Integer getProximoNroDocumentoContable(EPosicionIVA posIva) {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
-				FERecuperaLastCbteResponse ultimoNroCompAut = AFIPConnector.getInstance().getUltimoNroComprobanteAutorizado(paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), 1);
+				FERecuperaLastCbteResponse ultimoNroCompAut = AFIPConnector.getInstance().getUltimoComprobante(paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), 1);
 				return new Integer(ultimoNroCompAut.getCbteNro()) + 1;
 			} catch (RemoteException e) {
 				return getProximoNroFactura(posIva);
