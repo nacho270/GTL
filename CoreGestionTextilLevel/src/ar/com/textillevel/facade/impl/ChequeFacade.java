@@ -13,8 +13,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
@@ -38,7 +38,7 @@ import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 
 @Stateless
-public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal{
+public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 
 	@EJB
 	private ChequeDAOLocal chequeDAO;
@@ -129,7 +129,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal{
 		return chequeDAO.getChequesByCliente(idCliente, estadoCheque);
 	}
 
-	public CorreccionFactura rechazarCheque (Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws CLException{
+	public CorreccionFactura rechazarCheque (Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback {
 		//Genero una nota de débito al proveedor que tiene asignado el cheque
 		if(cheque.getEstadoCheque() == EEstadoCheque.SALIDA_PROVEEDOR) {
 			generarNotaDebitoProveedor(cheque, usuario, gastos);

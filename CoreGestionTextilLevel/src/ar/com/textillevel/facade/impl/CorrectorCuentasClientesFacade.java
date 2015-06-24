@@ -15,8 +15,8 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
@@ -306,7 +306,9 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 					}
 //				}
 			}
-		} catch (CLException e) {
+		} catch (ValidacionException e) {
+			e.printStackTrace();
+		} catch (ValidacionExceptionSinRollback e) {
 			e.printStackTrace();
 		}
 	}

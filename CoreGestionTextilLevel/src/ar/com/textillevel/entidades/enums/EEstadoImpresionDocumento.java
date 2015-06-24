@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EEstadoImpresionDocumento {
-	
-	PENDIENTE	( 1, "Pendiente"), 
-	IMPRESO		( 2, "Impreso");
+
+	PENDIENTE		( 1, "Pendiente"), 
+	AUTORIZADO_AFIP	( 3, "Autorizado AFIP"),
+	IMPRESO			( 2, "Impreso");
 
 	private EEstadoImpresionDocumento(Integer id, String descripcion) {
 		this.id = id;

@@ -8,7 +8,7 @@ import javax.swing.Action;
 
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -47,7 +47,7 @@ public class AccionAgregarFacturaSinRemitoAction implements Action {
 		dialogSeleccionarCliente.setVisible(true);
 		Cliente clienteElegido = dialogSeleccionarCliente.getCliente();
 		if (clienteElegido != null) {
-			Integer proxNroFactura = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class).getProximoNroFactura(clienteElegido.getPosicionIva());
+			Integer proxNroFactura = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class).getProximoNroDocumentoContable(clienteElegido.getPosicionIva());
 			JDialogCargaFactura jdcf = new JDialogCargaFactura(frame, proxNroFactura, clienteElegido);
 			jdcf.setVisible(true);
 		}

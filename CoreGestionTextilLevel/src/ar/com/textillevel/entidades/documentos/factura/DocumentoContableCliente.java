@@ -32,6 +32,7 @@ import ar.com.textillevel.entidades.gente.Cliente;
 public abstract class DocumentoContableCliente implements Serializable {
 
 	private static final long serialVersionUID = -1183250808883569214L;
+	public static final int LONG_OBS_AFIP = 256;
 
 	private Integer id;
 	private BigDecimal montoTotal;
@@ -43,6 +44,8 @@ public abstract class DocumentoContableCliente implements Serializable {
 	private Cliente cliente;
 	private Integer idTipoFactura;
 	private BigDecimal porcentajeIVAInscripto;
+	private String caeAFIP;
+	private String observacionesAFIP;
 
 	@Id
 	@Column(name = "P_ID")
@@ -176,6 +179,24 @@ public abstract class DocumentoContableCliente implements Serializable {
 		this.porcentajeIVAInscripto = porcentajeIVAInscripto;
 	}
 
+	@Column(name = "A_CAE_AFIP", nullable = true, length=14)
+	public String getCaeAFIP() {
+		return caeAFIP;
+	}
+
+	public void setCaeAFIP(String caeAFIP) {
+		this.caeAFIP = caeAFIP;
+	}
+
+	@Column(name = "A_OBS_AFIP", nullable = true, length=LONG_OBS_AFIP)
+	public String getObservacionesAFIP() {
+		return observacionesAFIP;
+	}
+
+	public void setObservacionesAFIP(String observacionesAFIP) {
+		this.observacionesAFIP = observacionesAFIP;
+	}
+	
 	@Transient
 	public abstract ETipoDocumento getTipoDocumento();
 	

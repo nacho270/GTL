@@ -26,8 +26,6 @@ public interface RemitoSalidaFacadeRemote {
 	
 	public RemitoSalida getByIdConPiezasYProductos(Integer id);
 	
-	public RemitoSalida getByNroRemitoConPiezasYProductos(Integer nroRemito);
-
 	public RemitoSalida getByNroRemitoConPiezasYProductosAnulado(Integer nroRemito);
 	
 	public List<RemitoSalida> getRemitosByNroRemitoConPiezasYProductos(Integer nroRemito);

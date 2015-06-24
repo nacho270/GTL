@@ -3,14 +3,13 @@ package main.acciones.facturacion;
 import java.awt.Frame;
 import java.util.Collections;
 import java.util.List;
-
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
-import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
@@ -51,13 +50,13 @@ public class IngresoRemitoSalidaHandler {
 
 	public RemitoSalida agregarRemitoCliente(ParametrosGenerales parametrosGenerales, Cliente clienteElegido) {
 		RemitoSalidaFacadeRemote remitoSalidaFacadeRemote = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class);
-		FacturaFacadeRemote facturaFacadeRemote = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class);
+		DocumentoContableFacadeRemote docContableFacadeRemote = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
 		Integer lastNroRemito = getProximoNroRemitoSalida(parametrosGenerales, remitoSalidaFacadeRemote);
 		RemitoSalida remitoSalida = new RemitoSalida();
 		remitoSalida.setCliente(clienteElegido);
 		remitoSalida.setNroRemito(lastNroRemito);
 		remitoSalida.setNroOrden(0);
-		remitoSalida.setNroFactura(facturaFacadeRemote.getProximoNroFactura(clienteElegido.getPosicionIva()));
+		remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva()));
 		remitoSalida.setTipoRemitoSalida(tipoRemitoSalida);
 		JDialogAgregarRemitoSalidaVentaTela dialogAgregarRemitoSalida = createDialog(remitoSalida);
 		GuiUtil.centrar(dialogAgregarRemitoSalida);

@@ -15,7 +15,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
@@ -70,7 +70,7 @@ public class AgregarRemitoSalidaAction implements Action {
 				return;
 			} else {
 				RemitoSalidaFacadeRemote remitoSalidaFacadeRemote = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class);
-				FacturaFacadeRemote facturaFacadeRemote = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class);
+				DocumentoContableFacadeRemote docContableFacadeRemote = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
 				Integer lastNroRemito = getProximoNroRemitoSalida(parametrosGenerales, remitoSalidaFacadeRemote);
 				RemitoSalida remitoSalida = new RemitoSalida();
 				remitoSalida.setNroOrden(0);
@@ -81,7 +81,7 @@ public class AgregarRemitoSalidaAction implements Action {
 				if(odtList.size()==1 && (odtList.get(0).getProducto().getTipo()==ETipoProducto.REPROCESO_SIN_CARGO || odtList.get(0).getProducto().getTipo()==ETipoProducto.DEVOLUCION)) {
 					esReproceso = true;
 				}else{
-					remitoSalida.setNroFactura(facturaFacadeRemote.getProximoNroFactura(clienteElegido.getPosicionIva()));
+					remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva()));
 				}
 				remitoSalida.getOdts().addAll(odtList);
 				JDialogAgregarRemitoSalida dialogAgregarRemitoSalida = new JDialogAgregarRemitoSalida(frame, remitoSalida, false);

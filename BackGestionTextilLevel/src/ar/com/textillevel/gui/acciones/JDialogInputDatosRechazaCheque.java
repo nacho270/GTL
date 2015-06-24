@@ -18,9 +18,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.taglibs.string.util.StringW;
+
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
@@ -130,20 +133,22 @@ public class JDialogInputDatosRechazaCheque extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					try{
 						if(validar()){
-							ChequeFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(ChequeFacadeRemote.class);
+							ChequeFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(ChequeFacadeRemote.class);
 							BigDecimal gastos = null;
 							if(getTxtGastos().getText().trim().length()>0){
 								gastos = new BigDecimal(getTxtGastos().getText());
 							}
 							java.sql.Date fecha = new java.sql.Date(getPanelFecha().getDate().getTime());
 							CorreccionFactura correccionFactura = cfr.rechazarCheque(getCheque(), fecha, getTxtMotivo().getText(),gastos, getUsrAdmin(), !GenericUtils.isSistemaTest());
-							CLJOptionPane.showInformationMessage(JDialogInputDatosRechazaCheque.this, 
-									"El cheque ha sido rechazado correctamente.\n\nSe generó la nota de débito " + correccionFactura.getNroFactura(), "Información");
+							CLJOptionPane.showInformationMessage(JDialogInputDatosRechazaCheque.this, "El cheque ha sido rechazado correctamente.\n\nSe generó la nota de débito " + correccionFactura.getNroFactura(), "Información");
 							setAcepto(true);
 							dispose();
 						}
-					}catch(CLException cle){
-						CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, "Se ha producido un error al rechazar el cheque", "Error");
+					}catch(ValidacionException cle) {
+						CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, StringW.wordWrap("Se ha producido un error al rechazar el cheque: " + cle.getMensajeError()), "Error");
+					}
+					catch(ValidacionExceptionSinRollback cle) {
+						CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, StringW.wordWrap("Se ha producido un error al rechazar el cheque: " + cle.getMensajeError()), "Error");
 					}
 				}
 			});

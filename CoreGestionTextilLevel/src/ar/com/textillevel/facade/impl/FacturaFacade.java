@@ -15,14 +15,12 @@ import javax.ejb.Stateless;
 import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
-import ar.com.textillevel.entidades.config.ConfiguracionNumeracionFactura;
-import ar.com.textillevel.entidades.config.NumeracionFactura;
-import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
@@ -32,7 +30,6 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaPe
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaPrecioMateriaPrima;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
-import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.enums.ETipoItemFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -42,6 +39,7 @@ import ar.com.textillevel.entidades.to.ivaventas.TotalesIVAVentasTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
+import ar.com.textillevel.facade.api.local.DocumentoContableFacadeLocal;
 import ar.com.textillevel.facade.api.local.FacturaFacadeLocal;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
@@ -51,6 +49,7 @@ import ar.com.textillevel.facade.api.local.UsuarioSistemaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
+import ar.com.textillevel.modulos.fe.connector.DatosRespuestaAFIP;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 
@@ -86,7 +85,10 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	
 	@EJB
 	private OrdenDeTrabajoFacadeLocal odtFacade;
-	
+
+	@EJB
+	private DocumentoContableFacadeLocal docContableFacade; 
+
 	@EJB
 	private UsuarioSistemaFacadeLocal usuSistemaFacade;
 	
@@ -98,6 +100,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		if(!facturaDao.esLaUltimaFactura(factura)){
 			throw new ValidacionException(EValidacionException.FACTURA_NO_ES_LA_ULTIMA.getInfoValidacion());
 		}
+		docContableFacade.checkAutorizacionAFIP(factura);
 		factura = eliminarInterno(factura);
 		auditoriaFacade.auditar(usrName, "Eliminación de factura  Nº: " + factura.getNroFactura(),EnumTipoEvento.BAJA,factura);
 	}
@@ -122,14 +125,14 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return factura;
 	}
 
-	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws CLException{
+	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws ValidacionException, ValidacionExceptionSinRollback  {
 		Factura f = guardarInterno(factura,usuario);
-		auditoriaFacade.auditar(usuario, "Creación de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.ALTA,f);
-		return f;
+		auditoriaFacade.auditar(usuario, "Creación de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.ALTA, f);
+		return docContableFacade.autorizarDocumentoContableAFIP(f); 
 	}
-	
-	public Factura editarFactura(Factura factura, String usuario) throws ValidacionException{
-//		eliminarInterno(factura);
+
+	public Factura editarFactura(Factura factura, String usuario) throws ValidacionException {
+		docContableFacade.checkAutorizacionAFIP(factura);
 		Factura facturaAnterior = getByIdEager(factura.getId());
 //		factura = guardarInterno(factura);
 		cuentaFacade.actualizarMovimientoFacturaCliente(factura,facturaAnterior.getMontoTotal());
@@ -185,6 +188,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	public void anularFactura(Factura factura, boolean anularRemitoSalida, String usuario) throws ValidacionException, CLException {
+		docContableFacade.checkAutorizacionAFIP(factura);		
 		if(facturaDao.facturaYaTieneRecibo(factura)){
 			throw new ValidacionException(EValidacionException.FACTURA_YA_TIENE_RECIBO.getInfoValidacion());
 		}
@@ -194,7 +198,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 				if(anularRemitoSalida) {
 					remitoSalidaFacade.anularRemitoSalida(remito);
 				} else {
-					remito.setNroFactura(getProximoNroFactura(factura.getCliente().getPosicionIva()));
+					remito.setNroFactura(docContableFacade.getProximoNroDocumentoContable(factura.getCliente().getPosicionIva()));
 					remitoSalidaFacade.guardarRemito(remito);
 				}
 			}
@@ -380,63 +384,20 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return facturaDao.getAllFacturasByCliente(idCliente);
 	}
 
-	public Integer getProximoNroFactura(EPosicionIVA posIva) {
-		ParametrosGenerales parametrosGenerales = paramGeneralesDao.getParametrosGenerales();
-		Integer proximoNumeroDeFactura = getLastNumeroFactura(posIva.getTipoFactura());
-		if (proximoNumeroDeFactura == null) {
-			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
-			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
-			}
-			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
-			if(numeracionActual != null){
-				proximoNumeroDeFactura = numeracionActual.getNroDesde();
-			}else{
-				throw new RuntimeException("No hay una configuracion de numeros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
-			}
-			Integer ultimaFacturaRecibo = remitoSalidaFacade.getUltimoNumeroFactura(posIva);
-			if(ultimaFacturaRecibo!=null){
-				proximoNumeroDeFactura = Math.max(proximoNumeroDeFactura, ultimaFacturaRecibo);
-			}
-		} else {
-			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
-			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
-			}
-			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
-			Integer numeroDesdeConfigurado = null;
-			if(numeracionActual != null){
-				numeroDesdeConfigurado = numeracionActual.getNroDesde() - 1; //para hacer + 1 despues
-			}else{
-				throw new RuntimeException("No hay una configuracion de numeros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
-			}
-			Integer ultimaFacturaRecibo = remitoSalidaFacade.getUltimoNumeroFactura(posIva);
-			if(ultimaFacturaRecibo == null){
-				ultimaFacturaRecibo = numeroDesdeConfigurado;
-			}
-			//lastNroFactura = lastNroFactura.equals(ultimaFacturaRecibo)?lastNroFactura+1:Math.max(lastNroFactura, ultimaFacturaRecibo+1);
-			proximoNumeroDeFactura = getMaximo(proximoNumeroDeFactura,numeroDesdeConfigurado,ultimaFacturaRecibo) + 1;
-		}
-		return proximoNumeroDeFactura;
-	}
-
 	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura) {
 		return facturaDao.getUltimoNumeroFacturaImpreso(tipoFactura);
-	}
-	
-	private Integer getMaximo(Integer... numeros){
-		Integer max = 0;
-		for(Integer n : numeros){
-			if(n > max){
-				max = n;
-			}
-		}
-		return max;
 	}
 
 	public void pruebaAutorizar() {
 		try {
-			AFIPConnector.getInstance().autorizarDocumento(facturaDao.getById(3873),parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal(),1);
+			Factura byId = facturaDao.getById(3872);
+			byId.setNroFactura(2);
+			DatosRespuestaAFIP autorizarDocumento = AFIPConnector.getInstance().autorizarDocumento(byId,parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal(),1);
+			System.out.println(autorizarDocumento);
+			
+//			FERecuperaLastCbteResponse ultimoNroComprobanteAutorizado = AFIPConnector.getInstance().getUltimoNroComprobanteAutorizado(1, 1);
+//			System.out.println(ultimoNroComprobanteAutorizado);
+			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

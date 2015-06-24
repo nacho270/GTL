@@ -8,9 +8,9 @@ import javax.ejb.Remote;
 
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
-import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
@@ -18,7 +18,7 @@ import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
 @Remote
 public interface FacturaFacadeRemote {
 
-	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws CLException;
+	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura);
 	public Factura getByNroFactura(Integer nroFactura);
 	public Factura getByNroFacturaConItems(Integer nroFactura);
@@ -32,7 +32,7 @@ public interface FacturaFacadeRemote {
 	public void eliminarFactura(Factura factura, String usrName) throws ValidacionException, CLException;
 	public Factura editarFactura(Factura factura, String usuario) throws ValidacionException;
 	public List<Factura> getAllFacturasByCliente(Integer idCliente);
-	public Integer getProximoNroFactura(EPosicionIVA posIva);
 	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura);
 	public void pruebaAutorizar();
+
 }

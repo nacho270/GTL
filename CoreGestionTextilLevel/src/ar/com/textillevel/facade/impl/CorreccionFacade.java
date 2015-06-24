@@ -10,6 +10,7 @@ import org.jboss.annotation.IgnoreDependency;
 import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionFacturaProveedorDAOLocal;
@@ -28,6 +29,7 @@ import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
+import ar.com.textillevel.facade.api.local.DocumentoContableFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 
@@ -54,20 +56,23 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	@EJB
 	@IgnoreDependency
 	private PagoOrdenDePagoDAOLocal pagoOrdenDePagoDAO;
-	
+
+	@EJB
+	private DocumentoContableFacadeLocal docContableFacade; 
+
 	@EJB
 	private AuditoriaFacadeLocal<CorreccionFactura> auditoriaFacade;
-	
+
 	@EJB
 	private AuditoriaFacadeLocal<CorreccionFacturaProveedor> auditoriaFacade2;
 	
 	@EJB
 	private ParametrosGeneralesDAOLocal parametrosGeneralesDAO;
-	
-	public CorreccionFactura guardarCorreccionYGenerarMovimiento(CorreccionFactura correccion, String usuario) throws CLException {
+
+	public CorreccionFactura guardarCorreccionYGenerarMovimiento(CorreccionFactura correccion, String usuario) throws ValidacionException, ValidacionExceptionSinRollback {
 		correccion = guardarYGenerarMovimientoInterno(correccion);
-		auditoriaFacade.auditar(usuario, "Actualización de nota de "+correccion.getTipo().getDescripcion() +" Nº: " + correccion.getNroFactura(), EnumTipoEvento.ALTA, correccion);
-		return correccion;
+		auditoriaFacade.auditar(usuario, "Actualización de nota de "+ correccion.getTipo().getDescripcion() + " Nº: " + correccion.getNroFactura(), EnumTipoEvento.ALTA, correccion);
+		return docContableFacade.autorizarDocumentoContableAFIP(correccion);
 	}
 
 	private CorreccionFactura guardarYGenerarMovimientoInterno(CorreccionFactura correccion) {
@@ -105,14 +110,15 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	public NotaCredito getNotaDeCreditoByFacturaRelacionada(Factura factura) {
 		return correccionDao.getNotaDeCreditoByFacturaRelacionada(factura);
 	}
-	
-	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException, CLException{
+
+	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException {
+		docContableFacade.checkAutorizacionAFIP(correccion);		
 		eliminarCorreccionInterno(correccion);
 		correccion = guardarYGenerarMovimientoInterno(correccion);
 		auditoriaFacade.auditar(usuario, "Edición de nota de "+correccion.getTipo().getDescripcion() +" Nº: " + correccion.getNroFactura(), EnumTipoEvento.MODIFICACION, correccion);
 		return correccion;
 	}
-	
+
 	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
 		correccion = getCorreccionByNumero(correccion.getNroFactura());
 		if(correccion instanceof NotaDebito){
@@ -145,6 +151,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	}
 	
 	public void eliminarCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
+		docContableFacade.checkAutorizacionAFIP(correccion);
 		correccion = getCorreccionByNumero(correccion.getNroFactura());
 		
 		if(correccion instanceof NotaDebito){
@@ -171,6 +178,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	}
 
 	private CorreccionFactura eliminarCorreccionInterno(CorreccionFactura correccion) throws ValidacionException {
+		docContableFacade.checkAutorizacionAFIP(correccion);
 		correccion = getCorreccionByNumero(correccion.getNroFactura()); 
 		if(correccion instanceof NotaCredito){
 			if(((NotaCredito)correccion).getFacturasRelacionadas().size()>0){

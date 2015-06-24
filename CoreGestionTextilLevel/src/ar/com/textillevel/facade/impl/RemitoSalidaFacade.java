@@ -26,9 +26,6 @@ import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
 import ar.com.textillevel.dao.api.local.PrecioMateriaPrimaDAOLocal;
 import ar.com.textillevel.dao.api.local.RemitoEntradaDAOLocal;
 import ar.com.textillevel.dao.api.local.RemitoSalidaDAOLocal;
-import ar.com.textillevel.entidades.config.ConfiguracionNumeracionFactura;
-import ar.com.textillevel.entidades.config.NumeracionFactura;
-import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
@@ -166,33 +163,6 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			result.add(getByIdConPiezasYProductos(id));
 		}
 		return result;
-	}
-
-	public RemitoSalida getByNroRemitoConPiezasYProductos(Integer nroRemito) {
-		RemitoSalida remito = remitoSalidaDAOLocal.getByNroRemitoConPiezasYProductos(nroRemito);
-		if(remito != null){
-			ParametrosGenerales param = parametrosGeneralesFacade.getParametrosGenerales();
-			ConfiguracionNumeracionFactura confNumeracion = param.getConfiguracionFacturaByTipoFactura(remito.getCliente().getPosicionIva().getTipoFactura());
-			if(confNumeracion != null){
-				NumeracionFactura numeracion = confNumeracion.getNumeracionActual(DateUtil.getHoy());
-				if(numeracion!=null){
-					Integer nroFacturaRemito = remito.getNroFactura();
-					Integer nroDesde = numeracion.getNroDesde();
-					if(nroFacturaRemito < nroDesde){ // es un remito viejo, hay que tirar el update
-						List<RemitoSalida> remitosConNumerosDeFacturaViejos = remitoSalidaDAOLocal.getRemitosConNumerosDeFacturaMenorA(nroDesde,numeracion.getFechaDesde());
-						Integer nroComiento = facturaFacade.getProximoNroFactura(remito.getCliente().getPosicionIva());
-						for(RemitoSalida rs : remitosConNumerosDeFacturaViejos){
-							rs.setNroFactura(nroComiento++);
-							remitoSalidaDAOLocal.save(rs);
-							if(rs.getNroRemito().equals(remito.getNroRemito())){
-								remito = rs;
-							}
-						}
-					}
-				}
-			}
-		}
-		return remito;
 	}
 
 	public Integer getUltimoNumeroFactura(EPosicionIVA posIva) {

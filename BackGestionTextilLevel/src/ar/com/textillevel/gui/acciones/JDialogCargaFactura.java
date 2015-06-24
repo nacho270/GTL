@@ -51,6 +51,7 @@ import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.componentes.VerticalFlowLayout;
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.NumUtil;
@@ -91,6 +92,7 @@ import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
+import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
@@ -183,6 +185,8 @@ public class JDialogCargaFactura extends JDialog {
 	private String strFacturasRelacionadas;
 	
 	private boolean edicion;
+
+	private DocumentoContableFacadeRemote docContableFacade;
 	
 	/**
 	 * Constructor para consulta de correcciones
@@ -443,7 +447,7 @@ public class JDialogCargaFactura extends JDialog {
 			if(tipoFactura == ETipoFactura.A){
 				getCorrecionFactura().setPorcentajeIVAInscripto(getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeIVAInscripto());
 			}
-			getCorrecionFactura().setNroFactura(getFacturaFacade().getProximoNroFactura(getCliente().getPosicionIva()));
+			getCorrecionFactura().setNroFactura(getDocumentoContableFacade().getProximoNroDocumentoContable(getCliente().getPosicionIva()));
 			getCorrecionFactura().setTipoFactura(tipoFactura);
 		}else{
 			throw new RuntimeException("El cliente no tiene posicion de IVA");
@@ -1651,47 +1655,45 @@ public class JDialogCargaFactura extends JDialog {
 	}
 
 	private boolean guardarCorreccion() {
-		try {
-			if (getCorrecionFactura().getMontoTotal() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe especificar el monto", "Error");
-				return false;
-			}
-			if(getCorrecionFactura() instanceof NotaCredito && ((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().size()==0){
-				CLJOptionPane.showErrorMessage(this, "Debe elegir las facturas relacionadas", "Error");
-				return false;
-			}
-			if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
-				getCorrecionFactura().setPorcentajeIVAInscripto(new BigDecimal(getTxtPorcentajeIVA().getText().replace(',', '.')));
-			}
-			getCorrecionFactura().setMontoTotal(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
-			if(getCorrecionFactura() instanceof NotaDebito) {
-				((NotaDebito)getCorrecionFactura()).setMontoFaltantePorPagar(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
-			}else{
-				((NotaCredito)getCorrecionFactura()).setMontoSobrante(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
-			}
-			getCorrecionFactura().setDescripcion((String)getTablaProductos().getValueAt(0, COL_DESCRIPCION));
-			long longFecha = 0;
-			if(GenericUtils.esHoy(new java.sql.Date(getPanelFecha().getDate().getTime()))){//hoy
-				longFecha = DateUtil.getAhora().getTime();
-			}else{
-				longFecha=getPanelFecha().getDate().getTime();
-			}
-			arreglarCorreccion();
-			getCorrecionFactura().setFechaEmision(new Timestamp(longFecha));
-			getCorrecionFactura().setCliente(getCliente());
-			getCorrecionFactura().setTipoFactura(getCliente().getPosicionIva().getTipoFactura());
-			String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
-			try {
-				setCorrecionFactura(isEdicion()?getCorreccionFacade().editarCorreccion(getCorrecionFactura(), usuario):getCorreccionFacade().guardarCorreccionYGenerarMovimiento(getCorrecionFactura(), usuario));
-			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(this, e.getMensajeError(), "Error");
-				return false;
-			}
-			return true;
-		} catch (CLException e) {
-			BossError.gestionarError(e);
+		if (getCorrecionFactura().getMontoTotal() == null) {
+			CLJOptionPane.showErrorMessage(this, "Debe especificar el monto", "Error");
 			return false;
 		}
+		if(getCorrecionFactura() instanceof NotaCredito && ((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().size()==0){
+			CLJOptionPane.showErrorMessage(this, "Debe elegir las facturas relacionadas", "Error");
+			return false;
+		}
+		if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
+			getCorrecionFactura().setPorcentajeIVAInscripto(new BigDecimal(getTxtPorcentajeIVA().getText().replace(',', '.')));
+		}
+		getCorrecionFactura().setMontoTotal(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
+		if(getCorrecionFactura() instanceof NotaDebito) {
+			((NotaDebito)getCorrecionFactura()).setMontoFaltantePorPagar(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
+		}else{
+			((NotaCredito)getCorrecionFactura()).setMontoSobrante(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
+		}
+		getCorrecionFactura().setDescripcion((String)getTablaProductos().getValueAt(0, COL_DESCRIPCION));
+		long longFecha = 0;
+		if(GenericUtils.esHoy(new java.sql.Date(getPanelFecha().getDate().getTime()))){//hoy
+			longFecha = DateUtil.getAhora().getTime();
+		}else{
+			longFecha=getPanelFecha().getDate().getTime();
+		}
+		arreglarCorreccion();
+		getCorrecionFactura().setFechaEmision(new Timestamp(longFecha));
+		getCorrecionFactura().setCliente(getCliente());
+		getCorrecionFactura().setTipoFactura(getCliente().getPosicionIva().getTipoFactura());
+		String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
+		try {
+			setCorrecionFactura(isEdicion()?getCorreccionFacade().editarCorreccion(getCorrecionFactura(), usuario):getCorreccionFacade().guardarCorreccionYGenerarMovimiento(getCorrecionFactura(), usuario));
+		} catch (ValidacionException e) {
+			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			return false;
+		} catch (ValidacionExceptionSinRollback e) {
+			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+		}
+		
+		return true;
 	}
 
 	private void arreglarCorreccion() {
@@ -1709,39 +1711,37 @@ public class JDialogCargaFactura extends JDialog {
 	}
 
 	private boolean guardarFactura() {
+		// getFactura().setMontoFaltantePorPagar(new
+		// BigDecimal(getTxtTotal().getText().trim().replace(',', '.')));
+		// getFactura().setMontoTotal(new
+		// BigDecimal(getTxtTotal().getText().trim().replace(',', '.')));
+		if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
+			getFactura().setPorcentajeIVAInscripto(getFactura().getPorcentajeIVAInscripto());
+		}
+		// getFactura().setPorcentajeIVANoInscripto(new
+		// BigDecimal(getTxtPorcentajeIVANoInscripto().getText()));
+		long longFecha = 0;
+		if(GenericUtils.esHoy(new java.sql.Date(getPanelFecha().getDate().getTime()))){//hoy
+			longFecha = DateUtil.getAhora().getTime();
+		}else{
+			longFecha=getPanelFecha().getDate().getTime();
+		}
+		getFactura().setFechaEmision(new Timestamp(longFecha));
+		getFactura().setCondicionDeVenta((CondicionDeVenta)getCmbCondicionVenta().getSelectedItem());
+		// getFactura().setMontoImpuestos(new
+		// BigDecimal(getTxtImpuestos().getText().trim().replace(',',
+		// '.')));
+		String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
 		try {
-			// getFactura().setMontoFaltantePorPagar(new
-			// BigDecimal(getTxtTotal().getText().trim().replace(',', '.')));
-			// getFactura().setMontoTotal(new
-			// BigDecimal(getTxtTotal().getText().trim().replace(',', '.')));
-			if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
-				getFactura().setPorcentajeIVAInscripto(getFactura().getPorcentajeIVAInscripto());
-			}
-			// getFactura().setPorcentajeIVANoInscripto(new
-			// BigDecimal(getTxtPorcentajeIVANoInscripto().getText()));
-			long longFecha = 0;
-			if(GenericUtils.esHoy(new java.sql.Date(getPanelFecha().getDate().getTime()))){//hoy
-				longFecha = DateUtil.getAhora().getTime();
-			}else{
-				longFecha=getPanelFecha().getDate().getTime();
-			}
-			getFactura().setFechaEmision(new Timestamp(longFecha));
-			getFactura().setCondicionDeVenta((CondicionDeVenta)getCmbCondicionVenta().getSelectedItem());
-			// getFactura().setMontoImpuestos(new
-			// BigDecimal(getTxtImpuestos().getText().trim().replace(',',
-			// '.')));
-			String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
-			try {
-				setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(),usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(), usuario));
-			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(this, e.getMensajeError(), "Error");
-				return false;
-			}
-			return true;
-		} catch (CLException e) {
-			BossError.gestionarError(e);
+			setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(),usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(), usuario));
+		} catch (ValidacionException e) {
+			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			return false;
+		} catch (ValidacionExceptionSinRollback e) {
+			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
 		}
+		return true;
 	}
 
 	private JButton getBtnImprimir() {
@@ -1819,6 +1819,13 @@ public class JDialogCargaFactura extends JDialog {
 			facturaFacade = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class);
 		}
 		return facturaFacade;
+	}
+
+	private DocumentoContableFacadeRemote getDocumentoContableFacade() {
+		if (docContableFacade == null) {
+			docContableFacade = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
+		}
+		return docContableFacade;
 	}
 
 	private ParametrosGeneralesFacadeRemote getParametrosGeneralesFacade() {

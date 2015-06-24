@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
@@ -25,7 +26,7 @@ public interface ChequeFacadeRemote {
 	public Cheque getChequeByNumero(String nroCheque);
 	public Integer getUltimoNumeroInternoCheque(Character letra);
 	public List<Cheque> getChequesByCliente(Integer idCliente, EEstadoCheque estadoCheque);
-	public CorreccionFactura rechazarCheque(Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws CLException;
+	public CorreccionFactura rechazarCheque(Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback;
 	public void eliminarCheque(Integer id, String usuario) throws ValidacionException;
 	public List<Cheque> obtenerChequesVencidos(Integer toleraciaDias);
 	public List<Cheque> getListaDeChequesProximosAVencer(Integer diasAntes, Integer diasEnQueVencen);

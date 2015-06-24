@@ -17,6 +17,7 @@ import ar.com.textillevel.modulos.fe.cliente.responses.CbteTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.FERecuperaLastCbteResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.IvaTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
 
@@ -35,7 +36,6 @@ public class AFIPConnector {
 			if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 				ServiceLocator locator = new ServiceLocator();
 				servicios = locator.getServiceSoap(new URL(ConfiguracionAFIPHolder.getInstance().getURLNegocio()));
-				
 			}
 		}catch(Exception e){
 			logger.error(e);
@@ -46,17 +46,14 @@ public class AFIPConnector {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		FECAERequest request = AFIPConverter.crearRequest(Arrays.asList(documento), nroSucursal, idTipoComprobanteAFIP);
 		FECAEResponse response = servicios.FECAESolicitar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
-		String resultado = response.getFeCabResp().getResultado();
-		String reproceso = response.getFeCabResp().getReproceso();
-		String cae = response.getFeDetResp()[0].getCAE();
-		return new DatosRespuestaAFIP(resultado, reproceso, cae);
+		return new DatosRespuestaAFIP(response);
 	}
-	
+
 	public DocTipoResponse getTiposDoc() throws RemoteException{
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		return servicios.FEParamGetTiposDoc(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
 	}
-	
+
 	public CbteTipoResponse getTiposComprobante() throws RemoteException{
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		return servicios.FEParamGetTiposCbte(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
@@ -75,4 +72,10 @@ public class AFIPConnector {
 	public DummyResponse informeEstadoServicio() throws RemoteException{
 		return servicios.FEDummy();
 	}
+
+	public FERecuperaLastCbteResponse getUltimoComprobante(int nroSucursal, int idTipoComprobanteAFIP) throws RemoteException {
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		return servicios.FECompUltimoAutorizado(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), nroSucursal, idTipoComprobanteAFIP);
+	}
+
 }

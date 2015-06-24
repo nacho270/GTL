@@ -17,6 +17,7 @@ import ar.com.textillevel.facade.api.remote.CorrectorCuentasProveedorFacadeRemot
 import ar.com.textillevel.facade.api.remote.CuentaArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CuentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
+import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.EventoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaPersonaFacadeRemote;
@@ -53,6 +54,7 @@ import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.modulos.alertas.facade.api.remote.AlertaFacadeRemote;
 import ar.com.textillevel.modulos.alertas.facade.api.remote.TipoAlertaFacadeRemote;
+import ar.com.textillevel.modulos.fe.facade.api.remote.ConfiguracionFacturaElectronicaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.AccionProcedimientoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaTenidoClienteFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.InstruccionProcedimientoFacadeRemote;
@@ -125,6 +127,8 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 		addJndiName(InstruccionProcedimientoFacadeRemote.class);
 		addJndiName(TipoAlertaFacadeRemote.class);
 		addJndiName(AlertaFacadeRemote.class);
+		addJndiName(ConfiguracionFacturaElectronicaFacadeRemote.class);
+		addJndiName(DocumentoContableFacadeRemote.class);
 	}
 
 	public static GTLBeanFactory getInstance() {
