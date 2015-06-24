@@ -2036,7 +2036,7 @@ public class JDialogCargaFactura extends JDialog {
 					}else{
 						FacturaTO factura = armarFacturaTO();
 						Map parameters = getParametros(factura);
-						JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura.jasper");
+						JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura_electronica.jasper");
 						JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, factura.getItems());
 						Integer cantidadAImprimir = Integer.valueOf(input);
 						Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
@@ -2146,8 +2146,8 @@ public class JDialogCargaFactura extends JDialog {
 	@SuppressWarnings("rawtypes")
 	private Map getParametros(FacturaTO factura) {
 		Map parameters = new HashMap();
-		//parameters.put("NRO_FACTURA", factura.getNroFactura());
-		//parameters.put("TIPO_FACTURA", factura.getTipoFactura());
+		parameters.put("NRO_FACTURA", factura.getNroFactura());
+		parameters.put("TIPO_FACTURA", factura.getTipoFactura());
 		parameters.put("RAZON_SOCIAL", factura.getCliente().getRazonSocial());
 		parameters.put("DIRECCION", factura.getCliente().getDireccion());
 		parameters.put("LOCALIDAD", factura.getCliente().getLocalidad());
@@ -2159,10 +2159,9 @@ public class JDialogCargaFactura extends JDialog {
 		parameters.put("PORC_IVA", factura.getPorcIvaInsc());
 		parameters.put("TOTAL_IVA", factura.getTotalIvaInscr());
 		parameters.put("TOTAL", factura.getTotalFactura());
+		parameters.put("CAE", "564564564864864");
 		parameters.put("FECHA_FACT", DateUtil.dateToString(DateUtil.stringToDate(factura.getFecha()),DateUtil.SHORT_DATE));
-		if(getCorrecionFactura()!=null){
-			parameters.put("TIPO_DOC", factura.getTipoDocumento());
-		}
+		parameters.put("TIPO_DOC", factura.getTipoDocumento());
 		return parameters;
 	}
 
@@ -2174,7 +2173,7 @@ public class JDialogCargaFactura extends JDialog {
 		factura.setFecha(DateUtil.dateToString(getPanelFecha().getDate(),DateUtil.SHORT_DATE));
 		factura.setNroFactura(getTxtNroFactura().getText());
 		factura.setNroRemito(getStrFacturasRelacionadas()!=null && getStrFacturasRelacionadas().trim().length()>0?getStrFacturasRelacionadas().replaceAll("/", " / "):getPnlNroRemito().getNrosRemitos());
-		factura.setPorcIvaInsc(getTxtPorcentajeIVA().getText().length() > 0 ? getTxtPorcentajeIVA().getText() + "%" : null);
+		factura.setPorcIvaInsc(getTxtPorcentajeIVA().getText().length() > 0 ? getTxtPorcentajeIVA().getText() : null);
 		factura.setSubTotal( (getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito?"-":"") + (getCorrecionFactura() != null ? getDecimalFormat().format(getCorrecionFactura().getMontoSubtotal().doubleValue()) : getDecimalFormat().format(getFactura().getMontoSubtotal().doubleValue())));
 		factura.setTipoDocumento(getLblTipoDocumento().getText());
 		factura.setTipoFactura(getCorrecionFactura() != null ? "" : getFactura().getTipoFactura().getDescripcion());
