@@ -77,5 +77,4 @@ public class AFIPConnector {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		return servicios.FECompUltimoAutorizado(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), nroSucursal, idTipoComprobanteAFIP);
 	}
-
 }
