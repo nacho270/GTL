@@ -143,4 +143,13 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		}
 	}
 
+	public List<DocumentoContableCliente> getDocumentosContablesSinCAE() {
+		return docContableDAO.getAllSinCAE();
+	}
+
+	public void autorizarMultiplesDocumentosAFIP(List<DocumentoContableCliente> documentos) throws ValidacionExceptionSinRollback, ValidacionException {
+		for(DocumentoContableCliente doc : documentos) {
+			autorizarDocumentoContableAFIP(doc);
+		}
+	}
 }

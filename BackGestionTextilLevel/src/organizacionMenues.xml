@@ -309,6 +309,9 @@
 			<newItem
 				class="main.acciones.cuentas.CorregirCuentaClienteAction"
 				nombre="Corrector clientes/proveedores" id="95" action="true"/>
+			<newItem
+				class="main.acciones.cuentas.VerFacturasSinAutorizacionAFIP"
+				nombre="Visualizar facturas sin autorización de AFIP" id="110" action="true"/>
 		</listaModulos>
 	</GrupoModulos>
 	

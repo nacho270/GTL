@@ -110,9 +110,13 @@
 	</module>
 
 	<module>
-		<java>bcprov-jdk14-119.jar</java>
+		<java>bcmail-jdk14-135.jar</java>
 	</module>
-	
+
+	<module>
+		<java>bcprov-jdk15-135.jar</java>
+	</module>
+
 	<module>
 		<java>gson-1.3.jar</java>
 	</module>

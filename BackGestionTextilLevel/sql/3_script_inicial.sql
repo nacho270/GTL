@@ -146,7 +146,8 @@ INSERT INTO T_MODULO VALUES
  (106,'ar.com.textillevel.gui.modulos.odt.gui.tenido.VerAdministrarFormulasAction','ODT - Administrar Fórmulas de Teñido por Cliente',0),
  (107,'ar.com.textillevel.gui.modulos.odt.gui.secuencias.GuiABMSecuencias','ODT - Administrar Secuencias de Trabajo',0),
  (108,'main.servicios.alertas.ServicioAlertas','Servicios - Servicio de Alertas',0,1),
- (109,'ar.com.textillevel.gui.modulos.abm.portal.GuiAsignacionAlertasPerfil','Seguridad - Administrar Alertas para Perfiles de usuario',0,0)
+ (109,'ar.com.textillevel.gui.modulos.abm.portal.GuiAsignacionAlertasPerfil','Seguridad - Administrar Alertas para Perfiles de usuario',0,0),
+ (110,'main.acciones.cuentas.VerFacturasSinAutorizacionAFIP','Cuentas - Visualizar facturas sin autorizacion de AFIP',0,0)
  ;
 
  
