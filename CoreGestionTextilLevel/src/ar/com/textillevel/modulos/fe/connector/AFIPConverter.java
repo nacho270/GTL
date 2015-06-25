@@ -2,7 +2,6 @@ package ar.com.textillevel.modulos.fe.connector;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
@@ -18,14 +17,10 @@ public class AFIPConverter {
 		df = new SimpleDateFormat(DateUtil.DEFAULT_DATE_WITHOUT_SEPARATOR); 
 	}
 	
-	public static FECAERequest crearRequest(List<DocumentoContableCliente> documentos, int nroSucursal, int idTipoComprobanteAFIP) {
+	public static FECAERequest crearRequest(DocumentoContableCliente documento, int nroSucursal, int idTipoComprobanteAFIP) {
 		FECAERequest req = new FECAERequest();
-		req.setFeCabReq(crearCabeceraRequest(documentos.size(), nroSucursal, idTipoComprobanteAFIP));
-		FECAEDetRequest[] docsRequests = new FECAEDetRequest[documentos.size()];
-		for(int i = 0; i < documentos.size(); i++) {
-			docsRequests[i] = documentoACAERequest(documentos.get(i));
-		}
-		req.setFeDetReq(docsRequests);
+		req.setFeCabReq(crearCabeceraRequest(1, nroSucursal, idTipoComprobanteAFIP));
+		req.setFeDetReq(new FECAEDetRequest[]{documentoACAERequest(documento)});
 		return req;
 	}
 

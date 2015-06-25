@@ -48,7 +48,7 @@ public enum EValidacionException {
 	RECIBO_PAGOS_INCONSISTENTES						(142, "Existen Facturas y/o Notas de débito que no son del cliente."),
 	DOCUMENTO_CONTABLE_NO_SE_PUDO_AUTORIZAR_AFIP	(143, "El documento se ha guardado pero no ha podido ser autorizado por la AFIP. \n '{0}' \n No se puede imprimir el mismo."),
 	DOCUMENTO_CONTABLE_YA_AUTORIZADO				(144, "El documento ya se encuentra autorizado por la AFIP. No se puede eliminar, anular ni modificar."),
-	
+	SERVICIO_AFIP_NO_HABILITADO						(145, "El servicio de factura electrónica no se encuentra activado."),
 	_											(000, "");
 	
 

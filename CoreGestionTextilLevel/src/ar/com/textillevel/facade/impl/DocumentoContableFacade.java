@@ -25,6 +25,8 @@ import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.DocumentoContableFacadeLocal;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.modulos.fe.ConfiguracionAFIPHolder;
+import ar.com.textillevel.modulos.fe.EstadoServidorAFIP;
+import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FERecuperaLastCbteResponse;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 import ar.com.textillevel.modulos.fe.connector.DatosRespuestaAFIP;
@@ -115,7 +117,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
-				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), 1);
+				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP());
 				boolean autorizada = respAFIP.isAutorizada(); 
 				if(autorizada) {
 					docContable.setCaeAFIP(respAFIP.getCae());
@@ -150,6 +152,18 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public void autorizarMultiplesDocumentosAFIP(List<DocumentoContableCliente> documentos) throws ValidacionExceptionSinRollback, ValidacionException {
 		for(DocumentoContableCliente doc : documentos) {
 			autorizarDocumentoContableAFIP(doc);
+		}
+	}
+
+	public EstadoServidorAFIP getEstadoServidorAFIP() throws ValidacionException {
+		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
+			try {
+				return new EstadoServidorAFIP(AFIPConnector.getInstance().informeEstadoServicio());
+			}catch(Exception e) {
+				return new EstadoServidorAFIP(new DummyResponse("error", "error", "error"));
+			}
+		}else{
+			throw new ValidacionException(EValidacionException.SERVICIO_AFIP_NO_HABILITADO.getInfoValidacion()); 
 		}
 	}
 }

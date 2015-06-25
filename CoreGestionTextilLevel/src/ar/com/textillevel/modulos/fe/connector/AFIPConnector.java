@@ -2,7 +2,6 @@ package ar.com.textillevel.modulos.fe.connector;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -44,7 +43,7 @@ public class AFIPConnector {
 	
 	public DatosRespuestaAFIP autorizarDocumento(DocumentoContableCliente documento, int nroSucursal, int idTipoComprobanteAFIP) throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
-		FECAERequest request = AFIPConverter.crearRequest(Arrays.asList(documento), nroSucursal, idTipoComprobanteAFIP);
+		FECAERequest request = AFIPConverter.crearRequest(documento, nroSucursal, idTipoComprobanteAFIP);
 		FECAEResponse response = servicios.FECAESolicitar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
 		return new DatosRespuestaAFIP(response);
 	}

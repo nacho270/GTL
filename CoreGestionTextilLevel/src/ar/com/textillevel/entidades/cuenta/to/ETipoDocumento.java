@@ -2,26 +2,32 @@ package ar.com.textillevel.entidades.cuenta.to;
 
 public enum ETipoDocumento {
 	
-	FACTURA(1),
-	NOTA_DEBITO(2),
-	RECIBO(3),
-	NOTA_CREDITO(4),
-	ORDEN_PAGO(5),
-	CHEQUE(6),
-	REMITO_ENTRADA(7),
-	REMITO_SALIDA(8),
-	REMITO_ENTRADA_PROV(9),
-	FACTURA_PROV(10),
-	NOTA_CREDITO_PROV(11),
-	NOTA_DEBITO_PROV(12);
+	FACTURA(1,1),
+	NOTA_DEBITO(2,2),
+	RECIBO(3,4),
+	NOTA_CREDITO(4,3),
+	ORDEN_PAGO(5,null),
+	CHEQUE(6,null),
+	REMITO_ENTRADA(7,null),
+	REMITO_SALIDA(8,null),
+	REMITO_ENTRADA_PROV(9,null),
+	FACTURA_PROV(10,null),
+	NOTA_CREDITO_PROV(11,null),
+	NOTA_DEBITO_PROV(12,null);
 
 	private int id;
-
-	private ETipoDocumento(int id) {
+	private Integer idTipoDocAFIP;
+	
+	private ETipoDocumento(int id, Integer idTipoDocAFIP) {
 		this.id = id;
+		this.idTipoDocAFIP = idTipoDocAFIP;
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public Integer getIdTipoDocAFIP() {
+		return idTipoDocAFIP;
 	}
 }
