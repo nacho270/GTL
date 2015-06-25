@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Window;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,7 +29,7 @@ public class JDialogEstadoServerAFIP extends JDialog {
 	private JButton btnAceptar;
 	private EstadoServidorAFIP estadoAFIP;
 
-	public JDialogEstadoServerAFIP(Window owner, EstadoServidorAFIP estadoAfip) {
+	public JDialogEstadoServerAFIP(Frame owner, EstadoServidorAFIP estadoAfip) {
 		super(owner);
 		this.estadoAFIP = estadoAfip;
 		setUpComponentes();

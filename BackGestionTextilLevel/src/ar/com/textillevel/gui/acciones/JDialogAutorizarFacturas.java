@@ -3,7 +3,7 @@ package ar.com.textillevel.gui.acciones;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Window;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 	private JButton btnAceptar;
 	private DocumentoContableFacadeRemote docFacade;
 	
-	public JDialogAutorizarFacturas(Window owner) {
+	public JDialogAutorizarFacturas(Frame owner) {
 		super(owner);
 		setUpComponentes();
 		setUpScreen();
