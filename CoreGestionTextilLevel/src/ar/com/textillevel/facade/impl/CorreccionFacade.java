@@ -120,6 +120,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	}
 
 	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
+		docContableFacade.checkAutorizacionAFIP(correccion);
 		correccion = getCorreccionByNumero(correccion.getNroFactura());
 		if(correccion instanceof NotaDebito){
 			NotaDebito notaDebito = (NotaDebito)correccion;

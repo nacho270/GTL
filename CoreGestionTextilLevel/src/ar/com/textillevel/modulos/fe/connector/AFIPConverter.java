@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.modulos.fe.cliente.dto.AlicIva;
+import ar.com.textillevel.modulos.fe.cliente.dto.CbteAsoc;
 import ar.com.textillevel.modulos.fe.cliente.requests.FECAECabRequest;
 import ar.com.textillevel.modulos.fe.cliente.requests.FECAEDetRequest;
 import ar.com.textillevel.modulos.fe.cliente.requests.FECAERequest;
@@ -20,7 +21,7 @@ public class AFIPConverter {
 	public static FECAERequest crearRequest(DocumentoContableCliente documento, int nroSucursal, int idTipoComprobanteAFIP) {
 		FECAERequest req = new FECAERequest();
 		req.setFeCabReq(crearCabeceraRequest(1, nroSucursal, idTipoComprobanteAFIP));
-		req.setFeDetReq(new FECAEDetRequest[]{documentoACAERequest(documento)});
+		req.setFeDetReq(new FECAEDetRequest[]{documentoACAERequest(documento, nroSucursal)});
 		return req;
 	}
 
@@ -32,7 +33,7 @@ public class AFIPConverter {
 		return cabecera;
 	}
 	
-	private static FECAEDetRequest documentoACAERequest(DocumentoContableCliente documento) {
+	private static FECAEDetRequest documentoACAERequest(DocumentoContableCliente documento, int nroSucursal) {
 		FECAEDetRequest req = new FECAEDetRequest();
 		req.setConcepto(EConceptoFacturaElectronica.SERVICIOS.getId());
 		req.setCbteDesde(documento.getNroFactura()); //no entiendo bien porque hay desde y hasta
@@ -56,6 +57,16 @@ public class AFIPConverter {
 		ali.setBaseImp(documento.getMontoSubtotal().doubleValue());
 		ali.setImporte(montoIVA);
 		req.setIva(new AlicIva[]{ali});
+
+		//Comprobantes asociados
+		CbteAsoc[] cbtesAsoc = new CbteAsoc[documento.getDocsContableRelacionados().size()];
+		for(int i=0; i < documento.getDocsContableRelacionados().size(); i++) {
+			DocumentoContableCliente docRel = documento.getDocsContableRelacionados().get(i);
+			CbteAsoc comprobanteAsociado = new CbteAsoc(docRel.getTipoDocumento().getIdTipoDocAFIP(), nroSucursal, docRel.getNroFactura());
+			cbtesAsoc[i] = comprobanteAsociado;
+		}
+		req.setCbtesAsoc(cbtesAsoc);
+		
 		return req;
 	}
 }

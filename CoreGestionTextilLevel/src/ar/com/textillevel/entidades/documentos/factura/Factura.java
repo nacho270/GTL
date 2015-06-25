@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,7 +32,7 @@ import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 @DiscriminatorValue(value = "FC")
 public class Factura extends DocumentoContableCliente implements Serializable {
 
-	private static final long serialVersionUID = -1221397892477482663L;
+	private static final long serialVersionUID = -541804970454200801L;
 
 	private List<RemitoSalida> remitos;
 	private List<ItemFactura> items;
@@ -139,6 +140,12 @@ public class Factura extends DocumentoContableCliente implements Serializable {
 	@Transient
 	public ETipoDocumento getTipoDocumento() {
 		return ETipoDocumento.FACTURA;
+	}
+
+	@Override
+	@Transient
+	public List<DocumentoContableCliente> getDocsContableRelacionados() {
+		return Collections.emptyList();
 	}
 
 }

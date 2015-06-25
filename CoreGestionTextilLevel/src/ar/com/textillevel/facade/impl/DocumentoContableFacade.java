@@ -133,7 +133,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 			} catch (RemoteException e) {
 				List<String> msg = new ArrayList<String>();
 				msg.add(e.getMessage());
-				throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_NO_SE_PUDO_AUTORIZAR_AFIP.getInfoValidacion(), msg); 
+				throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_FALLO_CONEXION_AFIP.getInfoValidacion(), msg); 
 			}
 		}
 		return docContable;
@@ -141,7 +141,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 
 	public void checkAutorizacionAFIP(DocumentoContableCliente docContable) throws ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado() && docContable.getCaeAFIP() != null && (docContable.getEstadoImpresion() == EEstadoImpresionDocumento.AUTORIZADO_AFIP || docContable.getEstadoImpresion() == EEstadoImpresionDocumento.IMPRESO)) {
-			throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_NO_SE_PUDO_AUTORIZAR_AFIP.getInfoValidacion());
+			throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_YA_AUTORIZADO.getInfoValidacion());
 		}
 	}
 

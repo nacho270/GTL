@@ -20,7 +20,7 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 @DiscriminatorValue(value = "NC")
 public class NotaCredito extends CorreccionFactura {
 
-	private static final long serialVersionUID = 8368346671001804508L;
+	private static final long serialVersionUID = 3772323739558108549L;
 
 	private List<Factura> facturasRelacionadas;
 
@@ -61,4 +61,11 @@ public class NotaCredito extends CorreccionFactura {
 	public ETipoDocumento getTipoDocumento() {
 		return ETipoDocumento.NOTA_CREDITO;
 	}
+
+	@Override
+	@Transient
+	public List<DocumentoContableCliente> getDocsContableRelacionados() {
+		return new ArrayList<DocumentoContableCliente>(getFacturasRelacionadas());
+	}
+
 }

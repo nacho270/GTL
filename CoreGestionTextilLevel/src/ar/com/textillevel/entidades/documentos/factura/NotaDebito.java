@@ -1,6 +1,8 @@
 package ar.com.textillevel.entidades.documentos.factura;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -19,7 +21,7 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 @DiscriminatorValue(value = "ND")
 public class NotaDebito extends CorreccionFactura {
 
-	private static final long serialVersionUID = -4332319729174476789L;
+	private static final long serialVersionUID = 3488001955152166685L;
 
 	private BigDecimal montoFaltantePorPagar;
 	private Cheque chequeRechazado;
@@ -97,4 +99,11 @@ public class NotaDebito extends CorreccionFactura {
 	public ETipoDocumento getTipoDocumento() {
 		return ETipoDocumento.NOTA_DEBITO;
 	}
+
+	@Override
+	@Transient
+	public List<DocumentoContableCliente> getDocsContableRelacionados() {
+		return Collections.emptyList();
+	}
+
 }

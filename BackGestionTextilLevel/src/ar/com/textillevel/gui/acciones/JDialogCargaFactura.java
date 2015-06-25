@@ -1600,15 +1600,15 @@ public class JDialogCargaFactura extends JDialog {
 						boolean okImprimir = false;
 						if (getCorrecionFactura() == null) {
 							if(validarFecha()){
-								if(getFactura().getItems().size()>0){
-								okImprimir = guardarFactura();
-								if(okImprimir){
-									CLJOptionPane.showInformationMessage(JDialogCargaFactura.this, "La factura se ha guardado con éxito", "Alta de factura");
-									}else{
+								if (getFactura().getItems().size() > 0) {
+									okImprimir = guardarFactura();
+									if (okImprimir) {
+										CLJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con éxito", "Alta de factura");
+									} else {
 										return;
 									}
-								}else{
-									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Debe elegir al menos un item para la factura", "Error");
+								} else {
+									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this,"Debe elegir al menos un item para la factura","Error");
 								}
 							}
 						} else {

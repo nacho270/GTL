@@ -3,6 +3,7 @@ package ar.com.textillevel.entidades.documentos.factura;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -31,7 +32,8 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @DiscriminatorColumn(name = "TIPO", discriminatorType = DiscriminatorType.STRING)
 public abstract class DocumentoContableCliente implements Serializable {
 
-	private static final long serialVersionUID = -1183250808883569214L;
+	private static final long serialVersionUID = 4517586970027276816L;
+
 	public static final int LONG_OBS_AFIP = 256;
 
 	private Integer id;
@@ -199,7 +201,10 @@ public abstract class DocumentoContableCliente implements Serializable {
 	
 	@Transient
 	public abstract ETipoDocumento getTipoDocumento();
-	
+
+	@Transient
+	public abstract List<DocumentoContableCliente> getDocsContableRelacionados();
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
