@@ -6,25 +6,29 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.sf.jasperreports.engine.JRException;
+import ar.clarin.fwjava.boss.BossError;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
+import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -166,12 +170,13 @@ public class JDialogAutorizarFacturas extends JDialog {
 							}
 						}
 						
-						List<DocumentoContableCliente> docs = new ArrayList<DocumentoContableCliente>(); 
-						for(int i : selectedRows) {
-							docs.add(getElemento(i));
-						}
 						try {
-							getDocFacade().autorizarMultiplesDocumentosAFIP(docs);
+							for(int i : selectedRows) {
+								DocumentoContableCliente docAut = getDocFacade().autorizarDocumentoContableAFIP(getElemento(i));
+								if(CLJOptionPane.showQuestionMessage(JDialogAutorizarFacturas.this, "Desea imprimir el documento?", "Pregunta") == CLJOptionPane.YES_OPTION){
+									imprimir(docAut);
+								}
+							}
 							llenarTabla();
 						} catch (ValidacionExceptionSinRollback e1) {
 							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
@@ -179,10 +184,35 @@ public class JDialogAutorizarFacturas extends JDialog {
 							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
 						}
 					}
+
 				});
 			}
 			return btnAutorizar;
 		}
+	}
+
+	private void imprimir(DocumentoContableCliente docAut) {
+		boolean ok = false;
+		do {
+			String input = JOptionPane.showInputDialog(JDialogAutorizarFacturas.this, "Ingrese la cantidad de copias: ", "Imprimir", JOptionPane.INFORMATION_MESSAGE);
+			if(input == null){
+				break;
+			}
+			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
+				CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Ingreso incorrecto", "error");
+			} else {
+				ok = true;
+				try{
+					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(JDialogAutorizarFacturas.this, docAut, input);
+					ifHandler.imprimir();
+				}catch(CLException cle){
+					BossError.gestionarError(cle);
+				}catch(JRException jre){
+					jre.printStackTrace();
+					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al imprimir.", "Error");
+				}
+			}
+		} while (!ok);
 	}
 
 	public DocumentoContableFacadeRemote getDocFacade() {

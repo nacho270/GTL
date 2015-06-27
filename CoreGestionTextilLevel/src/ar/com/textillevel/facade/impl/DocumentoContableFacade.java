@@ -149,12 +149,6 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		return docContableDAO.getAllSinCAE();
 	}
 
-	public void autorizarMultiplesDocumentosAFIP(List<DocumentoContableCliente> documentos) throws ValidacionExceptionSinRollback, ValidacionException {
-		for(DocumentoContableCliente doc : documentos) {
-			autorizarDocumentoContableAFIP(doc);
-		}
-	}
-
 	public EstadoServidorAFIP getEstadoServidorAFIP() throws ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {

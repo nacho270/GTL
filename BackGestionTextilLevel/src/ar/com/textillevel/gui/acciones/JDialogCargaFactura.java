@@ -38,8 +38,6 @@ import javax.swing.border.EtchedBorder;
 import main.GTLGlobalCache;
 import main.acciones.facturacion.OperacionSobreRemitoSalidaHandler;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -54,7 +52,6 @@ import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.NumUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
@@ -75,18 +72,11 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTu
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
-import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.to.ClienteTO;
-import ar.com.textillevel.entidades.to.FacturaTO;
-import ar.com.textillevel.entidades.to.ItemFacturaTO;
-import ar.com.textillevel.entidades.to.facturab.ClienteBTO;
-import ar.com.textillevel.entidades.to.facturab.FacturaBTO;
-import ar.com.textillevel.entidades.to.facturab.ItemFacturaBTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
@@ -98,15 +88,14 @@ import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
+import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.GestorDeFacturas;
 
-@SuppressWarnings("unchecked")
 public class JDialogCargaFactura extends JDialog {
 
 	private static final long serialVersionUID = -6724610019577922453L;
@@ -1275,17 +1264,6 @@ public class JDialogCargaFactura extends JDialog {
 			}
 		}
 		
-		public String getNrosRemitos(){
-			if(remitos!=null){
-				List<String> lista = new ArrayList<String>();
-				for(RemitoSalida r : remitos){
-					lista.add(String.valueOf(r.getNroRemito()));
-				}
-				return StringUtil.getCadena(lista, " / ");
-			}
-			return "";
-		}
-		
 		public List<RemitoSalida> getRemitos() {
 			return remitos;
 		}
@@ -2013,7 +1991,6 @@ public class JDialogCargaFactura extends JDialog {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void imprimir() throws JRException {
 		boolean ok = false;
 		do {
@@ -2024,209 +2001,22 @@ public class JDialogCargaFactura extends JDialog {
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
 				CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ingreso incorrecto", "error");
 			} else {
+				ok = true;
 				try{
-					ok = true;
-					if(getFactura()!=null && getFactura().getTipoFactura() == ETipoFactura.B){
-						FacturaBTO facturaB = armarFacturaBTO();
-						Map parameters = getParametrosB(facturaB);
-						JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/facturab.jasper");
-						JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, facturaB.getItems());
-						CLJOptionPane.showWarningMessage(this, "RECUERDE UTILIZAR EL FORMULARIO PARA FACTURAS B", "Advertencia");
-						Integer cantidadAImprimir = Integer.valueOf(input);
-						Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
-						if(cantidadImpresa.equals(cantidadAImprimir)){
-							getFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
-						}else{
-							getFactura().setEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE);
-						}
-						setFactura(getFacturaFacade().actualizarFactura(getFactura()));
+					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(JDialogCargaFactura.this, getFactura(), input);
+					ifHandler.imprimir();
+					if (getFactura() != null) {
+						setFactura(ifHandler.getFactura());
 					}else{
-						FacturaTO factura = armarFacturaTO();
-						Map parameters = getParametros(factura);
-						JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura_electronica.jasper");
-						JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, factura.getItems());
-						Integer cantidadAImprimir = Integer.valueOf(input);
-						Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
-						//JasperViewer.viewReport(jasperPrint, false);
-						if (getCorrecionFactura() == null) {
-							if(cantidadImpresa.equals(cantidadAImprimir)){
-								getFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
-							}else{
-								getFactura().setEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE);
-							}
-							setFactura(getFacturaFacade().actualizarFactura(getFactura()));
-						} else {
-							if(cantidadImpresa.equals(cantidadAImprimir)){
-								getCorrecionFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
-							}else{
-								getCorrecionFactura().setEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE);
-							}
-							setCorrecionFactura(getCorreccionFacade().actualizarCorreccion(getCorrecionFactura()));
-						}
+						setCorrecionFactura(ifHandler.getCorreccionFactura());
 					}
-				}catch(CLException e){
-					BossError.gestionarError(e);
+				}catch(CLException cle){
+					BossError.gestionarError(cle);
 				}
 			}
 		} while (!ok);
 	}
 
-	private FacturaBTO armarFacturaBTO() {
-		FacturaBTO factura = new FacturaBTO();
-		factura.setCliente(getClienteBTO());
-		factura.setItems(getItemsBTO());
-		if(((CondicionDeVenta) getCmbCondicionVenta().getSelectedItem()).getNombre().equalsIgnoreCase("efectivo")){
-			factura.setVentaContado("X");
-		}else{
-			factura.setVentaCtaCTe("X");
-		}
-		String fecha = DateUtil.dateToString(getPanelFecha().getDate(),DateUtil.SHORT_DATE);
-		String[] partesFecha = fecha.split("/");
-		factura.setAnioFecha(partesFecha[2]);
-		factura.setDiaFecha(partesFecha[0]);
-		factura.setMesFecha(partesFecha[1]);
-		factura.setNroRemito(getPnlNroRemito().getNrosRemitos());
-		factura.setTotalFactura(getCorrecionFactura() != null ? getDecimalFormat().format(getCorrecionFactura().getMontoTotal().doubleValue()).replace(',', '.') : getDecimalFormat().format(getFactura().getMontoTotal()));
-		return factura;
-	}
-	
-	private ClienteBTO getClienteBTO() {
-		ClienteBTO cliente = new ClienteBTO();
-		Cliente clientePosta = getCliente();
-		if(clientePosta.getPosicionIva() == EPosicionIVA.CONSUMIDOR_FINAL){
-			cliente.setCondicionIVAConsFinal("X");
-		}else if(clientePosta.getPosicionIva() == EPosicionIVA.EXENTO){
-			cliente.setCondicionIVAExento("X");
-		}else if(clientePosta.getPosicionIva() == EPosicionIVA.MONOTRIBUTISTA){
-			cliente.setCondicionIVARespMonot("X");
-		}
-		
-		cliente.setCuit(clientePosta.getCuit());
-		cliente.setDireccion(clientePosta.getDireccionReal().getDireccion());
-		cliente.setLocalidad(clientePosta.getDireccionReal().getLocalidad().getNombreLocalidad());
-		cliente.setRazonSocial(clientePosta.getRazonSocial());
-		return cliente;
-	}
-	
-	private List<ItemFacturaBTO> getItemsBTO() {
-		List<ItemFacturaBTO> lista = new ArrayList<ItemFacturaBTO>();
-		for (int i = 0; i < getTablaProductos().getRowCount(); i++) {
-			ItemFacturaBTO ito = new ItemFacturaBTO();
-			if(getTablaProductos().getValueAt(i, COL_CANTIDAD) instanceof BigDecimal){
-				ito.setCantidad(getTablaProductos().getValueAt(i, COL_CANTIDAD) != null ? getDecimalFormat().format(getTablaProductos().getValueAt(i, COL_CANTIDAD)) : null);
-			}else{
-				ito.setCantidad(getTablaProductos().getValueAt(i, COL_CANTIDAD) != null ? getDecimalFormat().format(NumUtil.toBigDecimal(Double.valueOf(((String)getTablaProductos().getValueAt(i, COL_CANTIDAD))))) : null);
-			}
-			ito.setDescripcion((String) getTablaProductos().getValueAt(i, COL_DESCRIPCION));
-			ito.setImporte(((String)(getTablaProductos().getValueAt(i, COL_IMPORTE))));
-			ito.setPrecioUnitario(getTablaProductos().getValueAt(i, COL_PRECIO_UNITARIO) != null ? (String.valueOf(getTablaProductos().getValueAt(i, COL_PRECIO_UNITARIO))) : null);
-			lista.add(ito);
-		}
-		return lista;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private Map getParametrosB(FacturaBTO factura) {
-		Map parameters = new HashMap();
-		parameters.put("RAZON_SOCIAL", factura.getCliente().getRazonSocial());
-		parameters.put("DIRECCION", factura.getCliente().getDireccion());
-		parameters.put("LOCALIDAD", factura.getCliente().getLocalidad());
-		
-		if(factura.getCliente().getCondicionIVAConsFinal() != null && factura.getCliente().getCondicionIVAConsFinal().equals("X")){
-			parameters.put("IVA_CONS_F", factura.getCliente().getCondicionIVAConsFinal());
-		}else if(factura.getCliente().getCondicionIVAExento()!=null && factura.getCliente().getCondicionIVAExento().equals("X")){
-			parameters.put("IVA_EXENTO", factura.getCliente().getCondicionIVAExento());
-		}else if(factura.getCliente().getCondicionIVARespMonot() != null && factura.getCliente().getCondicionIVARespMonot().equals("X")){
-			parameters.put("IVA_MONO", factura.getCliente().getCondicionIVARespMonot());
-		}
-		parameters.put("CUIT", factura.getCliente().getCuit());
-		parameters.put("NRO_REMITO", factura.getNroRemito());
-		parameters.put("TOTAL", factura.getTotalFactura());
-		parameters.put("FECHA_FACT_DIA", factura.getDiaFecha());
-		parameters.put("FECHA_FACT_MES", factura.getMesFecha());
-		parameters.put("FECHA_FACT_ANIO", factura.getAnioFecha());
-		parameters.put("CV_CONT", factura.getVentaContado());
-		parameters.put("CV_CTA_CTE", factura.getVentaCtaCTe());
-		return parameters;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private Map getParametros(FacturaTO factura) {
-		Map parameters = new HashMap();
-		parameters.put("NRO_FACTURA", factura.getNroFactura());
-		parameters.put("TIPO_FACTURA", factura.getTipoFactura());
-		parameters.put("RAZON_SOCIAL", factura.getCliente().getRazonSocial());
-		parameters.put("DIRECCION", factura.getCliente().getDireccion());
-		parameters.put("LOCALIDAD", factura.getCliente().getLocalidad());
-		parameters.put("IVA", factura.getCliente().getCondicionIVA());
-		parameters.put("CUIT", factura.getCliente().getCuit());
-		parameters.put("COND_VENTA", factura.getCondicionVenta());
-		parameters.put("NRO_REMITO", factura.getNroRemito());
-		parameters.put("SUBTOTAL", factura.getSubTotal());
-		parameters.put("PORC_IVA", factura.getPorcIvaInsc());
-		parameters.put("TOTAL_IVA", factura.getTotalIvaInscr());
-		parameters.put("TOTAL", factura.getTotalFactura());
-		parameters.put("CAE", factura.getCaeAFIP());
-		parameters.put("FECHA_FACT", DateUtil.dateToString(DateUtil.stringToDate(factura.getFecha()),DateUtil.SHORT_DATE));
-		parameters.put("TIPO_DOC", factura.getTipoDocumento());
-		return parameters;
-	}
-
-	private FacturaTO armarFacturaTO() {
-		FacturaTO factura = new FacturaTO();
-		factura.setCliente(getClienteTO());
-		factura.setItems(getItemsTO());
-		factura.setCondicionVenta(((CondicionDeVenta) getCmbCondicionVenta().getSelectedItem()).getNombre());
-		factura.setFecha(DateUtil.dateToString(getPanelFecha().getDate(),DateUtil.SHORT_DATE));
-		factura.setNroFactura(getTxtNroFactura().getText());
-		factura.setNroRemito(getStrFacturasRelacionadas()!=null && getStrFacturasRelacionadas().trim().length()>0?getStrFacturasRelacionadas().replaceAll("/", " / "):getPnlNroRemito().getNrosRemitos());
-		factura.setPorcIvaInsc(getTxtPorcentajeIVA().getText().length() > 0 ? getTxtPorcentajeIVA().getText() : null);
-		factura.setSubTotal( (getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito?"-":"") + (getCorrecionFactura() != null ? getDecimalFormat().format(getCorrecionFactura().getMontoSubtotal().doubleValue()) : getDecimalFormat().format(getFactura().getMontoSubtotal().doubleValue())));
-		factura.setTipoDocumento(getLblTipoDocumento().getText());
-		factura.setTipoFactura(getCorrecionFactura() != null ? "" : getFactura().getTipoFactura().getDescripcion());
-		factura.setTotalFactura(getCorrecionFactura() != null ? (getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito?"-":"") +  getDecimalFormat().format(getCorrecionFactura().getMontoTotal().doubleValue()).replace(',', '.') : getDecimalFormat().format(getFactura().getMontoTotal()));
-		factura.setCaeAFIP(getCorrecionFactura() != null ? getCorrecionFactura().getCaeAFIP() : getFactura().getCaeAFIP());
-		if(getFactura()!=null){
-			factura.setTotalIvaInscr(getFactura().getPorcentajeIVAInscripto() != null ? getDecimalFormat().format(getFactura().getPorcentajeIVAInscripto().doubleValue() * getFactura().getMontoSubtotal().doubleValue()/ 100) : null);
-		}else{
-			factura.setTotalIvaInscr(getCorrecionFactura().getPorcentajeIVAInscripto() != null ? (getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito?"-":"") +  getTxtImporteIVAInscripto().getText() : null);
-			//getCorrecionFactura().getPorcentajeIVAInscripto().doubleValue() * getCorrecionFactura().getMontoSubtotal().doubleValue()/ 100
-		}
-		
-		return factura;
-	}
-
-	private ClienteTO getClienteTO() {
-		ClienteTO cliente = new ClienteTO();
-		Cliente clientePosta = getCliente();
-		cliente.setCondicionIVA(clientePosta.getPosicionIva().getDescripcion());
-		cliente.setCuit(clientePosta.getCuit());
-		cliente.setDireccion(clientePosta.getDireccionReal().getDireccion());
-		cliente.setLocalidad(clientePosta.getDireccionReal().getLocalidad().getNombreLocalidad());
-		cliente.setRazonSocial(clientePosta.getRazonSocial());
-		return cliente;
-	}
-
-	private List<ItemFacturaTO> getItemsTO() {
-		List<ItemFacturaTO> lista = new ArrayList<ItemFacturaTO>();
-		for (int i = 0; i < getTablaProductos().getRowCount(); i++) {
-			ItemFacturaTO ito = new ItemFacturaTO();
-			ito.setArticulo((String) getTablaProductos().getValueAt(i, COL_ARTICULO));
-			if(getTablaProductos().getValueAt(i, COL_CANTIDAD) instanceof BigDecimal){
-				ito.setCantidad(getTablaProductos().getValueAt(i, COL_CANTIDAD) != null ? getDecimalFormat().format(getTablaProductos().getValueAt(i, COL_CANTIDAD)) : null);
-			}else{
-				String valor =GenericUtils.formatDoubleStringArg((String)getTablaProductos().getValueAt(i, COL_CANTIDAD));
-				valor = valor.replaceAll(",", ".");
-				ito.setCantidad(getTablaProductos().getValueAt(i, COL_CANTIDAD) != null ? getDecimalFormat().format(NumUtil.toBigDecimal(Double.valueOf(valor))) : null);
-			}
-			ito.setDescripcion((String) getTablaProductos().getValueAt(i, COL_DESCRIPCION));
-			ito.setImporte(((String)(getTablaProductos().getValueAt(i, COL_IMPORTE))));
-			ito.setPrecioUnitario(getTablaProductos().getValueAt(i, COL_PRECIO_UNITARIO) != null ? (getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito?"-":"") +  (String.valueOf(getTablaProductos().getValueAt(i, COL_PRECIO_UNITARIO))) : null);
-			ito.setUnidad((String) getTablaProductos().getValueAt(i, COL_UNIDAD));
-			lista.add(ito);
-		}
-		return lista;
-	}
 
 	public boolean isConsulta() {
 		return consulta;
@@ -2419,7 +2209,6 @@ public class JDialogCargaFactura extends JDialog {
 				refreshLabel();
 			}
 		}
-
 	}
 	
 	public CLJTextField getTxtNrosGenericos() {

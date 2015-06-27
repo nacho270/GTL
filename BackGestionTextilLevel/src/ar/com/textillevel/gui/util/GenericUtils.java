@@ -48,6 +48,7 @@ public class GenericUtils {
 	private static NumberFormat df;
 	private static NumberFormat df2;
 	private static NumberFormat df3;
+	private static NumberFormat df4;
 	private static final Double TOLEARANCIA_A_CERO = 0.009;
 	
 	/* Corresponden al DateUtil.getDia(date) */
@@ -77,6 +78,10 @@ public class GenericUtils {
 		df3.setMinimumFractionDigits(3);
 		df3.setMinimumIntegerDigits(1);
 		df3.setGroupingUsed(false);
+		
+		df4 = new DecimalFormat("#,###.00");
+		df.setMaximumFractionDigits(2);
+		df.setGroupingUsed(true);
 	}
 	
 	
@@ -214,6 +219,10 @@ public class GenericUtils {
 	
 	public static NumberFormat getDecimalFormat3() {
 		return df3;
+	}
+	
+	public static NumberFormat getDecimalFormatFactura(){
+		return df4;
 	}
 	
 	public static boolean esHoy(java.sql.Date fecha){
