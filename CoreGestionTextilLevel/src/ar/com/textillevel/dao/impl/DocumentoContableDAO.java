@@ -16,7 +16,7 @@ public class DocumentoContableDAO extends GenericDAO<DocumentoContableCliente, I
 		return getEntityManager().createQuery(
 				  " SELECT d FROM DocumentoContableCliente d "
 				  + "	JOIN FETCH d.cliente "
-				+ "	WHERE d.caeAFIP IS NULL "
+				+ "	WHERE d.caeAFIP IS NULL AND d.nroFactura > 0 "
 				+ " ORDER BY d.nroFactura ASC ").getResultList();
 	}
 }
