@@ -150,4 +150,8 @@ public class Err  implements java.io.Serializable {
             _javaType, _xmlType, typeDesc);
     }
 
+    public String toString() {
+    	return getCode() + " - " + getMsg();
+    }
+
 }

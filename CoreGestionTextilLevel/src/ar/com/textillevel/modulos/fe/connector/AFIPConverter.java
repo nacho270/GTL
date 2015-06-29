@@ -1,7 +1,11 @@
 package ar.com.textillevel.modulos.fe.connector;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
@@ -14,8 +18,15 @@ import ar.com.textillevel.modulos.fe.cliente.requests.FECAERequest;
 public class AFIPConverter {
 
 	private static DateFormat df;
+	private static NumberFormat nf;
+	
 	static {
-		df = new SimpleDateFormat(DateUtil.DEFAULT_DATE_WITHOUT_SEPARATOR); 
+		df = new SimpleDateFormat(DateUtil.DEFAULT_DATE_WITHOUT_SEPARATOR);
+		nf = DecimalFormat.getNumberInstance(new Locale("es_AR"));
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
+		nf.setMinimumIntegerDigits(1);
+		nf.setGroupingUsed(true);
 	}
 	
 	public static FECAERequest crearRequest(DocumentoContableCliente documento, int nroSucursal, int idTipoComprobanteAFIP) {
@@ -32,41 +43,53 @@ public class AFIPConverter {
 		cabecera.setCbteTipo(idTipoComprobanteAFIP); //ver el metodo AFIPConnector.getTiposComprobante
 		return cabecera;
 	}
-	
+
 	private static FECAEDetRequest documentoACAERequest(DocumentoContableCliente documento, int nroSucursal) {
 		FECAEDetRequest req = new FECAEDetRequest();
 		req.setConcepto(EConceptoFacturaElectronica.SERVICIOS.getId());
 		req.setCbteDesde(documento.getNroFactura()); //no entiendo bien porque hay desde y hasta
 		req.setCbteHasta(documento.getNroFactura());
-		
+
 		req.setDocNro(Long.valueOf(documento.getCliente().getCuit().replace("-", ""))); // Imagino que siempre es con CUIT.
 		req.setDocTipo(80);  // HARDCODE id para CUIT. Hay que ver el tipo de documento a usar basandose en el metodo  AFIPConnector.getTiposDoc
-		
+
 		req.setCbteFch(df.format(documento.getFechaEmision()));
-		req.setImpTotal(documento.getMontoTotal().doubleValue());
-		double montoIVA = documento.getMontoSubtotal().multiply(documento.getPorcentajeIVAInscripto()).doubleValue();
+
+		req.setFchServDesde(req.getCbteFch());
+		req.setFchServHasta(req.getCbteFch()); //Hay que ver bien que significa esto!!!
+		req.setFchVtoPago(req.getCbteFch());
+
+
+		req.setImpTotal(getFormatedDouble(documento.getMontoTotal().doubleValue()));
+		double montoIVA = getFormatedDouble(documento.getMontoSubtotal().multiply(documento.getPorcentajeIVAInscripto().divide(new BigDecimal(100))).doubleValue());
 		req.setImpIVA(montoIVA);
 		req.setMonCotiz(1d);
 		req.setMonId("PES"); //hardcode pesos. Podria ser dinamico pero el WS retorna solo esta y es lo unico que se usa.
 		req.setImpTotConc(0d); //no se usa. Ver FacturaFacade:253
-		req.setImpNeto(documento.getMontoSubtotal().doubleValue()); //Ver FacturaFacade:258. Ver que pasa con los nulls. No creo que haga falta multiplicar por -1 si es NC
+		req.setImpNeto(getFormatedDouble(documento.getMontoSubtotal().floatValue())); //Ver FacturaFacade:258. Ver que pasa con los nulls. No creo que haga falta multiplicar por -1 si es NC
 		req.setImpOpEx(0d); //no se usa. Ver FacturaFacade:252
 		req.setImpTrib(0d); //no se que es
 		AlicIva ali = new AlicIva();
 		ali.setId(5);
-		ali.setBaseImp(documento.getMontoSubtotal().doubleValue());
+		ali.setBaseImp(getFormatedDouble(documento.getMontoSubtotal().floatValue()));
 		ali.setImporte(montoIVA);
 		req.setIva(new AlicIva[]{ali});
 
 		//Comprobantes asociados
-		CbteAsoc[] cbtesAsoc = new CbteAsoc[documento.getDocsContableRelacionados().size()];
-		for(int i=0; i < documento.getDocsContableRelacionados().size(); i++) {
-			DocumentoContableCliente docRel = documento.getDocsContableRelacionados().get(i);
-			CbteAsoc comprobanteAsociado = new CbteAsoc(docRel.getTipoDocumento().getIdTipoDocAFIP(), nroSucursal, docRel.getNroFactura());
-			cbtesAsoc[i] = comprobanteAsociado;
+		if(!documento.getDocsContableRelacionados().isEmpty()) {
+			CbteAsoc[] cbtesAsoc = new CbteAsoc[documento.getDocsContableRelacionados().size()];
+			for(int i=0; i < documento.getDocsContableRelacionados().size(); i++) {
+				DocumentoContableCliente docRel = documento.getDocsContableRelacionados().get(i);
+				CbteAsoc comprobanteAsociado = new CbteAsoc(docRel.getTipoDocumento().getIdTipoDocAFIP(), nroSucursal, docRel.getNroFactura());
+				cbtesAsoc[i] = comprobanteAsociado;
+			}
+			req.setCbtesAsoc(cbtesAsoc);
 		}
-		req.setCbtesAsoc(cbtesAsoc);
-		
 		return req;
 	}
+
+	private static double getFormatedDouble(double value) {
+		return new Double(nf.format(value).replaceAll(",", ""));
+	}
+
 }

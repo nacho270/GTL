@@ -1,6 +1,11 @@
 package ar.com.textillevel.modulos.fe.connector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.clarin.fwjava.util.StringUtil;
+import ar.com.textillevel.modulos.fe.cliente.dto.Err;
+import ar.com.textillevel.modulos.fe.cliente.dto.Obs;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
 
 public class DatosRespuestaAFIP {
@@ -14,7 +19,26 @@ public class DatosRespuestaAFIP {
 		this.resultado = fecaeResponse.getFeCabResp().getResultado();
 		this.reproceso = fecaeResponse.getFeCabResp().getReproceso();
 		this.cae = fecaeResponse.getFeDetResp()[0].getCAE();
-		this.observaciones = StringUtil.getCadena(fecaeResponse.getFeDetResp()[0].getObservaciones(), "\n");
+		this.observaciones = buildTextoError(fecaeResponse.getFeDetResp()[0].getObservaciones(), fecaeResponse.getErrors());
+	}
+
+	private String buildTextoError(Obs[] observaciones, Err[] errors) {
+		List<String> msgList = new ArrayList<String>();
+		if(observaciones != null) {
+			for(Obs o : observaciones) {
+				msgList.add(o.toString());
+			}
+		}
+		if(errors != null) {
+			for(Err e : errors) {
+				msgList.add(e.toString());
+			}
+		}
+		if(msgList.isEmpty()) {
+			return "";
+		} else {
+			return StringUtil.getCadena(msgList, "\n");
+		}
 	}
 
 	public String getResultado() {

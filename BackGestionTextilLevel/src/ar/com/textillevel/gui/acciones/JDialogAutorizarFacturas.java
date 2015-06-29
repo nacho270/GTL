@@ -16,6 +16,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.taglibs.string.util.StringW;
+
 import net.sf.jasperreports.engine.JRException;
 import ar.clarin.fwjava.boss.BossError;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
@@ -210,6 +212,8 @@ public class JDialogAutorizarFacturas extends JDialog {
 				}catch(JRException jre){
 					jre.printStackTrace();
 					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al imprimir.", "Error");
+				} catch (ValidacionException e) {
+					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				}
 			}
 		} while (!ok);

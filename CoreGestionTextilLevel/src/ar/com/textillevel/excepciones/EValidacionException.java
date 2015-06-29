@@ -50,6 +50,7 @@ public enum EValidacionException {
 	DOCUMENTO_CONTABLE_YA_AUTORIZADO				(144, "El documento ya se encuentra autorizado por la AFIP. No se puede eliminar, anular ni modificar."),
 	SERVICIO_AFIP_NO_HABILITADO						(145, "El servicio de factura electrónica no se encuentra activado."),
 	DOCUMENTO_CONTABLE_FALLO_CONEXION_AFIP		    (146, "El documento se ha guardado pero no se pudo establecer la conexión con la la AFIP para autorizar el mismo. No se puede imprimir el documento."),
+	DOCUMENTO_CONTABLE_NO_SE_PUEDE_IMPRIMIR		    (148, "El documento no se puede imprimir porque no ha sido autorizado por la AFIP."),	
 	_											(000, "");
 	
 

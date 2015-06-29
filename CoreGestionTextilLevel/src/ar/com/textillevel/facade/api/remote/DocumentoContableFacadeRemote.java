@@ -17,4 +17,6 @@ public interface DocumentoContableFacadeRemote {
 	public List<DocumentoContableCliente> getDocumentosContablesSinCAE();
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException;
 	public EstadoServidorAFIP getEstadoServidorAFIP() throws ValidacionException;
+	public void checkImpresionDocumentoContable(DocumentoContableCliente documento) throws ValidacionException;
+	
 }

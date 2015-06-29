@@ -22,15 +22,15 @@ import ar.com.textillevel.entidades.gente.Cliente;
 public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaDAOLocal {
 
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura) {
-		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM Factura f WHERE f.idTipoFactura = :idTipo ");
+		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM Factura f WHERE f.idTipoFactura = :idTipo AND f.nroFactura > 0");
 		query.setParameter("idTipo", tipoFactura.getId());
 		Number lastNumeroFactura = (Number)query.getSingleResult();
-		query = getEntityManager().createQuery("SELECT MAX(c.nroFactura) FROM CorreccionFactura c WHERE c.idTipoFactura = :idTipo");
+		query = getEntityManager().createQuery("SELECT MAX(c.nroFactura) FROM CorreccionFactura c WHERE c.idTipoFactura = :idTipo AND c.nroFactura > 0");
 		query.setParameter("idTipo", tipoFactura.getId());
 		Number lastNumeroCorreccion = (Number)query.getSingleResult();
 		if(lastNumeroFactura==null){
 			if(lastNumeroCorreccion==null){
-				return null;
+				return 0;
 			}else{
 				return lastNumeroCorreccion.intValue();
 			}

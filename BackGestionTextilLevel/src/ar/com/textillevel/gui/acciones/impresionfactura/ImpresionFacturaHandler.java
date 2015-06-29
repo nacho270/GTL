@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.error.CLException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
@@ -42,6 +43,7 @@ import ar.com.textillevel.entidades.to.facturab.ClienteBTO;
 import ar.com.textillevel.entidades.to.facturab.FacturaBTO;
 import ar.com.textillevel.entidades.to.facturab.ItemFacturaBTO;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
+import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
@@ -59,6 +61,7 @@ public class ImpresionFacturaHandler {
 	private FacturaFacadeRemote facturaFacade;
 	private CorreccionFacadeRemote correccionFacade;
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
+	private DocumentoContableFacadeRemote documentoContableFacade;
 	private String strFacturasRelacionadas;
 
 	public ImpresionFacturaHandler(JDialog owner, DocumentoContableCliente documento, String cantidadCopias) {
@@ -67,6 +70,7 @@ public class ImpresionFacturaHandler {
 		facturaFacade = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class);
 		correccionFacade = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
 		parametrosGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
+		documentoContableFacade = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
 		if (documento.getTipoDocumento() == ETipoDocumento.FACTURA){
 			setFactura((Factura)documento);
 			setRemitos(GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdsConPiezasYProductos(extractIds(getFactura().getRemitos())));
@@ -78,9 +82,9 @@ public class ImpresionFacturaHandler {
 		}
 	}
 
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void imprimir() throws JRException, CLException {
+	public void imprimir() throws JRException, CLException, ValidacionException {
+		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
 		if (getFactura() != null && getFactura().getTipoFactura() == ETipoFactura.B) {
 			FacturaBTO facturaB = armarFacturaBTO();
 			Map parameters = getParametrosB(facturaB);

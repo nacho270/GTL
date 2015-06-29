@@ -123,11 +123,11 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 					docContable.setCaeAFIP(respAFIP.getCae());
 					docContable.setEstadoImpresion(EEstadoImpresionDocumento.AUTORIZADO_AFIP);
 				}
-				docContable.setObservacionesAFIP(respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, DocumentoContableCliente.LONG_OBS_AFIP-1));
+				docContable.setObservacionesAFIP(respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, Math.min(DocumentoContableCliente.LONG_OBS_AFIP-1, respAFIP.getObservaciones().length())));
 				docContable = (D)docContableDAO.save(docContable);
 				if(!autorizada) {
 					List<String> msg = new ArrayList<String>();
-					msg.add(docContable.getObservacionesAFIP());
+					msg.add(docContable.getObservacionesAFIP() == null ? "" : docContable.getObservacionesAFIP());
 					throw new ValidacionExceptionSinRollback(EValidacionException.DOCUMENTO_CONTABLE_NO_SE_PUDO_AUTORIZAR_AFIP.getInfoValidacion(), msg); 
 				}
 			} catch (RemoteException e) {
@@ -142,6 +142,12 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public void checkAutorizacionAFIP(DocumentoContableCliente docContable) throws ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado() && docContable.getCaeAFIP() != null && (docContable.getEstadoImpresion() == EEstadoImpresionDocumento.AUTORIZADO_AFIP || docContable.getEstadoImpresion() == EEstadoImpresionDocumento.IMPRESO)) {
 			throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_YA_AUTORIZADO.getInfoValidacion());
+		}
+	}
+
+	public void checkImpresionDocumentoContable(DocumentoContableCliente documento) throws ValidacionException {
+		if(ConfiguracionAFIPHolder.getInstance().isHabilitado() && documento.getCaeAFIP() == null) {
+			throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_NO_SE_PUEDE_IMPRIMIR.getInfoValidacion());			
 		}
 	}
 

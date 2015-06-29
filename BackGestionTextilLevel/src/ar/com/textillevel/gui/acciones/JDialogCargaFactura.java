@@ -1728,7 +1728,7 @@ public class JDialogCargaFactura extends JDialog {
 			btnImprimir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try{
-						if(getCliente().getPosicionIva() == EPosicionIVA.EXPORTACION){
+						if(getCliente().getPosicionIva() == EPosicionIVA.EXPORTACION) {
 							return;
 						}
 						imprimir();
@@ -2012,6 +2012,8 @@ public class JDialogCargaFactura extends JDialog {
 					}
 				}catch(CLException cle){
 					BossError.gestionarError(cle);
+				} catch (ValidacionException e) {
+					CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				}
 			}
 		} while (!ok);

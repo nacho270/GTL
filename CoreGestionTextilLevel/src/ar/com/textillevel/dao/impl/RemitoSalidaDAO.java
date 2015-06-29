@@ -73,10 +73,10 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 	}
 
 	public Integer getUltimoNumeroFactura(EPosicionIVA posIva) {
-		Query query = getEntityManager().createQuery("SELECT MAX(rs.nroFactura) FROM RemitoSalida rs WHERE rs.cliente.idPosicionIva = :idPosIva ");
+		Query query = getEntityManager().createQuery("SELECT MAX(rs.nroFactura) FROM RemitoSalida rs WHERE rs.cliente.idPosicionIva = :idPosIva AND rs.nroFactura > 0");
 		query.setParameter("idPosIva", posIva.getId());
 		Number lastNumeroRemito = (Number)query.getSingleResult();
-		return lastNumeroRemito == null ? null : lastNumeroRemito.intValue();
+		return lastNumeroRemito == null ? 0 : lastNumeroRemito.intValue();
 	}
 
 	public List<RemitoSalida> getRemitosByClienteYFecha(Date fechaDesde, Date fechaHasta, Cliente cliente) {

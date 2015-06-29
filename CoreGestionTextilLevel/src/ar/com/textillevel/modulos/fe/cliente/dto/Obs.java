@@ -9,8 +9,8 @@ package ar.com.textillevel.modulos.fe.cliente.dto;
 
 @SuppressWarnings({"serial","rawtypes","unused"})
 public class Obs  implements java.io.Serializable {
-    private int code;
 
+    private int code;
     private java.lang.String msg;
 
     public Obs() {
@@ -148,6 +148,10 @@ public class Obs  implements java.io.Serializable {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(
             _javaType, _xmlType, typeDesc);
+    }
+
+    public String toString() {
+    	return getMsg();
     }
 
 }
