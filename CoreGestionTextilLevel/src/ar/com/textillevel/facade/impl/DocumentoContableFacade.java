@@ -27,7 +27,6 @@ import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.modulos.fe.ConfiguracionAFIPHolder;
 import ar.com.textillevel.modulos.fe.EstadoServidorAFIP;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
-import ar.com.textillevel.modulos.fe.cliente.responses.FERecuperaLastCbteResponse;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 import ar.com.textillevel.modulos.fe.connector.DatosRespuestaAFIP;
 
@@ -47,6 +46,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	private RemitoSalidaDAOLocal remitoSalidaDAO;
 
 	public synchronized Integer getProximoNroDocumentoContable(EPosicionIVA posIva) {
+		/*
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
 				FERecuperaLastCbteResponse ultimoNroCompAut = AFIPConnector.getInstance().getUltimoComprobante(paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), 1);
@@ -57,6 +57,8 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		} else {
 			return getProximoNroFactura(posIva);
 		}
+		*/
+		return getProximoNroFactura(posIva);
 	}
 
 	public Integer getProximoNroFactura(EPosicionIVA posIva) {
