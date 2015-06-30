@@ -26,6 +26,11 @@ public class JDialogEstadoServerAFIP extends JDialog {
 	private PanelEstadoServicioAFIP panelEstadoAppServer;
 	private PanelEstadoServicioAFIP panelEstadoAuthServer;
 	private PanelEstadoServicioAFIP panelEstadoDBServer;
+	private PanelEstadoServicioAFIP panelPruebaAuth;
+	private JLabel lblUltimaFCAutorizada;
+	private JLabel lblUltimaNDAutorizada;
+	private JLabel lblUltimaNCAutorizada;
+	
 	private JButton btnAceptar;
 	private EstadoServidorAFIP estadoAFIP;
 
@@ -39,7 +44,7 @@ public class JDialogEstadoServerAFIP extends JDialog {
 	private void setUpScreen(){
 		setTitle("Estado de servicios de AFIP");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setSize(new Dimension(470, 140));
+		setSize(new Dimension(320, 260));
 		setResizable(false);
 		GuiUtil.centrar(this);
 		setModal(true);
@@ -50,6 +55,15 @@ public class JDialogEstadoServerAFIP extends JDialog {
 		pCentro.add(getPanelEstadoAppServer());
 		pCentro.add(getPanelEstadoAuthServer());
 		pCentro.add(getPanelEstadoDBServer());
+		pCentro.add(getPanelPruebaAuth());
+		
+		JPanel pnlDocs = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.CENTER, 5, 5));
+		
+		pnlDocs.add(getLblUltimaFCAutorizada());
+		pnlDocs.add(getLblUltimaNDAutorizada());
+		pnlDocs.add(getLblUltimaNCAutorizada());
+		
+		pCentro.add(pnlDocs);
 		add(pCentro, BorderLayout.CENTER);
 		JPanel pSur = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		pSur.add(getBtnAceptar());
@@ -73,31 +87,39 @@ public class JDialogEstadoServerAFIP extends JDialog {
 				lblEstado.setIcon(ImageUtil.loadIcon("ar/com/textillevel/imagenes/chat/delete.png"));
 			}
 			add(lblEstado);
+			setPreferredSize(new Dimension(150, 60));
 		}
 	}
 
-	public PanelEstadoServicioAFIP getPanelEstadoAppServer() {
+	private PanelEstadoServicioAFIP getPanelEstadoAppServer() {
 		if(panelEstadoAppServer == null){
 			panelEstadoAppServer = new PanelEstadoServicioAFIP(getEstadoAFIP().getAppServer());
 		}
 		return panelEstadoAppServer;
 	}
 
-	public PanelEstadoServicioAFIP getPanelEstadoAuthServer() {
+	private PanelEstadoServicioAFIP getPanelEstadoAuthServer() {
 		if(panelEstadoAuthServer == null){
 			panelEstadoAuthServer = new PanelEstadoServicioAFIP(getEstadoAFIP().getAuthServer());
 		}
 		return panelEstadoAuthServer;
 	}
 
-	public PanelEstadoServicioAFIP getPanelEstadoDBServer() {
+	private PanelEstadoServicioAFIP getPanelEstadoDBServer() {
 		if(panelEstadoDBServer==null){
 			panelEstadoDBServer = new PanelEstadoServicioAFIP(getEstadoAFIP().getDbServer());
 		}
 		return panelEstadoDBServer;
 	}
 
-	public JButton getBtnAceptar() {
+	private PanelEstadoServicioAFIP getPanelPruebaAuth() {
+		if(panelPruebaAuth==null){
+			panelPruebaAuth = new PanelEstadoServicioAFIP(getEstadoAFIP().getPruebaAutenticacion());
+		}
+		return panelPruebaAuth;
+	}
+	
+	private JButton getBtnAceptar() {
 		if(btnAceptar == null){
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
@@ -109,7 +131,35 @@ public class JDialogEstadoServerAFIP extends JDialog {
 		return btnAceptar;
 	}
 
-	public EstadoServidorAFIP getEstadoAFIP() {
+	private EstadoServidorAFIP getEstadoAFIP() {
 		return estadoAFIP;
+	}
+
+	private JLabel getLblUltimaFCAutorizada() {
+		if (lblUltimaFCAutorizada == null){
+			lblUltimaFCAutorizada = crearLblUltimoDocumentoAutorizado("Última FC autorizada: " + getEstadoAFIP().getUltimaFacturaAutorizada());
+		}
+		return lblUltimaFCAutorizada;
+	}
+
+	private JLabel getLblUltimaNDAutorizada() {
+		if(lblUltimaNDAutorizada == null){
+			lblUltimaNDAutorizada = crearLblUltimoDocumentoAutorizado("Última ND autorizada: " + getEstadoAFIP().getUltimaNDAutorizada());
+		}
+		return lblUltimaNDAutorizada;
+	}
+
+	private JLabel getLblUltimaNCAutorizada() {
+		if(lblUltimaNCAutorizada == null){
+			lblUltimaNCAutorizada = crearLblUltimoDocumentoAutorizado("Última NC autorizada: " + getEstadoAFIP().getUltimaNCAutorizada());
+		}
+		return lblUltimaNCAutorizada;
+	}
+	
+	private JLabel crearLblUltimoDocumentoAutorizado(String text){
+		JLabel lbl = new JLabel(text);
+		Font font = lbl.getFont();
+		lbl.setFont(new Font(font.getName(), Font.BOLD, font.getSize()));
+		return lbl;
 	}
 }

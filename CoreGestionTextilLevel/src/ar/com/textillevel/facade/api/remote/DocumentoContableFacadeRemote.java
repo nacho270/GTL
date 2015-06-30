@@ -16,7 +16,7 @@ public interface DocumentoContableFacadeRemote {
 	public Integer getProximoNroDocumentoContable(EPosicionIVA posIva);
 	public List<DocumentoContableCliente> getDocumentosContablesSinCAE();
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException;
-	public EstadoServidorAFIP getEstadoServidorAFIP() throws ValidacionException;
+	public EstadoServidorAFIP getEstadoServidorAFIP(int nroSucursal) throws ValidacionException;
 	public void checkImpresionDocumentoContable(DocumentoContableCliente documento) throws ValidacionException;
 	
 }

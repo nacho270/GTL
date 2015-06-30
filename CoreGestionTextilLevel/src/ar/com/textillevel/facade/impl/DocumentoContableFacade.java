@@ -17,6 +17,7 @@ import ar.com.textillevel.dao.api.local.RemitoSalidaDAOLocal;
 import ar.com.textillevel.entidades.config.ConfiguracionNumeracionFactura;
 import ar.com.textillevel.entidades.config.NumeracionFactura;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
@@ -67,7 +68,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		if (proximoNumeroDeFactura == null) {
 			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
 			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
+				throw new RuntimeException("Falta configurar el nï¿½mero de comienzo de factura en los parï¿½metros generales.");
 			}
 			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
 			if(numeracionActual != null){
@@ -82,7 +83,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		} else {
 			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
 			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
+				throw new RuntimeException("Falta configurar el nï¿½mero de comienzo de factura en los parï¿½metros generales.");
 			}
 			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
 			Integer numeroDesdeConfigurado = null;
@@ -157,12 +158,17 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		return docContableDAO.getAllSinCAE();
 	}
 
-	public EstadoServidorAFIP getEstadoServidorAFIP() throws ValidacionException {
+	public EstadoServidorAFIP getEstadoServidorAFIP(int nroSucursal) throws ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
-				return new EstadoServidorAFIP(AFIPConnector.getInstance().informeEstadoServicio());
+				DummyResponse informeEstadoServicio = AFIPConnector.getInstance().informeEstadoServicio();
+				boolean okAuth = ConfiguracionAFIPHolder.getInstance().getAuthData() != null;
+				String ultimaFCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.FACTURA.getIdTipoDocAFIP()).getCbteNro();
+				String ultimaNCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_CREDITO.getIdTipoDocAFIP()).getCbteNro();
+				String ultimaNDAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_DEBITO.getIdTipoDocAFIP()).getCbteNro();
+				return new EstadoServidorAFIP(informeEstadoServicio, okAuth, ultimaFCAuth, ultimaNCAuth, ultimaNDAuth);
 			}catch(Exception e) {
-				return new EstadoServidorAFIP(new DummyResponse("error", "error", "error"));
+				return new EstadoServidorAFIP(new DummyResponse("error", "error", "error"), false, " - ", " - ", " - ");
 			}
 		}else{
 			throw new ValidacionException(EValidacionException.SERVICIO_AFIP_NO_HABILITADO.getInfoValidacion()); 

@@ -11,12 +11,20 @@ public class EstadoServidorAFIP implements Serializable {
 	private EstadoAFIPWrapper appServer;
 	private EstadoAFIPWrapper dbServer;
 	private EstadoAFIPWrapper authServer;
-	
+	private EstadoAFIPWrapper pruebaAutenticacion;
+	private String ultimaFacturaAutorizada;
+	private String ultimaNDAutorizada;
+	private String ultimaNCAutorizada;
 
-	public EstadoServidorAFIP(DummyResponse respuestaAfip) {
+	public EstadoServidorAFIP(DummyResponse respuestaAfip, boolean pruebaAutorizacion, 
+			String ultimaFacturaAutorizada,String ultimaNCAutorizada,String ultimaNDAutorizada) {
 		this.appServer = new EstadoAFIPWrapper("Servidor de negocio", respuestaAfip.getAppServer());
 		this.dbServer = new EstadoAFIPWrapper("Servidor de base de datos", respuestaAfip.getDbServer());
-		this.authServer = new EstadoAFIPWrapper("Servidor de autenticación", respuestaAfip.getAuthServer());
+		this.authServer = new EstadoAFIPWrapper("Servidor de autenticaciï¿½n", respuestaAfip.getAuthServer());
+		this.pruebaAutenticacion = new EstadoAFIPWrapper("Prueba de autenticaciï¿½n", pruebaAutorizacion?"ok":"error");
+		this.ultimaFacturaAutorizada = ultimaFacturaAutorizada;
+		this.ultimaNCAutorizada = ultimaNCAutorizada;
+		this.ultimaNDAutorizada = ultimaNDAutorizada;
 	}
 
 	public class EstadoAFIPWrapper implements Serializable {
@@ -54,5 +62,21 @@ public class EstadoServidorAFIP implements Serializable {
 
 	public EstadoAFIPWrapper getAuthServer() {
 		return authServer;
+	}
+
+	public EstadoAFIPWrapper getPruebaAutenticacion() {
+		return pruebaAutenticacion;
+	}
+
+	public String getUltimaFacturaAutorizada() {
+		return ultimaFacturaAutorizada;
+	}
+
+	public String getUltimaNDAutorizada() {
+		return ultimaNDAutorizada;
+	}
+
+	public String getUltimaNCAutorizada() {
+		return ultimaNCAutorizada;
 	}
 }

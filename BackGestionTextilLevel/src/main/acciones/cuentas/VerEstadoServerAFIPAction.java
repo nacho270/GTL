@@ -9,6 +9,7 @@ import javax.swing.Action;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogEstadoServerAFIP;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -46,7 +47,8 @@ public class VerEstadoServerAFIPAction implements Action {
 
 	public void actionPerformed(ActionEvent e) {
 		try{
-			new JDialogEstadoServerAFIP(frame, GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class).getEstadoServidorAFIP()).setVisible(true);
+			Integer nroSucursal = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getNroSucursal();
+			new JDialogEstadoServerAFIP(frame, GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class).getEstadoServidorAFIP(nroSucursal)).setVisible(true);
 		}catch(ValidacionException vle){
 			CLJOptionPane.showErrorMessage(frame, vle.getMensajeError(), "Error");
 		}
