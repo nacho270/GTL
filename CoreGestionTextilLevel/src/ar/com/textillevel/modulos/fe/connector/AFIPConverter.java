@@ -80,7 +80,7 @@ public class AFIPConverter {
 			CbteAsoc[] cbtesAsoc = new CbteAsoc[documento.getDocsContableRelacionados().size()];
 			for(int i=0; i < documento.getDocsContableRelacionados().size(); i++) {
 				DocumentoContableCliente docRel = documento.getDocsContableRelacionados().get(i);
-				CbteAsoc comprobanteAsociado = new CbteAsoc(docRel.getTipoDocumento().getIdTipoDocAFIP(), nroSucursal, docRel.getNroFactura());
+				CbteAsoc comprobanteAsociado = new CbteAsoc(docRel.getTipoDocumento().getIdTipoDocAFIP(documento.getTipoFactura()), nroSucursal, docRel.getNroFactura());
 				cbtesAsoc[i] = comprobanteAsociado;
 			}
 			req.setCbtesAsoc(cbtesAsoc);

@@ -3,8 +3,10 @@ package main.acciones.facturacion;
 import java.awt.Frame;
 import java.util.Collections;
 import java.util.List;
+
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -56,7 +58,7 @@ public class IngresoRemitoSalidaHandler {
 		remitoSalida.setCliente(clienteElegido);
 		remitoSalida.setNroRemito(lastNroRemito);
 		remitoSalida.setNroOrden(0);
-		remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva()));
+		remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva(), ETipoDocumento.FACTURA));
 		remitoSalida.setTipoRemitoSalida(tipoRemitoSalida);
 		JDialogAgregarRemitoSalidaVentaTela dialogAgregarRemitoSalida = createDialog(remitoSalida);
 		GuiUtil.centrar(dialogAgregarRemitoSalida);

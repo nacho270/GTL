@@ -14,6 +14,7 @@ import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVi
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
 import ar.com.textillevel.gui.acciones.JFrameVerMovimientos;
+import ar.com.textillevel.gui.util.GenericUtils;
 
 public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor{
 
@@ -42,7 +43,7 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor{
 				getFrameMovimientos().getBtnEditar().setEnabled(true);
 			}
 		}else{
-			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaCredito().getAnulada()==false);
+			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaCredito().getAnulada()==false && GenericUtils.isSistemaTest());
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaCredito().getAnulada()==false && !(movimiento.getNotaCredito().getVerificada()!=null && movimiento.getNotaCredito().getVerificada() == true));
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(true);
 			getFrameMovimientos().getBtnEditar().setEnabled(true);
@@ -54,7 +55,7 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor{
 	public void visit(MovimientoDebe movimiento) {
 		if(movimiento.getFactura()!=null){
 			if(movimiento.getFactura().getEstadoFactura() == EEstadoFactura.IMPAGA || movimiento.getFactura().getEstadoFactura() == EEstadoFactura.PAGADA){
-				getFrameMovimientos().getBtnAnular().setEnabled(true);
+				getFrameMovimientos().getBtnAnular().setEnabled(GenericUtils.isSistemaTest());
 				getFrameMovimientos().getBtnConfirmar().setEnabled(true);
 				getFrameMovimientos().getBtnEditar().setEnabled(true);
 			}else if(movimiento.getFactura().getEstadoFactura() == EEstadoFactura.ANULADA){
@@ -62,13 +63,13 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor{
 				getFrameMovimientos().getBtnConfirmar().setEnabled(false);
 				getFrameMovimientos().getBtnEditar().setEnabled(false);
 			}else{
-				getFrameMovimientos().getBtnAnular().setEnabled(true);
+				getFrameMovimientos().getBtnAnular().setEnabled(GenericUtils.isSistemaTest());
 				getFrameMovimientos().getBtnConfirmar().setEnabled(false);
 				getFrameMovimientos().getBtnEditar().setEnabled(false);
 			}
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(true);
 		}else{
-			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaDebito().getAnulada()==false);
+			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaDebito().getAnulada()==false && GenericUtils.isSistemaTest());
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaDebito().getAnulada()==false && !(movimiento.getNotaDebito().getVerificada()!=null && movimiento.getNotaDebito().getVerificada() == true));
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(true);
 			getFrameMovimientos().getBtnEditar().setEnabled(true);

@@ -20,6 +20,7 @@ import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.Base64;
 import org.apache.axis.encoding.XMLType;
+import org.apache.log4j.Logger;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
@@ -31,6 +32,8 @@ import org.dom4j.io.SAXReader;
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 public class ClienteAutenticacionAFIP {
+	
+	private static final Logger logger = Logger.getLogger(ClienteAutenticacionAFIP.class);
 
 	private static String invocarAutenticacion(byte[] loginTicketRequestXMLCMS, String endpoint) throws Exception {
 		Service service = new Service();
@@ -96,12 +99,14 @@ public class ClienteAutenticacionAFIP {
 	}
 	
 	public static AuthAFIPData crearAutorizacion(ConfiguracionFacturaElectronica configFE) throws Exception {
+		logger.info("Creando pedido de autorización AFIP...");
 		byte[] LoginTicketRequest_xml_cms = crearCMS(configFE.getKeyStore(), 
 													 configFE.getKeyStorePass(), 
 													 configFE.getKeyStoreSigner(),
 													 configFE.getDestinoServicio(),
 													 configFE.getServicio(),
 													 configFE.getDuracion());
+		logger.info("invocando servicio de autorización AFIP...");
 		String LoginTicketResponse = invocarAutenticacion(LoginTicketRequest_xml_cms, configFE.getEndpointAutenticacion());
 		Reader tokenReader = new StringReader(LoginTicketResponse);
 		Document tokenDoc = new SAXReader(false).read(tokenReader);
@@ -109,7 +114,7 @@ public class ClienteAutenticacionAFIP {
 		String token = tokenDoc.valueOf("/loginTicketResponse/credentials/token");
 		String sign = tokenDoc.valueOf("/loginTicketResponse/credentials/sign");
 		Long cuitEmpresa = Long.valueOf(System.getProperty("textillevel.fe.cuitEmpresa"));
-		
+		logger.info("autorización AFIP obtenida...");
 		return new AuthAFIPData(token, sign, cuitEmpresa);
 	}
 }

@@ -21,6 +21,7 @@ import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
@@ -92,8 +93,8 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	@EJB
 	private UsuarioSistemaFacadeLocal usuSistemaFacade;
 	
-	public Integer getLastNumeroFactura(ETipoFactura tipoFactura){
-		return facturaDao.getLastNumeroFactura(tipoFactura);
+	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
+		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc);
 	}
 	
 	public void eliminarFactura(Factura factura, String usrName) throws ValidacionException, CLException {
@@ -198,7 +199,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 				if(anularRemitoSalida) {
 					remitoSalidaFacade.anularRemitoSalida(remito);
 				} else {
-					remito.setNroFactura(docContableFacade.getProximoNroDocumentoContable(factura.getCliente().getPosicionIva()));
+					remito.setNroFactura(docContableFacade.getProximoNroDocumentoContable(factura.getCliente().getPosicionIva(), ETipoDocumento.FACTURA));
 					remitoSalidaFacade.guardarRemito(remito);
 				}
 			}

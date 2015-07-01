@@ -436,7 +436,7 @@ public class JDialogCargaFactura extends JDialog {
 			if(tipoFactura == ETipoFactura.A){
 				getCorrecionFactura().setPorcentajeIVAInscripto(getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeIVAInscripto());
 			}
-			getCorrecionFactura().setNroFactura(getDocumentoContableFacade().getProximoNroDocumentoContable(getCliente().getPosicionIva()));
+			getCorrecionFactura().setNroFactura(getDocumentoContableFacade().getProximoNroDocumentoContable(getCliente().getPosicionIva(), getCorrecionFactura().getTipoDocumento()));
 			getCorrecionFactura().setTipoFactura(tipoFactura);
 		}else{
 			throw new RuntimeException("El cliente no tiene posicion de IVA");
@@ -1669,6 +1669,7 @@ public class JDialogCargaFactura extends JDialog {
 			return false;
 		} catch (ValidacionExceptionSinRollback e) {
 			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			return false;
 		}
 		
 		return true;
@@ -2003,7 +2004,7 @@ public class JDialogCargaFactura extends JDialog {
 			} else {
 				ok = true;
 				try{
-					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(JDialogCargaFactura.this, getFactura(), input);
+					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(JDialogCargaFactura.this, getFactura()!=null?getFactura():getCorrecionFactura(), input);
 					ifHandler.imprimir();
 					if (getFactura() != null) {
 						setFactura(ifHandler.getFactura());

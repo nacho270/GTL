@@ -1,4 +1,4 @@
-package ar.com.textillevel.modulos.fe;
+package ar.com.textillevel.modulos.fe.to;
 
 import java.io.Serializable;
 
@@ -20,36 +20,11 @@ public class EstadoServidorAFIP implements Serializable {
 			String ultimaFacturaAutorizada,String ultimaNCAutorizada,String ultimaNDAutorizada) {
 		this.appServer = new EstadoAFIPWrapper("Servidor de negocio", respuestaAfip.getAppServer());
 		this.dbServer = new EstadoAFIPWrapper("Servidor de base de datos", respuestaAfip.getDbServer());
-		this.authServer = new EstadoAFIPWrapper("Servidor de autenticaciï¿½n", respuestaAfip.getAuthServer());
-		this.pruebaAutenticacion = new EstadoAFIPWrapper("Prueba de autenticaciï¿½n", pruebaAutorizacion?"ok":"error");
+		this.authServer = new EstadoAFIPWrapper("Servidor de autenticación", respuestaAfip.getAuthServer());
+		this.pruebaAutenticacion = new EstadoAFIPWrapper("Prueba de autenticación", pruebaAutorizacion?"ok":"error");
 		this.ultimaFacturaAutorizada = ultimaFacturaAutorizada;
 		this.ultimaNCAutorizada = ultimaNCAutorizada;
 		this.ultimaNDAutorizada = ultimaNDAutorizada;
-	}
-
-	public class EstadoAFIPWrapper implements Serializable {
-
-		private static final long serialVersionUID = 2246424736021379959L;
-		
-		private String nombre;
-		private String valor;
-
-		public EstadoAFIPWrapper(String nombre, String valor) {
-			this.nombre = nombre;
-			this.valor = valor;
-		}
-
-		public String getNombre() {
-			return nombre;
-		}
-
-		public String getValor() {
-			return valor;
-		}
-		
-		public boolean isOK() {
-			return getValor().equalsIgnoreCase("ok");
-		}
 	}
 
 	public EstadoAFIPWrapper getAppServer() {

@@ -11,6 +11,7 @@ import javax.swing.Action;
 
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
@@ -81,7 +82,7 @@ public class AgregarRemitoSalidaAction implements Action {
 				if(odtList.size()==1 && (odtList.get(0).getProducto().getTipo()==ETipoProducto.REPROCESO_SIN_CARGO || odtList.get(0).getProducto().getTipo()==ETipoProducto.DEVOLUCION)) {
 					esReproceso = true;
 				}else{
-					remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva()));
+					remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva(), ETipoDocumento.FACTURA));
 				}
 				remitoSalida.getOdts().addAll(odtList);
 				JDialogAgregarRemitoSalida dialogAgregarRemitoSalida = new JDialogAgregarRemitoSalida(frame, remitoSalida, false);

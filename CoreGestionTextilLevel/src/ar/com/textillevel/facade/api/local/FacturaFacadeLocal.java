@@ -5,7 +5,6 @@ import javax.ejb.Local;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
-import ar.com.textillevel.entidades.enums.EPosicionIVA;
 
 @Local
 public interface FacturaFacadeLocal {

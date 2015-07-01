@@ -73,7 +73,9 @@ public class ImpresionFacturaHandler {
 		documentoContableFacade = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
 		if (documento.getTipoDocumento() == ETipoDocumento.FACTURA){
 			setFactura((Factura)documento);
-			setRemitos(GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdsConPiezasYProductos(extractIds(getFactura().getRemitos())));
+			if(getFactura().getRemitos() != null && !getFactura().getRemitos().isEmpty()) {
+				setRemitos(GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdsConPiezasYProductos(extractIds(getFactura().getRemitos())));
+			}
 		}else{
 			setCorreccionFactura((CorreccionFactura)documento);
 			if(getCorreccionFactura() instanceof NotaCredito){

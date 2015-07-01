@@ -20,6 +20,7 @@ import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionCheque;
@@ -138,7 +139,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		cheque.setEstadoCheque(EEstadoCheque.RECHAZADO);
 		//cheque.setFechaSalida(DateUtil.getHoy());
 		cheque = chequeDAO.save(cheque);
-		Integer lastNumeroFactura = facturaDao.getLastNumeroFactura(cheque.getCliente().getPosicionIva().getTipoFactura());
+		Integer lastNumeroFactura = facturaDao.getLastNumeroFactura(cheque.getCliente().getPosicionIva().getTipoFactura(), ETipoDocumento.NOTA_DEBITO);
 		if(lastNumeroFactura == null){
 			lastNumeroFactura = parametrosGeneralesFacade.getParametrosGenerales().getNroComienzoFactura();
 		}else{

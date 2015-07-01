@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -19,7 +20,7 @@ import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
 public interface FacturaFacadeRemote {
 
 	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
-	public Integer getLastNumeroFactura(ETipoFactura tipoFactura);
+	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
 	public Factura getByNroFactura(Integer nroFactura);
 	public Factura getByNroFacturaConItems(Integer nroFactura);
 	public List<Factura> getFacturaImpagaListByClient(Integer idCliente);

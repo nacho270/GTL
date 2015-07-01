@@ -62,6 +62,7 @@ public class ConfiguracionAFIPHolder {
 			long currentTime = System.currentTimeMillis();
 			synchronized (ConfiguracionAFIPHolder.class) {
 				if (currentTime - lastAuthRequestMillis >= configFE.getDuracion().longValue()) {
+					logger.info("Renovando autorización AFIP...");
 					loadAuthAFIP();
 				}
 			}

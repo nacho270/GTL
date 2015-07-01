@@ -7,14 +7,15 @@ import java.util.List;
 import javax.ejb.Local;
 
 import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 
 @Local
-public interface FacturaDAOLocal extends DAOLocal<Factura, Integer>{
+public interface FacturaDAOLocal extends DAOLocal<Factura, Integer> {
 
-	public Integer getLastNumeroFactura(ETipoFactura tipoFactura);
+	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
 
 	public Factura getByNroFacturaConCorrecciones(Integer nroFactura);
 	

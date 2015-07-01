@@ -16,8 +16,8 @@ import javax.swing.JPanel;
 import ar.clarin.fwjava.componentes.VerticalFlowLayout;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.ImageUtil;
-import ar.com.textillevel.modulos.fe.EstadoServidorAFIP;
-import ar.com.textillevel.modulos.fe.EstadoServidorAFIP.EstadoAFIPWrapper;
+import ar.com.textillevel.modulos.fe.to.EstadoAFIPWrapper;
+import ar.com.textillevel.modulos.fe.to.EstadoServidorAFIP;
 
 public class JDialogEstadoServerAFIP extends JDialog {
 
@@ -137,21 +137,21 @@ public class JDialogEstadoServerAFIP extends JDialog {
 
 	private JLabel getLblUltimaFCAutorizada() {
 		if (lblUltimaFCAutorizada == null){
-			lblUltimaFCAutorizada = crearLblUltimoDocumentoAutorizado("Ãšltima FC autorizada: " + getEstadoAFIP().getUltimaFacturaAutorizada());
+			lblUltimaFCAutorizada = crearLblUltimoDocumentoAutorizado("Última FC \"A\" autorizada: " + getEstadoAFIP().getUltimaFacturaAutorizada());
 		}
 		return lblUltimaFCAutorizada;
 	}
 
 	private JLabel getLblUltimaNDAutorizada() {
 		if(lblUltimaNDAutorizada == null){
-			lblUltimaNDAutorizada = crearLblUltimoDocumentoAutorizado("Ãšltima ND autorizada: " + getEstadoAFIP().getUltimaNDAutorizada());
+			lblUltimaNDAutorizada = crearLblUltimoDocumentoAutorizado("Última ND \"A\" autorizada: " + getEstadoAFIP().getUltimaNDAutorizada());
 		}
 		return lblUltimaNDAutorizada;
 	}
 
 	private JLabel getLblUltimaNCAutorizada() {
 		if(lblUltimaNCAutorizada == null){
-			lblUltimaNCAutorizada = crearLblUltimoDocumentoAutorizado("Ãšltima NC autorizada: " + getEstadoAFIP().getUltimaNCAutorizada());
+			lblUltimaNCAutorizada = crearLblUltimoDocumentoAutorizado("Última NC \"A\" autorizada: " + getEstadoAFIP().getUltimaNCAutorizada());
 		}
 		return lblUltimaNCAutorizada;
 	}

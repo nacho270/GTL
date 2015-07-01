@@ -1,5 +1,7 @@
 package ar.com.textillevel.entidades.cuenta.to;
 
+import ar.com.textillevel.entidades.enums.ETipoFactura;
+
 public enum ETipoDocumento {
 	
 	FACTURA(1,1),
@@ -27,7 +29,11 @@ public enum ETipoDocumento {
 		return id;
 	}
 
-	public Integer getIdTipoDocAFIP() {
+	public Integer getIdTipoDocAFIP(ETipoFactura tipo) {
+		if(tipo != null && this==ETipoDocumento.FACTURA && tipo==ETipoFactura.B) {
+			return 6; //ID de Factura B en la AFIP
+		}
 		return idTipoDocAFIP;
 	}
+
 }

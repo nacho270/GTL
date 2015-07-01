@@ -6,14 +6,15 @@ import javax.ejb.Remote;
 
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
-import ar.com.textillevel.modulos.fe.EstadoServidorAFIP;
+import ar.com.textillevel.modulos.fe.to.EstadoServidorAFIP;
 
 @Remote
 public interface DocumentoContableFacadeRemote {
 
-	public Integer getProximoNroDocumentoContable(EPosicionIVA posIva);
+	public Integer getProximoNroDocumentoContable(EPosicionIVA posIva, ETipoDocumento tipoDoc);
 	public List<DocumentoContableCliente> getDocumentosContablesSinCAE();
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException;
 	public EstadoServidorAFIP getEstadoServidorAFIP(int nroSucursal) throws ValidacionException;

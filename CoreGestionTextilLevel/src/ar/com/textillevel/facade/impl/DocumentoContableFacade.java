@@ -7,6 +7,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.log4j.Logger;
+
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
@@ -26,14 +28,16 @@ import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.DocumentoContableFacadeLocal;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.modulos.fe.ConfiguracionAFIPHolder;
-import ar.com.textillevel.modulos.fe.EstadoServidorAFIP;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 import ar.com.textillevel.modulos.fe.connector.DatosRespuestaAFIP;
+import ar.com.textillevel.modulos.fe.to.EstadoServidorAFIP;
 
 @Stateless
 public class DocumentoContableFacade implements DocumentoContableFacadeLocal, DocumentoContableFacadeRemote {
 
+	private static final Logger logger = Logger.getLogger(DocumentoContableFacade.class);
+	
 	@EJB
 	private ParametrosGeneralesDAOLocal paramGeneralesDAO;
 
@@ -46,64 +50,35 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	@EJB
 	private RemitoSalidaDAOLocal remitoSalidaDAO;
 
-	public synchronized Integer getProximoNroDocumentoContable(EPosicionIVA posIva) {
-		/*
-		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
-			try {
-				FERecuperaLastCbteResponse ultimoNroCompAut = AFIPConnector.getInstance().getUltimoComprobante(paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), 1);
-				return new Integer(ultimoNroCompAut.getCbteNro()) + 1;
-			} catch (RemoteException e) {
-				return getProximoNroFactura(posIva);
-			}
-		} else {
-			return getProximoNroFactura(posIva);
-		}
-		*/
-		return getProximoNroFactura(posIva);
-	}
-
-	public Integer getProximoNroFactura(EPosicionIVA posIva) {
+	public Integer getProximoNroDocumentoContable(EPosicionIVA posIva, ETipoDocumento tipoDoc) {
 		ParametrosGenerales parametrosGenerales = paramGeneralesDAO.getParametrosGenerales();
-		Integer proximoNumeroDeFactura = getLastNumeroFactura(posIva.getTipoFactura());
+		Integer proximoNumeroDeFactura = getLastNumeroFactura(posIva.getTipoFactura(), tipoDoc);
 		if (proximoNumeroDeFactura == null) {
 			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
 			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el nï¿½mero de comienzo de factura en los parï¿½metros generales.");
+				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
 			}
 			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
 			if(numeracionActual != null){
 				proximoNumeroDeFactura = numeracionActual.getNroDesde();
 			}else{
-				throw new RuntimeException("No hay una configuracion de numeros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
+				throw new RuntimeException("No hay una configuracion de números de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
 			}
-			Integer ultimaFacturaRecibo = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
-			if(ultimaFacturaRecibo!=null){
-				proximoNumeroDeFactura = Math.max(proximoNumeroDeFactura, ultimaFacturaRecibo);
+			Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
+			if(ultimaFacturaRS!=null){
+				proximoNumeroDeFactura = Math.max(proximoNumeroDeFactura, ultimaFacturaRS);
 			}
 		} else {
-			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
-			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el nï¿½mero de comienzo de factura en los parï¿½metros generales.");
+			if(tipoDoc == ETipoDocumento.FACTURA) { //Sólo cuando es FACTURA porque NC/ND siguen su propia numeración
+				Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
+				proximoNumeroDeFactura = getMaximo(proximoNumeroDeFactura,ultimaFacturaRS);
 			}
-			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
-			Integer numeroDesdeConfigurado = null;
-			if(numeracionActual != null){
-				numeroDesdeConfigurado = numeracionActual.getNroDesde() - 1; //para hacer + 1 despues
-			}else{
-				throw new RuntimeException("No hay una configuracion de numeros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
-			}
-			Integer ultimaFacturaRecibo = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
-			if(ultimaFacturaRecibo == null){
-				ultimaFacturaRecibo = numeroDesdeConfigurado;
-			}
-			//lastNroFactura = lastNroFactura.equals(ultimaFacturaRecibo)?lastNroFactura+1:Math.max(lastNroFactura, ultimaFacturaRecibo+1);
-			proximoNumeroDeFactura = getMaximo(proximoNumeroDeFactura,numeroDesdeConfigurado,ultimaFacturaRecibo) + 1;
 		}
-		return proximoNumeroDeFactura;
+		return proximoNumeroDeFactura + 1;
 	}
 
-	private Integer getLastNumeroFactura(ETipoFactura tipoFactura){
-		return facturaDAO.getLastNumeroFactura(tipoFactura);
+	private Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
+		return facturaDAO.getLastNumeroFactura(tipoFactura, tipoDoc);
 	}
 
 	private Integer getMaximo(Integer... numeros){
@@ -120,7 +95,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
-				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP());
+				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP(docContable.getTipoFactura()));
 				boolean autorizada = respAFIP.isAutorizada(); 
 				if(autorizada) {
 					docContable.setCaeAFIP(respAFIP.getCae());
@@ -161,11 +136,16 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public EstadoServidorAFIP getEstadoServidorAFIP(int nroSucursal) throws ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
+				logger.info("Consultando estado de servicios AFIP");
 				DummyResponse informeEstadoServicio = AFIPConnector.getInstance().informeEstadoServicio();
+				logger.info("Realizando prueba de autenticacion");
 				boolean okAuth = ConfiguracionAFIPHolder.getInstance().getAuthData() != null;
-				String ultimaFCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.FACTURA.getIdTipoDocAFIP()).getCbteNro();
-				String ultimaNCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_CREDITO.getIdTipoDocAFIP()).getCbteNro();
-				String ultimaNDAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_DEBITO.getIdTipoDocAFIP()).getCbteNro();
+				logger.info("Consultando ultima FC A autorizada");
+				String ultimaFCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.FACTURA.getIdTipoDocAFIP(ETipoFactura.A)).getCbteNro();
+				logger.info("Consultando ultima NC A autorizada");
+				String ultimaNCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_CREDITO.getIdTipoDocAFIP(null)).getCbteNro();
+				logger.info("Consultando ultima ND A autorizada");
+				String ultimaNDAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_DEBITO.getIdTipoDocAFIP(null)).getCbteNro();
 				return new EstadoServidorAFIP(informeEstadoServicio, okAuth, ultimaFCAuth, ultimaNCAuth, ultimaNDAuth);
 			}catch(Exception e) {
 				return new EstadoServidorAFIP(new DummyResponse("error", "error", "error"), false, " - ", " - ", " - ");

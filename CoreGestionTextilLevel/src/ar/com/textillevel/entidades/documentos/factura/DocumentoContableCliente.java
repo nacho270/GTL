@@ -34,7 +34,7 @@ public abstract class DocumentoContableCliente implements Serializable {
 
 	private static final long serialVersionUID = 4517586970027276816L;
 
-	public static final int LONG_OBS_AFIP = 256;
+	public static final int LONG_OBS_AFIP = 712;
 
 	private Integer id;
 	private BigDecimal montoTotal;
@@ -181,7 +181,7 @@ public abstract class DocumentoContableCliente implements Serializable {
 		this.porcentajeIVAInscripto = porcentajeIVAInscripto;
 	}
 
-	@Column(name = "A_CAE_AFIP", nullable = true, length=14)
+	@Column(name = "A_CAE_AFIP", nullable = true, length=50)
 	public String getCaeAFIP() {
 		return caeAFIP;
 	}

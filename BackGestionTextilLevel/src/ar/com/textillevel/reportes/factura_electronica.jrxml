@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" pageWidth="595" pageHeight="581" columnWidth="593" leftMargin="0" rightMargin="2" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.1000000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="52"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="NRO_FACTURA" class="java.lang.String"/>
 	<parameter name="TIPO_FACTURA" class="java.lang.String"/>
 	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
@@ -68,11 +68,6 @@ email: leveltextil@speedy.com.ar]]></text>
 				<text><![CDATA[Textil Level S.A.
 ]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="454" y="58" width="136" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{CAE}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="123" y="29" width="114" height="24"/>
 				<textElement>
@@ -117,12 +112,7 @@ email: leveltextil@speedy.com.ar]]></text>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="395" y="58" width="44" height="20"/>
-				<textElement/>
-				<text><![CDATA[Cod. Aut:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="454" y="81" width="136" height="33"/>
+				<reportElement x="435" y="81" width="321" height="33"/>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
@@ -451,6 +441,20 @@ Inicio de Actividades:03/2005 ]]></text>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total ($):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10" y="43" width="377" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CAE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="23" width="200" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código de autorización AFIP:]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

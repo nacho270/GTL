@@ -13,7 +13,10 @@ import javax.persistence.Query;
 import ar.clarin.fwjava.dao.impl.GenericDAO;
 import ar.clarin.fwjava.util.NumUtil;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
+import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
+import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -21,25 +24,24 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @Stateless
 public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaDAOLocal {
 
-	public Integer getLastNumeroFactura(ETipoFactura tipoFactura) {
-		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM Factura f WHERE f.idTipoFactura = :idTipo AND f.nroFactura > 0");
+	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
+		String clazz = "";
+		if(tipoDoc == ETipoDocumento.FACTURA) {
+			clazz = Factura.class.getName();
+		} else if(tipoDoc == ETipoDocumento.NOTA_CREDITO) {
+			clazz = NotaCredito.class.getName();
+		} else if(tipoDoc == ETipoDocumento.NOTA_DEBITO) {
+			clazz = NotaDebito.class.getName();
+		} else {
+			throw new IllegalArgumentException("Tipo de documento inválido " + tipoDoc);
+		}
+		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM " + clazz + " f WHERE f.idTipoFactura = :idTipo AND f.nroFactura > 0");
 		query.setParameter("idTipo", tipoFactura.getId());
-		Number lastNumeroFactura = (Number)query.getSingleResult();
-		query = getEntityManager().createQuery("SELECT MAX(c.nroFactura) FROM CorreccionFactura c WHERE c.idTipoFactura = :idTipo AND c.nroFactura > 0");
-		query.setParameter("idTipo", tipoFactura.getId());
-		Number lastNumeroCorreccion = (Number)query.getSingleResult();
-		if(lastNumeroFactura==null){
-			if(lastNumeroCorreccion==null){
-				return 0;
-			}else{
-				return lastNumeroCorreccion.intValue();
-			}
+		Number lastNumero = (Number)query.getSingleResult();
+		if(lastNumero==null){
+			return 0;
 		}else{
-			if(lastNumeroCorreccion==null){
-				return lastNumeroFactura.intValue();
-			}else{
-				return Math.max(lastNumeroCorreccion.intValue(),lastNumeroFactura.intValue());
-			}
+			return lastNumero.intValue();
 		}
 	}
 
@@ -214,7 +216,7 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	public boolean esLaUltimaFactura(Factura factura) {
-		return  !(factura.getNroFactura().compareTo(getLastNumeroFactura(factura.getTipoFactura()))<0);
+		return  !(factura.getNroFactura().compareTo(getLastNumeroFactura(factura.getTipoFactura(), ETipoDocumento.FACTURA))<0);
 	}
 
 	@SuppressWarnings("unchecked")
