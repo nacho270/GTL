@@ -112,9 +112,9 @@ email: leveltextil@speedy.com.ar]]></text>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="435" y="81" width="321" height="33"/>
+				<reportElement x="407" y="62" width="183" height="44"/>
 				<textElement>
-					<font size="8" isBold="false"/>
+					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[C.U.I.T.: 30-70912918-6
 Ing.  Brutos: C.M. 901-209740-7
@@ -131,22 +131,22 @@ Inicio de Actividades:03/2005 ]]></text>
 	<pageHeader>
 		<band height="120" splitType="Stretch">
 			<textField>
-				<reportElement x="68" y="11" width="366" height="20"/>
+				<reportElement x="79" y="11" width="366" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="68" y="33" width="319" height="20"/>
+				<reportElement x="79" y="33" width="319" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{DIRECCION}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="68" y="56" width="339" height="20"/>
+				<reportElement x="79" y="56" width="339" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{LOCALIDAD}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="67" y="81" width="170" height="20"/>
+				<reportElement x="79" y="78" width="170" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{IVA}]]></textFieldExpression>
 			</textField>
@@ -166,42 +166,56 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_REMITO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="19" y="11" width="44" height="20"/>
-				<textElement/>
+				<reportElement x="36" y="11" width="40" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="33" width="54" height="20"/>
-				<textElement/>
+				<reportElement x="24" y="33" width="51" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="33" y="81" width="23" height="20"/>
-				<textElement/>
+				<reportElement x="53" y="79" width="23" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[IVA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="36" width="61" height="20"/>
-				<textElement/>
+				<reportElement x="429" y="36" width="65" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Cond. Venta:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="454" y="11" width="30" height="20"/>
-				<textElement/>
+				<reportElement x="464" y="11" width="30" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[CUIT:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="56" width="51" height="20"/>
-				<textElement/>
+				<reportElement x="23" y="56" width="51" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Localidad:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="438" y="61" width="43" height="20"/>
-				<textElement/>
+				<reportElement x="445" y="61" width="49" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Remito/s:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="100" width="591" height="20"/>
+				<reportElement x="16" y="100" width="568" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -219,7 +233,7 @@ Inicio de Actividades:03/2005 ]]></text>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="2" y="0" width="59" height="20"/>
+				<reportElement x="16" y="0" width="56" height="20"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -232,7 +246,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<text><![CDATA[Artículo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="61" y="0" width="57" height="20"/>
+				<reportElement x="72" y="0" width="57" height="20"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -245,7 +259,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="118" y="0" width="39" height="20"/>
+				<reportElement x="129" y="0" width="39" height="20"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -258,7 +272,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<text><![CDATA[Unidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="157" y="0" width="297" height="20"/>
+				<reportElement x="168" y="0" width="301" height="20"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -271,7 +285,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="454" y="0" width="80" height="20"/>
+				<reportElement x="469" y="0" width="48" height="20"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -281,10 +295,10 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Precio unitario]]></text>
+				<text><![CDATA[P.U]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="534" y="0" width="59" height="20"/>
+				<reportElement x="517" y="0" width="67" height="20"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -301,7 +315,7 @@ Inicio de Actividades:03/2005 ]]></text>
 	<detail>
 		<band height="17" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="118" y="0" width="39" height="17"/>
+				<reportElement x="129" y="0" width="39" height="17"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -312,7 +326,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{unidad}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="454" y="0" width="80" height="17"/>
+				<reportElement x="469" y="0" width="48" height="17"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -323,7 +337,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="534" y="0" width="59" height="17"/>
+				<reportElement x="517" y="0" width="67" height="17"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -334,7 +348,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{importe}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="157" y="0" width="297" height="17"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="168" y="0" width="301" height="17"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -345,7 +359,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="61" y="0" width="57" height="17"/>
+				<reportElement x="72" y="0" width="57" height="17"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -356,7 +370,7 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2" y="0" width="59" height="17"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="16" y="0" width="56" height="17"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -364,7 +378,7 @@ Inicio de Actividades:03/2005 ]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{articulo}]]></textFieldExpression>
 			</textField>
@@ -373,28 +387,28 @@ Inicio de Actividades:03/2005 ]]></text>
 	<pageFooter>
 		<band height="91" splitType="Stretch">
 			<textField>
-				<reportElement x="490" y="3" width="100" height="20"/>
+				<reportElement x="509" y="3" width="76" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{SUBTOTAL}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="490" y="23" width="100" height="20"/>
+				<reportElement x="509" y="23" width="76" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PORC_IVA}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="490" y="43" width="100" height="20"/>
+				<reportElement x="509" y="43" width="76" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL_IVA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="490" y="63" width="100" height="20"/>
+				<reportElement x="509" y="63" width="76" height="20"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#000000"/>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -408,28 +422,28 @@ Inicio de Actividades:03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="428" y="23" width="41" height="20"/>
+				<reportElement x="453" y="23" width="41" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[IVA (%):]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="407" y="3" width="62" height="20"/>
+				<reportElement x="433" y="3" width="62" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Subtotal ($):]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="403" y="43" width="66" height="20"/>
+				<reportElement x="430" y="43" width="66" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total IVA ($):]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="63" width="47" height="20"/>
+				<reportElement x="449" y="63" width="47" height="20"/>
 				<box>
 					<pen lineWidth="0.0" lineColor="#000000"/>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -443,14 +457,14 @@ Inicio de Actividades:03/2005 ]]></text>
 				<text><![CDATA[Total ($):]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="10" y="43" width="377" height="20"/>
+				<reportElement x="21" y="43" width="366" height="40"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{CAE}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="7" y="23" width="200" height="20"/>
+				<reportElement x="20" y="23" width="200" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>

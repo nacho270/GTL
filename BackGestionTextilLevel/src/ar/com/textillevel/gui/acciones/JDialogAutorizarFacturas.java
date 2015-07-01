@@ -175,7 +175,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 						try {
 							for(int i : selectedRows) {
 								DocumentoContableCliente docAut = getDocFacade().autorizarDocumentoContableAFIP(getElemento(i));
-								if(CLJOptionPane.showQuestionMessage(JDialogAutorizarFacturas.this, "Desea imprimir el documento?", "Pregunta") == CLJOptionPane.YES_OPTION){
+								if(CLJOptionPane.showQuestionMessage(JDialogAutorizarFacturas.this, "El documento ha sido autorizado con exito.\nDesea imprimir el documento?", "Pregunta") == CLJOptionPane.YES_OPTION){
 									imprimir(docAut);
 								}
 							}
