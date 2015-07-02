@@ -184,8 +184,8 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return facturaDao.getByIdEager(id);
 	}
 
-	public List<Timestamp> getFechasFacturasAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura) {
-		return facturaDao.getFacturaAnteriorYPosterior(nroFactura,tipoFactura);
+	public List<Timestamp> getFechasFacturasAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
+		return facturaDao.getFacturaAnteriorYPosterior(nroFactura,tipoFactura, tipoDoc);
 	}
 
 	public void anularFactura(Factura factura, boolean anularRemitoSalida, String usuario) throws ValidacionException, CLException {

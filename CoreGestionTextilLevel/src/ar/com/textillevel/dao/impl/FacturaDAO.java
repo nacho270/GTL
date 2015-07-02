@@ -25,16 +25,7 @@ import ar.com.textillevel.entidades.gente.Cliente;
 public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaDAOLocal {
 
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
-		String clazz = "";
-		if(tipoDoc == ETipoDocumento.FACTURA) {
-			clazz = Factura.class.getName();
-		} else if(tipoDoc == ETipoDocumento.NOTA_CREDITO) {
-			clazz = NotaCredito.class.getName();
-		} else if(tipoDoc == ETipoDocumento.NOTA_DEBITO) {
-			clazz = NotaDebito.class.getName();
-		} else {
-			throw new IllegalArgumentException("Tipo de documento inválido " + tipoDoc);
-		}
+		String clazz = getDocumentoContableClassName(tipoDoc);
 		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM " + clazz + " f WHERE f.idTipoFactura = :idTipo AND f.nroFactura > 0");
 		query.setParameter("idTipo", tipoFactura.getId());
 		Number lastNumero = (Number)query.getSingleResult();
@@ -121,8 +112,9 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura) {
-		String hql = " SELECT f.fechaEmision FROM Factura f " +
+	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
+		String clazz = getDocumentoContableClassName(tipoDoc);
+		String hql = " SELECT f.fechaEmision FROM " + clazz + " f " +
 					 " WHERE (f.nroFactura = :nroAnterior OR f.nroFactura = :nroPosterior) " +
 					 " AND f.idTipoFactura = :idTipoFactura " +
 					 " ORDER BY f.nroFactura ASC ";
@@ -131,19 +123,8 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 		q.setParameter("nroPosterior", nroFactura+1);
 		q.setParameter("idTipoFactura", tipoFactura.getId());
 		List<Timestamp> fechasFacturas= q.getResultList();
-		
-		hql = " SELECT c.fechaEmision FROM CorreccionFactura c " +
-			  " WHERE (nroFactura = :nroAnterior OR c.nroFactura = :nroPosterior) " +
-			  " AND c.idTipoFactura = :idTipoFactura " +
-			  " ORDER BY nroFactura ASC ";
-		q = getEntityManager().createQuery(hql);
-		q.setParameter("nroAnterior", nroFactura-1);
-		q.setParameter("nroPosterior", nroFactura+1);
-		q.setParameter("idTipoFactura", tipoFactura.getId());
-		List<Timestamp> fechasCorreccion= q.getResultList();
 
 		List<Timestamp> listaTotal = new ArrayList<Timestamp>();
-		listaTotal.addAll(fechasCorreccion);
 		listaTotal.addAll(fechasFacturas);
 		Collections.sort(listaTotal, new Comparator<Timestamp>() {
 			public int compare(Timestamp o1, Timestamp o2) {
@@ -273,4 +254,19 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 		Query q = getEntityManager().createQuery(hql);
 		return NumUtil.toInteger(q.getSingleResult());
 	}
+
+	private String getDocumentoContableClassName(ETipoDocumento tipoDoc) {
+		String clazz="";
+		if(tipoDoc == ETipoDocumento.FACTURA) {
+			clazz = Factura.class.getName();
+		} else if(tipoDoc == ETipoDocumento.NOTA_CREDITO) {
+			clazz = NotaCredito.class.getName();
+		} else if(tipoDoc == ETipoDocumento.NOTA_DEBITO) {
+			clazz = NotaDebito.class.getName();
+		} else {
+			throw new IllegalArgumentException("Tipo de documento inválido " + tipoDoc);
+		}
+		return clazz;
+	}
+
 }

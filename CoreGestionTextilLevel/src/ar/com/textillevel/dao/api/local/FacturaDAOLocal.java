@@ -25,7 +25,7 @@ public interface FacturaDAOLocal extends DAOLocal<Factura, Integer> {
 	
 	public Factura getByIdEager(Integer id);
 
-	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura);
+	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
 
 	public boolean facturaYaTieneRecibo(Factura factura);
 	

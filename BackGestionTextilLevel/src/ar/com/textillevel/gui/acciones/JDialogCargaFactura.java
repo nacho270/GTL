@@ -54,6 +54,7 @@ import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
@@ -2123,7 +2124,9 @@ public class JDialogCargaFactura extends JDialog {
 
 	private boolean validarFecha() {
 		Integer nroFactura = getFactura()!=null?getFactura().getNroFactura():getCorrecionFactura().getNroFactura();
-		List<Timestamp> facturaAnteriorYPosterior = getFacturaFacade().getFechasFacturasAnteriorYPosterior(nroFactura,getFactura()!=null?getFactura().getTipoFactura():getCorrecionFactura().getTipoFactura());
+		ETipoFactura eTipoFactura = getFactura()!=null?getFactura().getTipoFactura():getCorrecionFactura().getTipoFactura();
+		ETipoDocumento tipoDocumento = getFactura()!=null?getFactura().getTipoDocumento():getCorrecionFactura().getTipoDocumento();
+		List<Timestamp> facturaAnteriorYPosterior = getFacturaFacade().getFechasFacturasAnteriorYPosterior(nroFactura,eTipoFactura, tipoDocumento);
 		if (facturaAnteriorYPosterior != null && facturaAnteriorYPosterior.size() > 0) {
 			if (facturaAnteriorYPosterior.size() == 2) { // hay anterior y posterior, la fecha debe estar entre ambas o si son iguales, debe ser la misma
 				Timestamp f1 = facturaAnteriorYPosterior.get(0);

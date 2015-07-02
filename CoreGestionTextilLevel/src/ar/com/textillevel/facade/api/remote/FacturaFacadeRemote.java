@@ -26,7 +26,7 @@ public interface FacturaFacadeRemote {
 	public List<Factura> getFacturaImpagaListByClient(Integer idCliente);
 	public Factura getByIdEager(Integer id);
 	public Factura actualizarFactura(Factura factura) throws CLException;
-	public List<Timestamp> getFechasFacturasAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura);
+	public List<Timestamp> getFechasFacturasAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
 	public void anularFactura(Factura factura, boolean anularRemitoSalida, String usuario) throws ValidacionException, CLException;
 	public void cambiarEstadoFactura(Factura factura, EEstadoFactura estadoNuevo, String usuario);
 	public IVAVentasTO calcularIVAVentas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cliente);

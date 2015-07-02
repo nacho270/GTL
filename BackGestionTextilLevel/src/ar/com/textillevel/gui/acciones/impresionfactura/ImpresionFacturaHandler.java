@@ -87,7 +87,7 @@ public class ImpresionFacturaHandler {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void imprimir() throws JRException, CLException, ValidacionException {
 		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
-		if (getFactura() != null && getFactura().getTipoFactura() == ETipoFactura.B) {
+		if (getFactura() != null && (getFactura().getTipoFactura() == ETipoFactura.B || GenericUtils.isSistemaTest())) {
 			FacturaBTO facturaB = armarFacturaBTO();
 			Map parameters = getParametrosB(facturaB);
 			JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/facturab.jasper");
@@ -173,7 +173,9 @@ public class ImpresionFacturaHandler {
 			ito.setCantidad(GenericUtils.getDecimalFormatFactura().format(item.getCantidad()));
 			ito.setDescripcion(item.getDescripcion());
 			ito.setImporte((item.getImporte().doubleValue()<1?String.valueOf(item.getImporte()): GenericUtils.getDecimalFormatFactura().format(item.getImporte().doubleValue())));
-			ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(item.getPrecioUnitario()));
+			if(item.getPrecioUnitario() != null) {
+				ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(item.getPrecioUnitario()));
+			}
 			lista.add(ito);
 		}
 		return lista;
