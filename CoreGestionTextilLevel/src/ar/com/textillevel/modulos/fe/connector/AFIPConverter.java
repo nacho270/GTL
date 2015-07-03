@@ -1,6 +1,5 @@
 package ar.com.textillevel.modulos.fe.connector;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
