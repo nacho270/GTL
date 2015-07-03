@@ -70,13 +70,15 @@ public class AFIPConverter {
 		req.setImpOpEx(0d); //no se usa. Ver FacturaFacade:252
 		req.setImpTrib(0d); //no se que es
 		
-		BigDecimal porcIVA = documento.getPorcentajeIVAInscripto();
-		if (porcIVA == null) {
-			porcIVA = BigDecimal.ZERO;
+		ETipoIVAAFIP tipoIva;
+		if (montoIVA == 0d) {
+			tipoIva = ETipoIVAAFIP.IVA_0;
+		}else{
+			tipoIva = ETipoIVAAFIP.IVA_21;
 		}
 		
 		AlicIva ali = new AlicIva();
-		ali.setId(ETipoIVAAFIP.getByPorcentaje(porcIVA.doubleValue()).getIdAFIP());
+		ali.setId(tipoIva.getIdAFIP());
 		ali.setBaseImp(getFormatedDouble(documento.getMontoSubtotal().floatValue()));
 		ali.setImporte(montoIVA);
 		req.setIva(new AlicIva[]{ali});
