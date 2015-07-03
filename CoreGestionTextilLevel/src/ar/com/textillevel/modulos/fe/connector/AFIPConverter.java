@@ -1,5 +1,6 @@
 package ar.com.textillevel.modulos.fe.connector;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -68,13 +69,17 @@ public class AFIPConverter {
 		req.setImpNeto(getFormatedDouble(documento.getMontoSubtotal().floatValue())); //Ver FacturaFacade:258. Ver que pasa con los nulls. No creo que haga falta multiplicar por -1 si es NC
 		req.setImpOpEx(0d); //no se usa. Ver FacturaFacade:252
 		req.setImpTrib(0d); //no se que es
-		if (documento.getPorcentajeIVAInscripto() != null) {
-			AlicIva ali = new AlicIva();
-			ali.setId(ETipoIVAAFIP.getByPorcentaje(documento.getPorcentajeIVAInscripto().doubleValue()).getIdAFIP());
-			ali.setBaseImp(getFormatedDouble(documento.getMontoSubtotal().floatValue()));
-			ali.setImporte(montoIVA);
-			req.setIva(new AlicIva[]{ali});
+		
+		BigDecimal porcIVA = documento.getPorcentajeIVAInscripto();
+		if (porcIVA == null) {
+			porcIVA = BigDecimal.ZERO;
 		}
+		
+		AlicIva ali = new AlicIva();
+		ali.setId(ETipoIVAAFIP.getByPorcentaje(porcIVA.doubleValue()).getIdAFIP());
+		ali.setBaseImp(getFormatedDouble(documento.getMontoSubtotal().floatValue()));
+		ali.setImporte(montoIVA);
+		req.setIva(new AlicIva[]{ali});
 
 		//Comprobantes asociados
 		if(!documento.getDocsContableRelacionados().isEmpty()) {
