@@ -1825,58 +1825,25 @@ public class JDialogCargaFactura extends JDialog {
 
 	private void updateTotales() {
 		double subTotal = getFactura().getMontoSubtotal().doubleValue();
-		// double subtotalConImpuestos = subTotal;
-		// if (getTxtImpuestos().getText().trim().length() > 0) {
-		// double impuestos = Double.valueOf(getTxtImpuestos().getText());
-		// subtotalConImpuestos += impuestos;
-		// }
 		double total = subTotal;
-		// getTxtSubTotalConImpuestos().setText(String.valueOf(subtotalConImpuestos));
-		if (getFactura().getPorcentajeIVAInscripto() != null) {
-			double valIVAInsc = getFactura().getPorcentajeIVAInscripto().doubleValue() / 100;
-			// double valIVANoInsc =
-			// Double.valueOf(getTxtPorcentajeIVANoInscripto().getText()) / 100;
-			double ivaInsc = subTotal * valIVAInsc;
-			// double ivaNoInsc = Math.round(subtotalConImpuestos *
-			// valIVANoInsc);
-			getTxtImporteIVAInscripto().setText(getDecimalFormat().format(ivaInsc));
-			// getTxtImporteIVANoInscripto().setText(String.valueOf(ivaNoInsc));
-			total += ivaInsc;// + ivaNoInsc;
-		}
+		double ivaInsc = getFactura().getTotalIVA();
+		getTxtImporteIVAInscripto().setText(getDecimalFormat().format(ivaInsc));
+		total += ivaInsc;
 		getFactura().setMontoFaltantePorPagar(new BigDecimal(total));
 		getFactura().setMontoTotal(new BigDecimal(total));
 		// getFactura().setMontoImpuestos(montoImpuestos)
 		getTxtTotal().setText(getDecimalFormat().format(total));
 	}
-	
+
 	private void updateTotalesCorrecion() {
 		double subTotal =0;
 		if(getCorrecionFactura().getMontoSubtotal()!=null){
 			subTotal += getCorrecionFactura().getMontoSubtotal().doubleValue();
 		}
-		// double subtotalConImpuestos = subTotal;
-		// if (getTxtImpuestos().getText().trim().length() > 0) {
-		// double impuestos = Double.valueOf(getTxtImpuestos().getText());
-		// subtotalConImpuestos += impuestos;
-		// }
 		double total = subTotal;
-		// getTxtSubTotalConImpuestos().setText(String.valueOf(subtotalConImpuestos));
-		if (getCorrecionFactura().getPorcentajeIVAInscripto() != null) {
-			double valIVAInsc = getCorrecionFactura().getPorcentajeIVAInscripto().doubleValue() / 100;
-			// double valIVANoInsc =
-			// Double.valueOf(getTxtPorcentajeIVANoInscripto().getText()) / 100;
-			double ivaInsc = 0;
-			if(getCorrecionFactura() instanceof NotaDebito && ( ((NotaDebito)getCorrecionFactura()).getChequeRechazado()!=null || (( ((NotaDebito)getCorrecionFactura()).getIsParaRechazarCheque()!=null) && ( ((NotaDebito)getCorrecionFactura()).getIsParaRechazarCheque()==true)) )&& ((NotaDebito)getCorrecionFactura()).getGastos()!=null){
-				ivaInsc = valIVAInsc * ((NotaDebito)getCorrecionFactura()).getGastos().doubleValue();
-			}else{
-				ivaInsc =  subTotal * valIVAInsc;
-			}
-			// double ivaNoInsc = Math.round(subtotalConImpuestos *
-			// valIVANoInsc);
-			getTxtImporteIVAInscripto().setText( (getCorrecionFactura() instanceof NotaCredito && ivaInsc >0?"-":"") +  getDecimalFormat().format(ivaInsc));
-			// getTxtImporteIVANoInscripto().setText(String.valueOf(ivaNoInsc));
-			total += ivaInsc;// + ivaNoInsc;
-		}
+		double ivaInsc = getCorrecionFactura().getTotalIVA();
+		getTxtImporteIVAInscripto().setText( (getCorrecionFactura() instanceof NotaCredito && ivaInsc >0?"-":"") +  getDecimalFormat().format(ivaInsc));
+		total += ivaInsc;
 		getCorrecionFactura().setMontoTotal(new BigDecimal(total * (getCorreccionFacade() instanceof NotaCredito?-1:1)));
 		// getFactura().setMontoImpuestos(montoImpuestos)
 		getTxtTotal().setText((getCorrecionFactura() instanceof NotaCredito && total > 0?"-":"") + getDecimalFormat().format(total));

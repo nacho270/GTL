@@ -1,6 +1,5 @@
 package ar.com.textillevel.modulos.fe.connector;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -59,9 +58,8 @@ public class AFIPConverter {
 		req.setFchServHasta(req.getCbteFch()); //Hay que ver bien que significa esto!!!
 		req.setFchVtoPago(req.getCbteFch());
 
-
 		req.setImpTotal(getFormatedDouble(documento.getMontoTotal().doubleValue()));
-		double montoIVA = getFormatedDouble(documento.getMontoSubtotal().multiply(documento.getPorcentajeIVAInscripto().divide(new BigDecimal(100))).doubleValue());
+		double montoIVA = getFormatedDouble(documento.getTotalIVA());
 		req.setImpIVA(montoIVA);
 		req.setMonCotiz(1d);
 		req.setMonId("PES"); //hardcode pesos. Podria ser dinamico pero el WS retorna solo esta y es lo unico que se usa.

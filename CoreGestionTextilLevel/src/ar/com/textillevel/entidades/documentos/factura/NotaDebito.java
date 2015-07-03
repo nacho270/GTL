@@ -21,7 +21,7 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 @DiscriminatorValue(value = "ND")
 public class NotaDebito extends CorreccionFactura {
 
-	private static final long serialVersionUID = 3488001955152166685L;
+	private static final long serialVersionUID = 2113471876503679142L;
 
 	private BigDecimal montoFaltantePorPagar;
 	private Cheque chequeRechazado;
@@ -104,6 +104,21 @@ public class NotaDebito extends CorreccionFactura {
 	@Transient
 	public List<DocumentoContableCliente> getDocsContableRelacionados() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	@Transient
+	public double getTotalIVA() {
+		double ivaInsc = 0;
+		if (getPorcentajeIVAInscripto() != null) {
+			double valIVAInsc = getPorcentajeIVAInscripto().doubleValue() / 100;
+			if((getChequeRechazado()!=null || ((getIsParaRechazarCheque()!=null) && (getIsParaRechazarCheque()==true)) ) && getGastos()!=null) {
+				ivaInsc = valIVAInsc * getGastos().doubleValue();
+			}else{
+				ivaInsc =  getMontoSubtotal().doubleValue() * valIVAInsc;
+			}
+		}
+		return ivaInsc;
 	}
 
 }

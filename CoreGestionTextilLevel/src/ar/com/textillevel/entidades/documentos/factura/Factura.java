@@ -32,7 +32,7 @@ import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 @DiscriminatorValue(value = "FC")
 public class Factura extends DocumentoContableCliente implements Serializable {
 
-	private static final long serialVersionUID = -541804970454200801L;
+	private static final long serialVersionUID = 5939934134590090440L;
 
 	private List<RemitoSalida> remitos;
 	private List<ItemFactura> items;
@@ -146,6 +146,17 @@ public class Factura extends DocumentoContableCliente implements Serializable {
 	@Transient
 	public List<DocumentoContableCliente> getDocsContableRelacionados() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	@Transient
+	public double getTotalIVA() {
+		double ivaInsc = 0;
+		if (getPorcentajeIVAInscripto() != null) {
+			double valIVAInsc = getPorcentajeIVAInscripto().doubleValue() / 100;
+			ivaInsc = getMontoSubtotal().doubleValue() * valIVAInsc;
+		}
+		return ivaInsc;
 	}
 
 }

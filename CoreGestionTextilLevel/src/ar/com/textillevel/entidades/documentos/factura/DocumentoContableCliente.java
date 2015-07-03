@@ -32,7 +32,7 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @DiscriminatorColumn(name = "TIPO", discriminatorType = DiscriminatorType.STRING)
 public abstract class DocumentoContableCliente implements Serializable {
 
-	private static final long serialVersionUID = 4517586970027276816L;
+	private static final long serialVersionUID = -5909799153834276469L;
 
 	public static final int LONG_OBS_AFIP = 712;
 
@@ -204,6 +204,9 @@ public abstract class DocumentoContableCliente implements Serializable {
 
 	@Transient
 	public abstract List<DocumentoContableCliente> getDocsContableRelacionados();
+
+	@Transient
+	public abstract double getTotalIVA();
 
 	@Override
 	public int hashCode() {

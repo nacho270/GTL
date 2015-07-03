@@ -20,7 +20,7 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 @DiscriminatorValue(value = "NC")
 public class NotaCredito extends CorreccionFactura {
 
-	private static final long serialVersionUID = 3772323739558108549L;
+	private static final long serialVersionUID = 2602232678527908608L;
 
 	private List<Factura> facturasRelacionadas;
 
@@ -66,6 +66,17 @@ public class NotaCredito extends CorreccionFactura {
 	@Transient
 	public List<DocumentoContableCliente> getDocsContableRelacionados() {
 		return new ArrayList<DocumentoContableCliente>(getFacturasRelacionadas());
+	}
+
+	@Override
+	@Transient
+	public double getTotalIVA() {
+		double ivaInsc = 0;
+		if (getPorcentajeIVAInscripto() != null) {
+			double valIVAInsc = getPorcentajeIVAInscripto().doubleValue() / 100;
+			ivaInsc = getMontoSubtotal().doubleValue() * valIVAInsc;
+		}
+		return ivaInsc;
 	}
 
 }

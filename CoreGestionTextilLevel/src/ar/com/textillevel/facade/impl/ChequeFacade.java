@@ -96,7 +96,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 			}
 			auditoriaFacade.auditar(usuario, descripcion, EnumTipoEvento.MODIFICACION, cheque);
 		}else{
-			auditoriaFacade.auditar(usuario, "Creciï¿½n del cheque: " + cheque.getNumeracion(), EnumTipoEvento.ALTA, cheque);
+			auditoriaFacade.auditar(usuario, "Creación del cheque: " + cheque.getNumeracion(), EnumTipoEvento.ALTA, cheque);
 		}
 		return cheque;
 	}
@@ -156,7 +156,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		correccion.setIsParaRechazarCheque(true);
 		correccion.setCliente(cheque.getCliente());
 		double importe = cheque.getImporte().doubleValue();
-		String descripcion = "Cheque rechazado - Nï¿½: " + cheque.getNumero() + " - Banco: " + cheque.getBanco().getNombre() + " - Importe: $" + importe + " - Motivo: " + motivoRechazo;
+		String descripcion = "Cheque rechazado - N°: " + cheque.getNumero() + " - Banco: " + cheque.getBanco().getNombre() + " - Importe: $" + importe + " - Motivo: " + motivoRechazo;
 		Double subTotal = importe;
 		if(gastos!=null){ //Si tiene gastos, calcular IVA.
 			descripcion +=" - Gastos: $" + gastos;
@@ -188,7 +188,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		correccion.setNroFactura(lastNumeroFactura);
 		correccion.setTipoFactura(cheque.getCliente().getPosicionIva().getTipoFactura());
 		CorreccionFactura correccionNueva = correccionFacade.guardarCorreccionYGenerarMovimiento(correccion,usuario);
-		auditoriaFacade.auditar(usuario, "Rechazo del cheque Nï¿½: " + cheque.getNumeracion() + ". Motivo: " + motivoRechazo, EnumTipoEvento.ANULACION, cheque);
+		auditoriaFacade.auditar(usuario, "Rechazo del cheque N°: " + cheque.getNumeracion() + ". Motivo: " + motivoRechazo, EnumTipoEvento.ANULACION, cheque);
 		return correccionNueva;
 	}
 
@@ -255,7 +255,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 			throw new ValidacionException(EValidacionException.CHEQUE_SE_USA_EN_ODP_PERSONA.getInfoValidacion());
 		}
 		chequeDAO.removeById(id);
-		auditoriaFacade.auditar(usuario, "Eliminaciï¿½n del cheque Nï¿½: " + cheque.getNumeracion() + ".", EnumTipoEvento.BAJA, cheque);
+		auditoriaFacade.auditar(usuario, "Eliminación del cheque N°: " + cheque.getNumeracion() + ".", EnumTipoEvento.BAJA, cheque);
 	}
 
 	public List<Cheque> obtenerChequesVencidos(Integer toleraciaDias) {
