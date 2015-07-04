@@ -1972,7 +1972,7 @@ public class JDialogCargaFactura extends JDialog {
 			} else {
 				ok = true;
 				try{
-					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(JDialogCargaFactura.this, getFactura()!=null?getFactura():getCorrecionFactura(), input);
+					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(getFactura()!=null?getFactura():getCorrecionFactura(), input);
 					ifHandler.imprimir();
 					if (getFactura() != null) {
 						setFactura(ifHandler.getFactura());

@@ -95,14 +95,20 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
+				logger.info("Autorizando " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
 				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP(docContable.getTipoFactura()));
 				boolean autorizada = respAFIP.isAutorizada(); 
 				if(autorizada) {
+					logger.info("Autorizacion existosa de " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
 					docContable.setCaeAFIP(respAFIP.getCae());
 					docContable.setEstadoImpresion(EEstadoImpresionDocumento.AUTORIZADO_AFIP);
+				} else {
+					logger.info("No se ha podido autorizar " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
 				}
 				docContable.setObservacionesAFIP(respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, Math.min(DocumentoContableCliente.LONG_OBS_AFIP-1, respAFIP.getObservaciones().length())));
 				docContable = (D)docContableDAO.save(docContable);
+				// hago eager al cliente
+				docContable.getCliente().getCelular();
 				if(!autorizada) {
 					List<String> msg = new ArrayList<String>();
 					msg.add(docContable.getObservacionesAFIP() == null ? "" : docContable.getObservacionesAFIP());

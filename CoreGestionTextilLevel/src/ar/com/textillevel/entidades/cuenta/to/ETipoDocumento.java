@@ -36,4 +36,7 @@ public enum ETipoDocumento {
 		return idTipoDocAFIP;
 	}
 
+	public String getDescripcion() {
+		return toString().replace("_", " ");
+	}
 }

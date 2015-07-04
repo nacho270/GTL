@@ -19,4 +19,5 @@ public interface ClienteFacadeRemote {
 	public abstract List<Cliente> getAllByRazonSocial(String razSoc);
 	public abstract List<ClienteDeudaTO> getClientesDeudores();
 	public abstract List<ClienteDeudaTO> getClientesConDeudaMayorA(BigDecimal monto);
+	public abstract Cliente getById(Integer idCliente);
 }

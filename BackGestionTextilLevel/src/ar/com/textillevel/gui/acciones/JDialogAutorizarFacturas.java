@@ -205,7 +205,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 			} else {
 				ok = true;
 				try{
-					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(JDialogAutorizarFacturas.this, docAut, input);
+					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(docAut, input);
 					ifHandler.imprimir();
 				}catch(CLException cle){
 					BossError.gestionarError(cle);

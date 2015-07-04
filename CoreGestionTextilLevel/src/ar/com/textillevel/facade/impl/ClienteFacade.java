@@ -57,4 +57,8 @@ public class ClienteFacade implements ClienteFacadeLocal, ClienteFacadeRemote {
 		return clienteDAOLocal.getClientesConDeudaMayorA(new BigDecimal(0d));
 	}
 
+	public Cliente getById(Integer idCliente) {
+		return clienteDAOLocal.getById(idCliente);
+	}
+
 }

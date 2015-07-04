@@ -1,16 +1,14 @@
 package ar.com.textillevel.gui.acciones.impresionfactura;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JDialog;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.DateUtil;
@@ -33,15 +31,11 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTe
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTubo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
-import ar.com.textillevel.entidades.enums.EPosicionIVA;
-import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ClienteTO;
 import ar.com.textillevel.entidades.to.FacturaTO;
 import ar.com.textillevel.entidades.to.ItemFacturaTO;
-import ar.com.textillevel.entidades.to.facturab.ClienteBTO;
-import ar.com.textillevel.entidades.to.facturab.FacturaBTO;
-import ar.com.textillevel.entidades.to.facturab.ItemFacturaBTO;
+import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
@@ -56,21 +50,23 @@ public class ImpresionFacturaHandler {
 	private Factura factura;
 	private CorreccionFactura correccionFactura;
 	private List<RemitoSalida> remitos;
-	private JDialog owner;
 	private String cantidadCopias;
+	private Cliente cliente;
 	private FacturaFacadeRemote facturaFacade;
 	private CorreccionFacadeRemote correccionFacade;
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	private DocumentoContableFacadeRemote documentoContableFacade;
+	private ClienteFacadeRemote clienteFacade;
 	private String strFacturasRelacionadas;
 
-	public ImpresionFacturaHandler(JDialog owner, DocumentoContableCliente documento, String cantidadCopias) {
-		this.owner = owner;
+	public ImpresionFacturaHandler(DocumentoContableCliente documento, String cantidadCopias) {
 		this.cantidadCopias = cantidadCopias;
 		facturaFacade = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class);
 		correccionFacade = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
 		parametrosGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		documentoContableFacade = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
+		clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
+		this.cliente = clienteFacade.getById(documento.getCliente().getId());
 		if (documento.getTipoDocumento() == ETipoDocumento.FACTURA){
 			setFactura((Factura)documento);
 			if(getFactura().getRemitos() != null && !getFactura().getRemitos().isEmpty()) {
@@ -87,14 +83,18 @@ public class ImpresionFacturaHandler {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void imprimir() throws JRException, CLException, ValidacionException {
 		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
-		if (getFactura() != null && (getFactura().getTipoFactura() == ETipoFactura.B || GenericUtils.isSistemaTest())) {
-			FacturaBTO facturaB = armarFacturaBTO();
-			Map parameters = getParametrosB(facturaB);
-			JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/facturab.jasper");
-			JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, facturaB.getItems());
-			CLJOptionPane.showWarningMessage(owner, "RECUERDE UTILIZAR EL FORMULARIO PARA FACTURAS B", "Advertencia");
-			Integer cantidadAImprimir = Integer.valueOf(cantidadCopias);
-			Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
+		FacturaTO factura = armarFacturaTO();
+		Map parameters = getParametros(factura);
+		JasperReport reporte;
+		if (GenericUtils.isSistemaTest()) {
+			reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/facturab_v2.jasper");
+		} else {
+			reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura_electronica.jasper");
+		}
+		JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, factura.getItems());
+		Integer cantidadAImprimir = Integer.valueOf(cantidadCopias);
+		Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
+		if (getCorreccionFactura() == null) {
 			if (cantidadImpresa.equals(cantidadAImprimir)) {
 				getFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
 			} else {
@@ -102,114 +102,15 @@ public class ImpresionFacturaHandler {
 			}
 			setFactura(getFacturaFacade().actualizarFactura(getFactura()));
 		} else {
-			FacturaTO factura = armarFacturaTO();
-			Map parameters = getParametros(factura);
-			JasperReport reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura_electronica.jasper");
-			JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, factura.getItems());
-			Integer cantidadAImprimir = Integer.valueOf(cantidadCopias);
-			Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
-			if (getCorreccionFactura() == null) {
-				if (cantidadImpresa.equals(cantidadAImprimir)) {
-					getFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
-				} else {
-					getFactura().setEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE);
-				}
-				setFactura(getFacturaFacade().actualizarFactura(getFactura()));
+			if (cantidadImpresa.equals(cantidadAImprimir)) {
+				getCorreccionFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
 			} else {
-				if (cantidadImpresa.equals(cantidadAImprimir)) {
-					getCorreccionFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
-				} else {
-					getCorreccionFactura().setEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE);
-				}
-				setCorreccionFactura(getCorreccionFacade().actualizarCorreccion(getCorreccionFactura()));
+				getCorreccionFactura().setEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE);
 			}
+			setCorreccionFactura(getCorreccionFacade().actualizarCorreccion(getCorreccionFactura()));
 		}
 	}
 
-	/************************************************ IMPRESION FACTURA B *******************************************************************************/
-	private FacturaBTO armarFacturaBTO() {
-		FacturaBTO factura = new FacturaBTO();
-		factura.setCliente(getClienteBTO());
-		factura.setItems(getItemsBTO());
-		if(getFactura()!=null){
-			if (getFactura().getCondicionDeVenta().getNombre().equalsIgnoreCase("efectivo")) {
-				factura.setVentaContado("X");
-			} else {
-				factura.setVentaCtaCTe("X");
-			}
-		}
-		String fecha = DateUtil.dateToString(getFactura().getFechaEmision(), DateUtil.SHORT_DATE);
-		String[] partesFecha = fecha.split("/");
-		factura.setAnioFecha(partesFecha[2]);
-		factura.setDiaFecha(partesFecha[0]);
-		factura.setMesFecha(partesFecha[1]);
-		factura.setNroRemito(getNrosRemitos());
-		factura.setTotalFactura(getCorreccionFactura() != null ? GenericUtils.getDecimalFormatFactura().format(getCorreccionFactura().getMontoTotal().doubleValue()).replace(',', '.') : GenericUtils.getDecimalFormatFactura().format(getFactura().getMontoTotal()));
-		return factura;
-	}
-	
-	private ClienteBTO getClienteBTO() {
-		ClienteBTO cliente = new ClienteBTO();
-		Cliente clientePosta = getCliente();
-		if (clientePosta.getPosicionIva() == EPosicionIVA.CONSUMIDOR_FINAL) {
-			cliente.setCondicionIVAConsFinal("X");
-		} else if (clientePosta.getPosicionIva() == EPosicionIVA.EXENTO) {
-			cliente.setCondicionIVAExento("X");
-		} else if (clientePosta.getPosicionIva() == EPosicionIVA.MONOTRIBUTISTA) {
-			cliente.setCondicionIVARespMonot("X");
-		}
-
-		cliente.setCuit(clientePosta.getCuit());
-		cliente.setDireccion(clientePosta.getDireccionReal().getDireccion());
-		cliente.setLocalidad(clientePosta.getDireccionReal().getLocalidad().getNombreLocalidad());
-		cliente.setRazonSocial(clientePosta.getRazonSocial());
-		return cliente;
-	}
-
-	private List<ItemFacturaBTO> getItemsBTO() {
-		List<ItemFacturaBTO> lista = new ArrayList<ItemFacturaBTO>();
-		for (ItemFactura item : getFactura().getItems()) {
-			ItemFacturaBTO ito = new ItemFacturaBTO();
-			ito.setCantidad(GenericUtils.getDecimalFormatFactura().format(item.getCantidad()));
-			ito.setDescripcion(item.getDescripcion());
-			ito.setImporte((item.getImporte().doubleValue()<1?String.valueOf(item.getImporte()): GenericUtils.getDecimalFormatFactura().format(item.getImporte().doubleValue())));
-			if(item.getPrecioUnitario() != null) {
-				ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(item.getPrecioUnitario()));
-			}
-			lista.add(ito);
-		}
-		return lista;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Map getParametrosB(FacturaBTO factura) {
-		Map parameters = new HashMap();
-		parameters.put("RAZON_SOCIAL", factura.getCliente().getRazonSocial());
-		parameters.put("DIRECCION", factura.getCliente().getDireccion());
-		parameters.put("LOCALIDAD", factura.getCliente().getLocalidad());
-
-		if (factura.getCliente().getCondicionIVAConsFinal() != null && factura.getCliente().getCondicionIVAConsFinal().equals("X")) {
-			parameters.put("IVA_CONS_F", factura.getCliente().getCondicionIVAConsFinal());
-		} else if (factura.getCliente().getCondicionIVAExento() != null && factura.getCliente().getCondicionIVAExento().equals("X")) {
-			parameters.put("IVA_EXENTO", factura.getCliente().getCondicionIVAExento());
-		} else if (factura.getCliente().getCondicionIVARespMonot() != null && factura.getCliente().getCondicionIVARespMonot().equals("X")) {
-			parameters.put("IVA_MONO", factura.getCliente().getCondicionIVARespMonot());
-		}
-		parameters.put("CUIT", factura.getCliente().getCuit());
-		parameters.put("NRO_REMITO", factura.getNroRemito());
-		parameters.put("TOTAL", factura.getTotalFactura());
-		parameters.put("FECHA_FACT_DIA", factura.getDiaFecha());
-		parameters.put("FECHA_FACT_MES", factura.getMesFecha());
-		parameters.put("FECHA_FACT_ANIO", factura.getAnioFecha());
-		parameters.put("CV_CONT", factura.getVentaContado());
-		parameters.put("CV_CTA_CTE", factura.getVentaCtaCTe());
-		return parameters;
-	}
-	
-	/************************************************ FIN IMPRESION FACTURA B *******************************************************************************/
-
-	/************************************************ IMPRESION FACTURA A *******************************************************************************/
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Map getParametros(FacturaTO factura) {
 		Map parameters = new HashMap();
@@ -238,11 +139,13 @@ public class ImpresionFacturaHandler {
 		factura.setItems(getItemsTO());
 		if(getFactura()!=null){
 			factura.setCondicionVenta(getFactura().getCondicionDeVenta().getNombre());
+		} else {
+			factura.setCondicionVenta("");
 		}
-		factura.setFecha(DateUtil.dateToString(getFactura().getFechaEmision(), DateUtil.SHORT_DATE));
+		factura.setFecha(DateUtil.dateToString(getFactura()!=null?getFactura().getFechaEmision():getCorreccionFactura().getFechaEmision(), DateUtil.SHORT_DATE));
 		factura.setNroFactura(getNroFactura());
 		factura.setNroRemito(getStrFacturasRelacionadas() != null && getStrFacturasRelacionadas().trim().length() > 0 ? getStrFacturasRelacionadas().replaceAll("/", " / ") : getNrosRemitos());
-		factura.setPorcIvaInsc(GenericUtils.getDecimalFormatFactura().format(getFactura().getPorcentajeIVAInscripto()));
+		factura.setPorcIvaInsc(GenericUtils.getDecimalFormatFactura().format(getFactura()!=null?getFactura().getPorcentajeIVAInscripto():getCorreccionFactura().getPorcentajeIVAInscripto()));
 		factura.setSubTotal((getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + (getCorreccionFactura() != null ? GenericUtils.getDecimalFormatFactura().format(getCorreccionFactura().getMontoSubtotal().doubleValue()) : GenericUtils.getDecimalFormatFactura().format(getFactura().getMontoSubtotal().doubleValue())));
 		
 		if (getCorreccionFactura() != null) {
@@ -328,15 +231,26 @@ public class ImpresionFacturaHandler {
 			}
 		}else{
 			ItemFacturaTO ito = new ItemFacturaTO();
+			ito.setCantidad("1");
+			ito.setDescripcion(getCorreccionFactura().getDescripcion());
+			BigDecimal montoSubtotal = getCorreccionFactura().getMontoSubtotal();
+			if(montoSubtotal!=null){
+				montoSubtotal = montoSubtotal.multiply(new BigDecimal(getCorreccionFactura() instanceof NotaCredito?-1:1));
+				ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(montoSubtotal));
+				ito.setImporte(montoSubtotal != null ? (GenericUtils.getDecimalFormatFactura().format(montoSubtotal.doubleValue())) : null);
+			} else {
+				BigDecimal monto = getCorreccionFactura().getMontoTotal();
+				if (monto!=null){
+					monto = monto.multiply(new BigDecimal(getCorreccionFactura() instanceof NotaCredito?-1:1));
+					ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(monto));
+					ito.setImporte(GenericUtils.getDecimalFormatFactura().format(monto));
+				}
+			}
 			lista.add(ito);
 		}
 		return lista;
 	}
-	
-	/************************************************ FIN IMPRESION FACTURA A *******************************************************************************/
-
-	/************************************************ METODOS COMUNES *******************************************************************************/
-	
+		
 	private String getArticulo(ItemFactura ifactura) {
 		if (ifactura instanceof ItemFacturaProducto) {
 			if( ((ItemFacturaProducto)ifactura).getProducto().getArticulo()!=null){
@@ -374,7 +288,7 @@ public class ImpresionFacturaHandler {
 
 	
 	private Cliente getCliente() {
-		return getFactura()!=null?getFactura().getCliente():getCorreccionFactura().getCliente();
+		return cliente;
 	}
 	
 	private List<Integer> extractIds(List<RemitoSalida> rsList) {
