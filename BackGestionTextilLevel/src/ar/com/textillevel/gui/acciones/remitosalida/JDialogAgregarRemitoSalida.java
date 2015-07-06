@@ -538,6 +538,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			rsNew.setNroOrden(i);
 			rsNew.setTipoRemitoSalida(rs.getTipoRemitoSalida());
 			rsNew.setNroFactura(rs.getNroFactura());
+			rsNew.setNroSucursal(rs.getNroSucursal());
 			rsNew.setFechaEmision(rs.getFechaEmision());
 			rsNew.setCliente(rs.getCliente());
 			rsNew.getPiezas().addAll(new ArrayList<PiezaRemito>(piezas.subList(CANT_PIEZAS_POR_REMITO_MAX*i, Math.min(piezas.size(), CANT_PIEZAS_POR_REMITO_MAX*(i+1)))));

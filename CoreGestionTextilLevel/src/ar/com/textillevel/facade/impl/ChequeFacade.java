@@ -144,7 +144,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		cheque.setEstadoCheque(EEstadoCheque.RECHAZADO);
 		//cheque.setFechaSalida(DateUtil.getHoy());
 		cheque = chequeDAO.save(cheque);
-		Integer lastNumeroFactura = facturaDao.getLastNumeroFactura(cheque.getCliente().getPosicionIva().getTipoFactura(), ETipoDocumento.NOTA_DEBITO);
+		Integer lastNumeroFactura = facturaDao.getLastNumeroFactura(cheque.getCliente().getPosicionIva().getTipoFactura(), ETipoDocumento.NOTA_DEBITO, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 		if(lastNumeroFactura == null){
 			lastNumeroFactura = parametrosGeneralesFacade.getParametrosGenerales().getNroComienzoFactura();
 		}else{

@@ -78,7 +78,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	}
 
 	private Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
-		return facturaDAO.getLastNumeroFactura(tipoFactura, tipoDoc);
+		return facturaDAO.getLastNumeroFactura(tipoFactura, tipoDoc, paramGeneralesDAO.getParametrosGenerales().getNroSucursal());
 	}
 
 	private Integer getMaximo(Integer... numeros){

@@ -94,11 +94,11 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	private UsuarioSistemaFacadeLocal usuSistemaFacade;
 	
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
-		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc);
+		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 	
 	public void eliminarFactura(Factura factura, String usrName) throws ValidacionException, CLException {
-		if(!facturaDao.esLaUltimaFactura(factura)){
+		if(!facturaDao.esLaUltimaFactura(factura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal())){
 			throw new ValidacionException(EValidacionException.FACTURA_NO_ES_LA_ULTIMA.getInfoValidacion());
 		}
 		docContableFacade.checkAutorizacionAFIP(factura);
@@ -143,6 +143,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	private Factura guardarInterno(Factura factura,String usuario) {
+		factura.setNroSucursal(parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 		Factura f = facturaDao.save(factura);
 		cuentaFacade.crearMovimientoDebe(f);
 		if (f.getRemitos() == null) { // es factura sin remito
@@ -169,15 +170,15 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	public Factura getByNroFactura(Integer nroFactura) {
-		return facturaDao.getByNroFacturaConCorrecciones(nroFactura);
+		return facturaDao.getByNroFacturaConCorrecciones(nroFactura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 	
 	public Factura getByNroFacturaConItems(Integer nroFactura){
-		return facturaDao.getByNroFacturaConItems(nroFactura);
+		return facturaDao.getByNroFacturaConItems(nroFactura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 
 	public List<Factura> getFacturaImpagaListByClient(Integer idCliente) {
-		return facturaDao.getFacturaImpagaListByClient(idCliente);
+		return facturaDao.getFacturaImpagaListByClient(idCliente, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 
 	public Factura getByIdEager(Integer id) {
@@ -185,7 +186,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	public List<Timestamp> getFechasFacturasAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
-		return facturaDao.getFacturaAnteriorYPosterior(nroFactura,tipoFactura, tipoDoc);
+		return facturaDao.getFacturaAnteriorYPosterior(nroFactura,tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 
 	public void anularFactura(Factura factura, boolean anularRemitoSalida, String usuario) throws ValidacionException, CLException {
@@ -243,13 +244,13 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	private void calcularCorrecciones(Date fechaDesde, Date fechaHasta, IVAVentasTO ivaVentas, TotalesIVAVentasTO totalRI, TotalesIVAVentasTO totalGral, Cliente cl) {
-		List<CorreccionFactura> correcciones = correccionDao.getCorreccionesByFecha(fechaDesde, fechaHasta,cl);
 		Integer nroSucursal = parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal();
+		List<CorreccionFactura> correcciones = correccionDao.getCorreccionesByFecha(fechaDesde, fechaHasta, cl, nroSucursal);
 		if(correcciones!=null && !correcciones.isEmpty()){
 			for(CorreccionFactura c : correcciones){
 				DescripcionFacturaIVAVentasTO dfiv = new DescripcionFacturaIVAVentasTO();
 				String nro = c.getTipoFactura().getDescripcion() +  
-							StringUtil.fillLeftWithZeros(String.valueOf(nroSucursal), 4) + 
+							StringUtil.fillLeftWithZeros(String.valueOf(c.getNroSucursal()), 4) + 
 							 "-" + StringUtil.fillLeftWithZeros(String.valueOf(c.getNroFactura()), 8);
 				dfiv.setNroCte(nro);
 				dfiv.setNroComprobanteSort(c.getNroFactura());
@@ -307,13 +308,13 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	private void calcularFacturas(Date fechaDesde, Date fechaHasta, IVAVentasTO ivaVentas, TotalesIVAVentasTO totalRI, TotalesIVAVentasTO totalGral, ETipoFactura tipoFactura, Cliente cl) {
-		List<Factura> facturas = facturaDao.getFacturasEntreFechas(fechaDesde, fechaHasta, tipoFactura,cl);
 		Integer nroSucursal = parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal();
+		List<Factura> facturas = facturaDao.getFacturasEntreFechas(fechaDesde, fechaHasta, tipoFactura, cl, nroSucursal);
 		if(facturas!=null && !facturas.isEmpty()){
 			for(Factura f : facturas){
 				DescripcionFacturaIVAVentasTO dfiv = new DescripcionFacturaIVAVentasTO();
 				String nro =  f.getTipoFactura().getDescripcion()+ 
-							 StringUtil.fillLeftWithZeros(String.valueOf(nroSucursal), 4) + 
+							 StringUtil.fillLeftWithZeros(String.valueOf(f.getNroSucursal()), 4) + 
 							 "-" + StringUtil.fillLeftWithZeros(String.valueOf(f.getNroFactura()), 8);
 				dfiv.setNroCte(nro);
 				dfiv.setNroComprobanteSort(f.getNroFactura());
@@ -382,11 +383,11 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	public List<Factura> getAllFacturasByCliente(Integer idCliente) {
-		return facturaDao.getAllFacturasByCliente(idCliente);
+		return facturaDao.getAllFacturasByCliente(idCliente, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 
 	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura) {
-		return facturaDao.getUltimoNumeroFacturaImpreso(tipoFactura);
+		return facturaDao.getUltimoNumeroFacturaImpreso(tipoFactura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 
 	public void pruebaAutorizar() {

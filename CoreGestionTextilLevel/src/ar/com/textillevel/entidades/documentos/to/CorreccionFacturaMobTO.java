@@ -32,7 +32,7 @@ public class CorreccionFacturaMobTO implements Serializable {
 	private List<DocumentoRelMobTO> facturas;
 
 	public CorreccionFacturaMobTO(CorreccionFactura cf, ParametrosGenerales parametrosGenerales) {
-		this.nroCorreccion = StringUtil.fillLeftWithZeros(String.valueOf(parametrosGenerales.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroFactura()), 8);
+		this.nroCorreccion = StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroFactura()), 8);
 		this.fecha = DateUtil.dateToString(cf.getFechaEmision());
 		this.porcIvaInsc = cf.getPorcentajeIVAInscripto().toString();
 		BigDecimal subtotalCF = cf instanceof NotaCredito ? (cf.getMontoSubtotal().multiply(new BigDecimal(-1))) : cf.getMontoSubtotal();
@@ -51,7 +51,7 @@ public class CorreccionFacturaMobTO implements Serializable {
 		if(cf instanceof NotaCredito) {
 			List<Factura> facturas = ((NotaCredito)cf).getFacturasRelacionadas();
 			for(Factura f : facturas){
-				result.add(new DocumentoRelMobTO(f.getId(), ETipoDocumento.FACTURA.getId(), StringUtil.fillLeftWithZeros(String.valueOf(parametrosGenerales.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroFactura()), 8)));
+				result.add(new DocumentoRelMobTO(f.getId(), ETipoDocumento.FACTURA.getId(), StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroFactura()), 8)));
 			}
 		}
 		return result;

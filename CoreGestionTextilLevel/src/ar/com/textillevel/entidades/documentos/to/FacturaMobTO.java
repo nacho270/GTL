@@ -32,7 +32,7 @@ public class FacturaMobTO implements Serializable {
 	private List<DocumentoRelMobTO> remitos;
 
 	public FacturaMobTO(Factura f, ParametrosGenerales parametrosGenerales) {
-		this.nroFactura = StringUtil.fillLeftWithZeros(String.valueOf(parametrosGenerales.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(f.getNroFactura()), 8);
+		this.nroFactura = StringUtil.fillLeftWithZeros(String.valueOf(f.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(f.getNroFactura()), 8);
 		this.fecha = DateUtil.dateToString(f.getFechaEmision());
 		this.tipoFactura = f.getTipoFactura().getDescripcion();
 		this.condicionVenta = f.getCondicionDeVenta().getNombre();

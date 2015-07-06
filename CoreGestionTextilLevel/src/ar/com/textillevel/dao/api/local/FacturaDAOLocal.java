@@ -15,30 +15,30 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @Local
 public interface FacturaDAOLocal extends DAOLocal<Factura, Integer> {
 
-	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
+	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc, Integer nroSucursal);
 
-	public Factura getByNroFacturaConCorrecciones(Integer nroFactura);
+	public Factura getByNroFacturaConCorrecciones(Integer nroFactura, Integer nroSucursal);
 	
-	public Factura getByNroFacturaConItems(Integer nroFactura);
+	public Factura getByNroFacturaConItems(Integer nroFactura, Integer nroSucursal);
 
-	public List<Factura> getFacturaImpagaListByClient(Integer idCliente);
+	public List<Factura> getFacturaImpagaListByClient(Integer idCliente, Integer nroSucursal);
 	
 	public Factura getByIdEager(Integer id);
 
-	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
+	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc, Integer nroSucursal);
 
 	public boolean facturaYaTieneRecibo(Factura factura);
 	
-	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cl);
+	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cl, Integer nroSucursal);
 
-	public boolean esLaUltimaFactura(Factura factura);
+	public boolean esLaUltimaFactura(Factura factura, Integer nroSucursal);
 
 	public List<Factura> getFacturaByRemitoSalida(Integer idRemitoSalida);
 
-	public List<Factura> getAllByIdClienteList(Integer idCliente);
+	public List<Factura> getAllByIdClienteList(Integer idCliente, Integer nroSucursal);
 
-	public List<Factura> getAllFacturasByCliente(Integer idCliente);
+	public List<Factura> getAllFacturasByCliente(Integer idCliente, Integer nroSucursal);
 
-	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura);
+	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura, Integer nroSucursal);
 
 }

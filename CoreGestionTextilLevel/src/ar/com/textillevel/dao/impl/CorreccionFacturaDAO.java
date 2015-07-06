@@ -20,10 +20,11 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @SuppressWarnings("unchecked")
 public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer> implements CorreccionDAOLocal {
 
-	public CorreccionFactura getCorreccionByNumero(Integer idNumero) {
-		String hql = " SELECT c FROM CorreccionFactura c WHERE c.nroFactura = :nroCorreccion ";
+	public CorreccionFactura getCorreccionByNumero(Integer idNumero, Integer nroSucursal) {
+		String hql = " SELECT c FROM CorreccionFactura c WHERE c.nroFactura = :nroCorreccion AND c.nroSucursal = :nroSucursal ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroCorreccion", idNumero);
+		q.setParameter("nroSucursal", nroSucursal);
 		List<CorreccionFactura> cors = q.getResultList();
 		if(cors == null || cors.isEmpty()){
 			return null;
@@ -52,12 +53,13 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		return c;
 	}
 	
-	public List<CorreccionFactura> getCorreccionesByFecha(Date fechaDesde, Date fechaHasta, Cliente cliente) {
-		String hql = " SELECT c FROM CorreccionFactura c WHERE c.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
+	public List<CorreccionFactura> getCorreccionesByFecha(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer nroSucursal) {
+		String hql = " SELECT c FROM CorreccionFactura c WHERE c.nroSucursal = :nroSucursal AND c.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
 					 (cliente !=null?" AND c.cliente.id = :idCliente ": " ");
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("fechaDesde", fechaDesde);
 		q.setParameter("fechaHasta", fechaHasta);
+		q.setParameter("nroSucursal", nroSucursal);
 		if(cliente!=null){
 			q.setParameter("idCliente", cliente.getId());
 		}
@@ -68,10 +70,11 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		return null;
 	}
 
-	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente) {
-		String hql = " SELECT nc FROM NotaCredito nc WHERE nc.cliente.id = :idCliente AND nc.montoSobrante > 0 ORDER BY nc.fechaEmision";
+	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente, Integer nroSucursal) {
+		String hql = " SELECT nc FROM NotaCredito nc WHERE nc.nroSucursal = :nroSucursal AND nc.cliente.id = :idCliente AND nc.montoSobrante > 0 ORDER BY nc.fechaEmision";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
+		q.setParameter("nroSucursal", nroSucursal);
 		return q.getResultList();
 	}
 
@@ -100,10 +103,11 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		return NumUtil.toInteger(q.getSingleResult())>0;
 	}
 
-	public List<NotaCredito> getAllNotaCreditoList(Integer idCliente) {
-		String hql = " SELECT nc FROM NotaCredito nc WHERE nc.cliente.id = :idCliente AND nc.anulada <> true ORDER BY nc.fechaEmision";
+	public List<NotaCredito> getAllNotaCreditoList(Integer idCliente, Integer nroSucursal) {
+		String hql = " SELECT nc FROM NotaCredito nc WHERE nc.nroSucursal = :nroSucursal AND nc.cliente.id = :idCliente AND nc.anulada <> true ORDER BY nc.fechaEmision";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
+		q.setParameter("nroSucursal", nroSucursal);
 		return q.getResultList();
 	}
 

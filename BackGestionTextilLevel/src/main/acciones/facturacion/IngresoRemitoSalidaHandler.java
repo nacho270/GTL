@@ -59,6 +59,7 @@ public class IngresoRemitoSalidaHandler {
 		remitoSalida.setNroRemito(lastNroRemito);
 		remitoSalida.setNroOrden(0);
 		remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva(), ETipoDocumento.FACTURA));
+		remitoSalida.setNroSucursal(parametrosGenerales.getNroSucursal());
 		remitoSalida.setTipoRemitoSalida(tipoRemitoSalida);
 		JDialogAgregarRemitoSalidaVentaTela dialogAgregarRemitoSalida = createDialog(remitoSalida);
 		GuiUtil.centrar(dialogAgregarRemitoSalida);

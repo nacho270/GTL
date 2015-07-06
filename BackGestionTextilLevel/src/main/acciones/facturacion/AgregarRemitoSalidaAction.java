@@ -83,6 +83,7 @@ public class AgregarRemitoSalidaAction implements Action {
 					esReproceso = true;
 				}else{
 					remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva(), ETipoDocumento.FACTURA));
+					remitoSalida.setNroSucursal(parametrosGenerales.getNroSucursal());
 				}
 				remitoSalida.getOdts().addAll(odtList);
 				JDialogAgregarRemitoSalida dialogAgregarRemitoSalida = new JDialogAgregarRemitoSalida(frame, remitoSalida, false);

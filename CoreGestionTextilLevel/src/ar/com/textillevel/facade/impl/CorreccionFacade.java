@@ -76,6 +76,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	}
 
 	private CorreccionFactura guardarYGenerarMovimientoInterno(CorreccionFactura correccion) {
+		correccion.setNroSucursal(parametrosGeneralesDAO.getParametrosGenerales().getNroSucursal());
 		correccion = correccionDao.save(correccion);
 		if (correccion.getTipo() == ETipoCorreccionFactura.NOTA_DEBITO) {
 			correccion = cuentaFacade.crearMovimientoDebe((NotaDebito) correccion);
@@ -91,11 +92,11 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	}
 
 	public CorreccionFactura getCorreccionByNumero(Integer idNumero) {
-		return correccionDao.getCorreccionByNumero(idNumero);
+		return correccionDao.getCorreccionByNumero(idNumero, parametrosGeneralesDAO.getParametrosGenerales().getNroSucursal());
 	}
 
 	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente) {
-		return correccionDao.getNotaCreditoPendienteUsarList(idCliente);
+		return correccionDao.getNotaCreditoPendienteUsarList(idCliente, parametrosGeneralesDAO.getParametrosGenerales().getNroSucursal());
 	}
 
 	public void cambiarVerificacionCorreccion(CorreccionFactura correccion, boolean verificada, String usrName) {

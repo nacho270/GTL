@@ -48,7 +48,8 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Integer idTipoRemitoSalida;
 	private Boolean anulado;
 	private Factura factura;
-
+	private Integer nroSucursal;
+	
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
 		this.items = new ArrayList<ItemRemitoSalidaProveedor>();
@@ -203,6 +204,15 @@ public class RemitoSalida extends Remito implements Serializable {
 
 	public void setFactura(Factura factura) {
 		this.factura = factura;
+	}
+	
+	@Column(name = "A_NRO_SUCURSAL", nullable = true)
+	public Integer getNroSucursal() {
+		return nroSucursal;
+	}
+
+	public void setNroSucursal(Integer nroSucursal) {
+		this.nroSucursal = nroSucursal;
 	}
 
 	@Override

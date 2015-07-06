@@ -263,7 +263,7 @@ public class JDialogCargaFactura extends JDialog {
 		setParametrosGenerales(parametrosGenerales2);
 		construct();
 		getTxtNroFactura().setText(
-				StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-"
+				StringUtil.fillLeftWithZeros(String.valueOf(getCorrecionFactura().getNroSucursal()!=null?getCorrecionFactura().getNroSucursal():parametrosGenerales2.getNroSucursal()), 4) + "-"
 						+ StringUtil.fillLeftWithZeros(String.valueOf(getCorrecionFactura().getNroFactura()), 8));
 		llenarDatosCliente(getCliente());
 		// getTxtNroRemito().setText(String.valueOf(factura.getRemito().getNroRemito()));
@@ -1274,10 +1274,20 @@ public class JDialogCargaFactura extends JDialog {
 		if (txtNroFactura == null) {
 			txtNroFactura = new CLJTextField();
 			txtNroFactura.setPreferredSize(new Dimension(150, 20));
-			String nro = StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-";
+			String nro; //StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-";
 			if (getFactura() != null) {
+				if(getFactura().getNroSucursal() == null) {
+					nro = StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-";
+				}else{
+					nro = StringUtil.fillLeftWithZeros(String.valueOf(getFactura().getNroSucursal()), 4) + "-";
+				}
 				nro += StringUtil.fillLeftWithZeros(String.valueOf(getFactura().getNroFactura()), 8);
 			} else {
+				if(getCorrecionFactura().getNroSucursal() == null) {
+					nro = StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-";
+				}else{
+					nro = StringUtil.fillLeftWithZeros(String.valueOf(getCorrecionFactura().getNroSucursal()), 4) + "-";
+				}
 				nro += StringUtil.fillLeftWithZeros(String.valueOf(getCorrecionFactura().getNroFactura()), 8);
 			}
 			txtNroFactura.setText(nro);
@@ -1361,10 +1371,11 @@ public class JDialogCargaFactura extends JDialog {
 	
 	private String getNrosFacturasRelacionadas(List<Factura> facturas){
 		StringBuilder sb = new StringBuilder();
-		sb.append(StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-");
+//		sb.append(StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-");
 		boolean primera = true;
 		for(Factura f : facturas){
 			if(primera){
+				sb.append(StringUtil.fillLeftWithZeros(String.valueOf(f.getNroSucursal()), 4) + "-");
 				sb.append(StringUtil.fillLeftWithZeros(String.valueOf(f.getNroFactura()), 8));
 				primera = false;
 				continue;

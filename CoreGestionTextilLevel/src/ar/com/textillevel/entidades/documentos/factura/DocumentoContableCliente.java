@@ -48,6 +48,7 @@ public abstract class DocumentoContableCliente implements Serializable {
 	private BigDecimal porcentajeIVAInscripto;
 	private String caeAFIP;
 	private String observacionesAFIP;
+	private Integer nroSucursal;
 
 	@Id
 	@Column(name = "P_ID")
@@ -199,6 +200,15 @@ public abstract class DocumentoContableCliente implements Serializable {
 		this.observacionesAFIP = observacionesAFIP;
 	}
 	
+	@Column(name = "A_NRO_SUCURSAL", nullable = false)
+	public Integer getNroSucursal() {
+		return nroSucursal;
+	}
+
+	public void setNroSucursal(Integer nroSucursal) {
+		this.nroSucursal = nroSucursal;
+	}
+	
 	@Transient
 	public abstract ETipoDocumento getTipoDocumento();
 
@@ -232,5 +242,4 @@ public abstract class DocumentoContableCliente implements Serializable {
 			return false;
 		return true;
 	}
-
 }

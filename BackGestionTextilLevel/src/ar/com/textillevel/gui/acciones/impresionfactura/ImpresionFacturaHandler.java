@@ -195,10 +195,12 @@ public class ImpresionFacturaHandler {
 	}
 	
 	private String getNroFactura() {
-		String nro = StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGeneralesFacade().getParametrosGenerales().getNroSucursal()), 4) + "-";
+		String nro;
 		if (getFactura() != null) {
+			nro = StringUtil.fillLeftWithZeros(String.valueOf(getFactura().getNroSucursal()), 4) + "-";
 			nro += StringUtil.fillLeftWithZeros(String.valueOf(getFactura().getNroFactura()), 8);
 		} else {
+			nro = StringUtil.fillLeftWithZeros(String.valueOf(getCorreccionFactura().getNroSucursal()), 4) + "-";
 			nro += StringUtil.fillLeftWithZeros(String.valueOf(getCorreccionFactura().getNroFactura()), 8);
 		}
 		return nro;
@@ -301,10 +303,10 @@ public class ImpresionFacturaHandler {
 
 	private String getNrosFacturasRelacionadas(List<Factura> facturasRelacionadas) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGeneralesFacade().getParametrosGenerales().getNroSucursal()), 4) + "-");
 		boolean primera = true;
 		for(Factura f : facturasRelacionadas){
 			if(primera){
+				sb.append(StringUtil.fillLeftWithZeros(String.valueOf(f.getNroSucursal()), 4) + "-");
 				sb.append(StringUtil.fillLeftWithZeros(String.valueOf(f.getNroFactura()), 8));
 				primera = false;
 				continue;

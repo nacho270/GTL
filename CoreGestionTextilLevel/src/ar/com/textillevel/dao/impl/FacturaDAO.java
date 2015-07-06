@@ -24,10 +24,12 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @Stateless
 public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaDAOLocal {
 
-	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
+	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc, Integer nroSucursal) {
 		String clazz = getDocumentoContableClassName(tipoDoc);
-		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM " + clazz + " f WHERE f.idTipoFactura = :idTipo AND f.nroFactura > 0");
+		Query query = getEntityManager().createQuery("SELECT MAX(f.nroFactura) FROM " + clazz + " f " +
+				" WHERE f.idTipoFactura = :idTipo AND f.nroSucursal = :nroSucursal");
 		query.setParameter("idTipo", tipoFactura.getId());
+		query.setParameter("nroSucursal", nroSucursal);
 		Number lastNumero = (Number)query.getSingleResult();
 		if(lastNumero==null){
 			return 0;
@@ -37,10 +39,11 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public Factura getByNroFacturaConCorrecciones(Integer nroFactura) {
-		String hql = " SELECT f FROM Factura f WHERE f.nroFactura = :nroFactura ";
+	public Factura getByNroFacturaConCorrecciones(Integer nroFactura, Integer nroSucursal) {
+		String hql = " SELECT f FROM Factura f WHERE f.nroFactura = :nroFactura AND f.nroSucursal = :nroSucursal ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroFactura", nroFactura);
+		q.setParameter("nroSucursal", nroSucursal);
 		List<Factura> list = q.getResultList();
 		if(!list.isEmpty()){
 			//list.get(0).getCorreciones().size();
@@ -54,10 +57,11 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Factura getByNroFacturaConItems(Integer nroFactura) {
-		String hql = " SELECT f FROM Factura f WHERE f.nroFactura = :nroFactura ";
+	public Factura getByNroFacturaConItems(Integer nroFactura, Integer nroSucursal) {
+		String hql = " SELECT f FROM Factura f WHERE f.nroFactura = :nroFactura AND f.nroSucursal = :nroSucursal ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroFactura", nroFactura);
+		q.setParameter("nroSucursal", nroSucursal);
 		List<Factura> list = q.getResultList();
 		if(!list.isEmpty()){
 			list.get(0).getItems().size();
@@ -73,14 +77,15 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Factura> getFacturaImpagaListByClient(Integer idCliente) {
+	public List<Factura> getFacturaImpagaListByClient(Integer idCliente, Integer nroSucursal) {
 		String hql = "SELECT f " +
 					 "FROM Factura f " +
-					 "WHERE f.cliente.id = :idCliente AND " +
+					 "WHERE f.cliente.id = :idCliente AND f.nroSucursal = :nroSucursal AND " +
 					 "f.montoFaltantePorPagar > 0 AND f.idEstado!=3 " +
 					 "ORDER BY f.fechaEmision, f.id ASC "; 
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
+		q.setParameter("nroSucursal", nroSucursal);
 		List<Factura> resultList = q.getResultList();
 		if(resultList!=null && !resultList.isEmpty()){
 			for(Factura f : resultList){
@@ -112,14 +117,15 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc) {
+	public List<Timestamp> getFacturaAnteriorYPosterior(Integer nroFactura, ETipoFactura tipoFactura, ETipoDocumento tipoDoc, Integer nroSucursal) {
 		String clazz = getDocumentoContableClassName(tipoDoc);
 		String hql = " SELECT f.fechaEmision FROM " + clazz + " f " +
 					 " WHERE (f.nroFactura = :nroAnterior OR f.nroFactura = :nroPosterior) " +
-					 " AND f.idTipoFactura = :idTipoFactura " +
+					 " AND f.idTipoFactura = :idTipoFactura AND f.nroSucursal = :nroSucursal " +
 					 " ORDER BY f.nroFactura ASC ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroAnterior", nroFactura-1);
+		q.setParameter("nroSucursal", nroSucursal);
 		q.setParameter("nroPosterior", nroFactura+1);
 		q.setParameter("idTipoFactura", tipoFactura.getId());
 		List<Timestamp> fechasFacturas= q.getResultList();
@@ -157,9 +163,9 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cliente) {
+	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cliente, Integer nroSucursal) {
 		String hql = " SELECT f FROM Factura f " +
-					 " WHERE f.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
+					 " WHERE f.nroSucursal = :nroSucursal AND f.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
 					(tipoFactura==null?" ": " AND f.idTipoFactura = :idTipoFactura  ")+
 					(cliente !=null?" AND ( f.cliente IS NOT NULL AND f.cliente.id = :idCliente) " : " ")+
 					//" ORDER BY f.fechaEmision, f.idTipoFactura, f.id ";
@@ -167,6 +173,7 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("fechaDesde", fechaDesde);
 		q.setParameter("fechaHasta", fechaHasta);
+		q.setParameter("nroSucursal", nroSucursal);
 		if(tipoFactura != null){
 			q.setParameter("idTipoFactura", tipoFactura.getId());
 		}
@@ -196,8 +203,8 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 		return null;
 	}
 
-	public boolean esLaUltimaFactura(Factura factura) {
-		return  !(factura.getNroFactura().compareTo(getLastNumeroFactura(factura.getTipoFactura(), ETipoDocumento.FACTURA))<0);
+	public boolean esLaUltimaFactura(Factura factura, Integer nroSucursal) {
+		return  !(factura.getNroFactura().compareTo(getLastNumeroFactura(factura.getTipoFactura(), ETipoDocumento.FACTURA, nroSucursal))<0);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -212,13 +219,14 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Factura> getAllByIdClienteList(Integer idCliente) {
+	public List<Factura> getAllByIdClienteList(Integer idCliente, Integer nroSucursal) {
 		String hql = "SELECT f " +
 					 "FROM Factura f " +
-					 "WHERE f.cliente.id = :idCliente AND f.idEstado!=3 " +
+					 "WHERE f.nroSucursal = :nroSucursal AND f.cliente.id = :idCliente AND f.idEstado!=3 " +
 					 "ORDER BY f.fechaEmision, f.nroFactura ASC ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
+		q.setParameter("nroSucursal", nroSucursal);
 		List<Factura> facturas = q.getResultList();
 		if(facturas!=null && !facturas.isEmpty()){
 			for(Factura f : facturas){
@@ -231,13 +239,14 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Factura> getAllFacturasByCliente(Integer idCliente) {
+	public List<Factura> getAllFacturasByCliente(Integer idCliente, Integer nroSucursal) {
 		String hql = "SELECT f " +
 					 "FROM Factura f " +
-					 "WHERE f.cliente.id = :idCliente " +
+					 "WHERE f.cliente.id = :idCliente AND f.nroSucursal = :nroSucursal " +
 					 "ORDER BY f.fechaEmision, f.id ASC ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
+		q.setParameter("nroSucursal", nroSucursal);
 		List<Factura> facturas = q.getResultList();
 		if(facturas!=null && !facturas.isEmpty()){
 			for(Factura f : facturas){
@@ -249,9 +258,9 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 		return facturas;
 	}
 
-	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura) {
-		String hql = " SELECT MAX(f.nroFactura) FROM Factura f WHERE f.idEstadoImpresion = 2 ";
-		Query q = getEntityManager().createQuery(hql);
+	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura, Integer nroSucursal ) {
+		String hql = " SELECT MAX(f.nroFactura) FROM Factura f WHERE f.idEstadoImpresion = 2 AND f.nroSucursal = :nroSucursal ";
+		Query q = getEntityManager().createQuery(hql).setParameter("nroSucursal", nroSucursal);
 		return NumUtil.toInteger(q.getSingleResult());
 	}
 

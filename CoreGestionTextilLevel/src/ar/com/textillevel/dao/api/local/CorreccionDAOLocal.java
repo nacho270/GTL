@@ -16,13 +16,13 @@ import ar.com.textillevel.entidades.gente.Cliente;
 @Local
 public interface CorreccionDAOLocal extends DAOLocal<CorreccionFactura, Integer>{
 
-	public CorreccionFactura getCorreccionByNumero(Integer idNumero);
-	public List<CorreccionFactura> getCorreccionesByFecha(Date fechaDesde, Date fechaHasta, Cliente cl);
-	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente);
+	public CorreccionFactura getCorreccionByNumero(Integer idNumero, Integer nroSucursal);
+	public List<CorreccionFactura> getCorreccionesByFecha(Date fechaDesde, Date fechaHasta, Cliente cl, Integer nroSucursal);
+	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente, Integer nroSucursal);
 	public NotaCredito getNotaDeCreditoByFacturaRelacionada(Factura factura);
 	public boolean notaDebitoSeUsaEnRecibo(NotaDebito nd);
 	public boolean notaCreditoSeUsaEnRecibo(NotaCredito nc);
-	public List<NotaCredito> getAllNotaCreditoList(Integer idCliente);
+	public List<NotaCredito> getAllNotaCreditoList(Integer idCliente, Integer nroSucursal);
 	public NotaDebito getNotaDebitoByCheque(Cheque cheque);
 	public CorreccionFactura getCorreccionById(Integer idCorreccion);
 

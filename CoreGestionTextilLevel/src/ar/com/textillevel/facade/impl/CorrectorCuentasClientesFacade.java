@@ -46,6 +46,7 @@ import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
 import ar.com.textillevel.facade.api.local.FacturaFacadeLocal;
+import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.CorrectorCuentasClientesFacadeRemote;
 
 @Stateless
@@ -81,6 +82,9 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 	@EJB
 	private CorreccionFacadeLocal correccionFacade;
 
+	@EJB
+	private ParametrosGeneralesFacadeLocal parametrosGeneralesFacade;
+	
 	public void corregirCuenta(Integer idCliente, String usrName) throws ValidacionException {
 		Map<DocMovimientoHaber, String> observacionesDocMHMap = new HashMap<DocMovimientoHaber, String>();
 		Map<PagoReciboWrapper, String> observacionesPagosMDMap = new HashMap<PagoReciboWrapper, String>();
@@ -158,7 +162,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 				tratarDuplicacionRecibo(r, reciboRevisado);
 			}
 		}
-		List<NotaCredito> allNotaCreditoList = correccionDAO.getAllNotaCreditoList(idCliente);
+		List<NotaCredito> allNotaCreditoList = correccionDAO.getAllNotaCreditoList(idCliente, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 		for(NotaCredito nc : allNotaCreditoList) {
 			resultList.add(new DocMovimientoHaber(nc));
 		}
@@ -201,7 +205,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 		for(NotaDebito nd : allNDByIdCliente) {
 			prList.add(new PagoReciboWrapper(nd));
 		}
-		List<Factura> facturaList = facturaDAO.getAllByIdClienteList(idCliente);
+		List<Factura> facturaList = facturaDAO.getAllByIdClienteList(idCliente, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 		for(Factura f : facturaList) {
 			prList.add(new PagoReciboWrapper(f));
 		}
@@ -341,7 +345,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 				r.getPagoReciboList().add(prnd);
 			}
 		}
-		List<Factura> facturaList = facturaDAO.getFacturaImpagaListByClient(r.getCliente().getId());
+		List<Factura> facturaList = facturaDAO.getFacturaImpagaListByClient(r.getCliente().getId(), parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 		for(Factura f : facturaList) {
 			if((mismoDia(f.getFechaEmision(), r.getFecha()) || !f.getFechaEmision().after(r.getFecha())) && totalMontoPagado.compareTo(new BigDecimal(0)) > 0) {
 				BigDecimal montoF = f.getMontoFaltantePorPagar();
