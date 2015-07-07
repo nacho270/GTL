@@ -1326,7 +1326,7 @@ public class JDialogCargaFactura extends JDialog {
 			panelDatosFactura.add(getCmbCondicionVenta(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			JLabel label = null;
 			if(getFactura()!=null && getFactura().getRemitos()!=null){
-				label = new JLabel("Remito Nï¿½: ");
+				label = new JLabel("Remito Nº: ");
 			}else if((getCorrecionFactura()!= null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_DEBITO) || (getFactura()!=null && getFactura().getRemitos()==null)){
 				label = new JLabel("");
 			}else if(getCorrecionFactura()!= null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_CREDITO){
