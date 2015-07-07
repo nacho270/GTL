@@ -43,6 +43,7 @@ public class AFIPConnector {
 	
 	public DatosRespuestaAFIP autorizarDocumento(DocumentoContableCliente documento, int nroSucursal, int idTipoComprobanteAFIP) throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
 		FECAERequest request = AFIPConverter.crearRequest(documento, nroSucursal, idTipoComprobanteAFIP);
 		FECAEResponse response = servicios.FECAESolicitar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
 		return new DatosRespuestaAFIP(response);
@@ -50,21 +51,25 @@ public class AFIPConnector {
 
 	public DocTipoResponse getTiposDoc() throws RemoteException{
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
 		return servicios.FEParamGetTiposDoc(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
 	}
 
 	public CbteTipoResponse getTiposComprobante() throws RemoteException{
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
 		return servicios.FEParamGetTiposCbte(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
 	}
 	
 	public MonedaResponse getTiposMoneda() throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
 		return servicios.FEParamGetTiposMonedas(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
 	}
 	
 	public IvaTipoResponse getTiposIVA() throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
 		return servicios.FEParamGetTiposIva(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()));
 	}
 	
@@ -74,6 +79,13 @@ public class AFIPConnector {
 
 	public FERecuperaLastCbteResponse getUltimoComprobante(int nroSucursal, int idTipoComprobanteAFIP) throws RemoteException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
 		return servicios.FECompUltimoAutorizado(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), nroSucursal, idTipoComprobanteAFIP);
+	}
+	
+	private void checkAuthDataAndServiceAFIP(AuthAFIPData authData) throws RemoteException {
+		if(authData == null || servicios==null) {
+			throw new RemoteException("");
+		}
 	}
 }

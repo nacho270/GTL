@@ -56,20 +56,20 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		if (proximoNumeroDeFactura == null) {
 			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
 			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
+				throw new RuntimeException("Falta configurar el nï¿½mero de comienzo de factura en los parï¿½metros generales.");
 			}
 			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
 			if(numeracionActual != null){
 				proximoNumeroDeFactura = numeracionActual.getNroDesde();
 			}else{
-				throw new RuntimeException("No hay una configuracion de números de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
+				throw new RuntimeException("No hay una configuracion de nï¿½meros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
 			}
 			Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
 			if(ultimaFacturaRS!=null){
 				proximoNumeroDeFactura = Math.max(proximoNumeroDeFactura, ultimaFacturaRS);
 			}
 		} else {
-			if(tipoDoc == ETipoDocumento.FACTURA) { //Sólo cuando es FACTURA porque NC/ND siguen su propia numeración
+			if(tipoDoc == ETipoDocumento.FACTURA) { //Sï¿½lo cuando es FACTURA porque NC/ND siguen su propia numeraciï¿½n
 				Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
 				proximoNumeroDeFactura = getMaximo(proximoNumeroDeFactura,ultimaFacturaRS);
 			}
@@ -92,7 +92,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	}
 
 	@SuppressWarnings("unchecked")
-	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException {
+	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback {
 		if(ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
 				logger.info("Autorizando " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
@@ -117,7 +117,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 			} catch (RemoteException e) {
 				List<String> msg = new ArrayList<String>();
 				msg.add(e.getMessage());
-				throw new ValidacionException(EValidacionException.DOCUMENTO_CONTABLE_FALLO_CONEXION_AFIP.getInfoValidacion(), msg); 
+				throw new ValidacionExceptionSinRollback(EValidacionException.DOCUMENTO_CONTABLE_FALLO_CONEXION_AFIP.getInfoValidacion(), msg); 
 			}
 		}
 		return docContable;
@@ -146,12 +146,21 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 				DummyResponse informeEstadoServicio = AFIPConnector.getInstance().informeEstadoServicio();
 				logger.info("Realizando prueba de autenticacion");
 				boolean okAuth = ConfiguracionAFIPHolder.getInstance().getAuthData() != null;
-				logger.info("Consultando ultima FC A autorizada");
-				String ultimaFCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.FACTURA.getIdTipoDocAFIP(ETipoFactura.A)).getCbteNro();
-				logger.info("Consultando ultima NC A autorizada");
-				String ultimaNCAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_CREDITO.getIdTipoDocAFIP(null)).getCbteNro();
-				logger.info("Consultando ultima ND A autorizada");
-				String ultimaNDAuth = "" + AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_DEBITO.getIdTipoDocAFIP(null)).getCbteNro();
+				String ultimaFCAuth = "";
+				String ultimaNCAuth = "";
+				String ultimaNDAuth = "";
+				if(okAuth) {
+					logger.info("Consultando ultima FC A autorizada");
+					ultimaFCAuth += AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.FACTURA.getIdTipoDocAFIP(ETipoFactura.A)).getCbteNro();
+					logger.info("Consultando ultima NC A autorizada");
+					ultimaNCAuth += AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_CREDITO.getIdTipoDocAFIP(null)).getCbteNro();
+					logger.info("Consultando ultima ND A autorizada");
+					ultimaNDAuth += AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_DEBITO.getIdTipoDocAFIP(null)).getCbteNro();
+				} else {
+					 ultimaFCAuth = " - ";
+					 ultimaNCAuth = " - ";
+					 ultimaNDAuth = " - ";
+				}
 				return new EstadoServidorAFIP(informeEstadoServicio, okAuth, ultimaFCAuth, ultimaNCAuth, ultimaNDAuth);
 			}catch(Exception e) {
 				return new EstadoServidorAFIP(new DummyResponse("error", "error", "error"), false, " - ", " - ", " - ");

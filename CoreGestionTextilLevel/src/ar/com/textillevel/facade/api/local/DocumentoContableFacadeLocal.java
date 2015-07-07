@@ -13,7 +13,7 @@ public interface DocumentoContableFacadeLocal {
 
 	public Integer getProximoNroDocumentoContable(EPosicionIVA posIva, ETipoDocumento tipoDoc);
 
-	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException;
+	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback;
 
 	public void checkAutorizacionAFIP(DocumentoContableCliente docContable) throws ValidacionException;
 
