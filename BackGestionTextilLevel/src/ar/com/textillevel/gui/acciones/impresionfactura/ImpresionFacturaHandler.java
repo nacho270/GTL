@@ -39,7 +39,6 @@ import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
-import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
@@ -54,7 +53,6 @@ public class ImpresionFacturaHandler {
 	private Cliente cliente;
 	private FacturaFacadeRemote facturaFacade;
 	private CorreccionFacadeRemote correccionFacade;
-	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	private DocumentoContableFacadeRemote documentoContableFacade;
 	private ClienteFacadeRemote clienteFacade;
 	private String strFacturasRelacionadas;
@@ -63,7 +61,6 @@ public class ImpresionFacturaHandler {
 		this.cantidadCopias = cantidadCopias;
 		facturaFacade = GTLBeanFactory.getInstance().getBean2(FacturaFacadeRemote.class);
 		correccionFacade = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
-		parametrosGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		documentoContableFacade = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
 		clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
 		this.cliente = clienteFacade.getById(documento.getCliente().getId());
@@ -348,10 +345,6 @@ public class ImpresionFacturaHandler {
 		return correccionFacade;
 	}
 
-	private ParametrosGeneralesFacadeRemote getParametrosGeneralesFacade() {
-		return parametrosGeneralesFacade;
-	}
-	
 	public void setFactura(Factura factura) {
 		this.factura = factura;
 	}

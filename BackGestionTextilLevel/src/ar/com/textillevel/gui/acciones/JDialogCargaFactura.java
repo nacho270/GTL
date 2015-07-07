@@ -480,7 +480,7 @@ public class JDialogCargaFactura extends JDialog {
 					if(producto == null) {//Es una pieza de tela cruda (i.e. no tiene ODT/Producto)
 						Articulo articulo = getRemitoEntradaFacade().getArticuloByPiezaSalidaCruda(pr.getId());
 						if(articulo == null) {
-							throw new IllegalArgumentException("No existe artículo relacionado para la pieza de salida con id " + pr.getId() + " y metros "  + pr.getMetros());
+							throw new IllegalArgumentException("No existe artï¿½culo relacionado para la pieza de salida con id " + pr.getId() + " y metros "  + pr.getMetros());
 						}
 						incrementarCantEnMap(mapTotalPorTelaCruda, articulo, pr.getMetros());
 					} else {
@@ -519,7 +519,7 @@ public class JDialogCargaFactura extends JDialog {
 			iftc.setPrecioUnitario(precioMasRecienteTela);
 			iftc.setImporte(precioMasRecienteTela.multiply(totalByTela));
 			iftc.setArticulo(a);
-			iftc.setDescripcion(""); //los items crudos se sugieren sin descripción
+			iftc.setDescripcion(""); //los items crudos se sugieren sin descripciï¿½n
 			iftc.setUnidad(EUnidad.METROS);
 			getFactura().getItems().add(iftc);
 		}
@@ -867,7 +867,7 @@ public class JDialogCargaFactura extends JDialog {
 	private JPanel getPanelHeader() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		panel.add(new JLabel("Nº: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+		panel.add(new JLabel("Nï¿½: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 		panel.add(getTxtNroFactura(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		panel.add(getLblTipoDocumento(), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 		panel.add(getLblTipoFactura(), GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
@@ -974,7 +974,7 @@ public class JDialogCargaFactura extends JDialog {
 								ItemFactura itemModificado = (ItemFactura) getValueAt(row, COL_OBJ_FACTURA);
 								String descripcion = (String) getValueAt(row, COL_DESCRIPCION);
 								if (descripcion.trim().length() == 0) {
-									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
+									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripciï¿½n", "Error");
 									return;
 								}
 								/*CeldaTablaProductos celda = new CeldaTablaProductos(0, COL_DESCRIPCION);
@@ -988,7 +988,7 @@ public class JDialogCargaFactura extends JDialog {
 							} else if (getValueAt(row, COL_OBJ_FACTURA) instanceof CorreccionFactura) {
 								String descripcion = (String) getValueAt(row, COL_DESCRIPCION);
 								if (descripcion.trim().length() == 0) {
-									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
+									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripciï¿½n", "Error");
 									return;
 								}
 								/*CeldaTablaProductos celda = new CeldaTablaProductos(0, COL_DESCRIPCION);
@@ -1326,7 +1326,7 @@ public class JDialogCargaFactura extends JDialog {
 			panelDatosFactura.add(getCmbCondicionVenta(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			JLabel label = null;
 			if(getFactura()!=null && getFactura().getRemitos()!=null){
-				label = new JLabel("Remito Nº: ");
+				label = new JLabel("Remito Nï¿½: ");
 			}else if((getCorrecionFactura()!= null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_DEBITO) || (getFactura()!=null && getFactura().getRemitos()==null)){
 				label = new JLabel("");
 			}else if(getCorrecionFactura()!= null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_CREDITO){
@@ -1393,7 +1393,7 @@ public class JDialogCargaFactura extends JDialog {
 			panelDatosCliente = new JPanel();
 			panelDatosCliente.setLayout(new GridBagLayout());
 			panelDatosCliente.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-			panelDatosCliente.add(new JLabel("Señor/es: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelDatosCliente.add(new JLabel("Seï¿½or/es: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosCliente.add(getTxtRazonSocial(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
 			panelDatosCliente.add(new JLabel("Direccion: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosCliente.add(getTxtDireccion(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
@@ -1461,7 +1461,7 @@ public class JDialogCargaFactura extends JDialog {
 						
 						if (it instanceof ItemFacturaPercepcion) {
 							if (hayPercepcion()) {
-								CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado la percepción.", "Error");
+								CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado la percepciï¿½n.", "Error");
 								return;
 							}
 						}
@@ -1593,8 +1593,9 @@ public class JDialogCargaFactura extends JDialog {
 								if (getFactura().getItems().size() > 0) {
 									okImprimir = guardarFactura();
 									if (okImprimir) {
-										CLJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con éxito", "Alta de factura");
+										CLJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con ï¿½xito", "Alta de factura");
 									} else {
+										dispose();
 										return;
 									}
 								} else {
@@ -1605,8 +1606,9 @@ public class JDialogCargaFactura extends JDialog {
 							if(validarFecha()){
 								okImprimir = guardarCorreccion();
 								if(okImprimir){
-									CLJOptionPane.showInformationMessage(JDialogCargaFactura.this, "La " + getCorrecionFactura().getTipo().getDescripcion() + " se ha guardado con éxito", "Alta de nota de crédito y débito");
+									CLJOptionPane.showInformationMessage(JDialogCargaFactura.this, "La " + getCorrecionFactura().getTipo().getDescripcion() + " se ha guardado con ï¿½xito", "Alta de nota de crï¿½dito y dï¿½bito");
 								}else{
+									dispose();
 									return;
 								}
 							}
@@ -2115,7 +2117,7 @@ public class JDialogCargaFactura extends JDialog {
 						return true;
 					}
 					getPanelFecha().setSelectedDate(f1);
-					CLJOptionPane.showInformationMessage(this, StringW.wordWrap("Atención, esto es una corrección. Se guardará el documento.\n\nLa fecha debe ser: " + DateUtil.dateToString(f1, DateUtil.SHORT_DATE)), "Corrección");
+					CLJOptionPane.showInformationMessage(this, StringW.wordWrap("Atenciï¿½n, esto es una correcciï¿½n. Se guardarï¿½ el documento.\n\nLa fecha debe ser: " + DateUtil.dateToString(f1, DateUtil.SHORT_DATE)), "Correcciï¿½n");
 					return true;
 				} else {
 					if (!fechaIngresada.before(DateUtil.redondearFecha(f1)) && !fechaIngresada.after(DateUtil.redondearFecha(f2))) {
