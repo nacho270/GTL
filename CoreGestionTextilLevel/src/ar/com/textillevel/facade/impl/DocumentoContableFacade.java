@@ -161,12 +161,14 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 					logger.info("Consultando ultima ND A autorizada");
 					ultimaNDAuth += AFIPConnector.getInstance().getUltimoComprobante(nroSucursal, ETipoDocumento.NOTA_DEBITO.getIdTipoDocAFIP(null)).getCbteNro();
 				} else {
-					 ultimaFCAuth = " - ";
-					 ultimaNCAuth = " - ";
-					 ultimaNDAuth = " - ";
+					logger.warn("No se pudo obtener la autorizacion de AFIP.");
+					ultimaFCAuth = " - ";
+					ultimaNCAuth = " - ";
+					ultimaNDAuth = " - ";
 				}
 				return new EstadoServidorAFIP(informeEstadoServicio, okAuth, ultimaFCAuth, ultimaNCAuth, ultimaNDAuth);
 			}catch(Exception e) {
+				logger.error(e);
 				return new EstadoServidorAFIP(new DummyResponse("error", "error", "error"), false, " - ", " - ", " - ");
 			}
 		}else{
