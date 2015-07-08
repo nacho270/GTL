@@ -64,13 +64,13 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 			}else{
 				throw new RuntimeException("No hay una configuracion de n�meros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
 			}
-			Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
+			Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva, parametrosGenerales.getNroSucursal());
 			if(ultimaFacturaRS!=null){
 				proximoNumeroDeFactura = Math.max(proximoNumeroDeFactura, ultimaFacturaRS);
 			}
 		} else {
 			if(tipoDoc == ETipoDocumento.FACTURA) { //S�lo cuando es FACTURA porque NC/ND siguen su propia numeraci�n
-				Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva);
+				Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva, parametrosGenerales.getNroSucursal());
 				proximoNumeroDeFactura = getMaximo(proximoNumeroDeFactura,ultimaFacturaRS);
 			}
 		}

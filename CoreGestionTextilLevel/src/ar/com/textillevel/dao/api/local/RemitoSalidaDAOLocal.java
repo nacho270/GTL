@@ -20,12 +20,12 @@ public interface RemitoSalidaDAOLocal extends DAOLocal<RemitoSalida, Integer> {
 	public RemitoSalida getByNroRemitoConPiezasYProductos(Integer nroRemito);
 	
 	/**
-	 * Devuelve el remito de salida con piezas y productos aunque esté anulado.
+	 * Devuelve el remito de salida con piezas y productos aunque estï¿½ anulado.
 	 * @param nroRemito
 	 * @return
 	 */
 	public RemitoSalida getByNroRemitoConPiezasYProductosAnulado(Integer nroRemito);
-	public Integer getUltimoNumeroFactura(EPosicionIVA posIva);
+	public Integer getUltimoNumeroFactura(EPosicionIVA posIva, Integer nroSucursal);
 	public List<RemitoSalida> getRemitosByClienteYFecha(Date fechaDesde, Date fechaHasta, Cliente cliente);
 	
 	/**
