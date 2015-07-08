@@ -10,6 +10,6 @@ import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 @Local
 public interface DocumentoContableDAOLocal extends DAOLocal<DocumentoContableCliente, Integer> {
 
-	List<DocumentoContableCliente> getAllSinCAE();
+	List<DocumentoContableCliente> getAllSinCAE(Integer nroSucursal);
 
 }

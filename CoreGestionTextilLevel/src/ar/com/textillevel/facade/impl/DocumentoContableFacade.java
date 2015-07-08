@@ -136,7 +136,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	}
 
 	public List<DocumentoContableCliente> getDocumentosContablesSinCAE() {
-		List<DocumentoContableCliente> docsSinCAE = docContableDAO.getAllSinCAE();
+		List<DocumentoContableCliente> docsSinCAE = docContableDAO.getAllSinCAE(paramGeneralesDAO.getParametrosGenerales().getNroSucursal());
 		for (DocumentoContableCliente doc : docsSinCAE) {
 			doc.getDocsContableRelacionados().size();
 		}

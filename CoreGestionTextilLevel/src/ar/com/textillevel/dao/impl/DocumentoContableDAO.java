@@ -12,11 +12,12 @@ import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 public class DocumentoContableDAO extends GenericDAO<DocumentoContableCliente, Integer> implements DocumentoContableDAOLocal {
 
 	@SuppressWarnings("unchecked")
-	public List<DocumentoContableCliente> getAllSinCAE() {
+	public List<DocumentoContableCliente> getAllSinCAE(Integer nroSucursal) {
 		return getEntityManager().createQuery(
 				  " SELECT d FROM DocumentoContableCliente d "
 				  + "	JOIN FETCH d.cliente "
-				+ "	WHERE d.caeAFIP IS NULL AND d.nroFactura > 0 "
-				+ " ORDER BY d.nroFactura ASC ").getResultList();
+				+ "	WHERE d.caeAFIP IS NULL AND d.nroSucursal = :nroSucursal "
+				+ " ORDER BY d.nroFactura ASC ")
+				.setParameter("nroSucursal", nroSucursal).getResultList();
 	}
 }
