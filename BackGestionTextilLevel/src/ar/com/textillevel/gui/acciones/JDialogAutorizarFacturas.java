@@ -6,7 +6,10 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -28,6 +31,7 @@ import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
@@ -56,7 +60,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 	}
 
 	private void setUpScreen(){
-		setTitle("Visualizador de facturas sin autorización AFIP");
+		setTitle("Visualizador de facturas sin autorizaciï¿½n AFIP");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(new Dimension(700, 200));
 		setResizable(false);
@@ -104,6 +108,9 @@ public class JDialogAutorizarFacturas extends JDialog {
 		
 		private JButton btnAutorizar;
 		
+		private Map<ETipoDocumento, List<Integer>> mapaDocumentos = new HashMap<ETipoDocumento, List<Integer>>();
+		private Map<ETipoDocumento, List<Integer>> mapaDocumentosSeleccionados = new HashMap<ETipoDocumento, List<Integer>>();
+		
 		public PanelTablaFacturas() {
 			agregarBoton(getBtnAutorizar());
 			getBotonAgregar().setVisible(false);
@@ -114,7 +121,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 		protected CLJTable construirTabla() {
 			CLJTable tabla = new CLJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO, "Documento", 100, 100, true);
-			tabla.setIntColumn(COL_NUMERO, "Número", 60, true);
+			tabla.setIntColumn(COL_NUMERO, "Nï¿½mero", 60, true);
 			tabla.setDateColumn(COL_FECHA, "Fecha", 70, true);
 			tabla.setStringColumn(COL_CLIENTE, "Cliente", 240, 240, true);
 			tabla.setStringColumn(COL_IMPORTE, "Importe", 100, 100, true);
@@ -124,8 +131,22 @@ public class JDialogAutorizarFacturas extends JDialog {
 			tabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				
 				public void valueChanged(ListSelectionEvent e) {
+					refreshSelectedRowsData();
 					getBtnAutorizar().setEnabled(getTabla().getSelectedRowCount() > 0);
-					
+				}
+
+				private void refreshSelectedRowsData() {
+					mapaDocumentosSeleccionados.clear();
+					if (getTabla().getSelectedRowCount() > 0) {
+						int[] selectedRows = getTabla().getSelectedRows();
+						for(int i : selectedRows) {
+							DocumentoContableCliente doc = getElemento(i);
+							if(mapaDocumentosSeleccionados.get(doc.getTipoDocumento()) == null) {
+								mapaDocumentosSeleccionados.put(doc.getTipoDocumento(), new LinkedList<Integer>());
+							}
+							mapaDocumentosSeleccionados.get(doc.getTipoDocumento()).add(i);
+						}
+					}
 				}
 			});
 			
@@ -142,6 +163,10 @@ public class JDialogAutorizarFacturas extends JDialog {
 			row[COL_IMPORTE] = GenericUtils.getDecimalFormat().format(elemento.getMontoTotal().doubleValue());
 			row[COL_OBJ] = elemento;
 			getTabla().addRow(row);
+			if(mapaDocumentos.get(elemento.getTipoDocumento()) == null) {
+				mapaDocumentos.put(elemento.getTipoDocumento(), new LinkedList<Integer>());
+			}
+			mapaDocumentos.get(elemento.getTipoDocumento()).add(getTabla().getRowCount()-1);
 		}
 
 		@Override
@@ -159,16 +184,33 @@ public class JDialogAutorizarFacturas extends JDialog {
 				btnAutorizar.setEnabled(false);
 				btnAutorizar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						int[] selectedRows = getTabla().getSelectedRows();
-						if(selectedRows[0] != 0) {
-							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Debe seleccionar la primer factura", "Error");
+						if (mapaDocumentosSeleccionados.keySet().size() > 1) {
+							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Seleccione documentos del mismo tipo.", "Error");
 							return;
 						}
+
+						ETipoDocumento tipoDocumentoSeleccionado = mapaDocumentosSeleccionados.keySet().iterator().next();
+						int primerIndiceReal = mapaDocumentos.get(tipoDocumentoSeleccionado).get(0);
 						
-						for(int i = 0; i<selectedRows.length;i++){
-							if(selectedRows[i] != i) {
-								CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Debe seleccionar facturas consecutivas", "Error");
-								return;
+						int[] selectedRows = getTabla().getSelectedRows();
+						if(selectedRows[0] != primerIndiceReal) {
+							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, 
+									"Debe seleccionar la primera " + tipoDocumentoSeleccionado.getDescripcion(), "Error");
+							return;
+						}
+						List<Integer> indicesSeleccionados = mapaDocumentosSeleccionados.get(tipoDocumentoSeleccionado);
+						if (indicesSeleccionados.size() > 1) {
+							DocumentoContableCliente ultimoDoc = null;
+							for(Integer indice : indicesSeleccionados){
+								if (ultimoDoc == null) {
+									ultimoDoc = getElemento(indice.intValue());
+								} else {
+									DocumentoContableCliente docActual = getElemento(indice.intValue());
+									if (ultimoDoc.getNroFactura().intValue() +1 != docActual.getNroFactura().intValue()) {
+										CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Debe seleccionar " + tipoDocumentoSeleccionado.getDescripcion() + " consecutivas", "Error");
+										return;
+									}
+								}
 							}
 						}
 						
@@ -186,7 +228,6 @@ public class JDialogAutorizarFacturas extends JDialog {
 							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
 						}
 					}
-
 				});
 			}
 			return btnAutorizar;
