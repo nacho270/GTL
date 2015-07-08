@@ -136,7 +136,11 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	}
 
 	public List<DocumentoContableCliente> getDocumentosContablesSinCAE() {
-		return docContableDAO.getAllSinCAE();
+		List<DocumentoContableCliente> docsSinCAE = docContableDAO.getAllSinCAE();
+		for (DocumentoContableCliente doc : docsSinCAE) {
+			doc.getDocsContableRelacionados().size();
+		}
+		return docsSinCAE;
 	}
 
 	public EstadoServidorAFIP getEstadoServidorAFIP(int nroSucursal) throws ValidacionException {
