@@ -60,7 +60,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 	}
 
 	private void setUpScreen(){
-		setTitle("Visualizador de facturas sin autorizaciï¿½n AFIP");
+		setTitle("Visualizador de facturas sin autorizaciïón AFIP");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(new Dimension(700, 200));
 		setResizable(false);
@@ -121,7 +121,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 		protected CLJTable construirTabla() {
 			CLJTable tabla = new CLJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO, "Documento", 100, 100, true);
-			tabla.setIntColumn(COL_NUMERO, "Nï¿½mero", 60, true);
+			tabla.setIntColumn(COL_NUMERO, "Número", 60, true);
 			tabla.setDateColumn(COL_FECHA, "Fecha", 70, true);
 			tabla.setStringColumn(COL_CLIENTE, "Cliente", 240, 240, true);
 			tabla.setStringColumn(COL_IMPORTE, "Importe", 100, 100, true);

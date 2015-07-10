@@ -131,7 +131,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	}
 
 	public CorreccionFactura rechazarCheque (Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback {
-		//Genero una nota de dï¿½bito al proveedor que tiene asignado el cheque
+		//Genero una nota de débito al proveedor que tiene asignado el cheque
 		
 		if(gastos==null){
 			gastos = BigDecimal.ZERO;

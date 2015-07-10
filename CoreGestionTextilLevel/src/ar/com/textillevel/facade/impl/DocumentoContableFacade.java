@@ -56,20 +56,20 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		if (proximoNumeroDeFactura == null) {
 			ConfiguracionNumeracionFactura configuracionFactura = parametrosGenerales.getConfiguracionFacturaByTipoFactura(posIva.getTipoFactura());
 			if (configuracionFactura == null) {
-				throw new RuntimeException("Falta configurar el nï¿½mero de comienzo de factura en los parï¿½metros generales.");
+				throw new RuntimeException("Falta configurar el número de comienzo de factura en los parámetros generales.");
 			}
 			NumeracionFactura numeracionActual = configuracionFactura.getNumeracionActual(DateUtil.getHoy());
 			if(numeracionActual != null){
 				proximoNumeroDeFactura = numeracionActual.getNroDesde();
 			}else{
-				throw new RuntimeException("No hay una configuracion de nï¿½meros de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
+				throw new RuntimeException("No hay una configuracion de números de factura vigente para " + DateUtil.dateToString(DateUtil.getHoy()));
 			}
 			Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva, parametrosGenerales.getNroSucursal());
 			if(ultimaFacturaRS!=null){
 				proximoNumeroDeFactura = Math.max(proximoNumeroDeFactura, ultimaFacturaRS);
 			}
 		} else {
-			if(tipoDoc == ETipoDocumento.FACTURA) { //Sï¿½lo cuando es FACTURA porque NC/ND siguen su propia numeraciï¿½n
+			if(tipoDoc == ETipoDocumento.FACTURA) { //Sólo cuando es FACTURA porque NC/ND siguen su propia numeración
 				Integer ultimaFacturaRS = remitoSalidaDAO.getUltimoNumeroFactura(posIva, parametrosGenerales.getNroSucursal());
 				proximoNumeroDeFactura = getMaximo(proximoNumeroDeFactura,ultimaFacturaRS);
 			}
@@ -99,7 +99,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP(docContable.getTipoFactura()));
 				boolean autorizada = respAFIP.isAutorizada(); 
 				if(autorizada) {
-					logger.info("Autorizacion existosa de " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
+					logger.info("Autorizacion existosa de " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura() + " CAE: " + respAFIP.getCae());
 					docContable.setCaeAFIP(respAFIP.getCae());
 					docContable.setEstadoImpresion(EEstadoImpresionDocumento.AUTORIZADO_AFIP);
 				} else {

@@ -132,9 +132,9 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		remitoSalida = remitoSalidaDAOLocal.save(remitoSalida);
 		cambiarEstadoODTs(remitoSalida.getOdts(), usuario);
 		if(isAlta) {
-			auditoriaFacade.auditar(usuario, "Creacion del remito de salida Nï¿½: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
+			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		} else {
-			auditoriaFacade.auditar(usuario, "Modificaciï¿½n del remito de salida Nï¿½: " + remitoSalida.getNroRemito(), EnumTipoEvento.MODIFICACION, remitoSalida);
+			auditoriaFacade.auditar(usuario, "Modificación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.MODIFICACION, remitoSalida);
 		}
 		return remitoSalida;
 	}
@@ -174,18 +174,18 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		if(remitoSalida.getProveedor() == null) { //es un remito de salida de cliente
 			checkEliminacionOrAnulacionRemitoSalida(remitoSalida.getId());
 			remitoSalidaDAOLocal.removeById(remitoSalida.getId());
-			auditoriaFacade.auditar(usrName, "Eliminaciï¿½n del remito de salida Nï¿½: " + remitoSalida.getNroRemito(), EnumTipoEvento.BAJA, remitoSalida);
+			auditoriaFacade.auditar(usrName, "Eliminación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.BAJA, remitoSalida);
 		} else {//es un remito de salida de proveedor
 			undoRemitoSalidaProveedor(idRemitoSalida, usrName);
 			remitoSalidaDAOLocal.removeById(remitoSalida.getId());
-			auditoriaFacade.auditar(usrName, "Eliminaciï¿½n del remito de salida Nï¿½: " + remitoSalida.getNroRemito() + " del proveedor " + remitoSalida.getProveedor().getNombreCorto() , EnumTipoEvento.BAJA, remitoSalida);
+			auditoriaFacade.auditar(usrName, "Eliminación del remito de salida N°: " + remitoSalida.getNroRemito() + " del proveedor " + remitoSalida.getProveedor().getNombreCorto() , EnumTipoEvento.BAJA, remitoSalida);
 		}
 	}
 
 	private void undoRemitoSalidaProveedor(Integer idRemitoSalida, String usrName) throws ValidacionException {
 		List<MovimientoStockResta> movRestaList =  movimientoStockFacade.getMovimientosRestaByRemitoSalida(idRemitoSalida);
 		for(MovimientoStockResta msr : movRestaList) {
-			if(msr.getRelContPrecioMatPrima() == null && msr.getPrecioMateriaPrima() != null) { //Es sï¿½lo de precio materia prima
+			if(msr.getRelContPrecioMatPrima() == null && msr.getPrecioMateriaPrima() != null) { //Es sólo de precio materia prima
 				precioMateriaPrimaFacade.actualizarStockPrecioMateriaPrima(msr.getCantidad(), msr.getPrecioMateriaPrima().getId());
 			} else if(msr.getRelContPrecioMatPrima() != null) { //Es solo de contenedor
 				relacionContenedorMatPrimaFacade.actualizarStockRelContPrecioMatPrima(msr.getCantidad(), msr.getRelContPrecioMatPrima().getId());				
@@ -193,7 +193,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			movimientoStockFacade.borrarMovimientoById(msr.getId());
 		}
 
-		//Si el remito de salida generï¿½ NCs entonces las borro
+		//Si el remito de salida generó NCs entonces las borro
 		RemitoSalida rs = remitoSalidaDAOLocal.getById(idRemitoSalida);
 		List<CorreccionFacturaProveedor> correccionesProvGeneradas = new ArrayList<CorreccionFacturaProveedor>(rs.getCorreccionesProvGeneradas());
 		rs.getCorreccionesProvGeneradas().clear();
@@ -211,7 +211,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 
 	public void eliminarRemitoSalida01OrVentaTela(Integer idRemitoSalida, String usrName) throws ValidacionException {
 		RemitoSalida remitoSalida = remitoSalidaDAOLocal.getById(idRemitoSalida);
-		//Chequeo si se puede realizar la eliminaciï¿½n
+		//Chequeo si se puede realizar la eliminación
 		if(remitoSalida.getTipoRemitoSalida() == null || remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.CLIENTE) {
 			throw new ValidacionException(EValidacionException.REMITO_SALIDA_VTA_OR_SAL_01_IMP_ELIMINAR.getInfoValidacion());			
 		}
@@ -225,7 +225,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		} catch (CLException e) {
 			e.printStackTrace();
 		}
-		auditoriaFacade.auditar(usrName, "Eliminaciï¿½n del remito de salida Nï¿½: " + remitoSalida.getNroRemito(), EnumTipoEvento.BAJA, remitoSalida);
+		auditoriaFacade.auditar(usrName, "Eliminación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.BAJA, remitoSalida);
 	}
 
 	private void undoRemitoSalida01OrVentaTelaPersistedStuff(Integer idRemitoSalida) {
@@ -244,7 +244,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				piezaRemitoDAO.save(piezaRE);
 			}
 		}
-		//TODO: Falta eliminar las ODTs que existian antes para el remito y ahora ya no estï¿½n
+		//TODO: Falta eliminar las ODTs que existian antes para el remito y ahora ya no están
 	}
 	
 	private String extractInfoFacturas(List<Factura> facturaList) {
@@ -304,7 +304,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			nc.getItemsCorreccion().addAll(itemsMatPrimaCorreccion);
 			nc.setUsuarioConfirmacion(user);
 			
-			nc = (NotaCreditoProveedor)correccionFacturaProveedorFacade.guardarCorreccionYGenerarMovimiento(nc, user, "Generada automï¿½ticamente por " + remitoSalida.toString());
+			nc = (NotaCreditoProveedor)correccionFacturaProveedorFacade.guardarCorreccionYGenerarMovimiento(nc, user, "Generada automáticamente por " + remitoSalida.toString());
 			remitoSalida.getCorreccionesProvGeneradas().add(nc);
 		}
 
@@ -422,7 +422,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			pmp.setStockInicialDisponible(pmp.getStockInicialDisponible().subtract(descStockInicial));
 			precioMateriaPrimaFacade.save(pmp);
 		}
-		auditoriaFacade.auditar(remitoSalidaTO.getUserName(), "Creaciï¿½n del remito de salida (venta de tela) Nï¿½: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
+		auditoriaFacade.auditar(remitoSalidaTO.getUserName(), "Creación del remito de salida (venta de tela) N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		return remitoSalida;
 	}
 
@@ -452,7 +452,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			pmp.setStockInicialDisponible(pmp.getStockInicialDisponible().subtract(descStockInicial));
 			precioMateriaPrimaFacade.save(pmp);
 		}
-		auditoriaFacade.auditar(remitoSalidaTO.getUserName(), "Creaciï¿½n del remito de salida Nï¿½: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
+		auditoriaFacade.auditar(remitoSalidaTO.getUserName(), "Creación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		return remitoSalida;
 	}
 
@@ -558,7 +558,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				cant = cant.add(prto.getPiezaRemitoEntrada().getMetros());
 				pmpModifStockMap.put(pmp, cant);
 				articuloCantMap.put(((Tela)pmp.getMateriaPrima()).getArticulo(), cant);
-			} else {//fue una pieza de entrada 01 => NO tengo que modificar stock de PMP, sï¿½lo se alteraran las cuentas
+			} else {//fue una pieza de entrada 01 => NO tengo que modificar stock de PMP, sólo se alteraran las cuentas
 				Articulo articulo = null;
 				if(odt == null) {
 					articulo = prto.getArticulo();
@@ -589,14 +589,14 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			}
 		}
 		if(prSet.size() != piezasConPiezaRE) {
-			throw new ValidacionException(EValidacionException.REMITO_SALIDA_01_OR_COMP_TELA_IMPOSIBLE_GRABAR.getInfoValidacion(), new String[] { "Existe mï¿½s de una pieza de salida asociada a la misma pieza de remito de entrada. " });
+			throw new ValidacionException(EValidacionException.REMITO_SALIDA_01_OR_COMP_TELA_IMPOSIBLE_GRABAR.getInfoValidacion(), new String[] { "Existe más de una pieza de salida asociada a la misma pieza de remito de entrada. " });
 		}
 	}
 
 	private PiezaODT findPiezaODT(OrdenDeTrabajo odt, PiezaODT piezaODT) {
 		for(PiezaODT podt : odt.getPiezas()) {
 			if(piezaODT.getPiezaRemito() == null) {
-				//FIXME: Analizar que pasa cuando descuento desde stock y tengo el mismo nï¿½mero de pieza (alcanza con comparar por metros?)
+				//FIXME: Analizar que pasa cuando descuento desde stock y tengo el mismo número de pieza (alcanza con comparar por metros?)
 				if(podt.getNroPiezaStockInicial()!=null && podt.getNroPiezaStockInicial().equals(piezaODT.getNroPiezaStockInicial())) {
 					return podt; 
 				}

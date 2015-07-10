@@ -20,7 +20,7 @@ public interface RemitoSalidaDAOLocal extends DAOLocal<RemitoSalida, Integer> {
 	public RemitoSalida getByNroRemitoConPiezasYProductos(Integer nroRemito);
 	
 	/**
-	 * Devuelve el remito de salida con piezas y productos aunque estï¿½ anulado.
+	 * Devuelve el remito de salida con piezas y productos aunque está anulado.
 	 * @param nroRemito
 	 * @return
 	 */
