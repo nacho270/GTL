@@ -60,7 +60,7 @@
 			</fileset>
 
 	
-			<fileset dir="../FWJava/classes">
+			<fileset dir="../../FWJava/classes">
 				<include name="ar/**" />
 				<include name="fwjava.properties" />
 				<exclude name="**/*.hbm.xml" />
@@ -85,6 +85,9 @@
 				<include name="ar/com/textillevel/modulos/alertas/enums/**" />
 				<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
 
+				<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
+				<include name="ar/com/textillevel/modulos/fe/to/**" />
+				
 			</fileset>
 		</jar>
 	</target>
@@ -102,7 +105,7 @@
 				<include name="JNLP-INF/**" />
 			</fileset>
 
-			<fileset dir="../FWJava/classes">
+			<fileset dir="../../FWJava/classes">
 				<include name="ar/**" />
 				<include name="fwjava.properties" />
 				<exclude name="**/*.hbm.xml" />
@@ -126,6 +129,9 @@
 				<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
 				<include name="ar/com/textillevel/modulos/alertas/enums/**" />
 				<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
+				
+				<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
+				<include name="ar/com/textillevel/modulos/fe/to/**" />
 
 			</fileset>
 		</jar>
@@ -309,7 +315,7 @@
 		-->
 	</fileset>
 	
-	<fileset dir="../FWJava/classes" id="fs-jar-clases-fwjava">
+	<fileset dir="../../FWJava/classes" id="fs-jar-clases-fwjava">
 		<include name="ar/**" />
 		<include name="fwjava.properties" />
 		<exclude name="**/*.hbm.xml" />

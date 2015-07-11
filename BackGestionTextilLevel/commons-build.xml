@@ -7,8 +7,8 @@
 	<property name="ear.dir" location="${deploy.dir}/${project.name}.ear" />
 	<property name="gtl.classes.dir" location="${workspace.home}/CoreGestionTextilLevel/bin"/>
 	<property name="lib.location.dir" location="lib"/>
-	<property name="FWLib.lib.dir" location="${workspace.home}/FWLib/lib" />
-	<property name="lib.FWLibJEE.dir" location="${workspace.home}/FWLibJEE/lib"/>
+	<property name="FWLib.lib.dir" location="${workspace.home}/../FWLib/lib" />
+	<property name="lib.FWLibJEE.dir" location="${workspace.home}/../FWLibJEE/lib"/>
 	<property name="directories.build" location="${workspace.home}/BackDT 2.0/build"/>
 	<property name="directories.configuration" location="${workspace.home}/BackDT 2.0/config/server/"/>
 
