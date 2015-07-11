@@ -151,7 +151,7 @@ public class ImpresionFacturaHandler {
 			factura.setTipoDocumento("FACTURA");
 		}
 		
-		factura.setTipoFactura(getCorreccionFactura() != null ? "" : getFactura().getTipoFactura().getDescripcion());
+		factura.setTipoFactura(getCorreccionFactura() != null ? getCorreccionFactura().getTipoFactura().getDescripcion() : getFactura().getTipoFactura().getDescripcion());
 		factura.setTotalFactura(getCorreccionFactura() != null ? (getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + GenericUtils.getDecimalFormatFactura().format(getCorreccionFactura().getMontoTotal().doubleValue()).replace(',', '.') : GenericUtils.getDecimalFormatFactura().format(getFactura().getMontoTotal()));
 		factura.setCaeAFIP(getCorreccionFactura() != null ? getCorreccionFactura().getCaeAFIP() : getFactura().getCaeAFIP());
 		if (getFactura() != null) {
