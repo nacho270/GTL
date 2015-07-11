@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
@@ -12,6 +13,9 @@ import main.acciones.cambioskin.MenuCambioSkin;
 import main.acciones.chat.MenuChat;
 import main.servicios.Servicio;
 import main.servicios.ServiciosPool;
+import main.statusbar.CompoTest;
+import main.statusbar.ConfiguracionComponenteStatusBar;
+import main.statusbar.StatusBar;
 import main.triggers.Trigger;
 import ar.clarin.fwjava.boss.BossError;
 import ar.clarin.fwjava.boss.BossEstilos;
@@ -257,5 +261,11 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 	
 	protected void crearTray(){
 		//NO SE USA POR AHORA, PERO SE PODRIA USAR SI SE LE QUIERE AGREGAR UN POPUP MENU
+	}
+	
+	protected void crearStatusBar() {
+		StatusBar comp = new StatusBar(this);
+		comp.addComponent(new CompoTest(new ConfiguracionComponenteStatusBar(true, 1000l)));
+		add(comp, BorderLayout.SOUTH);
 	}
 }

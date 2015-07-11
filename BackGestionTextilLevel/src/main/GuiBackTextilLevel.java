@@ -23,6 +23,7 @@ public class GuiBackTextilLevel extends GTLMainTemplate {
 		}
 		crearTrayIcon("ar/com/textillevel/imagenes/logogtl-ventana.jpg", "Gestion TextilLevel");
 		setIconoVentana("ar/com/textillevel/imagenes/logogtl-ventana.jpg");
+//		crearStatusBar();
 	}
 
 	public static void main(String[] args) {
