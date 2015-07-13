@@ -35,5 +35,6 @@ public interface FacturaFacadeRemote {
 	public List<Factura> getAllFacturasByCliente(Integer idCliente);
 	public Integer getUltimoNumeroFacturaImpreso(ETipoFactura tipoFactura);
 	public void pruebaAutorizar();
+	public Factura getByIdEagerRemitosEntrada(Integer idFactura);
 
 }

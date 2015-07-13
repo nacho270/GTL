@@ -103,7 +103,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		}
 		docContableFacade.checkAutorizacionAFIP(factura);
 		factura = eliminarInterno(factura);
-		auditoriaFacade.auditar(usrName, "Eliminación de factura  Nº: " + factura.getNroFactura(),EnumTipoEvento.BAJA,factura);
+		auditoriaFacade.auditar(usrName, "Eliminaciï¿½n de factura  Nï¿½: " + factura.getNroFactura(),EnumTipoEvento.BAJA,factura);
 	}
 
 	private Factura eliminarInterno(Factura factura) throws ValidacionException {
@@ -128,7 +128,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 
 	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws ValidacionException, ValidacionExceptionSinRollback  {
 		Factura f = guardarInterno(factura,usuario);
-		auditoriaFacade.auditar(usuario, "Creación de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.ALTA, f);
+		auditoriaFacade.auditar(usuario, "Creaciï¿½n de factura Nï¿½: " + factura.getNroFactura(), EnumTipoEvento.ALTA, f);
 		return docContableFacade.autorizarDocumentoContableAFIP(f); 
 	}
 
@@ -138,7 +138,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 //		factura = guardarInterno(factura);
 		cuentaFacade.actualizarMovimientoFacturaCliente(factura,facturaAnterior.getMontoTotal());
 		factura = facturaDao.save(factura);
-		auditoriaFacade.auditar(usuario, "Edición de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.MODIFICACION,factura);
+		auditoriaFacade.auditar(usuario, "Ediciï¿½n de factura Nï¿½: " + factura.getNroFactura(), EnumTipoEvento.MODIFICACION,factura);
 		return factura;
 	}
 
@@ -213,7 +213,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		}
 		factura.setRemitos(null);
 		factura = facturaDao.save(factura);
-		auditoriaFacade.auditar(usuario, "Anulación de factura  Nº: " + factura.getNroFactura(),EnumTipoEvento.ANULACION,factura);
+		auditoriaFacade.auditar(usuario, "Anulaciï¿½n de factura  Nï¿½: " + factura.getNroFactura(),EnumTipoEvento.ANULACION,factura);
 	}
 
 	public void cambiarEstadoFactura(Factura factura, EEstadoFactura estadoNuevo, String usuario) {
@@ -222,7 +222,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			factura.setUsuarioConfirmacion(usuario);
 		}
 		facturaDao.save(factura);
-		auditoriaFacade.auditar(usuario, "Cambio de estado de factura Nº: " + factura.getNroFactura() + ". Estado nuevo: " + estadoNuevo.getDescripcion(),EnumTipoEvento.MODIFICACION,factura);
+		auditoriaFacade.auditar(usuario, "Cambio de estado de factura Nï¿½: " + factura.getNroFactura() + ". Estado nuevo: " + estadoNuevo.getDescripcion(),EnumTipoEvento.MODIFICACION,factura);
 	}
 	
 	public IVAVentasTO calcularIVAVentas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cliente){
@@ -404,5 +404,23 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public Factura getByIdEagerRemitosEntrada(Integer idFactura) {
+		Factura f = facturaDao.getByIdEager(idFactura);
+		if(f.getRemitos()!=null && !f.getRemitos().isEmpty()){
+			f.getRemitos().size();
+			for(RemitoSalida rs : f.getRemitos()){
+				if(rs.getOdts()!=null && !rs.getOdts().isEmpty()){
+					rs.getOdts().size();
+					for(OrdenDeTrabajo odt : rs.getOdts()){
+						if(odt.getRemito()!=null){
+							odt.getCodigo();
+						}
+					}
+				}
+			}
+		}
+		return f;
 	}
 }

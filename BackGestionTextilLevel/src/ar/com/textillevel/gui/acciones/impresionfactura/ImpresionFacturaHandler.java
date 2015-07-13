@@ -42,6 +42,7 @@ import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
+import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class ImpresionFacturaHandler {
@@ -140,8 +141,14 @@ public class ImpresionFacturaHandler {
 			factura.setCondicionVenta("");
 		}
 		factura.setFecha(DateUtil.dateToString(getFactura()!=null?getFactura().getFechaEmision():getCorreccionFactura().getFechaEmision(), DateUtil.SHORT_DATE));
-		factura.setNroFactura(getNroFactura());
-		factura.setNroRemito(getStrFacturasRelacionadas() != null && getStrFacturasRelacionadas().trim().length() > 0 ? getStrFacturasRelacionadas().replaceAll("/", " / ") : getNrosRemitos());
+		if (GenericUtils.isSistemaTest() && getFactura()!=null) {
+			setFactura(getFacturaFacade().getByIdEagerRemitosEntrada(getFactura().getId()));
+			factura.setNroFactura(getStrFacturasRelacionadas() != null && getStrFacturasRelacionadas().trim().length() > 0 ? getStrFacturasRelacionadas().replaceAll("/", " / ") : getNrosRemitos());
+			factura.setNroRemito(extractNrosRemitoEntradaFactura());
+		}else{
+			factura.setNroFactura(getNroFactura());
+			factura.setNroRemito(getStrFacturasRelacionadas() != null && getStrFacturasRelacionadas().trim().length() > 0 ? getStrFacturasRelacionadas().replaceAll("/", " / ") : getNrosRemitos());
+		}
 		factura.setPorcIvaInsc(GenericUtils.getDecimalFormatFactura().format(getFactura()!=null?getFactura().getPorcentajeIVAInscripto():getCorreccionFactura().getPorcentajeIVAInscripto()));
 		factura.setSubTotal((getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + (getCorreccionFactura() != null ? GenericUtils.getDecimalFormatFactura().format(getCorreccionFactura().getMontoSubtotal().doubleValue()) : GenericUtils.getDecimalFormatFactura().format(getFactura().getMontoSubtotal().doubleValue())));
 		
@@ -163,6 +170,20 @@ public class ImpresionFacturaHandler {
 		return factura;
 	}
 	
+	private String extractNrosRemitoEntradaFactura() {
+		List<String> listaNros = new ArrayList<String>();
+		if(getFactura().getRemitos()!=null && !getFactura().getRemitos().isEmpty()){
+			for(RemitoSalida rs : getFactura().getRemitos()) {
+				if (rs.getOdts()!=null && !rs.getOdts().isEmpty()){
+					for(OrdenDeTrabajo odt : rs.getOdts()){
+						listaNros.add(""+odt.getRemito().getNroRemito());
+					}
+				}
+			}
+		}
+		return StringUtil.getCadena(listaNros, ", ");
+	}
+
 	private String getIvaInsc(){
 		if(getCorreccionFactura()!=null){
 			double subTotal =0;
