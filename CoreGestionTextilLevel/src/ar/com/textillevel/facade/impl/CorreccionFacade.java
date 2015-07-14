@@ -91,8 +91,8 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		//auditoriaFacade.auditar(usuario, "Actualización de nota de "+correccion.getTipo().getDescripcion() +" Nº: " + correccion.getNroCorreccion(), EnumTipoEvento.MODIFICACION, correccion);
 	}
 
-	public CorreccionFactura getCorreccionByNumero(Integer idNumero) {
-		return correccionDao.getCorreccionByNumero(idNumero, parametrosGeneralesDAO.getParametrosGenerales().getNroSucursal());
+	public CorreccionFactura getCorreccionByNumero(Integer idNumero, ETipoCorreccionFactura tipoCorreccion) {
+		return correccionDao.getCorreccionByNumero(idNumero, tipoCorreccion, parametrosGeneralesDAO.getParametrosGenerales().getNroSucursal());
 	}
 
 	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente) {
@@ -122,7 +122,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 
 	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
 		docContableFacade.checkAutorizacionAFIP(correccion);
-		correccion = getCorreccionByNumero(correccion.getNroFactura());
+		correccion = getCorreccionByNumero(correccion.getNroFactura(), correccion.getTipo());
 		if(correccion instanceof NotaDebito){
 			NotaDebito notaDebito = (NotaDebito)correccion;
 			if(correccionDao.notaDebitoSeUsaEnRecibo(notaDebito)){
@@ -154,7 +154,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	
 	public void eliminarCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
 		docContableFacade.checkAutorizacionAFIP(correccion);
-		correccion = getCorreccionByNumero(correccion.getNroFactura());
+		correccion = getCorreccionByNumero(correccion.getNroFactura(), correccion.getTipo());
 		
 		if(correccion instanceof NotaDebito){
 			NotaDebito notaDebito = (NotaDebito)correccion;
@@ -181,7 +181,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 
 	private CorreccionFactura eliminarCorreccionInterno(CorreccionFactura correccion) throws ValidacionException {
 		docContableFacade.checkAutorizacionAFIP(correccion);
-		correccion = getCorreccionByNumero(correccion.getNroFactura()); 
+		correccion = getCorreccionByNumero(correccion.getNroFactura(), correccion.getTipo()); 
 		if(correccion instanceof NotaCredito){
 			if(((NotaCredito)correccion).getFacturasRelacionadas().size()>0){
 				throw new ValidacionException(EValidacionException.NOTA_CREDITO_TIENE_FACTURAS_RELACIONADAS.getInfoValidacion());

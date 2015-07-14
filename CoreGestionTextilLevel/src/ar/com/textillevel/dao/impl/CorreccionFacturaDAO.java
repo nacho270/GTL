@@ -14,14 +14,21 @@ import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
+import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 
 @Stateless
 @SuppressWarnings("unchecked")
 public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer> implements CorreccionDAOLocal {
 
-	public CorreccionFactura getCorreccionByNumero(Integer idNumero, Integer nroSucursal) {
-		String hql = " SELECT c FROM CorreccionFactura c WHERE c.nroFactura = :nroCorreccion AND c.nroSucursal = :nroSucursal ";
+	public CorreccionFactura getCorreccionByNumero(Integer idNumero, ETipoCorreccionFactura tipo, Integer nroSucursal) {
+		String clazz;
+		if(tipo == ETipoCorreccionFactura.NOTA_CREDITO) {
+			clazz = NotaCredito.class.getName();
+		} else {
+			clazz = NotaDebito.class.getName();
+		} 
+		String hql = " SELECT c FROM " + clazz +" c WHERE c.nroFactura = :nroCorreccion AND c.nroSucursal = :nroSucursal ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroCorreccion", idNumero);
 		q.setParameter("nroSucursal", nroSucursal);

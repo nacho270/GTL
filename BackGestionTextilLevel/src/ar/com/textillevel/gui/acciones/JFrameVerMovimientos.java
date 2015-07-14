@@ -302,7 +302,8 @@ public class JFrameVerMovimientos extends JFrame {
 									selectedRow--;
 								}
 								getTabla().setRowSelectionInterval(selectedRow, selectedRow);
-								((MovimientoCuenta) getTabla().getValueAt(selectedRow, COL_OBJ)).aceptarVisitor(consultaDocumentoMovimientoVisitor);							} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN && getTabla().getSelectedRow() > -1) {
+								((MovimientoCuenta) getTabla().getValueAt(selectedRow, COL_OBJ)).aceptarVisitor(consultaDocumentoMovimientoVisitor);							
+							} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN && getTabla().getSelectedRow() > -1) {
 								HabilitarBotonesCuentaVisitor hbcv = new HabilitarBotonesCuentaVisitor(JFrameVerMovimientos.this);
 								((MovimientoCuenta) getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ)).aceptarVisitor(hbcv);
 							} else if (getTabla().getSelectedRow() < 0) {
@@ -1660,7 +1661,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 	public void editarCorreccion(CorreccionFactura correccion) {
 		CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
-		correccion = cfr.getCorreccionByNumero(correccion.getNroFactura());
+		correccion = cfr.getCorreccionByNumero(correccion.getNroFactura(), correccion.getTipo());
 		JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this,correccion, false);
 		dialogCargaFactura.setVisible(true);
 		buscarMovimientos();

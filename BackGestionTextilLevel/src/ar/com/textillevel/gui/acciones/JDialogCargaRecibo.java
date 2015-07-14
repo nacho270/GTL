@@ -67,6 +67,7 @@ import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
+import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
@@ -991,7 +992,7 @@ public class JDialogCargaRecibo extends JDialog {
 						int selectedRow = getTabla().getSelectedRow();
 						if (selectedRow != -1) {
 							NotaCredito nc = (NotaCredito)getTabla().getValueAt(selectedRow, COL_OBJ);
-							JDialogCargaFactura jDialogCargaFactura = new JDialogCargaFactura(owner, getCorreccionFacturaFacade().getCorreccionByNumero(nc.getNroFactura()), true);
+							JDialogCargaFactura jDialogCargaFactura = new JDialogCargaFactura(owner, getCorreccionFacturaFacade().getCorreccionByNumero(nc.getNroFactura(), ETipoCorreccionFactura.NOTA_CREDITO), true);
 							jDialogCargaFactura.setVisible(true);
 						}
 					}
@@ -1433,7 +1434,7 @@ public class JDialogCargaRecibo extends JDialog {
 		public void visit(PagoReciboNotaDebito prnd) {
 			try {
 				CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
-				CorreccionFactura correccion = cfr.getCorreccionByNumero(prnd.getNotaDebito().getNroFactura());
+				CorreccionFactura correccion = cfr.getCorreccionByNumero(prnd.getNotaDebito().getNroFactura(), ETipoCorreccionFactura.NOTA_DEBITO);
 				JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(null,correccion, true);
 				dialogCargaFactura.setVisible(true);
 			} catch (CLException e) {

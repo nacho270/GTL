@@ -11,6 +11,7 @@ import ar.clarin.fwjava.boss.BossError;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.error.CLException;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
+import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -61,13 +62,21 @@ public class ConsultarCorreccionesAction implements Action{
 				if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
 					CLJOptionPane.showErrorMessage(frame, "Ingreso incorrecto", "error");
 				} else {
-					correccion = ffr.getCorreccionByNumero(Integer.valueOf(input.trim()));
-					if(correccion == null){
-						CLJOptionPane.showErrorMessage(frame, "No se encontraron resultados", "Error");
-					}else{
-						ok = true;
-						JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(frame,correccion, true);
-						dialogCargaFactura.setVisible(true);
+					String[] correcs= new String[ETipoCorreccionFactura.values().length];
+					for(int i = 0 ; i<ETipoCorreccionFactura.values().length;i++){
+						correcs[i] = ETipoCorreccionFactura.values()[i].getDescripcion();
+					}
+					Object opcion = JOptionPane.showInputDialog(frame, "Seleccione el tipo de nota:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, correcs,correcs[0]);
+					if(opcion!=null){
+						ETipoCorreccionFactura tipoCorrecion = ETipoCorreccionFactura.getByDescripcion((String)opcion);
+						correccion = ffr.getCorreccionByNumero(Integer.valueOf(input.trim()),tipoCorrecion);
+						if(correccion == null){
+							CLJOptionPane.showErrorMessage(frame, "No se encontraron resultados", "Error");
+						}else{
+							ok = true;
+							JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(frame,correccion, true);
+							dialogCargaFactura.setVisible(true);
+						}
 					}
 				}
 			} while (!ok);
