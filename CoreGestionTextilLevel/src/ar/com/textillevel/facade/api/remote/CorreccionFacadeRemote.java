@@ -16,7 +16,7 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 public interface CorreccionFacadeRemote {
 
 	public CorreccionFactura guardarCorreccionYGenerarMovimiento(CorreccionFactura correccion, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
-	public CorreccionFactura getCorreccionByNumero(Integer idNumero, ETipoCorreccionFactura tipoCorreccion);
+	public CorreccionFactura getCorreccionByNumero(Integer idNumero, ETipoCorreccionFactura tipoCorreccion, Integer nroSucursal);
 	public CorreccionFactura actualizarCorreccion(CorreccionFactura correccion) throws CLException;
 	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente);
 	public void cambiarVerificacionCorreccion(CorreccionFactura correccion, boolean verificada, String usrName);
@@ -24,4 +24,6 @@ public interface CorreccionFacadeRemote {
 	public void eliminarCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException;
 	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException;
 	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException;
+	public CorreccionFactura getCorreccionById(Integer idCorreccion);
+
 }

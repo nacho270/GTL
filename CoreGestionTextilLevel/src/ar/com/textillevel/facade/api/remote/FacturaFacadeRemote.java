@@ -22,7 +22,7 @@ public interface FacturaFacadeRemote {
 	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc);
 	public Factura getByNroFactura(Integer nroFactura);
-	public Factura getByNroFacturaConItems(Integer nroFactura);
+	public Factura getByNroFacturaConItems(Integer nroFactura, Integer nroSucursal);
 	public List<Factura> getFacturaImpagaListByClient(Integer idCliente);
 	public Factura getByIdEager(Integer id);
 	public Factura actualizarFactura(Factura factura) throws CLException;

@@ -1661,7 +1661,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 	public void editarCorreccion(CorreccionFactura correccion) {
 		CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
-		correccion = cfr.getCorreccionByNumero(correccion.getNroFactura(), correccion.getTipo());
+		correccion = cfr.getCorreccionById(correccion.getId());
 		JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this,correccion, false);
 		dialogCargaFactura.setVisible(true);
 		buscarMovimientos();

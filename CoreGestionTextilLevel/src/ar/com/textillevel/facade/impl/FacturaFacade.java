@@ -119,7 +119,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			throw new ValidacionException(EValidacionException.FACTURA_TIENE_NOTA_CREDITO.getInfoValidacion());
 		}
 		if(factura.getRemitos()==null){ //Si es factura sin remito, tengo que borrar los movimientos de stock y aumentar el stock
-			factura = getByNroFacturaConItems(factura.getNroFactura());
+			factura = getByIdEager(factura.getId());
 			movimientoStockFacade.borrarMovientoStock(factura);
 		}
 		facturaDao.removeById(factura.getId());
@@ -173,8 +173,8 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return facturaDao.getByNroFacturaConCorrecciones(nroFactura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 	
-	public Factura getByNroFacturaConItems(Integer nroFactura){
-		return facturaDao.getByNroFacturaConItems(nroFactura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
+	public Factura getByNroFacturaConItems(Integer nroFactura, Integer nroSucursal) {
+		return facturaDao.getByNroFacturaConItems(nroFactura, nroSucursal);
 	}
 
 	public List<Factura> getFacturaImpagaListByClient(Integer idCliente) {

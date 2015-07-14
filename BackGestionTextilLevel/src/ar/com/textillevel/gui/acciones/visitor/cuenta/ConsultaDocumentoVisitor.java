@@ -69,7 +69,7 @@ public class ConsultaDocumentoVisitor implements IFilaMovimientoVisitor{
 	private void consultarCorreccion(CorreccionFactura correccion) {
 		try {
 			CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
-			correccion = cfr.getCorreccionByNumero(correccion.getNroFactura(), correccion.getTipo());
+			correccion = cfr.getCorreccionById(correccion.getId());
 			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(padre,correccion, true);
 			dialogCargaFactura.setVisible(true);
 		} catch (CLException e) {

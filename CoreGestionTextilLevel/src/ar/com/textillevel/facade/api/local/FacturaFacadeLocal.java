@@ -8,9 +8,9 @@ import ar.com.textillevel.entidades.documentos.factura.Factura;
 
 @Local
 public interface FacturaFacadeLocal {
-	
+
 	public Factura guardarFacturaYGenerarMovimiento(Factura factura, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
-	public Factura getByNroFacturaConItems(Integer nroFactura);
+	public Factura getByNroFacturaConItems(Integer nroFactura, Integer nroSucursal);
 	public Factura getByIdEager(Integer id);
 
 }

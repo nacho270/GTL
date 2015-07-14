@@ -26,12 +26,12 @@ public class FacturaRestController {
 	}
 
 	@RequestMapping(value="/byNro")
-	public @ResponseBody FacturaMobTO buscarFacturaPorNumero(@RequestParam(value="nroFactura") Integer nroFactura) throws GTLException {
-		Factura factura = BeanHelper.getFacturaFacade().getByNroFacturaConItems(nroFactura);
+	public @ResponseBody FacturaMobTO buscarFacturaPorNumero(@RequestParam(value="nroFactura") Integer nroFactura, @RequestParam(value="nroSucursal") Integer nroSucursal) throws GTLException {
+		Factura factura = BeanHelper.getFacturaFacade().getByNroFacturaConItems(nroFactura, nroSucursal);
 		if(factura == null){
 			throw new GTLException(777, "No se encontró la factura");
 		}
 		return new FacturaMobTO(factura, BeanHelper.getParametrosGeneralesFacade().getParametrosGenerales());
 	}
-}
 
+}

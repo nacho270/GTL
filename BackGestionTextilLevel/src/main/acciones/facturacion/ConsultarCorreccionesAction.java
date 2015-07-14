@@ -5,17 +5,10 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
-import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
+import main.acciones.facturacion.gui.JDialogParamBusquedaCorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
-import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
-import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
-import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.util.GTLBeanFactory;
 
 public class ConsultarCorreccionesAction implements Action{
 
@@ -50,6 +43,15 @@ public class ConsultarCorreccionesAction implements Action{
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		JDialogParamBusquedaCorreccionFactura dialogo = new JDialogParamBusquedaCorreccionFactura(frame);
+		dialogo.setVisible(true);
+		CorreccionFactura correccionFactura = dialogo.getCorreccionFactura();
+		if(correccionFactura != null) {
+			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(frame, correccionFactura, true);
+			dialogCargaFactura.setVisible(true);
+		}
+		
+		/*
 		try {
 			CorreccionFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
 			CorreccionFactura correccion = null;
@@ -69,7 +71,7 @@ public class ConsultarCorreccionesAction implements Action{
 					Object opcion = JOptionPane.showInputDialog(frame, "Seleccione el tipo de nota:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, correcs,correcs[0]);
 					if(opcion!=null){
 						ETipoCorreccionFactura tipoCorrecion = ETipoCorreccionFactura.getByDescripcion((String)opcion);
-						correccion = ffr.getCorreccionByNumero(Integer.valueOf(input.trim()),tipoCorrecion);
+						correccion = ffr.getCorreccionByNumero(Integer.valueOf(input.trim()),tipoCorrecion, null);
 						if(correccion == null){
 							CLJOptionPane.showErrorMessage(frame, "No se encontraron resultados", "Error");
 						}else{
@@ -84,5 +86,6 @@ public class ConsultarCorreccionesAction implements Action{
 		} catch (CLException e1) {
 			BossError.gestionarError(e1);
 		}
+		*/
 	}
 }

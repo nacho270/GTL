@@ -5,16 +5,10 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
-import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
+import main.acciones.facturacion.gui.JDialogParamBusquedaFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
-import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
-import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.util.GTLBeanFactory;
 
 public class ConsultarFacturaAction implements Action{
 	
@@ -49,31 +43,14 @@ public class ConsultarFacturaAction implements Action{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		try {
-			FacturaFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
-			Factura factura = null;
-			boolean ok = false;
-			do {
-				String input = JOptionPane.showInputDialog(frame, "Ingrese el número de factura: ", "Buscar factura", JOptionPane.INFORMATION_MESSAGE);
-				if(input == null){
-					break;
-				}
-				if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-					CLJOptionPane.showErrorMessage(frame, "Ingreso incorrecto", "error");
-				} else {
-					factura = ffr.getByNroFacturaConItems(Integer.valueOf(input.trim()));
-					if(factura == null){
-						CLJOptionPane.showErrorMessage(frame, "Factura no encontrada", "Error");
-					}else{
-						ok = true;
-						JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(frame,factura, true);						
-						dialogCargaFactura.setVisible(true);
-					}
-				}
-			} while (!ok);
-
-		} catch (CLException e1) {
-			BossError.gestionarError(e1);
+		JDialogParamBusquedaFactura dialogo = new JDialogParamBusquedaFactura(frame);
+		dialogo.setVisible(true);
+		Factura factura = dialogo.getFactura();
+		if(factura != null) {
+			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(frame,factura, true);						
+			dialogCargaFactura.setVisible(true);
 		}
 	}
+
 }
+ 
