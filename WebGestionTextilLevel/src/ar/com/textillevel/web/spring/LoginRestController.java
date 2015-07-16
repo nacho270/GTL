@@ -28,6 +28,6 @@ public class LoginRestController {
 		}
 		String token = PortalUtils.generarToken(usuario);
 		SessionMap.getInstance().newSession(token);
-		return new UsuarioSistemaTO(token);
+		return new UsuarioSistemaTO(token, user);
 	}
 }

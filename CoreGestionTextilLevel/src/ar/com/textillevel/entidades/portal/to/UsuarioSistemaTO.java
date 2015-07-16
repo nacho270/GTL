@@ -9,8 +9,9 @@ public class UsuarioSistemaTO implements Serializable {
 	private String token;
 	private String usrName;
 
-	public UsuarioSistemaTO(String token) {
+	public UsuarioSistemaTO(String token, String usrName) {
 		this.token = token;
+		this.usrName = usrName;
 	}
 
 	public String getToken() {
