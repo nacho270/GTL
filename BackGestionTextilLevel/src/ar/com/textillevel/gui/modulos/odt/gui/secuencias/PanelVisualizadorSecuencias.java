@@ -194,6 +194,7 @@ public class PanelVisualizadorSecuencias extends JPanel{
 				btnFijarSecuencia.setBorder(null);
 				Icon icon = ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_candado.png");
 				btnFijarSecuencia.setIcon(icon);
+				btnFijarSecuencia.setToolTipText("Fijar secuencia");
 				btnFijarSecuencia.setSelectedIcon(ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_candado_pressed.png"));
 				btnFijarSecuencia.setRolloverSelectedIcon(ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_candado_pressed.png"));
 				btnFijarSecuencia.setDisabledIcon(ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_candado_des.png"));
