@@ -21,4 +21,12 @@ public class SessionData {
 	public void setUsuarioEnSesion(UsuarioSistemaTO usuarioEnSesion) {
 		this.usuarioEnSesion = usuarioEnSesion;
 	}
+
+	public Integer getNroSucursal() {
+		if(getUsuarioEnSesion() == null) {
+			throw new IllegalStateException("ERROR: Aun no se inicializó usuarioEnSession...");
+		}
+		return getUsuarioEnSesion().getParamsSistemaTO().getNroSucursal();
+	}
+
 }

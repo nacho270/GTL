@@ -43,10 +43,13 @@ public class DocumentoClickResolver {
 			Toast.makeText(activity, "AÚN NO IMPLEMENTADO!", Toast.LENGTH_LONG).show();
 		}
 	}
-	
-	public void buscarDocumentoPorNumero(ETipoDocumento tipoDoc, String nroDoc, final Activity activity) {
+
+	public void buscarDocumentoPorNumero(ETipoDocumento tipoDoc, String nroDoc, String nroSucursal, final Activity activity) {
 		if (tipoDoc == ETipoDocumento.FACTURA) {
-			requestDocumentByParam(Collections.singletonList(new RequestParamContainer("nroFactura", nroDoc)), AppConfig.API_URL_FACTURA_BY_NRO, tipoDoc.getId(), new FacturaPostExecuteHandler(activity));
+			List<RequestParamContainer> lista = new ArrayList<RequestParamContainer>();
+			lista.add(new RequestParamContainer("nroFactura", nroDoc));
+			lista.add(new RequestParamContainer("nroSucursal", nroSucursal));
+			requestDocumentByParam(lista, AppConfig.API_URL_FACTURA_BY_NRO, tipoDoc.getId(), new FacturaPostExecuteHandler(activity));
 		} else if (tipoDoc == ETipoDocumento.RECIBO) {
 			requestDocumentByParam(Collections.singletonList(new RequestParamContainer("nroRecibo", nroDoc)), AppConfig.API_URL_RECIBO_BY_NRO, tipoDoc.getId(), new ReciboPostExecuteHandler(activity));
 		} else if (tipoDoc == ETipoDocumento.ORDEN_PAGO) {
@@ -56,7 +59,11 @@ public class DocumentoClickResolver {
 		} else if (tipoDoc == ETipoDocumento.REMITO_ENTRADA) {
 			requestDocumentByParam(Collections.singletonList(new RequestParamContainer("nroRE", nroDoc)), AppConfig.API_URL_RE, tipoDoc.getId(), new RemitoEntradaPostExecuteHandler(activity));
 		} else if(tipoDoc == ETipoDocumento.NOTA_CREDITO || tipoDoc == ETipoDocumento.NOTA_DEBITO){
-			//TODO:
+			List<RequestParamContainer> lista = new ArrayList<RequestParamContainer>();
+			lista.add(new RequestParamContainer("nroCorreccion", nroDoc));
+			lista.add(new RequestParamContainer("nroSucursal", nroSucursal));
+			lista.add(new RequestParamContainer("idTipoCorreccion", String.valueOf(tipoDoc.getId())));
+			requestDocumentByParam(lista, AppConfig.API_URL_CORRECCION_CLIENTE_BY_NRO, tipoDoc.getId(), new CorreccionFacturaClientePostExecuteHandler(activity));
 		} else if(tipoDoc == ETipoDocumento.REMITO_SALIDA){
 			//TODO:
 		} else {

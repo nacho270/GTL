@@ -18,8 +18,8 @@ public class ConsultasFragmentController extends FragmentController<ConsultasFra
 		}
 	}
 
-	public void buscarDocumento(ETipoDocumento tipoDocumento, String numero) {
-		DocumentoClickResolver.getInstance().buscarDocumentoPorNumero(tipoDocumento, numero, getFragment().getActivity());
+	public void buscarDocumento(ETipoDocumento tipoDocumento, String numero, String nroSucursal) {
+		DocumentoClickResolver.getInstance().buscarDocumentoPorNumero(tipoDocumento, numero, nroSucursal, getFragment().getActivity());
 	}
 
 	public void buscarDocumentoPorNumeroYString(ETipoDocumento tipoDocumento, String numero, String str) {

@@ -206,7 +206,12 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 
 	public CorreccionFacturaMobTO getCorreccionMobById(Integer idCorreccion) {
 		CorreccionFactura cf = correccionDao.getCorreccionById(idCorreccion);
-		return new CorreccionFacturaMobTO(cf, parametrosGeneralesDAO.getParametrosGenerales());
+		return new CorreccionFacturaMobTO(cf);
+	}
+
+	public CorreccionFacturaMobTO getCorreccionMobByNumero(Integer idNumero, ETipoCorreccionFactura tipoCorreccion, Integer nroSucursal) {
+		CorreccionFactura cf = correccionDao.getCorreccionByNumero(idNumero, tipoCorreccion, nroSucursal);
+		return new CorreccionFacturaMobTO(cf);
 	}
 
 	public CorreccionFactura getCorreccionById(Integer idCorreccion) {

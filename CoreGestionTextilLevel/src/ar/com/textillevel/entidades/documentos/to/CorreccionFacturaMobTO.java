@@ -8,7 +8,6 @@ import java.util.List;
 
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.StringUtil;
-import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.CuentaOwnerTO;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
@@ -31,7 +30,7 @@ public class CorreccionFacturaMobTO implements Serializable {
 	private List<ItemFacturaTO> items;
 	private List<DocumentoRelMobTO> facturas;
 
-	public CorreccionFacturaMobTO(CorreccionFactura cf, ParametrosGenerales parametrosGenerales) {
+	public CorreccionFacturaMobTO(CorreccionFactura cf) {
 		this.nroCorreccion = StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroFactura()), 8);
 		this.fecha = DateUtil.dateToString(cf.getFechaEmision());
 		this.porcIvaInsc = cf.getPorcentajeIVAInscripto().toString();
@@ -43,10 +42,10 @@ public class CorreccionFacturaMobTO implements Serializable {
 		this.cliente = new CuentaOwnerTO(cf.getCliente());
 		this.items = getItems(cf);
 		this.tipoDocumento = "" + (cf instanceof NotaCredito ? ETipoDocumento.NOTA_CREDITO.getId() : ETipoDocumento.NOTA_DEBITO.getId()); 
-		this.facturas = calcularFacturasRelacionadas(cf, parametrosGenerales);
+		this.facturas = calcularFacturasRelacionadas(cf);
 	}
 
-	private List<DocumentoRelMobTO> calcularFacturasRelacionadas(CorreccionFactura cf, ParametrosGenerales parametrosGenerales) {
+	private List<DocumentoRelMobTO> calcularFacturasRelacionadas(CorreccionFactura cf) {
 		List<DocumentoRelMobTO> result = new ArrayList<DocumentoRelMobTO>();
 		if(cf instanceof NotaCredito) {
 			List<Factura> facturas = ((NotaCredito)cf).getFacturasRelacionadas();

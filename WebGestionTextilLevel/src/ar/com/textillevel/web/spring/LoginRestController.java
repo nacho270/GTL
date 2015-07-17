@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+import ar.com.textillevel.entidades.portal.to.ParamsSistemaTO;
 import ar.com.textillevel.entidades.portal.to.UsuarioSistemaTO;
 import ar.com.textillevel.util.PortalUtils;
 import ar.com.textillevel.web.spring.exception.GTLException;
@@ -28,6 +29,10 @@ public class LoginRestController {
 		}
 		String token = PortalUtils.generarToken(usuario);
 		SessionMap.getInstance().newSession(token);
-		return new UsuarioSistemaTO(token, user);
+		
+		Integer nroSucursal = BeanHelper.getParametrosGeneralesFacade().getParametrosGenerales().getNroSucursal();
+		ParamsSistemaTO paramsSistemaTO = new ParamsSistemaTO(nroSucursal);
+		return new UsuarioSistemaTO(token, user, paramsSistemaTO);
 	}
+
 }

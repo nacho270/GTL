@@ -8,7 +8,8 @@ public class UsuarioSistemaTO implements Serializable {
 
 	private String token;
 	private String usrName;
-
+	private ParamsSistemaTO paramsSistemaTO; 
+	
 	public String getToken() {
 		return token;
 	}
@@ -24,4 +25,13 @@ public class UsuarioSistemaTO implements Serializable {
 	public void setUsrName(String usrName) {
 		this.usrName = usrName;
 	}
+
+	public ParamsSistemaTO getParamsSistemaTO() {
+		return paramsSistemaTO;
+	}
+
+	public void setParamsSistemaTO(ParamsSistemaTO paramsSistemaTO) {
+		this.paramsSistemaTO = paramsSistemaTO;
+	}
+
 }

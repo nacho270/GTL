@@ -33,7 +33,7 @@ public class AppConfig {
 	//TODO: BY NUMERO
 
 	public final static String API_URL_CORRECCION_CLIENTE = API_URL + "correccioncliente";
-	//TODO: BY NUMERO
+	public final static String API_URL_CORRECCION_CLIENTE_BY_NRO = API_URL_CORRECCION_CLIENTE + QUERY_BY_NRO;
 
 	public final static String API_URL_RS = API_URL + "remitoS";
 	//TODO: BY NUMERO

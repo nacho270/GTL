@@ -13,6 +13,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import ar.com.textillevel.mobile.R;
 import ar.com.textillevel.mobile.modules.common.FragmentWithController;
+import ar.com.textillevel.mobile.modules.common.SessionData;
 import ar.com.textillevel.mobile.modules.common.to.ETipoDocumento;
 
 public class ConsultasFragment extends FragmentWithController<ConsultasFragmentController> implements View.OnClickListener {
@@ -41,13 +42,34 @@ public class ConsultasFragment extends FragmentWithController<ConsultasFragmentC
 
 	public void showDialogInputNumero(final ETipoDocumento tipoDocumento) {
 		final EditText txtNro = new EditText(this.getActivity());
-		showInputDialog(txtNro,  new DialogInterface.OnClickListener() {
+		txtNro.setWidth(600);
+		txtNro.setHint("Número");
+		
+		final EditText txtNroSucursal = new EditText(this.getActivity());
+		txtNroSucursal.setWidth(600);
+		txtNroSucursal.setHint("Sucursal");
+		txtNroSucursal.setText(SessionData.getInstance().getNroSucursal().toString());
+		
+		TableLayout tl = new TableLayout(getActivity().getBaseContext());
+		
+		TableRow trNro = new TableRow(getActivity().getBaseContext());
+		trNro.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		trNro.addView(txtNro);
+		
+		TableRow trSucursal =  new TableRow(getActivity().getBaseContext());
+		trSucursal.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		trSucursal.addView(txtNroSucursal);
+
+		tl.addView(trNro);
+		tl.addView(trSucursal);
+		
+		showInputDialog(tl,  new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				getController().buscarDocumento(tipoDocumento, txtNro.getText().toString());
+				getController().buscarDocumento(tipoDocumento, txtNro.getText().toString(), txtNroSucursal.getText().toString());
 			}
 		});
 	}
-	
+
 	private void showInputDialog(View view, DialogInterface.OnClickListener listener){
 		new AlertDialog.Builder(this.getActivity()).setTitle("Ingrese número")
 		.setView(view)
