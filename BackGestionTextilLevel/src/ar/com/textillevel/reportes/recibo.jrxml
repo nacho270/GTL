@@ -400,9 +400,9 @@ email: leveltextil@speedy.com.ar]]></text>
 				<text><![CDATA[NOTA IMPORTANTE: No se reconocerá PAGO alguno que no sea otorgado sobre este formulario, debiendo llevar sello y firma de la casa.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="3" width="384" height="20"/>
+				<reportElement x="2" y="3" width="244" height="20"/>
 				<textElement/>
-				<text><![CDATA[Firma:..........................................................................(por TEXTIL LEVEL S.A.)]]></text>
+				<text><![CDATA[Firma:..........................................................................]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="24" width="77" height="16"/>
@@ -416,6 +416,13 @@ email: leveltextil@speedy.com.ar]]></text>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="234" y="3" width="121" height="24">
+					<printWhenExpression><![CDATA[$P{IS_TEST}.equals(new java.lang.Boolean(false))]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[(por TEXTIL LEVEL S.A.)]]></text>
+			</staticText>
 		</band>
 	</columnFooter>
 </jasperReport>
