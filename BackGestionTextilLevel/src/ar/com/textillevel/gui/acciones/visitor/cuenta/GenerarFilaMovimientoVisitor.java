@@ -2,12 +2,9 @@ package ar.com.textillevel.gui.acciones.visitor.cuenta;
 
 import java.awt.Color;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import ar.clarin.fwjava.componentes.CLJTable;
@@ -91,10 +88,10 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		Object[] row = new Object[size];
 		row[0] = "";
 		row[1] = movimiento.getDescripcionResumen();
-		row[2] = getDecimalFormat().format(movimiento.getMonto());
+		row[2] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
 		row[3] = null;
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue() * -1));
-		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":getDecimalFormat().format( Double.valueOf(getSaldo()).floatValue());
+		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
 		row[5] = movimiento;
 		if(((MovimientoDebe) movimiento).getFactura() != null){
 			row[6] = ((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA;
@@ -118,9 +115,9 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		row[0] = "";
 		row[1] = movimiento.getDescripcionResumen();
 		row[2] = null;
-		row[3] = getDecimalFormat().format(movimiento.getMonto());
+		row[3] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue() * -1));
-		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":getDecimalFormat().format( Double.valueOf(getSaldo()).floatValue());
+		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
 		row[5] = movimiento;
 		if((movimiento).getRecibo() != null){
 			row[6] = (movimiento).getRecibo().getEstadoRecibo() == EEstadoRecibo.ACEPTADO;
@@ -169,14 +166,6 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 
 	public void setMapaColores(Map<Integer, Color> mapaColores) {
 		this.mapaColores = mapaColores;
-	}
-
-	private NumberFormat getDecimalFormat() {
-		NumberFormat df =DecimalFormat.getNumberInstance(new Locale("es_AR"));// new DecimalFormat("#,###.00");
-		df.setMaximumFractionDigits(2);
-		/*df.setGroupingUsed(true);
-		df.setMinimumIntegerDigits(1);		*/
-		return df;
 	}
 
 	public List<InfoSecondPass> getRowsPagosSaldoAFavor() {

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +50,7 @@ public class GenericUtils {
 	private static NumberFormat df2;
 	private static NumberFormat df3;
 	private static NumberFormat df4;
+	private static DecimalFormat dfMovimientos;
 	private static final Double TOLEARANCIA_A_CERO = 0.009;
 	
 	/* Corresponden al DateUtil.getDia(date) */
@@ -82,6 +84,13 @@ public class GenericUtils {
 		df4 = new DecimalFormat("#,###.00");
 		df.setMaximumFractionDigits(2);
 		df.setGroupingUsed(true);
+		
+		dfMovimientos = (DecimalFormat) DecimalFormat.getNumberInstance(new Locale("es_AR"));// new DecimalFormat("#,###.00");
+		dfMovimientos.setMaximumFractionDigits(2);
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+		symbols.setDecimalSeparator(',');
+		symbols.setGroupingSeparator('.');
+		dfMovimientos.setDecimalFormatSymbols(symbols);
 	}
 	
 	
@@ -223,6 +232,9 @@ public class GenericUtils {
 	
 	public static NumberFormat getDecimalFormatFactura(){
 		return df4;
+	}
+	public static NumberFormat getDecimalFormatTablaMovimientos() {
+		return dfMovimientos;
 	}
 	
 	public static boolean esHoy(java.sql.Date fecha){
