@@ -19,6 +19,7 @@ public class FacturaTO implements Serializable {
 	private String totalIvaInscr;
 	private String totalFactura;
 	private String caeAFIP;
+	private String fechaVencimientoCaeAFIP;
 	private List<ItemFacturaTO> items;
 
 	public String getNroFactura() {
@@ -123,6 +124,14 @@ public class FacturaTO implements Serializable {
 
 	public void setCaeAFIP(String caeAFIP) {
 		this.caeAFIP = caeAFIP;
+	}
+
+	public String getFechaVencimientoCaeAFIP() {
+		return fechaVencimientoCaeAFIP;
+	}
+
+	public void setFechaVencimientoCaeAFIP(String fechaVencimientoCaeAFIP) {
+		this.fechaVencimientoCaeAFIP = fechaVencimientoCaeAFIP;
 	}
 
 }

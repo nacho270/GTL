@@ -19,6 +19,8 @@
 	<parameter name="FECHA_FACT" class="java.lang.String"/>
 	<parameter name="TIPO_DOC" class="java.lang.String"/>
 	<parameter name="CAE" class="java.lang.String"/>
+	<parameter name="FECHA_VENCIMIENTO" class="java.lang.String"/>
+	<parameter name="BAR_CODE" class="java.lang.String"/>
 	<field name="articulo" class="java.lang.String"/>
 	<field name="unidad" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.String"/>
@@ -457,19 +459,39 @@ Inicio de Actividades: 03/2005 ]]></text>
 				<text><![CDATA[Total ($):]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="21" y="43" width="366" height="40"/>
+				<reportElement x="67" y="2" width="119" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{CAE}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="23" width="200" height="20"/>
+				<reportElement x="17" y="2" width="47" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[CAE Nº:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="2" width="112" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fecha vencimiento CAE:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="317" y="2" width="100" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Código de autorización AFIP:]]></text>
-			</staticText>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_VENCIMIENTO}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="FixRelativeToBottom" x="16" y="28" width="408" height="60"/>
+				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$P{BAR_CODE}]]></jr:codeExpression>
+				</jr:Code39>
+			</componentElement>
 		</band>
 	</pageFooter>
 </jasperReport>

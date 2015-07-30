@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
@@ -49,6 +50,7 @@ public abstract class DocumentoContableCliente implements Serializable {
 	private String caeAFIP;
 	private String observacionesAFIP;
 	private Integer nroSucursal;
+	private String fechaVencimientoCaeAFIP;
 
 	@Id
 	@Column(name = "P_ID")
@@ -191,6 +193,15 @@ public abstract class DocumentoContableCliente implements Serializable {
 		this.caeAFIP = caeAFIP;
 	}
 
+	@Column(name = "A_FECHA_VTO_CAE_AFIP", nullable = true, length=8)
+	public String getFechaVencimientoCaeAFIP() {
+		return fechaVencimientoCaeAFIP;
+	}
+
+	public void setFechaVencimientoCaeAFIP(String fechaVencimientoCaeAFIP) {
+		this.fechaVencimientoCaeAFIP = fechaVencimientoCaeAFIP;
+	}
+	
 	@Column(name = "A_OBS_AFIP", nullable = true, length=LONG_OBS_AFIP)
 	public String getObservacionesAFIP() {
 		return observacionesAFIP;
@@ -241,5 +252,41 @@ public abstract class DocumentoContableCliente implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Transient
+	public String convertirFechaVencimientoAFIP() {
+		String fechaVTO = getFechaVencimientoCaeAFIP();
+		if(StringUtil.isNullOrEmpty(fechaVTO)) {
+			return "";
+		}
+		return fechaVTO.substring(6, 8) + "/" + fechaVTO.substring(4, 6) + "/" + fechaVTO.substring(0, 4);
+	}
+
+	public String crearCodigoDeBarrasAFIP(String cuitEmpresa) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(cuitEmpresa)
+			.append(StringUtil.fillLeftWithZeros(""+getTipoDocumento().getId(),2))
+			.append(StringUtil.fillLeftWithZeros(""+getNroSucursal(),4))
+			.append(getCaeAFIP())
+			.append(getFechaVencimientoCaeAFIP());
+		sb.append(String.valueOf(calcularDigitoVerificador(sb.toString())));
+		return sb.toString();
+	}
+
+	private int calcularDigitoVerificador(String codigoParcial) {
+		int sumaPares = 0;
+		int sumaImpares = 0;
+		for(int i = 0; i<codigoParcial.length();i++) {
+			if(i%2!=0){ //ESTO ESTA BIEN, LA AFIP HABLA DE POSICIONES PARES EMPEZANDO DE 1
+				sumaPares += Integer.valueOf(String.valueOf(codigoParcial.charAt(i)));
+			}else{
+				sumaImpares += Integer.valueOf(String.valueOf(codigoParcial.charAt(i)));
+			}
+		}
+		sumaImpares *= 3;
+		int total = sumaImpares + sumaPares;
+		int enteroMasCercano = total + (10 - total%10);
+		return enteroMasCercano - total;
 	}
 }

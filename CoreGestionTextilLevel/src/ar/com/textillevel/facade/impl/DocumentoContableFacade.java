@@ -21,6 +21,7 @@ import ar.com.textillevel.entidades.config.NumeracionFactura;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
+import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -101,14 +102,24 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 				if(autorizada) {
 					logger.info("Autorizacion existosa de " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura() + " CAE: " + respAFIP.getCae());
 					docContable.setCaeAFIP(respAFIP.getCae());
+					docContable.setFechaVencimientoCaeAFIP(respAFIP.getFechaVencimiento());
 					docContable.setEstadoImpresion(EEstadoImpresionDocumento.AUTORIZADO_AFIP);
 				} else {
 					logger.info("No se ha podido autorizar " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
 				}
 				docContable.setObservacionesAFIP(respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, Math.min(DocumentoContableCliente.LONG_OBS_AFIP-1, respAFIP.getObservaciones().length())));
 				docContable = (D)docContableDAO.save(docContable);
+				
 				// hago eager al cliente
 				docContable.getCliente().getCelular();
+				
+				//hago eager a los remitos
+				if(docContable.getTipoDocumento() == ETipoDocumento.FACTURA) {
+					Factura fc = (Factura) docContable;
+					if(fc.getRemitos()!=null) {
+						fc.getRemitos().size();
+					}
+				}
 				if(!autorizada) {
 					List<String> msg = new ArrayList<String>();
 					msg.add(docContable.getObservacionesAFIP() == null ? "" : docContable.getObservacionesAFIP());
@@ -174,5 +185,9 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 		}else{
 			throw new ValidacionException(EValidacionException.SERVICIO_AFIP_NO_HABILITADO.getInfoValidacion()); 
 		}
+	}
+
+	public Long getCuitEmpresa() {
+		return Long.valueOf(System.getProperty("textillevel.fe.cuitEmpresa"));
 	}
 }

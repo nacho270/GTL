@@ -19,5 +19,6 @@ public interface DocumentoContableFacadeRemote {
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback, ValidacionException;
 	public EstadoServidorAFIP getEstadoServidorAFIP(int nroSucursal) throws ValidacionException;
 	public void checkImpresionDocumentoContable(DocumentoContableCliente documento) throws ValidacionException;
+	public Long getCuitEmpresa();
 	
 }

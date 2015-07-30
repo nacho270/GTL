@@ -126,6 +126,10 @@ public class ImpresionFacturaHandler {
 		parameters.put("TOTAL_IVA", factura.getTotalIvaInscr());
 		parameters.put("TOTAL", factura.getTotalFactura());
 		parameters.put("CAE", factura.getCaeAFIP());
+		parameters.put("BAR_CODE", getFactura()!=null?
+				getFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa())):
+					getCorreccionFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa())));
+		parameters.put("FECHA_VENCIMIENTO", getFactura()!=null?getFactura().convertirFechaVencimientoAFIP():getCorreccionFactura().convertirFechaVencimientoAFIP());
 		parameters.put("FECHA_FACT", DateUtil.dateToString(DateUtil.stringToDate(factura.getFecha()), DateUtil.SHORT_DATE));
 		parameters.put("TIPO_DOC", factura.getTipoDocumento());
 		return parameters;
@@ -161,6 +165,7 @@ public class ImpresionFacturaHandler {
 		factura.setTipoFactura(getCorreccionFactura() != null ? getCorreccionFactura().getTipoFactura().getDescripcion() : getFactura().getTipoFactura().getDescripcion());
 		factura.setTotalFactura(getCorreccionFactura() != null ? (getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + GenericUtils.getDecimalFormatFactura().format(getCorreccionFactura().getMontoTotal().doubleValue()).replace(',', '.') : GenericUtils.getDecimalFormatFactura().format(getFactura().getMontoTotal()));
 		factura.setCaeAFIP(getCorreccionFactura() != null ? getCorreccionFactura().getCaeAFIP() : getFactura().getCaeAFIP());
+		factura.setFechaVencimientoCaeAFIP(getCorreccionFactura() != null ? getCorreccionFactura().getFechaVencimientoCaeAFIP() : getFactura().getFechaVencimientoCaeAFIP());
 		if (getFactura() != null) {
 			factura.setTotalIvaInscr(getFactura().getPorcentajeIVAInscripto() != null ? GenericUtils.getDecimalFormatFactura().format(getFactura().getPorcentajeIVAInscripto().doubleValue() * getFactura().getMontoSubtotal().doubleValue() / 100) : null);
 		} else {
