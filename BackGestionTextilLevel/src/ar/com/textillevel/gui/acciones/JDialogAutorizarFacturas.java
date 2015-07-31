@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -253,8 +254,11 @@ public class JDialogAutorizarFacturas extends JDialog {
 				}catch(JRException jre){
 					jre.printStackTrace();
 					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al imprimir.", "Error");
-				} catch (ValidacionException e) {
+				}catch (ValidacionException e) {
 					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				}catch(IOException ioe) {
+					ioe.printStackTrace();
+					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al generar el código de barras.", "Error");
 				}
 			}
 		} while (!ok);

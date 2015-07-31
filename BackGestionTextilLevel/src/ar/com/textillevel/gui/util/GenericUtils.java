@@ -6,8 +6,11 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -28,6 +31,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+
+import org.krysalis.barcode4j.impl.int2of5.Interleaved2Of5Bean;
+import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
@@ -386,5 +392,19 @@ public class GenericUtils {
 		};
 		sw.start();
 		WaitDialog.startWait(textoEspera);
+	}
+	
+	public static BufferedImage createBarCode(String barCode) throws IOException {
+		Interleaved2Of5Bean bean = new Interleaved2Of5Bean();
+		bean.setHeight(10d);
+		bean.doQuietZone(false);
+
+		OutputStream out = new java.io.FileOutputStream(new File("output.png"));
+		BitmapCanvasProvider provider = new BitmapCanvasProvider(out, "image/x-png",
+				110, BufferedImage.TYPE_BYTE_GRAY, false, 0);
+		bean.generateBarcode(provider, barCode);
+
+		provider.finish();
+		return provider.getBufferedImage();
 	}
 }

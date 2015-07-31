@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -1996,6 +1997,9 @@ public class JDialogCargaFactura extends JDialog {
 					BossError.gestionarError(cle);
 				} catch (ValidacionException e) {
 					CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				}catch(IOException ioe) {
+					ioe.printStackTrace();
+					CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al generar el código de barras.", "Error");
 				}
 			}
 		} while (!ok);

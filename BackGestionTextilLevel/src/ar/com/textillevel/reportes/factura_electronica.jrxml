@@ -21,6 +21,7 @@
 	<parameter name="CAE" class="java.lang.String"/>
 	<parameter name="FECHA_VENCIMIENTO" class="java.lang.String"/>
 	<parameter name="BAR_CODE" class="java.lang.String"/>
+	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<field name="articulo" class="java.lang.String"/>
 	<field name="unidad" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.String"/>
@@ -486,12 +487,10 @@ Inicio de Actividades: 03/2005 ]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_VENCIMIENTO}]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement positionType="FixRelativeToBottom" x="16" y="28" width="408" height="60"/>
-				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$P{BAR_CODE}]]></jr:codeExpression>
-				</jr:Code39>
-			</componentElement>
+			<image>
+				<reportElement x="10" y="27" width="407" height="60"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
 		</band>
 	</pageFooter>
 </jasperReport>

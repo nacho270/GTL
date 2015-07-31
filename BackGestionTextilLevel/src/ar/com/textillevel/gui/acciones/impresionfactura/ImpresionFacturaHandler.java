@@ -1,5 +1,6 @@
 package ar.com.textillevel.gui.acciones.impresionfactura;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +80,7 @@ public class ImpresionFacturaHandler {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void imprimir() throws JRException, CLException, ValidacionException {
+	public void imprimir() throws JRException, CLException, ValidacionException, IOException {
 		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
 		FacturaTO factura = armarFacturaTO();
 		Map parameters = getParametros(factura);
@@ -110,7 +111,7 @@ public class ImpresionFacturaHandler {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Map getParametros(FacturaTO factura) {
+	private Map getParametros(FacturaTO factura) throws IOException {
 		Map parameters = new HashMap();
 		parameters.put("NRO_FACTURA", factura.getNroFactura());
 		parameters.put("TIPO_FACTURA", factura.getTipoFactura());
@@ -126,12 +127,14 @@ public class ImpresionFacturaHandler {
 		parameters.put("TOTAL_IVA", factura.getTotalIvaInscr());
 		parameters.put("TOTAL", factura.getTotalFactura());
 		parameters.put("CAE", factura.getCaeAFIP());
-		parameters.put("BAR_CODE", getFactura()!=null?
+		String barCode = getFactura()!=null?
 				getFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa())):
-					getCorreccionFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa())));
+					getCorreccionFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa()));
+		parameters.put("BAR_CODE", barCode); //DEJO ESTO POR LAS DUDAS... COMO PARA TENER EL NUMERO POR SEPARADO, PERO NO HACE FALTA
 		parameters.put("FECHA_VENCIMIENTO", getFactura()!=null?getFactura().convertirFechaVencimientoAFIP():getCorreccionFactura().convertirFechaVencimientoAFIP());
 		parameters.put("FECHA_FACT", DateUtil.dateToString(DateUtil.stringToDate(factura.getFecha()), DateUtil.SHORT_DATE));
 		parameters.put("TIPO_DOC", factura.getTipoDocumento());
+		parameters.put("IMAGEN", GenericUtils.createBarCode(barCode));
 		return parameters;
 	}
 
