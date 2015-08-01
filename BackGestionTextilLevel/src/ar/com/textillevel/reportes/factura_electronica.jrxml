@@ -22,6 +22,7 @@
 	<parameter name="FECHA_VENCIMIENTO" class="java.lang.String"/>
 	<parameter name="BAR_CODE" class="java.lang.String"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
+	<parameter name="COD_DOC" class="java.lang.String"/>
 	<field name="articulo" class="java.lang.String"/>
 	<field name="unidad" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.String"/>
@@ -98,7 +99,7 @@ email: leveltextil@speedy.com.ar]]></text>
 				</graphicElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="291" y="20" width="47" height="40"/>
+				<reportElement x="291" y="12" width="47" height="31"/>
 				<textElement textAlignment="Center">
 					<font size="20"/>
 				</textElement>
@@ -129,6 +130,11 @@ Inicio de Actividades: 03/2005 ]]></text>
 					<pen lineWidth="1.25"/>
 				</graphicElement>
 			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="290" y="43" width="48" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{COD_DOC}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -388,7 +394,7 @@ Inicio de Actividades: 03/2005 ]]></text>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="91" splitType="Stretch">
+		<band height="117" splitType="Stretch">
 			<textField>
 				<reportElement x="509" y="3" width="76" height="20"/>
 				<textElement>
@@ -488,9 +494,20 @@ Inicio de Actividades: 03/2005 ]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_VENCIMIENTO}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="10" y="27" width="407" height="60"/>
+				<reportElement x="17" y="70" width="242" height="36"/>
 				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
 			</image>
+			<image hAlign="Center">
+				<reportElement x="16" y="26" width="136" height="37"/>
+				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/afip.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="167" y="36" width="142" height="12"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[COMPROBANTE AUTORIZADO]]></text>
+			</staticText>
 		</band>
 	</pageFooter>
 </jasperReport>

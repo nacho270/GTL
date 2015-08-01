@@ -127,14 +127,17 @@ public class ImpresionFacturaHandler {
 		parameters.put("TOTAL_IVA", factura.getTotalIvaInscr());
 		parameters.put("TOTAL", factura.getTotalFactura());
 		parameters.put("CAE", factura.getCaeAFIP());
-		String barCode = getFactura()!=null?
-				getFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa())):
-					getCorreccionFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa()));
-		parameters.put("BAR_CODE", barCode); //DEJO ESTO POR LAS DUDAS... COMO PARA TENER EL NUMERO POR SEPARADO, PERO NO HACE FALTA
-		parameters.put("FECHA_VENCIMIENTO", getFactura()!=null?getFactura().convertirFechaVencimientoAFIP():getCorreccionFactura().convertirFechaVencimientoAFIP());
+		if (!GenericUtils.isSistemaTest()) {
+			String barCode = getFactura()!=null?
+					getFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa())):
+						getCorreccionFactura().crearCodigoDeBarrasAFIP(String.valueOf(documentoContableFacade.getCuitEmpresa()));
+			parameters.put("BAR_CODE", barCode); //DEJO ESTO POR LAS DUDAS... COMO PARA TENER EL NUMERO POR SEPARADO, PERO NO HACE FALTA
+			parameters.put("FECHA_VENCIMIENTO", getFactura()!=null?getFactura().convertirFechaVencimientoAFIP():getCorreccionFactura().convertirFechaVencimientoAFIP());
+			parameters.put("IMAGEN", GenericUtils.createBarCode(barCode));
+		}
 		parameters.put("FECHA_FACT", DateUtil.dateToString(DateUtil.stringToDate(factura.getFecha()), DateUtil.SHORT_DATE));
 		parameters.put("TIPO_DOC", factura.getTipoDocumento());
-		parameters.put("IMAGEN", GenericUtils.createBarCode(barCode));
+		parameters.put("COD_DOC", "COD. " + factura.getCodigoDocumento());
 		return parameters;
 	}
 
@@ -161,8 +164,10 @@ public class ImpresionFacturaHandler {
 		
 		if (getCorreccionFactura() != null) {
 			factura.setTipoDocumento(getCorreccionFactura().getTipo().getDescripcion());
+			factura.setCodigoDocumento(StringUtil.fillLeftWithZeros("" + getCorreccionFactura().getTipoDocumento().getIdTipoDocAFIP(null), 2));
 		} else if (getFactura() != null || getRemitos() != null) {
 			factura.setTipoDocumento("FACTURA");
+			factura.setCodigoDocumento(StringUtil.fillLeftWithZeros("" + getFactura().getTipoDocumento().getIdTipoDocAFIP(null), 2));
 		}
 		
 		factura.setTipoFactura(getCorreccionFactura() != null ? getCorreccionFactura().getTipoFactura().getDescripcion() : getFactura().getTipoFactura().getDescripcion());
@@ -174,7 +179,6 @@ public class ImpresionFacturaHandler {
 		} else {
 			factura.setTotalIvaInscr(getCorreccionFactura().getPorcentajeIVAInscripto() != null ? (getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + getIvaInsc() : null);
 		}
-
 		return factura;
 	}
 	
