@@ -21,6 +21,15 @@ public class FacturaTO implements Serializable {
 	private String caeAFIP;
 	private String fechaVencimientoCaeAFIP;
 	private List<ItemFacturaTO> items;
+	private String codigoDocumento;
+
+	public String getCodigoDocumento() {
+		return codigoDocumento;
+	}
+
+	public void setCodigoDocumento(String codigoDocumento) {
+		this.codigoDocumento = codigoDocumento;
+	}
 
 	public String getNroFactura() {
 		return nroFactura;
