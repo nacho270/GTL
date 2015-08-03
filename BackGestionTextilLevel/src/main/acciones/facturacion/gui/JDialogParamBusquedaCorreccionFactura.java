@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,7 +28,6 @@ import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class JDialogParamBusquedaCorreccionFactura extends JDialog {
 
