@@ -99,15 +99,20 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 				logger.info("Autorizando " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
 				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP(docContable.getTipoFactura()));
 				boolean autorizada = respAFIP.isAutorizada(); 
+				String observaciones = respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, Math.min(DocumentoContableCliente.LONG_OBS_AFIP-1, respAFIP.getObservaciones().length()));
 				if(autorizada) {
 					logger.info("Autorizacion existosa de " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura() + " CAE: " + respAFIP.getCae());
 					docContable.setCaeAFIP(respAFIP.getCae());
 					docContable.setFechaVencimientoCaeAFIP(respAFIP.getFechaVencimiento());
 					docContable.setEstadoImpresion(EEstadoImpresionDocumento.AUTORIZADO_AFIP);
 				} else {
-					logger.info("No se ha podido autorizar " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
+					logger.info("No se ha podido autorizar " + docContable.getTipoDocumento().getDescripcion()
+							+ " Nro: " + docContable.getNroFactura()
+							+ ". Resultado: " + respAFIP.getResultado()
+							+ ". Reproceso: " + respAFIP.getReproceso()
+							+ ". Observaciones: " + observaciones);
 				}
-				docContable.setObservacionesAFIP(respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, Math.min(DocumentoContableCliente.LONG_OBS_AFIP-1, respAFIP.getObservaciones().length())));
+				docContable.setObservacionesAFIP(observaciones);
 				docContable = (D)docContableDAO.save(docContable);
 				
 				// hago eager al cliente
