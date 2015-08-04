@@ -88,11 +88,13 @@ public class GenericUtils {
 		df3.setGroupingUsed(false);
 		
 		df4 = new DecimalFormat("#,###.00");
-		df.setMaximumFractionDigits(2);
-		df.setGroupingUsed(true);
+		df4.setMaximumFractionDigits(2);
+		df4.setGroupingUsed(true);
 		
 		dfMovimientos = (DecimalFormat) DecimalFormat.getNumberInstance(new Locale("es_AR"));// new DecimalFormat("#,###.00");
 		dfMovimientos.setMaximumFractionDigits(2);
+		dfMovimientos.setMinimumFractionDigits(2);
+		dfMovimientos.setGroupingUsed(true);
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 		symbols.setDecimalSeparator(',');
 		symbols.setGroupingSeparator('.');

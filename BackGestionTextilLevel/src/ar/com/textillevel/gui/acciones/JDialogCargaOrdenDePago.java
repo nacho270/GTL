@@ -17,14 +17,11 @@ import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -250,7 +247,7 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			p.accept(visitor);
 			suma = suma.add(p.getMontoPagado());
 		}
-		getTxtTotalFacturas().setText(getDecimalFormat().format(suma.doubleValue()));
+		getTxtTotalFacturas().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(suma.doubleValue()));
 	}
 
 	private void cargarFormasDePago(OrdenDePago orden) {
@@ -261,9 +258,9 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			fp.accept(visitor);
 		}
 		getDobleListaCheques().setListaOriginal(visitor.getCheques());
-		getTxtTotalCheques().setText(getDecimalFormat().format(visitor.getSumaCheques().doubleValue()));
-		getTxtTotal().setText(getDecimalFormat().format(suma.doubleValue()));
-		getTxtTotalNotasDeCredito().setText(getDecimalFormat().format(visitor.getSumaNC().doubleValue()));
+		getTxtTotalCheques().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(visitor.getSumaCheques().doubleValue()));
+		getTxtTotal().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(suma.doubleValue()));
+		getTxtTotalNotasDeCredito().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(visitor.getSumaNC().doubleValue()));
 		getTxtTotalLetras().setText(GenericUtils.convertirNumeroATexto(suma.doubleValue()));
 	}
 	
@@ -285,21 +282,21 @@ public class JDialogCargaOrdenDePago extends JDialog {
 		}
 
 		public void visit(FormaPagoOrdenDePagoEfectivo formaPagoEfectivo) {
-			getTxtEfectivo().setText(getDecimalFormat().format(formaPagoEfectivo.getImporte().doubleValue()));
+			getTxtEfectivo().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(formaPagoEfectivo.getImporte().doubleValue()));
 		}
 
 		public void visit(FormaPagoOrdenDePagoRetencionIngresosBrutos formaPagoRetencionIngresosBrutos) {
-			getTxtRetencionesIngresosBrutos().setText(getDecimalFormat().format(formaPagoRetencionIngresosBrutos.getImporte().doubleValue()));
+			getTxtRetencionesIngresosBrutos().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(formaPagoRetencionIngresosBrutos.getImporte().doubleValue()));
 		}
 
 		public void visit(FormaPagoOrdenDePagoRetencionIVA formaPagoRetencionIVA) {
-			getTxtRetencionesIva().setText(getDecimalFormat().format(formaPagoRetencionIVA.getImporte().doubleValue()));
+			getTxtRetencionesIva().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(formaPagoRetencionIVA.getImporte().doubleValue()));
 		}
 
 		public void visit(FormaPagoOrdenDePagoTransferencia formaPagoTransferencia) {
 			getTxtObservacionesTransf().setText(formaPagoTransferencia.getObservaciones());
 			getTxtNroTransf().setText(String.valueOf(formaPagoTransferencia.getNroTx()));
-			getTxtImporteTransf().setText(getDecimalFormat().format(formaPagoTransferencia.getImporte().doubleValue()));
+			getTxtImporteTransf().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(formaPagoTransferencia.getImporte().doubleValue()));
 		}
 
 		public void visit(FormaPagoOrdenDePagoNotaCredito formaPagoNotaCredito) {
@@ -308,7 +305,7 @@ public class JDialogCargaOrdenDePago extends JDialog {
 		}
 
 		public void visit(FormaPagoOrdenDePagoRetencionesGanancias formaPagoGanancias) {
-			getTxtRetencionesGanancias().setText(getDecimalFormat().format(formaPagoGanancias.getImporte().doubleValue()));
+			getTxtRetencionesGanancias().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(formaPagoGanancias.getImporte().doubleValue()));
 		}
 
 		public List<Cheque> getCheques() {
@@ -693,7 +690,7 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			Object[] row = new Object[CANT_COLS_NOTA_CREDITO];
 			row[COL_FECHA_NOTA_CREDITO] = DateUtil.dateToString(getPanelFecha().getDate());
 			row[COL_DOCUMENTO_NOTA_CREDITO] = "Nota de crédito Nº " + elemento.getNotaCredito().getNroCorreccion();
-			row[COL_IMPORTE_NOTA_CREDITO] = getDecimalFormat().format(elemento.getImporteNC());
+			row[COL_IMPORTE_NOTA_CREDITO] = GenericUtils.getDecimalFormatTablaMovimientos().format(elemento.getImporteNC());
 			row[COL_OBJ_NOTA_CREDITO] = elemento;
 			getPanelTablaNotasDeCredito().getTabla().addRow(row); 
 		}
@@ -1462,8 +1459,8 @@ public class JDialogCargaOrdenDePago extends JDialog {
 		getTxtTotal().setText(String.valueOf(modelo.getTotalGeneral()));
 		getTxtTotalCheques().setText(String.valueOf(modelo.getTotalCheques()));
 		getTxtTotalLetras().setText(GenericUtils.convertirNumeroATexto(modelo.getTotalGeneral()));
-		getTxtTotalFacturas().setText(GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(modelo.getTotalFacturas())));
-		getTxtTotalNotasDeCredito().setText(getDecimalFormat().format(modelo.getTotalNotasCredito()));
+		getTxtTotalFacturas().setText(GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormatTablaMovimientos().format(modelo.getTotalFacturas())));
+		getTxtTotalNotasDeCredito().setText(GenericUtils.getDecimalFormatTablaMovimientos().format(modelo.getTotalNotasCredito()));
 		getPanelTablaFacturas().getTabla().removeAllRows();
 		for (PagoOrdenDePago p : modelo.getPagos()) {
 			getPanelTablaFacturas().agregarElemento(p);
@@ -1837,7 +1834,7 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_FECHA] = DateUtil.dateToString(getPanelFecha().getDate());
 			row[COL_DOCUMENTO] = "A Cuenta";
-			row[COL_IMPORTE] = getDecimalFormat().format(popac.getMontoPagado());
+			row[COL_IMPORTE] = GenericUtils.getDecimalFormatTablaMovimientos().format(popac.getMontoPagado());
 			row[COL_OBJ] = popac;
 			getPanelTablaFacturas().getTabla().addRow(row);
 		}
@@ -1847,13 +1844,13 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_FECHA] =  DateUtil.dateToString(fact.getFechaIngreso(), DateUtil.SHORT_DATE);
 			if(isConsulta()){
-				row[COL_DOCUMENTO] = "<html>Factura - Nro.: " + fact.getNroFactura() + " - Monto total: " + getDecimalFormat().format(fact.getMontoTotal().doubleValue()) +
+				row[COL_DOCUMENTO] = "<html>Factura - Nro.: " + fact.getNroFactura() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoTotal().doubleValue()) +
 									 "<br><center>Faltante: " +fact.getMontoFaltantePorPagar() + getDescrPago(popf) + "<center></html>";
 			}else{
-				row[COL_DOCUMENTO] = "<html>Factura - Nro.: " + fact.getNroFactura() + " - Monto total: " + getDecimalFormat().format(fact.getMontoTotal().doubleValue()) +
-									 "<br><center>Faltante: " + getDecimalFormat().format(fact.getMontoFaltantePorPagar().subtract(popf.getMontoPagado())) + getDescrPago(popf) + "<center></html>";
+				row[COL_DOCUMENTO] = "<html>Factura - Nro.: " + fact.getNroFactura() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoTotal().doubleValue()) +
+									 "<br><center>Faltante: " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoFaltantePorPagar().subtract(popf.getMontoPagado())) + getDescrPago(popf) + "<center></html>";
 			}
-			row[COL_IMPORTE] = getDecimalFormat().format(popf.getMontoPagado());
+			row[COL_IMPORTE] = GenericUtils.getDecimalFormatTablaMovimientos().format(popf.getMontoPagado());
 			row[COL_OBJ] = popf;
 			getPanelTablaFacturas().getTabla().addRow(row);
 		}
@@ -1863,13 +1860,13 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_FECHA] =  DateUtil.dateToString(nd.getFechaIngreso(), DateUtil.SHORT_DATE);
 			if(isConsulta()){
-				row[COL_DOCUMENTO] = "<html>Nota de débito - Nro.: " + nd.getNroCorreccion() + " - Monto total: " + getDecimalFormat().format(nd.getMontoTotal().doubleValue()) +
+				row[COL_DOCUMENTO] = "<html>Nota de débito - Nro.: " + nd.getNroCorreccion() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoTotal().doubleValue()) +
 									 "<br><center>Faltante: " +nd.getMontoFaltantePorPagar() + getDescrPago(popnd) + "<center></html>";
 			}else{
-				row[COL_DOCUMENTO] = "<html>Nota de débito - Nro.: " + nd.getNroCorreccion() + " - Monto total: " + getDecimalFormat().format(nd.getMontoTotal().doubleValue()) +
-									 "<br><center>Faltante: " + getDecimalFormat().format(nd.getMontoFaltantePorPagar().subtract(popnd.getMontoPagado())) + getDescrPago(popnd) + "<center></html>";
+				row[COL_DOCUMENTO] = "<html>Nota de débito - Nro.: " + nd.getNroCorreccion() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoTotal().doubleValue()) +
+									 "<br><center>Faltante: " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoFaltantePorPagar().subtract(popnd.getMontoPagado())) + getDescrPago(popnd) + "<center></html>";
 			}
-			row[COL_IMPORTE] = getDecimalFormat().format(popnd.getMontoPagado());
+			row[COL_IMPORTE] = GenericUtils.getDecimalFormatTablaMovimientos().format(popnd.getMontoPagado());
 			row[COL_OBJ] = popnd;
 			getPanelTablaFacturas().getTabla().addRow(row);
 		}
@@ -1968,15 +1965,6 @@ public class JDialogCargaOrdenDePago extends JDialog {
 		return txtRetencionesGanancias;
 	}
 	
-	private NumberFormat getDecimalFormat() {
-		NumberFormat df =DecimalFormat.getNumberInstance(new Locale("es_AR"));// new DecimalFormat("#,###.00");
-		df.setMaximumFractionDigits(2);
-		df.setMinimumFractionDigits(2);
-		/*df.setGroupingUsed(true);
-		df.setMinimumIntegerDigits(1);		*/
-		return df;
-	}
-
 	public FacturaProveedorFacadeRemote getFacturaProveedorFacade() {
 		if(facturaProveedorFacade == null){
 			facturaProveedorFacade = GTLBeanFactory.getInstance().getBean2(FacturaProveedorFacadeRemote.class);
