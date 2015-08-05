@@ -12,10 +12,12 @@ import ar.com.textillevel.modulos.fe.cliente.ServiceLocator;
 import ar.com.textillevel.modulos.fe.cliente.ServiceSoap;
 import ar.com.textillevel.modulos.fe.cliente.requests.FEAuthRequest;
 import ar.com.textillevel.modulos.fe.cliente.requests.FECAERequest;
+import ar.com.textillevel.modulos.fe.cliente.requests.FECompConsultaReq;
 import ar.com.textillevel.modulos.fe.cliente.responses.CbteTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DocTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.DummyResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;
+import ar.com.textillevel.modulos.fe.cliente.responses.FECompConsultaResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.FERecuperaLastCbteResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.IvaTipoResponse;
 import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
@@ -81,6 +83,13 @@ public class AFIPConnector {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		checkAuthDataAndServiceAFIP(authData);
 		return servicios.FECompUltimoAutorizado(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), nroSucursal, idTipoComprobanteAFIP);
+	}
+	
+	public FECompConsultaResponse consultarDatosDocumentoIngresado(int nroSucursal, int idTipoComprobanteAFIP, int nroComprobante) throws RemoteException {
+		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
+		checkAuthDataAndServiceAFIP(authData);
+		FECompConsultaReq feCompConsReq = new FECompConsultaReq(idTipoComprobanteAFIP, nroComprobante, nroSucursal);
+		return servicios.FECompConsultar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), feCompConsReq);
 	}
 	
 	private void checkAuthDataAndServiceAFIP(AuthAFIPData authData) throws RemoteException {
