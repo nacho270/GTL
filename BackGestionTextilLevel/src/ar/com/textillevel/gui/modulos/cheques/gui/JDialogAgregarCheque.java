@@ -440,7 +440,7 @@ public class JDialogAgregarCheque extends JDialog {
 						dialogIntellisense.displaySugerencias(cuits);
 						dialogIntellisense.setVisible(true);
 						if (dialogIntellisense.isAcepto()) {
-							txtCUIT.setText(dialogIntellisense.getSelectedValue());
+							txtCUIT.setValue(dialogIntellisense.getSelectedValue());
 							try {
 								txtCUIT.commitEdit();
 							} catch (ParseException e1) {
