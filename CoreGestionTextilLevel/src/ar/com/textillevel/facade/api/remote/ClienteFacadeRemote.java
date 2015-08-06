@@ -20,4 +20,5 @@ public interface ClienteFacadeRemote {
 	public abstract List<ClienteDeudaTO> getClientesDeudores();
 	public abstract List<ClienteDeudaTO> getClientesConDeudaMayorA(BigDecimal monto);
 	public abstract Cliente getById(Integer idCliente);
+	public abstract List<String> getCuits();
 }

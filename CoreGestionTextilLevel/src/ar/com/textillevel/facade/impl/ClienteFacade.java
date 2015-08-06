@@ -61,4 +61,8 @@ public class ClienteFacade implements ClienteFacadeLocal, ClienteFacadeRemote {
 		return clienteDAOLocal.getById(idCliente);
 	}
 
+	public List<String> getCuits() {
+		return clienteDAOLocal.getCuits();
+	}
+
 }

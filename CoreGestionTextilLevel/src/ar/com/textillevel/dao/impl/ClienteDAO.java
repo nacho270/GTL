@@ -3,8 +3,10 @@ package ar.com.textillevel.dao.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+
 import ar.clarin.fwjava.dao.impl.GenericDAO;
 import ar.clarin.fwjava.util.NumUtil;
 import ar.com.textillevel.dao.api.local.ClienteDAOLocal;
@@ -57,7 +59,7 @@ public class ClienteDAO extends GenericDAO<Cliente, Integer> implements ClienteD
 		} else if(clienteList.size() == 1) {
 			return clienteList.get(0);
 		} else {
-			throw new RuntimeException("Inconsistencia en la DB. Existen 2 clientes con el mismo número: " + nroCliente);
+			throw new RuntimeException("Inconsistencia en la DB. Existen 2 clientes con el mismo nï¿½mero: " + nroCliente);
 		}
 	}
 
@@ -80,6 +82,19 @@ public class ClienteDAO extends GenericDAO<Cliente, Integer> implements ClienteD
 				clientes.add(cld);
 			}
 			return clientes;
+		}
+		return null;
+	}
+
+	public List<String> getCuits() {
+		Query query = getEntityManager().createQuery("SELECT cl.cuit FROM Cliente AS cl");
+		List<Object> lista = query.getResultList();
+		if(lista!=null && !lista.isEmpty()){
+			List<String> cuits = new ArrayList<String>();
+			for(Object o : lista){
+				cuits.add((String)o);
+			}
+			return cuits;
 		}
 		return null;
 	}

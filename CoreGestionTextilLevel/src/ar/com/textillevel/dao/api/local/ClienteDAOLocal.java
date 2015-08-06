@@ -18,5 +18,6 @@ public interface ClienteDAOLocal extends DAOLocal<Cliente, Integer>{
 	public abstract Integer getMaxNroCliente();
 	public abstract Cliente getClienteByNumero(Integer nroCliente);
 	public abstract List<ClienteDeudaTO> getClientesConDeudaMayorA(BigDecimal monto);
+	public abstract List<String> getCuits();
 	
 }
