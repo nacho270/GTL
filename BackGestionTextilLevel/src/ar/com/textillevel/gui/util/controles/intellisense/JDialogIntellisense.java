@@ -1,18 +1,22 @@
-package ar.com.textillevel.gui.util;
+package ar.com.textillevel.gui.util.controles.intellisense;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.EventListenerList;
 
 import ar.clarin.fwjava.componentes.VerticalFlowLayout;
 
@@ -22,6 +26,7 @@ public class JDialogIntellisense extends JDialog {
 
 	private boolean acepto = false;
 	private String selectedValue = null;
+	private final EventListenerList listeners = new EventListenerList();
 
 	public JDialogIntellisense(Dialog owner) {
 		super(owner);
@@ -50,9 +55,17 @@ public class JDialogIntellisense extends JDialog {
 			lbl.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					JDialogIntellisense.this.selectedValue = lbl.getText();
-					JDialogIntellisense.this.acepto = true;
-					salir();
+					if (e.getClickCount() == 2) {
+						final ValorSeleccionadoListener[] l = listeners.getListeners(ValorSeleccionadoListener.class);
+						final ValorSeleccionadoData valorSeleccionadoData = new ValorSeleccionadoData(lbl.getText());
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								for (int i = 0; i < l.length; i++) {
+									l[i].onSelectedValue(valorSeleccionadoData);
+								}
+							}
+						});
+					}
 				}
 
 				@Override
@@ -79,8 +92,13 @@ public class JDialogIntellisense extends JDialog {
 		return acepto;
 	}
 
-	private void salir() {
-		dispose();
+	public void ubicar(JFormattedTextField txtCUIT) {
+		Point l = txtCUIT.getLocationOnScreen();
+		setLocation(l.x, l.y + txtCUIT.getHeight());
+		setSize(txtCUIT.getWidth(), 200);		
 	}
-
+	
+	public void addValorSeleccionadoActionListener(ValorSeleccionadoListener listener) {
+		listeners.add(ValorSeleccionadoListener.class, listener);
+	}
 }

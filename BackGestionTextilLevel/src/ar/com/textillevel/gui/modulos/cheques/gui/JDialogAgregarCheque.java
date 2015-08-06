@@ -7,7 +7,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -51,9 +50,11 @@ import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.gui.util.JDialogIntellisense;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
+import ar.com.textillevel.gui.util.controles.intellisense.JDialogIntellisense;
+import ar.com.textillevel.gui.util.controles.intellisense.ValorSeleccionadoData;
+import ar.com.textillevel.gui.util.controles.intellisense.ValorSeleccionadoListener;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -423,6 +424,16 @@ public class JDialogAgregarCheque extends JDialog {
 				txtCUIT = new JFormattedTextField(new MaskFormatter("##-########-#"));
 				txtCUIT.setFocusLostBehavior(JFormattedTextField.PERSIST);
 				dialogIntellisense = new JDialogIntellisense(JDialogAgregarCheque.this);
+				dialogIntellisense.addValorSeleccionadoActionListener(new ValorSeleccionadoListener() {
+					public void onSelectedValue(ValorSeleccionadoData event) {
+						txtCUIT.setValue(event.getValor());
+						try {
+							txtCUIT.commitEdit();
+						} catch (ParseException e1) {
+						}
+						dialogIntellisense.setVisible(false);
+					}
+				});
 				txtCUIT.addFocusListener(new FocusAdapter() {
 					public void focusLost(FocusEvent e) {
 						try {
@@ -433,19 +444,10 @@ public class JDialogAgregarCheque extends JDialog {
 				txtCUIT.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyReleased(KeyEvent e) {
-						Point l = txtCUIT.getLocationOnScreen();
-						dialogIntellisense.setLocation(l.x, l.y + txtCUIT.getHeight());
-						dialogIntellisense.setSize(txtCUIT.getWidth(), 200);
+						dialogIntellisense.ubicar(txtCUIT);
 						List<String> cuits = getCuitsCandidatos();
 						dialogIntellisense.displaySugerencias(cuits);
 						dialogIntellisense.setVisible(true);
-						if (dialogIntellisense.isAcepto()) {
-							txtCUIT.setValue(dialogIntellisense.getSelectedValue());
-							try {
-								txtCUIT.commitEdit();
-							} catch (ParseException e1) {
-							}
-						}
 					}
 					
 					private List<String> getCuitsCandidatos() {
