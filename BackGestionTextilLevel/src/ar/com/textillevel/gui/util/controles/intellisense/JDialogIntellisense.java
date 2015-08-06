@@ -26,6 +26,7 @@ public class JDialogIntellisense extends JDialog {
 
 	private boolean acepto = false;
 	private String selectedValue = null;
+	private JPanel panelLabels;
 	private final EventListenerList listeners = new EventListenerList();
 
 	public JDialogIntellisense(Dialog owner) {
@@ -43,11 +44,13 @@ public class JDialogIntellisense extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 		setLayout(new BorderLayout());
+		JScrollPane jsp = new JScrollPane(getPanelLabels());
+		add(jsp, BorderLayout.CENTER);
 	}
 
 	public void displaySugerencias(List<String> valores) {
 		this.acepto = false;
-		JPanel panelLabels = new JPanel(new VerticalFlowLayout());
+		getPanelLabels().removeAll();
 		for (String valor : valores) {
 			final JLabel lbl = new JLabel(valor);
 			lbl.setOpaque(true);
@@ -78,10 +81,15 @@ public class JDialogIntellisense extends JDialog {
 					lbl.setBackground(null);
 				}
 			});
-			panelLabels.add(lbl);
+			getPanelLabels().add(lbl);
 		}
-		JScrollPane jsp = new JScrollPane(panelLabels);
-		add(jsp, BorderLayout.CENTER);
+	}
+
+	private JPanel getPanelLabels() {
+		if(panelLabels == null) {
+			panelLabels = new JPanel(new VerticalFlowLayout());		
+		}
+		return panelLabels;
 	}
 
 	public String getSelectedValue() {
@@ -93,12 +101,14 @@ public class JDialogIntellisense extends JDialog {
 	}
 
 	public void ubicar(JFormattedTextField txtCUIT) {
+		setVisible(false);
 		Point l = txtCUIT.getLocationOnScreen();
 		setLocation(l.x, l.y + txtCUIT.getHeight());
-		setSize(txtCUIT.getWidth(), 200);		
+		setSize(txtCUIT.getWidth(), 200);
 	}
-	
+
 	public void addValorSeleccionadoActionListener(ValorSeleccionadoListener listener) {
 		listeners.add(ValorSeleccionadoListener.class, listener);
 	}
+
 }
