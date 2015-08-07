@@ -214,4 +214,12 @@ public class JDialogIntellisense extends JDialog {
 	public List<IntellisenseLabel> getLabels() {
 		return labels;
 	}
+
+	public void resetSeleccion() {
+		if(selectedLabel >= 0 && selectedLabel < getLabels().size()) {
+			getLabels().get(selectedLabel).deseleccionar();
+		}
+		selectedLabel=0;
+	}
+
 }
