@@ -2,6 +2,7 @@ package ar.com.textillevel.facade.api.remote;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Remote;
 
@@ -20,5 +21,5 @@ public interface ClienteFacadeRemote {
 	public abstract List<ClienteDeudaTO> getClientesDeudores();
 	public abstract List<ClienteDeudaTO> getClientesConDeudaMayorA(BigDecimal monto);
 	public abstract Cliente getById(Integer idCliente);
-	public abstract List<String> getCuits();
+	public abstract Set<String> getCuits();
 }

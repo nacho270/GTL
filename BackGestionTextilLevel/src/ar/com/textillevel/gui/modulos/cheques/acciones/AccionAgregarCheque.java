@@ -56,6 +56,7 @@ public class AccionAgregarCheque extends Accion<Cheque>{
 
 	@Override
 	public boolean esValida(AccionEvent<Cheque> e) {
-		return true;
+		return GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin();
 	}
+
 }

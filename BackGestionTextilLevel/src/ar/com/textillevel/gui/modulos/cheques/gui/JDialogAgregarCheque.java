@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -93,7 +94,7 @@ public class JDialogAgregarCheque extends JDialog {
 	private boolean modificacion;
 	private boolean agregaOtro;
 	private boolean paraAgregar;
-	private List<String> cuits = getClienteFacade().getCuits();
+	private Set<String> cuits = getClienteFacade().getCuits();
 
 	public JDialogAgregarCheque(Frame padre) {
 		super(padre);
@@ -785,7 +786,7 @@ public class JDialogAgregarCheque extends JDialog {
 		return comboBusquedaUsuario;
 	}
 
-	private List<String> getCuits() {
+	private Set<String> getCuits() {
 		return cuits;
 	}
 

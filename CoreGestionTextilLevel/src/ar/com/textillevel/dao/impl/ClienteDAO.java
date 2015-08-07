@@ -2,7 +2,9 @@ package ar.com.textillevel.dao.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -86,16 +88,12 @@ public class ClienteDAO extends GenericDAO<Cliente, Integer> implements ClienteD
 		return null;
 	}
 
-	public List<String> getCuits() {
+	public Set<String> getCuits() {
 		Query query = getEntityManager().createQuery("SELECT cl.cuit FROM Cliente AS cl");
-		List<Object> lista = query.getResultList();
-		if(lista!=null && !lista.isEmpty()){
-			List<String> cuits = new ArrayList<String>();
-			for(Object o : lista){
-				cuits.add((String)o);
-			}
-			return cuits;
-		}
-		return null;
+		Set<String> lista = new LinkedHashSet<String>(query.getResultList());
+		query = getEntityManager().createQuery("SELECT c.cuit FROM Cheque AS c");
+		lista.addAll(query.getResultList());
+		return lista;
 	}
+
 }

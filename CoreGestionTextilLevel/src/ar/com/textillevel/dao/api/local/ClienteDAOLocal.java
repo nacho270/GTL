@@ -2,6 +2,7 @@ package ar.com.textillevel.dao.api.local;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Local;
 
@@ -18,6 +19,6 @@ public interface ClienteDAOLocal extends DAOLocal<Cliente, Integer>{
 	public abstract Integer getMaxNroCliente();
 	public abstract Cliente getClienteByNumero(Integer nroCliente);
 	public abstract List<ClienteDeudaTO> getClientesConDeudaMayorA(BigDecimal monto);
-	public abstract List<String> getCuits();
+	public abstract Set<String> getCuits();
 	
 }

@@ -2,6 +2,7 @@ package ar.com.textillevel.facade.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -61,7 +62,7 @@ public class ClienteFacade implements ClienteFacadeLocal, ClienteFacadeRemote {
 		return clienteDAOLocal.getById(idCliente);
 	}
 
-	public List<String> getCuits() {
+	public Set<String> getCuits() {
 		return clienteDAOLocal.getCuits();
 	}
 
