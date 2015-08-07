@@ -446,13 +446,15 @@ public class JDialogAgregarCheque extends JDialog {
 
 					@Override
 					public void keyReleased(KeyEvent e) {
-						dialogIntellisense.ubicar(txtCUIT);
-						List<String> cuits = getCuitsCandidatos();
-						dialogIntellisense.displaySugerencias(cuits);
-						dialogIntellisense.setVisible(true);
-						txtCUIT.requestFocus();
 						if(Character.isDigit(e.getKeyChar())) {
+							List<String> cuits = getCuitsCandidatos();
+							dialogIntellisense.ubicar(txtCUIT, cuits.size());
+							dialogIntellisense.displaySugerencias(cuits);
+							dialogIntellisense.setVisible(true);
+							txtCUIT.requestFocus();
 							txtCUIT.setCaretPosition(calcularPosicionCursor(txtCUIT.getText()));
+						} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+							dialogIntellisense.updateSelectedLabel();
 						}
 					}
 
