@@ -17,6 +17,7 @@ import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaTenidoClienteExplotada;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.IFormulaClienteExplotadaVisitor;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.MateriaPrimaCantidadExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.FormulaTenidoCliente;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.IInstruccionProcedimientoVisitor;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
@@ -266,13 +267,115 @@ public class InstruccionProcedimientoRenderer {
 		return "<html>"+html+"</html>";
 	}
 	
+	public static String getResumenQuimicos(List<PasoSecuenciaODT> pasos) {
+		String html = "";
+		for (PasoSecuenciaODT p : pasos) {
+			ResumenHTMLQuimicosVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLQuimicosVisitor();
+			for (InstruccionProcedimiento ip : p.getSubProceso().getPasos()) {
+				ip.accept(v);
+				html += v.getResumenHTML();
+			}
+		}
+	
+	return "<html>"+html+"</html>";
+	}
+	
+	public static String getResumenAlgodon(List<PasoSecuenciaODT> pasos) {
+		return getResumenTipoArituclo("A", pasos);
+	}
+	
+	public static String getResumenPoliester(List<PasoSecuenciaODT> pasos) {
+		return getResumenTipoArituclo("P", pasos);
+	}
+	
+	private static String getResumenTipoArituclo(String sigla, List<PasoSecuenciaODT> pasos) {
+		String html = "";
+		for(PasoSecuenciaODT p : pasos){
+			ResumenHTMLTipoProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLTipoProductosInstruccionVisitor(sigla);
+			for(InstruccionProcedimiento ip : p.getSubProceso().getPasos()){
+				ip.accept(v);
+				html += v.getResumenHTML();
+			}
+		}
+		
+		return "<html>"+html+"</html>";
+	}
+	
+	private static class ResumenHTMLQuimicosVisitor implements IInstruccionProcedimientoVisitor{
+
+		private String resumenHTML = "";
+		
+		public void visit(InstruccionProcedimientoPasadas instruccion) {
+			if(instruccion.getQuimicosExplotados() != null && !instruccion.getQuimicosExplotados().isEmpty()){
+				setResumenHTML(generarDescripcionProductosHTML(instruccion.getQuimicosExplotados(), null));
+				return;
+			}
+			setResumenHTML("");
+		}
+
+		public void visit(InstruccionProcedimientoTexto instruccion) {
+		}
+
+		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
+			if(instruccion.getFormula() == null){
+				setResumenHTML("");
+				return;
+			}
+			ResumenHTMLQuimicosFormulaVisitor v = new ResumenHTMLQuimicosFormulaVisitor();
+			instruccion.getFormula().accept(v);
+			setResumenHTML(v.getResumenHTML());
+		}
+
+		public String getResumenHTML() {
+			return resumenHTML;
+		}
+		
+		public void setResumenHTML(String resumenHTML) {
+			this.resumenHTML = resumenHTML;
+		}
+	}
+	
+	private static class ResumenHTMLTipoProductosInstruccionVisitor implements IInstruccionProcedimientoVisitor{
+
+		private String resumenHTML = "";
+		private String sigla;
+		
+		public ResumenHTMLTipoProductosInstruccionVisitor(String sigla) {
+			this.sigla = sigla;
+		}
+
+		public void visit(InstruccionProcedimientoPasadas instruccion) {
+		}
+
+		public void visit(InstruccionProcedimientoTexto instruccion) {
+		}
+
+		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
+			if(instruccion.getFormula() == null){
+				setResumenHTML("");
+				return;
+			}
+			ResumenHTMLTipoProductosFormulaVisitor v = new ResumenHTMLTipoProductosFormulaVisitor(sigla);
+			instruccion.getFormula().accept(v);
+			setResumenHTML(v.getResumenHTML());
+		}
+
+		public String getResumenHTML() {
+			return resumenHTML;
+		}
+		
+		public void setResumenHTML(String resumenHTML) {
+			this.resumenHTML = resumenHTML;
+		}
+	}
+	
 	private static class ResumenHTMLProductosInstruccionVisitor implements IInstruccionProcedimientoVisitor{
 
 		private String resumenHTML;
 		
 		public void visit(InstruccionProcedimientoPasadas instruccion) {
 			if(instruccion.getQuimicosExplotados() != null && !instruccion.getQuimicosExplotados().isEmpty()){
-				setResumenHTML(generarDescripcionProductosHTML(instruccion.getQuimicosExplotados()));
+				setResumenHTML(generarDescripcionProductosHTML(instruccion.getQuimicosExplotados(), null));
 				return;
 			}
 			setResumenHTML("");
@@ -301,16 +404,43 @@ public class InstruccionProcedimientoRenderer {
 		}
 	}
 	
-	private static <T extends Formulable> String generarDescripcionProductosHTML(List<MateriaPrimaCantidadExplotada<T>> materiasPrimasExplotadas){
+	private static <T extends Formulable> String generarDescripcionProductosHTML(List<MateriaPrimaCantidadExplotada<T>> materiasPrimasExplotadas, String siglaAFiltrar){
 		String html = "";
 		for(MateriaPrimaCantidadExplotada<T> mp : materiasPrimasExplotadas){
-			if(mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima() instanceof Anilina){
-				html += "* " + mp.getTipoArticulo().getSigla() + ": " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
-			}else{
-				html += "* " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+			if (siglaAFiltrar == null || (siglaAFiltrar != null && mp.getTipoArticulo().getSigla().startsWith(siglaAFiltrar))){
+				if(mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima() instanceof Anilina){
+					html += "* " + mp.getTipoArticulo().getSigla() + ": " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+				}else{
+					html += "* " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+				}
 			}
 		}
 		return html;
+	}
+	
+	private static class ResumenHTMLQuimicosFormulaVisitor implements IFormulaClienteExplotadaVisitor{
+
+		private String resumenHTML = "";
+		
+		public void visit(FormulaEstampadoClienteExplotada fece) {
+			if(fece.getPigmentos()!=null && !fece.getPigmentos().isEmpty()){
+				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(fece.getPigmentos(), null));
+			}
+			if(fece.getQuimicos()!= null && !fece.getQuimicos().isEmpty()){
+				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(fece.getQuimicos(), null));
+			}
+		}
+
+		public void visit(FormulaTenidoClienteExplotada ftce) {
+		}
+		
+		public String getResumenHTML() {
+			return resumenHTML;
+		}
+
+		public void setResumenHTML(String resumenHTML) {
+			this.resumenHTML = resumenHTML;
+		}
 	}
 	
 	private static class ResumenHTMLProductosFormulaVisitor implements IFormulaClienteExplotadaVisitor{
@@ -319,16 +449,45 @@ public class InstruccionProcedimientoRenderer {
 		
 		public void visit(FormulaEstampadoClienteExplotada fece) {
 			if(fece.getPigmentos()!=null && !fece.getPigmentos().isEmpty()){
-				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(fece.getPigmentos()));
+				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(fece.getPigmentos(), null));
 			}
 			if(fece.getQuimicos()!= null && !fece.getQuimicos().isEmpty()){
-				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(fece.getQuimicos()));
+				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(fece.getQuimicos(), null));
 			}
 		}
 
 		public void visit(FormulaTenidoClienteExplotada ftce) {
 			if(ftce.getMateriasPrimas()!=null && !ftce.getMateriasPrimas().isEmpty()){
-				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(ftce.getMateriasPrimas()));
+				setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(ftce.getMateriasPrimas(), null));
+			}
+		}
+		
+		public String getResumenHTML() {
+			return resumenHTML;
+		}
+
+		public void setResumenHTML(String resumenHTML) {
+			this.resumenHTML = resumenHTML;
+		}
+	}
+	
+	private static class ResumenHTMLTipoProductosFormulaVisitor implements IFormulaClienteExplotadaVisitor{
+
+		private String resumenHTML = "";
+		private String sigla = "";
+		
+		public ResumenHTMLTipoProductosFormulaVisitor(String sigla) {
+			this.sigla = sigla;
+		}
+
+		public void visit(FormulaEstampadoClienteExplotada fece) {
+		}
+
+		public void visit(FormulaTenidoClienteExplotada ftce) {
+			if (ftce.getFormulaDesencadenante() instanceof FormulaTenidoCliente){
+				if(ftce.getMateriasPrimas()!=null && !ftce.getMateriasPrimas().isEmpty()){
+					setResumenHTML(getResumenHTML() + generarDescripcionProductosHTML(ftce.getMateriasPrimas(), this.sigla));
+				}
 			}
 		}
 		

@@ -40,6 +40,7 @@ public class ImprimirODTHandler {
 	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/odt.jasper";
 	private static final String ARCHIVO_JASPER_SECUENCIA = "/ar/com/textillevel/reportes/odt-secuencia.jasper";
 	private static final String ARCHIVO_JASPER_PROCEDIMIENTO = "/ar/com/textillevel/reportes/odt-procedimiento.jasper";
+	private static final String ARCHIVO_JASPER_RESUMEN_ARTICULO = "/ar/com/textillevel/reportes/odt-procedimiento_resumen_x_articulo.jasper";
 //	private Frame frameOwner;
 //	private Dialog dialogOwner;
 	private final OrdenDeTrabajo odt;
@@ -67,7 +68,7 @@ public class ImprimirODTHandler {
 				if(forma != EFormaImpresionODT.ENCABEZADO && odt.getSecuenciaDeTrabajo() == null){
 					CLJOptionPane.showErrorMessage(parent, "La orden de trabajo no tiene secuencia asignada", "Error");
 					valida = false;
-				}else if( (forma == EFormaImpresionODT.ENCABEZADO_SECUENCIA || forma == EFormaImpresionODT.AMBOS) && !tieneFormula(ETipoProducto.TENIDO)){
+				}else if( (forma == EFormaImpresionODT.ENCABEZADO_SECUENCIA || forma == EFormaImpresionODT.AMBOS || forma == EFormaImpresionODT.RESUMEN_ARTIULOS) && !tieneFormula(ETipoProducto.TENIDO)){
 					CLJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia, debe tener cargada la formula de teñido", "Error");
 					valida = false;
 				}else if(forma == EFormaImpresionODT.ESTAMPADO && !tieneFormula(ETipoProducto.ESTAMPADO)){
@@ -134,6 +135,8 @@ public class ImprimirODTHandler {
 				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_SECUENCIA);
 			}else if(formaImpresion == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
 				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_PROCEDIMIENTO);
+			} else if(formaImpresion == EFormaImpresionODT.RESUMEN_ARTIULOS){
+				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_ARTICULO);
 			}
 			ODTTO odtto = new ODTTO(this.odt,formaImpresion);
 			try {
@@ -191,6 +194,10 @@ public class ImprimirODTHandler {
 		private String resumenSectorSeco;
 		private String resumenSectorHumedo;
 		private String resumenSectorEstampado;
+		private String resumenQuimicos;
+		private String resumenAlgodon;
+		private String resumenPoliester;
+
 
 		// private String maquina;
 		
@@ -342,9 +349,13 @@ public class ImprimirODTHandler {
 			if(odt.getSecuenciaDeTrabajo()!=null){
 				this.secuencia = new SecuenciaODTTO(odt.getSecuenciaDeTrabajo(),formaImp);
 			}
-			if(formaImp == EFormaImpresionODT.AMBOS || formaImp == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
+			if(formaImp == EFormaImpresionODT.AMBOS || formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS || formaImp == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
 				crearPiezasDummy();
-				if(odt.getSecuenciaDeTrabajo()!=null){
+				if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS){
+					this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos());
+					this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos());
+					this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
+				}else if(odt.getSecuenciaDeTrabajo()!=null){
 					this.resumenSectorEstampado = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_ESTAMPERIA,odt.getSecuenciaDeTrabajo().getPasos());
 					this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos());
 					this.resumenSectorHumedo = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos());
@@ -418,6 +429,15 @@ public class ImprimirODTHandler {
 			}
 			if(resumenSectorSeco != null){
 				mapa.put("RESUMEN_SECTOR_SECO", resumenSectorSeco);
+			}
+			if(resumenQuimicos!=null){
+				mapa.put("RESUMEN_QUIMICOS", resumenQuimicos);
+			}
+			if(resumenAlgodon != null){
+				mapa.put("RESUMEN_ALGODON", resumenAlgodon);
+			}
+			if(resumenPoliester != null){
+				mapa.put("RESUMEN_POLIESTER", resumenPoliester);
 			}
 			mapa.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
 			mapa.put("pasosDS", new JRBeanCollectionDataSource(secuencia.pasos));

@@ -31,5 +31,7 @@ public class DoEagerFormulaExplotadaVisitor implements IFormulaClienteExplotadaV
 			mp.getMateriaPrimaCantidadDesencadenante().getDescripcion();
 			mp.getTipoArticulo().getNombre();
 		}
+		DoEagerFormulaVisitor def = new DoEagerFormulaVisitor();
+		ftce.getFormulaDesencadenante().accept(def);
 	}
 }
