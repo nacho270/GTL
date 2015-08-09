@@ -22,3 +22,23 @@ GABARDINA
 -- arreglar cosas que no son articulos: devolucion,  descrude y termofijado
 
 delete from t_articulo where p_id in (34, 40);
+
+-- cargar ap 2,45
+update t_producto set f_articulo_p_id = 75 where f_articulo_p_id = 74;
+
+update t_producto set f_articulo_p_id = 69 where f_articulo_p_id = 70;
+
+-- cargar ap 1,65
+update t_producto set f_articulo_p_id = 76 where f_articulo_p_id = 72;
+
+-- cargar ap 2,73
+update t_producto set f_articulo_p_id = 77 where f_articulo_p_id = 73;
+
+
+-- querys utiles
+
+select * from t_producto pr where not exists( select 1 from t_articulo art where art.p_id = pr.f_articulo_p_id);
+
+delete from t_producto where p_id in (368, 395, 1042, 1043);
+
+select * from t_remito_entrada_producto where f_producto_p_id in (368, 395, 1042, 1043);
