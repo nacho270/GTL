@@ -35,6 +35,7 @@ import ar.clarin.fwjava.componentes.CLJTextArea;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.componentes.VerticalFlowLayout;
 import ar.clarin.fwjava.componentes.error.CLRuntimeException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.templates.GuiABMListaTemplate;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.StringUtil;
@@ -186,7 +187,21 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 	public void botonCancelarPresionado(int arg0) {
 		habilitarTabSeleccionado(true);
 		setModoEdicion(false);
-		itemSelectorSeleccionado(lista.getSelectedIndex());
+		if(getClienteActual().getId() != null && getClienteActual().getId() >0) {
+			clienteList = getClienteFacade().getAllOrderByName();
+			setClienteActual(buscarClienteEnLista(getClienteActual().getId()));
+			lista.setSelectedValue(getClienteActual(), true);
+			setDataGUIFromClienteActual();
+		}
+	}
+
+	private Cliente buscarClienteEnLista(Integer idCliente) {
+		for(Cliente c : clienteList) {
+			if(c.getId().equals(idCliente)) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -207,11 +222,16 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 	public boolean botonGrabarPresionado(int arg0) {
 		if(validar()) {
 			capturarSetearDatos();
-			Cliente clienteRefresh = getClienteFacade().save(getClienteActual());
-			CLJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
-			clienteList = getClienteFacade().getAllOrderByName();
-			lista.setSelectedValue(clienteRefresh, true);
-			return true;
+			try {
+				Cliente clienteRefresh = getClienteFacade().save(getClienteActual());
+				CLJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
+				clienteList = getClienteFacade().getAllOrderByName();
+				lista.setSelectedValue(clienteRefresh, true);
+				return true;
+			} catch (ValidacionException e) {
+				CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				getTxtCUIT().requestFocus();
+			}
 		}
 		return false;
 	}
@@ -321,24 +341,28 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 
 	@Override
 	public void itemSelectorSeleccionado(int arg0) {
-		setClienteActual((Cliente)lista.getSelectedValue());
 		limpiarDatos();
+		setClienteActual((Cliente)lista.getSelectedValue());
 		if(getClienteActual() != null) {
-			getTxtNroCliente().setValue(getClienteActual().getNroCliente().longValue());
-			getTxtRazonSocial().setText(getClienteActual().getRazonSocial());
-			getPanDatosDireccionFiscal().setDireccion(getClienteActual().getDireccionFiscal(), getInfoLocalidadList());
-			getPanDatosDireccionReal().setDireccion(getClienteActual().getDireccionReal(), getInfoLocalidadList());
-			getTxtCUIT().setText(getClienteActual().getCuit());
-			getTxtContacto().setText(getClienteActual().getContacto());
-			getTxtObservaciones().setText(getClienteActual().getObservaciones());
-			getTxtEmail().setText(getClienteActual().getEmail());
-			getTxtSkype().setText(getClienteActual().getSkype());
-			getPanCelular().setFullDatos(getClienteActual().getCelular());
-			getPanTelefonoFijo().setFullDatos(getClienteActual().getTelefono());
-			getPanFax().setFullDatos(getClienteActual().getFax());
-			getCmbPosicionIva().setSelectedItem(getClienteActual().getPosicionIva());
-			getCmbCondicionVenta().setSelectedItem(getClienteActual().getCondicionVenta());
+			setDataGUIFromClienteActual();
 		}
+	}
+
+	private void setDataGUIFromClienteActual() {
+		getTxtNroCliente().setValue(getClienteActual().getNroCliente().longValue());
+		getTxtRazonSocial().setText(getClienteActual().getRazonSocial());
+		getPanDatosDireccionFiscal().setDireccion(getClienteActual().getDireccionFiscal(), getInfoLocalidadList());
+		getPanDatosDireccionReal().setDireccion(getClienteActual().getDireccionReal(), getInfoLocalidadList());
+		getTxtCUIT().setText(getClienteActual().getCuit());
+		getTxtContacto().setText(getClienteActual().getContacto());
+		getTxtObservaciones().setText(getClienteActual().getObservaciones());
+		getTxtEmail().setText(getClienteActual().getEmail());
+		getTxtSkype().setText(getClienteActual().getSkype());
+		getPanCelular().setFullDatos(getClienteActual().getCelular());
+		getPanTelefonoFijo().setFullDatos(getClienteActual().getTelefono());
+		getPanFax().setFullDatos(getClienteActual().getFax());
+		getCmbPosicionIva().setSelectedItem(getClienteActual().getPosicionIva());
+		getCmbCondicionVenta().setSelectedItem(getClienteActual().getCondicionVenta());
 	}
 
 	@Override

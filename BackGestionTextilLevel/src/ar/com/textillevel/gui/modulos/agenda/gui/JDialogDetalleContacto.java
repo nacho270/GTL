@@ -34,6 +34,7 @@ import ar.clarin.fwjava.componentes.CLJTextArea;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.componentes.VerticalFlowLayout;
 import ar.clarin.fwjava.componentes.error.CLRuntimeException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
@@ -827,9 +828,13 @@ public class JDialogDetalleContacto extends JDialog {
 	public boolean grabarCliente() {
 		if (validarCliente()) {
 			capturarSetearDatosCliente();
-			getClienteFacade().save(getClienteActual());
-			CLJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
-			return true;
+			try {
+				getClienteFacade().save(getClienteActual());
+				CLJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
+				return true;
+			} catch (ValidacionException e) {
+				CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			}
 		}
 		return false;
 	}

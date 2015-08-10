@@ -96,4 +96,11 @@ public class ClienteDAO extends GenericDAO<Cliente, Integer> implements ClienteD
 		return lista;
 	}
 
+	public List<Cliente> getClienteByCUIT(String cuit, Integer idCliente) {
+		Query query = getEntityManager().createQuery("FROM Cliente AS cl WHERE cl.cuit = :cuit AND cl.id != :idCliente");
+		query.setParameter("cuit", cuit);
+		query.setParameter("idCliente", idCliente);
+		return query.getResultList();
+	}
+
 }
