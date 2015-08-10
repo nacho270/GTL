@@ -52,6 +52,7 @@ public enum EValidacionException {
 	DOCUMENTO_CONTABLE_FALLO_CONEXION_AFIP		    (146, "El documento se ha guardado pero no se pudo establecer la conexión con la la AFIP para autorizar el mismo. No se puede imprimir el documento."),
 	DOCUMENTO_CONTABLE_NO_SE_PUEDE_IMPRIMIR		    (148, "El documento no se puede imprimir porque no ha sido autorizado por la AFIP."),
 	CLIENTE_YA_EXISTE_CUIT							(149, "El CUIT ingresado es el mismo que otro cliente."),
+	CLIENTE_CUIT_INVALIDO							(150, "El CUIT ingresado es inválido."),
 	_											(000, "");
 	
 

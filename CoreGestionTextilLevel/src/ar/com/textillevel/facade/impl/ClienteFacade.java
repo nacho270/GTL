@@ -43,6 +43,30 @@ public class ClienteFacade implements ClienteFacadeLocal, ClienteFacadeRemote {
 		if(!clientes.isEmpty()) {
 			throw new ValidacionException(EValidacionException.CLIENTE_YA_EXISTE_CUIT.getInfoValidacion());
 		}
+		// Chequeo lo del dígito verificador
+		if(!cuitValido(cliente.getCuit())) {
+			throw new ValidacionException(EValidacionException.CLIENTE_CUIT_INVALIDO.getInfoValidacion());
+		}
+	}
+
+	private boolean cuitValido(String cuit) {
+	    String cuitPlano = cuit.replaceAll("[^\\d]", "").trim();
+	    if (cuitPlano.length() != 11){
+	        return false;
+	    }
+	    char[] cuitArray = cuitPlano.toCharArray();
+	    Integer[] serie = {5, 4, 3, 2, 7, 6, 5, 4, 3, 2};
+	    Integer aux = 0;
+	    for (int i=0; i<cuitArray.length-1; i++){
+	        aux += Integer.valueOf(String.valueOf(cuitArray[i])) * serie[i];
+	    }
+	    aux = 11 - (aux % 11);
+	    if (aux == 11){
+	        aux = 0;
+	    } else if (aux == 10){
+	        aux = 9;
+	    }
+	    return Integer.valueOf(String.valueOf(cuitArray[cuitArray.length-1])).equals(aux);
 	}
 
 	public void remove(Cliente clienteActual) {
