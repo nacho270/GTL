@@ -34,6 +34,14 @@ update t_producto set f_articulo_p_id = 76 where f_articulo_p_id = 72;
 -- cargar ap 2,73
 update t_producto set f_articulo_p_id = 77 where f_articulo_p_id = 73;
 
+-- borro devolucion repetida
+update t_remito_entrada_producto set f_producto_p_id = 1042 where f_producto_p_id = 1043;
+delete from t_remito_entrada_producto where f_producto_p_id = 1043;
+update t_orden_de_trabajo set f_producto_p_id = 1042 where f_producto_p_id = 1043;
+delete from t_producto where p_id in (1043);
+
+-- quito articulos de productos que no los requieren
+update t_producto set f_articulo_p_id = null where p_id in (368, 395, 1042); /* 1222 ver que articulo es */
 
 -- querys utiles
 
