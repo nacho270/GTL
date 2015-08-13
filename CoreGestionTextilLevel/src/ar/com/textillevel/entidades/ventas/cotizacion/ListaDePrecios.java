@@ -13,36 +13,29 @@ public class ListaDePrecios {
  * 	Version
  * 		Definicion
 			- Tenido:
-				gama
-					AA
-						1.5 precio
-						2.0 precio
-					AP
-						1.5 precio
-						3.0 precio
-					POL
-						2.0 precio
-						4.0 precio
+				Rango ancho
+					Articulo
+						Gama Precio
 			- Estampado:
-				Base
-					AA
-						1.5 precio
-						2.0 precio
-					AP
-						1.5 precio
-						3.0 precio
-					POL
-						2.0 precio
-						4.0 precio	
+				Rango ancho
+					Articulo
+						Base (Gama)
+							Cantidad Colores + Cobertura
+								1 a 3	 0 a 50			
+													Precio
+								1 a 3	 51 a 100		
+													Precio
+								4 a 5	 0 a 50			
+													Precio
+								4 a 5	 51 a 100	
+													Precio
+								6 a 8 	 0 a 50			
+													Precio
+								6 a 8	 51 a 100	
+													Precio
 			- Comun:
-				AA
-					1.5 precio
-					2.0 precio
-				AP
-					1.5 precio
-					3.0 precio
-				POL
-					2.0 precio
-					4.0 precio
+				Rango ancho
+					Articulo
+						precio
 	*/
 }
