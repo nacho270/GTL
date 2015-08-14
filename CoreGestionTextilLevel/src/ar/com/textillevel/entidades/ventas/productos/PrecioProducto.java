@@ -4,20 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-@Entity
-@Table(name="T_PRECIO_PRODUCTO")
 public class PrecioProducto implements Serializable {
 
 	private static final long serialVersionUID = 7845404449673025665L;
@@ -31,9 +17,6 @@ public class PrecioProducto implements Serializable {
 	//	this.fechaUltModif = DateUtil.getAhora();
 	}
 
-	@Id
-	@Column(name="P_ID")
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer getId() {
 		return id;
 	}
@@ -42,9 +25,6 @@ public class PrecioProducto implements Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne
-	@JoinColumn(name="F_PRODUCTO_P_ID")
-	@Fetch(FetchMode.JOIN)
 	public Producto getProducto() {
 		return producto;
 	}
@@ -53,7 +33,6 @@ public class PrecioProducto implements Serializable {
 		this.producto = producto;
 	}
 
-	@Column(name="A_PRECIO", nullable=false)
 	public BigDecimal getPrecio() {
 		return precio;
 	}
@@ -62,7 +41,6 @@ public class PrecioProducto implements Serializable {
 		this.precio = precio;
 	}
 
-	@Column(name="A_FECHA_ULT_MODIF", nullable=false)
 	public Timestamp getFechaUltModif() {
 		return fechaUltModif;
 	}

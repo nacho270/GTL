@@ -1,41 +1,62 @@
 package ar.com.textillevel.entidades.ventas.cotizacion;
 
+import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import ar.com.textillevel.entidades.gente.Cliente;
 
-public class ListaDePrecios {
+@Entity
+@Table(name = "T_LISTA_DE_PRECIOS")
+public class ListaDePrecios implements Serializable {
+
+	private static final long serialVersionUID = 6741984125390784747L;
+
 	private Integer id;
-	private Cliente cliente; //si es null, es la lista default
+	private Cliente cliente; // si es null, es la lista default
 	private List<VersionListaDePrecios> versiones;
-/*	
- * Cliente
- * 	Version
- * 		Definicion
-			- Tenido:
-				Rango ancho
-					Articulo
-						Gama Precio
-			- Estampado:
-				Rango ancho
-					Articulo
-						Base (Gama)
-							Cantidad Colores + Cobertura
-								1 a 3	 0 a 50			
-													Precio
-								1 a 3	 51 a 100		
-													Precio
-								4 a 5	 0 a 50			
-													Precio
-								4 a 5	 51 a 100	
-													Precio
-								6 a 8 	 0 a 50			
-													Precio
-								6 a 8	 51 a 100	
-													Precio
-			- Comun:
-				Rango ancho
-					Articulo
-						precio
-	*/
+
+	@Id
+	@Column(name = "P_ID")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "F_CLIENTE_P_ID")
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
+	@JoinColumn(name = "F_LISTA_PRECIO_P_ID")
+	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+	public List<VersionListaDePrecios> getVersiones() {
+		return versiones;
+	}
+
+	public void setVersiones(List<VersionListaDePrecios> versiones) {
+		this.versiones = versiones;
+	}
+
 }
