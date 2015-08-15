@@ -2,6 +2,7 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,6 +25,16 @@ public class VersionListaDePrecios implements Serializable{
 	private Integer id;
 	private Date inicioValidez;
 	private List<DefinicionPrecio> precios;
+
+	
+	public VersionListaDePrecios() {
+		this.precios = new ArrayList<DefinicionPrecio>();
+	}
+
+	public VersionListaDePrecios(Date inicioValidez) {
+		this();
+		this.inicioValidez = inicioValidez;
+	}
 
 	@Id
 	@Column(name = "P_ID")

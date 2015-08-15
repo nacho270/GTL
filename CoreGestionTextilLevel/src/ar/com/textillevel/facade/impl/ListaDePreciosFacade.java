@@ -4,7 +4,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
-import ar.com.textillevel.entidades.ventas.productos.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 
 @Stateless

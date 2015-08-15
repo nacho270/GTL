@@ -1,5 +1,6 @@
 package ar.com.textillevel.entidades.ventas.cotizacion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,10 @@ public class RangoAnchoComun extends RangoAncho {
 	private static final long serialVersionUID = -5924812101662593637L;
 	
 	private List<PrecioTipoArticulo> precios;
+
+	public RangoAnchoComun() {
+		this.precios = new ArrayList<PrecioTipoArticulo>();
+	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name = "F_RANGO_P_ID")

@@ -1,6 +1,7 @@
 package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,6 +25,10 @@ public class RangoCantidadColores implements Serializable {
 	private Integer minimo;
 	private Integer maximo;
 	private List<RangoCoberturaEstampado> rangos;
+
+	public RangoCantidadColores() {
+		this.rangos = new ArrayList<RangoCoberturaEstampado>();
+	}
 
 	@Id
 	@Column(name = "P_ID")

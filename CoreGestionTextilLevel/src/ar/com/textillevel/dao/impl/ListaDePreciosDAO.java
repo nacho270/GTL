@@ -7,7 +7,8 @@ import javax.persistence.Query;
 
 import ar.clarin.fwjava.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
-import ar.com.textillevel.entidades.ventas.productos.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 
 @Stateless
 public class ListaDePreciosDAO extends GenericDAO<ListaDePrecios, Integer> implements ListaDePreciosDAOLocal {
@@ -23,7 +24,10 @@ public class ListaDePreciosDAO extends GenericDAO<ListaDePrecios, Integer> imple
 			throw new RuntimeException("Existe más de una lista de precios para el cliente con ID " + idCliente);
 		} else if(resultList.size() == 1) {
 			ListaDePrecios listaDePrecios = resultList.get(0);
-			listaDePrecios.getPrecios().size();
+			listaDePrecios.getVersiones().size();
+			for (VersionListaDePrecios v : listaDePrecios.getVersiones()) {
+				v.getPrecios().size();
+			}
 			return listaDePrecios;
 		}
 		return null;

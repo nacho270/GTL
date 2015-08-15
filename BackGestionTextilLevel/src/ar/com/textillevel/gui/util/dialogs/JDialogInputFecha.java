@@ -1,4 +1,4 @@
-package ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.wfvaleatencion;
+package ar.com.textillevel.gui.util.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import ar.clarin.fwjava.componentes.CLBotonCalendario;
 import ar.clarin.fwjava.componentes.CLDateField;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
@@ -22,6 +23,7 @@ public class JDialogInputFecha extends JDialog {
 	private CLDateField txtFecha;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
+	private CLBotonCalendario btnFecha;
 	
 	private Date fecha;
 	
@@ -48,6 +50,7 @@ public class JDialogInputFecha extends JDialog {
 	private JPanel getPanelCentral(){
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panel.add(getTxtFecha());
+		panel.add(getBtnFecha());
 		return panel;
 	}
 	
@@ -96,4 +99,23 @@ public class JDialogInputFecha extends JDialog {
 		return fecha;
 	}
 
+	private CLBotonCalendario getBtnFecha() {
+		if(btnFecha == null) {
+			btnFecha = new CLBotonCalendario(DateUtil.getHoy()) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void botonCalendarioPresionado() {
+					Date selectedDate = getBtnFecha().getCalendario().getSelectedDate();
+					if(selectedDate != null) {
+						getTxtFecha().setFecha(selectedDate);
+					}
+				}
+
+			};
+
+		}
+		return btnFecha;
+	}
 }

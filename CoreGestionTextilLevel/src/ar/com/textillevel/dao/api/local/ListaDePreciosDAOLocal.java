@@ -3,7 +3,7 @@ package ar.com.textillevel.dao.api.local;
 import javax.ejb.Local;
 
 import ar.clarin.fwjava.dao.api.local.DAOLocal;
-import ar.com.textillevel.entidades.ventas.productos.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
 
 @Local
 public interface ListaDePreciosDAOLocal extends DAOLocal<ListaDePrecios, Integer> {
