@@ -22,6 +22,7 @@ public class GamaColorCliente implements Serializable {
 	private static final long serialVersionUID = 2467232835529504756L;
 	
 	private Integer id;
+	private String nombre;
 	private GamaColor gamaOriginal;
 	private List<Color> colores;
 
@@ -36,6 +37,15 @@ public class GamaColorCliente implements Serializable {
 		this.id = id;
 	}
 
+	@Column(name = "A_NOMBRE", nullable = false)
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	@ManyToOne
 	@JoinColumn(name = "F_GAMA_CLIENTE_P_ID", nullable = false)
 	public GamaColor getGamaOriginal() {
@@ -61,4 +71,5 @@ public class GamaColorCliente implements Serializable {
 	public void setColores(List<Color> colores) {
 		this.colores = colores;
 	}
+
 }

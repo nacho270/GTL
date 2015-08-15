@@ -43,11 +43,6 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	private static final long serialVersionUID = 8012369007737291095L;
 	
-//	private static final String ICONO_BOTON_MODIF = "ar/clarin/fwjava/imagenes/b_modificar_fila.png";
-//	private static final String ICONO_BOTON_MODIF_DES = "ar/clarin/fwjava/imagenes/b_modificar_fila_des.png";
-//	private static final String ICONO_BOTON_VOLVER_A_DEFAULT = "ar/clarin/fwjava/imagenes/b_autocomp.png";
-//	private static final String ICONO_BOTON_VOLVER_A_DEFAULT_DES = "ar/clarin/fwjava/imagenes/b_autocomp_des.png";
-
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 

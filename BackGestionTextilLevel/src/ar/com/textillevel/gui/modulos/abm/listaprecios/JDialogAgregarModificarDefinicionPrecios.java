@@ -23,6 +23,9 @@ import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.comun.JDialogAgregarModificarRangoAnchoComun;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.estampado.JDialogAgregarModificarRangoAnchoEstampado;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.tenido.JDialogAgregarModificarRangoAnchoTenido;
 import ar.com.textillevel.gui.util.GenericUtils;
 
 public class JDialogAgregarModificarDefinicionPrecios extends JDialog {

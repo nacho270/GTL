@@ -31,7 +31,7 @@ public abstract class JDialogAgregarModificarRangoAncho extends JDialog {
 	private JButton btnCancelar;
 	private CLJNumericTextField txtAnchoInicial;
 	private CLJNumericTextField txtAnchoFinal;
-	private PanelTablaRango<? extends RangoAncho> panelRango;
+	private PanelTablaRango<?> panelRango;
 	
 	private boolean acepto;
 	private List<RangoAncho> rangosActuales;
@@ -54,7 +54,7 @@ public abstract class JDialogAgregarModificarRangoAncho extends JDialog {
 	private void setUpScreen() {
 		setTitle("Agregar/modificar rango");
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setSize(new Dimension(600, 600));
+		setSize(new Dimension(300, 300));
 		setModal(true);
 		setResizable(false);
 		GuiUtil.centrar(this);
@@ -150,7 +150,7 @@ public abstract class JDialogAgregarModificarRangoAncho extends JDialog {
 		this.acepto = acepto;
 	}
 
-	public PanelTablaRango<? extends RangoAncho> getPanelRango() {
+	public PanelTablaRango<?> getPanelRango() {
 		if (panelRango == null) {
 			panelRango = crearPanelRango();
 		}
@@ -159,5 +159,5 @@ public abstract class JDialogAgregarModificarRangoAncho extends JDialog {
 	
 	/** ABSTRACTOS */
 	protected abstract RangoAncho crearNuevoRango();
-	protected abstract PanelTablaRango<? extends RangoAncho> crearPanelRango();
+	protected abstract PanelTablaRango<?> crearPanelRango();
 }

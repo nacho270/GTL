@@ -1,11 +1,14 @@
-package ar.com.textillevel.gui.modulos.abm.listaprecios;
+package ar.com.textillevel.gui.modulos.abm.listaprecios.tenido;
 
 import java.util.List;
 
 import javax.swing.JDialog;
 
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarRangoAncho;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
 public class JDialogAgregarModificarRangoAnchoTenido extends JDialogAgregarModificarRangoAncho {
 
@@ -25,8 +28,7 @@ public class JDialogAgregarModificarRangoAnchoTenido extends JDialogAgregarModif
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoArticuloTenido> crearPanelRango() {
-		// TODO Auto-generated method stub
-		return null;
+	protected PanelTablaRango<GrupoTipoArticuloGama> crearPanelRango() {
+		return new PanelTablaRangoTenido(JDialogAgregarModificarRangoAnchoTenido.this);
 	}
 }

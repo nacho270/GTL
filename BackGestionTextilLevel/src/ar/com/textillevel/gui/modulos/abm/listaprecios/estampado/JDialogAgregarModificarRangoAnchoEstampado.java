@@ -1,4 +1,4 @@
-package ar.com.textillevel.gui.modulos.abm.listaprecios;
+package ar.com.textillevel.gui.modulos.abm.listaprecios.estampado;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import javax.swing.JDialog;
 
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarRangoAncho;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
 public class JDialogAgregarModificarRangoAnchoEstampado extends JDialogAgregarModificarRangoAncho {
 
