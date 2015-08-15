@@ -134,5 +134,23 @@ public enum ETipoProducto {
 		
 	}
 
+	public static ETipoProducto getByDescripcion(String descripcion) {
+		if (descripcion == null) return null;
+		return getDescripcionMap().get(descripcion);
+	}
+	
+	private static Map<String, ETipoProducto> descricpcionMap;
+	
+	private static Map<String, ETipoProducto> getDescripcionMap() {
+		if (descricpcionMap == null) {
+			descricpcionMap = new HashMap<String, ETipoProducto>();
+			ETipoProducto values[] = values();
+			for (int i = 0; i < values.length; i++) {
+				descricpcionMap.put(values[i].getDescripcion(), values[i]);
+			}
+		}
+		return descricpcionMap;
+	}
+
 
 }

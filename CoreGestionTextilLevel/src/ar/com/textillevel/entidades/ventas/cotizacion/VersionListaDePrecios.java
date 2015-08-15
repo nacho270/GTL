@@ -25,7 +25,6 @@ public class VersionListaDePrecios implements Serializable{
 	private Integer id;
 	private Date inicioValidez;
 	private List<DefinicionPrecio> precios;
-
 	
 	public VersionListaDePrecios() {
 		this.precios = new ArrayList<DefinicionPrecio>();
@@ -66,4 +65,38 @@ public class VersionListaDePrecios implements Serializable{
 	public void setPrecios(List<DefinicionPrecio> precios) {
 		this.precios = precios;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((inicioValidez == null) ? 0 : inicioValidez.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VersionListaDePrecios other = (VersionListaDePrecios) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (inicioValidez == null) {
+			if (other.inicioValidez != null)
+				return false;
+		} else if (!inicioValidez.equals(other.inicioValidez))
+			return false;
+		return true;
+	}
+	
+	
 }

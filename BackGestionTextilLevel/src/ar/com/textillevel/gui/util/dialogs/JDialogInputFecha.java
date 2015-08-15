@@ -65,6 +65,11 @@ public class JDialogInputFecha extends JDialog {
 		if(txtFecha==null){
 			txtFecha = new CLDateField();
 			txtFecha.setFecha(DateUtil.getHoy());
+			txtFecha.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getBtnAceptar().doClick();
+				}
+			});
 		}
 		return txtFecha;
 	}

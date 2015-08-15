@@ -71,4 +71,38 @@ public class DefinicionPrecio implements Serializable {
 	public void setTipoProducto(ETipoProducto tipoProducto) {
 		setIdTipoProducto(tipoProducto.getId());
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((idTipoProducto == null) ? 0 : idTipoProducto.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DefinicionPrecio other = (DefinicionPrecio) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (idTipoProducto == null) {
+			if (other.idTipoProducto != null)
+				return false;
+		} else if (!idTipoProducto.equals(other.idTipoProducto))
+			return false;
+		return true;
+	}
+	
+	
 }

@@ -1,23 +1,34 @@
-package ar.com.textillevel.gui.modulos.abm;
+package ar.com.textillevel.gui.modulos.abm.listaprecios;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections.Closure;
+import org.apache.commons.collections.CollectionUtils;
+
+import ar.clarin.fwjava.boss.BossEstilos;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.clarin.fwjava.componentes.PanelTabla;
 import ar.clarin.fwjava.templates.GuiABMListaTemplate;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
@@ -32,10 +43,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	private static final long serialVersionUID = 8012369007737291095L;
 	
-	private static final String ICONO_BOTON_MODIF = "ar/clarin/fwjava/imagenes/b_modificar_fila.png";
-	private static final String ICONO_BOTON_MODIF_DES = "ar/clarin/fwjava/imagenes/b_modificar_fila_des.png";
-	private static final String ICONO_BOTON_VOLVER_A_DEFAULT = "ar/clarin/fwjava/imagenes/b_autocomp.png";
-	private static final String ICONO_BOTON_VOLVER_A_DEFAULT_DES = "ar/clarin/fwjava/imagenes/b_autocomp_des.png";
+//	private static final String ICONO_BOTON_MODIF = "ar/clarin/fwjava/imagenes/b_modificar_fila.png";
+//	private static final String ICONO_BOTON_MODIF_DES = "ar/clarin/fwjava/imagenes/b_modificar_fila_des.png";
+//	private static final String ICONO_BOTON_VOLVER_A_DEFAULT = "ar/clarin/fwjava/imagenes/b_autocomp.png";
+//	private static final String ICONO_BOTON_VOLVER_A_DEFAULT_DES = "ar/clarin/fwjava/imagenes/b_autocomp_des.png";
 
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
@@ -169,6 +180,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public void setModoEdicion(boolean estado) {
 		GuiUtil.setEstadoPanel(getTabDetalle(), estado);
+		getTablaVersiones().getBotonEliminar().setEnabled(false);
+		getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
 		GuiUtil.setEstadoPanel(getTablaDefiniciones(), false);
 	}
 
@@ -194,8 +207,11 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
 		private static final int COL_OBJ = 1;
 		
+		private JButton btnImprimirVersion;
+		
 		public PanelTablaVersionesListaDePrecio() {
 			setBorder(BorderFactory.createTitledBorder("Versiones"));
+			agregarBoton(getBtnImprimirVersion());
 		}
 
 		@Override
@@ -206,13 +222,22 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					VersionListaDePrecios version = getElemento(getTabla().getSelectedRow());
-					if (version != null) {
-						getTablaDefiniciones().getBotonAgregar().setEnabled(true);
-						getTablaDefiniciones().agregarElementos(version.getPrecios());
-					} else {
+					int selectedRow = getTabla().getSelectedRow();
+					if (selectedRow >= 0) {
+						VersionListaDePrecios version = getElemento(selectedRow);
+						if (version != null) {
+							getTablaDefiniciones().getBotonAgregar().setEnabled(true);
+							getTablaDefiniciones().agregarElementos(version.getPrecios());
+							getBtnImprimirVersion().setEnabled(true);
+						} else {
+							getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+							getBtnImprimirVersion().setEnabled(false);
+						}
+					}else{
 						getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+						getBtnImprimirVersion().setEnabled(false);
 					}
+						
 				}
 			});
 			tabla.setHeaderAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
@@ -240,6 +265,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		
 		@Override
 		public boolean validarQuitar() {
+			getListaActual().getVersiones().remove(getElemento(getTabla().getSelectedRow()));
 			return true;
 		}
 
@@ -257,6 +283,19 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				agregarElemento(nuevaVersion);
 			}
 			return false;
+		}
+
+		public JButton getBtnImprimirVersion() {
+			if (btnImprimirVersion == null) {
+				btnImprimirVersion = BossEstilos.createButton("ar/com/textillevel/imagenes/b_imprimir_moderno.png", "ar/com/textillevel/imagenes/b_imprimir_moderno_des.png");
+				btnImprimirVersion.setEnabled(false);
+				btnImprimirVersion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						new ImprimirListaDePreciosHandler().imprimir();
+					}
+				});
+			}
+			return btnImprimirVersion;
 		}
 	}
 	
@@ -304,6 +343,57 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			return null;
 		} 
 		
+		@Override
+		public boolean validarAgregar() {
+			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
+			if (tipoProductoSeleccionado != null) {
+				JDialogAgregarModificarDefinicionPrecios dialog = new JDialogAgregarModificarDefinicionPrecios(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+				dialog.setVisible(true);
+				if (dialog.isAcepto()) {
+					VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
+					versionSeleccionada.getPrecios().add(dialog.getDefinicion());
+					refrescarTabla();
+				}
+			}
+			return false;
+		}
+		
+		private void refrescarTabla() {
+			getTabla().removeAllRows();
+			agregarElementos(getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow()).getPrecios());
+		}
+
+		@Override
+		public boolean validarQuitar() {
+			VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTabla().getSelectedRow());
+			versionSeleccionada.getPrecios().remove(getElemento(getTablaDefiniciones().getTabla().getSelectedRow()));
+			return true;
+		}
+		
+		@Override
+		protected void botonModificarPresionado(int filaSeleccionada) {
+
+		}
+		
+		private ETipoProducto seleccionarTipoProducto() {
+			final List<ETipoProducto> tiposUsados = new ArrayList<ETipoProducto>();
+			CollectionUtils.forAllDo(getElementos(), new Closure() {
+				public void execute(Object arg0) {
+					tiposUsados.add( ((DefinicionPrecio) arg0).getTipoProducto());
+				}
+			});
+			Collection<ETipoProducto> disjuncion = GenericUtils.restaConjuntosOrdenada(Arrays.asList(ETipoProducto.values()), tiposUsados);
+			Object[] disjuncionArray = disjuncion.toArray();
+			String[] tiposProducto= new String[disjuncionArray.length];
+			for(int i = 0 ; i < disjuncionArray.length;i++){
+				tiposProducto[i] = ((ETipoProducto)disjuncionArray[i]).getDescripcion();
+			}
+			Object opcion = JOptionPane.showInputDialog(null, "Seleccione el tipo de producto:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, tiposProducto,tiposProducto[0]);
+			if(opcion!=null){
+				return ETipoProducto.getByDescripcion((String)opcion);
+			}
+			return null;
+		}
 	}
 
 	public PanelTablaVersionesListaDePrecio getTablaVersiones() {
