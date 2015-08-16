@@ -11,7 +11,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 public class GuiBackTextilLevel extends GTLMainTemplate {
 
 	private static final long serialVersionUID = -2538191821904835236L;
-	private static final String VERSION = "3.0";
+	private static final String VERSION = "4.0";
 
 	protected GuiBackTextilLevel(int idAplicacion, String version) throws CLException {
 		super(idAplicacion, version);

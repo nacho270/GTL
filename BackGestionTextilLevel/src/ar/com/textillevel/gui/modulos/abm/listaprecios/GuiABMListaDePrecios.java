@@ -35,6 +35,9 @@ import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.comun.JDialogAgregarModificarDefinicionPreciosComun;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.estampado.JDialogAgregarModificarDefinicionPreciosEstampado;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.tenido.JDialogAgregarModificarDefinicionPreciosTenido;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.dialogs.JDialogInputFecha;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -342,17 +345,53 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarAgregar() {
 			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
 			if (tipoProductoSeleccionado != null) {
-				JDialogAgregarModificarDefinicionPrecios dialog = new JDialogAgregarModificarDefinicionPrecios(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
-				dialog.setVisible(true);
-				if (dialog.isAcepto()) {
+				JDialogAgregarModificarDefinicionPreciosV2 d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
+				d.setVisible(true);
+				if (d.isAcepto()) {
 					VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
-					versionSeleccionada.getPrecios().add(dialog.getDefinicion());
+					versionSeleccionada.getPrecios().add(d.getDefinicion());
 					refrescarTabla();
 				}
+
+//				VERSION ANTERIOR, CHEQUEAR
+//				JDialogAgregarModificarDefinicionPrecios dialog = new JDialogAgregarModificarDefinicionPrecios(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+//				dialog.setVisible(true);
+//				if (dialog.isAcepto()) {
+//					VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
+//					versionSeleccionada.getPrecios().add(dialog.getDefinicion());
+//					refrescarTabla();
+//				}
 			}
 			return false;
 		}
 		
+		private JDialogAgregarModificarDefinicionPreciosV2 createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
+			DefinicionPrecio defincionAModificar = null;
+			if (isModificar) {
+				int fila = getTabla().getSelectedRow();
+				if (fila == -1) {
+					throw new RuntimeException("No hay fila seleccionada");
+				}
+				defincionAModificar = getElemento(fila);
+			}
+			if (tipoProductoSeleccionado == ETipoProducto.TENIDO) {
+				if (isModificar) {
+					return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado, defincionAModificar);
+				}
+				return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+			}
+			if (tipoProductoSeleccionado == ETipoProducto.ESTAMPADO) {
+				if (isModificar) {
+					return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado, defincionAModificar);
+				}
+				return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+			}
+			if (isModificar) {
+				return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado, defincionAModificar);
+			}
+			return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+		}
+
 		private void refrescarTabla() {
 			getTabla().removeAllRows();
 			agregarElementos(getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow()).getPrecios());
