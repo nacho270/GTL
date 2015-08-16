@@ -48,8 +48,6 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 
 	@Override
 	public boolean validarAgregar() {
-		JDialogAgregarModificarPrecioGama dialog = new JDialogAgregarModificarPrecioGama(parent);
-		dialog.setVisible(true);
 		return false;
 	}
 	
