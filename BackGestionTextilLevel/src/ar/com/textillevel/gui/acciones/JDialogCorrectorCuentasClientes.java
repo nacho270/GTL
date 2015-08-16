@@ -276,15 +276,17 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 			bloquearComponentes();
 			CLCursor.startWait(JDialogCorrectorCuentasClientes.this);
 			if (getEntidad() == null) {
-				double avance = getListaEntidades().size() / 100;
+				double avance = 100f / getListaEntidades().size();
+				double avanceAcumulado = 0;
+				int contador = 1;
 				for (EntidadWrapper e : getListaEntidades()) {
 					try {
 						agregarFila(e.getRazonSocial());
-						getLblEstado().setText(
+						getLblEstado().setText( (contador++) + " de " + getListaEntidades().size() + " - " +
 								"Corrigiendo " + e.getRazonSocial());
 						corregirCuentaEntidad(e);
-						getProgreso().setValue(
-								getProgreso().getValue() + (int) avance);
+						avanceAcumulado += avance;
+						getProgreso().setValue((int) avanceAcumulado);
 						actualizarUltimaFila(EEstadoCorreccionCuentaCliente.OK);
 					} catch (ValidacionException ex) {
 						ex.printStackTrace();
