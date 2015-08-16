@@ -1,5 +1,6 @@
 package ar.com.textillevel.facade.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -89,7 +90,9 @@ public class CorreccionFacturaProveedorFacade implements CorreccionFacturaProvee
 		}
 
 		public void visit(NotaCreditoProveedor ncp) {
-			ncp.setMontoSobrantePorUtilizar(ncp.getMontoTotal());
+			BigDecimal montoTotalAbsoluto = new BigDecimal(Math.abs(ncp.getMontoTotal().doubleValue()));
+			ncp.setMontoSobrantePorUtilizar(montoTotalAbsoluto);
+			ncp.setMontoTotal(montoTotalAbsoluto);
 			ncp = (NotaCreditoProveedor)correccionDAO.save(ncp);
 
 			ncp.setMontoTotal(ncp.getMontoTotal());

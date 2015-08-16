@@ -441,11 +441,11 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 
 	public void crearMovimientoHaberProveedor(NotaCreditoProveedor notaCredito, String obsMovimiento) {
 		CuentaProveedor cuenta = getCuentaProveedorByIdProveedor(notaCredito.getProveedor().getId());
-		cuenta.setSaldo(new BigDecimal(cuenta.getSaldo().doubleValue() + notaCredito.getMontoTotal().doubleValue()));
+		cuenta.setSaldo(new BigDecimal(cuenta.getSaldo().doubleValue() + Math.abs(notaCredito.getMontoTotal().doubleValue())));
 		cuentaDao.save(cuenta);
 		MovimientoHaberProveedor mhp = new MovimientoHaberProveedor();
 		mhp.setObservaciones(obsMovimiento);
-		mhp.setMonto(notaCredito.getMontoTotal().negate()); //los movimientos se guardan con saldo positivo. El saldo de la nota de crédito viene negativo
+		mhp.setMonto(new BigDecimal(Math.abs(notaCredito.getMontoTotal().negate().doubleValue()))); //los movimientos se guardan con saldo positivo. El saldo de la nota de crédito viene negativo
 //		mhp.setMonto(notaCredito.getMontoTotal());//27/7/13 Segun Diego, estamos contando mal las NC
 		mhp.setCuenta(cuenta);
 		mhp.setNotaCredito(notaCredito);
