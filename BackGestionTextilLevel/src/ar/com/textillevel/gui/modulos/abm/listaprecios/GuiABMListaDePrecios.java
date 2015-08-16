@@ -345,27 +345,18 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarAgregar() {
 			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
 			if (tipoProductoSeleccionado != null) {
-				JDialogAgregarModificarDefinicionPreciosV2 d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
+				JDialogAgregarModificarDefinicionPrecios d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
 				d.setVisible(true);
 				if (d.isAcepto()) {
 					VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
 					versionSeleccionada.getPrecios().add(d.getDefinicion());
 					refrescarTabla();
 				}
-
-//				VERSION ANTERIOR, CHEQUEAR
-//				JDialogAgregarModificarDefinicionPrecios dialog = new JDialogAgregarModificarDefinicionPrecios(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
-//				dialog.setVisible(true);
-//				if (dialog.isAcepto()) {
-//					VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
-//					versionSeleccionada.getPrecios().add(dialog.getDefinicion());
-//					refrescarTabla();
-//				}
 			}
 			return false;
 		}
 		
-		private JDialogAgregarModificarDefinicionPreciosV2 createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
+		private JDialogAgregarModificarDefinicionPrecios createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
 			DefinicionPrecio defincionAModificar = null;
 			if (isModificar) {
 				int fila = getTabla().getSelectedRow();

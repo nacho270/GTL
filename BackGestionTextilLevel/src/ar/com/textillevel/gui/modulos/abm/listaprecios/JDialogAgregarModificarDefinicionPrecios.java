@@ -4,43 +4,49 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ar.clarin.fwjava.componentes.CLJNumericTextField;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
 import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
-import ar.com.textillevel.gui.modulos.abm.listaprecios.comun.JDialogAgregarModificarRangoAnchoComun;
-import ar.com.textillevel.gui.modulos.abm.listaprecios.estampado.JDialogAgregarModificarRangoAnchoEstampado;
-import ar.com.textillevel.gui.modulos.abm.listaprecios.tenido.JDialogAgregarModificarRangoAnchoTenido;
+import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.util.GTLBeanFactory;
 
-public class JDialogAgregarModificarDefinicionPrecios extends JDialog {
+public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 
-	private static final long serialVersionUID = 4298103239770904005L;
+	private static final long serialVersionUID = 1317620079501375084L;
 
-	private PanelTablaRangos tablaRangos;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private CLJTextField txtTipoProducto;
+	private JButton btnAgregar;
+	private CLJNumericTextField txtAnchoInicial;
+	private CLJNumericTextField txtAnchoFinal;
+	private JComboBox cmbTipoArticulo;
+	private CLJNumericTextField txtPrecio;
 
 	private ETipoProducto tipoProducto;
 	private boolean acepto;
 	private DefinicionPrecio definicion;
-
+	private TipoArticuloFacadeRemote tipoArticuloFacade;
+	
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, ETipoProducto tipoProducto) {
 		super(padre);
 		setDefinicion(new DefinicionPrecio());
@@ -49,9 +55,12 @@ public class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 		setUpScreen();
 	}
 	
-	public JDialogAgregarModificarDefinicionPrecios(Frame padre, ETipoProducto tipoProducto, DefinicionPrecio defincion) {
-		this(padre, tipoProducto);
-		setDefinicion(defincion);
+	public JDialogAgregarModificarDefinicionPrecios(Frame padre, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
+		super(padre);
+		setDefinicion(definicionAModificar);
+		setTipoProducto(tipoProducto);
+		setUpComponentes();
+		setUpScreen();
 	}
 
 	private void setUpScreen() {
@@ -70,40 +79,58 @@ public class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 				salir();
 			}
 		});
-		JPanel panelNorte = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		panelNorte.add(new JLabel("Tipo de producto: "));
-		panelNorte.add(getTxtTipoProducto());
 		
 		JPanel panelSur = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panelSur.add(getBtnAceptar());
 		panelSur.add(getBtnCancelar());
 		
-		add(panelNorte, BorderLayout.NORTH);
-		add(getTablaRangos(), BorderLayout.CENTER);
+		add(getPanelNorte(), BorderLayout.NORTH);
+		PanelTablaRango<? extends RangoAncho> tablaCentral = createPanelTabla();
+		if (tablaCentral != null) {
+			add(tablaCentral, BorderLayout.CENTER);
+		}
 		add(panelSur, BorderLayout.SOUTH);
 	}
+	
+	private JPanel getPanelNorte() {
+		JPanel panelNorte = new JPanel(new GridBagLayout());
+		panelNorte.add(new JLabel("Tipo de producto: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtTipoProducto(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 5, 1, 1, 1));
+		
+		panelNorte.add(new JLabel("Ancho inicial: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtAnchoInicial(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 
-	private JDialogAgregarModificarRangoAncho getDialogoAgregarModificarRangoAncho(boolean isModificar) {
-		int selectedRow = getTablaRangos().getTabla().getSelectedRow();
-		RangoAncho rangoElegido = selectedRow == -1 ? null : getTablaRangos().getElemento(selectedRow);
-		if (getTipoProducto() == ETipoProducto.TENIDO){
-			if (isModificar) {
-				return new JDialogAgregarModificarRangoAnchoTenido(JDialogAgregarModificarDefinicionPrecios.this, getDefinicion().getRangos(), rangoElegido);
-			}
-			return new JDialogAgregarModificarRangoAnchoTenido(JDialogAgregarModificarDefinicionPrecios.this, getDefinicion().getRangos());
+		panelNorte.add(new JLabel("Ancho final: "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtAnchoFinal(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+
+		panelNorte.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(4, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(5, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+		
+		JPanel panelEspecifico = createPanelDatosEspecificos();
+		if (panelEspecifico != null) {
+			panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 6,1,1,1));
 		}
-		if (getTipoProducto() == ETipoProducto.ESTAMPADO){
-			if (isModificar) {
-				return new JDialogAgregarModificarRangoAnchoEstampado(JDialogAgregarModificarDefinicionPrecios.this, getDefinicion().getRangos(), rangoElegido);
-			}
-			return new JDialogAgregarModificarRangoAnchoEstampado(JDialogAgregarModificarDefinicionPrecios.this, getDefinicion().getRangos());
-		}
-		if (isModificar) {
-			return new JDialogAgregarModificarRangoAnchoComun(JDialogAgregarModificarDefinicionPrecios.this, getDefinicion().getRangos(), rangoElegido);
-		}
-		return new JDialogAgregarModificarRangoAnchoComun(JDialogAgregarModificarDefinicionPrecios.this, getDefinicion().getRangos());
+		panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
+		panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(3, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
+		return panelNorte;
 	}
 
+	protected abstract JPanel createPanelDatosEspecificos();
+	protected abstract PanelTablaRango<? extends RangoAncho> createPanelTabla();
+
+	public JButton getBtnAceptar() {
+		if (btnAceptar == null) {
+			btnAceptar = new JButton("Aceptar");
+			btnAceptar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+				}
+			});
+		}
+		return btnAceptar;
+	}
+	
 	public boolean isAcepto() {
 		return acepto;
 	}
@@ -120,82 +147,6 @@ public class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 		this.definicion = definicion;
 	}
 
-	private class PanelTablaRangos extends PanelTabla<RangoAncho> {
-
-		private static final long serialVersionUID = -8601564676068790417L;
-
-		private static final int CANT_COLS = 3;
-		private static final int COL_ANCHO_MINIMO = 0;
-		private static final int COL_ANCHO_MAXIMO = 1;
-		private static final int COL_OBJ = 2;
-		
-		public PanelTablaRangos() {
-			agregarBotonModificar();
-			setBorder(BorderFactory.createTitledBorder("Anchos"));
-		}
-
-		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
-			tabla.setStringColumn(COL_ANCHO_MINIMO, "ANCHO DESDE", 200, 200, true);
-			tabla.setStringColumn(COL_ANCHO_MAXIMO, "ANCHO HASTA", 200, 200, true);
-			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_ANCHO_MINIMO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_ANCHO_MAXIMO, CLJTable.CENTER_ALIGN);
-			return tabla;
-		}
-
-		@Override
-		protected void agregarElemento(RangoAncho elemento) {
-			Object[] row = new Object[CANT_COLS];
-			row[COL_ANCHO_MINIMO] = GenericUtils.getDecimalFormat().format(elemento.getAnchoMinimo());
-			row[COL_ANCHO_MAXIMO] = GenericUtils.getDecimalFormat().format(elemento.getAnchoMaximo());
-			row[COL_OBJ] = elemento;
-			getTabla().addRow(row);		
-		}
-
-		@Override
-		protected RangoAncho getElemento(int fila) {
-			return (RangoAncho) getTabla().getValueAt(fila, COL_OBJ);
-		}
-
-		@Override
-		protected String validarElemento(int fila) {
-			return null;
-		}
-		
-		@Override
-		public boolean validarAgregar() {
-			JDialogAgregarModificarRangoAncho dialog = getDialogoAgregarModificarRangoAncho(false);
-			dialog.setVisible(true);
-			if (dialog.isAcepto()) {
-				getDefinicion().getRangos().add(dialog.getRango());
-				refrescarTabla();
-			}
-			return false;
-		}
-		
-		private void refrescarTabla() {
-			getTabla().removeAllRows();
-			agregarElementos(getDefinicion().getRangos());
-		}
-
-		@Override
-		public boolean validarQuitar() {
-			return true;
-		}
-		
-		@Override
-		protected void botonModificarPresionado(int filaSeleccionada) {
-			JDialogAgregarModificarRangoAncho dialog = getDialogoAgregarModificarRangoAncho(true);
-			dialog.setVisible(true);
-			if (dialog.isAcepto()) {
-				getDefinicion().getRangos().set(filaSeleccionada, dialog.getRango());
-				refrescarTabla();
-			}
-		}
-	}
-
 	private void salir() {
 		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Alta de cheque");
 		if (ret == CLJOptionPane.YES_OPTION) {
@@ -203,26 +154,7 @@ public class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 			dispose();
 		}
 	}
-
-	public PanelTablaRangos getTablaRangos() {
-		if (tablaRangos == null) {
-			tablaRangos = new PanelTablaRangos();
-		}
-		return tablaRangos;
-	}
-
-	public JButton getBtnAceptar() {
-		if (btnAceptar == null) {
-			btnAceptar = new JButton("Aceptar");
-			btnAceptar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-
-				}
-			});
-		}
-		return btnAceptar;
-	}
-
+	
 	public JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
@@ -251,5 +183,49 @@ public class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 
 	public void setTipoProducto(ETipoProducto tipoProducto) {
 		this.tipoProducto = tipoProducto;
+	}
+
+	public JButton getBtnAgregar() {
+		if (btnAgregar == null) {
+			btnAgregar = new JButton("Agregar");
+		}
+		return btnAgregar;
+	}
+
+	public CLJNumericTextField getTxtAnchoInicial() {
+		if (txtAnchoInicial == null) {
+			txtAnchoInicial = new CLJNumericTextField(0, 10);
+			txtAnchoInicial.setSize(100, 20);
+		}
+		return txtAnchoInicial;
+	}
+
+	public CLJNumericTextField getTxtAnchoFinal() {
+		if (txtAnchoFinal == null) {
+			txtAnchoFinal = new CLJNumericTextField(0, 10);
+		}
+		return txtAnchoFinal;
+	}
+
+	public JComboBox getCmbTipoArticulo() {
+		if (cmbTipoArticulo == null) {
+			cmbTipoArticulo = new JComboBox();
+			GuiUtil.llenarCombo(cmbTipoArticulo, getTipoArticuloFacade().getAllTipoArticulos(), true);
+		}
+		return cmbTipoArticulo;
+	}
+
+	public CLJNumericTextField getTxtPrecio() {
+		if (txtPrecio == null) {
+			txtPrecio = new CLJNumericTextField(0, 10);
+		}
+		return txtPrecio;
+	}
+	
+	public TipoArticuloFacadeRemote getTipoArticuloFacade() {
+		if (tipoArticuloFacade == null) {
+			tipoArticuloFacade = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class);
+		}
+		return tipoArticuloFacade;
 	}
 }

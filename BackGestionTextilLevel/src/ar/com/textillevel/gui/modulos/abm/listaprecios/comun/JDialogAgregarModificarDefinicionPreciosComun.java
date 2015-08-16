@@ -6,11 +6,11 @@ import javax.swing.JPanel;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
-import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
-import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPreciosV2;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgregarModificarDefinicionPreciosV2 {
+public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgregarModificarDefinicionPrecios {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -28,7 +28,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 	}
 
 	@Override
-	protected PanelTablaRango<PrecioTipoArticulo> createPanelTabla() {
+	protected PanelTablaRango<RangoAnchoComun> createPanelTabla() {
 		return null;
 	}
 }

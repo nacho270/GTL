@@ -6,11 +6,11 @@ import javax.swing.JPanel;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
-import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
-import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPreciosV2;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAgregarModificarDefinicionPreciosV2 {
+public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAgregarModificarDefinicionPrecios {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -28,7 +28,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	}
 
 	@Override
-	protected PanelTablaRango<GrupoTipoArticuloBaseEstampado> createPanelTabla() {
+	protected PanelTablaRango<RangoAnchoArticuloEstampado> createPanelTabla() {
 		return null;
 	}
 }

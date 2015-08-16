@@ -3,10 +3,10 @@ package ar.com.textillevel.gui.modulos.abm.listaprecios.tenido;
 import java.awt.Dialog;
 
 import ar.clarin.fwjava.componentes.CLJTable;
-import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class PanelTablaRangoTenido extends PanelTablaRango<GrupoTipoArticuloGama> {
+public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTenido> {
 
 	private static final long serialVersionUID = -6110511633595669633L;
 
@@ -30,16 +30,15 @@ public class PanelTablaRangoTenido extends PanelTablaRango<GrupoTipoArticuloGama
 	}
 
 	@Override
-	protected void agregarElemento(GrupoTipoArticuloGama elemento) {
+	protected void agregarElemento(RangoAnchoArticuloTenido elemento) {
 		Object[] row = new Object[CANT_COLS];
-		row[COL_TIPO_ARTICULO] = elemento.getTipoArticulo().getNombre();
 		row[COL_OBJ] = elemento;
 		getTabla().addRow(row);
 	}
 
 	@Override
-	protected GrupoTipoArticuloGama getElemento(int fila) {
-		return (GrupoTipoArticuloGama) getTabla().getValueAt(fila, COL_OBJ);
+	protected RangoAnchoArticuloTenido getElemento(int fila) {
+		return (RangoAnchoArticuloTenido) getTabla().getValueAt(fila, COL_OBJ);
 	}
 
 	@Override

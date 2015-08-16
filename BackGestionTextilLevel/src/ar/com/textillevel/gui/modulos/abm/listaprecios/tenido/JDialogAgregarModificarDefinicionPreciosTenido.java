@@ -11,12 +11,12 @@ import javax.swing.JPanel;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
-import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
-import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPreciosV2;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 import ar.com.textillevel.gui.util.GenericUtils;
 
-public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgregarModificarDefinicionPreciosV2 {
+public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgregarModificarDefinicionPrecios {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -46,7 +46,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	}
 
 	@Override
-	protected PanelTablaRango<GrupoTipoArticuloGama> createPanelTabla() {
+	protected PanelTablaRango<RangoAnchoArticuloTenido> createPanelTabla() {
 		return new PanelTablaRangoTenido(JDialogAgregarModificarDefinicionPreciosTenido.this);
 	}
 }
