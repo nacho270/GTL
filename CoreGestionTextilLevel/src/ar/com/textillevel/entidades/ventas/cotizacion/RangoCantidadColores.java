@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "T_RANGO_CANTIDAD_COLORES")
@@ -69,4 +70,20 @@ public class RangoCantidadColores implements Serializable {
 	public void setRangos(List<RangoCoberturaEstampado> rangos) {
 		this.rangos = rangos;
 	}
+
+	@Transient
+	public RangoCoberturaEstampado getRangoCobertura(Integer minCobertura, Integer maxCobertura) {
+		for(RangoCoberturaEstampado r : getRangos()) {
+			if(minCobertura != null && r.getMinimo() != null && minCobertura.equals(r.getMinimo()) && maxCobertura != null && r.getMaximo() != null && maxCobertura.equals(r.getMaximo())) {
+				return r;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "De " + getMinimo().toString() + " a " + getMaximo().toString();
+	}
+
 }

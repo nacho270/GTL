@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 
 @Entity
 @Table(name = "T_GRUPO_TIPO_ARTICULO_BASE")
@@ -32,6 +35,12 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 
 	public void setPrecios(List<PrecioBaseEstampado> precios) {
 		this.precios = precios;
+	}
+
+	@Transient
+	public PrecioBaseEstampado getPrecioBase(GamaColor base) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

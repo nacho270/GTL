@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,13 +25,14 @@ import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
+public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAncho> extends JDialog {
 
 	private static final long serialVersionUID = 1317620079501375084L;
 
@@ -41,10 +43,12 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	private CLJTextField txtAnchoExacto;
 	private JComboBox cmbTipoArticulo;
 	private CLJTextField txtPrecio;
-	private PanelTablaRango<? extends RangoAncho> tablaRango;
+	private PanelTablaRango<T> tablaRango;
 	private JButton btnAgregar;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
+	
+	private List<GamaColorCliente> gamas;
 
 	private Cliente cliente;
 	private ETipoProducto tipoProducto;
@@ -197,7 +201,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 			btnAgregar = new JButton("Agregar");
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					botonAgregarPresionado();
 				}
 			});
 		}
@@ -269,7 +273,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 		return txtAnchoExacto;
 	}
 	
-	public PanelTablaRango<? extends RangoAncho> getTablaRango() {
+	public PanelTablaRango<T> getTablaRango() {
 		if (tablaRango == null) {
 			tablaRango = createPanelTabla(JDialogAgregarModificarDefinicionPrecios.this);
 		}
@@ -279,7 +283,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	/* ABSTRACTOS */
 
 	protected abstract JPanel createPanelDatosEspecificos();
-	protected abstract PanelTablaRango<? extends RangoAncho> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent);
+	protected abstract PanelTablaRango<T> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<T> parent);
+	protected abstract void botonAgregarPresionado();
 
 	public Cliente getCliente() {
 		return cliente;

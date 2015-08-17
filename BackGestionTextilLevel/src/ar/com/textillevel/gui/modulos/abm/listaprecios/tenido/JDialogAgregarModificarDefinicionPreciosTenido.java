@@ -25,7 +25,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgregarModificarDefinicionPrecios {
+public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido> {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -71,7 +71,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoArticuloTenido> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent) {
+	protected PanelTablaRango<RangoAnchoArticuloTenido> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido> parent) {
 		return new PanelTablaRangoTenido(parent);
 	}
 
@@ -102,4 +102,10 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		}
 		return linkableLabelEditarGamaCliente;
 	}
+
+	@Override
+	protected void botonAgregarPresionado() {
+		// TODO Auto-generated method stub
+	}
+
 }

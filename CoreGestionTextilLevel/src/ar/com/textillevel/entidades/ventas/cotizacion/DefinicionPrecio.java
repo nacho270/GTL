@@ -103,6 +103,21 @@ public class DefinicionPrecio implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
+	@Transient
+	public RangoAncho getRango(Float min, Float max, Float exacto) {
+		for(RangoAncho ra : getRangos()) {
+			if(exacto != null && ra.getAnchoExacto() != null && exacto.equals(ra.getAnchoExacto())) {
+				return ra;
+			}
+			if(min != null && ra.getAnchoMinimo() != null && min.equals(ra.getAnchoMinimo()) && max != null && ra.getAnchoMaximo() != null && max.equals(ra.getAnchoMaximo())) {
+				return ra;
+			}
+			if(min != null && ra.getAnchoMinimo() != null && min.equals(ra.getAnchoMinimo()) && max == null && ra.getAnchoMaximo() == null) {
+				return ra;
+			}
+		}
+		return null;
+	}
+
 }

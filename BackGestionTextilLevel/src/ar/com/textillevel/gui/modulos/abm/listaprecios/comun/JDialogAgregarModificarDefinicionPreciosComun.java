@@ -11,7 +11,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgregarModificarDefinicionPrecios {
+public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoComun> {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -29,7 +29,13 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoComun> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent) {
+	protected PanelTablaRango<RangoAnchoComun> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoComun> parent) {
 		return null;
 	}
+
+	@Override
+	protected void botonAgregarPresionado() {
+		// TODO Auto-generated method stub
+	}
+
 }

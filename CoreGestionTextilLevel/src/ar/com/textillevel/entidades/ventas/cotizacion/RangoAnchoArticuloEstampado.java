@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 
 @Entity
 @DiscriminatorValue(value = "RANGOESTAMPADO")
@@ -32,4 +35,15 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 	public void setGruposBase(List<GrupoTipoArticuloBaseEstampado> gruposBase) {
 		this.gruposBase = gruposBase;
 	}
+
+	@Transient
+	public GrupoTipoArticuloBaseEstampado getGrupo(TipoArticulo ta) {
+		for(GrupoTipoArticuloBaseEstampado g : getGruposBase()) {
+			if(g.getTipoArticulo().equals(ta)) {
+				return g;
+			}
+		}
+		return null;
+	}
+
 }

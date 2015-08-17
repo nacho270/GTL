@@ -63,4 +63,14 @@ public abstract class RangoAncho implements Serializable{
 	public void setAnchoExacto(Float anchoExacto) {
 		this.anchoExacto = anchoExacto;
 	}
+
+	@Override
+	public String toString() {
+		if(getAnchoExacto() == null) {
+			return "De " + getAnchoMinimo().toString() + " a " + getAnchoMaximo().toString();
+		} else {
+			return getAnchoExacto().toString();
+		}
+	}
+
 }

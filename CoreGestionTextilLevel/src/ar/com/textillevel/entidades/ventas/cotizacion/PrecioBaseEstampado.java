@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 
@@ -63,4 +64,15 @@ public class PrecioBaseEstampado implements Serializable {
 	public void setRangosDeColores(List<RangoCantidadColores> rangosDeColores) {
 		this.rangosDeColores = rangosDeColores;
 	}
+
+	@Transient
+	public RangoCantidadColores getRango(Integer minCantColores, Integer maxCantColores) {
+		for(RangoCantidadColores r : getRangosDeColores()) {
+			if(minCantColores != null && r.getMinimo() != null && minCantColores.equals(r.getMinimo()) && maxCantColores != null && r.getMaximo() != null && maxCantColores.equals(r.getMaximo())) {
+				return r;
+			}
+		}
+		return null;
+	}
+
 }
