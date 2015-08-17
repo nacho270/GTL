@@ -46,7 +46,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoArticuloTenido> createPanelTabla() {
-		return new PanelTablaRangoTenido(JDialogAgregarModificarDefinicionPreciosTenido.this);
+	protected PanelTablaRango<RangoAnchoArticuloTenido> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent) {
+		return new PanelTablaRangoTenido(parent);
 	}
 }

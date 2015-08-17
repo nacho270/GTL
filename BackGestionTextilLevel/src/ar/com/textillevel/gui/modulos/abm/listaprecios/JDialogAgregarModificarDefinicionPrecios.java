@@ -13,12 +13,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
@@ -33,14 +33,17 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 
 	private static final long serialVersionUID = 1317620079501375084L;
 
+	private CLJTextField txtTipoProducto;
+	private JCheckBox chkAnchoExacto;
+	private CLJTextField txtAnchoInicial;
+	private CLJTextField txtAnchoFinal;
+	private CLJTextField txtAnchoExacto;
+	private JComboBox cmbTipoArticulo;
+	private CLJTextField txtPrecio;
+	private PanelTablaRango<? extends RangoAncho> tablaRango;
+	private JButton btnAgregar;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtTipoProducto;
-	private JButton btnAgregar;
-	private CLJNumericTextField txtAnchoInicial;
-	private CLJNumericTextField txtAnchoFinal;
-	private JComboBox cmbTipoArticulo;
-	private CLJNumericTextField txtPrecio;
 
 	private ETipoProducto tipoProducto;
 	private boolean acepto;
@@ -66,7 +69,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	private void setUpScreen() {
 		setTitle("Agregar/modificar definición de precios para - " + getTipoProducto().getDescripcion().toUpperCase());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setSize(new Dimension(600, 600));
+		setSize(new Dimension(700, 600));
 		setModal(true);
 		setResizable(false);
 		GuiUtil.centrar(this);
@@ -85,7 +88,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 		panelSur.add(getBtnCancelar());
 		
 		add(getPanelNorte(), BorderLayout.NORTH);
-		PanelTablaRango<? extends RangoAncho> tablaCentral = createPanelTabla();
+		PanelTablaRango<? extends RangoAncho> tablaCentral = getTablaRango();
 		if (tablaCentral != null) {
 			add(tablaCentral, BorderLayout.CENTER);
 		}
@@ -94,37 +97,37 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	
 	private JPanel getPanelNorte() {
 		JPanel panelNorte = new JPanel(new GridBagLayout());
-		panelNorte.add(new JLabel("Tipo de producto: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtTipoProducto(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 5, 1, 1, 1));
+		panelNorte.add(new JLabel("Producto: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtTipoProducto(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 7, 1, 1, 1));
 		
 		panelNorte.add(new JLabel("Ancho inicial: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 		panelNorte.add(getTxtAnchoInicial(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-
 		panelNorte.add(new JLabel("Ancho final: "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 		panelNorte.add(getTxtAnchoFinal(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+		panelNorte.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(6, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(7, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 
-		panelNorte.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(4, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(5, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-		
+		panelNorte.add(new JLabel("Usar ancho exacto"), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
+		panelNorte.add(getChkAnchoExacto(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
+		panelNorte.add(new JLabel("Ancho exacto: "), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtAnchoExacto(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+		panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(6, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+		panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(7, 2, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+
 		JPanel panelEspecifico = createPanelDatosEspecificos();
 		if (panelEspecifico != null) {
-			panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 6,1,1,1));
+			panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 8,1,1,1));
 		}
-		panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
-		panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(3, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
+		panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
 		return panelNorte;
 	}
-
-	protected abstract JPanel createPanelDatosEspecificos();
-	protected abstract PanelTablaRango<? extends RangoAncho> createPanelTabla();
 
 	public JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
+					getTablaRango().validarNuevoRegistro();
 				}
 			});
 		}
@@ -148,7 +151,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Alta de cheque");
+		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar definición de precios");
 		if (ret == CLJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
@@ -188,21 +191,26 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	public JButton getBtnAgregar() {
 		if (btnAgregar == null) {
 			btnAgregar = new JButton("Agregar");
+			btnAgregar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
 		}
 		return btnAgregar;
 	}
 
-	public CLJNumericTextField getTxtAnchoInicial() {
+	public CLJTextField getTxtAnchoInicial() {
 		if (txtAnchoInicial == null) {
-			txtAnchoInicial = new CLJNumericTextField(0, 10);
+			txtAnchoInicial = new CLJTextField();
 			txtAnchoInicial.setSize(100, 20);
 		}
 		return txtAnchoInicial;
 	}
 
-	public CLJNumericTextField getTxtAnchoFinal() {
+	public CLJTextField getTxtAnchoFinal() {
 		if (txtAnchoFinal == null) {
-			txtAnchoFinal = new CLJNumericTextField(0, 10);
+			txtAnchoFinal = new CLJTextField();
 		}
 		return txtAnchoFinal;
 	}
@@ -215,9 +223,9 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 		return cmbTipoArticulo;
 	}
 
-	public CLJNumericTextField getTxtPrecio() {
+	public CLJTextField getTxtPrecio() {
 		if (txtPrecio == null) {
-			txtPrecio = new CLJNumericTextField(0, 10);
+			txtPrecio = new CLJTextField();
 		}
 		return txtPrecio;
 	}
@@ -228,4 +236,45 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 		}
 		return tipoArticuloFacade;
 	}
+
+	public JCheckBox getChkAnchoExacto() {
+		if (chkAnchoExacto == null) {
+			chkAnchoExacto = new JCheckBox();
+			chkAnchoExacto.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getTxtAnchoExacto().setEditable(getChkAnchoExacto().isSelected());
+					getTxtAnchoInicial().setEditable(!getChkAnchoExacto().isSelected());
+					getTxtAnchoFinal().setEditable(!getChkAnchoExacto().isSelected());
+					if (getChkAnchoExacto().isSelected()) {
+						getTxtAnchoInicial().setText("");
+						getTxtAnchoFinal().setText("");
+					} else {
+						getTxtAnchoExacto().setText("");
+					}
+				}
+			});
+		}
+		return chkAnchoExacto;
+	}
+
+	public CLJTextField getTxtAnchoExacto() {
+		if (txtAnchoExacto == null) {
+			txtAnchoExacto = new CLJTextField();
+			txtAnchoExacto.setEditable(false);
+		}
+		return txtAnchoExacto;
+	}
+	
+	public PanelTablaRango<? extends RangoAncho> getTablaRango() {
+		if (tablaRango == null) {
+			tablaRango = createPanelTabla(JDialogAgregarModificarDefinicionPrecios.this);
+		}
+		return tablaRango;
+	}
+	
+	/* ABSTRACTOS */
+
+	protected abstract JPanel createPanelDatosEspecificos();
+	protected abstract PanelTablaRango<? extends RangoAncho> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent);
+
 }

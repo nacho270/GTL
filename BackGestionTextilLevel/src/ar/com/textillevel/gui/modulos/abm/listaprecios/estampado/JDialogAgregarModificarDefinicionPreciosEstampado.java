@@ -28,7 +28,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoArticuloEstampado> createPanelTabla() {
+	protected PanelTablaRango<RangoAnchoArticuloEstampado> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent) {
 		return null;
 	}
 }

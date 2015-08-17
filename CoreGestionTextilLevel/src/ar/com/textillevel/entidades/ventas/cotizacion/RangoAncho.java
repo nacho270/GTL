@@ -24,7 +24,8 @@ public abstract class RangoAncho implements Serializable{
 	private Integer id;
 	private Float anchoMinimo; // nulleable, si el otro no es null
 	private Float anchoMaximo; // nulleable, si el otro no es null
-
+	private Float anchoExacto; // nulleable, si el otro no es null
+	
 	@Id
 	@Column(name = "P_ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,5 +53,14 @@ public abstract class RangoAncho implements Serializable{
 
 	public void setAnchoMaximo(Float anchoMaximo) {
 		this.anchoMaximo = anchoMaximo;
+	}
+
+	@Column(name = "A_ANCHO_MAXIMO_EXACTO")
+	public Float getAnchoExacto() {
+		return anchoExacto;
+	}
+
+	public void setAnchoExacto(Float anchoExacto) {
+		this.anchoExacto = anchoExacto;
 	}
 }

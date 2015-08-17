@@ -4,7 +4,7 @@ import java.awt.Dialog;
 
 import ar.clarin.fwjava.componentes.PanelTabla;
 
-public abstract class PanelTablaRango <T> extends PanelTabla<T>{
+public abstract class PanelTablaRango <T> extends PanelTabla<T> {
 
 	private static final long serialVersionUID = 7325870283327165165L;
 
@@ -12,5 +12,8 @@ public abstract class PanelTablaRango <T> extends PanelTabla<T>{
 	
 	public PanelTablaRango(Dialog parent) {
 		this.parent = parent;
+		getBotonAgregar().setVisible(false);
 	}
+
+	public abstract boolean validarNuevoRegistro();
 }

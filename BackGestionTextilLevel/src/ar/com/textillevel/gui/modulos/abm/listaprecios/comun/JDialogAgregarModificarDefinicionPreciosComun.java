@@ -28,7 +28,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoComun> createPanelTabla() {
+	protected PanelTablaRango<RangoAnchoComun> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent) {
 		return null;
 	}
 }
