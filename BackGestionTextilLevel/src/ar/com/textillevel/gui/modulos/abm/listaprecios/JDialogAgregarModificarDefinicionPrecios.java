@@ -23,6 +23,7 @@ import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
@@ -45,21 +46,24 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
+	private Cliente cliente;
 	private ETipoProducto tipoProducto;
 	private boolean acepto;
 	private DefinicionPrecio definicion;
 	private TipoArticuloFacadeRemote tipoArticuloFacade;
 	
-	public JDialogAgregarModificarDefinicionPrecios(Frame padre, ETipoProducto tipoProducto) {
+	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
 		super(padre);
+		setCliente(cliente);
 		setDefinicion(new DefinicionPrecio());
 		setTipoProducto(tipoProducto);
 		setUpComponentes();
 		setUpScreen();
 	}
 	
-	public JDialogAgregarModificarDefinicionPrecios(Frame padre, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
+	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
 		super(padre);
+		setCliente(cliente);
 		setDefinicion(definicionAModificar);
 		setTipoProducto(tipoProducto);
 		setUpComponentes();
@@ -276,5 +280,13 @@ public abstract class JDialogAgregarModificarDefinicionPrecios extends JDialog {
 
 	protected abstract JPanel createPanelDatosEspecificos();
 	protected abstract PanelTablaRango<? extends RangoAncho> createPanelTabla(JDialogAgregarModificarDefinicionPrecios parent);
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 }

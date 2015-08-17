@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import ar.com.textillevel.entidades.gente.Cliente;
+
 @Entity
 @Table(name = "T_GAMA_CLIENTE")
 public class GamaColorCliente implements Serializable {
@@ -23,6 +25,7 @@ public class GamaColorCliente implements Serializable {
 	
 	private Integer id;
 	private String nombre;
+	private Cliente cliente;
 	private GamaColor gamaOriginal;
 	private List<Color> colores;
 
@@ -70,6 +73,16 @@ public class GamaColorCliente implements Serializable {
 
 	public void setColores(List<Color> colores) {
 		this.colores = colores;
+	}
+
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "F_CLIENTE_P_ID", nullable = false)
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 }

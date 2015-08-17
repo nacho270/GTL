@@ -358,6 +358,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		
 		private JDialogAgregarModificarDefinicionPrecios createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
 			DefinicionPrecio defincionAModificar = null;
+			Cliente cliente = (Cliente) lista.getSelectedValue();
 			if (isModificar) {
 				int fila = getTabla().getSelectedRow();
 				if (fila == -1) {
@@ -367,20 +368,20 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			if (tipoProductoSeleccionado == ETipoProducto.TENIDO) {
 				if (isModificar) {
-					return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado, defincionAModificar);
+					return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
 				}
-				return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+				return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 			}
 			if (tipoProductoSeleccionado == ETipoProducto.ESTAMPADO) {
 				if (isModificar) {
-					return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado, defincionAModificar);
+					return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
 				}
-				return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+				return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 			}
 			if (isModificar) {
-				return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado, defincionAModificar);
+				return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
 			}
-			return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), tipoProductoSeleccionado);
+			return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 		}
 
 		private void refrescarTabla() {
