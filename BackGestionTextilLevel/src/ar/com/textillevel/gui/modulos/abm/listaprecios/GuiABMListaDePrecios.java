@@ -32,6 +32,7 @@ import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
@@ -345,7 +346,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarAgregar() {
 			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
 			if (tipoProductoSeleccionado != null) {
-				JDialogAgregarModificarDefinicionPrecios d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
+				JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho> d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
+				if (tipoProductoSeleccionado == ETipoProducto.TENIDO && !d.isAcepto()) {
+					return false;
+				}
 				d.setVisible(true);
 				if (d.isAcepto()) {
 					VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
@@ -356,7 +360,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			return false;
 		}
 		
-		private JDialogAgregarModificarDefinicionPrecios createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
+		@SuppressWarnings("unchecked")
+		private <T extends RangoAncho, D extends JDialogAgregarModificarDefinicionPrecios<T>> D createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
 			DefinicionPrecio defincionAModificar = null;
 			Cliente cliente = (Cliente) lista.getSelectedValue();
 			if (isModificar) {
@@ -368,20 +373,20 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			if (tipoProductoSeleccionado == ETipoProducto.TENIDO) {
 				if (isModificar) {
-					return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
+					return (D) new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
 				}
-				return new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
+				return (D) new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 			}
 			if (tipoProductoSeleccionado == ETipoProducto.ESTAMPADO) {
 				if (isModificar) {
-					return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
+					return (D) new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
 				}
-				return new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
+				return (D) new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 			}
 			if (isModificar) {
-				return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
+				return (D) new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
 			}
-			return new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
+			return (D) new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 		}
 
 		private void refrescarTabla() {

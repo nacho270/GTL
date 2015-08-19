@@ -11,6 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.taglibs.string.util.StringW;
+
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
@@ -43,14 +45,20 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(this, getCliente());
 			d.setVisible(true);
 			if (d.isAcepto()) {
-				
+				gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
+			} else {
+				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("No se puede dar de alta la lista de precios para teñido si tener definidas las gamas cliente."), "Advertencia");
+				setAcepto(false);
+				dispose();
 			}
 		}
+		GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
+		setAcepto(true);
 	}
 
 	public JDialogAgregarModificarDefinicionPreciosTenido(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
-		super(padre, cliente, tipoProducto, definicionAModificar);
-		gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
+		this(padre, cliente, tipoProducto);
+		super.setDefinicion(definicionAModificar);
 	}
 	
 	@Override
@@ -95,7 +103,14 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 				@Override
 				public void labelClickeada(MouseEvent e) {
 					if (getCmbGama().getSelectedItem() != null) {
-						JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(JDialogAgregarModificarDefinicionPreciosTenido.this, getCliente(), (GamaColorCliente)getCmbGama().getSelectedItem() );
+						JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(JDialogAgregarModificarDefinicionPreciosTenido.this, getCliente());
+						d.setVisible(true);
+						if (d.isAcepto()) {
+							gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
+							getCmbGama().removeAllItems();
+							GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
+						}
+							
 					}
 				}
 			};

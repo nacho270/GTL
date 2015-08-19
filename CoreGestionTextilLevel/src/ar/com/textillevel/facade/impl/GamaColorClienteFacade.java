@@ -16,11 +16,23 @@ public class GamaColorClienteFacade implements GamaColorClienteFacadeRemote{
 	private GamaColorClienteDAOLocal gamaClienteDao;
 	
 	public List<GamaColorCliente> getByCliente(Integer idCliente) {
-		return gamaClienteDao.getByCliente(idCliente);
+		List<GamaColorCliente> gamas = gamaClienteDao.getByCliente(idCliente);
+		if (gamas != null && !gamas.isEmpty()) {
+			for(GamaColorCliente gcc : gamas) {
+				gcc.getColores().size();
+			}
+		}
+		return gamas;
 	}
 
 	public GamaColorCliente getByGama(Integer idGamaOriginal) {
 		return gamaClienteDao.getByGama(idGamaOriginal);
+	}
+
+	public void save(List<GamaColorCliente> gamas) {
+		for(GamaColorCliente gcc : gamas) {
+			gamaClienteDao.save(gcc);
+		}
 	}
 
 }

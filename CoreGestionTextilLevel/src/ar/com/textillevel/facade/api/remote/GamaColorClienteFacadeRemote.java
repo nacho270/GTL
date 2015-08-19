@@ -10,4 +10,5 @@ import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
 public interface GamaColorClienteFacadeRemote {
 	public List<GamaColorCliente> getByCliente(Integer idCliente);
 	public GamaColorCliente getByGama(Integer idGamaOriginal);
+	public void save(List<GamaColorCliente> gamas);
 }

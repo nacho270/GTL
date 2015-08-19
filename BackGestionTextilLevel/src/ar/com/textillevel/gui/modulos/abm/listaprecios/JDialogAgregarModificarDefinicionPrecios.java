@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,7 +24,6 @@ import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
@@ -51,8 +49,6 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	
 	private JPanel panelNorte;
 	
-	private List<GamaColorCliente> gamas;
-
 	private static String TEXT_BTN_NUEVO = "Nuevo";
 	private static String TEXT_BTN_CANCELAR = "Cancelar";
 
