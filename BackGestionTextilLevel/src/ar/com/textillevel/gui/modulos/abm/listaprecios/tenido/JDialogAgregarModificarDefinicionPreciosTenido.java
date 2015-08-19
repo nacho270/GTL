@@ -108,4 +108,25 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	protected boolean validar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void setModoEdicionExtended(boolean modoEdicion) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void limpiarDatosExtended() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void botonAgregarOrCancelarPresionado() {
+		// TODO Auto-generated method stub
+	}
+
 }

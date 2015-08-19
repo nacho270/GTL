@@ -23,20 +23,31 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 	private static final int COL_COBERTURA = 4;
 	private static final int COL_PRECIO = 5;
 	private static final int COL_OBJ = 6;
+
+	private JDialogAgregarModificarDefinicionPreciosEstampado padre;
 	
 	public PanelTablaRangoEstampado(Dialog parent) {
 		super(parent);
+		this.padre = (JDialogAgregarModificarDefinicionPreciosEstampado)parent;
 		agregarBotonModificar();
+	}
+
+	@Override
+	protected void filaTablaSeleccionada() {
+		if(getTabla().getSelectedRow() != -1) {
+			RangoCoberturaEstampado rangoCobertura = (RangoCoberturaEstampado)getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ);
+			padre.setRangoCoberturaEstampadoSiendoEditado(rangoCobertura, false);
+		}
 	}
 
 	@Override
 	protected CLJTable construirTabla() {
 		CLJTable tabla = new CLJTable(0, CANT_COLS);
-		tabla.setStringColumn(COL_ANCHO, "ANCHO", 80, 80, false);
-		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTICULO", 150, 150, false);
-		tabla.setStringColumn(COL_BASE, "BASE", 120, 120, false);
-		tabla.setStringColumn(COL_CANT_COLORES, "CANT. COLORES", 110, 110, false);
-		tabla.setStringColumn(COL_COBERTURA, "COBERTURA", 90, 90, false);
+		tabla.setStringColumn(COL_ANCHO, "ANCHO", 80, 80, true);
+		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTICULO", 150, 150, true);
+		tabla.setStringColumn(COL_BASE, "BASE", 120, 120, true);
+		tabla.setStringColumn(COL_CANT_COLORES, "CANT. COLORES", 110, 110, true);
+		tabla.setStringColumn(COL_COBERTURA, "COBERTURA", 90, 90, true);
 		tabla.setFloatColumn(COL_PRECIO, "PRECIO", 70, true);
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 		tabla.setHeaderAlignment(COL_ANCHO, CLJTable.CENTER_ALIGN);
@@ -56,7 +67,7 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 				for(RangoCantidadColores rangoCantColores : precioBase.getRangosDeColores()) {
 					for(RangoCoberturaEstampado rangoCobertura : rangoCantColores.getRangos()) {
 						Object[] row = new Object[CANT_COLS];
-						row[COL_OBJ] = elemento;
+						row[COL_OBJ] = rangoCobertura;
 						row[COL_ANCHO] = elemento.toString();
 						row[COL_TIPO_ARTICULO] = grupoEstampado.getTipoArticulo().toString();
 						row[COL_BASE] = precioBase.getGama().toString();
@@ -71,8 +82,14 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 	}
 
 	@Override
+	protected void botonModificarPresionado(int filaSeleccionada) {
+		RangoCoberturaEstampado rangoCobertura = (RangoCoberturaEstampado)getTabla().getValueAt(filaSeleccionada, COL_OBJ);
+		padre.setRangoCoberturaEstampadoSiendoEditado(rangoCobertura, true);
+	}
+
+	@Override
 	protected RangoAnchoArticuloEstampado getElemento(int fila) {
-		return (RangoAnchoArticuloEstampado) getTabla().getValueAt(fila, COL_OBJ);
+		return null;
 	}
 
 	@Override
@@ -82,9 +99,12 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 
 	@Override
 	public boolean validarQuitar() {
+		int selectedRow = getTabla().getSelectedRow();
+		RangoCoberturaEstampado rangoCobertura = (RangoCoberturaEstampado)getTabla().getValueAt(selectedRow, COL_OBJ);
+		rangoCobertura.deepRemove();
 		return true;
 	}
-	
+
 	@Override
 	protected void botonAgregarPresionado() {
 

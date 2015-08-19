@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -21,6 +22,7 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 	private static final long serialVersionUID = 2124229339045732222L;
 
 	private List<PrecioBaseEstampado> precios;
+	private RangoAnchoArticuloEstampado rangoAnchoArticulo;
 
 	public GrupoTipoArticuloBaseEstampado() {
 		this.precios = new ArrayList<PrecioBaseEstampado>();
@@ -37,9 +39,23 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		this.precios = precios;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "F_RANGO_P_ID", updatable=false, insertable=false, nullable=false)
+	public RangoAnchoArticuloEstampado getRangoAnchoArticulo() {
+		return rangoAnchoArticulo;
+	}
+
+	public void setRangoAnchoArticulo(RangoAnchoArticuloEstampado rangoAnchoArticulo) {
+		this.rangoAnchoArticulo = rangoAnchoArticulo;
+	}
+	
 	@Transient
 	public PrecioBaseEstampado getPrecioBase(GamaColor base) {
-		// TODO Auto-generated method stub
+		for(PrecioBaseEstampado p : getPrecios()) {
+			if(p.getGama().equals(base)) {
+				return p;
+			}
+		}
 		return null;
 	}
 

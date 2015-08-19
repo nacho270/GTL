@@ -35,4 +35,15 @@ public class Utils {
 			   texto.equals("1") || texto.equals("true") ||
 			   texto.equals("verdadero");
 	}
+
+	public static <E extends Object, T extends Comparable<E>> boolean dentroDelRango(T elem, E desde, E hasta) {
+		return (desde == null || elem.compareTo(desde) >= 0) &&
+			   (hasta ==null || elem.compareTo(hasta) <= 0);
+	}
+
+	public static <E extends Object, T extends Comparable<E>> boolean dentroDelRangoEstricto(T elem, E desde, E hasta) {
+		return (desde == null || elem.compareTo(desde) > 0) &&
+			   (hasta ==null || elem.compareTo(hasta) < 0);
+	}
+
 }

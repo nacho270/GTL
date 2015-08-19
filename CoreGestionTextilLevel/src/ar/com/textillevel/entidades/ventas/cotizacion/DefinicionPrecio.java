@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.util.Utils;
 
 @Entity
 @Table(name = "T_DEFINICION_PRECIO_LISTA")
@@ -107,13 +108,29 @@ public class DefinicionPrecio implements Serializable {
 	@Transient
 	public RangoAncho getRango(Float min, Float max, Float exacto) {
 		for(RangoAncho ra : getRangos()) {
-			if(exacto != null && ra.getAnchoExacto() != null && exacto.equals(ra.getAnchoExacto())) {
+			if(exacto != null && ra.getAnchoExacto() != null && (exacto.equals(ra.getAnchoExacto()) || Utils.dentroDelRango(exacto, ra.getAnchoMinimo(), ra.getAnchoMaximo()))) {
 				return ra;
 			}
-			if(min != null && ra.getAnchoMinimo() != null && min.equals(ra.getAnchoMinimo()) && max != null && ra.getAnchoMaximo() != null && max.equals(ra.getAnchoMaximo())) {
+			if(min != null && Utils.dentroDelRango(min, ra.getAnchoMinimo(), ra.getAnchoMaximo())) {
 				return ra;
 			}
-			if(min != null && ra.getAnchoMinimo() != null && min.equals(ra.getAnchoMinimo()) && max == null && ra.getAnchoMaximo() == null) {
+			if(max != null && Utils.dentroDelRango(max, ra.getAnchoMinimo(), ra.getAnchoMaximo())) {
+				return ra;
+			}
+		}
+		return null;
+	}
+
+	@Transient
+	public RangoAncho getRangoSolapadoCon(Float min, Float max, Float exacto) {
+		for(RangoAncho ra : getRangos()) {
+			if(exacto != null && Utils.dentroDelRangoEstricto(exacto, ra.getAnchoMinimo(), ra.getAnchoMaximo())) {
+				return ra;
+			}
+			if(min != null && Utils.dentroDelRangoEstricto(min, ra.getAnchoMinimo(), ra.getAnchoMaximo())) {
+				return ra;
+			}
+			if(max != null && Utils.dentroDelRangoEstricto(max, ra.getAnchoMinimo(), ra.getAnchoMaximo())) {
 				return ra;
 			}
 		}

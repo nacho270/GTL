@@ -44,11 +44,17 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private JComboBox cmbTipoArticulo;
 	private CLJTextField txtPrecio;
 	private PanelTablaRango<T> tablaRango;
+	private JButton btnNuevoOrCancelar;
 	private JButton btnAgregar;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	
+	private JPanel panelNorte;
+	
 	private List<GamaColorCliente> gamas;
+
+	private static String TEXT_BTN_NUEVO = "Nuevo";
+	private static String TEXT_BTN_CANCELAR = "Cancelar";
 
 	private Cliente cliente;
 	private ETipoProducto tipoProducto;
@@ -104,29 +110,32 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 	
 	private JPanel getPanelNorte() {
-		JPanel panelNorte = new JPanel(new GridBagLayout());
-		panelNorte.add(new JLabel("Producto: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtTipoProducto(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 7, 1, 1, 1));
-		
-		panelNorte.add(new JLabel("Ancho inicial: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtAnchoInicial(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-		panelNorte.add(new JLabel("Ancho final: "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtAnchoFinal(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-		panelNorte.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(6, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(7, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+		if(panelNorte == null) {
+			panelNorte = new JPanel(new GridBagLayout());
+			panelNorte.add(new JLabel("Producto: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getTxtTipoProducto(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 7, 1, 1, 1));
+			
+			panelNorte.add(new JLabel("Ancho inicial: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getTxtAnchoInicial(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(new JLabel("Ancho final: "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getTxtAnchoFinal(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(6, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(7, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 
-		panelNorte.add(new JLabel("Usar ancho exacto"), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
-		panelNorte.add(getChkAnchoExacto(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
-		panelNorte.add(new JLabel("Ancho exacto: "), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtAnchoExacto(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-		panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(6, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-		panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(7, 2, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(new JLabel("Usar ancho exacto"), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(getChkAnchoExacto(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(new JLabel("Ancho exacto: "), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getTxtAnchoExacto(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(6, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(7, 2, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 
-		JPanel panelEspecifico = createPanelDatosEspecificos();
-		if (panelEspecifico != null) {
-			panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 8,1,1,1));
+			JPanel panelEspecifico = createPanelDatosEspecificos();
+			if (panelEspecifico != null) {
+				panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 8,1,1,1));
+			}
+			panelNorte.add(getBtnNuevoOrCancelar(), GenericUtils.createGridBagConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
+			panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(4, 4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
 		}
-		panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
 		return panelNorte;
 	}
 
@@ -196,12 +205,59 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		this.tipoProducto = tipoProducto;
 	}
 
-	public JButton getBtnAgregar() {
+	protected void setModoEdicion(boolean modoEdicion) {
+		GuiUtil.setEstadoPanel(getPanelNorte(), modoEdicion);
+		setModoEdicionExtended(modoEdicion);
+		getBtnNuevoOrCancelar().setEnabled(true);
+		if(modoEdicion) {
+			getBtnNuevoOrCancelar().setText(TEXT_BTN_CANCELAR);
+		} else {
+			getBtnNuevoOrCancelar().setText(TEXT_BTN_NUEVO);
+		}
+		
+	}
+
+	protected void limpiarDatos() {
+		getTxtAnchoExacto().setText(null);
+		getTxtAnchoFinal().setText(null);
+		getTxtAnchoInicial().setText(null);
+		getTxtPrecio().setText(null);
+		getChkAnchoExacto().setSelected(false);
+		getCmbTipoArticulo().setSelectedIndex(-1);
+		limpiarDatosExtended();
+	}
+
+	protected JButton getBtnNuevoOrCancelar() {
+		if (btnNuevoOrCancelar == null) {
+			btnNuevoOrCancelar = new JButton(TEXT_BTN_NUEVO);
+			btnNuevoOrCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(btnNuevoOrCancelar.getText().equals(TEXT_BTN_NUEVO)) {
+						btnNuevoOrCancelar.setText(TEXT_BTN_CANCELAR);
+						setModoEdicion(true);
+						getTxtAnchoInicial().requestFocus();
+					} else {
+						limpiarDatos();
+						btnNuevoOrCancelar.setText(TEXT_BTN_NUEVO);
+						setModoEdicion(false);
+					}
+					botonAgregarOrCancelarPresionado();
+				}
+			});
+		}
+		return btnNuevoOrCancelar;
+	}
+
+	protected JButton getBtnAgregar() {
 		if (btnAgregar == null) {
 			btnAgregar = new JButton("Agregar");
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					botonAgregarPresionado();
+					if(validar()) {
+						botonAgregarPresionado();
+						setModoEdicion(false);
+						limpiarDatos();
+					}
 				}
 			});
 		}
@@ -279,12 +335,16 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		}
 		return tablaRango;
 	}
+
 	
 	/* ABSTRACTOS */
-
 	protected abstract JPanel createPanelDatosEspecificos();
 	protected abstract PanelTablaRango<T> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<T> parent);
 	protected abstract void botonAgregarPresionado();
+	protected abstract boolean validar();
+	protected abstract void setModoEdicionExtended(boolean modoEdicion);
+	protected abstract void limpiarDatosExtended();
+	protected abstract void botonAgregarOrCancelarPresionado();
 
 	public Cliente getCliente() {
 		return cliente;

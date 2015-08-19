@@ -41,4 +41,36 @@ public class GrupoTipoArticulo implements Serializable{
 		this.tipoArticulo = tipoArticulo;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((tipoArticulo == null) ? 0 : tipoArticulo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GrupoTipoArticulo other = (GrupoTipoArticulo) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (tipoArticulo == null) {
+			if (other.tipoArticulo != null)
+				return false;
+		} else if (!tipoArticulo.equals(other.tipoArticulo))
+			return false;
+		return true;
+	}
+
 }
