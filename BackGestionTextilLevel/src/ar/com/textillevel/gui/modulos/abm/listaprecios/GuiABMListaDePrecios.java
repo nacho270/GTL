@@ -346,7 +346,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarAgregar() {
 			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
 			if (tipoProductoSeleccionado != null) {
-				JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho> d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
+				JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
 				if (tipoProductoSeleccionado == ETipoProducto.TENIDO && !d.isAcepto()) {
 					return false;
 				}
@@ -361,7 +361,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 		
 		@SuppressWarnings("unchecked")
-		private <T extends RangoAncho, D extends JDialogAgregarModificarDefinicionPrecios<T>> D createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
+		private <T extends RangoAncho, D extends JDialogAgregarModificarDefinicionPrecios<T, ?>> D createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
 			DefinicionPrecio defincionAModificar = null;
 			Cliente cliente = (Cliente) lista.getSelectedValue();
 			if (isModificar) {

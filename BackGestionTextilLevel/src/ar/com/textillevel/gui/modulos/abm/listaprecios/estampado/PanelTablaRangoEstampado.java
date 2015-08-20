@@ -1,7 +1,5 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.estampado;
 
-import java.awt.Dialog;
-
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
@@ -9,9 +7,10 @@ import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCoberturaEstampado;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticuloEstampado> {
+public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticuloEstampado, RangoCoberturaEstampado> {
 
 	private static final long serialVersionUID = 4588180157146398987L;
 
@@ -23,21 +22,9 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 	private static final int COL_COBERTURA = 4;
 	private static final int COL_PRECIO = 5;
 	private static final int COL_OBJ = 6;
-
-	private JDialogAgregarModificarDefinicionPreciosEstampado padre;
 	
-	public PanelTablaRangoEstampado(Dialog parent) {
+	public PanelTablaRangoEstampado(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloEstampado, RangoCoberturaEstampado> parent) {
 		super(parent);
-		this.padre = (JDialogAgregarModificarDefinicionPreciosEstampado)parent;
-		agregarBotonModificar();
-	}
-
-	@Override
-	protected void filaTablaSeleccionada() {
-		if(getTabla().getSelectedRow() != -1) {
-			RangoCoberturaEstampado rangoCobertura = (RangoCoberturaEstampado)getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ);
-			padre.setRangoCoberturaEstampadoSiendoEditado(rangoCobertura, false);
-		}
 	}
 
 	@Override
@@ -56,6 +43,7 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 		tabla.setHeaderAlignment(COL_PRECIO, CLJTable.CENTER_ALIGN);
 		tabla.setHeaderAlignment(COL_COBERTURA, CLJTable.CENTER_ALIGN);
 		tabla.setHeaderAlignment(COL_CANT_COLORES, CLJTable.CENTER_ALIGN);
+		tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
 		return tabla;
 	}
 
@@ -82,18 +70,7 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 	}
 
 	@Override
-	protected void botonModificarPresionado(int filaSeleccionada) {
-		RangoCoberturaEstampado rangoCobertura = (RangoCoberturaEstampado)getTabla().getValueAt(filaSeleccionada, COL_OBJ);
-		padre.setRangoCoberturaEstampadoSiendoEditado(rangoCobertura, true);
-	}
-
-	@Override
 	protected RangoAnchoArticuloEstampado getElemento(int fila) {
-		return null;
-	}
-
-	@Override
-	protected String validarElemento(int fila) {
 		return null;
 	}
 
@@ -106,14 +83,14 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 	}
 
 	@Override
-	protected void botonAgregarPresionado() {
-
-	}
-
-	@Override
 	public boolean validarNuevoRegistro() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getColObj() {
+		return COL_OBJ;
 	}
 
 }

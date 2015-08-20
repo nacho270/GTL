@@ -7,11 +7,12 @@ import javax.swing.JPanel;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoComun> {
+public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoComun, PrecioTipoArticulo> {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -29,7 +30,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoComun> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoComun> parent) {
+	protected PanelTablaRango<RangoAnchoComun, PrecioTipoArticulo> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoComun, PrecioTipoArticulo> parent) {
 		return null;
 	}
 
@@ -57,6 +58,11 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 
 	@Override
 	protected void botonAgregarOrCancelarPresionado() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setElemHojaSiendoEditado(PrecioTipoArticulo elemHoja, boolean modoEdicion) {
 		// TODO Auto-generated method stub
 	}
 

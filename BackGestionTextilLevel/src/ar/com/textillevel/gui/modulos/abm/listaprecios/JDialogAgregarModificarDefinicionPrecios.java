@@ -22,15 +22,18 @@ import javax.swing.JPanel;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
+import ar.clarin.fwjava.util.NumUtil;
+import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAncho> extends JDialog {
+public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAncho, E> extends JDialog {
 
 	private static final long serialVersionUID = 1317620079501375084L;
 
@@ -41,7 +44,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private CLJTextField txtAnchoExacto;
 	private JComboBox cmbTipoArticulo;
 	private CLJTextField txtPrecio;
-	private PanelTablaRango<T> tablaRango;
+	private PanelTablaRango<T, E> tablaRango;
 	private JButton btnNuevoOrCancelar;
 	private JButton btnAgregar;
 	private JButton btnAceptar;
@@ -98,7 +101,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		panelSur.add(getBtnCancelar());
 		
 		add(getPanelNorte(), BorderLayout.NORTH);
-		PanelTablaRango<? extends RangoAncho> tablaCentral = getTablaRango();
+		PanelTablaRango<T, E> tablaCentral = getTablaRango();
 		if (tablaCentral != null) {
 			add(tablaCentral, BorderLayout.CENTER);
 		}
@@ -325,22 +328,97 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return txtAnchoExacto;
 	}
 	
-	public PanelTablaRango<T> getTablaRango() {
+	public PanelTablaRango<T, E> getTablaRango() {
 		if (tablaRango == null) {
 			tablaRango = createPanelTabla(JDialogAgregarModificarDefinicionPrecios.this);
 		}
 		return tablaRango;
 	}
 
+	protected boolean validarDatosComunes() {
+		boolean usaAnchoExacto = getChkAnchoExacto().isSelected();
+		if(usaAnchoExacto) {
+			if(StringUtil.isNullOrEmpty(getTxtAnchoExacto().getText()) && !GenericUtils.esNumerico(getTxtAnchoExacto().getText())) {
+				CLJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no fue ingresado o es inválido.", "Error");
+				getTxtAnchoExacto().requestFocus();
+				return false;
+			}
+		} else {
+			boolean validarRango = validarRango(getTxtAnchoInicial(), "Ancho Inicial", getTxtAnchoFinal(), "Ancho Final", true);
+			if(!validarRango) {
+				return false;
+			}
+		}
+		//Tipo Articulo
+		if(getCmbTipoArticulo().getSelectedItem() == null) {
+			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un 'Tipo de Artículo'.", "Error");
+			return false;
+		}
+		//Precio
+		if(StringUtil.isNullOrEmpty(getTxtPrecio().getText()) && !GenericUtils.esNumerico(getTxtPrecio().getText())) {
+			CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
+			getTxtPrecio().requestFocus();
+			return false;
+		}
+		return true;
+	}
+	
+	protected Float getAnchoExacto() {
+		if(getChkAnchoExacto().isSelected()) {
+			return Float.valueOf(getTxtAnchoExacto().getText());
+		} else {
+			return null;
+		}
+	}
+	
+	protected Float getAnchoInicial() {
+		return Float.valueOf(getTxtAnchoInicial().getText());
+	}
+	
+	protected Float getAnchoFinal() {
+		return Float.valueOf(getTxtAnchoFinal().getText());
+	}
+
+	protected Float getPrecio() {
+		return Float.valueOf(getTxtPrecio().getText());
+	}
+
+	protected TipoArticulo getTipoArticulo() {
+		return (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected boolean validarRango(CLJTextField desde, String labelDesde, CLJTextField hasta, String labelHasta, boolean isFloat) {
+		if(StringUtil.isNullOrEmpty(desde.getText()) && (isFloat  ? !GenericUtils.esNumerico(desde.getText()) : !NumUtil.esNumerico(desde.getText()))) {
+			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' no fue ingresado o es inválido.", "Error");
+			desde.requestFocus();
+			return false;
+		}
+		if(StringUtil.isNullOrEmpty(hasta.getText()) && (isFloat  ? !GenericUtils.esNumerico(hasta.getText()) : !NumUtil.esNumerico(hasta.getText()))) {
+			CLJOptionPane.showErrorMessage(this, "'" + labelHasta + "' no fue ingresado o es inválido.", "Error");
+			hasta.requestFocus();
+			return false;
+		}
+		Comparable desdeVal = isFloat ? Float.valueOf(desde.getText()) : Integer.valueOf(desde.getText());
+		Comparable hastaVal = isFloat ? Float.valueOf(hasta.getText()) : Integer.valueOf(hasta.getText());
+		if(desdeVal.compareTo(hastaVal) > 0) {
+			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' debe ser menor a '" + labelHasta + "'" , "Error");
+			desde.requestFocus();
+			return false;
+		}
+		return true;
+	}
+	
 	
 	/* ABSTRACTOS */
 	protected abstract JPanel createPanelDatosEspecificos();
-	protected abstract PanelTablaRango<T> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<T> parent);
+	protected abstract PanelTablaRango<T, E> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<T, E> parent);
 	protected abstract void botonAgregarPresionado();
 	protected abstract boolean validar();
 	protected abstract void setModoEdicionExtended(boolean modoEdicion);
 	protected abstract void limpiarDatosExtended();
 	protected abstract void botonAgregarOrCancelarPresionado();
+	public abstract void setElemHojaSiendoEditado(E elemHoja, boolean modoEdicion);
 
 	public Cliente getCliente() {
 		return cliente;
@@ -349,5 +427,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
+	
 
 }

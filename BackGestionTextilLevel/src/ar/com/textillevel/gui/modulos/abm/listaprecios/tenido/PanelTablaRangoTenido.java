@@ -1,15 +1,14 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.tenido;
 
-import java.awt.Dialog;
-
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
-public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTenido> {
+public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTenido, PrecioGama> {
 
 	private static final long serialVersionUID = -6110511633595669633L;
 
@@ -20,9 +19,8 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 	private static final int COL_PRECIO = 3;
 	private static final int COL_OBJ = 4;
 	
-	public PanelTablaRangoTenido(Dialog parent) {
+	public PanelTablaRangoTenido(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido, PrecioGama> parent) {
 		super(parent);
-		agregarBotonModificar();
 	}
 
 	@Override
@@ -37,6 +35,7 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 		tabla.setHeaderAlignment(COL_TIPO_ARTICULO, CLJTable.CENTER_ALIGN);
 		tabla.setHeaderAlignment(COL_GAMA, CLJTable.CENTER_ALIGN);
 		tabla.setHeaderAlignment(COL_PRECIO, CLJTable.CENTER_ALIGN);
+		tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
 		return tabla;
 	}
 
@@ -62,23 +61,20 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 	}
 
 	@Override
-	protected String validarElemento(int fila) {
-		return null;
-	}
-
-	@Override
 	public boolean validarQuitar() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 	
-	@Override
-	protected void botonAgregarPresionado() {
-
-	}
-
 	@Override
 	public boolean validarNuevoRegistro() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public int getColObj() {
+		return COL_OBJ;
+	}
+
 }

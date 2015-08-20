@@ -32,10 +32,10 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido> {
+public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido, PrecioGama> {
 
 	private static final long serialVersionUID = -6851805146971694269L;
-	
+
 	private JComboBox cmbGama;
 	private LinkableLabel linkableLabelEditarGamaCliente;
 	private JPanel panelDatosPropios;
@@ -88,7 +88,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoArticuloTenido> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido> parent) {
+	protected PanelTablaRango<RangoAnchoArticuloTenido, PrecioGama> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloTenido, PrecioGama> parent) {
 		return new PanelTablaRangoTenido(parent);
 	}
 
@@ -127,7 +127,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		return linkableLabelEditarGamaCliente;
 	}
 
-	public void setPrecioGamaSiendoEditado(PrecioGama precioGamaSiendoEditado, boolean modoEdicion) {
+	@Override
+	public void setElemHojaSiendoEditado(PrecioGama precioGamaSiendoEditado, boolean modoEdicion) {
 		this.precioGamaSiendoEditado = precioGamaSiendoEditado;
 
 		setModoEdicion(modoEdicion);
@@ -155,11 +156,11 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			setDefinicion(new DefinicionPrecio());
 		}
 		//Rango
-		Float min = Float.valueOf(getTxtAnchoInicial().getText());
-		Float max = Float.valueOf(getTxtAnchoFinal().getText());
+		Float min = getAnchoInicial();
+		Float max = getAnchoFinal();
 		Float exacto = null;
 		if(getChkAnchoExacto().isSelected()) {
-			exacto = Float.valueOf(getTxtAnchoExacto().getText());
+			exacto = getAnchoExacto();
 		}
 		RangoAnchoArticuloTenido rango = (RangoAnchoArticuloTenido)definicion.getRango(min, max, exacto);
 		if(rango == null) {
@@ -172,7 +173,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		}
 		
 		//Grupo
-		TipoArticulo ta = (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
+		TipoArticulo ta = getTipoArticulo();
 		GrupoTipoArticuloGama grupo = rango.getGrupo(ta);
 		if(grupo == null) {
 			grupo = new GrupoTipoArticuloGama();
@@ -180,7 +181,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			rango.getGruposGama().add(grupo);
 			grupo.setRangoAnchoArticuloTenido(rango);
 		}
-		Float precio = Float.valueOf(getTxtPrecio().getText());
+		Float precio = getPrecio();
 		GamaColorCliente gcc = (GamaColorCliente) getCmbGama().getSelectedItem();
 		PrecioGama pg = grupo.getPrecioGama(gcc);
 		if (pg == null) {
@@ -199,11 +200,21 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		//agrego a la tabla
 		getTablaRango().limpiar();
 		getTablaRango().agregarElementos(rangosList);
+		
+		getTablaRango().selectElement(pg);
 	}
 
 	@Override
 	protected boolean validar() {
-		// TODO Auto-generated method stub
+		if(validarDatosComunes()) {
+			//Gama
+			if(getCmbGama().getSelectedItem() == null) {
+				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
+				return false;
+			}
+		} else {
+			return false;
+		}
 		return true;
 	}
 

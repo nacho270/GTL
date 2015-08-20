@@ -115,7 +115,7 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setSize(new Dimension(500, 350));
 		setModal(true);
-		setResizable(false);
+		setResizable(true);
 		GuiUtil.centrar(this);		
 	}
 

@@ -31,7 +31,7 @@ import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloEstampado> {
+public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloEstampado, RangoCoberturaEstampado> {
 
 	private static final long serialVersionUID = -6851805146971694269L;
 	
@@ -81,7 +81,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	}
 
 	@Override
-	protected PanelTablaRango<RangoAnchoArticuloEstampado> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloEstampado> parent) {
+	protected PanelTablaRango<RangoAnchoArticuloEstampado, RangoCoberturaEstampado> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloEstampado, RangoCoberturaEstampado> parent) {
 		return new PanelTablaRangoEstampado(parent);
 	}
 
@@ -142,11 +142,11 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			setDefinicion(new DefinicionPrecio());
 		}
 		//Rango
-		Float min = Float.valueOf(getTxtAnchoInicial().getText());
-		Float max = Float.valueOf(getTxtAnchoFinal().getText());
+		Float min = getAnchoInicial();
+		Float max = getAnchoFinal();
 		Float exacto = null;
 		if(getChkAnchoExacto().isSelected()) {
-			exacto = Float.valueOf(getTxtAnchoExacto().getText());
+			exacto = getAnchoExacto();
 		}
 		RangoAnchoArticuloEstampado rango = (RangoAnchoArticuloEstampado)definicion.getRango(min, max, exacto);
 		if(rango == null) {
@@ -159,7 +159,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		}
 		
 		//Grupo
-		TipoArticulo ta = (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
+		TipoArticulo ta = getTipoArticulo();
 		GrupoTipoArticuloBaseEstampado grupo = rango.getGrupo(ta);
 		if(grupo == null) {
 			grupo = new GrupoTipoArticuloBaseEstampado();
@@ -191,7 +191,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		//Rango Cobertura
 		Integer minCobertura = Integer.valueOf(getTxtCoberturaDesde().getText());
 		Integer maxCobertura = Integer.valueOf(getTxtCoberturaHasta().getText());
-		Float precio = Float.valueOf(getTxtPrecio().getText());
+		Float precio = getPrecio();
 		
 		RangoCoberturaEstampado rangoCobertura = null;
 		if(rangoCoberturaEstampadoSiendoEditado == null) {
@@ -216,93 +216,89 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		//agrego a la tabla
 		getTablaRango().limpiar();
 		getTablaRango().agregarElementos(rangosList);
+		
+		getTablaRango().selectElement(rangoCobertura);
 	}
 
 	@Override
 	protected boolean validar() {
-		//TODO: Validar completitud y correctitud de tipos de datos para post conversión
-		/*
-		if(StringUtil.isNullOrEmpty(getTxtAnchoInicial().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar 'Ancho Inicial'", "Error");
-			getTxtAnchoInicial().requestFocus();
-			return false;
-		}
-		if(StringUtil.isNullOrEmpty(getTxtAnchoFinal().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar 'Ancho Final'", "Error");
-			getTxtAnchoFinal().requestFocus();
-			return false;
-		}
-		*/
-		
-		TipoArticulo ta = (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
-		GamaColor base = (GamaColor)getCmbBase().getSelectedItem();
-		
-		Float precio = Float.valueOf(getTxtPrecio().getText());
-
-		//Rango Ancho Articulo
-		RangoAnchoArticuloEstampado rangoAnchoArticuloSiendoEditado=null;
-		Float min = Float.valueOf(getTxtAnchoInicial().getText());
-		Float max = Float.valueOf(getTxtAnchoFinal().getText());
-		Float anchoExacto = null;
-		if(getChkAnchoExacto().isSelected()) {
-			anchoExacto = Float.valueOf(getTxtAnchoExacto().getText());
-		}
-		RangoAncho rangoAnchoArticuloExistente = null;
-		if(rangoCoberturaEstampadoSiendoEditado != null) {
-			rangoAnchoArticuloSiendoEditado = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores().getPrecioBase().getGrupoTipoArticuloBase().getRangoAnchoArticulo();
-		}
-		if(getDefinicion() != null) {
-			rangoAnchoArticuloExistente = getDefinicion().getRangoSolapadoCon(min, max, anchoExacto);
-			if(rangoAnchoArticuloExistente != null && (rangoAnchoArticuloSiendoEditado != null && !rangoAnchoArticuloExistente.equals(rangoAnchoArticuloSiendoEditado))) {
-				CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
+		if(validarDatosComunes()) {
+			//Base
+			if(getCmbBase().getSelectedItem() == null) {
+				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Base'.", "Error");
 				return false;
 			}
-			rangoAnchoArticuloExistente = getDefinicion().getRango(min, max, anchoExacto);			
-		}
+			GamaColor base = (GamaColor)getCmbBase().getSelectedItem();
+			//Rango Cantidad de colores
+			boolean validarRangoCantColores = validarRango(getTxtCantColoresDesde(), "Color Desde", getTxtCantColoresHasta(), "Color Hasta", false);
+			if(!validarRangoCantColores) {
+				return false;
+			}
+			//Rango Cobertura
+			boolean validarRangoCobertura = validarRango(getTxtCoberturaDesde(), "Cobertura Desde", getTxtCoberturaHasta(), "Cobertura Hasta", false);
+			if(!validarRangoCobertura) {
+				return false;
+			}
+			//Rango Ancho Articulo
+			RangoAnchoArticuloEstampado rangoAnchoArticuloSiendoEditado=null;
+			RangoAncho rangoAnchoArticuloExistente = null;
+			if(rangoCoberturaEstampadoSiendoEditado != null) {
+				rangoAnchoArticuloSiendoEditado = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores().getPrecioBase().getGrupoTipoArticuloBase().getRangoAnchoArticulo();
+			}
+			if(getDefinicion() != null) {
+				rangoAnchoArticuloExistente = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
+				if(rangoAnchoArticuloExistente != null && (rangoAnchoArticuloSiendoEditado != null && !rangoAnchoArticuloExistente.equals(rangoAnchoArticuloSiendoEditado))) {
+					CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
+					return false;
+				}
+				rangoAnchoArticuloExistente = getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());			
+			}
 
-		//Rango Cantidad de Colores
-		RangoCantidadColores rangoCantColoresSiendoEditado = null;
-		Integer minCantColores = Integer.valueOf(getTxtCantColoresDesde().getText());
-		Integer maxCantColores = Integer.valueOf(getTxtCantColoresHasta().getText());
-		RangoCantidadColores rangoCantColoresExistente = null;
-		if(rangoCoberturaEstampadoSiendoEditado != null) {
-			rangoCantColoresSiendoEditado = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores();
-		}
-		if(rangoAnchoArticuloExistente != null) {
-			GrupoTipoArticuloBaseEstampado grupo = ((RangoAnchoArticuloEstampado)rangoAnchoArticuloExistente).getGrupo(ta);
-			if(grupo != null) {
-				PrecioBaseEstampado precioBase = grupo.getPrecioBase(base);
-				if(precioBase != null) {
-					rangoCantColoresExistente = precioBase.getRangoSolapadoCon(minCantColores, maxCantColores);
-					if(rangoCantColoresExistente != null && (rangoCantColoresSiendoEditado != null && !rangoCantColoresSiendoEditado.equals(rangoCantColoresExistente))) {
-						CLJOptionPane.showErrorMessage(this, "Rango Cantidad de Colores Existente", "Error");
+			//Rango Cantidad de Colores
+			RangoCantidadColores rangoCantColoresSiendoEditado = null;
+			Integer minCantColores = Integer.valueOf(getTxtCantColoresDesde().getText());
+			Integer maxCantColores = Integer.valueOf(getTxtCantColoresHasta().getText());
+			RangoCantidadColores rangoCantColoresExistente = null;
+			if(rangoCoberturaEstampadoSiendoEditado != null) {
+				rangoCantColoresSiendoEditado = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores();
+			}
+			if(rangoAnchoArticuloExistente != null) {
+				GrupoTipoArticuloBaseEstampado grupo = ((RangoAnchoArticuloEstampado)rangoAnchoArticuloExistente).getGrupo(getTipoArticulo());
+				if(grupo != null) {
+					PrecioBaseEstampado precioBase = grupo.getPrecioBase(base);
+					if(precioBase != null) {
+						rangoCantColoresExistente = precioBase.getRangoSolapadoCon(minCantColores, maxCantColores);
+						if(rangoCantColoresExistente != null && (rangoCantColoresSiendoEditado != null && !rangoCantColoresSiendoEditado.equals(rangoCantColoresExistente))) {
+							CLJOptionPane.showErrorMessage(this, "Rango Cantidad de Colores Existente", "Error");
+							return false;
+						}
+						rangoCantColoresExistente = precioBase.getRango(minCantColores, maxCantColores);
+					}
+				}
+			}
+			//Rango Cobertura
+			RangoCoberturaEstampado rangoCoberturaExistente = null;
+			Integer minCobertura = Integer.valueOf(getTxtCoberturaDesde().getText());
+			Integer maxCobertura = Integer.valueOf(getTxtCoberturaHasta().getText());
+			if(rangoCantColoresExistente != null) {
+				List<RangoCoberturaEstampado> rangosCobertura = rangoCantColoresExistente.getRangoCobertura(minCobertura, maxCobertura);
+				if(!rangosCobertura.isEmpty()) {
+					if(rangosCobertura.size()>1) {
+						CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
+						return false;
+					} else {
+						rangoCoberturaExistente = rangosCobertura.get(0);
+					}
+					if(rangoCoberturaExistente != null && (rangoCoberturaEstampadoSiendoEditado == null || rangoCoberturaEstampadoSiendoEditado!=rangoCoberturaExistente)) {
+						CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
 						return false;
 					}
-					rangoCantColoresExistente = precioBase.getRango(minCantColores, maxCantColores);
 				}
 			}
+			return true;
+		} else {
+			return false;
 		}
-
-		//Rango Cobertura
-		RangoCoberturaEstampado rangoCoberturaExistente = null;
-		Integer minCobertura = Integer.valueOf(getTxtCoberturaDesde().getText());
-		Integer maxCobertura = Integer.valueOf(getTxtCoberturaHasta().getText());
-		if(rangoCantColoresExistente != null) {
-			List<RangoCoberturaEstampado> rangosCobertura = rangoCantColoresExistente.getRangoCobertura(minCobertura, maxCobertura);
-			if(!rangosCobertura.isEmpty()) {
-				if(rangosCobertura.size()>1) {
-					CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
-					return false;
-				} else {
-					rangoCoberturaExistente = rangosCobertura.get(0);
-				}
-				if(rangoCoberturaExistente != null && (rangoCoberturaEstampadoSiendoEditado == null || rangoCoberturaEstampadoSiendoEditado!=rangoCoberturaExistente)) {
-					CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 	@Override
@@ -319,7 +315,8 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		getCmbBase().setSelectedIndex(-1);
 	}
 
-	public void setRangoCoberturaEstampadoSiendoEditado(RangoCoberturaEstampado rangoCoberturaEstampadoSiendoEditado, boolean modoEdicion) {
+	@Override
+	public void setElemHojaSiendoEditado(RangoCoberturaEstampado rangoCoberturaEstampadoSiendoEditado, boolean modoEdicion) {
 		this.rangoCoberturaEstampadoSiendoEditado = rangoCoberturaEstampadoSiendoEditado;
 
 		setModoEdicion(modoEdicion);

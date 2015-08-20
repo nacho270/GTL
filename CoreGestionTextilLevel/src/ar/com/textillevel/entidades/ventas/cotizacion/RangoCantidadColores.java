@@ -2,7 +2,9 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -87,7 +89,7 @@ public class RangoCantidadColores implements Serializable {
 
 	@Transient
 	public List<RangoCoberturaEstampado> getRangoCobertura(Integer minCobertura, Integer maxCobertura) {
-		List<RangoCoberturaEstampado> rangos = new ArrayList<RangoCoberturaEstampado>();
+		Set<RangoCoberturaEstampado> rangos = new HashSet<RangoCoberturaEstampado>();
 		for(RangoCoberturaEstampado r : getRangos()) {
 			if(minCobertura != null && Utils.dentroDelRango(minCobertura, r.getMinimo(), r.getMaximo())) {
 				rangos.add(r);
@@ -96,7 +98,7 @@ public class RangoCantidadColores implements Serializable {
 				rangos.add(r);
 			}
 		}
-		return rangos;
+		return new ArrayList<RangoCoberturaEstampado>(rangos);
 	}
 
 	@Transient
