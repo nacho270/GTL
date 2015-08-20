@@ -3,6 +3,9 @@ package ar.com.textillevel.gui.modulos.abm.listaprecios.tenido;
 import java.awt.Dialog;
 
 import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticulo;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 
@@ -39,9 +42,18 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 
 	@Override
 	protected void agregarElemento(RangoAnchoArticuloTenido elemento) {
-		Object[] row = new Object[CANT_COLS];
-		row[COL_OBJ] = elemento;
-		getTabla().addRow(row);
+		for(GrupoTipoArticulo grupo : elemento.getGruposGama()) {
+			GrupoTipoArticuloGama grupoTenido = (GrupoTipoArticuloGama) grupo;
+			for(PrecioGama pg : grupoTenido.getPrecios()) {
+				Object[] row = new Object[CANT_COLS];
+				row[COL_ANCHO] = elemento.toString();
+				row[COL_TIPO_ARTICULO] = grupoTenido.getTipoArticulo().toString();
+				row[COL_GAMA] = pg.getGamaCliente().toString();
+				row[COL_PRECIO] = pg.getPrecio();
+				row[COL_OBJ] = elemento;
+				getTabla().addRow(row);
+			}
+		}
 	}
 
 	@Override

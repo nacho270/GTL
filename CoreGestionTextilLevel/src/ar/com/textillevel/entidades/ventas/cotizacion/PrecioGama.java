@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
@@ -24,6 +25,7 @@ public class PrecioGama implements Serializable{
 	private GamaColorCliente gamaCliente; // nullable.Si no esta, se lee la default
 	private GamaColor gamaDefault; // no nullable. Se lee de aca si la otra es null
 	private Float precio;
+	private GrupoTipoArticuloGama grupoTipoArticuloGama;
 
 	@Id
 	@Column(name = "P_ID")
@@ -63,5 +65,63 @@ public class PrecioGama implements Serializable{
 
 	public void setPrecio(Float precio) {
 		this.precio = precio;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "F_GRUPO_P_ID", updatable=false, insertable=false, nullable=false)
+	public GrupoTipoArticuloGama getGrupoTipoArticuloGama() {
+		return grupoTipoArticuloGama;
+	}
+
+	public void setGrupoTipoArticuloGama(GrupoTipoArticuloGama grupoTipoArticuloGama) {
+		this.grupoTipoArticuloGama = grupoTipoArticuloGama;
+	}
+
+	@Transient
+	public void deepRemove() {
+		//nivel 0
+		GrupoTipoArticuloGama grupoGama = this.getGrupoTipoArticuloGama();
+		grupoGama.getPrecios().remove(this);
+		//nivel 1
+		if(grupoGama.getPrecios().isEmpty()) {
+			RangoAnchoArticuloTenido rangoTenido = grupoGama.getRangoAnchoArticuloTenido();
+			rangoTenido.getGruposGama().remove(grupoGama);
+			//nivel 2
+			if(rangoTenido.getGruposGama().isEmpty()) {
+				DefinicionPrecio definicionPrecio = rangoTenido.getDefinicionPrecio();
+				definicionPrecio.getRangos().remove(rangoTenido);
+			}
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gamaCliente == null) ? 0 : gamaCliente.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PrecioGama other = (PrecioGama) obj;
+		if (gamaCliente == null) {
+			if (other.gamaCliente != null)
+				return false;
+		} else if (!gamaCliente.equals(other.gamaCliente))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }
