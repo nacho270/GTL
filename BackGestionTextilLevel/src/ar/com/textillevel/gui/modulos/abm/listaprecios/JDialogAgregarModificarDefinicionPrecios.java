@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -62,12 +63,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private TipoArticuloFacadeRemote tipoArticuloFacade;
 	
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
-		super(padre);
-		setCliente(cliente);
-		setDefinicion(new DefinicionPrecio());
-		setTipoProducto(tipoProducto);
-		setUpComponentes();
-		setUpScreen();
+		this(padre, cliente, tipoProducto, new DefinicionPrecio());
 	}
 	
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
@@ -143,7 +139,9 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					getTablaRango().validarNuevoRegistro();
+					getDefinicion().setTipoProducto(getTipoProducto());
+					setAcepto(true);
+					dispose();
 				}
 			});
 		}
@@ -255,7 +253,6 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 					if(validar()) {
 						botonAgregarPresionado();
 						setModoEdicion(false);
-						limpiarDatos();
 					}
 				}
 			});
@@ -328,9 +325,11 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return txtAnchoExacto;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public PanelTablaRango<T, E> getTablaRango() {
 		if (tablaRango == null) {
 			tablaRango = createPanelTabla(JDialogAgregarModificarDefinicionPrecios.this);
+			tablaRango.agregarElementos((Collection<T>) getDefinicion().getRangos());
 		}
 		return tablaRango;
 	}
@@ -389,19 +388,19 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected boolean validarRango(CLJTextField desde, String labelDesde, CLJTextField hasta, String labelHasta, boolean isFloat) {
-		if(StringUtil.isNullOrEmpty(desde.getText()) && (isFloat  ? !GenericUtils.esNumerico(desde.getText()) : !NumUtil.esNumerico(desde.getText()))) {
+		if(StringUtil.isNullOrEmpty(desde.getText()) || (isFloat  ? !GenericUtils.esNumerico(desde.getText()) : !NumUtil.esNumerico(desde.getText()))) {
 			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' no fue ingresado o es inválido.", "Error");
 			desde.requestFocus();
 			return false;
 		}
-		if(StringUtil.isNullOrEmpty(hasta.getText()) && (isFloat  ? !GenericUtils.esNumerico(hasta.getText()) : !NumUtil.esNumerico(hasta.getText()))) {
+		if(StringUtil.isNullOrEmpty(hasta.getText()) || (isFloat  ? !GenericUtils.esNumerico(hasta.getText()) : !NumUtil.esNumerico(hasta.getText()))) {
 			CLJOptionPane.showErrorMessage(this, "'" + labelHasta + "' no fue ingresado o es inválido.", "Error");
 			hasta.requestFocus();
 			return false;
 		}
 		Comparable desdeVal = isFloat ? Float.valueOf(desde.getText()) : Integer.valueOf(desde.getText());
 		Comparable hastaVal = isFloat ? Float.valueOf(hasta.getText()) : Integer.valueOf(hasta.getText());
-		if(desdeVal.compareTo(hastaVal) > 0) {
+		if(desdeVal.compareTo(hastaVal) >= 0) {
 			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' debe ser menor a '" + labelHasta + "'" , "Error");
 			desde.requestFocus();
 			return false;

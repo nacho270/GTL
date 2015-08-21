@@ -58,7 +58,7 @@ public abstract class RangoAncho implements Serializable{
 		this.anchoMaximo = anchoMaximo;
 	}
 
-	@Column(name = "A_ANCHO_MAXIMO_EXACTO")
+	@Column(name = "A_ANCHO_EXACTO")
 	public Float getAnchoExacto() {
 		return anchoExacto;
 	}

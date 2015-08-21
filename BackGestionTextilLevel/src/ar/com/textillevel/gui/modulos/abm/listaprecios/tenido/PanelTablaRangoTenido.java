@@ -26,9 +26,9 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 	@Override
 	protected CLJTable construirTabla() {
 		CLJTable tabla = new CLJTable(0, CANT_COLS);
-		tabla.setStringColumn(COL_ANCHO, "ANCHO", 150, 150, false);
-		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTICULO", 150, 150, false);
-		tabla.setStringColumn(COL_GAMA, "GAMA", 230, 230, false);
+		tabla.setStringColumn(COL_ANCHO, "ANCHO", 150, 150, true);
+		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTICULO", 150, 150, true);
+		tabla.setStringColumn(COL_GAMA, "GAMA", 230, 230, true);
 		tabla.setFloatColumn(COL_PRECIO, "PRECIO", 100, true);
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 		tabla.setHeaderAlignment(COL_ANCHO, CLJTable.CENTER_ALIGN);
@@ -36,6 +36,10 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 		tabla.setHeaderAlignment(COL_GAMA, CLJTable.CENTER_ALIGN);
 		tabla.setHeaderAlignment(COL_PRECIO, CLJTable.CENTER_ALIGN);
 		tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+		tabla.setAllowHidingColumns(false);
+		tabla.setAllowSorting(false);
+		tabla.setReorderingAllowed(false);
+
 		return tabla;
 	}
 
@@ -49,7 +53,7 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 				row[COL_TIPO_ARTICULO] = grupoTenido.getTipoArticulo().toString();
 				row[COL_GAMA] = pg.getGamaCliente().toString();
 				row[COL_PRECIO] = pg.getPrecio();
-				row[COL_OBJ] = elemento;
+				row[COL_OBJ] = pg;
 				getTabla().addRow(row);
 			}
 		}
@@ -66,12 +70,6 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 		return true;
 	}
 	
-	@Override
-	public boolean validarNuevoRegistro() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	@Override
 	public int getColObj() {
 		return COL_OBJ;

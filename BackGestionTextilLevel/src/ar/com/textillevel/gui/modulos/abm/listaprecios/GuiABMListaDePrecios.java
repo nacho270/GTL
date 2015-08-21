@@ -131,7 +131,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public boolean botonGrabarPresionado(int arg0) {
 		getListaDePreciosFacade().save(getListaActual());
-		return false;
+		return true;
 	}
 
 	@Override
@@ -181,7 +181,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		GuiUtil.setEstadoPanel(getTabDetalle(), estado);
 		getTablaVersiones().getBotonEliminar().setEnabled(false);
 		getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
-		GuiUtil.setEstadoPanel(getTablaDefiniciones(), false);
+		GuiUtil.setEstadoPanel(getTablaDefiniciones(), estado);
+		getTablaDefiniciones().getBotonModificar().setEnabled(false);
+		getTablaDefiniciones().getBotonEliminar().setEnabled(false);
 	}
 
 	public ClienteFacadeRemote getClienteFacade() {
@@ -218,6 +220,11 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			CLJTable tabla = new CLJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_FECHA_INICIO_VALIDEZ, "VALIDA A PARTIR DE FECHA", 200, 200, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
+			tabla.setHeaderAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
+			tabla.setAllowHidingColumns(false);
+			tabla.setAllowSorting(false);
+			tabla.setReorderingAllowed(false);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -239,8 +246,6 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 						
 				}
 			});
-			tabla.setHeaderAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
 			return tabla;
 		}
 
@@ -272,6 +277,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarAgregar() {
 			if(getListaActual() == null) {
 				setListaActual(new ListaDePrecios());
+				getListaActual().setCliente((Cliente) lista.getSelectedValue());
 			}
 			JDialogInputFecha dialogoFecha = new JDialogInputFecha(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez");
 			dialogoFecha.setVisible(true);
@@ -290,6 +296,14 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				btnImprimirVersion.setEnabled(false);
 				btnImprimirVersion.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						if (getListaActual().getVersiones().size() > 1) {
+							int selectedRow = getTabla().getSelectedRow();
+							if (selectedRow + 1 < getListaActual().getVersiones().size() ) {
+								if (CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this.getFrame(), "Ha seleccionado imprimir una versión que no es actual. Desea continuar?", "Pregunta") == CLJOptionPane.NO_OPTION) {
+									return;
+								}
+							}
+						}
 						new ImprimirListaDePreciosHandler().imprimir();
 					}
 				});
@@ -321,6 +335,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			tabla.setHeaderAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
+			tabla.setAllowHidingColumns(false);
+			tabla.setAllowSorting(false);
+			tabla.setReorderingAllowed(false);
 			return tabla;
 		}
 
@@ -403,7 +420,14 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		
 		@Override
 		protected void botonModificarPresionado(int filaSeleccionada) {
-
+			DefinicionPrecio definicionSeleccionada = getElemento(getTabla().getSelectedRow());
+			JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true);
+			d.setVisible(true);
+			if (d.isAcepto()) {
+				VersionListaDePrecios versionSeleccionada = getTablaVersiones().getElemento(getTablaVersiones().getTabla().getSelectedRow());
+				versionSeleccionada.getPrecios().set(getTabla().getSelectedRow(), d.getDefinicion());
+				refrescarTabla();
+			}
 		}
 		
 		private ETipoProducto seleccionarTipoProducto() {

@@ -44,28 +44,32 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	private GamaColorClienteFacadeRemote gamaClienteFacade;
 	private PrecioGama precioGamaSiendoEditado;
 	
+	private boolean editable = true;
+	
 	public JDialogAgregarModificarDefinicionPreciosTenido(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
-		super(padre, cliente, tipoProducto);
-		gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
-		if (gamas == null || gamas.isEmpty()) {
-			CLJOptionPane.showWarningMessage(this, "El cliente no cuenta con gamas definidas. Debe ingresarlas.", "Advertencia");
-			JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(this, getCliente());
-			d.setVisible(true);
-			if (d.isAcepto()) {
-				gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
-			} else {
-				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("No se puede dar de alta la lista de precios para teñido si tener definidas las gamas cliente."), "Advertencia");
-				setAcepto(false);
-				dispose();
-			}
-		}
-		GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
-		setAcepto(true);
+		this(padre, cliente, tipoProducto, new DefinicionPrecio());
 	}
 
 	public JDialogAgregarModificarDefinicionPreciosTenido(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
-		this(padre, cliente, tipoProducto);
-		super.setDefinicion(definicionAModificar);
+		super(padre, cliente, tipoProducto, definicionAModificar);
+		gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
+		if (definicionAModificar.getId() == null) {
+			if (gamas == null || gamas.isEmpty()) {
+				CLJOptionPane.showWarningMessage(this, "El cliente no cuenta con gamas definidas. Debe ingresarlas.", "Advertencia");
+				JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(this, getCliente());
+				d.setVisible(true);
+				if (d.isAcepto()) {
+					gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
+				} else {
+					CLJOptionPane.showWarningMessage(this, StringW.wordWrap("No se puede dar de alta la lista de precios para teñido si tener definidas las gamas cliente."), "Advertencia");
+					setAcepto(false);
+					dispose();
+				}
+			}
+			setAcepto(true);
+		}
+		GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
+		setModoEdicion(false);
 	}
 	
 	@Override
@@ -111,7 +115,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 
 				@Override
 				public void labelClickeada(MouseEvent e) {
-					if (getCmbGama().getSelectedItem() != null) {
+					if (editable) {
 						JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(JDialogAgregarModificarDefinicionPreciosTenido.this, getCliente());
 						d.setVisible(true);
 						if (d.isAcepto()) {
@@ -119,7 +123,6 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 							getCmbGama().removeAllItems();
 							GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
 						}
-							
 					}
 				}
 			};
@@ -141,6 +144,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		RangoAnchoArticuloTenido rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticuloTenido();
 		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo().toString());
 		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo().toString());
+		
+		getTxtPrecio().setText(precioGamaSiendoEditado.getPrecio().toString());
 	}
 	
 	@Override
@@ -202,6 +207,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		getTablaRango().agregarElementos(rangosList);
 		
 		getTablaRango().selectElement(pg);
+		getTablaRango().setTextoBotonGuardar("Agregar");
 	}
 
 	@Override
@@ -212,6 +218,15 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
 				return false;
 			}
+			if(getDefinicion() != null) {
+				RangoAncho rangoAnchoArticuloExistente  = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
+				if(rangoAnchoArticuloExistente != null && (precioGamaSiendoEditado == null || 
+						(precioGamaSiendoEditado != null && !rangoAnchoArticuloExistente.equals(precioGamaSiendoEditado)))) {
+					CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
+					return false;
+				}
+				rangoAnchoArticuloExistente = getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());			
+			}
 		} else {
 			return false;
 		}
@@ -221,6 +236,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	@Override
 	protected void setModoEdicionExtended(boolean modoEdicion) {
 		GuiUtil.setEstadoPanel(createPanelDatosEspecificos(), modoEdicion);
+		this.editable = modoEdicion;
 	}
 
 	@Override

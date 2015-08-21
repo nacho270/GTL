@@ -15,16 +15,20 @@ public abstract class PanelTablaRango <T extends RangoAncho, E> extends PanelTab
 		agregarBotonModificar();
 	}
 
-	public abstract boolean validarNuevoRegistro();
 	public abstract int getColObj();
 
 	public void selectElement(E elemHoja) {
 		for(int i=0; i < getTabla().getRowCount(); i++) {
 			if(getTabla().getValueAt(i, getColObj()) == elemHoja) {
 				getTabla().setRowSelectionInterval(i, i);
+				parent.setElemHojaSiendoEditado(elemHoja, false);
 				break;
 			}
 		}
+	}
+	
+	public void setTextoBotonGuardar(String texto) {
+		parent.getBtnAgregar().setText(texto);
 	}
 
 	@Override
@@ -41,6 +45,7 @@ public abstract class PanelTablaRango <T extends RangoAncho, E> extends PanelTab
 	protected void botonModificarPresionado(int filaSeleccionada) {
 		E rangoCobertura = (E)getTabla().getValueAt(filaSeleccionada, getColObj());
 		parent.setElemHojaSiendoEditado(rangoCobertura, true);
+		setTextoBotonGuardar("Guardar");
 	}
 
 	@Override

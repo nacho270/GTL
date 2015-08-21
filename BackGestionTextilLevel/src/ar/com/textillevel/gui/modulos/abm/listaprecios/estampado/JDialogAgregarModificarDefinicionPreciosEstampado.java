@@ -48,14 +48,14 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	private RangoCoberturaEstampado rangoCoberturaEstampadoSiendoEditado;
 
 	public JDialogAgregarModificarDefinicionPreciosEstampado(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
-		super(padre, cliente, tipoProducto);
-		bases = getGamaFacade().getAllOrderByName();
-		GuiUtil.llenarCombo(cmbBase, bases, true);
-		setModoEdicion(false);
+		this(padre, cliente, tipoProducto, new DefinicionPrecio());
 	}
 
 	public JDialogAgregarModificarDefinicionPreciosEstampado(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
 		super(padre, cliente, tipoProducto, definicionAModificar);
+		bases = getGamaFacade().getAllOrderByName();
+		GuiUtil.llenarCombo(cmbBase, bases, true);
+		setModoEdicion(false);
 	}
 
 	@Override
@@ -218,6 +218,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		getTablaRango().agregarElementos(rangosList);
 		
 		getTablaRango().selectElement(rangoCobertura);
+		getTablaRango().setTextoBotonGuardar("Agregar");
 	}
 
 	@Override

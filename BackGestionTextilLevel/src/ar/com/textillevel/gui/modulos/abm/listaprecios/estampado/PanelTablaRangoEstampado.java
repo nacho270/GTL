@@ -44,6 +44,9 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 		tabla.setHeaderAlignment(COL_COBERTURA, CLJTable.CENTER_ALIGN);
 		tabla.setHeaderAlignment(COL_CANT_COLORES, CLJTable.CENTER_ALIGN);
 		tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+		tabla.setAllowHidingColumns(false);
+		tabla.setAllowSorting(false);
+		tabla.setReorderingAllowed(false);
 		return tabla;
 	}
 
@@ -80,12 +83,6 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 		RangoCoberturaEstampado rangoCobertura = (RangoCoberturaEstampado)getTabla().getValueAt(selectedRow, COL_OBJ);
 		rangoCobertura.deepRemove();
 		return true;
-	}
-
-	@Override
-	public boolean validarNuevoRegistro() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
