@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
+import edu.emory.mathcs.backport.java.util.Collections;
 
 @Entity
 @DiscriminatorValue(value = "RANGOCOMUN")
@@ -32,4 +36,20 @@ public class RangoAnchoComun extends RangoAncho {
 	public void setPrecios(List<PrecioTipoArticulo> precios) {
 		this.precios = precios;
 	}
+
+	@Transient
+	public PrecioTipoArticulo getPrecioArticulo(TipoArticulo ta) {
+		for(PrecioTipoArticulo pta : getPrecios()) {
+			if(pta.getTipoArticulo().equals(ta)) {
+				return pta;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void deepOrderBy() {
+		Collections.sort(precios);
+	}
+
 }

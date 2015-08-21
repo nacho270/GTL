@@ -13,7 +13,7 @@ import javax.persistence.MappedSuperclass;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 
 @MappedSuperclass
-public class GrupoTipoArticulo implements Serializable{
+public class GrupoTipoArticulo implements Serializable {
 
 	private static final long serialVersionUID = 2918848319937718773L;
 

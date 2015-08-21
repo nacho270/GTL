@@ -17,7 +17,7 @@ import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
 
 @Entity
 @Table(name = "T_PRECIO_GAMA")
-public class PrecioGama implements Serializable{
+public class PrecioGama implements Serializable, Comparable<PrecioGama> {
 
 	private static final long serialVersionUID = -4042531226341019113L;
 	
@@ -92,6 +92,17 @@ public class PrecioGama implements Serializable{
 				definicionPrecio.getRangos().remove(rangoTenido);
 			}
 		}
+	}
+
+	@Transient
+	public int compareTo(PrecioGama o) {
+		String thisNombreGama = getGamaCliente() == null ? getGamaDefault().getNombre() : getGamaCliente().getNombre(); 
+		String otherNombreGama = o.getGamaCliente() == null ? o.getGamaDefault().getNombre() : o.getGamaCliente().getNombre();
+		int res = thisNombreGama.compareToIgnoreCase(otherNombreGama);
+		if(res == 0) {
+			return getPrecio().compareTo(o.getPrecio());
+		}
+		return res;
 	}
 
 	@Override

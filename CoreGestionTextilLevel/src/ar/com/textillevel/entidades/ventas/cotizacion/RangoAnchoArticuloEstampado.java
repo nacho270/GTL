@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 
 @Entity
@@ -44,6 +45,14 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void deepOrderBy() {
+		Collections.sort(gruposBase);
+		for(GrupoTipoArticuloBaseEstampado g : getGruposBase()) {
+			g.deepOrderBy();
+		}
 	}
 
 }

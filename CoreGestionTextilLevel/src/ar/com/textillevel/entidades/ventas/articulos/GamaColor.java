@@ -17,7 +17,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="T_GAMA")
-public class GamaColor implements Serializable{
+public class GamaColor implements Serializable, Comparable<GamaColor> {
 	
 	private static final long serialVersionUID = -2948345730280498958L;
 
@@ -70,6 +70,11 @@ public class GamaColor implements Serializable{
 		return nombre;
 	}
 
+	@Transient
+	public int compareTo(GamaColor gama) {
+		return getNombre().compareToIgnoreCase(gama.getNombre());
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -94,4 +99,5 @@ public class GamaColor implements Serializable{
 			return false;
 		return true;
 	}
+
 }

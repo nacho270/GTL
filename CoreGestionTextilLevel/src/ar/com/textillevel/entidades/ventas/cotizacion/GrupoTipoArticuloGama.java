@@ -2,6 +2,7 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,7 +18,7 @@ import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
 
 @Entity
 @Table(name = "T_GRUPO_TIPO_ARTICULO_GAMA")
-public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializable {
+public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializable, Comparable<GrupoTipoArticuloGama> {
 
 	private static final long serialVersionUID = -6971873499189577231L;
 
@@ -58,4 +59,15 @@ public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializ
 		}
 		return null;
 	}
+
+	@Transient
+	public void deepOrderBy() {
+		Collections.sort(getPrecios());
+	}
+
+	@Transient
+	public int compareTo(GrupoTipoArticuloGama o) {
+		return getTipoArticulo().compareTo(o.getTipoArticulo());
+	}
+
 }

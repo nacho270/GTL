@@ -42,7 +42,6 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	
 	private List<GamaColorCliente> gamas;
 	private GamaColorClienteFacadeRemote gamaClienteFacade;
-	private PrecioGama precioGamaSiendoEditado;
 	
 	private boolean editable = true;
 	
@@ -132,7 +131,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 
 	@Override
 	public void setElemHojaSiendoEditado(PrecioGama precioGamaSiendoEditado, boolean modoEdicion) {
-		this.precioGamaSiendoEditado = precioGamaSiendoEditado;
+		this.elemSiendoEditado = precioGamaSiendoEditado;
 
 		setModoEdicion(modoEdicion);
 
@@ -142,8 +141,16 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
 
 		RangoAnchoArticuloTenido rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticuloTenido();
-		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo().toString());
-		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo().toString());
+		
+		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo() == null ? "" : rangoAnchoArticulo.getAnchoMinimo().toString());
+		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo() == null ? "" :rangoAnchoArticulo.getAnchoMaximo().toString());
+		if(rangoAnchoArticulo.getAnchoExacto() != null) {
+			getTxtAnchoExacto().setText(rangoAnchoArticulo.getAnchoExacto().toString());
+			getChkAnchoExacto().setSelected(true);
+		} else {
+			getTxtAnchoExacto().setText(null);
+			getChkAnchoExacto().setSelected(false);
+		}
 		
 		getTxtPrecio().setText(precioGamaSiendoEditado.getPrecio().toString());
 	}
@@ -151,8 +158,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	@Override
 	protected void botonAgregarPresionado() {
 
-		if(precioGamaSiendoEditado != null) {
-			precioGamaSiendoEditado.deepRemove();
+		if(elemSiendoEditado != null) {
+			elemSiendoEditado.deepRemove();
 		}
 
 		//Definicion
@@ -198,6 +205,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			grupo.getPrecios().add(pg);
 		}
 		
+		getDefinicion().deepOrderBy();
+
 		List<RangoAnchoArticuloTenido> rangosList = new ArrayList<RangoAnchoArticuloTenido>();
 		for(RangoAncho r : getDefinicion().getRangos()) {
 			rangosList.add((RangoAnchoArticuloTenido)r);
@@ -218,15 +227,6 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
 				return false;
 			}
-			if(getDefinicion() != null) {
-				RangoAncho rangoAnchoArticuloExistente  = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
-				if(rangoAnchoArticuloExistente != null && (precioGamaSiendoEditado == null || 
-						(precioGamaSiendoEditado != null && !rangoAnchoArticuloExistente.equals(precioGamaSiendoEditado)))) {
-					CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
-					return false;
-				}
-				rangoAnchoArticuloExistente = getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());			
-			}
 		} else {
 			return false;
 		}
@@ -245,8 +245,11 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	}
 
 	@Override
-	protected void botonAgregarOrCancelarPresionado() {
-		this.precioGamaSiendoEditado = null;
+	public RangoAnchoArticuloTenido getRangoAnchoFromElemSiendoEditado() {
+		if(elemSiendoEditado != null) {
+			elemSiendoEditado.getGrupoTipoArticuloGama().getRangoAnchoArticuloTenido();
+		}
+		return null;
 	}
 
 }

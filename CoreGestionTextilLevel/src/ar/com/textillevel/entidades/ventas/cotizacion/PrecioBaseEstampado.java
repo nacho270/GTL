@@ -17,12 +17,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.util.Utils;
 
 @Entity
 @Table(name = "T_PRECIO_BASE")
-public class PrecioBaseEstampado implements Serializable {
+public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseEstampado> {
 
 	private static final long serialVersionUID = 1156776031396199794L;
 
@@ -104,6 +105,19 @@ public class PrecioBaseEstampado implements Serializable {
 		return null;
 	}
 	
+	@Transient
+	public int compareTo(PrecioBaseEstampado o) {
+		return getGama().compareTo(o.getGama());
+	}
+
+	@Transient
+	public void deepOrderBy() {
+		Collections.sort(getRangosDeColores());
+		for(RangoCantidadColores r : getRangosDeColores()) {
+			r.deepOrderBy();
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -134,6 +148,5 @@ public class PrecioBaseEstampado implements Serializable {
 			return false;
 		return true;
 	}
-
 
 }

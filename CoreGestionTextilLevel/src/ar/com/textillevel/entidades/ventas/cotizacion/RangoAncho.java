@@ -14,12 +14,13 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "T_RANGO_ANCHO_ARTICULO")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
-public abstract class RangoAncho implements Serializable{
+public abstract class RangoAncho implements Serializable, Comparable<RangoAncho> {
 
 	private static final long serialVersionUID = 1181170583796051214L;
 	
@@ -131,5 +132,18 @@ public abstract class RangoAncho implements Serializable{
 			return false;
 		return true;
 	}
+
+	@Transient
+	public int compareTo(RangoAncho o) {
+		Float thisdesde = getAnchoExacto() == null ? (getAnchoMinimo() == null ? getAnchoMaximo() : getAnchoMinimo()) : getAnchoExacto();  
+		Float otherdesde = o.getAnchoExacto() == null ? (o.getAnchoMinimo() == null ? o.getAnchoMaximo() : o.getAnchoMinimo()) : o.getAnchoExacto();
+		if(thisdesde != null && otherdesde != null) {
+			return thisdesde.compareTo(otherdesde);
+		}
+		return 0;
+	}
+
+	@Transient
+	public abstract void deepOrderBy();
 
 }

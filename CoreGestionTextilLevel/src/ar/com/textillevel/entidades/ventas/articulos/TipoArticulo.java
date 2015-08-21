@@ -21,7 +21,7 @@ import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "T_TIPO_ARTICULO")
-public class TipoArticulo implements Serializable {
+public class TipoArticulo implements Serializable, Comparable<TipoArticulo> {
 
 	private static final long serialVersionUID = 3675012123576376920L;
 
@@ -134,6 +134,11 @@ public class TipoArticulo implements Serializable {
 	@Transient
 	public boolean isCompuesto() {
 		return getTiposArticuloComponentes()!=null && !getTiposArticuloComponentes().isEmpty();
+	}
+
+	@Transient
+	public int compareTo(TipoArticulo o) {
+		return getNombre().compareToIgnoreCase(o.getNombre());
 	}
 
 }

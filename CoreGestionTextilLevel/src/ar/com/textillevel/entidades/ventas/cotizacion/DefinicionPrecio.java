@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.util.Utils;
 
@@ -135,6 +136,14 @@ public class DefinicionPrecio implements Serializable {
 			}
 		}
 		return null;
+	}
+
+	@Transient
+	public void deepOrderBy() {
+		Collections.sort(getRangos());
+		for(RangoAncho r : getRangos()) {
+			r.deepOrderBy();
+		}
 	}
 
 }

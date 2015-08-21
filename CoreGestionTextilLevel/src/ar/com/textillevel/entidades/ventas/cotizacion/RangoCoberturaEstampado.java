@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "T_RANGO_COBERTURA_ESTAMPADO")
-public class RangoCoberturaEstampado implements Serializable {
+public class RangoCoberturaEstampado implements Serializable, Comparable<RangoCoberturaEstampado> {
 
 	private static final long serialVersionUID = 4223229114159062052L;
 
@@ -72,6 +72,43 @@ public class RangoCoberturaEstampado implements Serializable {
 		this.rangoCantidadColores = rangoCantidadColores;
 	}
 
+	@Transient
+	public void deepRemove() {
+		//nivel 0
+		RangoCantidadColores rangoCantidadColores = this.getRangoCantidadColores();
+		rangoCantidadColores.getRangos().remove(this);
+		//nivel 1
+		if(rangoCantidadColores.getRangos().isEmpty()) {
+			PrecioBaseEstampado precioBase = rangoCantidadColores.getPrecioBase();
+			precioBase.getRangosDeColores().remove(rangoCantidadColores);
+			//nivel 2
+			if(precioBase.getRangosDeColores().isEmpty()) {
+				GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase = precioBase.getGrupoTipoArticuloBase();
+				grupoTipoArticuloBase.getPrecios().remove(precioBase);
+				//nivel 3
+				if(grupoTipoArticuloBase.getPrecios().isEmpty()) {
+					RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo(); 
+					rangoAnchoArticulo.getGruposBase().remove(grupoTipoArticuloBase);
+					//nivel 4
+					if(rangoAnchoArticulo.getGruposBase().isEmpty()) {
+						DefinicionPrecio definicionPrecio = rangoAnchoArticulo.getDefinicionPrecio();
+						definicionPrecio.getRangos().remove(rangoAnchoArticulo);
+					}
+				}
+			}
+		}
+	}
+
+	@Transient
+	public int compareTo(RangoCoberturaEstampado o) {
+		Integer thisMin = getMinimo() == null ? getMaximo() : getMinimo();
+		Integer otherMin = o.getMinimo() == null ? o.getMaximo() : o.getMinimo();
+		if(thisMin != null && otherMin != null) {
+			return thisMin.compareTo(otherMin);
+		}
+		return 0;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -107,33 +144,6 @@ public class RangoCoberturaEstampado implements Serializable {
 		} else if (!minimo.equals(other.minimo))
 			return false;
 		return true;
-	}
-
-	@Transient
-	public void deepRemove() {
-		//nivel 0
-		RangoCantidadColores rangoCantidadColores = this.getRangoCantidadColores();
-		rangoCantidadColores.getRangos().remove(this);
-		//nivel 1
-		if(rangoCantidadColores.getRangos().isEmpty()) {
-			PrecioBaseEstampado precioBase = rangoCantidadColores.getPrecioBase();
-			precioBase.getRangosDeColores().remove(rangoCantidadColores);
-			//nivel 2
-			if(precioBase.getRangosDeColores().isEmpty()) {
-				GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase = precioBase.getGrupoTipoArticuloBase();
-				grupoTipoArticuloBase.getPrecios().remove(precioBase);
-				//nivel 3
-				if(grupoTipoArticuloBase.getPrecios().isEmpty()) {
-					RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo(); 
-					rangoAnchoArticulo.getGruposBase().remove(grupoTipoArticuloBase);
-					//nivel 4
-					if(rangoAnchoArticulo.getGruposBase().isEmpty()) {
-						DefinicionPrecio definicionPrecio = rangoAnchoArticulo.getDefinicionPrecio();
-						definicionPrecio.getRangos().remove(rangoAnchoArticulo);
-					}
-				}
-			}
-		}
 	}
 
 }

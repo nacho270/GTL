@@ -45,7 +45,6 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 	private GamaColorFacadeRemote gamaFacade;
 	private JPanel panDatosPropios;
-	private RangoCoberturaEstampado rangoCoberturaEstampadoSiendoEditado;
 
 	public JDialogAgregarModificarDefinicionPreciosEstampado(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
 		this(padre, cliente, tipoProducto, new DefinicionPrecio());
@@ -132,8 +131,8 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	@Override
 	protected void botonAgregarPresionado() {
 
-		if(rangoCoberturaEstampadoSiendoEditado != null) {
-			rangoCoberturaEstampadoSiendoEditado.deepRemove();
+		if(elemSiendoEditado != null) {
+			elemSiendoEditado.deepRemove();
 		}
 
 		//Definicion
@@ -194,7 +193,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		Float precio = getPrecio();
 		
 		RangoCoberturaEstampado rangoCobertura = null;
-		if(rangoCoberturaEstampadoSiendoEditado == null) {
+		if(elemSiendoEditado == null) {
 			List<RangoCoberturaEstampado> rangosCobertura = rangoCantColores.getRangoCobertura(minCobertura, maxCobertura);
 			if(!rangosCobertura.isEmpty()) {
 				rangoCobertura = rangosCobertura.get(0);//Seguro hay uno solo 
@@ -209,10 +208,13 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		rangoCantColores.getRangos().add(rangoCobertura);
 		rangoCobertura.setRangoCantidadColores(rangoCantColores);
 
+		getDefinicion().deepOrderBy();
+		
 		List<RangoAnchoArticuloEstampado> rangosList = new ArrayList<RangoAnchoArticuloEstampado>();
 		for(RangoAncho r : getDefinicion().getRangos()) {
 			rangosList.add((RangoAnchoArticuloEstampado)r);
 		}
+		
 		//agrego a la tabla
 		getTablaRango().limpiar();
 		getTablaRango().agregarElementos(rangosList);
@@ -241,27 +243,15 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 				return false;
 			}
 			//Rango Ancho Articulo
-			RangoAnchoArticuloEstampado rangoAnchoArticuloSiendoEditado=null;
-			RangoAncho rangoAnchoArticuloExistente = null;
-			if(rangoCoberturaEstampadoSiendoEditado != null) {
-				rangoAnchoArticuloSiendoEditado = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores().getPrecioBase().getGrupoTipoArticuloBase().getRangoAnchoArticulo();
-			}
-			if(getDefinicion() != null) {
-				rangoAnchoArticuloExistente = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
-				if(rangoAnchoArticuloExistente != null && (rangoAnchoArticuloSiendoEditado != null && !rangoAnchoArticuloExistente.equals(rangoAnchoArticuloSiendoEditado))) {
-					CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
-					return false;
-				}
-				rangoAnchoArticuloExistente = getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());			
-			}
+			RangoAncho rangoAnchoArticuloExistente = getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
 
 			//Rango Cantidad de Colores
 			RangoCantidadColores rangoCantColoresSiendoEditado = null;
 			Integer minCantColores = Integer.valueOf(getTxtCantColoresDesde().getText());
 			Integer maxCantColores = Integer.valueOf(getTxtCantColoresHasta().getText());
 			RangoCantidadColores rangoCantColoresExistente = null;
-			if(rangoCoberturaEstampadoSiendoEditado != null) {
-				rangoCantColoresSiendoEditado = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores();
+			if(elemSiendoEditado != null) {
+				rangoCantColoresSiendoEditado = elemSiendoEditado.getRangoCantidadColores();
 			}
 			if(rangoAnchoArticuloExistente != null) {
 				GrupoTipoArticuloBaseEstampado grupo = ((RangoAnchoArticuloEstampado)rangoAnchoArticuloExistente).getGrupo(getTipoArticulo());
@@ -290,7 +280,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 					} else {
 						rangoCoberturaExistente = rangosCobertura.get(0);
 					}
-					if(rangoCoberturaExistente != null && (rangoCoberturaEstampadoSiendoEditado == null || rangoCoberturaEstampadoSiendoEditado!=rangoCoberturaExistente)) {
+					if(rangoCoberturaExistente != null && (elemSiendoEditado == null || elemSiendoEditado!=rangoCoberturaExistente)) {
 						CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
 						return false;
 					}
@@ -318,7 +308,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 	@Override
 	public void setElemHojaSiendoEditado(RangoCoberturaEstampado rangoCoberturaEstampadoSiendoEditado, boolean modoEdicion) {
-		this.rangoCoberturaEstampadoSiendoEditado = rangoCoberturaEstampadoSiendoEditado;
+		this.elemSiendoEditado = rangoCoberturaEstampadoSiendoEditado;
 
 		setModoEdicion(modoEdicion);
 
@@ -337,13 +327,23 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
 
 		RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo();
-		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo().toString());
-		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo().toString());
+		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo() == null ? "" : rangoAnchoArticulo.getAnchoMinimo().toString());
+		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo() == null ? "" :rangoAnchoArticulo.getAnchoMaximo().toString());
+		if(rangoAnchoArticulo.getAnchoExacto() != null) {
+			getTxtAnchoExacto().setText(rangoAnchoArticulo.getAnchoExacto().toString());
+			getChkAnchoExacto().setSelected(true);
+		} else {
+			getTxtAnchoExacto().setText(null);
+			getChkAnchoExacto().setSelected(false);
+		}
 	}
 
 	@Override
-	protected void botonAgregarOrCancelarPresionado() {
-		this.rangoCoberturaEstampadoSiendoEditado = null;
+	public RangoAnchoArticuloEstampado getRangoAnchoFromElemSiendoEditado() {
+		if(elemSiendoEditado != null) {
+			return elemSiendoEditado.getRangoCantidadColores().getPrecioBase().getGrupoTipoArticuloBase().getRangoAnchoArticulo();
+		}
+		return null;
 	}
 
 }

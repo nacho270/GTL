@@ -56,6 +56,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private static String TEXT_BTN_NUEVO = "Nuevo";
 	private static String TEXT_BTN_CANCELAR = "Cancelar";
 
+	protected E elemSiendoEditado;
+
 	private Cliente cliente;
 	private ETipoProducto tipoProducto;
 	private boolean acepto;
@@ -162,6 +164,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	public void setDefinicion(DefinicionPrecio definicion) {
 		this.definicion = definicion;
+		this.definicion.deepOrderBy();
 	}
 
 	private void salir() {
@@ -234,6 +237,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 						setModoEdicion(true);
 						getTxtAnchoInicial().requestFocus();
 					} else {
+						getBtnAgregar().setText("Agregar");
 						limpiarDatos();
 						btnNuevoOrCancelar.setText(TEXT_BTN_NUEVO);
 						setModoEdicion(false);
@@ -359,6 +363,20 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			getTxtPrecio().requestFocus();
 			return false;
 		}
+		//Rango Ancho Común
+		T rangoAnchoSiendoEditado=null;
+		RangoAncho rangoAnchoExistente = null;
+		if(elemSiendoEditado != null) {
+			rangoAnchoSiendoEditado = getRangoAnchoFromElemSiendoEditado();
+		}
+		if(getDefinicion() != null) {
+			rangoAnchoExistente = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
+			if(rangoAnchoExistente != null && (rangoAnchoSiendoEditado == null || rangoAnchoExistente!=rangoAnchoSiendoEditado)) {
+				CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
+				return false;
+			}
+		}
+		
 		return true;
 	}
 	
@@ -371,10 +389,16 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 	
 	protected Float getAnchoInicial() {
+		if(getChkAnchoExacto().isSelected()) {
+			return null;
+		}
 		return Float.valueOf(getTxtAnchoInicial().getText());
 	}
 	
 	protected Float getAnchoFinal() {
+		if(getChkAnchoExacto().isSelected()) {
+			return null;
+		}
 		return Float.valueOf(getTxtAnchoFinal().getText());
 	}
 
@@ -416,8 +440,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	protected abstract boolean validar();
 	protected abstract void setModoEdicionExtended(boolean modoEdicion);
 	protected abstract void limpiarDatosExtended();
-	protected abstract void botonAgregarOrCancelarPresionado();
 	public abstract void setElemHojaSiendoEditado(E elemHoja, boolean modoEdicion);
+	public abstract T getRangoAnchoFromElemSiendoEditado();
 
 	public Cliente getCliente() {
 		return cliente;
@@ -427,6 +451,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		this.cliente = cliente;
 	}
 
-	
+	protected void botonAgregarOrCancelarPresionado() {
+		this.elemSiendoEditado = null;
+	}
 
 }

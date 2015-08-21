@@ -2,6 +2,7 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +24,7 @@ import ar.com.textillevel.util.Utils;
 
 @Entity
 @Table(name = "T_RANGO_CANTIDAD_COLORES")
-public class RangoCantidadColores implements Serializable {
+public class RangoCantidadColores implements Serializable, Comparable<RangoCantidadColores> {
 
 	private static final long serialVersionUID = -1466816699070964522L;
 
@@ -117,6 +118,21 @@ public class RangoCantidadColores implements Serializable {
 	@Override
 	public String toString() {
 		return "De " + getMinimo().toString() + " a " + getMaximo().toString();
+	}
+
+	@Transient
+	public int compareTo(RangoCantidadColores o) {
+		Integer thisMin = getMinimo() == null ? getMaximo() : getMinimo();
+		Integer otherMin = o.getMinimo() == null ? o.getMaximo() : o.getMinimo();
+		if(thisMin != null && otherMin != null) {
+			return thisMin.compareTo(otherMin);
+		}
+		return 0;
+	}
+
+	@Transient
+	public void deepOrderBy() {
+		Collections.sort(getRangos());
 	}
 
 	@Override
