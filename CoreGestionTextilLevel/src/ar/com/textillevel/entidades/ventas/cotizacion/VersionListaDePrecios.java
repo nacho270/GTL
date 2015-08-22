@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 
 @Entity
 @Table(name = "T_VERSION_LISTA_PRECIO")
@@ -98,5 +101,13 @@ public class VersionListaDePrecios implements Serializable{
 		return true;
 	}
 	
-	
+	@Transient
+	public DefinicionPrecio getDefinicionPorTipoProducto(ETipoProducto tipoProducto) {
+		for(DefinicionPrecio d : getPrecios()) {
+			if (d.getTipoProducto() == tipoProducto) {
+				return d;
+			}
+		}
+		return null;
+	}
 }

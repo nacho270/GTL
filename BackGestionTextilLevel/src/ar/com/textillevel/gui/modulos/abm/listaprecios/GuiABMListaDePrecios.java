@@ -130,6 +130,16 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	@Override
 	public boolean botonGrabarPresionado(int arg0) {
+		if (getListaActual().getVersiones().isEmpty()) {
+			CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe agregar al menos una version", "Error");
+			return false;
+		}
+		for(VersionListaDePrecios v : getListaActual().getVersiones()) {
+			if (v.getPrecios().isEmpty()) {
+				CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe definir los precios para version con validez a partir de " + DateUtil.dateToString(v.getInicioValidez(), DateUtil.SHORT_DATE), "Error");
+				return false;
+			}
+		}
 		getListaDePreciosFacade().save(getListaActual());
 		return true;
 	}
@@ -284,9 +294,21 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			dialogoFecha.setVisible(true);
 			Date fechaInicioValidez = dialogoFecha.getFecha();
 			if(fechaInicioValidez != null) {
-				VersionListaDePrecios nuevaVersion = new VersionListaDePrecios(fechaInicioValidez);
-				getListaActual().getVersiones().add(nuevaVersion);
-				agregarElemento(nuevaVersion);
+				boolean hayVersionesMasViejas = hayVersionesMasViejas(fechaInicioValidez);
+				if (getListaActual().getVersiones().isEmpty() || !hayVersionesMasViejas) {
+					VersionListaDePrecios nuevaVersion = new VersionListaDePrecios(fechaInicioValidez);
+					getListaActual().getVersiones().add(nuevaVersion);
+					agregarElemento(nuevaVersion);
+				}
+			}
+			return false;
+		}
+
+		private boolean hayVersionesMasViejas(Date fechaInicioValidez) {
+			for(VersionListaDePrecios v : getListaActual().getVersiones()) {
+				if(!v.getInicioValidez().before(fechaInicioValidez)) {
+					return true;
+				}
 			}
 			return false;
 		}

@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
+import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 
 @Entity
 @Table(name = "T_GRUPO_TIPO_ARTICULO_BASE")
@@ -71,6 +72,11 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		for(PrecioBaseEstampado p : getPrecios()) {
 			p.deepOrderBy();
 		}
+	}
+
+	@Transient
+	public Float getPrecio(ProductoEstampado producto) {
+		return null;
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
+import ar.com.textillevel.entidades.ventas.productos.Producto;
 
 @Entity
 @DiscriminatorValue(value = "RANGOCOMUN")
@@ -50,6 +51,13 @@ public class RangoAnchoComun extends RangoAncho {
 	@Override
 	public void deepOrderBy() {
 		Collections.sort(precios);
+	}
+
+	@Override
+	@Transient
+	public Float buscarPrecio(Producto producto) {
+		PrecioTipoArticulo pta = getPrecioArticulo(producto.getArticulo().getTipoArticulo());
+		return pta != null ? pta.getPrecio() : null;
 	}
 
 }

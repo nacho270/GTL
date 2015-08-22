@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.util.Utils;
 
 @Entity
@@ -149,6 +150,34 @@ public class DefinicionPrecio implements Serializable {
 	@Override
 	public String toString() {
 		return getTipoProducto().getDescripcion().toUpperCase();
+	}
+	
+	@Transient
+	public Float getPrecio(Producto producto) {
+		for (RangoAncho ra : getRangosProducto(producto)) {
+			Float precio = ra.getPrecioProducto(producto);
+			if (precio != null) {
+				return precio;
+			}
+		}
+		return null;
+	}
+
+	@Transient
+	private List<RangoAncho> getRangosProducto(Producto producto) {
+		List<RangoAncho> lista = new ArrayList<RangoAncho>();
+		for(RangoAncho ra : getRangos()) {
+			if (producto.getTipo() == ETipoProducto.TENIDO && (ra instanceof RangoAnchoArticuloTenido)) {
+				lista.add(ra);
+			} else if (producto.getTipo() == ETipoProducto.ESTAMPADO && (ra instanceof RangoAnchoArticuloEstampado)) {
+				lista.add(ra);
+			} else if (producto.getTipo() != ETipoProducto.TENIDO && producto.getTipo() == ETipoProducto.ESTAMPADO && 
+					!(ra instanceof RangoAnchoArticuloEstampado) && !(ra instanceof RangoAnchoArticuloTenido)){
+				lista.add(ra);
+			}
+					
+		}
+		return lista;
 	}
 
 }

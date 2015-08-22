@@ -1,6 +1,7 @@
 package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.apache.commons.collections.iterators.ReverseListIterator;
+
+import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 
 @Entity
@@ -64,4 +69,26 @@ public class ListaDePrecios implements Serializable {
 		this.versiones = versiones;
 	}
 
+	@Transient
+	public VersionListaDePrecios getVersionActual() {
+		return getVersionPorFecha(DateUtil.getHoy());
+	}
+
+	@Transient
+	public VersionListaDePrecios getVersionPorFecha(Date fecha) {
+		if (getVersiones() == null || getVersiones().isEmpty()) {
+			return null;
+		}
+		ReverseListIterator iterator = new ReverseListIterator(getVersiones());
+		VersionListaDePrecios versionADevolver = null;
+		while(iterator.hasNext()) {
+			VersionListaDePrecios v = (VersionListaDePrecios) iterator.next();
+			if (!v.getInicioValidez().after(fecha)) {
+				versionADevolver = v;
+			}else{
+				break;
+			}
+		}
+		return versionADevolver;
+	}
 }

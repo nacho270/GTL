@@ -16,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.util.Utils;
+
 @Entity
 @Table(name = "T_RANGO_ANCHO_ARTICULO")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -146,4 +149,18 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	@Transient
 	public abstract void deepOrderBy();
 
+	@Transient
+	public Float getPrecioProducto(Producto producto) {
+		if (getAnchoExacto() != null && getAnchoExacto().floatValue() == producto.getArticulo().getAncho().floatValue()) {
+			return buscarPrecio(producto);
+		} else if (getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(producto.getArticulo().getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) {
+			return buscarPrecio(producto);
+		}
+		return null;
+	}
+
+	@Transient
+	public abstract Float buscarPrecio(Producto producto);
+	
+	
 }

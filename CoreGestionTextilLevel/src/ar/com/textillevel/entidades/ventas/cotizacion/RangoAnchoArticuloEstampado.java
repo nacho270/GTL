@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
+import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 
 @Entity
 @DiscriminatorValue(value = "RANGOESTAMPADO")
@@ -53,6 +55,13 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 		for(GrupoTipoArticuloBaseEstampado g : getGruposBase()) {
 			g.deepOrderBy();
 		}
+	}
+
+	@Override
+	@Transient
+	public Float buscarPrecio(Producto producto) {
+		GrupoTipoArticuloBaseEstampado grupo = getGrupo(producto.getArticulo().getTipoArticulo());
+		return grupo != null ? grupo.getPrecio((ProductoEstampado) producto) : null;
 	}
 
 }

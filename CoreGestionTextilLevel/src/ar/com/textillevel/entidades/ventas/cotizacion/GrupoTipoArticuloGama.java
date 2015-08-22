@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
+import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 
 @Entity
 @Table(name = "T_GRUPO_TIPO_ARTICULO_GAMA")
@@ -68,6 +69,18 @@ public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializ
 	@Transient
 	public int compareTo(GrupoTipoArticuloGama o) {
 		return getTipoArticulo().compareTo(o.getTipoArticulo());
+	}
+
+	@Transient
+	public Float getPrecio(ProductoTenido producto) {
+		for(PrecioGama pc : getPrecios() ) {
+			if (pc.getGamaCliente() != null && pc.getGamaCliente().getGamaOriginal().getId().equals(producto.getGamaColor().getId())) {
+				return pc.getPrecio();
+			} else if (pc.getGamaDefault()!=null && pc.getGamaDefault().getId().equals(producto.getGamaColor().getId())) {
+				return pc.getPrecio();
+			}
+		}
+		return null;
 	}
 
 }
