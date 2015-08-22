@@ -47,6 +47,8 @@ public class ParametrosGenerales implements Serializable {
 	private Banco bancoDefault;
 	private BigDecimal umbralDeuda;
 	private Integer nroComienzoOrdenDePagoPersona;
+	private BigDecimal cargaMinimaColor;
+	private BigDecimal cargaMinimaEstampado;
 	private ConfiguracionNumeracionFactura configuracionFacturaA;
 	private ConfiguracionNumeracionFactura configuracionFacturaB;
 	
@@ -264,6 +266,24 @@ public class ParametrosGenerales implements Serializable {
 		this.configuracionFacturaB = configuracionFacturaB;
 	}
 	
+	@Column(name="A_CARGA_MINIMA_COLOR",nullable=false)
+	public BigDecimal getCargaMinimaColor() {
+		return cargaMinimaColor;
+	}
+
+	public void setCargaMinimaColor(BigDecimal cargaMinimaColor) {
+		this.cargaMinimaColor = cargaMinimaColor;
+	}
+
+	@Column(name="A_CARGA_MINIMA_ESTAMPADO",nullable=false)
+	public BigDecimal getCargaMinimaEstampado() {
+		return cargaMinimaEstampado;
+	}
+
+	public void setCargaMinimaEstampado(BigDecimal cargaMinimaEstampado) {
+		this.cargaMinimaEstampado = cargaMinimaEstampado;
+	}
+	
 	@Transient
 	public ConfiguracionNumeracionFactura getConfiguracionFacturaByTipoFactura(ETipoFactura tipo){
 		switch(tipo){
@@ -281,9 +301,10 @@ public class ParametrosGenerales implements Serializable {
 	
 	@Transient
 	public Boolean hayAlgunParametroVacio(boolean isB) {
-		return nroComienzoRemito == null || nroComienzoFactura == null || nroComienzoRecibo == null || porcentajeIVAInscripto == null || porcentajeIVANoInscripto == null || porcentajeSeguro == null
+		return     nroComienzoRemito == null || nroComienzoFactura == null || nroComienzoRecibo == null || porcentajeIVAInscripto == null || porcentajeIVANoInscripto == null || porcentajeSeguro == null
 				|| porcentajeToleranciaMermaNegativa == null || precioPorTubo == null || numeracionCheque == null || nroSucursal == null || diasAvisoVencimientoDeCheque == null
 				|| diasVenceCheque == null || nroComienzoODT == null || nroComienzoFacturaB == null || nroIGJ == null || nroComienzoOrdenDePago == null || nroComienzoOrdenDeDeposito == null
-				|| bancoDefault == null || umbralDeuda == null || nroComienzoOrdenDePagoPersona == null || (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null);
+				|| cargaMinimaColor == null || cargaMinimaEstampado == null  || bancoDefault == null || umbralDeuda == null || nroComienzoOrdenDePagoPersona == null
+				|| (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null);
 	}
 }

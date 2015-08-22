@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cotizacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="CORREO" class="java.lang.String"/>
+	<parameter name="FECHA" class="java.lang.String"/>
+	<parameter name="CLIENTE" class="java.lang.String"/>
+	<parameter name="CONTACTO" class="java.lang.String"/>
+	<parameter name="COND_PAGO" class="java.lang.String"/>
+	<parameter name="VALIDEZ" class="java.lang.String"/>
+	<parameter name="SEGURO" class="java.lang.String"/>
+	<parameter name="TUBOS" class="java.lang.String"/>
+	<parameter name="CARGA_MINIMA_COLOR" class="java.lang.String"/>
+	<parameter name="CARGA_MINIMA_ESTAMPADO" class="java.lang.String"/>
+	<field name="tipoProducto" class="java.lang.String"/>
+	<field name="tipoArticulo" class="java.lang.String"/>
+	<field name="ancho" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="precio" class="java.lang.String"/>
+	<title>
+		<band height="103" splitType="Stretch">
+			<staticText>
+				<reportElement x="98" y="24" width="208" height="15"/>
+				<textElement>
+					<font size="11" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Textil Level S.A.
+]]></text>
+			</staticText>
+			<image hAlign="Center">
+				<reportElement x="0" y="24" width="93" height="66"/>
+				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="98" y="41" width="208" height="13"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Tintoreria y estamperia Industrial
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="54" width="208" height="16"/>
+				<textElement/>
+				<text><![CDATA[Tel/Fax: (5411) 4454-2279/2395]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="70" width="208" height="20" forecolor="#0033FF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[administracion@textillevel.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="34" width="35" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="402" y="34" width="136" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="97" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="226" y="0" width="120" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COTIZACION]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="116">
+			<staticText>
+				<reportElement x="66" y="5" width="47" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="25" width="46" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Correo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="45" width="55" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Contacto: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="65" width="101" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Condición de pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="85" width="97" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Validez cotización:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="113" y="25" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CORREO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="5" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLIENTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="45" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONTACTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="65" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{COND_PAGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="85" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{VALIDEZ}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="111" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="29">
+			<staticText>
+				<reportElement x="0" y="5" width="555" height="20"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[En esta oportunidad nos dirijimos a Ud. a fin de comunicarle los nuevos precios de nuestros servicios.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="92" height="20"/>
+				<box leftPadding="5">
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoProducto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="93" y="0" width="98" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ancho}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="291" y="0" width="186" height="20"/>
+				<box topPadding="3" bottomPadding="3">
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="477" y="0" width="78" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="191" y="0" width="100" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoArticulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="226" y="18" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="306" y="18" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="225">
+			<textField>
+				<reportElement x="226" y="194" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="306" y="194" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="1" y="7" width="554" height="115"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="12" width="226" height="20"/>
+				<textElement>
+					<font isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Seguro obligatorio de mercadería en fábrica: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="231" y="12" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SEGURO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="32" width="100" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tubos y embalajes:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="105" y="32" width="226" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TUBOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="52" width="100" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Carga mínima color:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="105" y="52" width="226" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CARGA_MINIMA_COLOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="72" width="129" height="20"/>
+				<textElement>
+					<font isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Carga mínima estampado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="134" y="72" width="197" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CARGA_MINIMA_ESTAMPADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="92" width="135" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No realizamos entregas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="136" width="179" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[*NOTA: Los precios no incluyen IVA.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="162" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Atentamente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="156" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TEXTIL LEVEL S.A]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

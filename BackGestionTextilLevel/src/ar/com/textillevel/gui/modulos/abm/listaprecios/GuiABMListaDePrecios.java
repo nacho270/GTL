@@ -233,6 +233,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 						VersionListaDePrecios version = getElemento(selectedRow);
 						if (version != null) {
 							getTablaDefiniciones().getBotonAgregar().setEnabled(true);
+							getTablaDefiniciones().limpiar();
 							getTablaDefiniciones().agregarElementos(version.getPrecios());
 							getBtnImprimirVersion().setEnabled(true);
 						} else {
@@ -304,7 +305,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 								}
 							}
 						}
-						new ImprimirListaDePreciosHandler().imprimir();
+						new ImprimirListaDePreciosHandler(GuiABMListaDePrecios.this.getFrame(), getListaActual().getCliente(),
+								getListaActual().getVersiones().get(getListaActual().getVersiones().size()-1).getPrecios()).imprimir();
 					}
 				});
 			}

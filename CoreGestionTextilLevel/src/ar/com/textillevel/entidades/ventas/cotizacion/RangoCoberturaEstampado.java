@@ -146,4 +146,8 @@ public class RangoCoberturaEstampado implements Serializable, Comparable<RangoCo
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "De " + getMinimo().toString() + "% a " + getMaximo().toString() + "%";
+	}
 }

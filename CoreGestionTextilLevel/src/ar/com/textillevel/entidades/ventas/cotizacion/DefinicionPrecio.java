@@ -146,4 +146,9 @@ public class DefinicionPrecio implements Serializable {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return getTipoProducto().getDescripcion().toUpperCase();
+	}
+
 }

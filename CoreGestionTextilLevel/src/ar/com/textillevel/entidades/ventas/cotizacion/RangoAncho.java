@@ -41,7 +41,7 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 		this.id = id;
 	}
 
-	@Column(name = "A_ANCHO_MINIMO", nullable = false)
+	@Column(name = "A_ANCHO_MINIMO")
 	public Float getAnchoMinimo() {
 		return anchoMinimo;
 	}

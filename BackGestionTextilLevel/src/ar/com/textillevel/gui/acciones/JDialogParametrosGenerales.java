@@ -57,6 +57,8 @@ public class JDialogParametrosGenerales extends JDialog {
 	private CLJTextField txtPrecioTubo;
 	private CLJTextField txtLetraCheque;
 	private CLJTextField txtNumeroCheque;
+	private CLJTextField txtCargaMinimaColor;
+	private CLJTextField txtCargaMinimaEstampado;
 	private CLJNumericTextField txtNroSucursal;
 	private CLJNumericTextField txtDiasAvisoVencimientoCheque;
 	private CLJNumericTextField txtDiasVencenCheques;
@@ -151,6 +153,8 @@ public class JDialogParametrosGenerales extends JDialog {
 			String textoMinimoDeuda = getTxtMinimoDeuda().getText().trim().replaceAll("\\.", "").replaceAll(",", ".");
 			getParametrosGenerales().setUmbralDeuda(new BigDecimal(Double.valueOf(textoMinimoDeuda)));
 			getParametrosGenerales().setNroComienzoOrdenDePagoPersona(getTxtNroComienzoOrdenDePagoPersona().getValue());
+			getParametrosGenerales().setCargaMinimaColor(new BigDecimal(Double.valueOf(getTxtCargaMinimaColor().getText().trim().replace(',', '.'))));
+			getParametrosGenerales().setCargaMinimaEstampado(new BigDecimal(Double.valueOf(getTxtCargaMinimaEstampado().getText().trim().replace(',', '.'))));
 			try {
 				getParametrosFacade().save(getParametrosGenerales());
 				setAcepto(true);
@@ -432,6 +436,30 @@ public class JDialogParametrosGenerales extends JDialog {
 				return false;
 			}
 		}
+		
+		if (StringUtil.isNullOrEmpty(getTxtCargaMinimaColor().getText())) {
+			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtCargaMinimaColor().requestFocus();
+			return false;
+		} else {
+			if (!GenericUtils.esNumerico((getTxtCargaMinimaColor().getText()))) {
+				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				getTxtCargaMinimaColor().requestFocus();
+				return false;
+			}
+		}
+		
+		if (StringUtil.isNullOrEmpty(getTxtCargaMinimaEstampado().getText())) {
+			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtCargaMinimaEstampado().requestFocus();
+			return false;
+		} else {
+			if (!GenericUtils.esNumerico((getTxtCargaMinimaEstampado().getText()))) {
+				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				getTxtCargaMinimaEstampado().requestFocus();
+				return false;
+			}
+		}
 
 		return true;
 	}
@@ -494,6 +522,26 @@ public class JDialogParametrosGenerales extends JDialog {
 			}
 		}
 		return txtPorcentajeSeguroMercaderia;
+	}
+	
+	public CLJTextField getTxtCargaMinimaColor() {
+		if (txtCargaMinimaColor == null) {
+			txtCargaMinimaColor = new CLJTextField();
+			if (getParametrosGenerales() != null && getParametrosGenerales().getCargaMinimaColor() != null) {
+				txtCargaMinimaColor.setText(String.valueOf((getParametrosGenerales().getCargaMinimaColor().doubleValue())));
+			}
+		}
+		return txtCargaMinimaColor;
+	}
+
+	public CLJTextField getTxtCargaMinimaEstampado() {
+		if (txtCargaMinimaEstampado == null) {
+			txtCargaMinimaEstampado = new CLJTextField();
+			if (getParametrosGenerales() != null && getParametrosGenerales().getCargaMinimaEstampado() != null) {
+				txtCargaMinimaEstampado.setText(String.valueOf((getParametrosGenerales().getCargaMinimaEstampado().doubleValue())));
+			}
+		}
+		return txtCargaMinimaEstampado;
 	}
 
 	private JButton getBtnGuardar() {
@@ -768,7 +816,10 @@ public class JDialogParametrosGenerales extends JDialog {
 			panelTabVarios.add(getTxtMinimoDeuda(), createGridBagConstraints(1, 5, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelTabVarios.add(new JLabel("Comienzo de orden de pago a persona: "), createGridBagConstraints(0, 6, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelTabVarios.add(getTxtNroComienzoOrdenDePagoPersona(), createGridBagConstraints(1, 6, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-
+			panelTabVarios.add(new JLabel("Carga mínima color: "), createGridBagConstraints(0, 7, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtCargaMinimaColor(), createGridBagConstraints(1, 7, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTabVarios.add(new JLabel("Carga mínima estampado: "), createGridBagConstraints(0, 8, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtCargaMinimaEstampado(), createGridBagConstraints(1, 8, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		
 		return panelTabVarios;

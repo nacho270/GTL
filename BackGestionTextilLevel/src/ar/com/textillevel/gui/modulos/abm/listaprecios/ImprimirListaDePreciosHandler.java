@@ -1,8 +1,197 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios;
 
+import java.awt.Frame;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import ar.clarin.fwjava.util.DateUtil;
+import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioGama;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoCoberturaEstampado;
+import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
+import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.JasperHelper;
+import ar.com.textillevel.util.GTLBeanFactory;
+
 public class ImprimirListaDePreciosHandler {
 
+	private static final String ARCHIVO_JASPER_COTIZACION = "/ar/com/textillevel/reportes/cotizacion.jasper";
+	
+	private List<DefinicionPrecio> definiciones;
+	private Cliente cliente;
+	private ParametrosGenerales parametros;
+	
+	private Frame padre;
+	
+	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
+	
+	public ImprimirListaDePreciosHandler(Frame padre, Cliente cliente, List<DefinicionPrecio> definiciones) {
+		this.padre = padre;
+		this.definiciones = definiciones;
+		this.cliente = cliente;
+		this.parametros = getParametrosGeneralesFacade().getParametrosGenerales();
+	}
+
 	public void imprimir() {
-		
+		JDialogSeleccionarDefinicionesAImprimir d = new JDialogSeleccionarDefinicionesAImprimir(padre, definiciones);
+		d.setVisible(true);
+		if (d.isAcepto()) {
+			this.definiciones = d.getDefinicionesAImprimir();
+			JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_COTIZACION);
+			try {
+				JasperPrint jasperPrint = JasperHelper.fillReport(reporte, getParameters(), createDefiniciones());
+				JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
+			
+		} else return;
+	}
+	
+	private List<DefinicionPrecioTO> createDefiniciones() {
+		List<DefinicionPrecioTO> definicionesTO = new ArrayList<ImprimirListaDePreciosHandler.DefinicionPrecioTO>();
+		for(int i = 0; i < this.definiciones.size(); i++) {
+			DefinicionPrecio dp = this.definiciones.get(i);
+			for (RangoAncho ra : dp.getRangos()) {
+				if (ra instanceof RangoAnchoArticuloTenido) {
+					RangoAnchoArticuloTenido raat = (RangoAnchoArticuloTenido) ra;
+					for (GrupoTipoArticuloGama gtag : raat.getGruposGama()) {
+						for (PrecioGama pg : gtag.getPrecios()) {
+							DefinicionPrecioTO dTO = new DefinicionPrecioTO();
+							dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
+							dTO.setAncho(ra.toString() + " mts.");
+							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase());
+							dTO.setDescripcion(pg.getGamaDefault().getNombre());
+							dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
+							definicionesTO.add(dTO);
+						}
+					}
+				} else if (ra instanceof RangoAnchoArticuloEstampado) {
+					RangoAnchoArticuloEstampado raae = (RangoAnchoArticuloEstampado) ra;
+					for (GrupoTipoArticuloBaseEstampado gtabe : raae.getGruposBase()) {
+						for (PrecioBaseEstampado pbe : gtabe.getPrecios()) {
+							for (RangoCantidadColores rcc : pbe.getRangosDeColores()) {
+								for (RangoCoberturaEstampado rce : rcc.getRangos()) {
+									DefinicionPrecioTO dTO = new DefinicionPrecioTO();
+									dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
+									dTO.setAncho(ra.toString() + " mts.");
+									dTO.setTipoArticulo(gtabe.getTipoArticulo().getNombre().toUpperCase());
+									dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
+									dTO.setDescripcion("Base " + pbe.getGama().getNombre().toUpperCase() + ".\n" + rcc.toString() + " colores.\n" + rce.toString() + " de cobertura.");
+									definicionesTO.add(dTO);
+								}
+							}
+						}
+					}
+				} else {
+					RangoAnchoComun rac = (RangoAnchoComun) ra;
+					for (PrecioTipoArticulo pta : rac.getPrecios()) {
+						DefinicionPrecioTO dTO = new DefinicionPrecioTO();
+						dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
+						dTO.setAncho(ra.toString() + " mts.");
+						dTO.setDescripcion("-");
+						dTO.setTipoArticulo(pta.getTipoArticulo().getNombre().toUpperCase());
+						dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
+						definicionesTO.add(dTO);
+					}
+				} 
+			}
+//			if ( (i+1) < this.definiciones.size() ) {
+//				DefinicionPrecioTO separador = new DefinicionPrecioTO();
+//				definicionesTO.add(separador);
+//			}
+		}
+		return definicionesTO;
+	}
+	
+	private Map<String, Object> getParameters() {
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		mapa.put("FECHA", DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE));
+		mapa.put("CORREO", cliente.getEmail());
+		mapa.put("CLIENTE", cliente.getRazonSocial());
+		mapa.put("CONTACTO", cliente.getContacto());
+		String condicion = cliente.getCondicionVenta().getNombre().toLowerCase().contains("dias") ? cliente.getCondicionVenta().getNombre() : cliente.getCondicionVenta().getNombre() + " DIAS";
+		mapa.put("COND_PAGO", condicion + " a partir de fecha de factura (no se aceptan promedios)."); // a riBer le gusta esto
+		mapa.put("VALIDEZ", "30 días");
+		mapa.put("SEGURO", parametros.getPorcentajeSeguro() + "%.");
+		mapa.put("TUBOS", "$ " + parametros.getPrecioPorTubo() + "* c/u.");
+		mapa.put("CARGA_MINIMA_COLOR", parametros.getCargaMinimaColor() + " Kg. por color.");
+		mapa.put("CARGA_MINIMA_ESTAMPADO", parametros.getCargaMinimaEstampado() + " Mts. por variante.");
+		return mapa;
+	}
+
+	public ParametrosGeneralesFacadeRemote getParametrosGeneralesFacade() {
+		if (parametrosGeneralesFacade == null) {
+			parametrosGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
+		}
+		return parametrosGeneralesFacade;
+	}
+	
+	public static class DefinicionPrecioTO implements Serializable {
+
+		private static final long serialVersionUID = -235946966463225784L;
+
+		private String tipoProducto;
+		private String tipoArticulo;
+		private String ancho;
+		private String descripcion;
+		private String precio;
+
+		public String getTipoProducto() {
+			return tipoProducto;
+		}
+
+		public void setTipoProducto(String tipoProducto) {
+			this.tipoProducto = tipoProducto;
+		}
+
+		public String getTipoArticulo() {
+			return tipoArticulo;
+		}
+
+		public void setTipoArticulo(String tipoArticulo) {
+			this.tipoArticulo = tipoArticulo;
+		}
+
+		public String getAncho() {
+			return ancho;
+		}
+
+		public void setAncho(String ancho) {
+			this.ancho = ancho;
+		}
+
+		public String getDescripcion() {
+			return descripcion;
+		}
+
+		public void setDescripcion(String descripcion) {
+			this.descripcion = descripcion;
+		}
+
+		public String getPrecio() {
+			return precio;
+		}
+
+		public void setPrecio(String precio) {
+			this.precio = precio;
+		}
 	}
 }
