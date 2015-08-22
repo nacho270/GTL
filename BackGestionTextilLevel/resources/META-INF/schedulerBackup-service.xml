@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+	<mbean code="org.jboss.varia.scheduler.Scheduler" name="initBackupDataBase:service=Scheduler">
+		<attribute name="SchedulableClass">ar.com.textillevel.modulos.SchedulerBackupDatabase</attribute>
+		<attribute name="StartAtStartup">true</attribute>
+		<attribute name="FixedRate">true</attribute>
+		<attribute name="DateFormat">dd/MM/yy HH:mm</attribute>
+		<attribute name="InitialStartDate">01/01/1970 00:00</attribute>
+		<attribute name="SchedulePeriod">86400000</attribute>
+		<attribute name="InitialRepetitions">-1</attribute>
+		<depends>
+			<mbean code="javax.management.timer.Timer" name="initBackupDataBase:service=Timer"></mbean>
+		</depends>
+	</mbean>
+</server> 

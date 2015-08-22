@@ -77,6 +77,11 @@
 		textillevel.fe.keyStorePass=soloio
 		textillevel.fe.duracion=3600000
 		textillevel.fe.cuitEmpresa=30709129186
+		
+		textillevel.backup.habilitado=si
+		textillevel.backup.db=gtl
+		textillevel.backup.directorioBackup=E:/backups-scheduler/
+		textillevel.backup.MySQLDumpPath=C:/AppServ/MySQL/bin/mysqldump.exe
     </attribute>
     
   </mbean>

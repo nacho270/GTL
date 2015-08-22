@@ -5,4 +5,7 @@
 	<module> 
 		<service>META-INF/schedulerWatcherFichadasExcel-service.xml</service>
 	</module>
+	<module> 
+		<service>META-INF/schedulerBackup-service.xml</service>
+	</module>
 </jboss-app>
