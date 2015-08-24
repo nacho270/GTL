@@ -14,6 +14,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -48,11 +50,14 @@ import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.componentes.PanelTabla;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.ImageUtil;
+import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.ColorCilindro;
+import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
-import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
+import ar.com.textillevel.facade.api.remote.GamaColorFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
@@ -74,7 +79,9 @@ public class JDialogEditarVariante extends JDialog {
 	
 	private CLJTextField txtNombreVariante;
 	private JComboBox cmbColorParaFondo;
+	private JComboBox cmbGama;
 	private JCheckBox chkFondoSeEstampaEnCilindro;
+	private DecimalNumericTextField txtCobertura;
 	
 	private VarianteEstampado varianteEstampado;
 
@@ -101,7 +108,9 @@ public class JDialogEditarVariante extends JDialog {
 	private void setDatos() {
 		getTxtNombreVariante().setText(varianteEstampado.getNombre());
 		getChkFondoSeEstampaEnCilindro().setSelected(varianteEstampado.fondoSeEstampaEnCilindro());
+		getCmbGama().setSelectedItem(varianteEstampado.getGama());
 		getCmbColorParaFondo().setSelectedItem(varianteEstampado.getColorFondo());
+		getTxtCobertura().setText(varianteEstampado.getPorcentajeCobertura() == null ? null : varianteEstampado.getPorcentajeCobertura().toString());
 		if(varianteEstampado.getImagenEstampado() !=null){
 			putImageInLabel(varianteEstampado.getImagenEstampado());
 		}
@@ -161,11 +170,15 @@ public class JDialogEditarVariante extends JDialog {
 			pnlDatos.setLayout(new GridBagLayout());
 			pnlDatos.add(new JLabel("NOMBRE: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			pnlDatos.add(getTxtNombreVariante(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(new JLabel("COLOR DE FONDO: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(getCmbColorParaFondo(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(getChkFondoSeEstampaEnCilindro(), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 2, 1, 0, 0));
-			pnlDatos.add(getPanelImagen(), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 2, 1, 1, 1));
-			pnlDatos.add(getPanTablaColorCilindro(), GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 0, 0));
+			pnlDatos.add(new JLabel("GAMA: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(getCmbGama(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(new JLabel("COLOR DE FONDO: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(getCmbColorParaFondo(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(new JLabel("% COBERTURA: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(getTxtCobertura(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(getChkFondoSeEstampaEnCilindro(), GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 2, 1, 0, 0));
+			pnlDatos.add(getPanelImagen(), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 2, 1, 1, 1));
+			pnlDatos.add(getPanTablaColorCilindro(), GenericUtils.createGridBagConstraints(0, 6, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 0, 0));
 		}
 		return pnlDatos;
 	}
@@ -178,7 +191,9 @@ public class JDialogEditarVariante extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(validar()){
 						varianteEstampado.setNombre(getTxtNombreVariante().getText().toUpperCase());
+						varianteEstampado.setGama((GamaColor)getCmbGama().getSelectedItem());
 						varianteEstampado.setColorFondo((Color)getCmbColorParaFondo().getSelectedItem());
+						varianteEstampado.setPorcentajeCobertura(getTxtCobertura().getValueWithNull());
 						varianteEstampado.getColores().clear();
 						varianteEstampado.getColores().addAll(getPanTablaColorCilindro().getElementos());
 						varianteEstampado.setImagenEstampado((ImageIcon)getLblImagen().getIcon());
@@ -198,8 +213,17 @@ public class JDialogEditarVariante extends JDialog {
 			getTxtNombreVariante().requestFocus();
 			return false;
 		}
+		if(getCmbGama().getSelectedItem() == null) {
+			CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe seleccionar una gama.", JDialogEditarVariante.this.getTitle());
+			return false;
+		}
 		if(getCmbColorParaFondo().getSelectedItem() == null) {
 			CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe seleccionar un color de fondo.", JDialogEditarVariante.this.getTitle());
+			return false;
+		}
+		if(StringUtil.isNullOrEmpty(getTxtCobertura().getText())) {
+			CLJOptionPane.showErrorMessage(this, "El % de cobertura no fue ingresado o es inválido.", "Error");
+			getTxtCobertura().requestFocus();
 			return false;
 		}
 		//Si el fondo se estampa por cilindro => valido que se haya seleccionado el cilindro
@@ -251,6 +275,13 @@ public class JDialogEditarVariante extends JDialog {
 			txtNombreVariante = new CLJTextField();
 		}
 		return txtNombreVariante;
+	}
+
+	private DecimalNumericTextField getTxtCobertura() {
+		if(txtCobertura == null){
+			txtCobertura = new DecimalNumericTextField();
+		}
+		return txtCobertura;
 	}
 
 	public boolean isAcepto() {
@@ -534,9 +565,27 @@ public class JDialogEditarVariante extends JDialog {
 	private JComboBox getCmbColorParaFondo() {
 		if(cmbColorParaFondo == null) {
 			cmbColorParaFondo = new JComboBox();
-			GuiUtil.llenarCombo(cmbColorParaFondo, GTLBeanFactory.getInstance().getBean2(ColorFacadeRemote.class).getAllOrderByName(), true);
 		}
 		return cmbColorParaFondo;
+	}
+
+	private JComboBox getCmbGama() {
+		if(cmbGama == null) {
+			cmbGama = new JComboBox();
+			GuiUtil.llenarCombo(cmbGama, GTLBeanFactory.getInstance().getBean2(GamaColorFacadeRemote.class).getAllOrderByName(), true);
+
+			cmbGama.addItemListener(new ItemListener() {
+
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						GamaColor gama = (GamaColor)getCmbGama().getSelectedItem();
+						GuiUtil.llenarCombo(cmbColorParaFondo, gama.getColores(), true);
+					}
+				}
+
+			});
+		}
+		return cmbGama;
 	}
 
 	public static class PanelTablaColorCilindro extends PanelTabla<ColorCilindro> {

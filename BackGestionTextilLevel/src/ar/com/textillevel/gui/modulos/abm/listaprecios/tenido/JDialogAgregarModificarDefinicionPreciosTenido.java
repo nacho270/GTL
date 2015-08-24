@@ -39,7 +39,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	private JComboBox cmbGama;
 	private LinkableLabel linkableLabelEditarGamaCliente;
 	private JPanel panelDatosPropios;
-	
+
 	private List<GamaColorCliente> gamas;
 	private GamaColorClienteFacadeRemote gamaClienteFacade;
 	
@@ -136,23 +136,20 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		setModoEdicion(modoEdicion);
 
 		getCmbGama().setSelectedItem(precioGamaSiendoEditado.getGamaCliente());
-
 		GrupoTipoArticuloGama grupoTipoArticuloBase = precioGamaSiendoEditado.getGrupoTipoArticuloGama();
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
 
 		RangoAnchoArticuloTenido rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticuloTenido();
-		
-		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo() == null ? "" : rangoAnchoArticulo.getAnchoMinimo().toString());
-		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo() == null ? "" :rangoAnchoArticulo.getAnchoMaximo().toString());
+		getTxtAnchoInicial().setValue(rangoAnchoArticulo.getAnchoMinimo() == null ? null : rangoAnchoArticulo.getAnchoMinimo().doubleValue());
+		getTxtAnchoFinal().setValue(rangoAnchoArticulo.getAnchoMaximo() == null ? null :rangoAnchoArticulo.getAnchoMaximo().doubleValue());
 		if(rangoAnchoArticulo.getAnchoExacto() != null) {
-			getTxtAnchoExacto().setText(rangoAnchoArticulo.getAnchoExacto().toString());
+			getTxtAnchoExacto().setValue(rangoAnchoArticulo.getAnchoExacto().doubleValue());
 			getChkAnchoExacto().setSelected(true);
 		} else {
-			getTxtAnchoExacto().setText(null);
+			getTxtAnchoExacto().setValue(null);
 			getChkAnchoExacto().setSelected(false);
 		}
-		
-		getTxtPrecio().setText(precioGamaSiendoEditado.getPrecio().toString());
+		getTxtPrecio().setValue(precioGamaSiendoEditado.getPrecio().doubleValue());
 	}
 	
 	@Override
@@ -227,10 +224,22 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
 				return false;
 			}
+			RangoAnchoArticuloTenido rangoAnchoArticuloTenido = (RangoAnchoArticuloTenido)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
+			if(rangoAnchoArticuloTenido != null) {
+				GrupoTipoArticuloGama grupo = rangoAnchoArticuloTenido.getGrupo(getTipoArticulo());
+				if(grupo != null) {
+					PrecioGama pg = grupo.getPrecioGama((GamaColorCliente)getCmbGama().getSelectedItem());
+					if(pg != null && (elemSiendoEditado == null  || elemSiendoEditado != pg)) {
+						CLJOptionPane.showErrorMessage(this, "Ya existe un precio para esa gama", "Error");
+						getTxtPrecio().requestFocus();
+						return false;
+					}
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}
-		return true;
 	}
 
 	@Override

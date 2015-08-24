@@ -76,6 +76,11 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 
 	@Transient
 	public Float getPrecio(ProductoEstampado producto) {
+		GamaColor gama = producto.getVariante().getGama();
+		PrecioBaseEstampado precioBase = getPrecioBase(gama);
+		if(precioBase != null) {
+			//TODO: hacer bidireccional el dibujo estampado en la variante....
+		}
 		return null;
 	}
 

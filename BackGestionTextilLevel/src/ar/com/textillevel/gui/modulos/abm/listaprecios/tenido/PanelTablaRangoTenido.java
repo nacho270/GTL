@@ -66,7 +66,6 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 
 	@Override
 	public boolean validarQuitar() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	

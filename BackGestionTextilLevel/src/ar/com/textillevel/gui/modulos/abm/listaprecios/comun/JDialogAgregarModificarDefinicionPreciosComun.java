@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
@@ -95,6 +96,15 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 	@Override
 	protected boolean validar() {
 		if(validarDatosComunes()) {
+			RangoAnchoComun rangoAnchoComun = (RangoAnchoComun)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
+			if(rangoAnchoComun != null) {
+				PrecioTipoArticulo pta = rangoAnchoComun.getPrecioArticulo(getTipoArticulo());
+				if(pta != null && (elemSiendoEditado == null  || elemSiendoEditado != pta)) {
+					CLJOptionPane.showErrorMessage(this, "Ya existe un precio para ese tipo de artículo.", "Error");
+					getTxtPrecio().requestFocus();
+					return false;
+				}
+			}
 			return true;
 		} else {
 			return false;
@@ -114,17 +124,17 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 		this.elemSiendoEditado = elemHoja;
 		setModoEdicion(modoEdicion);
 		RangoAnchoComun rangoAnchoComun = elemHoja.getRangoAncho();
-		getTxtAnchoInicial().setText(rangoAnchoComun.getAnchoMinimo() == null ? "" : rangoAnchoComun.getAnchoMinimo().toString());
-		getTxtAnchoFinal().setText(rangoAnchoComun.getAnchoMaximo() == null ? "" :rangoAnchoComun.getAnchoMaximo().toString());
+		getTxtAnchoInicial().setValue(rangoAnchoComun.getAnchoMinimo() == null ? null : rangoAnchoComun.getAnchoMinimo().doubleValue());
+		getTxtAnchoFinal().setValue(rangoAnchoComun.getAnchoMaximo() == null ? null :rangoAnchoComun.getAnchoMaximo().doubleValue());
 		if(rangoAnchoComun.getAnchoExacto() != null) {
-			getTxtAnchoExacto().setText(rangoAnchoComun.getAnchoExacto().toString());
+			getTxtAnchoExacto().setValue(rangoAnchoComun.getAnchoExacto().doubleValue());
 			getChkAnchoExacto().setSelected(true);
 		} else {
-			getTxtAnchoExacto().setText(null);
+			getTxtAnchoExacto().setValue(null);
 			getChkAnchoExacto().setSelected(false);
 		}
 		getCmbTipoArticulo().setSelectedItem(elemHoja.getTipoArticulo());
-		getTxtPrecio().setText(elemHoja.getPrecio().toString());
+		getTxtPrecio().setValue(elemHoja.getPrecio().doubleValue());
 	}
 
 	@Override

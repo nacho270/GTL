@@ -34,6 +34,8 @@ public class VarianteEstampado implements Serializable {
 	private List<ColorCilindro> colores;
 	private byte[] bytesFotos;
 	private byte[] bytesFotosOriginal;
+	private Float porcentajeCobertura;
+	private GamaColor gama;
 
 	public VarianteEstampado() {
 		this.colores = new ArrayList<ColorCilindro>();
@@ -139,6 +141,25 @@ public class VarianteEstampado implements Serializable {
 
 	public void setColorFondo(Color colorFondo) {
 		this.colorFondo = colorFondo;
+	}
+
+	@Column(name = "A_PORC_COBERTURA")
+	public Float getPorcentajeCobertura() {
+		return porcentajeCobertura;
+	}
+
+	public void setPorcentajeCobertura(Float porcentajeCobertura) {
+		this.porcentajeCobertura = porcentajeCobertura;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="F_GAMA_P_ID")
+	public GamaColor getGama() {
+		return gama;
+	}
+
+	public void setGama(GamaColor gama) {
+		this.gama = gama;
 	}
 
 	@Override

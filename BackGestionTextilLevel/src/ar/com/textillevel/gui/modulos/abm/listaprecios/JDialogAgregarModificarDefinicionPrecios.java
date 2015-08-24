@@ -32,6 +32,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAncho, E> extends JDialog {
@@ -40,11 +41,11 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	private CLJTextField txtTipoProducto;
 	private JCheckBox chkAnchoExacto;
-	private CLJTextField txtAnchoInicial;
-	private CLJTextField txtAnchoFinal;
-	private CLJTextField txtAnchoExacto;
+	private DecimalNumericTextField txtAnchoInicial;
+	private DecimalNumericTextField txtAnchoFinal;
+	private DecimalNumericTextField txtAnchoExacto;
 	private JComboBox cmbTipoArticulo;
-	private CLJTextField txtPrecio;
+	private DecimalNumericTextField txtPrecio;
 	private PanelTablaRango<T, E> tablaRango;
 	private JButton btnNuevoOrCancelar;
 	private JButton btnAgregar;
@@ -264,17 +265,17 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return btnAgregar;
 	}
 
-	public CLJTextField getTxtAnchoInicial() {
+	public DecimalNumericTextField getTxtAnchoInicial() {
 		if (txtAnchoInicial == null) {
-			txtAnchoInicial = new CLJTextField();
+			txtAnchoInicial = new DecimalNumericTextField();
 			txtAnchoInicial.setSize(100, 20);
 		}
 		return txtAnchoInicial;
 	}
 
-	public CLJTextField getTxtAnchoFinal() {
+	public DecimalNumericTextField getTxtAnchoFinal() {
 		if (txtAnchoFinal == null) {
-			txtAnchoFinal = new CLJTextField();
+			txtAnchoFinal = new DecimalNumericTextField();
 		}
 		return txtAnchoFinal;
 	}
@@ -287,9 +288,9 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return cmbTipoArticulo;
 	}
 
-	public CLJTextField getTxtPrecio() {
+	public DecimalNumericTextField getTxtPrecio() {
 		if (txtPrecio == null) {
-			txtPrecio = new CLJTextField();
+			txtPrecio = new DecimalNumericTextField();
 		}
 		return txtPrecio;
 	}
@@ -321,9 +322,9 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return chkAnchoExacto;
 	}
 
-	public CLJTextField getTxtAnchoExacto() {
+	public DecimalNumericTextField getTxtAnchoExacto() {
 		if (txtAnchoExacto == null) {
-			txtAnchoExacto = new CLJTextField();
+			txtAnchoExacto = new DecimalNumericTextField();
 			txtAnchoExacto.setEditable(false);
 		}
 		return txtAnchoExacto;
@@ -341,7 +342,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	protected boolean validarDatosComunes() {
 		boolean usaAnchoExacto = getChkAnchoExacto().isSelected();
 		if(usaAnchoExacto) {
-			if(StringUtil.isNullOrEmpty(getTxtAnchoExacto().getText()) && !GenericUtils.esNumerico(getTxtAnchoExacto().getText())) {
+			if(StringUtil.isNullOrEmpty(getTxtAnchoExacto().getText())) {
 				CLJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no fue ingresado o es inválido.", "Error");
 				getTxtAnchoExacto().requestFocus();
 				return false;
@@ -379,31 +380,31 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		
 		return true;
 	}
-	
+
 	protected Float getAnchoExacto() {
 		if(getChkAnchoExacto().isSelected()) {
-			return Float.valueOf(getTxtAnchoExacto().getText());
+			return getTxtAnchoExacto().getValueWithNull();
 		} else {
 			return null;
 		}
 	}
-	
+
 	protected Float getAnchoInicial() {
 		if(getChkAnchoExacto().isSelected()) {
 			return null;
 		}
-		return Float.valueOf(getTxtAnchoInicial().getText());
+		return getTxtAnchoInicial().getValueWithNull();
 	}
-	
+
 	protected Float getAnchoFinal() {
 		if(getChkAnchoExacto().isSelected()) {
 			return null;
 		}
-		return Float.valueOf(getTxtAnchoFinal().getText());
+		return getTxtAnchoFinal().getValueWithNull();
 	}
 
 	protected Float getPrecio() {
-		return Float.valueOf(getTxtPrecio().getText());
+		return getTxtPrecio().getValueWithNull();
 	}
 
 	protected TipoArticulo getTipoArticulo() {
@@ -411,7 +412,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected boolean validarRango(CLJTextField desde, String labelDesde, CLJTextField hasta, String labelHasta, boolean isFloat) {
+	protected boolean validarRango(DecimalNumericTextField desde, String labelDesde, DecimalNumericTextField hasta, String labelHasta, boolean isFloat) {
 		if(StringUtil.isNullOrEmpty(desde.getText()) || (isFloat  ? !GenericUtils.esNumerico(desde.getText()) : !NumUtil.esNumerico(desde.getText()))) {
 			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' no fue ingresado o es inválido.", "Error");
 			desde.requestFocus();
@@ -422,8 +423,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			hasta.requestFocus();
 			return false;
 		}
-		Comparable desdeVal = isFloat ? Float.valueOf(desde.getText()) : Integer.valueOf(desde.getText());
-		Comparable hastaVal = isFloat ? Float.valueOf(hasta.getText()) : Integer.valueOf(hasta.getText());
+		Comparable desdeVal = isFloat ? desde.getValueWithNull() : desde.getValueWithNull().intValue();
+		Comparable hastaVal = isFloat ? hasta.getValueWithNull() : hasta.getValueWithNull().intValue();
 		if(desdeVal.compareTo(hastaVal) >= 0) {
 			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' debe ser menor a '" + labelHasta + "'" , "Error");
 			desde.requestFocus();
@@ -431,8 +432,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		}
 		return true;
 	}
-	
-	
+
 	/* ABSTRACTOS */
 	protected abstract JPanel createPanelDatosEspecificos();
 	protected abstract PanelTablaRango<T, E> createPanelTabla(JDialogAgregarModificarDefinicionPrecios<T, E> parent);

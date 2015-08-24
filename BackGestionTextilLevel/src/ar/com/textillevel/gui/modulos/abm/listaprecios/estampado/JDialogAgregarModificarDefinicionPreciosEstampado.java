@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -29,6 +28,7 @@ import ar.com.textillevel.facade.api.remote.GamaColorFacadeRemote;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAgregarModificarDefinicionPrecios<RangoAnchoArticuloEstampado, RangoCoberturaEstampado> {
@@ -36,10 +36,10 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	private static final long serialVersionUID = -6851805146971694269L;
 	
 	private JComboBox cmbBase;
-	private CLJTextField txtCantColoresDesde;
-	private CLJTextField txtCantColoresHasta;
-	private CLJTextField txtCoberturaDesde;
-	private CLJTextField txtCoberturaHasta;
+	private DecimalNumericTextField txtCantColoresDesde;
+	private DecimalNumericTextField txtCantColoresHasta;
+	private DecimalNumericTextField txtCoberturaDesde;
+	private DecimalNumericTextField txtCoberturaHasta;
 	
 	private List<GamaColor> bases;
 
@@ -91,32 +91,32 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		return cmbBase;
 	}
 
-	private CLJTextField getTxtCantColoresDesde() {
+	private DecimalNumericTextField getTxtCantColoresDesde() {
 		if (txtCantColoresDesde == null) {
-			txtCantColoresDesde = new CLJTextField();
+			txtCantColoresDesde = new DecimalNumericTextField(new Integer(0) , new Integer(0));
 			txtCantColoresDesde.setSize(100, 20);
 		}
 		return txtCantColoresDesde;
 	}
 
-	private CLJTextField getTxtCantColoresHasta() {
+	private DecimalNumericTextField getTxtCantColoresHasta() {
 		if (txtCantColoresHasta == null) {
-			txtCantColoresHasta = new CLJTextField();
+			txtCantColoresHasta = new DecimalNumericTextField(new Integer(0) , new Integer(0));
 		}
 		return txtCantColoresHasta;
 	}
 	
-	private CLJTextField getTxtCoberturaDesde() {
+	private DecimalNumericTextField getTxtCoberturaDesde() {
 		if (txtCoberturaDesde == null) {
-			txtCoberturaDesde = new CLJTextField();
+			txtCoberturaDesde = new DecimalNumericTextField(new Integer(0) , new Integer(0));
 			txtCoberturaDesde.setSize(100, 20);
 		}
 		return txtCoberturaDesde;
 	}
 
-	private CLJTextField getTxtCoberturaHasta() {
+	private DecimalNumericTextField getTxtCoberturaHasta() {
 		if (txtCoberturaHasta == null) {
-			txtCoberturaHasta = new CLJTextField();
+			txtCoberturaHasta = new DecimalNumericTextField(new Integer(0) , new Integer(0));
 		}
 		return txtCoberturaHasta;
 	}
@@ -312,13 +312,13 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 		setModoEdicion(modoEdicion);
 
-		getTxtPrecio().setText(rangoCoberturaEstampadoSiendoEditado.getPrecio().toString());
-		getTxtCoberturaDesde().setText(rangoCoberturaEstampadoSiendoEditado.getMinimo().toString());
-		getTxtCoberturaHasta().setText(rangoCoberturaEstampadoSiendoEditado.getMaximo().toString());
+		getTxtPrecio().setValue(rangoCoberturaEstampadoSiendoEditado.getPrecio().doubleValue());
+		getTxtCoberturaDesde().setValue(rangoCoberturaEstampadoSiendoEditado.getMinimo().doubleValue());
+		getTxtCoberturaHasta().setValue(rangoCoberturaEstampadoSiendoEditado.getMaximo().doubleValue());
 
 		RangoCantidadColores rangoCantidadColores = rangoCoberturaEstampadoSiendoEditado.getRangoCantidadColores();
-		getTxtCantColoresDesde().setText(rangoCantidadColores.getMinimo().toString());
-		getTxtCantColoresHasta().setText(rangoCantidadColores.getMaximo().toString());
+		getTxtCantColoresDesde().setValue(rangoCantidadColores.getMinimo().doubleValue());
+		getTxtCantColoresHasta().setValue(rangoCantidadColores.getMaximo().doubleValue());
 
 		PrecioBaseEstampado precioBase = rangoCantidadColores.getPrecioBase();
 		getCmbBase().setSelectedItem(precioBase.getGama());
@@ -327,13 +327,13 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
 
 		RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo();
-		getTxtAnchoInicial().setText(rangoAnchoArticulo.getAnchoMinimo() == null ? "" : rangoAnchoArticulo.getAnchoMinimo().toString());
-		getTxtAnchoFinal().setText(rangoAnchoArticulo.getAnchoMaximo() == null ? "" :rangoAnchoArticulo.getAnchoMaximo().toString());
+		getTxtAnchoInicial().setValue(rangoAnchoArticulo.getAnchoMinimo() == null ? null : rangoAnchoArticulo.getAnchoMinimo().doubleValue());
+		getTxtAnchoFinal().setValue(rangoAnchoArticulo.getAnchoMaximo() == null ? null :rangoAnchoArticulo.getAnchoMaximo().doubleValue());
 		if(rangoAnchoArticulo.getAnchoExacto() != null) {
-			getTxtAnchoExacto().setText(rangoAnchoArticulo.getAnchoExacto().toString());
+			getTxtAnchoExacto().setValue(rangoAnchoArticulo.getAnchoExacto().doubleValue());
 			getChkAnchoExacto().setSelected(true);
 		} else {
-			getTxtAnchoExacto().setText(null);
+			getTxtAnchoExacto().setValue(null);
 			getChkAnchoExacto().setSelected(false);
 		}
 	}
