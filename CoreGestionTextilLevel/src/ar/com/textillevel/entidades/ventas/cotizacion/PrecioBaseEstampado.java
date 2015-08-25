@@ -111,6 +111,16 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 	}
 
 	@Transient
+	public RangoCantidadColores getRango(Integer cantColores) {
+		for(RangoCantidadColores r : getRangosDeColores()) {
+			if(Utils.dentroDelRangoEstricto(cantColores, r.getMinimo(), r.getMaximo())) {
+				return r;
+			}
+		}
+		return null;
+	}
+
+	@Transient
 	public void deepOrderBy() {
 		Collections.sort(getRangosDeColores());
 		for(RangoCantidadColores r : getRangosDeColores()) {

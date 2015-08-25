@@ -135,6 +135,16 @@ public class RangoCantidadColores implements Serializable, Comparable<RangoCanti
 		Collections.sort(getRangos());
 	}
 
+	@Transient
+	public Float getPrecio(Float porcentajeCobertura) {
+		for(RangoCoberturaEstampado r : getRangos()) {
+			if(porcentajeCobertura.intValue() >= r.getMinimo().floatValue() && porcentajeCobertura.intValue() >= r.getMaximo().floatValue()) {
+				return r.getPrecio(); 
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

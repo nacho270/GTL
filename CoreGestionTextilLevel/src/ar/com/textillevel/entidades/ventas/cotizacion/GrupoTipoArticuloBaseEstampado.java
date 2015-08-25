@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
+import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 
 @Entity
@@ -76,10 +77,17 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 
 	@Transient
 	public Float getPrecio(ProductoEstampado producto) {
-		GamaColor gama = producto.getVariante().getGama();
-		PrecioBaseEstampado precioBase = getPrecioBase(gama);
-		if(precioBase != null) {
-			//TODO: hacer bidireccional el dibujo estampado en la variante....
+		VarianteEstampado variante = producto.getVariante();
+		GamaColor gama = variante.getGama();
+		if(gama != null) {
+			PrecioBaseEstampado precioBase = getPrecioBase(gama);
+			if(precioBase != null) {
+				Integer cantColores = variante.getDibujo().getCantidadColores();
+				RangoCantidadColores rango = precioBase.getRango(cantColores);
+				if(rango != null) {
+					return rango.getPrecio(variante.getPorcentajeCobertura());
+				}
+			}
 		}
 		return null;
 	}

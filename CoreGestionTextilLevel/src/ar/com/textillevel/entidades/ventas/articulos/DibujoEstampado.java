@@ -121,7 +121,15 @@ public class DibujoEstampado implements Serializable{
 	public String toString() {
 		return getNroDibujo() + " - " + getNombre();
 	}
-	
+
+	@Transient
+	public Integer getCantidadColores() {
+		if(getNroDibujo() != null) {
+			Integer.valueOf(String.valueOf(getNroDibujo().toString().charAt(0)));
+		}
+		return null;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

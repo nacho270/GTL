@@ -36,6 +36,7 @@ public class VarianteEstampado implements Serializable {
 	private byte[] bytesFotosOriginal;
 	private Float porcentajeCobertura;
 	private GamaColor gama;
+	private DibujoEstampado dibujo;
 
 	public VarianteEstampado() {
 		this.colores = new ArrayList<ColorCilindro>();
@@ -160,6 +161,16 @@ public class VarianteEstampado implements Serializable {
 
 	public void setGama(GamaColor gama) {
 		this.gama = gama;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="F_VARIANTE_P_ID", nullable=false, insertable=false, updatable=false)
+	public DibujoEstampado getDibujo() {
+		return dibujo;
+	}
+
+	public void setDibujo(DibujoEstampado dibujo) {
+		this.dibujo = dibujo;
 	}
 
 	@Override
