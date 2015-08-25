@@ -31,6 +31,8 @@ import javax.swing.JPanel;
 import ar.clarin.fwjava.componentes.CLJNumericTextField;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
+import ar.clarin.fwjava.componentes.error.CLRuntimeException;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
@@ -52,6 +54,7 @@ import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -714,14 +717,24 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JComboBox getCmbProductos() {
 		if (cmbProductos == null) {
 			cmbProductos = new JComboBox();
-			List<Producto> allOrderByName = getProductoFacade().getAllOrderByName();
-			List<Producto> allOrderByNameSinReproceso = new ArrayList<Producto>();
-			for(Producto p : allOrderByName){
-				if(!(p instanceof ProductoReprocesoSinCargo)){
-					allOrderByNameSinReproceso.add(p);
+			List<Producto> allOrderByName;
+			try {
+				allOrderByName = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class).getProductos(getCliente());
+//				List<Producto> allOrderByName = getProductoFacade().getAllOrderByName();
+				List<Producto> allOrderByNameSinReproceso = new ArrayList<Producto>();
+				for(Producto p : allOrderByName){
+					if(!(p instanceof ProductoReprocesoSinCargo)){
+						allOrderByNameSinReproceso.add(p);
+					}
 				}
+				GuiUtil.llenarCombo(cmbProductos, allOrderByNameSinReproceso, true);
+			} catch (CLRuntimeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ValidacionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			GuiUtil.llenarCombo(cmbProductos, allOrderByNameSinReproceso, true);
 		}
 		return cmbProductos;
 	}

@@ -1,5 +1,7 @@
 package ar.com.textillevel.facade.api.remote;
 
+import java.util.List;
+
 import javax.ejb.Remote;
 
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
@@ -17,4 +19,7 @@ public interface ListaDePreciosFacadeRemote {
 	public void remove(ListaDePrecios listaDePrecios);
 
 	public Float getPrecioProducto(Producto producto, Cliente cliente) throws ValidacionException;
+	
+	public List<Producto> getProductos(Cliente cliente) throws ValidacionException;
+
 }
