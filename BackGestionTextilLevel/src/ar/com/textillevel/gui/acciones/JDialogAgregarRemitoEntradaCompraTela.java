@@ -350,7 +350,7 @@ public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					PrecioMateriaPrima selectedItem = getPMPSeleccionada();
-					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoEntradaCompraTela.this, remitoEntrada.getProductoList(), Collections.singletonList(((Tela)selectedItem.getMateriaPrima()).getArticulo()));
+					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoEntradaCompraTela.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList(), Collections.singletonList(((Tela)selectedItem.getMateriaPrima()).getArticulo()));
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {

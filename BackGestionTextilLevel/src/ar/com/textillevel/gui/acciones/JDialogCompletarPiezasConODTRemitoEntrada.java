@@ -318,9 +318,9 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					JDialogSeleccionarProducto dialogSeleccionarProducto = null;
 					if(remitoEntrada.getArticuloStock() == null) { //Es un remito de entrada normal 
-						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getProductoList());
+						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList());
 					} else { //Es un remito de entrada 01
-						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getProductoList(), Collections.singletonList(remitoEntrada.getArticuloStock()));
+						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList(), Collections.singletonList(remitoEntrada.getArticuloStock()));
 					}
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);

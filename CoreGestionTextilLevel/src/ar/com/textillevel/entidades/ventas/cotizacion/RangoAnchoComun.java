@@ -28,7 +28,7 @@ public class RangoAnchoComun extends RangoAncho {
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "F_RANGO_P_ID")
+	@JoinColumn(name = "F_RANGO_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<PrecioTipoArticulo> getPrecios() {
 		return precios;

@@ -47,7 +47,7 @@ public class DefinicionPrecio implements Serializable {
 	}
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "F_DEFINICION_PRECIO_P_ID")
+	@JoinColumn(name = "F_DEFINICION_PRECIO_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = { org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
 	public List<RangoAncho> getRangos() {
 		return rangos;
@@ -171,7 +171,7 @@ public class DefinicionPrecio implements Serializable {
 				lista.add(ra);
 			} else if (producto.getTipo() == ETipoProducto.ESTAMPADO && (ra instanceof RangoAnchoArticuloEstampado)) {
 				lista.add(ra);
-			} else if (producto.getTipo() != ETipoProducto.TENIDO && producto.getTipo() == ETipoProducto.ESTAMPADO && 
+			} else if (producto.getTipo() != ETipoProducto.TENIDO && producto.getTipo() != ETipoProducto.ESTAMPADO && 
 					!(ra instanceof RangoAnchoArticuloEstampado) && !(ra instanceof RangoAnchoArticuloTenido)){
 				lista.add(ra);
 			}

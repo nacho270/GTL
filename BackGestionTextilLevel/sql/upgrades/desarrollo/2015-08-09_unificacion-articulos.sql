@@ -48,6 +48,10 @@ update t_producto set f_articulo_p_id = 76 where f_articulo_p_id = 72;
 insert into t_articulo values(77, 'ALGODON POLIESTER 2,73', 'AP 2,73', 1, 2.73, 3);
 update t_producto set f_articulo_p_id = 77 where f_articulo_p_id = 73;
 
+-- cargar PCL 2,85
+insert into t_articulo values(71, 'PERCAL 2,85MTS', 'PCL 2,85', 1, 2.85, 3);
+
+
 -- borro devolucion repetida
 update t_remito_entrada_producto set f_producto_p_id = 1042 where f_producto_p_id = 1043;
 delete from t_remito_entrada_producto where f_producto_p_id = 1043;

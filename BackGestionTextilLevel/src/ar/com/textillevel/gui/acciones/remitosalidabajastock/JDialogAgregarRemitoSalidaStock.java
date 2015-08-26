@@ -316,7 +316,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 			btnSelProductos.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoSalidaStock.this, productoList, getArticuloListFromRemitos());
+					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoSalidaStock.this, remitoSalida.getCliente(), productoList, getArticuloListFromRemitos());
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {

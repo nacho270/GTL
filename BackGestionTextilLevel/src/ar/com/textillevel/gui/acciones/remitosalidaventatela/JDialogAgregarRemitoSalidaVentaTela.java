@@ -433,7 +433,7 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 			btnSelProductos.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoSalidaVentaTela.this, productoList, getArticuloElegidos());
+					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoSalidaVentaTela.this, remitoSalida.getCliente(), productoList, getArticuloElegidos());
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {
