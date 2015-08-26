@@ -57,7 +57,6 @@ import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
-import ar.com.textillevel.util.GestorDeFacturas;
 
 public class JDialogAgregarItemFactura extends JDialog {
 
@@ -223,7 +222,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_PRODUCTOS);
 				setItemFacturaSeleccionado(new ItemFacturaProducto());
-				BigDecimal precio = GestorDeFacturas.getInstance().getPrecio((Producto) getCmbProductos().getSelectedItem(), getCliente().getId());
+				BigDecimal precio = new BigDecimal(((Producto) getCmbProductos().getSelectedItem()).getPrecioCalculado());
 				getTxtPrecioUnitario().setText(String.valueOf(precio));
 				this.setSize(new Dimension(400, 190));
 				break;
@@ -401,7 +400,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getItemFacturaSeleccionado().setUnidad(((Producto) getCmbProductos().getSelectedItem()).getTipo().getUnidad());
 				BigDecimal cantidad = new BigDecimal(getTxtCantMetros().getText().trim().replace(',', '.'));
 				//BigDecimal precioUnitario = new BigDecimal(getTxtPrecioUnitario().getText().trim().replace(',', '.'));
-				BigDecimal precioUnitario = GestorDeFacturas.getInstance().getPrecio((Producto) getCmbProductos().getSelectedItem(), getCliente().getId());
+				BigDecimal precioUnitario = new BigDecimal(((Producto) getCmbProductos().getSelectedItem()).getPrecioCalculado());
 				getItemFacturaSeleccionado().setCantidad(cantidad);
 				getItemFacturaSeleccionado().setPrecioUnitario(precioUnitario);
 				getItemFacturaSeleccionado().setImporte(new BigDecimal(cantidad.doubleValue() * precioUnitario.doubleValue()));
