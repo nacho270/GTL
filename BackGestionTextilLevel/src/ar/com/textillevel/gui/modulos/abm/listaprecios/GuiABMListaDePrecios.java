@@ -217,6 +217,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		GuiUtil.setEstadoPanel(getTablaDefiniciones(), estado);
 		getTablaDefiniciones().getBotonModificar().setEnabled(false);
 		getTablaDefiniciones().getBotonEliminar().setEnabled(false);
+		getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 	}
 
 	public ClienteFacadeRemote getClienteFacade() {
