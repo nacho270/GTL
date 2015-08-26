@@ -7,6 +7,15 @@ update t_articulo set f_tipo_articulo_p_id = null;
 update t_articulo set f_tipo_articulo_p_id =2 where substring(a_nombre,1,2) = 'AA';
 update t_articulo set f_tipo_articulo_p_id =5 where substring(a_nombre,1,3) = 'POL';
 update t_articulo set f_tipo_articulo_p_id =3 where substring(a_nombre,1,2) = 'AP';
+update t_articulo set f_tipo_articulo_p_id =3 where substring(a_nombre,1,3) = 'PCL';
+update t_articulo set f_tipo_articulo_p_id =3 where substring(a_nombre,1,2) = 'PC';
+update t_articulo set f_tipo_articulo_p_id =5 where substring(a_nombre,1,6) = 'PONGEE';
+update t_articulo set f_tipo_articulo_p_id =5 where substring(a_nombre,1,5) = 'PONGE';
+update t_articulo set f_tipo_articulo_p_id =2 where substring(a_nombre,1,3) = 'GAB';
+update t_articulo set f_tipo_articulo_p_id =2 where p_id = 24;
+update t_articulo set f_tipo_articulo_p_id =2 where p_id = 23;
+update t_articulo set f_tipo_articulo_p_id =3 where p_id = 13;
+update t_articulo set f_tipo_articulo_p_id =3 where p_id = 21;
 
 -- chequear donde van los siguientes:
 /*
@@ -28,7 +37,7 @@ insert into t_articulo values(75, 'ALGODON POLIESTER 2,45', 'AP 2,45', 1, 2.45, 
 update t_producto set f_articulo_p_id = 75 where f_articulo_p_id = 74;
 
 -- cargar aa 1,52
-insert into t_articulo values(69, 'ALGODON 1,53', 'AA 1,52', 1, 1.52, 2);
+insert into t_articulo values(69, 'ALGODON 1,52', 'AA 1,52', 1, 1.52, 2);
 update t_producto set f_articulo_p_id = 69 where f_articulo_p_id = 70;
 
 -- cargar ap 1,65
