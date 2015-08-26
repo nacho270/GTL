@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import ar.clarin.fwjava.componentes.CLJNumericTextField;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.StringUtil;
@@ -56,7 +55,6 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
-import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.GestorDeFacturas;
@@ -128,7 +126,6 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnSalir;
 
-	private ProductoFacadeRemote productoFacade;
 	private PrecioMateriaPrimaFacadeRemote precioMateriaPrimaFacade;
 	private ArticuloFacadeRemote articulosFacade;
 
@@ -717,10 +714,8 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JComboBox getCmbProductos() {
 		if (cmbProductos == null) {
 			cmbProductos = new JComboBox();
-			List<Producto> allOrderByName;
 			try {
-				allOrderByName = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class).getProductos(getCliente());
-//				List<Producto> allOrderByName = getProductoFacade().getAllOrderByName();
+				List<Producto> allOrderByName = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class).getProductos(getCliente());
 				List<Producto> allOrderByNameSinReproceso = new ArrayList<Producto>();
 				for(Producto p : allOrderByName){
 					if(!(p instanceof ProductoReprocesoSinCargo)){
@@ -728,22 +723,11 @@ public class JDialogAgregarItemFactura extends JDialog {
 					}
 				}
 				GuiUtil.llenarCombo(cmbProductos, allOrderByNameSinReproceso, true);
-			} catch (CLRuntimeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (ValidacionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				CLJOptionPane.showWarningMessage(JDialogAgregarItemFactura.this, "El cliente no posee una lista de precios.\nPor favor, cargue una para poder facturar productos.", "Advertencia");
 			}
 		}
 		return cmbProductos;
-	}
-
-	private ProductoFacadeRemote getProductoFacade() {
-		if (productoFacade == null) {
-			productoFacade = GTLBeanFactory.getInstance().getBean2(ProductoFacadeRemote.class);
-		}
-		return productoFacade;
 	}
 
 	private void salir() {

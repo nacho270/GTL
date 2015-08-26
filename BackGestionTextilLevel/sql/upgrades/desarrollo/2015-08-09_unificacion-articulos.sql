@@ -24,14 +24,19 @@ GABARDINA
 delete from t_articulo where p_id in (34, 40);
 
 -- cargar ap 2,45
+insert into t_articulo values(75, 'ALGODON POLIESTER 2,45', 'AP 2,45', 1, 2.45, 3);
 update t_producto set f_articulo_p_id = 75 where f_articulo_p_id = 74;
 
+-- cargar aa 1,52
+insert into t_articulo values(69, 'ALGODON 1,53', 'AA 1,52', 1, 1.52, 2);
 update t_producto set f_articulo_p_id = 69 where f_articulo_p_id = 70;
 
 -- cargar ap 1,65
+insert into t_articulo values(76, 'ALGODON POLIESTER 1,65', 'AP 1,65', 1, 1.65, 3);
 update t_producto set f_articulo_p_id = 76 where f_articulo_p_id = 72;
 
 -- cargar ap 2,73
+insert into t_articulo values(77, 'ALGODON POLIESTER 2,73', 'AP 2,73', 1, 2.73, 3);
 update t_producto set f_articulo_p_id = 77 where f_articulo_p_id = 73;
 
 -- borro devolucion repetida
@@ -43,7 +48,82 @@ delete from t_producto where p_id in (1043);
 -- quito articulos de productos que no los requieren
 update t_producto set f_articulo_p_id = null where p_id in (368, 395, 1042); /* 1222 ver que articulo es */
 
+-- QUEDA A DEFINIR QUE SE PONE EN EL P_ID 13: ART. VS CAMISERIA
+
+-- cargo anchos faltantes
+update t_articulo set a_ancho = 2.4 where p_id = 1;
+update t_articulo set a_ancho = 1.5 where p_id = 3;
+update t_articulo set a_ancho = 3 where p_id = 4;
+update t_articulo set a_ancho = 1.95 where p_id = 5;
+update t_articulo set a_ancho = 1.5 where p_id = 6;
+update t_articulo set a_ancho = 2.4 where p_id = 7;
+update t_articulo set a_ancho = 1.5 where p_id = 8;
+update t_articulo set a_ancho = 2.6 where p_id = 10;
+update t_articulo set a_ancho = 2.7 where p_id = 11;
+update t_articulo set a_ancho = 2.8 where p_id = 12;
+update t_articulo set a_ancho = 1.6 where p_id = 14;
+update t_articulo set a_ancho = 1.6 where p_id = 15;
+update t_articulo set a_ancho = 3 where p_id = 16;
+update t_articulo set a_ancho = 1.85 where p_id = 18;
+update t_articulo set a_ancho = 1.6 where p_id = 19;
+update t_articulo set a_ancho = 2 where p_id = 20;
+update t_articulo set a_ancho = 2.6 where p_id = 21;
+update t_articulo set a_ancho = 2.10 where p_id = 22;
+update t_articulo set a_ancho = 1.6 where p_id = 23;
+update t_articulo set a_ancho = 1.6 where p_id = 24;
+update t_articulo set a_ancho = 2.1 where p_id = 26;
+update t_articulo set a_ancho = 2.5 where p_id = 27;
+update t_articulo set a_ancho = 2.8 where p_id = 28;
+update t_articulo set a_ancho = 2.05 where p_id = 29;
+update t_articulo set a_ancho = 2.5 where p_id = 30;
+update t_articulo set a_ancho = 2 where p_id = 31;
+update t_articulo set a_ancho = 2.6 where p_id = 32;
+update t_articulo set a_ancho = 1.05 where p_id = 33;
+update t_articulo set a_ancho = 3 where p_id = 35;
+update t_articulo set a_ancho = 3 where p_id = 37;
+update t_articulo set a_ancho = 2.5 where p_id = 38;
+update t_articulo set a_ancho = 2.7 where p_id = 39;
+update t_articulo set a_ancho = 1.6 where p_id = 41;
+update t_articulo set a_ancho = 2.8 where p_id = 42;
+update t_articulo set a_ancho = 2.9 where p_id = 43;
+update t_articulo set a_ancho = 1.5 where p_id = 44;
+update t_articulo set a_ancho = 2.1 where p_id = 45;
+update t_articulo set a_ancho = 3 where p_id = 46;
+update t_articulo set a_ancho = 1.8 where p_id = 47;
+update t_articulo set a_ancho = 2.7 where p_id = 48;
+update t_articulo set a_ancho = 1.1 where p_id = 49;
+update t_articulo set a_ancho = 1.1 where p_id = 50;
+update t_articulo set a_ancho = 2.05 where p_id = 51;
+update t_articulo set a_ancho = 2.1 where p_id = 52;
+update t_articulo set a_ancho = 2.55 where p_id = 53;
+update t_articulo set a_ancho = 3 where p_id = 54;
+update t_articulo set a_ancho = 2.15 where p_id = 55;
+update t_articulo set a_ancho = 1.2 where p_id = 56;
+update t_articulo set a_ancho = 1.2 where p_id = 57;
+update t_articulo set a_ancho = 1.6 where p_id = 58;
+update t_articulo set a_ancho = 1.2 where p_id = 59;
+update t_articulo set a_ancho = 2.45 where p_id = 60;
+update t_articulo set a_ancho = 2.1 where p_id = 61;
+update t_articulo set a_ancho = 1.6 where p_id = 62;
+update t_articulo set a_ancho = 1.75 where p_id = 63;
+update t_articulo set a_ancho = 2.07 where p_id = 64;
+update t_articulo set a_ancho = 2.6 where p_id = 65;
+update t_articulo set a_ancho = 1.68 where p_id = 66;
+update t_articulo set a_ancho = 1.5 where p_id = 67;
+update t_articulo set a_ancho = 1.42 where p_id = 68;
+
+
+
+
+
+
 -- querys utiles
+
+--validacion de tipo producto y ancho repetido
+SELECT f_tipo_articulo_p_id, a_ancho, count(*)
+FROM t_articulo
+group by f_tipo_articulo_p_id, a_ancho
+having f_tipo_articulo_p_id is not null and a_ancho is not null and count(*) > 1;
 
 select * from t_producto pr where not exists( select 1 from t_articulo art where art.p_id = pr.f_articulo_p_id);
 

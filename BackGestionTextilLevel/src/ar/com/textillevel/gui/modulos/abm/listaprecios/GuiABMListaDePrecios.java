@@ -30,12 +30,16 @@ import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
+import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.comun.JDialogAgregarModificarDefinicionPreciosComun;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.estampado.JDialogAgregarModificarDefinicionPreciosEstampado;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.tenido.JDialogAgregarModificarDefinicionPreciosTenido;
@@ -139,6 +143,25 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe definir los precios para version con validez a partir de " + DateUtil.dateToString(v.getInicioValidez(), DateUtil.SHORT_DATE), "Error");
 				return false;
 			}
+		}
+		if(getListaActual().getVersionActual().getDefinicionPorTipoProducto(ETipoProducto.REPROCESO_SIN_CARGO) == null) {
+			// agrego automaticamente el reproceso sin cargo con precio 0
+			DefinicionPrecio definicionReprocesoSinCargo = new DefinicionPrecio();
+			definicionReprocesoSinCargo.setTipoProducto(ETipoProducto.REPROCESO_SIN_CARGO);
+			RangoAnchoComun rangoAnchoComun = new RangoAnchoComun();
+			rangoAnchoComun.setAnchoMinimo(0f);
+			rangoAnchoComun.setAnchoMaximo(50f);
+			rangoAnchoComun.setDefinicionPrecio(definicionReprocesoSinCargo);
+			List<TipoArticulo> tiposArticulo = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class).getAllTipoArticulos();
+			for(TipoArticulo ta : tiposArticulo){
+				PrecioTipoArticulo pta = new PrecioTipoArticulo();
+				pta.setPrecio(0f);
+				pta.setRangoAncho(rangoAnchoComun);
+				pta.setTipoArticulo(ta);
+				rangoAnchoComun.getPrecios().add(pta);
+			}
+			definicionReprocesoSinCargo.getRangos().add(rangoAnchoComun);
+			getListaActual().getVersionActual().getPrecios().add(definicionReprocesoSinCargo);
 		}
 		getListaDePreciosFacade().save(getListaActual());
 		return true;
@@ -462,6 +485,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				}
 			});
 			Collection<ETipoProducto> disjuncion = GenericUtils.restaConjuntosOrdenada(Arrays.asList(ETipoProducto.values()), tiposUsados);
+			disjuncion.remove(ETipoProducto.REPROCESO_SIN_CARGO);
 			Object[] disjuncionArray = disjuncion.toArray();
 			String[] tiposProducto= new String[disjuncionArray.length];
 			for(int i = 0 ; i < disjuncionArray.length;i++){
