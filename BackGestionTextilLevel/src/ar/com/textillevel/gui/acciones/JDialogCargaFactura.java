@@ -86,6 +86,7 @@ import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
@@ -96,7 +97,6 @@ import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
-import ar.com.textillevel.util.GestorDeFacturas;
 
 public class JDialogCargaFactura extends JDialog {
 
@@ -503,11 +503,12 @@ public class JDialogCargaFactura extends JDialog {
 			ItemFacturaProducto itp = new ItemFacturaProducto();
 			BigDecimal totalByProducto = mapTotalPorProducto.get(p);
 			itp.setCantidad(totalByProducto);
-			itp.setImporte(totalByProducto.multiply(getPrecio(p)));
+			BigDecimal precio = getPrecio(p);
+			itp.setImporte(totalByProducto.multiply(precio));
 			itp.setDescripcion(p.getDescripcion());
 			itp.setProducto(p);
 			itp.setUnidad(p.getTipo().getUnidad());
-			itp.setPrecioUnitario(getPrecio(p));
+			itp.setPrecioUnitario(precio);
 			getFactura().getItems().add(itp);
 		}
 		//coloco los de tela cruda
@@ -831,7 +832,13 @@ public class JDialogCargaFactura extends JDialog {
 	}
 
 	private BigDecimal getPrecio(Producto p) {
-		return GestorDeFacturas.getInstance().getPrecio(p, getCliente().getId());
+		try {
+			return new BigDecimal(GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class).getPrecioProducto(p, getCliente()));
+		} catch (ValidacionException e) {
+			// no deberia pasar
+			CLJOptionPane.showErrorMessage(this, "No se encuentra definido el precio para " + p.getDescripcion() + " en la lista de precios del cliente.", "Error");
+		}
+		return null;
 	}
 
 	private void construct() {
