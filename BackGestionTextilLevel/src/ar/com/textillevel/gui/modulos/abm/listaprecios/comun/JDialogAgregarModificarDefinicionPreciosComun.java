@@ -23,10 +23,12 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 
 	public JDialogAgregarModificarDefinicionPreciosComun(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
 		super(padre, cliente, tipoProducto);
+		setModoEdicion(false);
 	}
 
 	public JDialogAgregarModificarDefinicionPreciosComun(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
 		super(padre, cliente, tipoProducto, definicionAModificar);
+		setModoEdicion(false);
 	}
 
 	@Override
