@@ -160,7 +160,7 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	}
 
 	@Transient
-	public abstract Float buscarPrecio(Producto producto);
+	protected abstract Float buscarPrecio(Producto producto);
 	
 	
 }

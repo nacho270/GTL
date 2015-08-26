@@ -55,7 +55,7 @@ public class RangoAnchoComun extends RangoAncho {
 
 	@Override
 	@Transient
-	public Float buscarPrecio(Producto producto) {
+	protected Float buscarPrecio(Producto producto) {
 		PrecioTipoArticulo pta = getPrecioArticulo(producto.getArticulo().getTipoArticulo());
 		return pta != null ? pta.getPrecio() : null;
 	}

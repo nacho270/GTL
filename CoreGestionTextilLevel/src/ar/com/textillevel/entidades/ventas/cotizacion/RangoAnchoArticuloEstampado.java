@@ -59,7 +59,7 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 
 	@Override
 	@Transient
-	public Float buscarPrecio(Producto producto) {
+	protected Float buscarPrecio(Producto producto) {
 		GrupoTipoArticuloBaseEstampado grupo = getGrupo(producto.getArticulo().getTipoArticulo());
 		return grupo != null ? grupo.getPrecio((ProductoEstampado) producto) : null;
 	}
