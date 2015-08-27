@@ -62,7 +62,7 @@ public class SchedulerBackupDatabase implements Schedulable{
 	        	logger.info("BACKUP REALIZADO..... BORRANDO BACKUPS VIEJOS ... ");
 	        	List<String> nombresArchivosBorrados = borrarBackupsAnteriores(backupPath, dejarUltimosN == null ? DEJAR_ULTIMOS_N_DEFAULT : Integer.valueOf(dejarUltimosN));
 	        	if(nombresArchivosBorrados.isEmpty()) {
-	        		logger.info("BACKUP REALIZADO..... NO HABIA BACKUPS PARA BORRAR");
+	        		logger.info("BACKUP REALIZADO..... NO HABIA BACKUPS PARA BORRAR.");
 	        	} else {
 	        		logger.info("BACKUP REALIZADO..... SE BORRARON LOS BACKUPS: " + StringUtil.getCadena(nombresArchivosBorrados, " "));
 	        	}
