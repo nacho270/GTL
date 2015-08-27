@@ -6,8 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -16,11 +19,14 @@ import org.jboss.varia.scheduler.Schedulable;
 
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.FileUtil;
+import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.util.Utils;
 
 public class SchedulerBackupDatabase implements Schedulable{
 
 	private static final Logger logger = Logger.getLogger(SchedulerBackupDatabase.class);
+	
+	private static final Integer DEJAR_ULTIMOS_N_DEFAULT = 6;
 	
 	public void perform(Date arg0, long arg1) {
 		boolean habilitado = Utils.esAfirmativo(System.getProperty("textillevel.backup.habilitado", "false"));
@@ -34,6 +40,7 @@ public class SchedulerBackupDatabase implements Schedulable{
 	    String mysqldumpPath = System.getProperty("textillevel.backup.MySQLDumpPath");
 	    String backupPath = System.getProperty("textillevel.backup.directorioBackup");
 	    String tempFile = System.getProperty("java.io.tmpdir") + "temp-backup.sql";
+	    String dejarUltimosN = System.getProperty("textillevel.backup.dejarUltimosN");
 	    java.sql.Date hoy = DateUtil.getHoy();
 	    String fileName = DateUtil.getAnio(hoy) + "-" + DateUtil.getMes(hoy) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
 
@@ -42,11 +49,8 @@ public class SchedulerBackupDatabase implements Schedulable{
 	    try {
 	        Process runtimeProcess = Runtime.getRuntime().exec(command);
 	        
-	        BufferedReader reader = new BufferedReader(new InputStreamReader(runtimeProcess.getInputStream()));
-	        while ((reader.readLine()) != null) {
-	        	System.out.println("a");
-	        }
-	        
+	        logger.info("VACIANDO BUFFER... " + readInputStream(runtimeProcess.getInputStream()));
+
 	        int processComplete = runtimeProcess.waitFor();
 	        if (processComplete == 0) {
 	        	logger.info("BACKUP REALIZADO..... COMPRIMIENDO... ");
@@ -55,14 +59,41 @@ public class SchedulerBackupDatabase implements Schedulable{
 	        	FileUtil.moverArchivo(new File(zipFileName), new File(backupPath + "/" + fileName));
 	        	new File(tempFile).delete();
 	        	logger.info("BACKUP FINALIZADO EXITOSAMENTE");
+	        	logger.info("BACKUP REALIZADO..... BORRANDO BACKUPS VIEJOS ... ");
+	        	List<String> nombresArchivosBorrados = borrarBackupsAnteriores(backupPath, dejarUltimosN == null ? DEJAR_ULTIMOS_N_DEFAULT : Integer.valueOf(dejarUltimosN));
+	        	if(nombresArchivosBorrados.isEmpty()) {
+	        		logger.info("BACKUP REALIZADO..... NO HABIA BACKUPS PARA BORRAR");
+	        	} else {
+	        		logger.info("BACKUP REALIZADO..... SE BORRARON LOS BACKUPS: " + StringUtil.getCadena(nombresArchivosBorrados, " "));
+	        	}
 	        } else {
-	        	logger.info("EL BACKUP NO SE HA PODIDO LLEVAR A CABO");
+	        	logger.error("EL BACKUP NO SE HA PODIDO LLEVAR A CABO: " + readInputStream(runtimeProcess.getErrorStream()));
+	        	return;
 	        }
 	    } catch (IOException ioe) {
 	        ioe.printStackTrace();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	}
+
+	private List<String> borrarBackupsAnteriores(String backupPath, int dejarUltimosN) {
+		List<String> nombresArchivosBorrados = new ArrayList<String>();
+		File dirBackupPath = new File(backupPath);
+		File[] listFiles = dirBackupPath.listFiles();
+		List<File> listFilesParaBorrar = new ArrayList<File>();
+		for(int i=0; i < listFiles.length; i++) {
+			if(listFiles.length - i > dejarUltimosN) {
+				listFilesParaBorrar.add(listFiles[i]);
+			}
+		}
+		for(File f : listFilesParaBorrar) {
+			boolean borrado = f.delete();
+			if(borrado) {
+				nombresArchivosBorrados.add(f.getName());
+			}
+		}
+		return nombresArchivosBorrados;
 	}
 
 	private String crearZip(String tempFile) throws FileNotFoundException, IOException {
@@ -72,7 +103,7 @@ public class SchedulerBackupDatabase implements Schedulable{
 		
 		File file = new File(tempFile);
 		FileInputStream fis = new FileInputStream(file);
-		ZipEntry zipEntry = new ZipEntry("temp-backup.sql");
+		ZipEntry zipEntry = new ZipEntry("backup.sql");
 		zos.putNextEntry(zipEntry);
 
 		byte[] bytes = new byte[1024];
@@ -87,6 +118,18 @@ public class SchedulerBackupDatabase implements Schedulable{
 		zos.close();
 		fos.close();
 		return zipFileName;
+	}
+
+	private StringBuilder readInputStream(InputStream in) throws IOException {
+		InputStreamReader is = new InputStreamReader(in);
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(is);
+		String read = br.readLine();
+		while(read != null) {
+		    sb.append(read);
+		    read =br.readLine();
+		}
+		return sb;
 	}
 
 }
