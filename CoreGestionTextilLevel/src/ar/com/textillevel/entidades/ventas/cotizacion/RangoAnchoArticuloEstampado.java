@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
@@ -29,7 +30,7 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "F_RANGO_P_ID")
+	@JoinColumn(name = "F_RANGO_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<GrupoTipoArticuloBaseEstampado> getGruposBase() {
 		return gruposBase;
@@ -62,6 +63,12 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 	protected Float buscarPrecio(Producto producto) {
 		GrupoTipoArticuloBaseEstampado grupo = getGrupo(producto.getArticulo().getTipoArticulo());
 		return grupo != null ? grupo.getPrecio((ProductoEstampado) producto) : null;
+	}
+
+	@Override
+	@Transient
+	public boolean estaDefinido(Articulo art) {
+		return enRango(art.getAncho().floatValue()) && getGrupo(art.getTipoArticulo()) != null;
 	}
 
 }

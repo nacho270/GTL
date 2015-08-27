@@ -47,7 +47,7 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 		return definicion.getPrecio(producto);
 	}
 
-	private VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException {
+	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException {
 		ListaDePrecios lista = getListaByIdCliente(cliente.getId());
 		if (lista == null || lista.getVersionActual() == null) {
 			throw new ValidacionException(EValidacionException.CLIENTE_SIN_LISTA_PRECIOS.getInfoValidacion());

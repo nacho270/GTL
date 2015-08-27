@@ -68,7 +68,7 @@ public class RangoCantidadColores implements Serializable, Comparable<RangoCanti
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "F_RANGO_CANT_COLORES_P_ID")
+	@JoinColumn(name = "F_RANGO_CANT_COLORES_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<RangoCoberturaEstampado> getRangos() {
 		return rangos;
@@ -138,7 +138,7 @@ public class RangoCantidadColores implements Serializable, Comparable<RangoCanti
 	@Transient
 	public Float getPrecio(Float porcentajeCobertura) {
 		for(RangoCoberturaEstampado r : getRangos()) {
-			if(porcentajeCobertura.intValue() >= r.getMinimo().floatValue() && porcentajeCobertura.intValue() >= r.getMaximo().floatValue()) {
+			if(porcentajeCobertura.intValue() >= r.getMinimo().floatValue() && porcentajeCobertura.intValue() <= r.getMaximo().floatValue()) {
 				return r.getPrecio(); 
 			}
 		}

@@ -1082,7 +1082,7 @@ public class JDialogCargaFactura extends JDialog {
 			tablaProductos.setFloatColumn(COL_CANTIDAD, "Cantidad",0f,9999999999999f, 50,  getCorrecionFactura()!=null);
 			tablaProductos.setStringColumn(COL_UNIDAD, "Unidad", 150, 50, true);
 			tablaProductos.setStringColumn(COL_DESCRIPCION, "Descripcion", 150, 280, false);
-			tablaProductos.setFloatColumn(COL_PRECIO_UNITARIO, "Precio Unitario",0f,9999999999999f, 100, false);
+			tablaProductos.setFloatColumn(COL_PRECIO_UNITARIO, "Precio Unitario",0f,9999999999999f, 100, true);
 			tablaProductos.setStringColumn(COL_IMPORTE, "Importe", 150, 100, true);
 			tablaProductos.setStringColumn(COL_OBJ_FACTURA, "", 0, 0, true);
 		}

@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 
@@ -58,6 +59,12 @@ public class RangoAnchoComun extends RangoAncho {
 	protected Float buscarPrecio(Producto producto) {
 		PrecioTipoArticulo pta = getPrecioArticulo(producto.getArticulo().getTipoArticulo());
 		return pta != null ? pta.getPrecio() : null;
+	}
+
+	@Override
+	@Transient
+	public boolean estaDefinido(Articulo art) {
+		return enRango(art.getAncho().floatValue()) && getPrecioArticulo(art.getTipoArticulo()) != null;
 	}
 
 }

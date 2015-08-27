@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.util.Utils;
 
@@ -160,7 +161,14 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	}
 
 	@Transient
+	public boolean enRango(Float valor) {
+		return valor != null && (getAnchoExacto() != null && valor.equals(getAnchoExacto()) || Utils.dentroDelRango(valor, getAnchoMinimo(), getAnchoMaximo()));
+	}
+
+	@Transient
 	protected abstract Float buscarPrecio(Producto producto);
-	
+
+	@Transient
+	public abstract boolean estaDefinido(Articulo art);
 	
 }

@@ -59,7 +59,7 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "F_PRECIO_BASE_P_ID")
+	@JoinColumn(name = "F_PRECIO_BASE_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<RangoCantidadColores> getRangosDeColores() {
 		return rangosDeColores;
@@ -113,7 +113,7 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 	@Transient
 	public RangoCantidadColores getRango(Integer cantColores) {
 		for(RangoCantidadColores r : getRangosDeColores()) {
-			if(Utils.dentroDelRangoEstricto(cantColores, r.getMinimo(), r.getMaximo())) {
+			if(Utils.dentroDelRango(cantColores, r.getMinimo(), r.getMaximo())) {
 				return r;
 			}
 		}

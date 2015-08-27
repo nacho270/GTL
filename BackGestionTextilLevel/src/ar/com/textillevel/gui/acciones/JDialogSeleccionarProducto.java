@@ -30,7 +30,12 @@ import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
+import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -44,6 +49,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 	
 	private JComboBox cmbArticulo;
 	private JComboBox cmbTipoProducto;
+	private JComboBox cmbGama;
 	private CLCheckBoxList<Producto> checkBoxList;
 	private boolean acepto;
 	private List<Producto> productoSelectedList;
@@ -51,11 +57,14 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 	private JPanel pnlBotones;
 	private JPanel pnlDatos;
+	private JLabel lblGama;
 
 	private ArticuloFacadeRemote articuloFacade;
 	private ListaDePreciosFacadeRemote listaPreciosFacade;
 
+	private List<Articulo> allArticulosList;
 	private List<Articulo> articuloFilterList;
+	private VersionListaDePrecios versionListaDePrecios;
 	private Cliente cliente;
 
 	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<Producto> productoSelectedList) {
@@ -136,9 +145,24 @@ public class JDialogSeleccionarProducto extends JDialog {
 			gridBagConstraints.insets = new Insets(5,5,5,5);
 			pnlDatos.add(getCmbArticulo(), gridBagConstraints);
 
+
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 2;
+			gridBagConstraints.insets = new Insets(5,5,5,5);
+			pnlDatos.add(getLblGama(), gridBagConstraints);
+
+			gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 1;
+			gridBagConstraints.gridy = 2;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.insets = new Insets(5,5,5,5);
+			pnlDatos.add(getCmbGama(), gridBagConstraints);
+			
+			
+			gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 3;
 			gridBagConstraints.gridwidth = 2;
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1;
@@ -150,21 +174,38 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return pnlDatos;
 	}
 
+	private JLabel getLblGama() {
+		if(lblGama == null) {
+			lblGama = new JLabel("GAMA: ");
+			lblGama.setVisible(false);
+		}
+		return lblGama;
+	}
+
 	private void filtrar() {
 		Articulo artSelected = getCmbArticulo().getSelectedIndex() == 0 ? null : (Articulo)getCmbArticulo().getSelectedItem();
 		ETipoProducto tipoProd = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
+		GamaColor gama = getCmbGama().getSelectedIndex() == 0 ? null : (GamaColor)getCmbGama().getSelectedItem();
 		List<Producto> productoMatchedList = new ArrayList<Producto>();
 		getClCheckBoxList().setAllSelectedItems(false);
 		for(Producto p : allProductoList) {
 			boolean cumpleTipoProd = tipoProd == null || tipoProd == p.getTipo();
 			boolean cumpleArticulo = artSelected == null || artSelected.equals(p.getArticulo());
-			if(cumpleArticulo && cumpleTipoProd) {
+			boolean cumpleGama = true;
+			if(p.getTipo() == ETipoProducto.TENIDO) {
+				cumpleGama = gama==null || gama.equals(((ProductoTenido)p).getGamaColor()); 
+			}
+			if(p.getTipo() == ETipoProducto.ESTAMPADO) {
+				VarianteEstampado variante = ((ProductoEstampado)p).getVariante();
+				cumpleGama = gama == null || (variante.getGama() != null && gama.equals(variante.getGama())); 
+			}
+			if(cumpleArticulo && cumpleTipoProd && cumpleGama) {
 				productoMatchedList.add(p);
 			}
 		}
 		checkBoxList.setValues(productoMatchedList.toArray(new Object[productoMatchedList.size()]));
 	}
-	
+
 	private JButton getBtnAceptar() {
 		if(btnAceptar == null){
 			btnAceptar = new JButton("Aceptar");
@@ -227,6 +268,8 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private List<Producto> getProductoList() {
 		List<Producto> productoResultList = new ArrayList<Producto>();
 		try {
+			allArticulosList = getArticuloFacade().getArticulosConTipoArticuloFetched();
+			versionListaDePrecios = getListaDePreciosFacade().getVersionListaPrecioActual(cliente);
 			List<Producto> allOrderByName = getListaDePreciosFacade().getProductos(cliente);
 			if(articuloFilterList == null) {
 				return allOrderByName;
@@ -250,7 +293,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 			cmbArticulo.insertItemAt("",0);
 			cmbArticulo.setSelectedIndex(0);
 			cmbArticulo.addItemListener(new ItemListener() {
-				
+
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED) {
 						filtrar();
@@ -264,12 +307,11 @@ public class JDialogSeleccionarProducto extends JDialog {
 	}
 
 	private List<Articulo> getArticuloList() {
-		List<Articulo> allOrderByName = calcularArticulosSegunProductos(getArticuloFacade().getAllOrderByName());
 		if(articuloFilterList == null) {
-			return allOrderByName;
+			return allArticulosList;
 		} else {
 			List<Articulo> articuloResultList = new ArrayList<Articulo>();
-			for(Articulo a : allOrderByName) {
+			for(Articulo a : allArticulosList) {
 				if(articuloFilterList.contains(a)) {
 					articuloResultList.add(a);
 				}
@@ -278,19 +320,65 @@ public class JDialogSeleccionarProducto extends JDialog {
 		}
 	}
 
-	private List<Articulo> calcularArticulosSegunProductos(List<Articulo> allOrderByName) {
+	private void recargarComboArticulos() {
 		List<Articulo> result = new ArrayList<Articulo>();
 		Set<Integer> tpSet = new HashSet<Integer>();
+
+		ETipoProducto tpSel = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
+		List<Producto> subsetProductos = new ArrayList<Producto>();
+
 		for(Producto producto : allProductoList) {
-			tpSet.add(producto.getArticulo().getTipoArticulo().getId());
+			if(tpSel == null || producto.getTipo() == tpSel) {
+				tpSet.add(producto.getArticulo().getTipoArticulo().getId());
+				subsetProductos.add(producto);
+			}
 		}
-		for(Articulo a : allOrderByName) {
-			if(a.getTipoArticulo()!= null && tpSet.contains(a.getTipoArticulo().getId())) {
+
+		if(tpSel != null) {
+			tpSet.clear();
+			tpSet.add(tpSel.getId());
+		}
+
+		//Filtro por tipo de articulo y ancho
+		for(Articulo a : getArticuloList()) {
+			if(a.getTipoArticulo()!= null && anchoValido(a, tpSet)) {
 				result.add(a);
 			}
 		}
-		//TODO: Falta filtrar por ancho!!!
-		return result;
+
+		GuiUtil.llenarCombo(getCmbArticulo(), result, true);
+		getCmbArticulo().insertItemAt("", 0);
+		getCmbArticulo().setSelectedIndex(0);
+	}
+
+	private void recargarComboGama() {
+		ETipoProducto tpSel = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
+		Set<GamaColor> resultGamas = new HashSet<GamaColor>();
+		for(Producto producto : allProductoList) {
+			if(tpSel == ETipoProducto.ESTAMPADO && producto.getTipo() == ETipoProducto.ESTAMPADO) {
+				VarianteEstampado variante = ((ProductoEstampado)producto).getVariante();
+				if(variante.getGama() != null) {
+					resultGamas.add(variante.getGama());
+				}
+			} else if(tpSel == ETipoProducto.TENIDO && producto.getTipo() == ETipoProducto.TENIDO) {
+				GamaColor gamaColor = ((ProductoTenido)producto).getGamaColor();
+				if(gamaColor !=null) {
+					resultGamas.add(gamaColor);
+				}
+			}
+		}
+		GuiUtil.llenarCombo(getCmbGama(), new ArrayList<GamaColor>(resultGamas), true);
+		getCmbGama().insertItemAt("", 0);
+		getCmbGama().setSelectedIndex(0);
+	}
+
+	private boolean anchoValido(Articulo art, Set<Integer> tpSet) {
+		for(Integer idTipoProd : tpSet) {
+			if(versionListaDePrecios.getDefinicionPorTipoProducto(ETipoProducto.getById(idTipoProd)).estaDefinido(art)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isAcepto() {
@@ -306,6 +394,14 @@ public class JDialogSeleccionarProducto extends JDialog {
 			cmbTipoProducto.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED) {
+						ETipoProducto tpSel = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
+						boolean esTenidoOrEstampado = tpSel != null && (tpSel == ETipoProducto.TENIDO || tpSel == ETipoProducto.ESTAMPADO);
+						if(esTenidoOrEstampado) {
+							recargarComboGama();
+						}
+						getCmbGama().setVisible(esTenidoOrEstampado);
+						getLblGama().setVisible(esTenidoOrEstampado);
+						recargarComboArticulos();
 						filtrar();
 					}
 				}
@@ -314,6 +410,21 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return cmbTipoProducto;
 	}
 
+	private JComboBox getCmbGama() {
+		if(cmbGama == null) {
+			cmbGama = new JComboBox();
+			cmbGama.setVisible(false);
+			cmbGama.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						filtrar();
+					}
+				}
+			});
+		}
+		return cmbGama;
+	}
+	
 	private List<ETipoProducto> getTipoProductosEnListaDePrecios() {
 		Set<ETipoProducto> tpSet = new HashSet<ETipoProducto>();
 		for(Producto pr : allProductoList) {

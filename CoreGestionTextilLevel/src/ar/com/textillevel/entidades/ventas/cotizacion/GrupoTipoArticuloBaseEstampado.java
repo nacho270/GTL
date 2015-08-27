@@ -32,7 +32,7 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "F_GRUPO_P_ID")
+	@JoinColumn(name = "F_GRUPO_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<PrecioBaseEstampado> getPrecios() {
 		return precios;
@@ -83,9 +83,11 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 			PrecioBaseEstampado precioBase = getPrecioBase(gama);
 			if(precioBase != null) {
 				Integer cantColores = variante.getDibujo().getCantidadColores();
-				RangoCantidadColores rango = precioBase.getRango(cantColores);
-				if(rango != null) {
-					return rango.getPrecio(variante.getPorcentajeCobertura());
+				if(cantColores != null) {
+					RangoCantidadColores rango = precioBase.getRango(cantColores);
+					if(rango != null && variante.getPorcentajeCobertura() != null) {
+						return rango.getPrecio(variante.getPorcentajeCobertura());
+					}
 				}
 			}
 		}

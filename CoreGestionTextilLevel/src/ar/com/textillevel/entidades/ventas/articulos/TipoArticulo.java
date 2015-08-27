@@ -113,15 +113,15 @@ public class TipoArticulo implements Serializable, Comparable<TipoArticulo> {
 		if (getClass() != obj.getClass())
 			return false;
 		TipoArticulo other = (TipoArticulo) obj;
-		if (sigla == null) {
-			if (other.sigla != null)
-				return false;
-		} else if (!sigla.equals(other.sigla))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (sigla == null) {
+			if (other.sigla != null)
+				return false;
+		} else if (!sigla.equals(other.sigla))
 			return false;
 		if (nombre == null) {
 			if (other.nombre != null)

@@ -125,7 +125,7 @@ public class DibujoEstampado implements Serializable{
 	@Transient
 	public Integer getCantidadColores() {
 		if(getNroDibujo() != null) {
-			Integer.valueOf(String.valueOf(getNroDibujo().toString().charAt(0)));
+			return Integer.valueOf(String.valueOf(getNroDibujo().toString().charAt(0)));
 		}
 		return null;
 	}

@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.util.Utils;
 
@@ -175,9 +176,18 @@ public class DefinicionPrecio implements Serializable {
 					!(ra instanceof RangoAnchoArticuloEstampado) && !(ra instanceof RangoAnchoArticuloTenido)){
 				lista.add(ra);
 			}
-					
 		}
 		return lista;
+	}
+
+	@Transient
+	public boolean estaDefinido(Articulo art) {
+		for(RangoAncho r : getRangos()) {
+			if(art.getAncho() != null && r.estaDefinido(art)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

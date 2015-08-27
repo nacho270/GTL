@@ -31,7 +31,7 @@ public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializ
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "F_GRUPO_P_ID")
+	@JoinColumn(name = "F_GRUPO_P_ID", nullable=false)
 	@org.hibernate.annotations.Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<PrecioGama> getPrecios() {
 		return precios;
