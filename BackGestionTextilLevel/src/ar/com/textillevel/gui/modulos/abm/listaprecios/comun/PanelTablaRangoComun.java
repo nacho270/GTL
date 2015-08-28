@@ -57,6 +57,9 @@ public class PanelTablaRangoComun extends PanelTablaRango<RangoAnchoComun, Preci
 
 	@Override
 	public boolean validarQuitar() {
+		int selectedRow = getTabla().getSelectedRow();
+		PrecioTipoArticulo precioTA = (PrecioTipoArticulo)getTabla().getValueAt(selectedRow, COL_OBJ);
+		precioTA.deepRemove();
 		return true;
 	}
 

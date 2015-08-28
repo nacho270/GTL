@@ -66,6 +66,9 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 
 	@Override
 	public boolean validarQuitar() {
+		int selectedRow = getTabla().getSelectedRow();
+		PrecioGama precioGama = (PrecioGama)getTabla().getValueAt(selectedRow, COL_OBJ);
+		precioGama.deepRemove();
 		return true;
 	}
 	

@@ -14,6 +14,5 @@ public interface ArticuloFacadeRemote {
 	public List<Articulo> getAllOrderByName();
 	public Articulo getById(Integer idArticulo);
 	public List<Articulo> getArticulosConAlgunaPMPConStockInicial();
-	public List<Articulo> getArticulosConTipoArticuloFetched();
 
 }

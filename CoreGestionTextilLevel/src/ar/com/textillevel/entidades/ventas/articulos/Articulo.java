@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "T_ARTICULO")
 public class Articulo implements Serializable {
@@ -74,8 +77,9 @@ public class Articulo implements Serializable {
 		this.ancho = ancho;
 	}
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="F_TIPO_ARTICULO_P_ID",insertable=false, updatable=false)
+	@Fetch(FetchMode.JOIN)
 	public TipoArticulo getTipoArticulo() {
 		return tipoArticulo;
 	}

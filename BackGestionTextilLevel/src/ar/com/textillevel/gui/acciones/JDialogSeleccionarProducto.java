@@ -268,7 +268,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private List<Producto> getProductoList() {
 		List<Producto> productoResultList = new ArrayList<Producto>();
 		try {
-			allArticulosList = getArticuloFacade().getArticulosConTipoArticuloFetched();
+			allArticulosList = getArticuloFacade().getAllOrderByName();
 			versionListaDePrecios = getListaDePreciosFacade().getVersionListaPrecioActual(cliente);
 			List<Producto> allOrderByName = getListaDePreciosFacade().getProductos(cliente);
 			if(articuloFilterList == null) {

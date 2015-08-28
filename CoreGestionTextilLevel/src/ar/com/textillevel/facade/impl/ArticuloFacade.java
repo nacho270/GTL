@@ -35,8 +35,4 @@ public class ArticuloFacade implements ArticuloFacadeRemote {
 		return articuloDao.getById(idArticulo);
 	}
 
-	public List<Articulo> getArticulosConTipoArticuloFetched() {
-		return articuloDao.getArticulosConTipoArticuloFetched();
-	}
-
 }
