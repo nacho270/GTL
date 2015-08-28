@@ -29,7 +29,7 @@ public class MovimientoHaber extends MovimientoCuenta {
 		this.recibo = recibo;
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="F_NOTA_CREDITO_P_ID")
 	public NotaCredito getNotaCredito() {
 		return notaCredito;

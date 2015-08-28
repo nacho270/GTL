@@ -29,7 +29,7 @@ public class MovimientoDebe extends MovimientoCuenta {
 		this.factura = factura;
 	}
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="F_NOTA_DEBITO_P_ID")
 	public NotaDebito getNotaDebito() {
 		return notaDebito;
