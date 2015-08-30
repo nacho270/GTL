@@ -78,7 +78,7 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 		for(GamaColor gc : getGamasDefault()) {
 			GamaColorCliente gcc = new GamaColorCliente();
 			gcc.setCliente(getCliente());
-			gcc.setNombre(gc.getNombre() + " - " + getCliente().getRazonSocial());
+			gcc.setNombre(gc.getNombre());
 			gcc.setGamaOriginal(gc);
 			gcc.setColores(gc.getColores());
 			gamas.add(gcc);
@@ -259,14 +259,23 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 								}
 								if (found) {
 									gcc.getColores().remove(indiceARemover);
+									if(gcc.getNombre().indexOf(" - ") == -1){
+										gcc.setNombre(gcc.getNombre() + " - EDITADA");
+									}
 									getLblAdvertencias().setText("Se quita el color " + color.getNombre() + " de la gama: " + gcc.getNombre());
 									break;
 								}
 							}
 						}
+						if(gamaSeleccionada.getNombre().indexOf(" - ") == -1){
+							gamaSeleccionada.setNombre(gamaSeleccionada.getNombre() + " - EDITADA");
+						}
 						gamaSeleccionada.getColores().add(color);
 					} else {
 						gamaSeleccionada.getColores().remove(color);
+						if(gamaSeleccionada.getNombre().indexOf(" - ") == -1){
+							gamaSeleccionada.setNombre(gamaSeleccionada.getNombre() + " - EDITADA");
+						}
 					}
 				}
 			};

@@ -59,6 +59,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	private PanelTablaVersionesListaDePrecio tablaVersiones;
 	private PanelTablaDefinicionesPrecio tablaDefiniciones;
 	
+	private boolean isEdicion;
 	private ClienteFacadeRemote clienteFacade;
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
 	
@@ -119,6 +120,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	public void botonCancelarPresionado(int arg0) {
 		setModoEdicion(false);
 		itemSelectorSeleccionado(lista.getSelectedIndex());
+		habilitacionSinEdicion();
 	}
 
 	@Override
@@ -171,6 +173,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	public boolean botonModificarPresionado(int nivelNodoSeleccionado) {
 		if(nivelNodoSeleccionado >= 0) {
 			setModoEdicion(true);
+			if(getListaActual()==null) {
+				getTablaVersiones().validarAgregar();
+			}
 			return true;
 		} else {
 			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
@@ -190,6 +195,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			setListaActual(getListaDePreciosFacade().getListaByIdCliente(cliente.getId()));
 			if (getListaActual() != null) {
 				getTablaVersiones().agregarElementos(getListaActual().getVersiones());
+				getBtnModificar().setText("Modificar >>");
+			} else {
+				getBtnModificar().setText("Agregar >>");
 			}
 		}
 	}
@@ -202,15 +210,29 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	@Override
 	public void setEstadoInicial() {
-		setModoEdicion(false);
+		//setModoEdicion(false);
+		habilitacionSinEdicion();
 		cargarLista();
 		if(lista.getModel().getSize() > 0) {
 			lista.setSelectedIndex(0);
 		}
 	}
 
+	private void habilitacionSinEdicion() {
+		this.isEdicion = false;
+		GuiUtil.setEstadoPanel(getTabDetalle(), true);
+		getTablaVersiones().getBotonAgregar().setEnabled(false);
+//		getTablaVersiones().getBotonModificar().setEnabled(false);
+		getTablaVersiones().getBotonEliminar().setEnabled(false);
+		getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
+		getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+		getTablaDefiniciones().getBotonModificar().setEnabled(false);
+		getTablaDefiniciones().getBotonEliminar().setEnabled(false);
+	}
+
 	@Override
 	public void setModoEdicion(boolean estado) {
+		this.isEdicion = estado;
 		GuiUtil.setEstadoPanel(getTabDetalle(), estado);
 		getTablaVersiones().getBotonEliminar().setEnabled(false);
 		getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
@@ -266,17 +288,22 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					if (selectedRow >= 0) {
 						VersionListaDePrecios version = getElemento(selectedRow);
 						if (version != null) {
-							getTablaDefiniciones().getBotonAgregar().setEnabled(true);
+							getTablaDefiniciones().getBotonAgregar().setEnabled(isEdicion);
+							getTablaDefiniciones().getBotonModificar().setEnabled(isEdicion);
 							getTablaDefiniciones().limpiar();
 							getTablaDefiniciones().agregarElementos(version.getPrecios());
-							getBtnImprimirVersion().setEnabled(true);
+							getBtnImprimirVersion().setEnabled(isEdicion);
+							getTablaVersiones().getBotonEliminar().setEnabled(isEdicion);
 						} else {
 							getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 							getBtnImprimirVersion().setEnabled(false);
+							getTablaVersiones().getBotonEliminar().setEnabled(false);
 						}
 					}else{
 						getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+						getTablaDefiniciones().getBotonModificar().setEnabled(false);
 						getBtnImprimirVersion().setEnabled(false);
+						getTablaDefiniciones().limpiar();
 					}
 						
 				}
@@ -386,6 +413,17 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
+			tabla.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int selectedRow = getTabla().getSelectedRow();
+					if (selectedRow >= 0) {
+						if(isEdicion && e.getClickCount() == 2){
+							botonModificarPresionado(selectedRow);
+						}
+					}
+				}
+			});
 			return tabla;
 		}
 		
@@ -398,6 +436,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					getBotonAgregar().setEnabled(false);
 					getBotonModificar().setEnabled(false);
 					getBotonEliminar().setEnabled(false);
+				} else {
+					getBotonModificar().setEnabled(isEdicion);
+					getBotonEliminar().setEnabled(isEdicion);
 				}
 			}
 		}
