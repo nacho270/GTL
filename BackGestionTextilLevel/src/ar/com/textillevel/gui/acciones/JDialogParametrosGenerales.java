@@ -50,6 +50,7 @@ public class JDialogParametrosGenerales extends JDialog {
 	private CLJNumericTextField txtNroComienzoRemito;
 	private CLJNumericTextField txtNroComienzoFactura;
 	private CLJNumericTextField txtNroComienzoRecibo;
+	private CLJNumericTextField txtValidezCotizaciones;
 	private CLJTextField txtPorcentajeIvaInscripto;
 	private CLJTextField txtPorcentajeIvaNoInscripto;
 	private CLJTextField txtPorcentajeSeguroMercaderia;
@@ -137,6 +138,7 @@ public class JDialogParametrosGenerales extends JDialog {
 			getParametrosGenerales().setPorcentajeSeguro(new BigDecimal(Double.valueOf(getTxtPorcentajeSeguroMercaderia().getText().trim().replace(',', '.'))));
 			getParametrosGenerales().setPorcentajeToleranciaMermaNegativa(new BigDecimal(Double.valueOf(getTxtPorcentajeMerma().getText().trim().replace(',', '.'))));
 			getParametrosGenerales().setPrecioPorTubo(new BigDecimal(Double.valueOf(getTxtPrecioTubo().getText().trim().replace(',', '.'))));
+			getParametrosGenerales().setValidezCotizaciones(Integer.valueOf(getTxtValidezCotizaciones().getText().trim()));
 			NumeracionCheque nc = new NumeracionCheque();
 			nc.setLetra(Character.valueOf(getTxtLetraCheque().getText().trim().toUpperCase().charAt(0)));
 			nc.setNumero(Integer.valueOf(getTxtNumeroCheque().getText().trim()));
@@ -457,6 +459,18 @@ public class JDialogParametrosGenerales extends JDialog {
 			if (!GenericUtils.esNumerico((getTxtCargaMinimaEstampado().getText()))) {
 				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtCargaMinimaEstampado().requestFocus();
+				return false;
+			}
+		}
+		
+		if (StringUtil.isNullOrEmpty(getTxtValidezCotizaciones().getText())) {
+			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtValidezCotizaciones().requestFocus();
+			return false;
+		} else {
+			if (!GenericUtils.esNumerico((getTxtValidezCotizaciones().getText()))) {
+				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				getTxtValidezCotizaciones().requestFocus();
 				return false;
 			}
 		}
@@ -820,6 +834,9 @@ public class JDialogParametrosGenerales extends JDialog {
 			panelTabVarios.add(getTxtCargaMinimaColor(), createGridBagConstraints(1, 7, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelTabVarios.add(new JLabel("Carga mínima estampado: "), createGridBagConstraints(0, 8, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelTabVarios.add(getTxtCargaMinimaEstampado(), createGridBagConstraints(1, 8, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTabVarios.add(new JLabel("Validez cotizaciones: "), createGridBagConstraints(0, 9, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtValidezCotizaciones(), createGridBagConstraints(1, 9, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+
 		}
 		
 		return panelTabVarios;
@@ -903,5 +920,15 @@ public class JDialogParametrosGenerales extends JDialog {
 			});
 		}
 		return btnConfigurarNumeracionB;
+	}
+
+	public CLJNumericTextField getTxtValidezCotizaciones() {
+		if (txtValidezCotizaciones == null) {
+			txtValidezCotizaciones = new CLJNumericTextField();
+			if (getParametrosGenerales() != null && getParametrosGenerales().getValidezCotizaciones() != null) {
+				txtValidezCotizaciones.setValue(getParametrosGenerales().getValidezCotizaciones().longValue());
+			}
+		}
+		return txtValidezCotizaciones;
 	}
 }

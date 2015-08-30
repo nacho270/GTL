@@ -215,7 +215,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		} else {
 			getBtnNuevoOrCancelar().setText(TEXT_BTN_NUEVO);
 		}
-		
+		getBtnAceptar().setEnabled(!modoEdicion);
+		getBtnCancelar().setEnabled(!modoEdicion);
 	}
 
 	protected void limpiarDatos() {

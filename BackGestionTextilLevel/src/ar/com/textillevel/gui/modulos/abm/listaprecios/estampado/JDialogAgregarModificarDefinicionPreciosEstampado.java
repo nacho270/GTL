@@ -54,7 +54,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		super(padre, cliente, tipoProducto, definicionAModificar);
 		bases = getGamaFacade().getAllOrderByName();
 		GuiUtil.llenarCombo(cmbBase, bases, true);
-		setModoEdicion(false);
+		setModoEdicion(true);
 	}
 
 	@Override
@@ -67,13 +67,13 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			panDatosPropios = new JPanel(new GridBagLayout());
 			panDatosPropios.add(new JLabel("Base: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getCmbBase(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-			panDatosPropios.add(new JLabel("Color desde : "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panDatosPropios.add(new JLabel("Cantidad de colores desde : "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getTxtCantColoresDesde(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-			panDatosPropios.add(new JLabel("Color Hasta : "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panDatosPropios.add(new JLabel("Cantidad de colores Hasta : "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getTxtCantColoresHasta(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-			panDatosPropios.add(new JLabel("Cobertura desde : "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panDatosPropios.add(new JLabel("Cobertura desde (%): "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getTxtCoberturaDesde(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-			panDatosPropios.add(new JLabel("Cobertura Hasta : "), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panDatosPropios.add(new JLabel("Cobertura Hasta (%): "), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getTxtCoberturaHasta(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 		}
 		return panDatosPropios;
@@ -110,6 +110,8 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		if (txtCoberturaDesde == null) {
 			txtCoberturaDesde = new DecimalNumericTextField(new Integer(0) , new Integer(0));
 			txtCoberturaDesde.setSize(100, 20);
+			txtCoberturaDesde.setValue(1d);
+			txtCoberturaDesde.setText("1");
 		}
 		return txtCoberturaDesde;
 	}
@@ -117,6 +119,8 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	private DecimalNumericTextField getTxtCoberturaHasta() {
 		if (txtCoberturaHasta == null) {
 			txtCoberturaHasta = new DecimalNumericTextField(new Integer(0) , new Integer(0));
+			txtCoberturaHasta.setValue(50d);
+			txtCoberturaHasta.setText("50");
 		}
 		return txtCoberturaHasta;
 	}

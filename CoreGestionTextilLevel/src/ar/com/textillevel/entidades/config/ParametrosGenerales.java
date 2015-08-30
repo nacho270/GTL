@@ -30,6 +30,7 @@ public class ParametrosGenerales implements Serializable {
 	private Integer nroComienzoRemito;
 	private Integer nroComienzoFactura;
 	private Integer nroComienzoRecibo;
+	private Integer validezCotizaciones;
 	private BigDecimal porcentajeIVAInscripto;
 	private BigDecimal porcentajeIVANoInscripto;
 	private BigDecimal porcentajeSeguro;
@@ -284,6 +285,15 @@ public class ParametrosGenerales implements Serializable {
 		this.cargaMinimaEstampado = cargaMinimaEstampado;
 	}
 	
+	@Column(name="A_VALIDEZ_COTIZACIONES",nullable=false)
+	public Integer getValidezCotizaciones() {
+		return validezCotizaciones;
+	}
+
+	public void setValidezCotizaciones(Integer validezCotizaciones) {
+		this.validezCotizaciones = validezCotizaciones;
+	}
+	
 	@Transient
 	public ConfiguracionNumeracionFactura getConfiguracionFacturaByTipoFactura(ETipoFactura tipo){
 		switch(tipo){
@@ -304,7 +314,8 @@ public class ParametrosGenerales implements Serializable {
 		return     nroComienzoRemito == null || nroComienzoFactura == null || nroComienzoRecibo == null || porcentajeIVAInscripto == null || porcentajeIVANoInscripto == null || porcentajeSeguro == null
 				|| porcentajeToleranciaMermaNegativa == null || precioPorTubo == null || numeracionCheque == null || nroSucursal == null || diasAvisoVencimientoDeCheque == null
 				|| diasVenceCheque == null || nroComienzoODT == null || nroComienzoFacturaB == null || nroIGJ == null || nroComienzoOrdenDePago == null || nroComienzoOrdenDeDeposito == null
-				|| cargaMinimaColor == null || cargaMinimaEstampado == null  || bancoDefault == null || umbralDeuda == null || nroComienzoOrdenDePagoPersona == null
+				|| cargaMinimaColor == null || cargaMinimaEstampado == null  || bancoDefault == null || umbralDeuda == null || nroComienzoOrdenDePagoPersona == null || validezCotizaciones == null
 				|| (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null);
 	}
+
 }

@@ -388,6 +388,19 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.setReorderingAllowed(false);
 			return tabla;
 		}
+		
+		@Override
+		protected void filaTablaSeleccionada() {
+			int selectedRow = getTabla().getSelectedRow();
+			if(selectedRow > -1) {
+				DefinicionPrecio definicionPrecio = getElemento(selectedRow);
+				if (definicionPrecio.getTipoProducto()==ETipoProducto.REPROCESO_SIN_CARGO) {
+					getBotonAgregar().setEnabled(false);
+					getBotonModificar().setEnabled(false);
+					getBotonEliminar().setEnabled(false);
+				}
+			}
+		}
 
 		@Override
 		protected void agregarElemento(DefinicionPrecio elemento) {

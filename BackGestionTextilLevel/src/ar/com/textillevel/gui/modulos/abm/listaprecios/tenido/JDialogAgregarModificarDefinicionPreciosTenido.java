@@ -68,7 +68,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			setAcepto(true);
 		}
 		GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
-		setModoEdicion(false);
+		setModoEdicion(true);
 	}
 	
 	@Override

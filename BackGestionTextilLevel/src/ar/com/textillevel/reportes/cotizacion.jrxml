@@ -10,6 +10,7 @@
 	<parameter name="TUBOS" class="java.lang.String"/>
 	<parameter name="CARGA_MINIMA_COLOR" class="java.lang.String"/>
 	<parameter name="CARGA_MINIMA_ESTAMPADO" class="java.lang.String"/>
+	<parameter name="NRO_COTIZACION" class="java.lang.String"/>
 	<field name="tipoProducto" class="java.lang.String"/>
 	<field name="tipoArticulo" class="java.lang.String"/>
 	<field name="ancho" class="java.lang.String"/>
@@ -69,12 +70,19 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="226" y="0" width="120" height="20"/>
+				<reportElement x="213" y="0" width="120" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[COTIZACION]]></text>
+				<text><![CDATA[COTIZACION   Nº]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="342" y="0" width="167" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_COTIZACION}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -148,21 +156,81 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="29">
+		<band height="47">
 			<staticText>
 				<reportElement x="0" y="5" width="555" height="20"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
-				<text><![CDATA[En esta oportunidad nos dirijimos a Ud. a fin de comunicarle los nuevos precios de nuestros servicios.]]></text>
+				<text><![CDATA[En esta oportunidad nos dirijimos a Ud. a fin de comunicarle los precios de nuestros servicios.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="27" width="104" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[SERVICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="27" width="86" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ANCHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="27" width="100" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ARTICULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="27" width="186" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="477" y="27" width="78" height="20"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[PRECIO]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="92" height="20"/>
-				<box leftPadding="5">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="104" height="20"/>
+				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
 					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -173,8 +241,8 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoProducto}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="93" y="0" width="98" height="20"/>
-				<box>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="105" y="0" width="86" height="20"/>
+				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
 					<leftPen lineWidth="1.0" lineColor="#FA0006"/>

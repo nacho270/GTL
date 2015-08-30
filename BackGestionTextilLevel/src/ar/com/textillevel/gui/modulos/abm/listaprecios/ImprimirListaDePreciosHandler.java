@@ -4,14 +4,20 @@ import java.awt.Frame;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
@@ -45,6 +51,12 @@ public class ImprimirListaDePreciosHandler {
 	public ImprimirListaDePreciosHandler(Frame padre, Cliente cliente, List<DefinicionPrecio> definiciones) {
 		this.padre = padre;
 		this.definiciones = definiciones;
+		for(Iterator<DefinicionPrecio> it = this.definiciones.iterator(); it.hasNext(); ){
+			DefinicionPrecio dp = it.next();
+			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+				it.remove();
+			}
+		}
 		this.cliente = cliente;
 		this.parametros = getParametrosGeneralesFacade().getParametrosGenerales();
 	}
@@ -54,9 +66,31 @@ public class ImprimirListaDePreciosHandler {
 		d.setVisible(true);
 		if (d.isAcepto()) {
 			this.definiciones = d.getDefinicionesAImprimir();
+			boolean okValidez = false;
+			String inputValidez = null;
+			do {
+				if(!okValidez) {
+					Object input = JOptionPane.showInputDialog(padre, "Ingrese la validez de la cotización: ", "Ingrese la validez de la cotización", JOptionPane.INFORMATION_MESSAGE, null, null, String.valueOf(parametros.getValidezCotizaciones()));
+					if(input == null){
+						break;
+					}
+					inputValidez = input.toString();
+					if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
+						CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
+					} else {
+						okValidez = true;
+						break;
+					}
+				}
+			} while (!okValidez);
+			
+			if(!okValidez) {
+				return;
+			}
+			
 			JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_COTIZACION);
 			try {
-				JasperPrint jasperPrint = JasperHelper.fillReport(reporte, getParameters(), createDefiniciones());
+				JasperPrint jasperPrint = JasperHelper.fillReport(reporte, getParameters(inputValidez), createDefiniciones());
 				JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
 			} catch (JRException e) {
 				e.printStackTrace();
@@ -76,7 +110,7 @@ public class ImprimirListaDePreciosHandler {
 						for (PrecioGama pg : gtag.getPrecios()) {
 							DefinicionPrecioTO dTO = new DefinicionPrecioTO();
 							dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
-							dTO.setAncho(ra.toString() + " mts.");
+							dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase());
 							dTO.setDescripcion(pg.getGamaDefault().getNombre());
 							dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
@@ -91,7 +125,7 @@ public class ImprimirListaDePreciosHandler {
 								for (RangoCoberturaEstampado rce : rcc.getRangos()) {
 									DefinicionPrecioTO dTO = new DefinicionPrecioTO();
 									dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
-									dTO.setAncho(ra.toString() + " mts.");
+									dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 									dTO.setTipoArticulo(gtabe.getTipoArticulo().getNombre().toUpperCase());
 									dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 									dTO.setDescripcion("Base " + pbe.getGama().getNombre().toUpperCase() + ".\n" + rcc.toString() + " colores.\n" + rce.toString() + " de cobertura.");
@@ -105,7 +139,7 @@ public class ImprimirListaDePreciosHandler {
 					for (PrecioTipoArticulo pta : rac.getPrecios()) {
 						DefinicionPrecioTO dTO = new DefinicionPrecioTO();
 						dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
-						dTO.setAncho(ra.toString() + " mts.");
+						dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 						dTO.setDescripcion("-");
 						dTO.setTipoArticulo(pta.getTipoArticulo().getNombre().toUpperCase());
 						dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
@@ -121,7 +155,7 @@ public class ImprimirListaDePreciosHandler {
 		return definicionesTO;
 	}
 	
-	private Map<String, Object> getParameters() {
+	private Map<String, Object> getParameters(String validez) {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("FECHA", DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE));
 		mapa.put("CORREO", cliente.getEmail());
@@ -129,11 +163,12 @@ public class ImprimirListaDePreciosHandler {
 		mapa.put("CONTACTO", cliente.getContacto());
 		String condicion = cliente.getCondicionVenta().getNombre().toLowerCase().contains("dias") ? cliente.getCondicionVenta().getNombre() : cliente.getCondicionVenta().getNombre() + " DIAS";
 		mapa.put("COND_PAGO", condicion + " a partir de fecha de factura (no se aceptan promedios)."); // a riBer le gusta esto
-		mapa.put("VALIDEZ", "30 días");
+		mapa.put("VALIDEZ", validez + " días");
 		mapa.put("SEGURO", parametros.getPorcentajeSeguro() + "%.");
 		mapa.put("TUBOS", "$ " + parametros.getPrecioPorTubo() + "* c/u.");
 		mapa.put("CARGA_MINIMA_COLOR", parametros.getCargaMinimaColor() + " Kg. por color.");
 		mapa.put("CARGA_MINIMA_ESTAMPADO", parametros.getCargaMinimaEstampado() + " Mts. por variante.");
+		mapa.put("NRO_COTIZACION", "");
 		return mapa;
 	}
 

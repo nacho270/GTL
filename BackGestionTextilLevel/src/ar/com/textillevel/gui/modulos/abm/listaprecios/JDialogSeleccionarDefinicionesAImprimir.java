@@ -1,13 +1,17 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -41,6 +45,7 @@ public class JDialogSeleccionarDefinicionesAImprimir extends JDialog {
 		getChkListDefiniciones().setValues(definiciones.toArray());
 		getChkSeleccionarTodos().setSelected(true);
 		getChkListDefiniciones().setAllSelectedItems(true);
+		getBtnAceptar().requestFocus();
 	}
 
 	private void setUpScreen() {
@@ -70,6 +75,41 @@ public class JDialogSeleccionarDefinicionesAImprimir extends JDialog {
 		
 		add(jsp, BorderLayout.CENTER);
 		add(pnlSur, BorderLayout.SOUTH);
+		
+		final Component[] comps = new Component[] { getBtnAceptar(), getBtnSalir()};
+		FocusTraversalPolicy policy = new FocusTraversalPolicy() {
+
+			List<Component> textList = Arrays.asList(comps);
+
+			@Override
+			public Component getFirstComponent(Container focusCycleRoot) {
+				return comps[0];
+			}
+
+			@Override
+			public Component getLastComponent(Container focusCycleRoot) {
+				return comps[comps.length - 1];
+			}
+
+			@Override
+			public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
+				int index = textList.indexOf(aComponent);
+				return comps[(index + 1) % comps.length];
+			}
+
+			@Override
+			public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
+				int index = textList.indexOf(aComponent);
+				return comps[(index - 1 + comps.length) % comps.length];
+			}
+
+			@Override
+			public Component getDefaultComponent(Container focusCycleRoot) {
+				return comps[0];
+			}
+		};
+
+		setFocusTraversalPolicy(policy);
 	}
 
 	private CLCheckBoxList<DefinicionPrecio> getChkListDefiniciones() {

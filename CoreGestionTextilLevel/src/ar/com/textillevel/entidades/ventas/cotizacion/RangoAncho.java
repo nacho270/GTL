@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.util.Utils;
@@ -88,6 +89,14 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 			return "De " + getAnchoMinimo().toString() + " a " + getAnchoMaximo().toString();
 		} else {
 			return getAnchoExacto().toString();
+		}
+	}
+	
+	public String toStringConUnidad(EUnidad unidad) {
+		if(getAnchoExacto() == null) {
+			return "De " + getAnchoMinimo().toString() + " " + unidad.getDescripcion().toLowerCase() + " a " + getAnchoMaximo().toString() + " " + unidad.getDescripcion().toLowerCase();
+		} else {
+			return getAnchoExacto().toString() + " " + unidad.getDescripcion().toLowerCase();
 		}
 	}
 

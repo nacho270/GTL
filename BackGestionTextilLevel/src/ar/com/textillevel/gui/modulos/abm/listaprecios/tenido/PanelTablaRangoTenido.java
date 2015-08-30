@@ -1,6 +1,7 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.tenido;
 
 import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioGama;
@@ -49,7 +50,7 @@ public class PanelTablaRangoTenido extends PanelTablaRango<RangoAnchoArticuloTen
 			GrupoTipoArticuloGama grupoTenido = (GrupoTipoArticuloGama) grupo;
 			for(PrecioGama pg : grupoTenido.getPrecios()) {
 				Object[] row = new Object[CANT_COLS];
-				row[COL_ANCHO] = elemento.toString();
+				row[COL_ANCHO] = elemento.toStringConUnidad(EUnidad.METROS);
 				row[COL_TIPO_ARTICULO] = grupoTenido.getTipoArticulo().toString();
 				row[COL_GAMA] = pg.getGamaCliente().toString();
 				row[COL_PRECIO] = pg.getPrecio();

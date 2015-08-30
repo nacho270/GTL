@@ -1,6 +1,7 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.comun;
 
 import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
@@ -42,7 +43,7 @@ public class PanelTablaRangoComun extends PanelTablaRango<RangoAnchoComun, Preci
 	protected void agregarElemento(RangoAnchoComun elemento) {
 		for(PrecioTipoArticulo pta : elemento.getPrecios()) {
 			Object[] row = new Object[CANT_COLS];
-			row[COL_ANCHO] = elemento.toString();
+			row[COL_ANCHO] = elemento.toStringConUnidad(EUnidad.METROS);
 			row[COL_TIPO_ARTICULO] = pta.getTipoArticulo().toString();
 			row[COL_PRECIO] = pta.getPrecio();
 			row[COL_OBJ] = pta;

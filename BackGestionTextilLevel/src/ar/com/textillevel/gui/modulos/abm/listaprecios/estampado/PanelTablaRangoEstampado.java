@@ -1,6 +1,7 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.estampado;
 
 import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
@@ -59,7 +60,7 @@ public class PanelTablaRangoEstampado extends PanelTablaRango<RangoAnchoArticulo
 					for(RangoCoberturaEstampado rangoCobertura : rangoCantColores.getRangos()) {
 						Object[] row = new Object[CANT_COLS];
 						row[COL_OBJ] = rangoCobertura;
-						row[COL_ANCHO] = elemento.toString();
+						row[COL_ANCHO] = elemento.toStringConUnidad(EUnidad.METROS);
 						row[COL_TIPO_ARTICULO] = grupoEstampado.getTipoArticulo().toString();
 						row[COL_BASE] = precioBase.getGama().toString();
 						row[COL_CANT_COLORES] = rangoCantColores.toString();
