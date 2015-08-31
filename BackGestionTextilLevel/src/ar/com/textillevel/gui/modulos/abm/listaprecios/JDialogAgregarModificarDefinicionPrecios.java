@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.swing.JButton;
@@ -64,11 +65,11 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private boolean acepto;
 	private DefinicionPrecio definicion;
 	private TipoArticuloFacadeRemote tipoArticuloFacade;
-	
+
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
 		this(padre, cliente, tipoProducto, new DefinicionPrecio());
 	}
-	
+
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
 		super(padre);
 		setCliente(cliente);
@@ -268,7 +269,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	public DecimalNumericTextField getTxtAnchoInicial() {
 		if (txtAnchoInicial == null) {
-			txtAnchoInicial = new DecimalNumericTextField();
+			txtAnchoInicial = crearDecimalTextField();
 			txtAnchoInicial.setSize(100, 20);
 		}
 		return txtAnchoInicial;
@@ -276,7 +277,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	public DecimalNumericTextField getTxtAnchoFinal() {
 		if (txtAnchoFinal == null) {
-			txtAnchoFinal = new DecimalNumericTextField();
+			txtAnchoFinal = crearDecimalTextField();
 		}
 		return txtAnchoFinal;
 	}
@@ -291,11 +292,11 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	public DecimalNumericTextField getTxtPrecio() {
 		if (txtPrecio == null) {
-			txtPrecio = new DecimalNumericTextField();
+			txtPrecio = crearDecimalTextField();
 		}
 		return txtPrecio;
 	}
-	
+
 	public TipoArticuloFacadeRemote getTipoArticuloFacade() {
 		if (tipoArticuloFacade == null) {
 			tipoArticuloFacade = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class);
@@ -384,7 +385,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	protected Float getAnchoExacto() {
 		if(getChkAnchoExacto().isSelected()) {
-			return getTxtAnchoExacto().getValueWithNull();
+			return NumUtil.redondearDecimales(getTxtAnchoExacto().getValueWithNull(), 2, BigDecimal.ROUND_UP);
 		} else {
 			return null;
 		}
@@ -394,18 +395,18 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		if(getChkAnchoExacto().isSelected()) {
 			return null;
 		}
-		return getTxtAnchoInicial().getValueWithNull();
+		return NumUtil.redondearDecimales(getTxtAnchoInicial().getValueWithNull(), 2, BigDecimal.ROUND_UP);
 	}
 
 	protected Float getAnchoFinal() {
 		if(getChkAnchoExacto().isSelected()) {
 			return null;
 		}
-		return getTxtAnchoFinal().getValueWithNull();
+		return NumUtil.redondearDecimales(getTxtAnchoFinal().getValueWithNull(), 2, BigDecimal.ROUND_UP);
 	}
 
 	protected Float getPrecio() {
-		return getTxtPrecio().getValueWithNull();
+		return NumUtil.redondearDecimales(getTxtPrecio().getValueWithNull(), 2, BigDecimal.ROUND_UP);
 	}
 
 	protected TipoArticulo getTipoArticulo() {
@@ -454,6 +455,14 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	protected void botonAgregarOrCancelarPresionado() {
 		this.elemSiendoEditado = null;
+	}
+
+	protected DecimalNumericTextField crearDecimalTextField()  {
+		return new DecimalNumericTextField(new Integer(2), new Integer(2));
+	}
+
+	protected DecimalNumericTextField crearEnteroTextField()  {
+		return new DecimalNumericTextField(new Integer(0), new Integer(0));
 	}
 
 }

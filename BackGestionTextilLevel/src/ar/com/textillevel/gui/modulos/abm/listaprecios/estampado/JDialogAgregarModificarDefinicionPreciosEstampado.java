@@ -93,7 +93,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 	private DecimalNumericTextField getTxtCantColoresDesde() {
 		if (txtCantColoresDesde == null) {
-			txtCantColoresDesde = new DecimalNumericTextField(new Integer(0) , new Integer(0));
+			txtCantColoresDesde = crearEnteroTextField();
 			txtCantColoresDesde.setSize(100, 20);
 		}
 		return txtCantColoresDesde;
@@ -101,14 +101,14 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 	private DecimalNumericTextField getTxtCantColoresHasta() {
 		if (txtCantColoresHasta == null) {
-			txtCantColoresHasta = new DecimalNumericTextField(new Integer(0) , new Integer(0));
+			txtCantColoresHasta = crearEnteroTextField();
 		}
 		return txtCantColoresHasta;
 	}
 	
 	private DecimalNumericTextField getTxtCoberturaDesde() {
 		if (txtCoberturaDesde == null) {
-			txtCoberturaDesde = new DecimalNumericTextField(new Integer(0) , new Integer(0));
+			txtCoberturaDesde = crearEnteroTextField();
 			txtCoberturaDesde.setSize(100, 20);
 			txtCoberturaDesde.setValue(1d);
 			txtCoberturaDesde.setText("1");
@@ -118,7 +118,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 	private DecimalNumericTextField getTxtCoberturaHasta() {
 		if (txtCoberturaHasta == null) {
-			txtCoberturaHasta = new DecimalNumericTextField(new Integer(0) , new Integer(0));
+			txtCoberturaHasta = crearEnteroTextField();
 			txtCoberturaHasta.setValue(50d);
 			txtCoberturaHasta.setText("50");
 		}

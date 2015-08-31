@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -21,6 +22,7 @@ import javax.swing.JPanel;
 import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import ar.clarin.fwjava.boss.BossEstilos;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
@@ -193,13 +195,25 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			limpiarDatos();
 			Cliente cliente = (Cliente) lista.getSelectedValue();
 			setListaActual(getListaDePreciosFacade().getListaByIdCliente(cliente.getId()));
-			if (getListaActual() != null) {
+			if(getListaActual() != null) {
+				ordenarVersiones();
 				getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 				getBtnModificar().setText("Modificar >>");
 			} else {
 				getBtnModificar().setText("Agregar >>");
 			}
 		}
+	}
+
+	private void ordenarVersiones() {
+		//ordeno en forma descendente
+		Collections.sort(getListaActual().getVersiones(), new Comparator<VersionListaDePrecios>() {
+
+			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
+				return o1.getInicioValidez().compareTo(o2.getInicioValidez())*(-1);
+			}
+
+		});
 	}
 
 	@Override
@@ -349,7 +363,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				if (getListaActual().getVersiones().isEmpty() || !hayVersionesMasViejas) {
 					VersionListaDePrecios nuevaVersion = new VersionListaDePrecios(fechaInicioValidez);
 					getListaActual().getVersiones().add(nuevaVersion);
-					agregarElemento(nuevaVersion);
+					ordenarVersiones();
+					
+					getTablaVersiones().limpiar();
+					getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 				}
 			}
 			return false;
@@ -554,7 +571,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 	}
 
-	public PanelTablaVersionesListaDePrecio getTablaVersiones() {
+	private PanelTablaVersionesListaDePrecio getTablaVersiones() {
 		if (tablaVersiones == null) {
 			tablaVersiones = new PanelTablaVersionesListaDePrecio();
 		}
