@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,7 +23,6 @@ import javax.swing.JPanel;
 import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import ar.clarin.fwjava.boss.BossEstilos;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
