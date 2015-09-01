@@ -9,12 +9,23 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.clarin.fwjava.util.DateUtil;
+import ar.com.textillevel.dao.api.local.CotizacionDAOLocal;
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.excepciones.EValidacionException;
@@ -29,8 +40,17 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 	@EJB
 	private ProductoDAOLocal productoDAOLocal;
 	
+	@EJB
+	private CotizacionDAOLocal cotizacionDAOLocal;
+	
 	public ListaDePrecios getListaByIdCliente(Integer idCliente) {
-		return listaDePreciosDAOLocal.getListaByIdCliente(idCliente);
+		ListaDePrecios listaByIdCliente = listaDePreciosDAOLocal.getListaByIdCliente(idCliente);
+		if(listaByIdCliente != null) {
+			for(VersionListaDePrecios v : listaByIdCliente.getVersiones()) {
+				doEagerVersionListaDePrecios(v);
+			}
+		}
+		return listaByIdCliente;
 	}
 
 	public ListaDePrecios save(ListaDePrecios listaDePreciosActual) {
@@ -40,10 +60,27 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 	public void remove(ListaDePrecios listaDePreciosActual) {
 		listaDePreciosDAOLocal.removeById(listaDePreciosActual.getId());
 	}
-	
+
+	public VersionListaDePrecios getVersionCotizadaVigente(Cliente cliente) {
+		Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacion(cliente);
+		if(cotizacion != null && !DateUtil.getHoy().after(DateUtil.sumarDias(cotizacion.getFechaInicio(), cotizacion.getValidez()))) {
+			doEagerVersionListaDePrecios(cotizacion.getVersionListaPrecio());
+			return cotizacion.getVersionListaPrecio();
+		}
+		return null;
+	}
+
 	public Float getPrecioProducto(Producto producto, Cliente cliente) throws ValidacionException {
+		DefinicionPrecio definicion = null;
+		VersionListaDePrecios versionCotizadaVigente = getVersionCotizadaVigente(cliente);
+		if(versionCotizadaVigente != null) {
+			definicion = versionCotizadaVigente.getDefinicionPorTipoProducto(producto.getTipo());
+			if(definicion != null) {
+				return definicion.getPrecio(producto);
+			}
+		}
 		VersionListaDePrecios versionActual = getVersionListaPrecioActual(cliente);
-		DefinicionPrecio definicion = versionActual.getDefinicionPorTipoProducto(producto.getTipo());
+		definicion = versionActual.getDefinicionPorTipoProducto(producto.getTipo());
 		return definicion.getPrecio(producto);
 	}
 
@@ -57,11 +94,21 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 
 	public List<Producto> getProductos(Cliente cliente) throws ValidacionException {
 		List<Producto> allProductosCliente = new ArrayList<Producto>();
+		VersionListaDePrecios versionCotizadaVigente = getVersionCotizadaVigente(cliente);
 		VersionListaDePrecios versionListaPrecio = getVersionListaPrecioActual(cliente);
 		List<Producto> productos = productoDAOLocal.getAll();
 		Map<ETipoProducto, DefinicionPrecio> definicionMap = new HashMap<ETipoProducto, DefinicionPrecio>();
 		for(ETipoProducto tp : ETipoProducto.values()) {
-			definicionMap.put(tp, versionListaPrecio.getDefinicionPorTipoProducto(tp));
+			if(versionCotizadaVigente != null) {
+				DefinicionPrecio definicionPorTipoProducto = versionCotizadaVigente.getDefinicionPorTipoProducto(tp);
+				if(definicionPorTipoProducto == null) {
+					definicionMap.put(tp, versionListaPrecio.getDefinicionPorTipoProducto(tp));
+				} else {
+					definicionMap.put(tp, definicionPorTipoProducto);
+				}
+			} else {
+				definicionMap.put(tp, versionListaPrecio.getDefinicionPorTipoProducto(tp));
+			}
 		}
 		for(Producto p : productos) {
 			DefinicionPrecio definicion = definicionMap.get(p.getTipo());
@@ -74,6 +121,37 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 			}
 		}
 		return allProductosCliente;
+	}
+
+	private void doEagerVersionListaDePrecios(VersionListaDePrecios v) {
+		v.getPrecios().size();
+		for(DefinicionPrecio dp : v.getPrecios()) {
+			dp.getRangos().size();
+			for (RangoAncho ra : dp.getRangos()) {
+				if (ra instanceof RangoAnchoArticuloTenido) {
+					RangoAnchoArticuloTenido raat = (RangoAnchoArticuloTenido) ra;
+					raat.getGruposGama().size();
+					for (GrupoTipoArticuloGama gtag : raat.getGruposGama()) {
+						gtag.getPrecios().size();
+					}
+				} else if (ra instanceof RangoAnchoArticuloEstampado) {
+					RangoAnchoArticuloEstampado raae = (RangoAnchoArticuloEstampado) ra;
+					raae.getGruposBase().size();
+					for (GrupoTipoArticuloBaseEstampado gtabe : raae.getGruposBase()) {
+						gtabe.getPrecios().size();
+						for (PrecioBaseEstampado pbe : gtabe.getPrecios()) {
+							pbe.getRangosDeColores().size();
+							for (RangoCantidadColores rcc : pbe.getRangosDeColores()) {
+								rcc.getRangos().size();
+							}
+						}
+					}
+				} else {
+					RangoAnchoComun rac = (RangoAnchoComun) ra;
+					rac.getPrecios().size();
+				}
+			}
+		}
 	}
 
 }
