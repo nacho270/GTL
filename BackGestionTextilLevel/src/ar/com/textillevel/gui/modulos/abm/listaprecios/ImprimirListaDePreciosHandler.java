@@ -10,15 +10,19 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.apache.taglibs.string.util.StringW;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
@@ -31,6 +35,8 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCoberturaEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
+import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
@@ -41,16 +47,19 @@ public class ImprimirListaDePreciosHandler {
 	private static final String ARCHIVO_JASPER_COTIZACION = "/ar/com/textillevel/reportes/cotizacion.jasper";
 	
 	private List<DefinicionPrecio> definiciones;
+	private VersionListaDePrecios versionListaDePrecios;
 	private Cliente cliente;
 	private ParametrosGenerales parametros;
+	private ListaDePreciosFacadeRemote listaDePreciosFacade;
 	
 	private Frame padre;
 	
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	
-	public ImprimirListaDePreciosHandler(Frame padre, Cliente cliente, List<DefinicionPrecio> definiciones) {
+	public ImprimirListaDePreciosHandler(Frame padre, Cliente cliente, VersionListaDePrecios versionListaDePrecios) {
 		this.padre = padre;
-		this.definiciones = definiciones;
+		this.versionListaDePrecios = versionListaDePrecios;
+		this.definiciones = versionListaDePrecios.getPrecios();
 		for(Iterator<DefinicionPrecio> it = this.definiciones.iterator(); it.hasNext(); ){
 			DefinicionPrecio dp = it.next();
 			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
@@ -87,18 +96,34 @@ public class ImprimirListaDePreciosHandler {
 			if(!okValidez) {
 				return;
 			}
-			
+
+			Cotizacion cotizacion = generarYGrabarCotizacion(Integer.valueOf(inputValidez));
+
 			JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_COTIZACION);
 			try {
-				JasperPrint jasperPrint = JasperHelper.fillReport(reporte, getParameters(inputValidez), createDefiniciones());
+				JasperPrint jasperPrint = JasperHelper.fillReport(reporte, getParameters(inputValidez, cotizacion.getNumero()), createDefiniciones());
 				JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
-			
-		} else return;
+			if(cotizacion != null) {
+				CLJOptionPane.showInformationMessage(padre, "Se generó la cotización número '" + cotizacion.getNumero() + "'.", "Información");
+			}
+		} else {
+			return;
+		}
 	}
-	
+
+	private Cotizacion generarYGrabarCotizacion(Integer validez) {
+		try {
+			Cotizacion cotizacion = getListaDePreciosFacade().generarCotizacion(cliente, versionListaDePrecios, validez);
+			return cotizacion;
+		} catch (ValidacionException e) {
+			CLJOptionPane.showErrorMessage(padre, StringW.wordWrap("La cotización no se pudo generar. Probablemente se hicieron dos en el mismo momento. Por favor, reintente la operación."), "Error");
+			return null;
+		}
+	}
+
 	private List<DefinicionPrecioTO> createDefiniciones() {
 		List<DefinicionPrecioTO> definicionesTO = new ArrayList<ImprimirListaDePreciosHandler.DefinicionPrecioTO>();
 		for(int i = 0; i < this.definiciones.size(); i++) {
@@ -155,7 +180,7 @@ public class ImprimirListaDePreciosHandler {
 		return definicionesTO;
 	}
 	
-	private Map<String, Object> getParameters(String validez) {
+	private Map<String, Object> getParameters(String validez, Integer nroCotizacion) {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		mapa.put("FECHA", DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE));
 		mapa.put("CORREO", cliente.getEmail());
@@ -168,7 +193,7 @@ public class ImprimirListaDePreciosHandler {
 		mapa.put("TUBOS", "$ " + parametros.getPrecioPorTubo() + "* c/u.");
 		mapa.put("CARGA_MINIMA_COLOR", parametros.getCargaMinimaColor() + " Kg. por color.");
 		mapa.put("CARGA_MINIMA_ESTAMPADO", parametros.getCargaMinimaEstampado() + " Mts. por variante.");
-		mapa.put("NRO_COTIZACION", "");
+		mapa.put("NRO_COTIZACION", ""+nroCotizacion);
 		return mapa;
 	}
 
@@ -177,6 +202,13 @@ public class ImprimirListaDePreciosHandler {
 			parametrosGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		}
 		return parametrosGeneralesFacade;
+	}
+
+	private ListaDePreciosFacadeRemote getListaDePreciosFacade() {
+		if(listaDePreciosFacade == null) {
+			listaDePreciosFacade = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class);
+		}
+		return listaDePreciosFacade;
 	}
 	
 	public static class DefinicionPrecioTO implements Serializable {
@@ -229,4 +261,5 @@ public class ImprimirListaDePreciosHandler {
 			this.precio = precio;
 		}
 	}
+
 }

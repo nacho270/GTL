@@ -6,6 +6,7 @@ import javax.ejb.Remote;
 
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
@@ -24,5 +25,9 @@ public interface ListaDePreciosFacadeRemote {
 	public List<Producto> getProductos(Cliente cliente) throws ValidacionException;
 
 	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException;
+
+	public Cotizacion generarCotizacion(Cliente cliente, VersionListaDePrecios versionListaDePrecios, Integer validez) throws ValidacionException;
+
+	public Cotizacion getUltimaCotizacionVigente(VersionListaDePrecios version);
 
 }

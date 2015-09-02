@@ -30,6 +30,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
+import ar.com.textillevel.util.Utils;
 
 @Stateless
 public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
@@ -63,11 +64,15 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 
 	public VersionListaDePrecios getVersionCotizadaVigente(Cliente cliente) {
 		Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacion(cliente);
-		if(cotizacion != null && !DateUtil.getHoy().after(DateUtil.sumarDias(cotizacion.getFechaInicio(), cotizacion.getValidez()))) {
+		if(cotizacionVigente(cotizacion)) {
 			doEagerVersionListaDePrecios(cotizacion.getVersionListaPrecio());
 			return cotizacion.getVersionListaPrecio();
 		}
 		return null;
+	}
+
+	private boolean cotizacionVigente(Cotizacion cotizacion) {
+		return cotizacion != null && !DateUtil.getHoy().after(DateUtil.sumarDias(cotizacion.getFechaInicio(), cotizacion.getValidez()));
 	}
 
 	public Float getPrecioProducto(Producto producto, Cliente cliente) throws ValidacionException {
@@ -151,6 +156,33 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 					rac.getPrecios().size();
 				}
 			}
+		}
+	}
+
+	public Cotizacion generarCotizacion(Cliente cliente, VersionListaDePrecios versionListaDePrecios, Integer validez) throws ValidacionException {
+		try {
+			Cotizacion cotizacion = new Cotizacion();
+			cotizacion.setCliente(cliente);
+			cotizacion.setFechaInicio(DateUtil.getHoy());
+			cotizacion.setValidez(validez);
+			cotizacion.setVersionListaPrecio(versionListaDePrecios);
+			cotizacion.setNumero(cotizacionDAOLocal.getUltimoNumeroCotizacion() + 1);
+			return cotizacionDAOLocal.save(cotizacion);
+		} catch(Exception e) {
+			if(Utils.isConstraintViolationException(e)) {
+				throw new ValidacionException(EValidacionException.COTIZACION_LISTA_DE_PRECIOS_NUMERO_REPETIDO.getInfoValidacion());
+			} else {
+				throw new RuntimeException(e.getMessage());
+			}
+		}
+	}
+
+	public Cotizacion getUltimaCotizacionVigente(VersionListaDePrecios version) {
+		Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacionParaVersion(version);
+		if(cotizacionVigente(cotizacion)) {
+			return cotizacion;
+		} else {
+			return null;
 		}
 	}
 

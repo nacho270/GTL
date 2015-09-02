@@ -54,6 +54,8 @@ public enum EValidacionException {
 	CLIENTE_YA_EXISTE_CUIT							(149, "El CUIT ingresado es el mismo que otro cliente."),
 	CLIENTE_CUIT_INVALIDO							(150, "El CUIT ingresado es inválido."),
 	CLIENTE_SIN_LISTA_PRECIOS						(151, "El cliente no tiene lista de precios asociada."),
+	COTIZACION_LISTA_DE_PRECIOS_NUMERO_REPETIDO		(152, "El número de cotización generado ya existe."),
+	
 	_											(000, "");
 	
 

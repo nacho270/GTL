@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import org.hibernate.exception.ConstraintViolationException;
+
 import ar.clarin.fwjava.util.StringUtil;
 
 public class Utils {
@@ -44,6 +46,10 @@ public class Utils {
 	public static <E extends Object, T extends Comparable<E>> boolean dentroDelRangoEstricto(T elem, E desde, E hasta) {
 		return (desde == null || elem.compareTo(desde) > 0) &&
 			   (hasta ==null || elem.compareTo(hasta) < 0);
+	}
+
+	public static boolean isConstraintViolationException (Exception e) {
+		return e.getCause()!=null && e.getCause().getCause()!=null && e.getCause().getCause().getCause()!=null && e.getCause().getCause() instanceof ConstraintViolationException;
 	}
 
 }

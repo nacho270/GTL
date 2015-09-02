@@ -26,6 +26,7 @@ public class Cotizacion implements Serializable {
 	private VersionListaDePrecios versionListaPrecio;
 	private Date fechaInicio;
 	private Integer validez;
+	private Integer numero;
 
 	@Id
 	@Column(name = "P_ID")
@@ -74,6 +75,15 @@ public class Cotizacion implements Serializable {
 
 	public void setValidez(Integer validez) {
 		this.validez = validez;
+	}
+
+	@Column(name="A_NUMERO", nullable=false, unique=true)
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
 	}
 
 }
