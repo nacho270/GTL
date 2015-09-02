@@ -4,18 +4,24 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.util.GuiUtil;
+import ar.clarin.fwjava.util.NumUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
@@ -38,6 +44,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 
 	private JComboBox cmbGama;
 	private LinkableLabel linkableLabelEditarGamaCliente;
+	private JButton btnAgregarTodos;
 	private JPanel panelDatosPropios;
 
 	private List<GamaColorCliente> gamas;
@@ -77,7 +84,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			panelDatosPropios = new JPanel(new GridBagLayout());
 			panelDatosPropios.add(new JLabel("Gama: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panelDatosPropios.add(getCmbGama(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-			panelDatosPropios.add(getLinkableLabelEditarGamaCliente(), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelDatosPropios.add(getLinkableLabelEditarGamaCliente(), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelDatosPropios.add(getBtnAgregarTodos(), GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
 		}
 		return panelDatosPropios;
 	}
@@ -154,8 +162,11 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	
 	@Override
 	protected void botonAgregarPresionado() {
+		agregarInterno((GamaColorCliente) getCmbGama().getSelectedItem(), getPrecio(),false);
+	}
 
-		if(elemSiendoEditado != null) {
+	private void agregarInterno(GamaColorCliente gcc, Float precio, boolean isBulk) {
+		if(!isBulk && elemSiendoEditado != null) {
 			elemSiendoEditado.deepRemove();
 		}
 
@@ -190,8 +201,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			rango.getGruposGama().add(grupo);
 			grupo.setRangoAnchoArticuloTenido(rango);
 		}
-		Float precio = getPrecio();
-		GamaColorCliente gcc = (GamaColorCliente) getCmbGama().getSelectedItem();
+		//Float precio = getPrecio();
+		//GamaColorCliente gcc = (GamaColorCliente) getCmbGama().getSelectedItem();
 		PrecioGama pg = grupo.getPrecioGama(gcc);
 		if (pg == null) {
 			pg = new PrecioGama();
@@ -218,28 +229,32 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 
 	@Override
 	protected boolean validar() {
-		if(validarDatosComunes()) {
-			//Gama
-			if(getCmbGama().getSelectedItem() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
-				return false;
-			}
-			RangoAnchoArticuloTenido rangoAnchoArticuloTenido = (RangoAnchoArticuloTenido)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
-			if(rangoAnchoArticuloTenido != null) {
-				GrupoTipoArticuloGama grupo = rangoAnchoArticuloTenido.getGrupo(getTipoArticulo());
-				if(grupo != null) {
-					PrecioGama pg = grupo.getPrecioGama((GamaColorCliente)getCmbGama().getSelectedItem());
-					if(pg != null && (elemSiendoEditado == null  || elemSiendoEditado != pg)) {
-						CLJOptionPane.showErrorMessage(this, "Ya existe un precio para esa gama", "Error");
-						getTxtPrecio().requestFocus();
-						return false;
-					}
-				}
-			}
-			return true;
+		if(validarDatosComunes(true)) {
+			return validarGama((GamaColorCliente) getCmbGama().getSelectedItem());
 		} else {
 			return false;
 		}
+	}
+
+	private boolean validarGama(GamaColorCliente gamaColorCliente) {
+		//Gama
+		if(gamaColorCliente == null) {
+			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
+			return false;
+		}
+		RangoAnchoArticuloTenido rangoAnchoArticuloTenido = (RangoAnchoArticuloTenido)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
+		if(rangoAnchoArticuloTenido != null) {
+			GrupoTipoArticuloGama grupo = rangoAnchoArticuloTenido.getGrupo(getTipoArticulo());
+			if(grupo != null) {
+				PrecioGama pg = grupo.getPrecioGama(gamaColorCliente);
+				if(pg != null && (elemSiendoEditado == null  || elemSiendoEditado != pg)) {
+					CLJOptionPane.showErrorMessage(this, "Ya existe un precio para la gama " + gamaColorCliente.getNombre(), "Error");
+					getTxtPrecio().requestFocus();
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -261,4 +276,61 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		return null;
 	}
 
+	public JButton getBtnAgregarTodos() {
+		if(btnAgregarTodos == null){
+			btnAgregarTodos = new JButton("Agregar todas las gamas");
+			btnAgregarTodos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					for(int i = 0; i < getCmbGama().getItemCount(); i++) {
+						GamaColorCliente gcc = (GamaColorCliente) getCmbGama().getItemAt(i);
+						if(validarDatosComunes(false)){
+							if(validarGama(gcc)) {
+								try{
+									Float precio = ingresarPrecio(gcc);
+									agregarInterno(gcc, precio, true);
+								}catch(Exception ex){
+									break;
+								}
+							} else {
+								break;
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			});
+		}
+		return btnAgregarTodos;
+	}
+
+	private Float ingresarPrecio(GamaColorCliente gcc) throws Exception {
+		boolean okValidez = false;
+		String inputValidez = "";
+		do {
+			if(!okValidez) {
+				inputValidez = JOptionPane.showInputDialog(JDialogAgregarModificarDefinicionPreciosTenido.this, "Precio para " + gcc.getNombre() + ": ", "Ingrese el precio", JOptionPane.INFORMATION_MESSAGE);
+				if(inputValidez == null){
+					break;
+				}
+				if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
+					CLJOptionPane.showErrorMessage(JDialogAgregarModificarDefinicionPreciosTenido.this, "Ingreso incorrecto", "error");
+				} else {
+					okValidez = true;
+					break;
+				}
+			}
+		} while (!okValidez);
+		
+		if(!okValidez) {
+			throw new Exception();
+		}
+		Float precio = null;
+		try {
+			precio = new Float(inputValidez.replace(",", "."));
+		} catch (NumberFormatException ex) {
+			precio = new Float(0f);
+		}
+		return NumUtil.redondearDecimales(precio, 2, BigDecimal.ROUND_UP);
+	}
 }

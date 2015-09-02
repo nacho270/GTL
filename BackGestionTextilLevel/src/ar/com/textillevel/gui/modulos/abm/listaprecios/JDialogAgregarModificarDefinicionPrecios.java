@@ -341,7 +341,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return tablaRango;
 	}
 
-	protected boolean validarDatosComunes() {
+	protected boolean validarDatosComunes(boolean validarPrecio) {
 		boolean usaAnchoExacto = getChkAnchoExacto().isSelected();
 		if(usaAnchoExacto) {
 			if(StringUtil.isNullOrEmpty(getTxtAnchoExacto().getText())) {
@@ -361,10 +361,12 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			return false;
 		}
 		//Precio
-		if(StringUtil.isNullOrEmpty(getTxtPrecio().getText()) && !GenericUtils.esNumerico(getTxtPrecio().getText())) {
-			CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
-			getTxtPrecio().requestFocus();
-			return false;
+		if(validarPrecio) { // no entra aca solo en el caso de "agregar todas las gamas" en teñido
+			if(StringUtil.isNullOrEmpty(getTxtPrecio().getText()) && !GenericUtils.esNumerico(getTxtPrecio().getText())) {
+				CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
+				getTxtPrecio().requestFocus();
+				return false;
+			}
 		}
 		//Rango Ancho Común
 		T rangoAnchoSiendoEditado=null;

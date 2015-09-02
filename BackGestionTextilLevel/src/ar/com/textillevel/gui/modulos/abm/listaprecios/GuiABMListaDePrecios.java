@@ -31,13 +31,22 @@ import ar.clarin.fwjava.templates.GuiABMListaTemplate;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.PrecioGama;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
+import ar.com.textillevel.entidades.ventas.cotizacion.RangoCoberturaEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
@@ -61,6 +70,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	private PanelTablaVersionesListaDePrecio tablaVersiones;
 	private PanelTablaDefinicionesPrecio tablaDefiniciones;
 	
+	private boolean shortCutAgregar = false;
 	private boolean isEdicion;
 	private ClienteFacadeRemote clienteFacade;
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
@@ -121,6 +131,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public void botonCancelarPresionado(int arg0) {
 		setModoEdicion(false);
+		shortCutAgregar = false;
 		itemSelectorSeleccionado(lista.getSelectedIndex());
 		habilitacionSinEdicion();
 	}
@@ -177,6 +188,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			setModoEdicion(true);
 			if(getListaActual()==null) {
 				getTablaVersiones().validarAgregar();
+				shortCutAgregar = true;
 			}
 			return true;
 		} else {
@@ -247,13 +259,21 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public void setModoEdicion(boolean estado) {
 		this.isEdicion = estado;
-		GuiUtil.setEstadoPanel(getTabDetalle(), estado);
-		getTablaVersiones().getBotonEliminar().setEnabled(false);
-		getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
-		GuiUtil.setEstadoPanel(getTablaDefiniciones(), estado);
-		getTablaDefiniciones().getBotonModificar().setEnabled(false);
-		getTablaDefiniciones().getBotonEliminar().setEnabled(false);
-		getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+		if(estado == false){
+			habilitacionSinEdicion();
+		}else{
+			GuiUtil.setEstadoPanel(getTabDetalle(), estado);
+			getTablaVersiones().getBotonEliminar().setEnabled(false);
+			getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
+			GuiUtil.setEstadoPanel(getTablaDefiniciones(), estado);
+			getTablaDefiniciones().getBotonModificar().setEnabled(false);
+			getTablaDefiniciones().getBotonEliminar().setEnabled(false);
+			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+		}
+		if(shortCutAgregar){
+			getTablaVersiones().getTabla().setRowSelectionInterval(getTablaVersiones().getTabla().getRowCount() - 1, getTablaVersiones().getTabla().getRowCount() - 1);
+			getTablaVersiones().handleClickTablaVersiones();
+		}
 	}
 
 	public ClienteFacadeRemote getClienteFacade() {
@@ -298,28 +318,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					int selectedRow = getTabla().getSelectedRow();
-					if (selectedRow >= 0) {
-						VersionListaDePrecios version = getElemento(selectedRow);
-						if (version != null) {
-							getTablaDefiniciones().getBotonAgregar().setEnabled(isEdicion);
-							getTablaDefiniciones().getBotonModificar().setEnabled(isEdicion);
-							getTablaDefiniciones().limpiar();
-							getTablaDefiniciones().agregarElementos(version.getPrecios());
-							getBtnImprimirVersion().setEnabled(isEdicion);
-							getTablaVersiones().getBotonEliminar().setEnabled(isEdicion);
-						} else {
-							getTablaDefiniciones().getBotonAgregar().setEnabled(false);
-							getBtnImprimirVersion().setEnabled(false);
-							getTablaVersiones().getBotonEliminar().setEnabled(false);
-						}
-					}else{
-						getTablaDefiniciones().getBotonAgregar().setEnabled(false);
-						getTablaDefiniciones().getBotonModificar().setEnabled(false);
-						getBtnImprimirVersion().setEnabled(false);
-						getTablaDefiniciones().limpiar();
-					}
-						
+					handleClickTablaVersiones();
 				}
 			});
 			return tabla;
@@ -402,15 +401,40 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			return btnImprimirVersion;
 		}
+
+		private void handleClickTablaVersiones() {
+			int selectedRow = getTabla().getSelectedRow();
+			if (selectedRow >= 0) {
+				VersionListaDePrecios version = getElemento(selectedRow);
+				if (version != null) {
+					getTablaDefiniciones().getBotonAgregar().setEnabled(isEdicion);
+					getTablaDefiniciones().getBotonModificar().setEnabled(isEdicion);
+					getTablaDefiniciones().limpiar();
+					getTablaDefiniciones().agregarElementos(version.getPrecios());
+					getBtnImprimirVersion().setEnabled(isEdicion);
+					getTablaVersiones().getBotonEliminar().setEnabled(isEdicion);
+				} else {
+					getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+					getBtnImprimirVersion().setEnabled(false);
+					getTablaVersiones().getBotonEliminar().setEnabled(false);
+				}
+			}else{
+				getTablaDefiniciones().getBotonAgregar().setEnabled(false);
+				getTablaDefiniciones().getBotonModificar().setEnabled(false);
+				getBtnImprimirVersion().setEnabled(false);
+				getTablaDefiniciones().limpiar();
+			}
+		}
 	}
 	
 	private class PanelTablaDefinicionesPrecio extends PanelTabla<DefinicionPrecio> {
 
 		private static final long serialVersionUID = -5833558544844113513L;
 
-		private static final int CANT_COLS = 2;
+		private static final int CANT_COLS = 3;
 		private static final int COL_TIPO_PRODUCTO = 0;
-		private static final int COL_OBJ = 1;
+		private static final int COL_RESUMEN = 1;
+		private static final int COL_OBJ = 2;
 		
 		public PanelTablaDefinicionesPrecio() {
 			setBorder(BorderFactory.createTitledBorder("Precios por tipo de producto"));
@@ -424,8 +448,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		protected CLJTable construirTabla() {
 			CLJTable tabla = new CLJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO_PRODUCTO, "TIPO DE PRODUCTO", 200, 200, true);
+			tabla.setMultilineColumn(COL_RESUMEN, "RESUMEN", 350, true, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			tabla.setHeaderAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_RESUMEN, CLJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
@@ -464,6 +490,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		protected void agregarElemento(DefinicionPrecio elemento) {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_TIPO_PRODUCTO] = elemento.getTipoProducto();
+			row[COL_RESUMEN] = GeneradorResumen.generarResumen(elemento);
 			row[COL_OBJ] = elemento;
 			getTabla().addRow(row);			
 		}
@@ -591,5 +618,64 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	public void setListaActual(ListaDePrecios listaActual) {
 		this.listaActual = listaActual;
+	}
+
+	private static class GeneradorResumen {
+		public static String generarResumen(DefinicionPrecio definicion) {
+			String descripcion = "";
+			for(RangoAncho ra : definicion.getRangos()) {
+				if(ra instanceof RangoAnchoArticuloEstampado) {
+					descripcion += generarResumenRango((RangoAnchoArticuloEstampado) ra, definicion.getTipoProducto().getUnidad());
+				} else if (ra instanceof RangoAnchoArticuloTenido){
+					descripcion += generarResumenRango((RangoAnchoArticuloTenido) ra, definicion.getTipoProducto().getUnidad());
+				} else {
+					descripcion += generarResumenRango((RangoAnchoComun) ra, definicion.getTipoProducto().getUnidad());
+				}
+			}
+			return "<html>" + descripcion + "</html>";
+		}
+
+		private static String generarResumenRango(RangoAnchoComun ra, EUnidad unidad) {
+			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
+			for (PrecioTipoArticulo pta : ra.getPrecios()) {
+				descripcion += pta.getTipoArticulo().getNombre().toUpperCase() 
+							+ " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x "
+							+ unidad.getDescripcion().toLowerCase() + "</b><br>";
+				descripcion += "<br>";
+			}
+			return descripcion;
+		}
+		
+		private static String generarResumenRango(RangoAnchoArticuloEstampado ra, EUnidad unidad) {
+			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br/>";
+			for (GrupoTipoArticuloBaseEstampado gtabe : ra.getGruposBase()) {
+				for (PrecioBaseEstampado pbe : gtabe.getPrecios()) {
+					for (RangoCantidadColores rcc : pbe.getRangosDeColores()) {
+						for (RangoCoberturaEstampado rce : rcc.getRangos()) {
+							descripcion += gtabe.getTipoArticulo().getNombre().toUpperCase() + " - "
+									+ "Base " + pbe.getGama().getNombre().toUpperCase() + " <br>"
+									+ "- " + rcc.getMinimo() + " a " + rcc.getMaximo() + " colores "
+									+ " y " + rce.getMinimo() + "&#37; a " + rce.getMaximo() + "&#37;  de cobertura "
+									+ " ==> $ <b> " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + unidad.getDescripcion().toLowerCase() + "</b><br/>";
+						}
+					}
+				}
+				descripcion += "<br/>";
+			}
+			return descripcion;
+		}
+		
+		private static String generarResumenRango(RangoAnchoArticuloTenido ra, EUnidad unidad) {
+			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
+			for (GrupoTipoArticuloGama gtag : ra.getGruposGama()) {
+				for (PrecioGama pg : gtag.getPrecios()) {
+					descripcion += gtag.getTipoArticulo().getNombre().toUpperCase() + " - "
+							+ pg.getGamaCliente().getNombre() + " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x "
+							+ unidad.getDescripcion().toLowerCase() + "</b><br>";
+				}
+				descripcion += "<br>";
+			}
+			return descripcion;
+		}
 	}
 }

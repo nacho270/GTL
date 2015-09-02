@@ -229,7 +229,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 	@Override
 	protected boolean validar() {
-		if(validarDatosComunes()) {
+		if(validarDatosComunes(true)) {
 			//Base
 			if(getCmbBase().getSelectedItem() == null) {
 				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Base'.", "Error");

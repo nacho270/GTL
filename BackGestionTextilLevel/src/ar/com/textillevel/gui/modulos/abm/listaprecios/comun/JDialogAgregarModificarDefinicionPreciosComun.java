@@ -97,7 +97,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 
 	@Override
 	protected boolean validar() {
-		if(validarDatosComunes()) {
+		if(validarDatosComunes(true)) {
 			RangoAnchoComun rangoAnchoComun = (RangoAnchoComun)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
 			if(rangoAnchoComun != null) {
 				PrecioTipoArticulo pta = rangoAnchoComun.getPrecioArticulo(getTipoArticulo());

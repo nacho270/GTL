@@ -112,7 +112,7 @@ public class ImprimirListaDePreciosHandler {
 							dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
 							dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase());
-							dTO.setDescripcion(pg.getGamaDefault().getNombre());
+							dTO.setDescripcion(pg.getGamaCliente().getNombre());
 							dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 							definicionesTO.add(dTO);
 						}
