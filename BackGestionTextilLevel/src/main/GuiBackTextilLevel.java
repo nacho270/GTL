@@ -21,7 +21,11 @@ public class GuiBackTextilLevel extends GTLMainTemplate {
 		}else{
 			setBackgroundImage("ar/com/textillevel/imagenes/logogtl-test.jpg");
 		}
-		crearTrayIcon("ar/com/textillevel/imagenes/logogtl-ventana.jpg", "Gestion TextilLevel");
+		try{
+			crearTrayIcon("ar/com/textillevel/imagenes/logogtl-ventana.jpg", "Gestion TextilLevel");
+		}catch(Exception e){
+			// aca no paso nada
+		}
 		setIconoVentana("ar/com/textillevel/imagenes/logogtl-ventana.jpg");
 //		crearStatusBar();
 	}

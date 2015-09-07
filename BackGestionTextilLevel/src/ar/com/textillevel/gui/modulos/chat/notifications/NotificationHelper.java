@@ -59,7 +59,6 @@ public class NotificationHelper {
 					}
 				}catch(Exception e){
 					//aca no paso nada
-					e.printStackTrace();
 					return;
 				}
 			}
