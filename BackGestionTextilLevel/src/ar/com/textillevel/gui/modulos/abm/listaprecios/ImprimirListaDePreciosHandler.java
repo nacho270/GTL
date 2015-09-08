@@ -10,11 +10,12 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.apache.taglibs.string.util.StringW;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+
+import org.apache.taglibs.string.util.StringW;
+
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.DateUtil;
@@ -59,7 +60,7 @@ public class ImprimirListaDePreciosHandler {
 	public ImprimirListaDePreciosHandler(Frame padre, Cliente cliente, VersionListaDePrecios versionListaDePrecios) {
 		this.padre = padre;
 		this.versionListaDePrecios = versionListaDePrecios;
-		this.definiciones = versionListaDePrecios.getPrecios();
+		this.definiciones = new ArrayList<DefinicionPrecio>(versionListaDePrecios.getPrecios());
 		for(Iterator<DefinicionPrecio> it = this.definiciones.iterator(); it.hasNext(); ){
 			DefinicionPrecio dp = it.next();
 			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
@@ -79,7 +80,7 @@ public class ImprimirListaDePreciosHandler {
 			String inputValidez = null;
 			do {
 				if(!okValidez) {
-					Object input = JOptionPane.showInputDialog(padre, "Ingrese la validez de la cotización: ", "Ingrese la validez de la cotización", JOptionPane.INFORMATION_MESSAGE, null, null, String.valueOf(parametros.getValidezCotizaciones()));
+					Object input = JOptionPane.showInputDialog(padre, "Ingrese la validez de la cotización (días): ", "Ingrese la validez de la cotización", JOptionPane.INFORMATION_MESSAGE, null, null, String.valueOf(parametros.getValidezCotizaciones()));
 					if(input == null){
 						break;
 					}
