@@ -12,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import ar.clarin.fwjava.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 
 @Entity
@@ -84,6 +86,11 @@ public class Cotizacion implements Serializable {
 
 	public void setNumero(Integer numero) {
 		this.numero = numero;
+	}
+
+	@Transient
+	public String getFechaVencimientoStr() {
+		return DateUtil.dateToString(DateUtil.sumarDias(getFechaInicio(), validez));
 	}
 
 }

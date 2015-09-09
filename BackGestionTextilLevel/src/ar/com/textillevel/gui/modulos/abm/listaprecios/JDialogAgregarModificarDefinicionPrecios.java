@@ -326,7 +326,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	public DecimalNumericTextField getTxtAnchoExacto() {
 		if (txtAnchoExacto == null) {
-			txtAnchoExacto = new DecimalNumericTextField();
+			txtAnchoExacto = crearDecimalTextField();
 			txtAnchoExacto.setEditable(false);
 		}
 		return txtAnchoExacto;

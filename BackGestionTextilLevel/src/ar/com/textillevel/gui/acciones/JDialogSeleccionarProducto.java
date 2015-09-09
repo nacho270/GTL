@@ -32,6 +32,7 @@ import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
+import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
@@ -374,7 +375,8 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 	private boolean anchoValido(Articulo art, Set<Integer> tpSet) {
 		for(Integer idTipoProd : tpSet) {
-			if(versionListaDePrecios.getDefinicionPorTipoProducto(ETipoProducto.getById(idTipoProd)).estaDefinido(art)) {
+			DefinicionPrecio def = versionListaDePrecios.getDefinicionPorTipoProducto(ETipoProducto.getById(idTipoProd));
+			if(def != null && def.estaDefinido(art)) {
 				return true;
 			}
 		}

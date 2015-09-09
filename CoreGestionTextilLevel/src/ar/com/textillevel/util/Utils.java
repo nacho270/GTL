@@ -39,13 +39,11 @@ public class Utils {
 	}
 
 	public static <E extends Object, T extends Comparable<E>> boolean dentroDelRango(T elem, E desde, E hasta) {
-		return (desde == null || elem.compareTo(desde) >= 0) &&
-			   (hasta ==null || elem.compareTo(hasta) <= 0);
+		return (desde != null || hasta != null) && (desde == null || elem.compareTo(desde) >= 0) && (hasta ==null || elem.compareTo(hasta) <= 0);
 	}
 
 	public static <E extends Object, T extends Comparable<E>> boolean dentroDelRangoEstricto(T elem, E desde, E hasta) {
-		return (desde == null || elem.compareTo(desde) > 0) &&
-			   (hasta ==null || elem.compareTo(hasta) < 0);
+		return (desde != null || hasta != null) && (desde == null || elem.compareTo(desde) > 0) && (hasta ==null || elem.compareTo(hasta) < 0);
 	}
 
 	public static boolean isConstraintViolationException (Exception e) {

@@ -290,6 +290,27 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 					}
 				}
 			}
+
+			//Chequeo que para el mismo rango de ancho/articulo pero diferente gama => no tengan el mismo precio
+			for(int i=0; i < getTablaRango().getTabla().getRowCount(); i++) {
+				RangoCoberturaEstampado rce = (RangoCoberturaEstampado)getTablaRango().getTabla().getValueAt(i, getTablaRango().getColObj());
+				PrecioBaseEstampado precioBase = rce.getRangoCantidadColores().getPrecioBase();
+				boolean mismoPrecioPeroDiferenteGama = !precioBase.getGama().equals(base) && rce.getPrecio().equals(getPrecio());
+				if(mismoPrecioPeroDiferenteGama && (elemSiendoEditado == null || elemSiendoEditado != rce)) {
+					GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase = precioBase.getGrupoTipoArticuloBase();
+					RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo();
+					boolean mismoArticulo = grupoTipoArticuloBase.getTipoArticulo().equals(getTipoArticulo()); 
+					if(mismoArticulo) {
+						boolean mismoRango = rangoAnchoArticulo.getAnchoExacto() != null && rangoAnchoArticulo.getAnchoExacto().equals(getAnchoExacto()) ||
+								 			 rangoAnchoArticulo.getAnchoMinimo().equals(getAnchoInicial()) && rangoAnchoArticulo.getAnchoMaximo().equals(getAnchoFinal());
+						if(mismoRango) {
+							CLJOptionPane.showErrorMessage(this, "El precio no puede ser el mismo para diferentes gamas y mismo ancho.", "Error");
+							getTxtPrecio().requestFocus();
+							return false;
+						}
+					}
+				}
+			}
 			return true;
 		} else {
 			return false;

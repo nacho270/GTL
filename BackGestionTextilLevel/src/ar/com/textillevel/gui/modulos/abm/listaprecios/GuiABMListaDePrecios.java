@@ -209,11 +209,13 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			limpiarDatos();
 			Cliente cliente = (Cliente) lista.getSelectedValue();
 			setListaActual(getListaDePreciosFacade().getListaByIdCliente(cliente.getId()));
+			
 			if(getListaActual() != null) {
 				ordenarVersiones();
 				getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 				getBtnModificar().setText("Modificar >>");
 				setModoEdicion(false);
+				getTablaVersiones().setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(cliente));
 			} else {
 				getBtnModificar().setText("Agregar >>");
 			}
@@ -297,9 +299,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		private static final long serialVersionUID = 524085936965031187L;
 
-		private static final int CANT_COLS = 2;
+		private static final int CANT_COLS = 3;
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
-		private static final int COL_OBJ = 1;
+		private static final int COL_ULT_COTIZACION = 1;
+		private static final int COL_OBJ = 2;
 		
 		private JButton btnImprimirVersion;
 		
@@ -312,9 +315,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		protected CLJTable construirTabla() {
 			CLJTable tabla = new CLJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_FECHA_INICIO_VALIDEZ, "VALIDA A PARTIR DE FECHA", 200, 200, true);
+			tabla.setStringColumn(COL_ULT_COTIZACION, "ULTIMA COTIZACIÓN", 300, 300, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			tabla.setHeaderAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ULT_COTIZACION, CLJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_ULT_COTIZACION, CLJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
@@ -375,6 +381,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					
 					getTablaVersiones().limpiar();
 					getTablaVersiones().agregarElementos(getListaActual().getVersiones());
+					
+					setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
 				}
 			}
 			return false;
@@ -395,15 +403,22 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				btnImprimirVersion.setEnabled(false);
 				btnImprimirVersion.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int selectedRow = getTabla().getSelectedRow();
 						if (getListaActual().getVersiones().size() > 1) {
-							int selectedRow = getTabla().getSelectedRow();
 							if (selectedRow + 1 < getListaActual().getVersiones().size() ) {
 								if (CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this.getFrame(), "Ha seleccionado imprimir una versión que no es actual. Desea continuar?", "Pregunta") == CLJOptionPane.NO_OPTION) {
 									return;
 								}
 							}
 						}
-						new ImprimirListaDePreciosHandler(GuiABMListaDePrecios.this.getFrame(), getListaActual().getCliente(), getListaActual().getVersiones().get(getListaActual().getVersiones().size()-1)).imprimir();
+						VersionListaDePrecios version = getTablaVersiones().getElemento(selectedRow);
+						if(version.getId() == null) {//i.e es una versión no persistida se avisa que primero grabe y después imprima
+							CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("La versión seleccionada no ha sido grabada y no se puede generar la cotización. Por favor, grabe los cambios y después reintente."), "Error");
+							return;
+						}
+						new ImprimirListaDePreciosHandler(GuiABMListaDePrecios.this.getFrame(), getListaActual().getCliente(), version).imprimir();
+						
+						getTablaVersiones().setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
 					}
 				});
 			}
@@ -442,6 +457,19 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				return null;
 			}
 		}
+
+		public void setCotizacionVigente(Cotizacion cotizacion) {
+			if(cotizacion != null) {
+				for(int i=0; i < getTabla().getRowCount(); i++) {
+					VersionListaDePrecios elemento = getElemento(i);
+					if(cotizacion.getVersionListaPrecio().getId().equals(elemento.getId())) {
+						getTabla().setValueAt("COTIZACION NRO. '" + cotizacion.getNumero() + "' VIGENTE. VENCE: " + cotizacion.getFechaVencimientoStr(), i, COL_ULT_COTIZACION);
+						return;
+					}
+				}
+			}
+		}
+	
 	}
 	
 	private class PanelTablaDefinicionesPrecio extends PanelTabla<DefinicionPrecio> {
