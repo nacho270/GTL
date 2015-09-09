@@ -158,11 +158,14 @@ public class JFrameVerMovimientos extends JFrame {
 //	private JButton btnEliminarRecibo;
 	private JButton btnAgregarObservaciones;
 	private JButton btnVisualizarCotizacionActual;
+	private JButton btnEnviarCotizacionPorEmail;
+
 	
 	private UsuarioSistema usuarioAdministrador;
 	private Cliente clienteBuscado;
 	private VersionListaDePrecios versionListaDePreciosCotizada;
 	private Cotizacion cotizacionActual;
+	JasperPrint jasperPrintCotizacion = null;
 	
 	public JFrameVerMovimientos(Frame padre) {
 		setUpComponentes();
@@ -649,6 +652,7 @@ public class JFrameVerMovimientos extends JFrame {
 			panelAcciones = new JPanel();
 			panelAcciones.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 2));
 			panelAcciones.add(getBtnVisualizarCotizacionActual());
+			panelAcciones.add(getBtnEnviarCotizacionPorEmail());
 			panelAcciones.add(getBtnAnular());
 			panelAcciones.add(getBtnEliminarFactura());
 			panelAcciones.add(getBtnEditar());
@@ -803,21 +807,24 @@ public class JFrameVerMovimientos extends JFrame {
 			btnVisualizarCotizacionActual.setEnabled(false);
 			btnVisualizarCotizacionActual.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Cliente cliente = getClienteBuscado();
-					if (cliente == null) {
-						cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getClienteByNumero(getTxtBusquedaCliente().getValue());
+					createJasperPrintCotizacion();
+					if (jasperPrintCotizacion != null) {
+						JasperHelper.visualizarReporte(jasperPrintCotizacion);
 					}
-					if (cliente != null) {
-						if (cotizacionActual != null) {
-							JasperPrint jasperPrint = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
-									cotizacionActual.getVersionListaPrecio()).createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero());
-							JasperHelper.visualizarReporte(jasperPrint);
-						} else if (versionListaDePreciosCotizada != null) {
-							JasperPrint jasperPrint = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
-									versionListaDePreciosCotizada).createJasperPrint("30", null);
-							JasperHelper.visualizarReporte(jasperPrint);
-						}
-					}
+				}
+			});
+		}
+		return btnVisualizarCotizacionActual;
+	}
+	
+	private JButton getBtnEnviarCotizacionPorEmail() {
+		if (btnEnviarCotizacionPorEmail == null) {
+			btnEnviarCotizacionPorEmail = BossEstilos.createButton("ar/com/textillevel/imagenes/b_venta.png", "ar/com/textillevel/imagenes/b_venta_des.png");
+			btnEnviarCotizacionPorEmail.setToolTipText("Enviar lista de precios actual por email");
+			btnEnviarCotizacionPorEmail.setEnabled(false);
+			btnEnviarCotizacionPorEmail.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					createJasperPrintCotizacion();
 				}
 			});
 		}
@@ -1732,6 +1739,22 @@ public class JFrameVerMovimientos extends JFrame {
 
 	public VersionListaDePrecios getVersionListaDePreciosCotizada() {
 		return versionListaDePreciosCotizada;
+	}
+
+	private void createJasperPrintCotizacion() {
+		Cliente cliente = getClienteBuscado();
+		if (cliente == null) {
+			cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getClienteByNumero(getTxtBusquedaCliente().getValue());
+		}
+		if (cliente != null) {
+			if (cotizacionActual != null) {
+				jasperPrintCotizacion = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
+						cotizacionActual.getVersionListaPrecio()).createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero());
+			} else if (versionListaDePreciosCotizada != null) {
+				jasperPrintCotizacion = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
+						versionListaDePreciosCotizada).createJasperPrint("30", null);
+			}
+		}
 	}
 	
 //	private JComboBox getCmbOrdenMovimientos() {

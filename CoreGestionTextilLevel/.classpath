@@ -6,8 +6,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5.0_22"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLibJEE"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/FWJava"/>
 	<classpathentry kind="lib" path="lib/jasperreports-3.7.3.jar"/>
 	<classpathentry kind="lib" path="lib/jnotify-0.93.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FWCommon"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

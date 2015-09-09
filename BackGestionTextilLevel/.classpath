@@ -21,9 +21,9 @@
 	<classpathentry kind="lib" path="lib/swt-4.2.1-x64.jar"/>
 	<classpathentry kind="lib" path="lib/swt.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CoreGestionTextilLevel"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/FWJava"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLibJEE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FWCommon"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
