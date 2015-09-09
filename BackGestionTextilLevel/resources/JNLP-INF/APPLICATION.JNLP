@@ -110,6 +110,8 @@
     <property name="applicationName" value="GTL"/>
 	<property name="textillevel.chat.server.ip" value="192.168.1.250"/>
     <property name="textillevel.chat.server.port" value="7777"/>
+	<property name="textillevel.email.user" value="administracion@textillevel.com"/>
+	<property name="textillevel.email.pass" value="la clave"/>
 	
 
     <property name="com.sun.management.jmxremote" value="" />

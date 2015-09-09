@@ -21,11 +21,25 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.imageio.ImageIO;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -409,4 +423,40 @@ public class GenericUtils {
 		provider.finish();
 		return provider.getBufferedImage();
 	}
+
+	public static void enviarEmail(String asunto, String cuerpo, File file, String... recipents) throws AddressException, MessagingException {
+		Properties mailServerProperties = System.getProperties();
+		mailServerProperties.put("mail.smtp.port", "587");
+		mailServerProperties.put("mail.smtp.auth", "true");
+		mailServerProperties.put("mail.smtp.starttls.enable", "true");
+ 
+		Session getMailSession = Session.getDefaultInstance(mailServerProperties, null);
+		Message generateMailMessage = new MimeMessage(getMailSession);
+		for (String recipent : recipents) {
+			try {
+				generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipent));
+			} catch (AddressException ae) {
+				continue; // evito el email erroneo
+			}
+		}
+		generateMailMessage.setSubject(asunto);
+		generateMailMessage.setContent(cuerpo, "text/html");
+		
+		if (file != null) {
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+	        Multipart multipart = new MimeMultipart();
+	        messageBodyPart = new MimeBodyPart();
+	        DataSource source = new FileDataSource(file);
+	        messageBodyPart.setDataHandler(new DataHandler(source));
+	        messageBodyPart.setFileName(file.getName());
+	        multipart.addBodyPart(messageBodyPart);
+	        generateMailMessage.setContent(multipart);
+		}
+		Transport transport = getMailSession.getTransport("smtp");
+		transport.connect("smtp.gmail.com", mailServerProperties.getProperty("textillevel.email.user"),
+				mailServerProperties.getProperty("textillevel.email.pass"));
+		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
+		transport.close();
+	}
+	
 }
