@@ -87,6 +87,8 @@ public class ImprimirListaDePreciosHandler {
 					inputValidez = input.toString();
 					if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
 						CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
+					} else if(Integer.valueOf(inputValidez) > 60){
+						CLJOptionPane.showErrorMessage(padre, "La validez no puede superar los 60 días.", "error");
 					} else {
 						okValidez = true;
 						break;

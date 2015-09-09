@@ -213,6 +213,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				ordenarVersiones();
 				getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 				getBtnModificar().setText("Modificar >>");
+				setModoEdicion(false);
 			} else {
 				getBtnModificar().setText("Agregar >>");
 			}
