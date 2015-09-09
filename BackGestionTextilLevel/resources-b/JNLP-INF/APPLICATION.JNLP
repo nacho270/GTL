@@ -91,10 +91,14 @@
     <jar href="DJNativeSwing-SWT.jar"/>
     <jar href="DJNativeSwing.jar"/>
     <jar href="swt-3.6M3-win32-win32-x86.jar"/>
+    <jar href="javax.mail-api-1.5.4.jar"/>
+	<jar href="mail-1.4.7.jar"/>
     <property name="applicationName" value="GTL"/>
 	<property name="textillevel.chat.server.ip" value="192.168.0.100"/>
     <property name="textillevel.chat.server.port" value="7778"/>
-
+	<property name="textillevel.email.user" value="administracion@textillevel.com"/>
+	<property name="textillevel.email.pass" value="la clave"/>
+	
     <property name="com.sun.management.jmxremote" value="" />
 
     <property name="swing.disableFileChooserSpeedFix" value="true"/>
