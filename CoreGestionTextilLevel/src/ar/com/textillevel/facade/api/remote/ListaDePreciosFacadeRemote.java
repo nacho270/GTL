@@ -29,5 +29,8 @@ public interface ListaDePreciosFacadeRemote {
 	public Cotizacion generarCotizacion(Cliente cliente, VersionListaDePrecios versionListaDePrecios, Integer validez) throws ValidacionException;
 
 	public Cotizacion getUltimaCotizacionVigente(VersionListaDePrecios version);
+	
+	public Cotizacion getCotizacionVigente(Cliente cliente);
 
+	public VersionListaDePrecios getVersionActual(Cliente cliente) throws ValidacionException;	
 }

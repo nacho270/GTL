@@ -185,5 +185,21 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 			return null;
 		}
 	}
+	
+	public Cotizacion getCotizacionVigente(Cliente cliente) {
+		Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacion(cliente);
+		if(cotizacionVigente(cotizacion)) {
+			doEagerVersionListaDePrecios(cotizacion.getVersionListaPrecio());
+			return cotizacion;
+		}
+		return null;
+	}
 
+	public VersionListaDePrecios getVersionActual(Cliente cliente) throws ValidacionException {
+		VersionListaDePrecios versionActual = getVersionListaPrecioActual(cliente);
+		if (versionActual != null) {
+			doEagerVersionListaDePrecios(versionActual);
+		}
+		return versionActual;
+	}
 }

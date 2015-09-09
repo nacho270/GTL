@@ -102,19 +102,27 @@ public class ImprimirListaDePreciosHandler {
 
 			Cotizacion cotizacion = generarYGrabarCotizacion(Integer.valueOf(inputValidez));
 
-			JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_COTIZACION);
-			try {
-				JasperPrint jasperPrint = JasperHelper.fillReport(reporte, getParameters(inputValidez, cotizacion.getNumero()), createDefiniciones());
-				JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
-			} catch (JRException e) {
-				e.printStackTrace();
-			}
+			imprimir(inputValidez, cotizacion != null ? cotizacion.getNumero() : null);
 			if(cotizacion != null) {
 				CLJOptionPane.showInformationMessage(padre, "Se generó la cotización número '" + cotizacion.getNumero() + "'.", "Información");
 			}
 		} else {
 			return;
 		}
+	}
+	
+	public void imprimir(String validez, Integer nroCotizacion) {
+		try {
+			JasperPrint jasperPrint = createJasperPrint(validez, nroCotizacion);
+			JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
+		} catch (JRException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public JasperPrint createJasperPrint(String validez, Integer nroCotizacion) {
+		JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_COTIZACION);
+		return JasperHelper.fillReport(reporte, getParameters(validez, nroCotizacion), createDefiniciones());
 	}
 
 	private Cotizacion generarYGrabarCotizacion(Integer validez) {
@@ -189,14 +197,20 @@ public class ImprimirListaDePreciosHandler {
 		mapa.put("CORREO", cliente.getEmail());
 		mapa.put("CLIENTE", cliente.getRazonSocial());
 		mapa.put("CONTACTO", cliente.getContacto());
-		String condicion = cliente.getCondicionVenta().getNombre().toLowerCase().contains("dias") ? cliente.getCondicionVenta().getNombre() : cliente.getCondicionVenta().getNombre() + " DIAS";
-		mapa.put("COND_PAGO", condicion + " a partir de fecha de factura (no se aceptan promedios)."); // a riBer le gusta esto
+		String condicion = cliente.getCondicionVenta().getNombre().toLowerCase();
+		if (condicion.contains("efectivo")){
+			condicion = "EFECTIVO";
+		} else {
+			condicion = condicion.contains("dias") ? cliente.getCondicionVenta().getNombre() : cliente.getCondicionVenta().getNombre() + " DIAS";
+			condicion = condicion + " a partir de fecha de factura (no se aceptan promedios)."; // a riBer le gusta esto
+		}
+		mapa.put("COND_PAGO", condicion);
 		mapa.put("VALIDEZ", validez + " días");
 		mapa.put("SEGURO", parametros.getPorcentajeSeguro() + "%.");
 		mapa.put("TUBOS", "$ " + parametros.getPrecioPorTubo() + "* c/u.");
 		mapa.put("CARGA_MINIMA_COLOR", parametros.getCargaMinimaColor() + " Kg. por color.");
 		mapa.put("CARGA_MINIMA_ESTAMPADO", parametros.getCargaMinimaEstampado() + " Mts. por variante.");
-		mapa.put("NRO_COTIZACION", ""+nroCotizacion);
+		mapa.put("NRO_COTIZACION", ""+ (nroCotizacion == null ? "" : nroCotizacion));
 		return mapa;
 	}
 

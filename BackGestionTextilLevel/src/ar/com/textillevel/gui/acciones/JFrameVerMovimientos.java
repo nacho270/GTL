@@ -45,6 +45,7 @@ import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileFilter;
 
 import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -74,10 +75,14 @@ import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
+import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.excepciones.EValidacionException;
+import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CuentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ReciboFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
@@ -93,6 +98,7 @@ import ar.com.textillevel.gui.acciones.visitor.cuenta.GenerarFilaMovimientoVisit
 import ar.com.textillevel.gui.acciones.visitor.cuenta.HabilitarBotonesCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.PintarFilaReciboVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.PintarRecibosSecondPassVisitor;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.ImprimirListaDePreciosHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
 import ar.com.textillevel.gui.util.JasperHelper;
@@ -130,13 +136,14 @@ public class JFrameVerMovimientos extends JFrame {
 
 	private GenerarFilaMovimientoVisitor filaMovimientoVisitor;
 	private IFilaMovimientoVisitor consultaDocumentoMovimientoVisitor;
-
+	
 	private CuentaFacadeRemote cuentaFacade;
 	private FacturaFacadeRemote facturaFacade;
 	private ReciboFacadeRemote reciboFacade;
 	private CorreccionFacadeRemote correccionFacade;
 	private RemitoSalidaFacadeRemote remitoSalidaFacade;
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
+	private ListaDePreciosFacadeRemote listaDePreciosFacade;
 
 	/** ACCIONES **/
 
@@ -150,9 +157,12 @@ public class JFrameVerMovimientos extends JFrame {
 	private JButton btnAgregarRecibo;
 //	private JButton btnEliminarRecibo;
 	private JButton btnAgregarObservaciones;
+	private JButton btnVisualizarCotizacionActual;
 	
 	private UsuarioSistema usuarioAdministrador;
 	private Cliente clienteBuscado;
+	private VersionListaDePrecios versionListaDePreciosCotizada;
+	private Cotizacion cotizacionActual;
 	
 	public JFrameVerMovimientos(Frame padre) {
 		setUpComponentes();
@@ -486,6 +496,23 @@ public class JFrameVerMovimientos extends JFrame {
 					} else {
 						CLJOptionPane.showWarningMessage(JFrameVerMovimientos.this, "El cliente no registra movimientos", "Error");
 					}
+					Cliente cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getClienteByNumero(idCliente);
+					if (cliente != null) {
+						try {
+							cotizacionActual = getListaDePreciosFacade().getCotizacionVigente(cliente);
+							if (cotizacionActual == null) {
+								versionListaDePreciosCotizada = getListaDePreciosFacade().getVersionActual(cliente);
+							}
+							getBtnVisualizarCotizacionActual().setEnabled(true);
+						}catch(ValidacionException vle) {
+							versionListaDePreciosCotizada = null;
+							getBtnVisualizarCotizacionActual().setEnabled(false);
+						}
+					} else {
+						versionListaDePreciosCotizada = null;
+						getBtnVisualizarCotizacionActual().setEnabled(false);
+					}
+					
 				}catch(ValidacionException vle){
 					CLJOptionPane.showErrorMessage(JFrameVerMovimientos.this, vle.getMensajeError(), "Error");
 				}
@@ -621,6 +648,7 @@ public class JFrameVerMovimientos extends JFrame {
 		if (panelAcciones == null) {
 			panelAcciones = new JPanel();
 			panelAcciones.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 2));
+			panelAcciones.add(getBtnVisualizarCotizacionActual());
 			panelAcciones.add(getBtnAnular());
 			panelAcciones.add(getBtnEliminarFactura());
 			panelAcciones.add(getBtnEditar());
@@ -766,6 +794,34 @@ public class JFrameVerMovimientos extends JFrame {
 			});
 		}
 		return btnAgregarObservaciones;
+	}
+	
+	private JButton getBtnVisualizarCotizacionActual() {
+		if (btnVisualizarCotizacionActual == null) {
+			btnVisualizarCotizacionActual = BossEstilos.createButton("ar/com/textillevel/imagenes/b_venta.png", "ar/com/textillevel/imagenes/b_venta_des.png");
+			btnVisualizarCotizacionActual.setToolTipText("Visualizar lista de precios actual");
+			btnVisualizarCotizacionActual.setEnabled(false);
+			btnVisualizarCotizacionActual.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Cliente cliente = getClienteBuscado();
+					if (cliente == null) {
+						cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getClienteByNumero(getTxtBusquedaCliente().getValue());
+					}
+					if (cliente != null) {
+						if (cotizacionActual != null) {
+							JasperPrint jasperPrint = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
+									cotizacionActual.getVersionListaPrecio()).createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero());
+							JasperHelper.visualizarReporte(jasperPrint);
+						} else if (versionListaDePreciosCotizada != null) {
+							JasperPrint jasperPrint = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
+									versionListaDePreciosCotizada).createJasperPrint("30", null);
+							JasperHelper.visualizarReporte(jasperPrint);
+						}
+					}
+				}
+			});
+		}
+		return btnVisualizarCotizacionActual;
 	}
 	
 //	public JButton getBtnEliminarRecibo() {
@@ -1665,6 +1721,17 @@ public class JFrameVerMovimientos extends JFrame {
 		JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this,correccion, false);
 		dialogCargaFactura.setVisible(true);
 		buscarMovimientos();
+	}
+
+	public ListaDePreciosFacadeRemote getListaDePreciosFacade() {
+		if (listaDePreciosFacade == null) {
+			listaDePreciosFacade = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class);
+		}
+		return listaDePreciosFacade;
+	}
+
+	public VersionListaDePrecios getVersionListaDePreciosCotizada() {
+		return versionListaDePreciosCotizada;
 	}
 	
 //	private JComboBox getCmbOrdenMovimientos() {
