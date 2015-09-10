@@ -431,31 +431,37 @@ public class GenericUtils {
 		mailServerProperties.put("mail.smtp.starttls.enable", "true");
  
 		Session getMailSession = Session.getDefaultInstance(mailServerProperties, null);
-		Message generateMailMessage = new MimeMessage(getMailSession);
+		Message mailMessage = new MimeMessage(getMailSession);
 		for (String recipent : recipents) {
 			try {
-				generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipent));
+				mailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipent));
 			} catch (AddressException ae) {
 				continue; // evito el email erroneo
 			}
 		}
-		generateMailMessage.setSubject(asunto);
-		generateMailMessage.setContent(cuerpo, "text/html");
-		
+		mailMessage.setSubject(asunto);
+		mailMessage.setSentDate(new java.util.Date());
 		if (file != null) {
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
-	        Multipart multipart = new MimeMultipart();
-	        messageBodyPart = new MimeBodyPart();
+			MimeBodyPart mimeBodyPartCuerpo = new MimeBodyPart();
+			mimeBodyPartCuerpo.setContent(cuerpo, "text/html");
+			
+			MimeBodyPart mimeBodyPartFile = new MimeBodyPart();
 	        DataSource source = new FileDataSource(file);
-	        messageBodyPart.setDataHandler(new DataHandler(source));
-	        messageBodyPart.setFileName(file.getName());
-	        multipart.addBodyPart(messageBodyPart);
-	        generateMailMessage.setContent(multipart);
+	        mimeBodyPartFile.setDataHandler(new DataHandler(source));
+	        mimeBodyPartFile.setFileName(file.getName());
+	       
+	        Multipart multipart = new MimeMultipart();
+	        multipart.addBodyPart(mimeBodyPartCuerpo);
+	        multipart.addBodyPart(mimeBodyPartFile);
+	        mailMessage.setContent(multipart);
+	        mailMessage.saveChanges();
+		} else {
+			mailMessage.setContent(cuerpo, "text/html");
 		}
 		Transport transport = getMailSession.getTransport("smtp");
 		transport.connect("smtp.gmail.com", mailServerProperties.getProperty("textillevel.email.user"),
 				mailServerProperties.getProperty("textillevel.email.pass"));
-		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
+		transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
 		transport.close();
 	}
 	

@@ -507,13 +507,16 @@ public class JFrameVerMovimientos extends JFrame {
 								versionListaDePreciosCotizada = getListaDePreciosFacade().getVersionActual(cliente);
 							}
 							getBtnVisualizarCotizacionActual().setEnabled(true);
+							getBtnEnviarCotizacionPorEmail().setEnabled(cotizacionActual != null && cliente.getEmail() != null);
 						}catch(ValidacionException vle) {
 							versionListaDePreciosCotizada = null;
 							getBtnVisualizarCotizacionActual().setEnabled(false);
+							getBtnEnviarCotizacionPorEmail().setEnabled(false);
 						}
 					} else {
 						versionListaDePreciosCotizada = null;
 						getBtnVisualizarCotizacionActual().setEnabled(false);
+						getBtnEnviarCotizacionPorEmail().setEnabled(false);
 					}
 					
 				}catch(ValidacionException vle){
@@ -819,16 +822,29 @@ public class JFrameVerMovimientos extends JFrame {
 	
 	private JButton getBtnEnviarCotizacionPorEmail() {
 		if (btnEnviarCotizacionPorEmail == null) {
-			btnEnviarCotizacionPorEmail = BossEstilos.createButton("ar/com/textillevel/imagenes/b_venta.png", "ar/com/textillevel/imagenes/b_venta_des.png");
+			btnEnviarCotizacionPorEmail = BossEstilos.createButton("ar/com/textillevel/imagenes/b_cotizacion_email.png", "ar/com/textillevel/imagenes/b_cotizacion_email_des.png");
 			btnEnviarCotizacionPorEmail.setToolTipText("Enviar lista de precios actual por email");
 			btnEnviarCotizacionPorEmail.setEnabled(false);
 			btnEnviarCotizacionPorEmail.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					createJasperPrintCotizacion();
+					if (jasperPrintCotizacion != null) {
+						try {
+							File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
+							JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
+							GenericUtils.enviarEmail("Nueva cotización", "Sres " + getClienteBuscado().getRazonSocial() + ",<br>" + 
+									"Por medio de la presente, adjuntamos una nueva cotizaci&oacute;n de nuestros precios.<br><br>Saluda Atte.<br>Textil Level S.A.",
+									file, getClienteBuscado().getEmail());
+							CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotizacion por correo a " + getClienteBuscado().getEmail(), "Información");
+							file.delete();
+						}catch(Exception ex){
+							ex.printStackTrace();
+						}
+					}
 				}
 			});
 		}
-		return btnVisualizarCotizacionActual;
+		return btnEnviarCotizacionPorEmail;
 	}
 	
 //	public JButton getBtnEliminarRecibo() {
@@ -1745,6 +1761,7 @@ public class JFrameVerMovimientos extends JFrame {
 		Cliente cliente = getClienteBuscado();
 		if (cliente == null) {
 			cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getClienteByNumero(getTxtBusquedaCliente().getValue());
+			this.clienteBuscado = cliente;
 		}
 		if (cliente != null) {
 			if (cotizacionActual != null) {

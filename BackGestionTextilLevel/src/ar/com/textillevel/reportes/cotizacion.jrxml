@@ -17,7 +17,7 @@
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="precio" class="java.lang.String"/>
 	<title>
-		<band height="103" splitType="Stretch">
+		<band height="246" splitType="Stretch">
 			<staticText>
 				<reportElement x="98" y="24" width="208" height="15"/>
 				<textElement>
@@ -76,6 +76,72 @@
 				</textElement>
 				<text><![CDATA[COTIZACION   Nº]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="66" y="112" width="47" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="132" width="46" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Correo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="152" width="55" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Contacto: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="172" width="101" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Condición de pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="192" width="97" height="20"/>
+				<textElement>
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Validez cotización:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="113" y="132" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CORREO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="112" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLIENTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="152" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONTACTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="172" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{COND_PAGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="192" width="425" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{VALIDEZ}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="218" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25"/>
+				</graphicElement>
+			</line>
 			<textField isBlankWhenNull="true">
 				<reportElement x="342" y="0" width="167" height="20"/>
 				<textElement>
@@ -83,89 +149,19 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_COTIZACION}]]></textFieldExpression>
 			</textField>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="116">
 			<staticText>
-				<reportElement x="66" y="5" width="47" height="20"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cliente:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="67" y="25" width="46" height="20"/>
-				<textElement>
-					<font isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[Correo:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="58" y="45" width="55" height="20"/>
-				<textElement>
-					<font isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[Contacto: ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="12" y="65" width="101" height="20"/>
-				<textElement>
-					<font isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[Condición de pago:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="16" y="85" width="97" height="20"/>
-				<textElement>
-					<font isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[Validez cotización:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="113" y="25" width="425" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{CORREO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="113" y="5" width="425" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLIENTE}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="113" y="45" width="425" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{CONTACTO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="113" y="65" width="425" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{COND_PAGO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="113" y="85" width="425" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{VALIDEZ}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="0" y="111" width="555" height="1"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="47">
-			<staticText>
-				<reportElement x="0" y="5" width="555" height="20"/>
+				<reportElement x="0" y="221" width="555" height="20"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[En esta oportunidad nos dirijimos a Ud. a fin de comunicarle los precios de nuestros servicios.]]></text>
 			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="22">
 			<staticText>
-				<reportElement x="1" y="27" width="104" height="20"/>
+				<reportElement x="1" y="2" width="104" height="20"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -177,7 +173,7 @@
 				<text><![CDATA[SERVICIO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="27" width="86" height="20"/>
+				<reportElement x="105" y="2" width="86" height="20"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -189,7 +185,7 @@
 				<text><![CDATA[ANCHO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="27" width="100" height="20"/>
+				<reportElement x="191" y="2" width="100" height="20"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -201,7 +197,7 @@
 				<text><![CDATA[ARTICULO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="291" y="27" width="186" height="20"/>
+				<reportElement x="291" y="2" width="186" height="20"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -213,7 +209,7 @@
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="477" y="27" width="78" height="20"/>
+				<reportElement x="477" y="2" width="78" height="20"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
