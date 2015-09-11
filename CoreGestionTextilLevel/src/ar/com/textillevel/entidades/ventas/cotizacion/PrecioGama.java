@@ -135,4 +135,15 @@ public class PrecioGama implements Serializable, Comparable<PrecioGama> {
 			return false;
 		return true;
 	}
+
+	@Transient
+	public PrecioGama deepClone(GrupoTipoArticuloGama grupo) {
+		PrecioGama precioGama = new PrecioGama();
+		precioGama.setGrupoTipoArticuloGama(grupo);
+		precioGama.setGamaCliente(getGamaCliente());
+		precioGama.setGamaDefault(getGamaDefault());
+		precioGama.setPrecio(getPrecio());
+		return precioGama;
+	}
+
 }

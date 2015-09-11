@@ -182,4 +182,16 @@ public class RangoCantidadColores implements Serializable, Comparable<RangoCanti
 		return true;
 	}
 
+	@Transient
+	public RangoCantidadColores deepClone(PrecioBaseEstampado precio) {
+		RangoCantidadColores rango = new RangoCantidadColores();
+		rango.setMaximo(getMaximo());
+		rango.setMinimo(getMinimo());
+		rango.setPrecioBase(precio);
+		for(RangoCoberturaEstampado rce : getRangos()) {
+			rango.getRangos().add(rce.deepClone(rango));
+		}
+		return rango;
+	}
+
 }

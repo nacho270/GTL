@@ -21,7 +21,7 @@ import ar.com.textillevel.entidades.enums.ETipoProducto;
 
 @Entity
 @Table(name = "T_VERSION_LISTA_PRECIO")
-public class VersionListaDePrecios implements Serializable{
+public class VersionListaDePrecios implements Serializable {
 
 	private static final long serialVersionUID = 8639306062580166848L;
 	
@@ -110,4 +110,15 @@ public class VersionListaDePrecios implements Serializable{
 		}
 		return null;
 	}
+
+	@Transient
+	public VersionListaDePrecios deepClone() {
+		VersionListaDePrecios version = new VersionListaDePrecios();
+		version.setInicioValidez(getInicioValidez());
+		for(DefinicionPrecio def : getPrecios()) {
+			version.getPrecios().add(def.deepClone());
+		}
+		return version;
+	}
+
 }

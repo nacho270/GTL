@@ -150,4 +150,15 @@ public class RangoCoberturaEstampado implements Serializable, Comparable<RangoCo
 	public String toString() {
 		return "De " + getMinimo().toString() + "% a " + getMaximo().toString() + "%";
 	}
+
+	@Transient
+	public RangoCoberturaEstampado deepClone(RangoCantidadColores rango) {
+		RangoCoberturaEstampado rce = new RangoCoberturaEstampado();
+		rce.setRangoCantidadColores(rango);
+		rce.setMaximo(getMaximo());
+		rce.setMinimo(getMinimo());
+		rce.setPrecio(getPrecio());
+		return rce;
+	}
+
 }

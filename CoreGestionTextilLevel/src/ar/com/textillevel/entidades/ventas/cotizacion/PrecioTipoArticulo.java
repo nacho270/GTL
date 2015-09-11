@@ -80,4 +80,13 @@ public class PrecioTipoArticulo extends GrupoTipoArticulo implements Serializabl
 		return true;
 	}
 
+	@Transient
+	public PrecioTipoArticulo deepClone(RangoAnchoComun rango) {
+		PrecioTipoArticulo precio = new PrecioTipoArticulo();
+		precio.setPrecio(getPrecio());
+		precio.setRangoAncho(rango);
+		precio.setTipoArticulo(getTipoArticulo());
+		return precio;
+	}
+
 }

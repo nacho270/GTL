@@ -190,4 +190,14 @@ public class DefinicionPrecio implements Serializable {
 		return false;
 	}
 
+	@Transient
+	public DefinicionPrecio deepClone() {
+		DefinicionPrecio def = new DefinicionPrecio();
+		def.setTipoProducto(getTipoProducto());
+		for(RangoAncho ra : getRangos()) {
+			def.getRangos().add(ra.deepClone(def));
+		}
+		return def;
+	}
+
 }

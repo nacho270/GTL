@@ -680,8 +680,24 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		if(versionParaEditar.getId() != null) {
 			Cotizacion ultimaCotizacion = getListaDePreciosFacade().getUltimaCotizacionVigente(versionParaEditar);
 			if(ultimaCotizacion != null) {
-				CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede editar la lista de precios porque la cotización número '" + ultimaCotizacion.getNumero() + "' aún está vigente. Por favor, pruebe de crear una nueva lista de precios."), "Advertencia");
-				return true;
+				int res = CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede editar la lista de precios porque la cotización NRO. '" + ultimaCotizacion.getNumero() + "' aún está vigente. ¿Desea crear una nueva versión?."), "Advertencia");
+				if(CLJOptionPane.YES_OPTION == res) {
+					JDialogInputFecha dialogoFecha = new JDialogInputFecha(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez");
+					dialogoFecha.setVisible(true);
+					Date fechaInicioValidez = dialogoFecha.getFecha();
+					if(fechaInicioValidez != null) {
+						VersionListaDePrecios nuevaVersion = versionParaEditar.deepClone();
+						nuevaVersion.setInicioValidez(fechaInicioValidez);
+						getListaActual().getVersiones().add(nuevaVersion);
+						ordenarVersiones();
+						getTablaVersiones().limpiar();
+						getTablaVersiones().agregarElementos(getListaActual().getVersiones());
+						getTablaVersiones().setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
+					}
+					return true;
+				} else {
+					return true;
+				}
 			}
 		}
 		return false;

@@ -67,4 +67,18 @@ public class RangoAnchoComun extends RangoAncho {
 		return enRango(art.getAncho().floatValue()) && getPrecioArticulo(art.getTipoArticulo()) != null;
 	}
 
+	@Override
+	@Transient
+	public RangoAnchoComun deepClone(DefinicionPrecio def) {
+		RangoAnchoComun rango = new RangoAnchoComun();
+		rango.setDefinicionPrecio(def);
+		rango.setAnchoExacto(getAnchoExacto());
+		rango.setAnchoMaximo(getAnchoMaximo());
+		rango.setAnchoMinimo(getAnchoMinimo());
+		for(PrecioTipoArticulo g : getPrecios()) {
+			rango.getPrecios().add(g.deepClone(rango));
+		}
+		return rango;
+	}
+
 }

@@ -159,4 +159,15 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 		return true;
 	}
 
+	@Transient
+	public PrecioBaseEstampado deepClone(GrupoTipoArticuloBaseEstampado grupo) {
+		PrecioBaseEstampado precio = new PrecioBaseEstampado();
+		precio.setGrupoTipoArticuloBase(grupo);
+		precio.setGama(getGama());
+		for(RangoCantidadColores rcc : getRangosDeColores()) {
+			precio.getRangosDeColores().add(rcc.deepClone(precio));
+		}
+		return precio;
+	}
+
 }

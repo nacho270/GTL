@@ -179,5 +179,8 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 
 	@Transient
 	public abstract boolean estaDefinido(Articulo art);
-	
+
+	@Transient
+	public abstract RangoAncho deepClone(DefinicionPrecio def);
+
 }

@@ -83,4 +83,15 @@ public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializ
 		return null;
 	}
 
+	@Transient
+	public GrupoTipoArticuloGama deepClone(RangoAnchoArticuloTenido rango) {
+		GrupoTipoArticuloGama grupo = new GrupoTipoArticuloGama();
+		grupo.setTipoArticulo(getTipoArticulo());
+		grupo.setRangoAnchoArticuloTenido(rango);
+		for(PrecioGama p : getPrecios()) {
+			grupo.getPrecios().add(p.deepClone(grupo));
+		}
+		return grupo;
+	}
+
 }

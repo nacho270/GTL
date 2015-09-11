@@ -19,10 +19,10 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 
 @Entity
 @DiscriminatorValue(value = "RANGOTENIDO")
-public class RangoAnchoArticuloTenido extends RangoAncho{
+public class RangoAnchoArticuloTenido extends RangoAncho {
 
 	private static final long serialVersionUID = -8264351911905316172L;
-	
+
 	private List<GrupoTipoArticuloGama> gruposGama;
 
 	public RangoAnchoArticuloTenido() {
@@ -69,6 +69,20 @@ public class RangoAnchoArticuloTenido extends RangoAncho{
 	@Transient
 	public boolean estaDefinido(Articulo art) {
 		return enRango(art.getAncho().floatValue()) && getGrupo(art.getTipoArticulo()) != null;
+	}
+
+	@Override
+	@Transient
+	public RangoAncho deepClone(DefinicionPrecio def) {
+		RangoAnchoArticuloTenido rango = new RangoAnchoArticuloTenido();
+		rango.setDefinicionPrecio(def);
+		rango.setAnchoExacto(getAnchoExacto());
+		rango.setAnchoMaximo(getAnchoMaximo());
+		rango.setAnchoMinimo(getAnchoMinimo());
+		for(GrupoTipoArticuloGama g : getGruposGama()) {
+			rango.getGruposGama().add(g.deepClone(rango));
+		}
+		return rango;
 	}
 
 }

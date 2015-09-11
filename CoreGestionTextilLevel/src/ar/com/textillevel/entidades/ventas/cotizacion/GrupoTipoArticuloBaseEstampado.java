@@ -94,4 +94,15 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		return null;
 	}
 
+	@Transient
+	public GrupoTipoArticuloBaseEstampado deepClone(RangoAnchoArticuloEstampado rango) {
+		GrupoTipoArticuloBaseEstampado grupo = new GrupoTipoArticuloBaseEstampado();
+		grupo.setTipoArticulo(getTipoArticulo());
+		grupo.setRangoAnchoArticulo(rango);
+		for(PrecioBaseEstampado p : getPrecios()) {
+			grupo.getPrecios().add(p.deepClone(grupo));
+		}
+		return grupo;
+	}
+
 }

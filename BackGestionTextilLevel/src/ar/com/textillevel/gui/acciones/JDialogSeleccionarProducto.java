@@ -38,6 +38,7 @@ import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -62,12 +63,15 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 	private ArticuloFacadeRemote articuloFacade;
 	private ListaDePreciosFacadeRemote listaPreciosFacade;
+	private ClienteFacadeRemote clienteFacade;
 
 	private List<Articulo> allArticulosList;
 	private List<Articulo> articuloFilterList;
 	private VersionListaDePrecios versionListaDePrecios;
 	private Cliente cliente;
 
+	private static final int NRO_CLIENTE_01 = 1;
+	
 	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<Producto> productoSelectedList) {
 		super(owner);
 		this.cliente = cliente;
@@ -267,22 +271,33 @@ public class JDialogSeleccionarProducto extends JDialog {
 	}
 
 	private List<Producto> getProductoList() {
+		List<Producto> allOrderByName = null;
 		List<Producto> productoResultList = new ArrayList<Producto>();
 		try {
 			allArticulosList = getArticuloFacade().getAllOrderByName();
 			versionListaDePrecios = getListaDePreciosFacade().getVersionListaPrecioActual(cliente);
-			List<Producto> allOrderByName = getListaDePreciosFacade().getProductos(cliente);
-			if(articuloFilterList == null) {
-				return allOrderByName;
-			} else {
-				for(Producto p : allOrderByName) {
-					if(articuloFilterList.contains(p.getArticulo())) {
-						productoResultList.add(p);
-					}
+			allOrderByName = getListaDePreciosFacade().getProductos(cliente);
+		} catch (ValidacionException e) {
+			int resp = CLJOptionPane.showQuestionMessage(JDialogSeleccionarProducto.this, "El cliente no posee una lista de precios.\n ¿Desea cargar la lista por defecto?", "Advertencia");
+			if(resp == CLJOptionPane.YES_OPTION) {
+				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_01);
+				try {
+					versionListaDePrecios = getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault);
+					allOrderByName = getListaDePreciosFacade().getProductos(clienteDefault);
+				} catch (ValidacionException e1) {
+					CLJOptionPane.showErrorMessage(JDialogSeleccionarProducto.this, "La lista de precios por defecto tampoco fue cargada.", "Advertencia");
+					return productoResultList;
 				}
 			}
-		} catch (ValidacionException e) {
-			CLJOptionPane.showWarningMessage(JDialogSeleccionarProducto.this, "El cliente no posee una lista de precios.\nPor favor, cargue una para poder ingresar remitos de entrada.", "Advertencia");
+		}
+		if(articuloFilterList == null) {
+			return allOrderByName;
+		} else {
+			for(Producto p : allOrderByName) {
+				if(articuloFilterList.contains(p.getArticulo())) {
+					productoResultList.add(p);
+				}
+			}
 		}
 		return productoResultList;
 	}
@@ -447,6 +462,13 @@ public class JDialogSeleccionarProducto extends JDialog {
 			listaPreciosFacade = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class);
 		}
 		return listaPreciosFacade;
+	}
+
+	private ClienteFacadeRemote getClienteFacade() {
+		if(clienteFacade == null) {
+			clienteFacade =  GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
+		}
+		return clienteFacade;
 	}
 
 	public List<Producto> getProductoSelectedList() {

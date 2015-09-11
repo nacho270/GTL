@@ -71,4 +71,18 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 		return enRango(art.getAncho().floatValue()) && getGrupo(art.getTipoArticulo()) != null;
 	}
 
+	@Override
+	@Transient	
+	public RangoAncho deepClone(DefinicionPrecio def) {
+		RangoAnchoArticuloEstampado rango = new RangoAnchoArticuloEstampado();
+		rango.setDefinicionPrecio(def);
+		rango.setAnchoExacto(getAnchoExacto());
+		rango.setAnchoMaximo(getAnchoMaximo());
+		rango.setAnchoMinimo(getAnchoMinimo());
+		for(GrupoTipoArticuloBaseEstampado g : getGruposBase()) {
+			rango.getGruposBase().add(g.deepClone(rango));
+		}
+		return rango;
+	}
+
 }
