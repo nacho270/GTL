@@ -276,7 +276,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		}
 		if(shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0){
-			getTablaVersiones().getTabla().setRowSelectionInterval(getTablaVersiones().getTabla().getRowCount() - 1, getTablaVersiones().getTabla().getRowCount() - 1);
+			getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
 			getTablaVersiones().handleClickTablaVersiones();
 		}
 	}
@@ -301,7 +301,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		private static final int CANT_COLS = 3;
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
-		private static final int COL_ULT_COTIZACION = 1;
+		public static final int COL_ULT_COTIZACION = 1;
 		private static final int COL_OBJ = 2;
 		
 		private JButton btnImprimirVersion;
@@ -324,6 +324,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
+			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -365,6 +366,14 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		@Override
 		public boolean validarAgregar() {
+			if(getTablaVersiones().getTabla().getRowCount() > 0) {
+				VersionListaDePrecios ultVersion = getElemento(0);
+				if(ultVersion.getId() == null) {
+					CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede agregar otra versión porque no se ha grabado la última agregada. Por favor, elimine esta última o bien grabe los cambios y reintente la operación."), "Error");
+					return false;
+				}
+			}
+			
 			if(getListaActual() == null) {
 				setListaActual(new ListaDePrecios());
 				getListaActual().setCliente((Cliente) lista.getSelectedValue());
@@ -383,6 +392,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 					
 					setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
+					
+					getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
+					handleClickTablaVersiones();
 				}
 			}
 			return false;
@@ -397,20 +409,13 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			return false;
 		}
 
-		public JButton getBtnImprimirVersion() {
+		private JButton getBtnImprimirVersion() {
 			if (btnImprimirVersion == null) {
 				btnImprimirVersion = BossEstilos.createButton("ar/com/textillevel/imagenes/b_imprimir_moderno.png", "ar/com/textillevel/imagenes/b_imprimir_moderno_des.png");
 				btnImprimirVersion.setEnabled(false);
 				btnImprimirVersion.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						int selectedRow = getTabla().getSelectedRow();
-						if (getListaActual().getVersiones().size() > 1) {
-							if (selectedRow + 1 < getListaActual().getVersiones().size() ) {
-								if (CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this.getFrame(), "Ha seleccionado imprimir una versión que no es actual. Desea continuar?", "Pregunta") == CLJOptionPane.NO_OPTION) {
-									return;
-								}
-							}
-						}
 						VersionListaDePrecios version = getTablaVersiones().getElemento(selectedRow);
 						if(version.getId() == null) {//i.e es una versión no persistida se avisa que primero grabe y después imprima
 							CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("La versión seleccionada no ha sido grabada y no se puede generar la cotización. Por favor, grabe los cambios y después reintente."), "Error");
@@ -431,11 +436,11 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				VersionListaDePrecios version = getElemento(selectedRow);
 				if (version != null) {
 					getTablaDefiniciones().getBotonAgregar().setEnabled(isEdicion);
-					getTablaDefiniciones().getBotonModificar().setEnabled(getTablaDefiniciones().getTabla().getSelectedRow() > -1 
-							&& isEdicion);
+					getTablaDefiniciones().getBotonModificar().setEnabled(getTablaDefiniciones().getTabla().getSelectedRow() > -1 && isEdicion);
 					getTablaDefiniciones().limpiar();
 					getTablaDefiniciones().agregarElementos(version.getPrecios());
-					getBtnImprimirVersion().setEnabled(version.getPrecios().size() > 0 && isEdicion);
+					//sólo se habilita con la última versión de lista de precios y si hay precios configurados o bien una que nos la última pero q tiene una cotización vigente
+					getBtnImprimirVersion().setEnabled((getTablaVersiones().getTabla().getValueAt(selectedRow, PanelTablaVersionesListaDePrecio.COL_ULT_COTIZACION) != null || selectedRow == 0) && version.getPrecios().size() > 0 && isEdicion);
 					getTablaVersiones().getBotonEliminar().setEnabled(isEdicion);
 				} else {
 					getTablaDefiniciones().getBotonAgregar().setEnabled(false);
@@ -501,6 +506,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
+			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {

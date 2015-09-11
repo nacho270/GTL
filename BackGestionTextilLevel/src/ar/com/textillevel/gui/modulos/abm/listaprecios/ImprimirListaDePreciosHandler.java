@@ -72,42 +72,51 @@ public class ImprimirListaDePreciosHandler {
 	}
 
 	public void imprimir() {
-		JDialogSeleccionarDefinicionesAImprimir d = new JDialogSeleccionarDefinicionesAImprimir(padre, definiciones);
-		d.setVisible(true);
-		if (d.isAcepto()) {
-			this.definiciones = d.getDefinicionesAImprimir();
-			boolean okValidez = false;
-			String inputValidez = null;
-			do {
-				if(!okValidez) {
-					Object input = JOptionPane.showInputDialog(padre, "Ingrese la validez de la cotización (días): ", "Ingrese la validez de la cotización", JOptionPane.INFORMATION_MESSAGE, null, null, String.valueOf(parametros.getValidezCotizaciones()));
-					if(input == null){
-						break;
+		Cotizacion ultCotizacionVigente = getListaDePreciosFacade().getUltimaCotizacionVigente(versionListaDePrecios);
+		if(ultCotizacionVigente == null) {
+			int resp = CLJOptionPane.showQuestionMessage(padre, "No existe una cotización vigente ¿Desea crear una?", "Atención");
+			JDialogSeleccionarDefinicionesAImprimir d = new JDialogSeleccionarDefinicionesAImprimir(padre, definiciones);
+			d.setVisible(true);
+			if (d.isAcepto()) {
+				this.definiciones = d.getDefinicionesAImprimir();
+				boolean okValidez = false;
+				String inputValidez = null;
+				if(resp == CLJOptionPane.YES_OPTION) {
+					do {
+						if(!okValidez) {
+							Object input = JOptionPane.showInputDialog(padre, "Ingrese la validez de la cotización (días): ", "Ingrese la validez de la cotización", JOptionPane.INFORMATION_MESSAGE, null, null, String.valueOf(parametros.getValidezCotizaciones()));
+							if(input == null){
+								break;
+							}
+							inputValidez = input.toString();
+							if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
+								CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
+							} else if(Integer.valueOf(inputValidez) > 60){
+								CLJOptionPane.showErrorMessage(padre, "La validez no puede superar los 60 días.", "error");
+							} else {
+								okValidez = true;
+								break;
+							}
+						}
+					} while (!okValidez);
+					
+					if(!okValidez) {
+						return;
 					}
-					inputValidez = input.toString();
-					if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
-						CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
-					} else if(Integer.valueOf(inputValidez) > 60){
-						CLJOptionPane.showErrorMessage(padre, "La validez no puede superar los 60 días.", "error");
-					} else {
-						okValidez = true;
-						break;
+					Cotizacion cotizacion = generarYGrabarCotizacion(Integer.valueOf(inputValidez));
+					imprimir(inputValidez, cotizacion != null ? cotizacion.getNumero() : null);
+					if(cotizacion != null) {
+						CLJOptionPane.showInformationMessage(padre, "Se generó la cotización número '" + cotizacion.getNumero() + "'.", "Información");
 					}
+				} else {
+					imprimir("30", null);
 				}
-			} while (!okValidez);
-			
-			if(!okValidez) {
+			} else {
 				return;
-			}
-
-			Cotizacion cotizacion = generarYGrabarCotizacion(Integer.valueOf(inputValidez));
-
-			imprimir(inputValidez, cotizacion != null ? cotizacion.getNumero() : null);
-			if(cotizacion != null) {
-				CLJOptionPane.showInformationMessage(padre, "Se generó la cotización número '" + cotizacion.getNumero() + "'.", "Información");
-			}
+			}			
 		} else {
-			return;
+			this.definiciones = ultCotizacionVigente.getVersionListaPrecio().getPrecios();
+			imprimir(ultCotizacionVigente.getValidez().toString(), ultCotizacionVigente.getNumero());
 		}
 	}
 	

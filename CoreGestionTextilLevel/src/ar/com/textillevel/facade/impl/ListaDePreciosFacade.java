@@ -180,6 +180,7 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 	public Cotizacion getUltimaCotizacionVigente(VersionListaDePrecios version) {
 		Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacionParaVersion(version);
 		if(cotizacionVigente(cotizacion)) {
+			doEagerVersionListaDePrecios(cotizacion.getVersionListaPrecio());
 			return cotizacion;
 		} else {
 			return null;
