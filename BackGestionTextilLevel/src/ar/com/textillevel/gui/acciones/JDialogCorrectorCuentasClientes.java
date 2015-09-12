@@ -74,7 +74,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 	private JPanel panelNorte;
 	private JPanel panelCentro;
 	private JPanel panelSur;
-	
+
 	private Proveedor proveedor;
 
 	public JDialogCorrectorCuentasClientes(Frame padre) {
@@ -110,15 +110,15 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 			chkSeleccionarCliente.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					ETipoCuenta tipoEntidad = (ETipoCuenta)getCmbTipoCuenta().getSelectedItem();
-					if(chkSeleccionarCliente.isSelected()) {
-						if(tipoEntidad == ETipoCuenta.PROVEEDOR) {
+					ETipoCuenta tipoEntidad = (ETipoCuenta) getCmbTipoCuenta().getSelectedItem();
+					if (chkSeleccionarCliente.isSelected()) {
+						if (tipoEntidad == ETipoCuenta.PROVEEDOR) {
 							getTxtNroCliente().setEditable(false);
 							JDialogSeleccionarProveedor dialogSeleccionarProveedor = new JDialogSeleccionarProveedor(null);
 							GuiUtil.centrar(dialogSeleccionarProveedor);
 							dialogSeleccionarProveedor.setVisible(true);
 							Proveedor proveedorElegido = dialogSeleccionarProveedor.getProveedor();
-							if(proveedorElegido != null) {
+							if (proveedorElegido != null) {
 								getTxtNroCliente().setText(proveedorElegido.getRazonSocial());
 								proveedor = proveedorElegido;
 							} else {
@@ -176,10 +176,10 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 
 	private void realizarCorrecciones() {
 		if (getChkSeleccionarCliente().isSelected()) {
-			ETipoCuenta tipoCuenta = (ETipoCuenta)getCmbTipoCuenta().getSelectedItem();
+			ETipoCuenta tipoCuenta = (ETipoCuenta) getCmbTipoCuenta().getSelectedItem();
 			String textoIngresado = getTxtNroCliente().getText().trim();
-			if(tipoCuenta == ETipoCuenta.CLIENTE) {
-				if(GenericUtils.esNumerico(textoIngresado)) {
+			if (tipoCuenta == ETipoCuenta.CLIENTE) {
+				if (GenericUtils.esNumerico(textoIngresado)) {
 					Cliente cl = getClienteFacade().getClienteByNumero(Integer.valueOf(textoIngresado));
 					if (cl == null) {
 						CLJOptionPane.showErrorMessage(this, "No se ha encontrado al cliente indicado", "Error");
@@ -196,8 +196,8 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 				new ThreadCorreccion(entidad).start();
 			}
 		} else {
-			ETipoCuenta tipoEntidad = (ETipoCuenta)getCmbTipoCuenta().getSelectedItem();
-			if (CLJOptionPane.showQuestionMessage(this, "Va a corregir todas las cuentas de '"+ tipoEntidad +"'. ¿Desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+			ETipoCuenta tipoEntidad = (ETipoCuenta) getCmbTipoCuenta().getSelectedItem();
+			if (CLJOptionPane.showQuestionMessage(this, "Va a corregir todas las cuentas de '" + tipoEntidad + "'. ¿Desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
 				List<EntidadWrapper> entidades = getEntidades();
 				if (entidades != null && !entidades.isEmpty()) {
 					new ThreadCorreccion(entidades).start();
@@ -211,16 +211,14 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 
 	private List<EntidadWrapper> getEntidades() {
 		List<EntidadWrapper> entidades = new ArrayList<JDialogCorrectorCuentasClientes.EntidadWrapper>();
-		ETipoCuenta tipoCuenta = (ETipoCuenta) getCmbTipoCuenta()
-				.getSelectedItem();
+		ETipoCuenta tipoCuenta = (ETipoCuenta) getCmbTipoCuenta().getSelectedItem();
 		if (tipoCuenta == ETipoCuenta.CLIENTE) {
 			List<Cliente> clientes = getClienteFacade().getAllOrderByName();
 			for (Cliente cl : clientes) {
 				entidades.add(new EntidadWrapper(cl));
 			}
 		} else {
-			List<Proveedor> proveedores = getProveedorFacade()
-					.getAllProveedoresOrderByName();
+			List<Proveedor> proveedores = getProveedorFacade().getAllProveedoresOrderByName();
 			for (Proveedor pr : proveedores) {
 				entidades.add(new EntidadWrapper(pr));
 			}
@@ -228,12 +226,9 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 		return entidades;
 	}
 
-	private void corregirCuentaEntidad(EntidadWrapper e)
-			throws ValidacionException {
-		ETipoCuenta tipoCuenta = (ETipoCuenta) getCmbTipoCuenta()
-				.getSelectedItem();
-		String usrName = GTLGlobalCache.getInstance().getUsuarioSistema()
-				.getUsrName();
+	private void corregirCuentaEntidad(EntidadWrapper e) throws ValidacionException {
+		ETipoCuenta tipoCuenta = (ETipoCuenta) getCmbTipoCuenta().getSelectedItem();
+		String usrName = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
 		Integer entidadId = e.getId();
 		if (tipoCuenta == ETipoCuenta.CLIENTE) {
 			getCorrectorFacade().corregirCuenta(entidadId, usrName);
@@ -244,16 +239,14 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 
 	private CorrectorCuentasProveedorFacadeRemote getCorrectorProveedorFacade() {
 		if (correctorProveedorFacade == null) {
-			correctorProveedorFacade = GTLBeanFactory.getInstance().getBean2(
-					CorrectorCuentasProveedorFacadeRemote.class);
+			correctorProveedorFacade = GTLBeanFactory.getInstance().getBean2(CorrectorCuentasProveedorFacadeRemote.class);
 		}
 		return correctorProveedorFacade;
 	}
 
 	private ProveedorFacadeRemote getProveedorFacade() {
 		if (proveedorFacade == null) {
-			proveedorFacade = GTLBeanFactory.getInstance().getBean2(
-					ProveedorFacadeRemote.class);
+			proveedorFacade = GTLBeanFactory.getInstance().getBean2(ProveedorFacadeRemote.class);
 		}
 		return proveedorFacade;
 	}
@@ -282,8 +275,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 				for (EntidadWrapper e : getListaEntidades()) {
 					try {
 						agregarFila(e.getRazonSocial());
-						getLblEstado().setText( (contador++) + " de " + getListaEntidades().size() + " - " +
-								"Corrigiendo " + e.getRazonSocial());
+						getLblEstado().setText((contador++) + " de " + getListaEntidades().size() + " - " + "Corrigiendo " + e.getRazonSocial());
 						corregirCuentaEntidad(e);
 						avanceAcumulado += avance;
 						getProgreso().setValue((int) avanceAcumulado);
@@ -311,7 +303,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 		}
 
 		private void actualizarUltimaFila(EEstadoCorreccionCuentaCliente estado) {
-			getTablaAvance().setValueAt(estado,getTablaAvance().getRowCount() - 1, COL_RESULTADO);
+			getTablaAvance().setValueAt(estado, getTablaAvance().getRowCount() - 1, COL_RESULTADO);
 		}
 
 		private void agregarFila(String razonSocial) {
@@ -322,14 +314,8 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				public void run() {
-					getTablaAvance().scrollRectToVisible(
-							getTablaAvance().getCellRect(
-									getTablaAvance().getRowCount() - 1,
-									getTablaAvance().getColumnCount(), true));
-					getJsp().scrollRectToVisible(
-							getTablaAvance().getCellRect(
-									getTablaAvance().getRowCount() - 1,
-									getTablaAvance().getColumnCount(), true));
+					getTablaAvance().scrollRectToVisible(getTablaAvance().getCellRect(getTablaAvance().getRowCount() - 1, getTablaAvance().getColumnCount(), true));
+					getJsp().scrollRectToVisible(getTablaAvance().getCellRect(getTablaAvance().getRowCount() - 1, getTablaAvance().getColumnCount(), true));
 					getJsp().invalidate();
 					getJsp().repaint();
 				}
@@ -392,30 +378,21 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 	public CLJTable getTablaAvance() {
 		if (tablaAvance == null) {
 			tablaAvance = new CLJTable(0, CANT_COLS);
-			tablaAvance.setStringColumn(COL_CLIENTE, "Razón Social", 250, 250,
-					true);
-			tablaAvance.setStringColumn(COL_RESULTADO, "Resultado", 100, 100,
-					true);
+			tablaAvance.setStringColumn(COL_CLIENTE, "Razón Social", 250, 250, true);
+			tablaAvance.setStringColumn(COL_RESULTADO, "Resultado", 100, 100, true);
 			tablaAvance.setReorderingAllowed(false);
 			tablaAvance.setAllowHidingColumns(false);
 			tablaAvance.setAllowSorting(false);
-			tablaAvance
-					.getColumnModel()
-					.getColumn(COL_RESULTADO)
-					.setCellRenderer(
-							new EstadoCorreccionCuentaClienteCellRenderer());
+			tablaAvance.getColumnModel().getColumn(COL_RESULTADO).setCellRenderer(new EstadoCorreccionCuentaClienteCellRenderer());
 		}
 		return tablaAvance;
 	}
 
-	private class EstadoCorreccionCuentaClienteCellRenderer extends JLabel
-			implements TableCellRenderer {
+	private class EstadoCorreccionCuentaClienteCellRenderer extends JLabel implements TableCellRenderer {
 
 		private static final long serialVersionUID = 1496405966581926966L;
 
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			EEstadoCorreccionCuentaCliente estado = (EEstadoCorreccionCuentaCliente) value;
 			setText(String.valueOf(estado));
 			if (estado == EEstadoCorreccionCuentaCliente.ERROR) {
@@ -431,9 +408,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 
 	public JLabel getLblWorking() {
 		if (lblWorking == null) {
-			lblWorking = new JLabel(
-					ImageUtil
-							.loadIcon("ar/com/textillevel/imagenes/loading-chiquito.gif"));
+			lblWorking = new JLabel(ImageUtil.loadIcon("ar/com/textillevel/imagenes/loading-chiquito.gif"));
 			lblWorking.setVisible(false);
 		}
 		return lblWorking;
@@ -441,9 +416,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 
 	public JScrollPane getJsp() {
 		if (jsp == null) {
-			jsp = new JScrollPane(getTablaAvance(),
-					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jsp = new JScrollPane(getTablaAvance(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			jsp.setPreferredSize(new Dimension(450, 150));
 		}
 		return jsp;
@@ -452,53 +425,20 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 	public JPanel getPanelNorte() {
 		if (panelNorte == null) {
 			panelNorte = new JPanel(new GridBagLayout());
-			panelNorte.add(new JLabel("Tipo de Cuenta:"), GenericUtils
-					.createGridBagConstraints(0, 0, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
-			panelNorte.add(getCmbTipoCuenta(), GenericUtils
-					.createGridBagConstraints(1, 0, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
+			panelNorte.add(new JLabel("Tipo de Cuenta:"), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panelNorte.add(getCmbTipoCuenta(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 
-			panelNorte.add(getChkSeleccionarCliente(), GenericUtils
-					.createGridBagConstraints(0, 1, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
-			panelNorte.add(new JLabel("Entidad: "), GenericUtils
-					.createGridBagConstraints(1, 1, GridBagConstraints.CENTER,
-							GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1,
-							1, 0, 0));
-			panelNorte.add(getTxtNroCliente(), GenericUtils
-					.createGridBagConstraints(2, 1, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 1, 0));
-			panelNorte.add(getBtnCorregir(), GenericUtils
-					.createGridBagConstraints(3, 1, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
+			panelNorte.add(getChkSeleccionarCliente(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panelNorte.add(new JLabel("Entidad: "), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panelNorte.add(getTxtNroCliente(), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 1, 0));
+			panelNorte.add(getBtnCorregir(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 
-			panelNorte.add(new JLabel("Estado: "), GenericUtils
-					.createGridBagConstraints(0, 2, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
-			panelNorte.add(getLblEstado(), GenericUtils
-					.createGridBagConstraints(1, 2, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 4, 1, 0, 0));
-			panelNorte.add(getLblWorking(), GenericUtils
-					.createGridBagConstraints(5, 2, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
+			panelNorte.add(new JLabel("Estado: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panelNorte.add(getLblEstado(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 4, 1, 0, 0));
+			panelNorte.add(getLblWorking(), GenericUtils.createGridBagConstraints(5, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 
-			panelNorte.add(new JLabel("Avance: "), GenericUtils
-					.createGridBagConstraints(0, 3, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 1, 1, 0, 0));
-			panelNorte.add(getProgreso(), GenericUtils
-					.createGridBagConstraints(1, 3, GridBagConstraints.CENTER,
-							GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5,
-									5), 3, 1, 0, 0));
+			panelNorte.add(new JLabel("Avance: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panelNorte.add(getProgreso(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 3, 1, 0, 0));
 		}
 		return panelNorte;
 	}
@@ -521,8 +461,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 
 	public ClienteFacadeRemote getClienteFacade() {
 		if (clienteFacade == null) {
-			clienteFacade = GTLBeanFactory.getInstance().getBean2(
-					ClienteFacadeRemote.class);
+			clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
 		}
 		return clienteFacade;
 	}
@@ -587,7 +526,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 					getTxtNroCliente().setText(null);
 					getTxtNroCliente().setEditable(false);
 					proveedor = null;
-					
+
 				}
 
 			});
