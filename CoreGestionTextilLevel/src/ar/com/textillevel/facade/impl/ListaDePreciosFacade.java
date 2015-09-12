@@ -203,4 +203,8 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 		}
 		return versionActual;
 	}
+
+	public List<Cliente> getClientesConListaDePrecios() {
+		return listaDePreciosDAOLocal.getClientesConListaDePrecios();
+	}
 }

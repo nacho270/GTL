@@ -829,17 +829,21 @@ public class JFrameVerMovimientos extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					createJasperPrintCotizacion();
 					if (jasperPrintCotizacion != null) {
-						try {
-							File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
-							JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
-							GenericUtils.enviarEmail("Nueva cotización", "Sres " + getClienteBuscado().getRazonSocial() + ",<br>" + 
-									"Por medio de la presente, adjuntamos una nueva cotizaci&oacute;n de nuestros precios.<br><br>Saluda Atte.<br>Textil Level S.A.",
-									file, getClienteBuscado().getEmail());
-							CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotizacion por correo a " + getClienteBuscado().getEmail(), "Información");
-							file.delete();
-						}catch(Exception ex){
-							ex.printStackTrace();
-						}
+						GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
+							public void perform() {
+								try {
+									File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
+									JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
+									GenericUtils.enviarEmail("Nueva cotización", "Sres " + getClienteBuscado().getRazonSocial() + ",<br>" + 
+											"Por medio de la presente, adjuntamos una nueva cotizaci&oacute;n de nuestros precios.<br><br>Saluda Atte.<br>Textil Level S.A.",
+											file, getClienteBuscado().getEmail());
+									CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotizacion por correo a " + getClienteBuscado().getEmail(), "Información");
+									file.delete();
+								}catch(Exception ex){
+									ex.printStackTrace();
+								}
+							}
+						});
 					}
 				}
 			});
@@ -1769,7 +1773,7 @@ public class JFrameVerMovimientos extends JFrame {
 						cotizacionActual.getVersionListaPrecio()).createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero());
 			} else if (versionListaDePreciosCotizada != null) {
 				jasperPrintCotizacion = new ImprimirListaDePreciosHandler(JFrameVerMovimientos.this, cliente,
-						versionListaDePreciosCotizada).createJasperPrint("30", null);
+						versionListaDePreciosCotizada).createJasperPrint(""+GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getValidezCotizaciones(), null);
 			}
 		}
 	}

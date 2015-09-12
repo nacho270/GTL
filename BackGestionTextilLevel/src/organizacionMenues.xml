@@ -34,6 +34,9 @@
 					class="ar.com.textillevel.gui.modulos.abm.listaprecios.GuiABMListaDePrecios"
 					nombre="Administrar Listas de Precios" id="7" />
 					<newItem
+					class="main.acciones.modulos.productos.AumentarPreciosAction"
+					nombre="Aumentar precios" id="112" action="true"/>
+					<newItem
 					class="ar.com.textillevel.gui.modulos.abm.GuiABMArticulos"
 					nombre="Administrar Artículos" id="8" />
 				</listaModulos>

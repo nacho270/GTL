@@ -148,7 +148,8 @@ INSERT INTO T_MODULO VALUES
  (108,'main.servicios.alertas.ServicioAlertas','Servicios - Servicio de Alertas',0,1),
  (109,'ar.com.textillevel.gui.modulos.abm.portal.GuiAsignacionAlertasPerfil','Seguridad - Administrar Alertas para Perfiles de usuario',0,0),
  (110,'main.acciones.cuentas.VerFacturasSinAutorizacionAFIP','Cuentas - Visualizar facturas sin autorizacion de AFIP',0,0),
- (111,'main.acciones.cuentas.VerEstadoServerAFIPAction','Cuentas - Visualizar estado de servicios AFIP',0,0)
+ (111,'main.acciones.cuentas.VerEstadoServerAFIPAction','Cuentas - Visualizar estado de servicios AFIP',0,0),
+ (112,'main.acciones.modulos.productos.AumentarPreciosAction','Productos - Aumentar Precios',0,0)
  ;
 
  

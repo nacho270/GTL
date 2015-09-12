@@ -7,6 +7,7 @@ import javax.persistence.Query;
 
 import ar.clarin.fwjava.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
+import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
 
 @Stateless
@@ -25,6 +26,12 @@ public class ListaDePreciosDAO extends GenericDAO<ListaDePrecios, Integer> imple
 			return resultList.get(0);
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Cliente> getClientesConListaDePrecios() {
+		Query q = getEntityManager().createQuery(" SELECT lc.cliente FROM ListaDePrecios AS lc ");
+		return q.getResultList();
 	}
 
 }
