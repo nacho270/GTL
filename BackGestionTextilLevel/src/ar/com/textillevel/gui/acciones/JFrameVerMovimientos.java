@@ -832,13 +832,8 @@ public class JFrameVerMovimientos extends JFrame {
 						GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
 							public void perform() {
 								try {
-									File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
-									JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
-									GenericUtils.enviarEmail("Nueva cotización", "Sres " + getClienteBuscado().getRazonSocial() + ",<br>" + 
-											"Por medio de la presente, adjuntamos una nueva cotizaci&oacute;n de nuestros precios.<br><br>Saluda Atte.<br>Textil Level S.A.",
-											file, getClienteBuscado().getEmail());
+									GenericUtils.enviarCotizacionPorEmail(getClienteBuscado(), jasperPrintCotizacion);
 									CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotizacion por correo a " + getClienteBuscado().getEmail(), "Información");
-									file.delete();
 								}catch(Exception ex){
 									ex.printStackTrace();
 								}

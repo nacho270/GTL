@@ -39,8 +39,10 @@ import ar.clarin.fwjava.util.ImageUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
+import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAumentadorDePrecios extends JDialog {
@@ -297,8 +299,9 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		@Override
 		protected CLJTable construirTabla() {
 			CLJTable tabla = new CLJTable(0, CANT_COLS);
-			tabla.setComboColumn(COL_TIPO_PRODUCTO, "PRODUCTO", new JComboBox(ETipoProducto.values()), 270, false);
-			ComboBoxTableCellEditor editor = new ComboBoxTableCellEditor(Arrays.asList(ETipoProducto.values()));
+			ETipoProducto[] productosFiltrados = ETipoProducto.valuesSinReprocesoSinTipo(ETipoProducto.REPROCESO_SIN_CARGO);
+			tabla.setComboColumn(COL_TIPO_PRODUCTO, "PRODUCTO", new JComboBox(productosFiltrados), 270, false);
+			ComboBoxTableCellEditor editor = new ComboBoxTableCellEditor(Arrays.asList(productosFiltrados));
 			tabla.getColumnModel().getColumn(COL_TIPO_PRODUCTO).setCellEditor(editor);
 			tabla.setFloatColumn(COL_AUMENTO, "AUMENTO (%)", 0f, 999999f, 90, false);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
@@ -311,12 +314,6 @@ public class JDialogAumentadorDePrecios extends JDialog {
 			tabla.setReorderingAllowed(false);
 			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
 			return tabla;
-		}
-
-		// NO SE USAN
-		@Override
-		protected void agregarElemento(DatosAumentoTO elemento) {
-			
 		}
 
 		@Override
@@ -332,11 +329,23 @@ public class JDialogAumentadorDePrecios extends JDialog {
 			return datos;
 		}
 
+		public List<DatosAumentoTO> getDatosAumento() {
+			List<DatosAumentoTO> datos = new ArrayList<DatosAumentoTO>();
+			for(int i = 0; i<getTabla().getRowCount();i++) {
+				datos.add(getElemento(i));
+			}
+			return datos;
+		}
+
+		// NO SE USAN
+		@Override
+		protected void agregarElemento(DatosAumentoTO elemento) { }
+
 		@Override
 		protected String validarElemento(int fila) {
 			return null;
 		}
-		
+
 	}
 
 	private class ComboBoxTableCellEditor extends AbstractCellEditor implements TableCellEditor {
@@ -399,15 +408,57 @@ public class JDialogAumentadorDePrecios extends JDialog {
 			double avance = 100f / getListaClientes().size();
 			double avanceAcumulado = 0;
 			int contador = 1;
+			boolean volverAPreguntarCotizacion = true;
+			boolean volverAPreguntarEnviarEmail = true;
+			boolean actualizarCotizacion = false;
+			boolean enviarEmail = false;
+
+			List<DatosAumentoTO> datosAumento = getPanelTablaAumentos().getDatosAumento();
+
 			for (Cliente c : getListaClientes()) {
 				try {
 					agregarFila(c.getRazonSocial());
 					getLblEstado().setText((contador++) + " de " + getListaClientes().size() + " - " + "aumentando a " + c.getRazonSocial());
-					//aumentar(c);
-					//pregutar por actualizar cotizacion
-					//si tiene cotizacion, preguntar por enviar email
-					
-					// fin
+					Cotizacion cotizacionActual = getListaDePreciosFacade().getCotizacionVigente(c);
+					if (volverAPreguntarCotizacion){
+						if (cotizacionActual != null){
+							SiNoResponse preguntaCotizacion = GenericUtils.realizarPregunta(JDialogAumentadorDePrecios.this, "El cliente dispone de una cotizacion vigente. Desea actualizarla?", "Pregunta");
+							if(preguntaCotizacion.getRespose() == CLJOptionPane.YES_OPTION){
+								actualizarCotizacion = true;
+							}
+							if(preguntaCotizacion.isNoVolverAPreguntar()) {
+								volverAPreguntarCotizacion = false;
+							}
+						}
+					}
+
+					getListaDePreciosFacade().aumentar(datosAumento, actualizarCotizacion);
+
+					if (actualizarCotizacion) {
+						// si pedi actualizar cotizacion, veo si mando el mail o no
+						if (cotizacionActual != null) {
+							if (volverAPreguntarEnviarEmail) {
+								SiNoResponse preguntaCotizacion = GenericUtils.realizarPregunta(JDialogAumentadorDePrecios.this, "Desea enviar la cotizacion actualizada por email?", "Pregunta");
+								if (preguntaCotizacion.getRespose() == CLJOptionPane.YES_OPTION) {
+									enviarEmail = true;
+								}
+								if (preguntaCotizacion.isNoVolverAPreguntar()) {
+									volverAPreguntarEnviarEmail = false;
+								}
+							}
+							if (enviarEmail) {
+								// actualizo la configuracion actual que ahora deberia ser nueva
+								cotizacionActual = getListaDePreciosFacade().getCotizacionVigente(c);
+								actualizarUltimaFila(EEstadoAumentoPrecioCliente.ENVIANDO_EMAIL);
+								try {
+									GenericUtils.enviarCotizacionPorEmail(c, new ImprimirListaDePreciosHandler(c, cotizacionActual.getVersionListaPrecio())
+										.createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero()));
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							}
+						}
+					}
 					actualizarUltimaFila(EEstadoAumentoPrecioCliente.OK);
 					avanceAcumulado += avance;
 					getProgreso().setValue((int) avanceAcumulado);

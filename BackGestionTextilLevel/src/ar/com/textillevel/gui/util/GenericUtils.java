@@ -1,13 +1,16 @@
 package ar.com.textillevel.gui.util;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,6 +49,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.krysalis.barcode4j.impl.int2of5.Interleaved2Of5Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
@@ -55,6 +61,8 @@ import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.FileUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.clarin.fwjava.util.SwingWorker;
+import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
 import ar.com.textillevel.gui.util.dialogs.WaitDialog;
 import ar.com.textillevel.gui.util.num2text.Num2Text;
 
@@ -465,4 +473,42 @@ public class GenericUtils {
 		transport.close();
 	}
 	
+	public static void enviarCotizacionPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
+		File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
+		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
+		GenericUtils.enviarEmail("Nueva cotización", "Sres " + c.getRazonSocial() + ",<br>" + 
+				"Por medio de la presente, adjuntamos una nueva cotizaci&oacute;n de nuestros precios.<br><br>Saluda Atte.<br>Textil Level S.A.",
+				file, c.getEmail());
+		file.delete();
+	}
+	
+	public static class SiNoResponse {
+		private int respose;
+		private boolean noVolverAPreguntar;
+
+		public SiNoResponse(int respose, boolean noVolverAPreguntar) {
+			this.respose = respose;
+			this.noVolverAPreguntar = noVolverAPreguntar;
+		}
+
+		public int getRespose() {
+			return respose;
+		}
+		
+		public boolean isNoVolverAPreguntar() {
+			return noVolverAPreguntar;
+		}
+	}
+	
+	public static SiNoResponse realizarPregunta(Frame padre, String pregunta, String titulo) {
+		JDialogSiNoNoVolverAPreguntar d = new JDialogSiNoNoVolverAPreguntar(padre, pregunta, titulo);
+		d.setVisible(true);
+		return new SiNoResponse(d.getResponse(), d.noVolverAPreguntar());
+	}
+	
+	public static SiNoResponse realizarPregunta(Dialog padre, String pregunta, String titulo) {
+		JDialogSiNoNoVolverAPreguntar d = new JDialogSiNoNoVolverAPreguntar(padre, pregunta, titulo);
+		d.setVisible(true);
+		return new SiNoResponse(d.getResponse(), d.noVolverAPreguntar());
+	}
 }

@@ -139,18 +139,39 @@ public enum ETipoProducto {
 		return getDescripcionMap().get(descripcion);
 	}
 	
-	private static Map<String, ETipoProducto> descricpcionMap;
+	private static Map<String, ETipoProducto> descripcionMap;
 	
 	private static Map<String, ETipoProducto> getDescripcionMap() {
-		if (descricpcionMap == null) {
-			descricpcionMap = new HashMap<String, ETipoProducto>();
+		if (descripcionMap == null) {
+			descripcionMap = new HashMap<String, ETipoProducto>();
 			ETipoProducto values[] = values();
 			for (int i = 0; i < values.length; i++) {
-				descricpcionMap.put(values[i].getDescripcion(), values[i]);
+				descripcionMap.put(values[i].getDescripcion(), values[i]);
 			}
 		}
-		return descricpcionMap;
+		return descripcionMap;
 	}
 
+	public static ETipoProducto[] valuesSinReprocesoSinTipo(ETipoProducto... tipos) {
+		ETipoProducto[] values = values();
+		if(tipos.length > values.length) {
+			throw new IllegalArgumentException("Mas productos excluidos de los que hay");
+		}
+		ETipoProducto[] tiposRet = new ETipoProducto[values.length - tipos.length];
+		int index = 0;
+		for(ETipoProducto tp : values) {
+			boolean found = false;
+			for(ETipoProducto tpExcluir : tipos) {
+				if(tpExcluir == tp) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				tiposRet[index++] = tp;
+			}
+		}
+		return tipos;
+	}
 
 }

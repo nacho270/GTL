@@ -57,6 +57,19 @@ public class ImprimirListaDePreciosHandler {
 	
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	
+	public ImprimirListaDePreciosHandler(Cliente cliente, VersionListaDePrecios versionListaDePrecios) {
+		this.versionListaDePrecios = versionListaDePrecios;
+		this.definiciones = new ArrayList<DefinicionPrecio>(versionListaDePrecios.getPrecios());
+		for(Iterator<DefinicionPrecio> it = this.definiciones.iterator(); it.hasNext(); ){
+			DefinicionPrecio dp = it.next();
+			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+				it.remove();
+			}
+		}
+		this.cliente = cliente;
+		this.parametros = getParametrosGeneralesFacade().getParametrosGenerales();
+	}
+	
 	public ImprimirListaDePreciosHandler(Frame padre, Cliente cliente, VersionListaDePrecios versionListaDePrecios) {
 		this.padre = padre;
 		this.versionListaDePrecios = versionListaDePrecios;

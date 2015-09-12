@@ -15,6 +15,7 @@ import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
@@ -206,5 +207,9 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 
 	public List<Cliente> getClientesConListaDePrecios() {
 		return listaDePreciosDAOLocal.getClientesConListaDePrecios();
+	}
+
+	public void aumentar(List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) {
+		
 	}
 }
