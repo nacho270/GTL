@@ -182,5 +182,8 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 
 	@Transient
 	public abstract RangoAncho deepClone(DefinicionPrecio def);
+	
+	@Transient
+	public abstract void aumentarPrecios(float porcentajeAumento);
 
 }

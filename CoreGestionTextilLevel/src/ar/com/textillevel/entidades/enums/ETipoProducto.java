@@ -171,7 +171,7 @@ public enum ETipoProducto {
 				tiposRet[index++] = tp;
 			}
 		}
-		return tipos;
+		return tiposRet;
 	}
 
 }

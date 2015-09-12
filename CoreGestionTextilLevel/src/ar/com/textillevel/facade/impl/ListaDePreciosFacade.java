@@ -1,5 +1,6 @@
 package ar.com.textillevel.facade.impl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.DateUtil;
@@ -30,11 +33,12 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.excepciones.EValidacionException;
+import ar.com.textillevel.facade.api.local.ListaDePreciosFacadeLocal;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.util.Utils;
 
 @Stateless
-public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
+public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDePreciosFacadeLocal {
 
 	@EJB
 	private ListaDePreciosDAOLocal listaDePreciosDAOLocal;
@@ -44,6 +48,9 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 	
 	@EJB
 	private CotizacionDAOLocal cotizacionDAOLocal;
+	
+	@EJB
+	private ListaDePreciosFacadeLocal self;
 	
 	public ListaDePrecios getListaByIdCliente(Integer idCliente) {
 		ListaDePrecios listaByIdCliente = listaDePreciosDAOLocal.getListaByIdCliente(idCliente);
@@ -209,7 +216,31 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote {
 		return listaDePreciosDAOLocal.getClientesConListaDePrecios();
 	}
 
-	public void aumentar(List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) {
-		
+	public void aumentarPrecios(Cliente cliente, Date inicioValidez, List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) throws ValidacionException {
+		ListaDePrecios listaActual = getListaByIdCliente(cliente.getId());
+		VersionListaDePrecios versionActual = getVersionListaPrecioActual(cliente);
+		VersionListaDePrecios nuevaVersionListaDePrecios = versionActual.deepClone();
+		nuevaVersionListaDePrecios.setInicioValidez(inicioValidez);
+		for(DatosAumentoTO aumento : datosAumento) {
+			DefinicionPrecio definicion = versionActual.getDefinicionPorTipoProducto(aumento.getTipoProducto());
+			DefinicionPrecio nuevaDefinicion = definicion.deepClone();
+			nuevaDefinicion.aumentarPrecios(aumento.getPorcentajeAumento());
+			nuevaVersionListaDePrecios.reemplazarDefinicion(nuevaDefinicion);
+		}
+		listaActual.getVersiones().add(nuevaVersionListaDePrecios);
+		listaActual = listaDePreciosDAOLocal.save(listaActual);
+		nuevaVersionListaDePrecios = listaActual.getVersiones().get(listaActual.getVersiones().size() - 1);
+		if(actualizarCotizacion) {
+			self.actualizarVersionListaDePrecios(cliente, nuevaVersionListaDePrecios);
+		}
+	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Cotizacion actualizarVersionListaDePrecios(Cliente cliente, VersionListaDePrecios nuevaVersionListaDePrecios) {
+		Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacion(cliente);
+		if(cotizacionVigente(cotizacion)) {
+			cotizacion.setVersionListaPrecio(nuevaVersionListaDePrecios);
+		}
+		return cotizacionDAOLocal.save(cotizacion);
 	}
 }

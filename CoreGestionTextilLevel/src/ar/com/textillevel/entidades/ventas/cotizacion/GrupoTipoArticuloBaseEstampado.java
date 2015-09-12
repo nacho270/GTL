@@ -105,4 +105,12 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		return grupo;
 	}
 
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(PrecioBaseEstampado pbe : getPrecios()) {
+			pbe.aumentarPrecios(porcentajeAumento);
+		}
+		
+	}
+
 }

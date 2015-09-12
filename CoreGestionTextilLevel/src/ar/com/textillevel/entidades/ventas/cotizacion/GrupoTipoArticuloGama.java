@@ -94,4 +94,12 @@ public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializ
 		return grupo;
 	}
 
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(PrecioGama pg : getPrecios()) {
+			pg.setPrecio(pg.getPrecio() + ( (pg.getPrecio() * porcentajeAumento) / 100) );
+		}
+		
+	}
+
 }

@@ -170,4 +170,11 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 		return precio;
 	}
 
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(RangoCantidadColores rcc : getRangosDeColores()) {
+			rcc.aumentarPrecios(porcentajeAumento);
+		}
+	}
+
 }

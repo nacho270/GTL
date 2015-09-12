@@ -81,4 +81,12 @@ public class RangoAnchoComun extends RangoAncho {
 		return rango;
 	}
 
+	@Override
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(PrecioTipoArticulo pta : getPrecios()) {
+			pta.setPrecio(pta.getPrecio() + ((pta.getPrecio() * porcentajeAumento) / 100) ); 
+		}
+	}
+
 }

@@ -194,4 +194,11 @@ public class RangoCantidadColores implements Serializable, Comparable<RangoCanti
 		return rango;
 	}
 
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(RangoCoberturaEstampado rce : getRangos()) {
+			rce.setPrecio(rce.getPrecio() + ( (rce.getPrecio() * porcentajeAumento) / 100) );
+		}
+	}
+
 }

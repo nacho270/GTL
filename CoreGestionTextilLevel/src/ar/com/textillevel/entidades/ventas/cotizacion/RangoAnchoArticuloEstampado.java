@@ -85,4 +85,12 @@ public class RangoAnchoArticuloEstampado extends RangoAncho {
 		return rango;
 	}
 
+	@Override
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(GrupoTipoArticuloBaseEstampado gtabe : getGruposBase()) {
+			gtabe.aumentarPrecios(porcentajeAumento);
+		}
+	}
+
 }

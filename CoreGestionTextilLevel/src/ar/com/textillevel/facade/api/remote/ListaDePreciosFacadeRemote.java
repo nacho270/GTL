@@ -1,5 +1,6 @@
 package ar.com.textillevel.facade.api.remote;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -37,5 +38,5 @@ public interface ListaDePreciosFacadeRemote {
 
 	public List<Cliente> getClientesConListaDePrecios();
 
-	public void aumentar(List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion);	
+	public void aumentarPrecios(Cliente cliente, Date inicioValidez, List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) throws ValidacionException;	
 }

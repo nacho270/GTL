@@ -85,4 +85,12 @@ public class RangoAnchoArticuloTenido extends RangoAncho {
 		return rango;
 	}
 
+	@Override
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(GrupoTipoArticuloGama gtag : getGruposGama()) {
+			gtag.aumentarPrecios(porcentajeAumento);
+		}
+	}
+
 }

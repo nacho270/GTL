@@ -30,7 +30,7 @@ public class ListaDePreciosDAO extends GenericDAO<ListaDePrecios, Integer> imple
 
 	@SuppressWarnings("unchecked")
 	public List<Cliente> getClientesConListaDePrecios() {
-		Query q = getEntityManager().createQuery(" SELECT lc.cliente FROM ListaDePrecios AS lc ");
+		Query q = getEntityManager().createQuery(" SELECT lc.cliente FROM ListaDePrecios AS lc ORDER BY lc.cliente.razonSocial ASC ");
 		return q.getResultList();
 	}
 

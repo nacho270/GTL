@@ -34,6 +34,7 @@ import ar.clarin.fwjava.componentes.CLCursor;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.ImageUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
@@ -43,6 +44,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
+import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAumentadorDePrecios extends JDialog {
@@ -58,6 +60,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
 	
+	private PanelDatePicker fechaInicioValidez;
 	private CLCheckBoxList<Cliente> chkListClientes;
 	private JButton btnSeleccionarTodos;
 	private JButton btnSeleccionarNinguno;
@@ -87,9 +90,11 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		JScrollPane jsp = new JScrollPane(getChkListClientes(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		jsp.setPreferredSize(new Dimension(300, 100));
 		
-		panelNorte.add(jsp, GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 2, 3, 1, 0));
+		panelNorte.add(jsp, GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 2, 2, 1, 0));
 		panelNorte.add(getBtnSeleccionarTodos(), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 		panelNorte.add(getBtnSeleccionarNinguno(), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+		
+		panelNorte.add(getFechaInicioValidez(), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
 		panelNorte.add(getBtnAumentar(), GenericUtils.createGridBagConstraints(2, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 
 		panelNorte.add(new JLabel("Estado: "), GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
@@ -115,8 +120,17 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		setTitle("Aumentador de precios");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
+		setResizable(false);
 		setSize(500, 650);
 		GuiUtil.centrar(this);
+	}
+	
+	private PanelDatePicker getFechaInicioValidez() {
+		if (fechaInicioValidez == null) {
+			fechaInicioValidez = new PanelDatePicker();
+			fechaInicioValidez.setCaption("Válida a partir del día:");
+		}
+		return fechaInicioValidez;
 	}
 	
 	private JButton getBtnSeleccionarTodos() {
@@ -190,6 +204,10 @@ public class JDialogAumentadorDePrecios extends JDialog {
 							return;
 						}
 					}
+					if(getFechaInicioValidez().getDate().before(DateUtil.getHoy())) {
+						CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La fecha de inicio de validez debe ser igual o posterior a hoy.", "Error");
+						return;
+					}
 					new ThreadAumentador(getClientesSeleccionados()).start();
 				}
 			});
@@ -201,7 +219,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		if (tablaAvance == null) {
 			tablaAvance = new CLJTable(0, CANT_COLS);
 			tablaAvance.setStringColumn(COL_CLIENTE, "CLIENTE", 300, 300, true);
-			tablaAvance.setStringColumn(COL_RESULTADO, "RESULTADO", 100, 100, true);
+			tablaAvance.setStringColumn(COL_RESULTADO, "RESULTADO", 130, 130, true);
 			tablaAvance.setHeaderAlignment(COL_CLIENTE, CLJTable.CENTER_ALIGN);
 			tablaAvance.setHeaderAlignment(COL_RESULTADO, CLJTable.CENTER_ALIGN);
 			tablaAvance.setReorderingAllowed(false);
@@ -231,7 +249,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	}
 	
 	private enum EEstadoAumentoPrecioCliente {
-		OK, PROCESANDO_LISTA, ENVIANDO_EMAIL, ERROR;
+		OK, PROCESANDO, EMAIL, ERROR;
 	}
 	
 	private JLabel getLblWorking() {
@@ -281,8 +299,8 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	private PanelTablaAumentosTipoProducto getPanelTablaAumentos() {
 		if (panelTablaAumentos == null) {
 			panelTablaAumentos = new PanelTablaAumentosTipoProducto();
-			panelTablaAumentos.setSize(300, 200);
-			panelTablaAumentos.setPreferredSize(new Dimension(300, 200));
+			panelTablaAumentos.setSize(300, 150);
+			panelTablaAumentos.setPreferredSize(new Dimension(300, 150));
 		}
 		return panelTablaAumentos;
 	}
@@ -432,7 +450,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 						}
 					}
 
-					getListaDePreciosFacade().aumentar(datosAumento, actualizarCotizacion);
+					getListaDePreciosFacade().aumentarPrecios(c, new java.sql.Date(getFechaInicioValidez().getDate().getTime()), datosAumento, actualizarCotizacion);
 
 					if (actualizarCotizacion) {
 						// si pedi actualizar cotizacion, veo si mando el mail o no
@@ -449,7 +467,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 							if (enviarEmail) {
 								// actualizo la configuracion actual que ahora deberia ser nueva
 								cotizacionActual = getListaDePreciosFacade().getCotizacionVigente(c);
-								actualizarUltimaFila(EEstadoAumentoPrecioCliente.ENVIANDO_EMAIL);
+								actualizarUltimaFila(EEstadoAumentoPrecioCliente.EMAIL);
 								try {
 									GenericUtils.enviarCotizacionPorEmail(c, new ImprimirListaDePreciosHandler(c, cotizacionActual.getVersionListaPrecio())
 										.createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero()));
@@ -479,7 +497,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		private void agregarFila(String razonSocial) {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_CLIENTE] = razonSocial;
-			row[COL_RESULTADO] = EEstadoAumentoPrecioCliente.PROCESANDO_LISTA;
+			row[COL_RESULTADO] = EEstadoAumentoPrecioCliente.PROCESANDO;
 			getTablaAvance().addRow(row);
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
@@ -494,6 +512,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		private void bloquearComponentes() {
 			getTablaAvance().removeAllRows();
 			getBtnSeleccionarTodos().setEnabled(false);
+			GuiUtil.setEstadoPanel(getPanelTablaAumentos(), false);
 			getBtnSeleccionarNinguno().setEnabled(false);
 			getChkListClientes().setEnabled(false);
 			getLblWorking().setVisible(true);
@@ -504,6 +523,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 
 		private void desBloquearComponentes() {
+			GuiUtil.setEstadoPanel(getPanelTablaAumentos(), true);
 			getLblWorking().setVisible(false);
 			getChkListClientes().setEnabled(true);
 			getBtnSeleccionarTodos().setEnabled(true);

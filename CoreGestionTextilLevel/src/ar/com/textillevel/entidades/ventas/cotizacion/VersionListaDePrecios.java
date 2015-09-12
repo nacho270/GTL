@@ -3,6 +3,7 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -119,6 +120,19 @@ public class VersionListaDePrecios implements Serializable {
 			version.getPrecios().add(def.deepClone());
 		}
 		return version;
+	}
+
+	@Transient
+	public void reemplazarDefinicion(DefinicionPrecio nuevaDefinicion) {
+		int index = 0;
+		for(Iterator<DefinicionPrecio> it = getPrecios().iterator(); it.hasNext(); ){
+			DefinicionPrecio def = it.next();
+			if(def.getTipoProducto() == nuevaDefinicion.getTipoProducto()) {
+				break;
+			}
+			index++;
+		}
+		getPrecios().set(index, nuevaDefinicion);
 	}
 
 }

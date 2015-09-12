@@ -200,4 +200,11 @@ public class DefinicionPrecio implements Serializable {
 		return def;
 	}
 
+	@Transient
+	public void aumentarPrecios(float porcentajeAumento) {
+		for(RangoAncho ra : getRangos()) {
+			ra.aumentarPrecios(porcentajeAumento);
+		}
+	}
+
 }
