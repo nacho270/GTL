@@ -86,13 +86,13 @@ import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
-import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
@@ -499,11 +499,12 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		//Por cada par <producto, total> del map genero un item factura producto y lo pongo en la tabla
 		getFactura().setItems(new ArrayList<ItemFactura>());
+		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogCargaFactura.this, getCliente());
 		for (Producto p : mapTotalPorProducto.keySet()) {
 			ItemFacturaProducto itp = new ItemFacturaProducto();
 			BigDecimal totalByProducto = mapTotalPorProducto.get(p);
 			itp.setCantidad(totalByProducto);
-			BigDecimal precio = getPrecio(p);
+			BigDecimal precio = helper.getPrecio(p);
 			itp.setImporte(totalByProducto.multiply(precio));
 			itp.setDescripcion(p.getDescripcion());
 			itp.setProducto(p);
@@ -829,16 +830,6 @@ public class JDialogCargaFactura extends JDialog {
 		fila[COL_IMPORTE] =itfs.getImporte();// getDecimalFormat().format(itfs.getImporte().doubleValue());
 		fila[COL_OBJ_FACTURA] = itfs;
 		return fila;
-	}
-
-	private BigDecimal getPrecio(Producto p) {
-		try {
-			return new BigDecimal(GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class).getPrecioProducto(p, getCliente()));
-		} catch (ValidacionException e) {
-			// no deberia pasar
-			CLJOptionPane.showErrorMessage(this, "No se encuentra definido el precio para " + p.getDescripcion() + " en la lista de precios del cliente.", "Error");
-		}
-		return null;
 	}
 
 	private void construct() {

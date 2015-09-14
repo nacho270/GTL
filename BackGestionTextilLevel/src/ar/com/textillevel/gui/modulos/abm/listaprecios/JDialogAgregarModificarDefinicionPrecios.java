@@ -21,6 +21,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.taglibs.string.util.StringW;
+
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
@@ -57,6 +59,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	
 	private static String TEXT_BTN_NUEVO = "Nuevo";
 	private static String TEXT_BTN_CANCELAR = "Cancelar";
+	
+	private static Float UMBRAL_PRECIO = 99.99f;
 
 	protected E elemSiendoEditado;
 
@@ -367,6 +371,13 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 				getTxtPrecio().requestFocus();
 				return false;
 			}
+			if(getPrecio() > UMBRAL_PRECIO) {
+				int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio es mayor a " + UMBRAL_PRECIO + " ¿Desea continuar?"), "Atención");
+				if(res == CLJOptionPane.NO_OPTION) {
+					getTxtPrecio().requestFocus();
+					return false;
+				}
+			}
 		}
 		//Rango Ancho Común
 		T rangoAnchoSiendoEditado=null;
@@ -381,7 +392,6 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 				return false;
 			}
 		}
-		
 		return true;
 	}
 

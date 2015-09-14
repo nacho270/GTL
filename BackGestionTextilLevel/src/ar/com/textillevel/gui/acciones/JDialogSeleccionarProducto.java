@@ -25,7 +25,6 @@ import javax.swing.JScrollPane;
 
 import ar.clarin.fwjava.componentes.CLCheckBoxList;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -38,8 +37,8 @@ import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
-import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
-import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
+import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
+import ar.com.textillevel.gui.util.ProductosAndPreciosHelper.ResultProductosTO;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogSeleccionarProducto extends JDialog {
@@ -62,16 +61,12 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private JLabel lblGama;
 
 	private ArticuloFacadeRemote articuloFacade;
-	private ListaDePreciosFacadeRemote listaPreciosFacade;
-	private ClienteFacadeRemote clienteFacade;
 
 	private List<Articulo> allArticulosList;
 	private List<Articulo> articuloFilterList;
 	private VersionListaDePrecios versionListaDePrecios;
 	private Cliente cliente;
 
-	private static final int NRO_CLIENTE_01 = 1;
-	
 	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<Producto> productoSelectedList) {
 		super(owner);
 		this.cliente = cliente;
@@ -273,22 +268,14 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private List<Producto> getProductoList() {
 		List<Producto> allOrderByName = null;
 		List<Producto> productoResultList = new ArrayList<Producto>();
-		try {
-			allArticulosList = getArticuloFacade().getAllOrderByName();
-			versionListaDePrecios = getListaDePreciosFacade().getVersionListaPrecioActual(cliente);
-			allOrderByName = getListaDePreciosFacade().getProductos(cliente);
-		} catch (ValidacionException e) {
-			int resp = CLJOptionPane.showQuestionMessage(JDialogSeleccionarProducto.this, "El cliente no posee una lista de precios.\n ¿Desea cargar la lista por defecto?", "Advertencia");
-			if(resp == CLJOptionPane.YES_OPTION) {
-				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_01);
-				try {
-					versionListaDePrecios = getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault);
-					allOrderByName = getListaDePreciosFacade().getProductos(clienteDefault);
-				} catch (ValidacionException e1) {
-					CLJOptionPane.showErrorMessage(JDialogSeleccionarProducto.this, "La lista de precios por defecto tampoco fue cargada.", "Advertencia");
-					return productoResultList;
-				}
-			}
+		allArticulosList = getArticuloFacade().getAllOrderByName();
+		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogSeleccionarProducto.this, cliente);
+		ResultProductosTO result = helper.getInfoProductosAndListaDePrecios();
+		if(result != null) {
+			versionListaDePrecios = result.versionListaDePrecios;
+			allOrderByName = result.productos;
+		} else {
+			return productoResultList;
 		}
 		if(articuloFilterList == null) {
 			return allOrderByName;
@@ -455,20 +442,6 @@ public class JDialogSeleccionarProducto extends JDialog {
 			articuloFacade = GTLBeanFactory.getInstance().getBean2(ArticuloFacadeRemote.class);
 		}
 		return articuloFacade;
-	}
-
-	private ListaDePreciosFacadeRemote getListaDePreciosFacade() {
-		if(listaPreciosFacade == null) {
-			listaPreciosFacade = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class);
-		}
-		return listaPreciosFacade;
-	}
-
-	private ClienteFacadeRemote getClienteFacade() {
-		if(clienteFacade == null) {
-			clienteFacade =  GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
-		}
-		return clienteFacade;
 	}
 
 	public List<Producto> getProductoSelectedList() {

@@ -57,7 +57,7 @@ import ar.com.textillevel.gui.modulos.abm.listaprecios.comun.JDialogAgregarModif
 import ar.com.textillevel.gui.modulos.abm.listaprecios.estampado.JDialogAgregarModificarDefinicionPreciosEstampado;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.tenido.JDialogAgregarModificarDefinicionPreciosTenido;
 import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.gui.util.dialogs.JDialogInputFecha;
+import ar.com.textillevel.gui.util.dialogs.JDialogInputFechaWithCheckbox;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class GuiABMListaDePrecios extends GuiABMListaTemplate {
@@ -275,9 +275,11 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			getTablaDefiniciones().getBotonEliminar().setEnabled(false);
 			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		}
-		if(shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0){
-			getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
-			getTablaVersiones().handleClickTablaVersiones();
+		if(shortCutAgregar){
+			if(getTablaVersiones().getTabla().getRowCount() > 0) {
+				getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
+				getTablaVersiones().handleClickTablaVersiones();
+			}
 		}
 	}
 
@@ -366,7 +368,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		@Override
 		public boolean validarAgregar() {
-			if(getTablaVersiones().getTabla().getRowCount() > 0) {
+			boolean existenVersionesAnteriores = getTablaVersiones().getTabla().getRowCount() > 0;
+			if(existenVersionesAnteriores) {
 				VersionListaDePrecios ultVersion = getElemento(0);
 				if(ultVersion.getId() == null) {
 					CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede agregar otra versión porque no se ha grabado la última agregada. Por favor, elimine esta última o bien grabe los cambios y reintente la operación."), "Error");
@@ -378,13 +381,20 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				setListaActual(new ListaDePrecios());
 				getListaActual().setCliente((Cliente) lista.getSelectedValue());
 			}
-			JDialogInputFecha dialogoFecha = new JDialogInputFecha(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez");
+			JDialogInputFechaWithCheckbox dialogoFecha = new JDialogInputFechaWithCheckbox(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez", "Copiar última versión", existenVersionesAnteriores, existenVersionesAnteriores);
 			dialogoFecha.setVisible(true);
 			Date fechaInicioValidez = dialogoFecha.getFecha();
 			if(fechaInicioValidez != null) {
 				boolean hayVersionesMasViejas = hayVersionesMasViejas(fechaInicioValidez);
 				if (getListaActual().getVersiones().isEmpty() || !hayVersionesMasViejas) {
-					VersionListaDePrecios nuevaVersion = new VersionListaDePrecios(fechaInicioValidez);
+					VersionListaDePrecios nuevaVersion = null;
+					//Clono la última versión
+					if(existenVersionesAnteriores && dialogoFecha.isChkSelected()) {
+						nuevaVersion = getTablaVersiones().getElemento(0).deepClone();
+						nuevaVersion.setInicioValidez(fechaInicioValidez);
+					} else {
+						nuevaVersion = new VersionListaDePrecios(fechaInicioValidez);
+					}
 					getListaActual().getVersiones().add(nuevaVersion);
 					ordenarVersiones();
 					
@@ -683,12 +693,13 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	}
 
 	private boolean checkCotizacionVigente(VersionListaDePrecios versionParaEditar) {
+		boolean existenVersionesAnteriores = getTablaVersiones().getTabla().getRowCount() > 0;
 		if(versionParaEditar.getId() != null) {
 			Cotizacion ultimaCotizacion = getListaDePreciosFacade().getUltimaCotizacionVigente(versionParaEditar);
 			if(ultimaCotizacion != null) {
 				int res = CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede editar la lista de precios porque la cotización NRO. '" + ultimaCotizacion.getNumero() + "' aún está vigente. ¿Desea crear una nueva versión?."), "Advertencia");
 				if(CLJOptionPane.YES_OPTION == res) {
-					JDialogInputFecha dialogoFecha = new JDialogInputFecha(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez");
+					JDialogInputFechaWithCheckbox dialogoFecha = new JDialogInputFechaWithCheckbox(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez", "Copiar última versión", existenVersionesAnteriores, existenVersionesAnteriores);
 					dialogoFecha.setVisible(true);
 					Date fechaInicioValidez = dialogoFecha.getFecha();
 					if(fechaInicioValidez != null) {

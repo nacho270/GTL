@@ -24,6 +24,7 @@ public class JDialogInputFecha extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private CLBotonCalendario btnFecha;
+	private JPanel panelCentral;
 	
 	private Date fecha;
 	
@@ -47,11 +48,13 @@ public class JDialogInputFecha extends JDialog {
 		add(getPanelSur(),BorderLayout.SOUTH);
 	}
 
-	private JPanel getPanelCentral(){
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel.add(getTxtFecha());
-		panel.add(getBtnFecha());
-		return panel;
+	protected JPanel getPanelCentral(){
+		if(panelCentral == null) {
+			panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			panelCentral.add(getTxtFecha());
+			panelCentral.add(getBtnFecha());
+		}
+		return panelCentral;
 	}
 	
 	private JPanel getPanelSur(){
