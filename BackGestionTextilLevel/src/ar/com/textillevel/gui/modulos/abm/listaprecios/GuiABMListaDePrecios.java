@@ -703,8 +703,13 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					dialogoFecha.setVisible(true);
 					Date fechaInicioValidez = dialogoFecha.getFecha();
 					if(fechaInicioValidez != null) {
-						VersionListaDePrecios nuevaVersion = versionParaEditar.deepClone();
-						nuevaVersion.setInicioValidez(fechaInicioValidez);
+						VersionListaDePrecios nuevaVersion = null;
+						if(dialogoFecha.isChkSelected()) {
+							nuevaVersion = getTablaVersiones().getElemento(0).deepClone();
+							nuevaVersion.setInicioValidez(fechaInicioValidez);
+						} else {
+							nuevaVersion = new VersionListaDePrecios(fechaInicioValidez); 
+						}
 						getListaActual().getVersiones().add(nuevaVersion);
 						ordenarVersiones();
 						getTablaVersiones().limpiar();
