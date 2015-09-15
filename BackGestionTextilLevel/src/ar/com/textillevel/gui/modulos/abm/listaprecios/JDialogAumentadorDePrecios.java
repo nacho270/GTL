@@ -169,13 +169,18 @@ public class JDialogAumentadorDePrecios extends JDialog {
 				public void itemListaSeleccionado(Object item, boolean seleccionado) {
 					if (seleccionado) {
 						Cliente cliente = (Cliente) item;
+						if(getClientesSeleccionados()== null) {
+							clientesSeleccionados = new ArrayList<Cliente>();
+						}
 						if (!getClientesSeleccionados().contains(cliente)) {
 							getClientesSeleccionados().add(cliente);
 						}
 					} else {
-						getClientesSeleccionados().remove(item);
-						if(getClientesSeleccionados().isEmpty()) {
-							clientesSeleccionados = null;
+						if (getClientesSeleccionados()!= null ) {
+							getClientesSeleccionados().remove(item);
+							if(getClientesSeleccionados().isEmpty()) {
+								clientesSeleccionados = null;
+							}
 						}
 					}
 				}

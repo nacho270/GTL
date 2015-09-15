@@ -231,7 +231,13 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		listaActual = listaDePreciosDAOLocal.save(listaActual);
 		if(actualizarCotizacion) {
 			nuevaVersionListaDePrecios = listaActual.getVersiones().get(listaActual.getVersiones().size() - 1);
-			self.actualizarVersionListaDePrecios(cliente, nuevaVersionListaDePrecios);
+
+			Cotizacion cotizacion = cotizacionDAOLocal.getUltimaCotizacion(cliente);
+			if(cotizacionVigente(cotizacion)) {
+				cotizacion.setVersionListaPrecio(nuevaVersionListaDePrecios);
+			}
+			cotizacionDAOLocal.save(cotizacion);
+//			self.actualizarVersionListaDePrecios(cliente, nuevaVersionListaDePrecios);
 		}
 	}
 
