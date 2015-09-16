@@ -101,9 +101,11 @@ public class ChatClient {
 							MensajeMessageChat mmc = (MensajeMessageChat)msg;
 							ChatWindow.getInstance().agregarMensaje(mmc);
 							if(!ChatWindow.getInstance().isVisible()){
+								ChatWindow.getInstance().mostrarVentana(mmc.getNickDestino());
 								NotificationHelper.showNotification("Nuevo mensaje de: "+ mmc.getNickDestino(),mmc.getMsg(),EnumNotificaciones.HINT);
+							} else {
+								ChatWindow.getInstance().toFront();
 							}
-							ChatWindow.getInstance().toFront();
 							break;
 						}
 						case USUARIOS:{
@@ -138,12 +140,10 @@ public class ChatClient {
 	public void setPort(String port) {
 		this.port = port;
 	}
-
 	
 	public boolean isConnected() {
 		return connected;
 	}
-
 	
 	public void setConnected(boolean connected) {
 		this.connected = connected;
