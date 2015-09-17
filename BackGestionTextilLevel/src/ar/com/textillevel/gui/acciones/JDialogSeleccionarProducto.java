@@ -332,8 +332,10 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 		for(Producto producto : allProductoList) {
 			if(tpSel == null || producto.getTipo() == tpSel) {
-				tpSet.add(producto.getArticulo().getTipoArticulo().getId());
-				subsetProductos.add(producto);
+				if(producto.getArticulo() != null) {
+					tpSet.add(producto.getArticulo().getTipoArticulo().getId());
+					subsetProductos.add(producto);
+				}
 			}
 		}
 

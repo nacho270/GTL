@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
@@ -161,6 +162,10 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 
 	@Transient
 	public Float getPrecioProducto(Producto producto) {
+		if(producto.getTipo() == ETipoProducto.DEVOLUCION || producto.getTipo() == ETipoProducto.REPROCESO_SIN_CARGO) {
+			return new Float(0);
+		}
+		
 		if (getAnchoExacto() != null && getAnchoExacto().floatValue() == producto.getArticulo().getAncho().floatValue()) {
 			return buscarPrecio(producto);
 		} else if (getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(producto.getArticulo().getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) {

@@ -17,7 +17,7 @@ update t_articulo set f_tipo_articulo_p_id =2 where p_id = 23;
 update t_articulo set f_tipo_articulo_p_id =3 where p_id = 13;
 update t_articulo set f_tipo_articulo_p_id =3 where p_id = 21;
 
--- chequear donde van los siguientes:
+-- TODO: chequear donde van los siguientes:
 /*
 TAPICERIA
 PERCAL
@@ -28,7 +28,7 @@ PONGE
 GABARDINA
 */
 
--- arreglar cosas que no son articulos: devolucion,  descrude y termofijado
+-- TODO: arreglar cosas que no son articulos: devolucion,  descrude y termofijado
 
 delete from t_articulo where p_id in (34, 40);
 
@@ -37,8 +37,7 @@ insert into t_articulo values(75, 'ALGODON POLIESTER 2,45', 'AP 2,45', 1, 2.45, 
 update t_producto set f_articulo_p_id = 75 where f_articulo_p_id = 74;
 
 -- cargar aa 1,52
-insert into t_articulo values(69, 'ALGODON 1,52', 'AA 1,52', 1, 1.52, 2);
-update t_producto set f_articulo_p_id = 69 where f_articulo_p_id = 70;
+insert into t_articulo values(70, 'ALGODON 1,52', 'AA 1,52', 1, 1.52, 2);
 
 -- cargar ap 1,65
 insert into t_articulo values(76, 'ALGODON POLIESTER 1,65', 'AP 1,65', 1, 1.65, 3);
@@ -61,7 +60,7 @@ delete from t_producto where p_id in (1043);
 -- quito articulos de productos que no los requieren
 update t_producto set f_articulo_p_id = null where p_id in (368, 395, 1042); /* 1222 ver que articulo es */
 
--- QUEDA A DEFINIR QUE SE PONE EN EL P_ID 13: ART. VS CAMISERIA
+-- QUEDA A DEFINIR QUE ANCHO SE PONE EN EL P_ID 13: ART. VS CAMISERIA
 
 -- cargo anchos faltantes
 update t_articulo set a_ancho = 2.4 where p_id = 1;
@@ -124,9 +123,9 @@ update t_articulo set a_ancho = 2.6 where p_id = 65;
 update t_articulo set a_ancho = 1.68 where p_id = 66;
 update t_articulo set a_ancho = 1.5 where p_id = 67;
 update t_articulo set a_ancho = 1.42 where p_id = 68;
+update t_articulo set a_ancho = 1.5 where p_id = 69;
 
-
-
+-- TODO: el producto con p_id=395 (tipo TERMOFIJADO) pero no tiene ancho!! 
 
 
 
@@ -139,7 +138,4 @@ group by f_tipo_articulo_p_id, a_ancho
 having f_tipo_articulo_p_id is not null and a_ancho is not null and count(*) > 1;
 
 select * from t_producto pr where not exists( select 1 from t_articulo art where art.p_id = pr.f_articulo_p_id);
-
-delete from t_producto where p_id in (368, 395, 1042, 1043);
-
-select * from t_remito_entrada_producto where f_producto_p_id in (368, 395, 1042, 1043);
+select * from t_remito_entrada_producto where f_producto_p_id in (368, 395, 1042);
