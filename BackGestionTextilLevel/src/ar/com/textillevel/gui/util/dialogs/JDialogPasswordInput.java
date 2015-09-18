@@ -2,6 +2,7 @@ package ar.com.textillevel.gui.util.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -29,6 +30,13 @@ public class JDialogPasswordInput extends JDialog {
 	private char[] password;
 	private JPanel panelCentral;
 
+	public JDialogPasswordInput(Dialog padre, String titulo) {
+		super(padre);
+		setAcepto(false);
+		setUpComponentes();
+		setUpScreen(titulo);
+	}
+	
 	public JDialogPasswordInput(Frame padre, String titulo) {
 		super(padre);
 		setAcepto(false);

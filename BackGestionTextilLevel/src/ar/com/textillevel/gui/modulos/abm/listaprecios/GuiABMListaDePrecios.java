@@ -246,6 +246,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		cargarLista();
 		if(lista.getModel().getSize() > 0) {
 			lista.setSelectedIndex(0);
+			itemSelectorSeleccionado(0);
 		}
 	}
 
@@ -275,11 +276,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			getTablaDefiniciones().getBotonEliminar().setEnabled(false);
 			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		}
-		if(shortCutAgregar){
-			if(getTablaVersiones().getTabla().getRowCount() > 0) {
-				getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
-				getTablaVersiones().handleClickTablaVersiones();
-			}
+		if(shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0) {
+			getTablaVersiones().getTabla().setRowSelectionInterval(getTablaVersiones().getFilaVersionVigente(), getTablaVersiones().getFilaVersionVigente());
+			getTablaVersiones().handleClickTablaVersiones();
 		}
 	}
 
@@ -301,6 +300,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		private static final long serialVersionUID = 524085936965031187L;
 
+		private int filaVersionVigente = 0;
+		
 		private static final int CANT_COLS = 3;
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
 		public static final int COL_ULT_COTIZACION = 1;
@@ -478,11 +479,16 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				for(int i=0; i < getTabla().getRowCount(); i++) {
 					VersionListaDePrecios elemento = getElemento(i);
 					if(cotizacion.getVersionListaPrecio().getId().equals(elemento.getId())) {
+						filaVersionVigente = i;
 						getTabla().setValueAt("COTIZACION NRO. '" + cotizacion.getNumero() + "' VIGENTE. VENCE: " + cotizacion.getFechaVencimientoStr(), i, COL_ULT_COTIZACION);
 						return;
 					}
 				}
 			}
+		}
+		
+		public int getFilaVersionVigente() {
+			return filaVersionVigente;
 		}
 	
 	}

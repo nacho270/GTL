@@ -39,12 +39,15 @@ import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.ImageUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
+import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
+import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAumentadorDePrecios extends JDialog {
@@ -213,7 +216,19 @@ public class JDialogAumentadorDePrecios extends JDialog {
 						CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La fecha de inicio de validez debe ser igual o posterior a hoy.", "Error");
 						return;
 					}
-					new ThreadAumentador(getClientesSeleccionados()).start();
+					if (CLJOptionPane.showQuestionMessage(JDialogAumentadorDePrecios.this, "Va a aumentar las listas de precios de " + getClientesSeleccionados().size() +
+							" clientes.\nDesea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+						JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JDialogAumentadorDePrecios.this, "Aumentar precios");
+						if (jDialogPasswordInput.isAcepto()) {
+							String pass = new String(jDialogPasswordInput.getPassword());
+							UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
+							if (usrAdmin != null) {
+								new ThreadAumentador(getClientesSeleccionados()).start();
+							} else {
+								CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+							}
+						}
+					}
 				}
 			});
 		}
