@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.swing.JButton;
@@ -397,7 +396,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	protected Float getAnchoExacto() {
 		if(getChkAnchoExacto().isSelected()) {
-			return NumUtil.redondearDecimales(getTxtAnchoExacto().getValueWithNull(), 2, BigDecimal.ROUND_UP);
+			return getTxtAnchoExacto().getValueWithNull();
 		} else {
 			return null;
 		}
@@ -407,18 +406,18 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		if(getChkAnchoExacto().isSelected()) {
 			return null;
 		}
-		return NumUtil.redondearDecimales(getTxtAnchoInicial().getValueWithNull(), 2, BigDecimal.ROUND_UP);
+		return getTxtAnchoInicial().getValueWithNull();
 	}
 
 	protected Float getAnchoFinal() {
 		if(getChkAnchoExacto().isSelected()) {
 			return null;
 		}
-		return NumUtil.redondearDecimales(getTxtAnchoFinal().getValueWithNull(), 2, BigDecimal.ROUND_UP);
+		return getTxtAnchoFinal().getValueWithNull();
 	}
 
 	protected Float getPrecio() {
-		return NumUtil.redondearDecimales(getTxtPrecio().getValueWithNull(), 2, BigDecimal.ROUND_UP);
+		return getTxtPrecio().getValueWithNull();
 	}
 
 	protected TipoArticulo getTipoArticulo() {

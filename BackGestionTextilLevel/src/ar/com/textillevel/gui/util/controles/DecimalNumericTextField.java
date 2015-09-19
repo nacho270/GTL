@@ -122,7 +122,11 @@ public class DecimalNumericTextField extends JTextField {
 	 */
 	public Float getValue() {
 		try {
-			return new Float(getText().replace(",", "."));
+			if(decimalFormat != null) {
+				return new Float(decimalFormat.format(new Float(getText().replace(",", "."))).replace(",", "."));
+			} else {
+				return new Float(getText().replace(",", "."));
+			}
 		} catch (NumberFormatException e) {
 			return new Float(0f);
 		}

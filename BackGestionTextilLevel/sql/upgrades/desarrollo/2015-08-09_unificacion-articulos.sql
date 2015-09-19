@@ -125,6 +125,8 @@ update t_articulo set a_ancho = 1.5 where p_id = 67;
 update t_articulo set a_ancho = 1.42 where p_id = 68;
 update t_articulo set a_ancho = 1.5 where p_id = 69;
 
+-- agrego gramaje a repasador
+update t_articulo set a_gramaje = '0.37' where p_id = 24;
 
 update t_producto set a_descr='DESCRUDE Y TERMOFIJADO', f_articulo_p_id=4 where p_id=395;
 -- TODO: HACER REFACTOR CREANDO PROD DESCRUDE

@@ -791,7 +791,7 @@ public class JDialogCargaFactura extends JDialog {
 		fila[COL_CANTIDAD] =itf.getCantidad();// getDecimalFormat().format(itf.getCantidad());
 		fila[COL_DESCRIPCION] = itf.getDescripcion();
 		fila[COL_UNIDAD] = itf.getUnidad().getDescripcion();
-		fila[COL_PRECIO_UNITARIO] = itf.getPrecioUnitario();// getDecimalFormat().format(itf.getPrecioUnitario());
+		fila[COL_PRECIO_UNITARIO] = getDecimalFormat().format(itf.getPrecioUnitario());
 		fila[COL_IMPORTE] = getDecimalFormat().format(itf.getImporte().doubleValue());
 		fila[COL_OBJ_FACTURA] = itf;
 		return fila;
