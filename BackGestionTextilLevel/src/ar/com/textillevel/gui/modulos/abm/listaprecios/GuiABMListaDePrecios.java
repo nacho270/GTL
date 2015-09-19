@@ -277,7 +277,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		}
 		if(shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0) {
-			getTablaVersiones().getTabla().setRowSelectionInterval(getTablaVersiones().getFilaVersionVigente(), getTablaVersiones().getFilaVersionVigente());
+			int filaVersionVigente = getTablaVersiones().getFilaVersionVigente();
+			if (filaVersionVigente > -1) {
+				getTablaVersiones().getTabla().setRowSelectionInterval(filaVersionVigente, filaVersionVigente);
+			}else if (getTablaVersiones().getTabla().getRowCount() > 0) {
+				getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
+			}
 			getTablaVersiones().handleClickTablaVersiones();
 		}
 	}
@@ -300,7 +305,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		private static final long serialVersionUID = 524085936965031187L;
 
-		private int filaVersionVigente = 0;
+		private int filaVersionVigente = -1;
 		
 		private static final int CANT_COLS = 3;
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
