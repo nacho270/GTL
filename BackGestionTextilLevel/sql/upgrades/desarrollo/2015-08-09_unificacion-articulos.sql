@@ -16,8 +16,9 @@ update t_articulo set f_tipo_articulo_p_id =2 where p_id = 24;
 update t_articulo set f_tipo_articulo_p_id =2 where p_id = 23;
 update t_articulo set f_tipo_articulo_p_id =3 where p_id = 13;
 update t_articulo set f_tipo_articulo_p_id =3 where p_id = 21;
+update t_articulo set f_tipo_articulo_p_id =3 where p_id in (22, 3, 4, 14);
 
--- TODO: chequear donde van los siguientes:
+-- DONE: chequear donde van los siguientes:
 /*
 TAPICERIA
 PERCAL
@@ -60,8 +61,6 @@ delete from t_producto where p_id in (1043);
 -- quito articulos de productos que no los requieren
 update t_producto set f_articulo_p_id = null where p_id in (368, 395, 1042); /* 1222 ver que articulo es */
 
--- QUEDA A DEFINIR QUE ANCHO SE PONE EN EL P_ID 13: ART. VS CAMISERIA
-
 -- cargo anchos faltantes
 update t_articulo set a_ancho = 2.4 where p_id = 1;
 update t_articulo set a_ancho = 1.5 where p_id = 3;
@@ -73,6 +72,7 @@ update t_articulo set a_ancho = 1.5 where p_id = 8;
 update t_articulo set a_ancho = 2.6 where p_id = 10;
 update t_articulo set a_ancho = 2.7 where p_id = 11;
 update t_articulo set a_ancho = 2.8 where p_id = 12;
+update t_articulo set a_ancho = 1.6 where p_id = 13;
 update t_articulo set a_ancho = 1.6 where p_id = 14;
 update t_articulo set a_ancho = 1.6 where p_id = 15;
 update t_articulo set a_ancho = 3 where p_id = 16;
@@ -125,7 +125,9 @@ update t_articulo set a_ancho = 1.5 where p_id = 67;
 update t_articulo set a_ancho = 1.42 where p_id = 68;
 update t_articulo set a_ancho = 1.5 where p_id = 69;
 
--- TODO: el producto con p_id=395 (tipo TERMOFIJADO) pero no tiene ancho!! 
+
+update t_producto set a_descr='DESCRUDE Y TERMOFIJADO', f_articulo_p_id=4 where p_id=395;
+-- TODO: HACER REFACTOR CREANDO PROD DESCRUDE
 
 
 

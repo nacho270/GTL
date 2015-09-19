@@ -68,7 +68,7 @@ public class ProductosAndPreciosHelper {
 		try {
 			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente), getListaDePreciosFacade().getProductos(cliente));
 		} catch (ValidacionException e) {
-			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap("El cliente no posee una lista de precios y no se pueden recuperar los productos.\n ¿Desea usar la lista de precios por defecto?"), "Advertencia");
+			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap("El cliente no posee una lista de precios y no se pueden obtener los productos.\n ¿Desea usar la lista de precios por defecto?"), "Advertencia");
 			if(resp == CLJOptionPane.YES_OPTION) {
 				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_DEFAULT);
 				if(clienteDefault == null) {
