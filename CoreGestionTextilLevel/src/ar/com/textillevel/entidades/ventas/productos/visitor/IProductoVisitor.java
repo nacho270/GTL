@@ -2,6 +2,7 @@ package ar.com.textillevel.entidades.ventas.productos.visitor;
 
 import ar.com.textillevel.entidades.ventas.productos.ProductoAprestado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoCalandrado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoDescrude;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDesmanchado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDesmanchadoYLavado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDevolucion;
@@ -19,7 +20,7 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTermofijado;
 
 public interface IProductoVisitor {
-	
+
 	public void visit(ProductoCalandrado pc);
 	public void visit(ProductoDoblado pd);
 	public void visit(ProductoEstampado pe);
@@ -37,5 +38,6 @@ public interface IProductoVisitor {
 	public void visit(ProductoLavado productoLavado);
 	public void visit(ProductoReprocesoConCargo productoReprocesoConCargo);
 	public void visit(ProductoAprestado productoAprestado);
-	
+	public void visit(ProductoDescrude productoDescrude);
+
 }

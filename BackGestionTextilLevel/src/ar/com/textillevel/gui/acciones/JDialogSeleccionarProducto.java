@@ -22,14 +22,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import ar.clarin.fwjava.componentes.CLCheckBoxList;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.util.GuiUtil;
+import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
+import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
@@ -37,6 +40,7 @@ import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
+import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper.ResultProductosTO;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -48,10 +52,13 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	
+	private JComboBox cmbTipoArticulo;
 	private JComboBox cmbArticulo;
 	private JComboBox cmbTipoProducto;
 	private JComboBox cmbGama;
 	private CLCheckBoxList<Producto> checkBoxList;
+	private JTextArea txtProdSel;
+
 	private boolean acepto;
 	private List<Producto> productoSelectedList;
 	private List<Producto> allProductoList;
@@ -62,6 +69,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 	private ArticuloFacadeRemote articuloFacade;
 
+	private List<TipoArticulo> allTipoArticuloList;
 	private List<Articulo> allArticulosList;
 	private List<Articulo> articuloFilterList;
 	private VersionListaDePrecios versionListaDePrecios;
@@ -121,22 +129,24 @@ public class JDialogSeleccionarProducto extends JDialog {
 		if(pnlDatos == null){
 			pnlDatos = new JPanel();
 			pnlDatos.setLayout(new GridBagLayout());
+			
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
-			pnlDatos.add(new JLabel("TIPO DE PRODUCTO: "), gridBagConstraints);
+			pnlDatos.add(new JLabel("TIPO DE ARTÍCULO: "), gridBagConstraints);
+			
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.insets = new Insets(5,5,5,5);
-			pnlDatos.add(getCmbTipoProducto(), gridBagConstraints);
+			pnlDatos.add(getCmbTipoArticulo(), gridBagConstraints);
 
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 1;
 			gridBagConstraints.insets = new Insets(5,5,5,5);
-			pnlDatos.add(new JLabel("ARTICULO: "), gridBagConstraints);
+			pnlDatos.add(new JLabel("ARTÍCULO: "), gridBagConstraints);
 
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
@@ -145,31 +155,62 @@ public class JDialogSeleccionarProducto extends JDialog {
 			gridBagConstraints.insets = new Insets(5,5,5,5);
 			pnlDatos.add(getCmbArticulo(), gridBagConstraints);
 
-
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 2;
 			gridBagConstraints.insets = new Insets(5,5,5,5);
-			pnlDatos.add(getLblGama(), gridBagConstraints);
-
+			pnlDatos.add(new JLabel("TIPO DE PRODUCTO: "), gridBagConstraints);
+			
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.gridy = 2;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.insets = new Insets(5,5,5,5);
-			pnlDatos.add(getCmbGama(), gridBagConstraints);
-			
+			pnlDatos.add(getCmbTipoProducto(), gridBagConstraints);			
 			
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 3;
+			gridBagConstraints.insets = new Insets(5,5,5,5);
+			pnlDatos.add(getLblGama(), gridBagConstraints);
+
+			gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 1;
+			gridBagConstraints.gridy = 3;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.insets = new Insets(5,5,5,5);
+			pnlDatos.add(getCmbGama(), gridBagConstraints);
+
+			gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 4;
 			gridBagConstraints.gridwidth = 2;
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1;
-			gridBagConstraints.weighty = 1;
+			gridBagConstraints.weighty = 0.7;
 			JScrollPane scrollPane = new JScrollPane(getClCheckBoxList());
 			scrollPane.setBorder(BorderFactory.createTitledBorder("PRODUCTOS"));
 			pnlDatos.add(scrollPane, gridBagConstraints);
+			
+			gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 5;
+			gridBagConstraints.gridwidth = 2;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.insets = new Insets(5,5,5,5);
+			pnlDatos.add(new JLabel("PRODUCTOS:"), gridBagConstraints);			
+
+			JScrollPane scrollPaneProdSel = new JScrollPane(getTxtProdSel());
+			scrollPane.setBorder(BorderFactory.createTitledBorder("PRODUCTOS SELECCIONADOS:"));
+			gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 6;
+			gridBagConstraints.gridwidth = 2;
+			gridBagConstraints.weighty = 0.3;			
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
+			gridBagConstraints.insets = new Insets(5,5,5,5);
+			pnlDatos.add(scrollPaneProdSel, gridBagConstraints);			
+			
 		}
 		return pnlDatos;
 	}
@@ -183,14 +224,16 @@ public class JDialogSeleccionarProducto extends JDialog {
 	}
 
 	private void filtrar() {
+		TipoArticulo tipoArtSelected = getCmbTipoArticulo().getSelectedIndex() == 0 ? null : (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
 		Articulo artSelected = getCmbArticulo().getSelectedIndex() == 0 ? null : (Articulo)getCmbArticulo().getSelectedItem();
 		ETipoProducto tipoProd = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
 		GamaColor gama = getCmbGama().getSelectedIndex() == 0 ? null : (GamaColor)getCmbGama().getSelectedItem();
 		List<Producto> productoMatchedList = new ArrayList<Producto>();
 		getClCheckBoxList().setAllSelectedItems(false);
 		for(Producto p : allProductoList) {
+			boolean cumpleTipoArticulo = tipoArtSelected == null || (p.getArticulo() != null && p.getArticulo().getTipoArticulo().equals(tipoArtSelected));
+			boolean cumpleArticulo = artSelected == null || (p.getArticulo() != null && artSelected.equals(p.getArticulo()));
 			boolean cumpleTipoProd = tipoProd == null || tipoProd == p.getTipo();
-			boolean cumpleArticulo = artSelected == null || artSelected.equals(p.getArticulo());
 			boolean cumpleGama = true;
 			if(p.getTipo() == ETipoProducto.TENIDO) {
 				cumpleGama = gama==null || gama.equals(((ProductoTenido)p).getGamaColor()); 
@@ -199,11 +242,14 @@ public class JDialogSeleccionarProducto extends JDialog {
 				VarianteEstampado variante = ((ProductoEstampado)p).getVariante();
 				cumpleGama = gama == null || (variante.getGama() != null && gama.equals(variante.getGama())); 
 			}
-			if(cumpleArticulo && cumpleTipoProd && cumpleGama) {
+			if(cumpleTipoArticulo && cumpleArticulo && cumpleTipoProd && cumpleGama) {
 				productoMatchedList.add(p);
 			}
 		}
 		checkBoxList.setValues(productoMatchedList.toArray(new Object[productoMatchedList.size()]));
+		for(Producto p : productoSelectedList) {
+			checkBoxList.setSelectedValue(p, false);
+		}
 	}
 
 	private JButton getBtnAceptar() {
@@ -257,12 +303,22 @@ public class JDialogSeleccionarProducto extends JDialog {
 					} else {
 						productoSelectedList.remove(item);
 					}
+					
+					getTxtProdSel().setText(StringUtil.getCadena(productoSelectedList, "\n"));
 				}
 
 			};
 			checkBoxList.setValues(allProductoList.toArray(new Object[allProductoList.size()]));
 		}
 		return checkBoxList;
+	}
+
+	private JTextArea getTxtProdSel() {
+		if(txtProdSel == null) {
+			txtProdSel = new JTextArea();
+			txtProdSel.setEditable(false);
+		}
+		return txtProdSel;
 	}
 
 	private List<Producto> getProductoList() {
@@ -289,6 +345,26 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return productoResultList;
 	}
 
+	private JComboBox getCmbTipoArticulo() {
+		if(cmbTipoArticulo == null) {
+			cmbTipoArticulo = new JComboBox();
+			GuiUtil.llenarCombo(cmbTipoArticulo, getTipoArticuloList(), false);
+			cmbTipoArticulo.insertItemAt("",0);
+			cmbTipoArticulo.setSelectedIndex(0);
+			cmbTipoArticulo.addItemListener(new ItemListener() {
+
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						filtrar();
+					}
+				}
+
+			});
+
+		}
+		return cmbTipoArticulo;
+	}
+
 	private JComboBox getCmbArticulo() {
 		if(cmbArticulo == null) {
 			cmbArticulo = new JComboBox();
@@ -307,6 +383,13 @@ public class JDialogSeleccionarProducto extends JDialog {
 			
 		}
 		return cmbArticulo;
+	}
+
+	private List<TipoArticulo> getTipoArticuloList() {
+		if(allTipoArticuloList == null) {
+			this.allTipoArticuloList = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class).getAllTipoArticulos();
+		}
+		return allTipoArticuloList;
 	}
 
 	private List<Articulo> getArticuloList() {

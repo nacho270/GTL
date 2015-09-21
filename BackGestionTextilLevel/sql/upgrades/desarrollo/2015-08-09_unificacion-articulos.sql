@@ -59,7 +59,7 @@ update t_orden_de_trabajo set f_producto_p_id = 1042 where f_producto_p_id = 104
 delete from t_producto where p_id in (1043);
 
 -- quito articulos de productos que no los requieren
-update t_producto set f_articulo_p_id = null where p_id in (368, 395, 1042); /* 1222 ver que articulo es */
+update t_producto set f_articulo_p_id = null where p_id in (368, 1042); /* 1222 ver que articulo es */
 
 -- cargo anchos faltantes
 update t_articulo set a_ancho = 2.4 where p_id = 1;
@@ -128,9 +128,8 @@ update t_articulo set a_ancho = 1.5 where p_id = 69;
 -- agrego gramaje a repasador
 update t_articulo set a_gramaje = '0.37' where p_id = 24;
 
-update t_producto set a_descr='DESCRUDE Y TERMOFIJADO', f_articulo_p_id=4 where p_id=395;
--- TODO: HACER REFACTOR CREANDO PROD DESCRUDE
-
+-- EL PRODUCTO 'DESCRUDE Y TERMOFIJADO' PASA A SER DE TIPO 'DESCRUDE'
+update t_producto set a_descr='DESCRUDE', f_articulo_p_id=4, tipo='DESCR' where p_id=395;
 
 
 -- querys utiles

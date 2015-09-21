@@ -42,7 +42,8 @@ public enum ETipoProducto {
 	DESMANCHADO(12, "Desmanchado", EUnidad.KILOS, ProductoDesmanchado.class.getName(), ESectorMaquina.SECTOR_HUMEDO),
 	LAVADO(13, "Lavado", EUnidad.KILOS, ProductoLavado.class.getName(),ESectorMaquina.SECTOR_HUMEDO),
 	REVISADO(14, "Revisado", EUnidad.METROS, ProductoRevisado.class.getName(), ESectorMaquina.SECTOR_TERMINADO),
-	APRESTADO(15, "Aprestado", EUnidad.METROS, ProductoAprestado.class.getName(), ESectorMaquina.SECTOR_SECO);
+	APRESTADO(15, "Aprestado", EUnidad.METROS, ProductoAprestado.class.getName(), ESectorMaquina.SECTOR_SECO),
+	DESCRUDE(16, "Descrude", EUnidad.METROS, ProductoAprestado.class.getName(), ESectorMaquina.SECTOR_HUMEDO);
 
 	private Integer id;
 	private String descripcion;

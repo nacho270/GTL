@@ -5,6 +5,7 @@ import java.util.List;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.productos.ProductoAprestado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoCalandrado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoDescrude;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDesmanchado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDesmanchadoYLavado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDevolucion;
@@ -91,6 +92,9 @@ public class ProductoGamaColorDetectorVisitor implements IProductoVisitor {
 	}
 
 	public void visit(ProductoAprestado productoAprestado) {
+	}
+
+	public void visit(ProductoDescrude productoDescrude) {
 	}
 
 }
