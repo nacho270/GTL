@@ -1,7 +1,6 @@
 package ar.com.textillevel.entidades.ventas.articulos;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -23,7 +22,6 @@ public class GamaColor implements Serializable, Comparable<GamaColor> {
 
 	private Integer id;
 	private String nombre;
-	private BigDecimal precio; // TODO: PENSAR BIEN, PUEDE PICAR TODO
 	private List<Color> colores;
 
 	@Id
@@ -44,15 +42,6 @@ public class GamaColor implements Serializable, Comparable<GamaColor> {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	@Column(name="A_PRECIO", nullable=false)
-	public BigDecimal getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(BigDecimal precio) {
-		this.precio = precio;
 	}
 
 	@OneToMany(fetch=FetchType.EAGER)

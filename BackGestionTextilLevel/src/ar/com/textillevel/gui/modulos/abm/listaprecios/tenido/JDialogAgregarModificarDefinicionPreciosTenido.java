@@ -1,27 +1,31 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.tenido;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
 import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.NumUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
@@ -288,6 +292,8 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 								try{
 									Float precio = ingresarPrecio(gcc);
 									agregarInterno(gcc, precio, true);
+								}catch(SaltarException ex){
+									continue;
 								}catch(Exception ex){
 									break;
 								}
@@ -304,20 +310,26 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		return btnAgregarTodos;
 	}
 
-	private Float ingresarPrecio(GamaColorCliente gcc) throws Exception {
+	private Float ingresarPrecio(GamaColorCliente gcc) throws SaltarException, Exception {
 		boolean okValidez = false;
-		String inputValidez = "";
+		String inputPrecio = "";
 		do {
 			if(!okValidez) {
-				inputValidez = JOptionPane.showInputDialog(JDialogAgregarModificarDefinicionPreciosTenido.this, "Precio para " + gcc.getNombre() + ": ", "Ingrese el precio", JOptionPane.INFORMATION_MESSAGE);
-				if(inputValidez == null){
+				//inputPrecio = JOptionPane.showInputDialog(JDialogAgregarModificarDefinicionPreciosTenido.this, "Precio para " + gcc.getNombre() + ": ", "Ingrese el precio", JOptionPane.INFORMATION_MESSAGE);
+				JDialogInputPrecio dialogInput = new JDialogInputPrecio("Precio para " + gcc.getNombre() + ": ");
+				dialogInput.setVisible(true);
+				inputPrecio = dialogInput.getPrecioInput();
+				if(inputPrecio == null){
 					break;
 				}
-				if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
+				if(inputPrecio.trim().length()==0 || !GenericUtils.esNumerico(inputPrecio)) {
 					CLJOptionPane.showErrorMessage(JDialogAgregarModificarDefinicionPreciosTenido.this, "Ingreso incorrecto", "error");
 				} else {
-					okValidez = true;
-					break;
+					boolean okPrecio = validarPrecio(inputPrecio);
+					if (okPrecio) {
+						okValidez = true;
+						break;
+					}
 				}
 			}
 		} while (!okValidez);
@@ -325,12 +337,134 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		if(!okValidez) {
 			throw new Exception();
 		}
-		Float precio = null;
 		try {
-			precio = new Float(inputValidez.replace(",", "."));
+			return new Float(GenericUtils.getDecimalFormat().format(new Float(inputPrecio.replace(",", "."))).replace(",", "."));
 		} catch (NumberFormatException ex) {
-			precio = new Float(0f);
+			return new Float(0f);
 		}
-		return NumUtil.redondearDecimales(precio, 2, BigDecimal.ROUND_UP);
+	}
+	
+	public class SaltarException extends Exception {
+
+		private static final long serialVersionUID = 5248117900571514497L;
+
+	}
+
+	private class JDialogInputPrecio extends JDialog {
+
+		private static final long serialVersionUID = 1L;
+
+		private JButton btnAceptar;
+		private JButton btnCancelar;
+		private JButton btnSaltar;
+		private CLJTextField txtNumberInput;
+		private JPanel pnlBotones;
+		private String precioInput;
+		private String txtIngreso;
+		private boolean throwException = false;
+
+		public JDialogInputPrecio(String txtIngreso) {
+			super(JDialogAgregarModificarDefinicionPreciosTenido.this);
+			this.txtIngreso = txtIngreso;
+			setAcepto(false);
+			setUpComponentes();
+			setUpScreen();
+		}
+
+		private void setUpScreen() {
+			setTitle("Ingrese el precio");
+			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			setSize(new Dimension(350, 92));
+			setResizable(false);
+			setModal(true);
+			GuiUtil.centrar(this);
+		}
+
+		private void setUpComponentes() {
+			add(getPanelCarga(), BorderLayout.CENTER);
+			add(getPanelBotones(), BorderLayout.SOUTH);
+		}
+
+		private JPanel getPanelCarga() {
+			JPanel pnl = new JPanel();
+			pnl.setLayout(new GridBagLayout());
+			pnl.add(new JLabel(txtIngreso), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			pnl.add(getTxtNumberInput(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1, 1, 1));
+			return pnl;
+		}
+
+		private JPanel getPanelBotones() {
+			if (pnlBotones == null) {
+				pnlBotones = new JPanel();
+				pnlBotones.setLayout(new FlowLayout(FlowLayout.CENTER));
+				pnlBotones.add(getBtnAceptar());
+				pnlBotones.add(getBtnCancelar());
+				pnlBotones.add(getBtnSaltar());
+			}
+			return pnlBotones;
+		}
+
+		private JButton getBtnAceptar() {
+			if (btnAceptar == null) {
+				btnAceptar = new JButton("Aceptar");
+				btnAceptar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						precioInput = getTxtNumberInput().getText();
+						dispose();
+					}
+				});
+			}
+			return btnAceptar;
+		}
+
+		private JButton getBtnCancelar() {
+			if (btnCancelar == null) {
+				btnCancelar = new JButton("Cancelar");
+				btnCancelar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						precioInput = null;
+						dispose();
+					}
+				});
+			}
+			return btnCancelar;
+		}
+
+		public JButton getBtnSaltar() {
+			if (btnSaltar == null) {
+				btnSaltar = new JButton("Saltar");
+				btnSaltar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						precioInput = null;
+						throwException = true;
+						dispose();
+					}
+				});
+			}
+			return btnSaltar;
+		}
+
+		private CLJTextField getTxtNumberInput() {
+			if (txtNumberInput == null) {
+				txtNumberInput = new CLJTextField();
+				txtNumberInput.addKeyListener(new KeyAdapter() {
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+							getBtnAceptar().doClick();
+						}
+					}
+
+				});
+			}
+			return txtNumberInput;
+		}
+
+		public String getPrecioInput() throws SaltarException {
+			if (throwException) {
+				throw new SaltarException();
+			}
+			return precioInput;
+		}
 	}
 }

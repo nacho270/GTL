@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.GamaColorFacadeRemote;
-import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class GuiABMGamas extends GuiABMListaTemplate {
@@ -35,7 +33,6 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 	private JPanel panDetalle;
 	
 	private CLJTextField txtNombreGama;
-	private CLJTextField txtPrecioGama;
 	private CLCheckBoxList<Color> listaColores;
 	
 	private ColorFacadeRemote colorFacade;
@@ -69,10 +66,8 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(new JLabel("Nombre: "), createGridBagConstraints(0, 0,GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panDetalle.add(getTxtNombreGama(),  createGridBagConstraints(1, 0,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Precio: "), createGridBagConstraints(0, 1,GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtPrecioGama(),  createGridBagConstraints(1, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Colores: "), createGridBagConstraints(0, 2,GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getScrollLista(),  createGridBagConstraints(1, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
+			panDetalle.add(new JLabel("Colores: "), createGridBagConstraints(0, 1,GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getScrollLista(),  createGridBagConstraints(1, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
 		}
 		return panDetalle;
 	}
@@ -148,25 +143,7 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 			getTxtNombreGama().requestFocus();
 			return false;
 		}
-		
-		if(getTxtPrecioGama().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el precio de la gama.", "Advertencia");
-			getTxtPrecioGama().requestFocus();
-			return false;
-		}
-		
-		if(!GenericUtils.esNumerico(getTxtPrecioGama().getText())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
-			getTxtPrecioGama().requestFocus();
-			return false;
-		}
 
-		if(getTxtPrecioGama().getText().trim().length() < 0){
-			CLJOptionPane.showErrorMessage(this, "Error en el precio de la gama.", "Advertencia");
-			getTxtPrecioGama().requestFocus();
-			return false;
-		}
-		
 		if(getListaColores().getSelectedValues().length==0){
 			CLJOptionPane.showErrorMessage(this, "Debe elegir al menos un color para la gama.", "Advertencia");
 			return false;
@@ -196,7 +173,6 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 
 	private void capturarSetearDatos() {
 		getGamaActual().setNombre(getTxtNombreGama().getText().toUpperCase());
-		getGamaActual().setPrecio(new BigDecimal(getTxtPrecioGama().getText().replace(',', '.')));
 		Object[] coloresSeleccionados = getListaColores().getSelectedValues();
 		List<Color> colores = new ArrayList<Color>();
 		for(int i = 0; i<coloresSeleccionados.length;i++){
@@ -228,7 +204,6 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 		limpiarDatos();
 		if(getGamaActual() != null) {
 			getTxtNombreGama().setText(getGamaActual().getNombre());
-			getTxtPrecioGama().setText(String.valueOf(getGamaActual().getPrecio().doubleValue()));
 			int i = -1;
 			for(Object o : getListaColores().getItemList()){
 				Color c = (Color) o;
@@ -245,7 +220,6 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 	@Override
 	public void limpiarDatos() {
 		getTxtNombreGama().setText("");
-		getTxtPrecioGama().setText("");
 		getListaColores().setAllSelectedItems(false);
 	}
 
@@ -289,13 +263,6 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 			txtNombreGama = new CLJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreGama;
-	}
-
-	public CLJTextField getTxtPrecioGama() {
-		if(txtPrecioGama == null){
-			txtPrecioGama = new CLJTextField();
-		}
-		return txtPrecioGama;
 	}
 
 	public CLCheckBoxList<Color> getListaColores() {

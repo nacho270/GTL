@@ -13,6 +13,7 @@ import ar.com.textillevel.modulos.odt.dao.api.local.TerminacionFraccionadoDAOLoc
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TerminacionFraccionado;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 
 @Stateless
@@ -61,6 +62,10 @@ public class MaquinaFacade implements MaquinaFacadeRemote {
 			throw new ValidacionException(EValidacionException.MAQUINA_TERMINACION_MISMO_NOMBRE.getInfoValidacion(), strList);
 		}
 		return terminacionDAO.save(terminacion);
+	}
+
+	public List<Maquina> getBySector(ESectorMaquina sector) {
+		return maquinaDao.getAllBySector(sector);
 	}
 
 }

@@ -9,6 +9,7 @@ import ar.clarin.fwjava.dao.impl.GenericDAO;
 import ar.com.textillevel.modulos.odt.dao.api.local.MaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 
 @Stateless
 @SuppressWarnings("unchecked")
@@ -39,6 +40,10 @@ public class MaquinaDAO extends GenericDAO<Maquina, Integer> implements MaquinaD
 		Maquina m = getById(id);
 		m.getTipoArticulos().size();
 		return m;
+	}
+
+	public List<Maquina> getAllBySector(ESectorMaquina sector) {
+		return getEntityManager().createQuery(" SELECT m FROM Maquina m WHERE m.tipoMaquina.idTipoSector = :idTipoSector").setParameter("idTipoSector", sector.getId()).getResultList();
 	}
 
 }

@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +35,6 @@ import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.GamaColorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
-import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.ProductoFactory;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -55,7 +53,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 	private JPanel pnlControlesExtra;
 	
 	private CLJTextField txtNombreProducto;
-	private CLJTextField txtPrecioProducto;
 	private JComboBox cmbArticulos;
 	private JComboBox cmbTipoProducto;
 	
@@ -106,13 +103,11 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(new JLabel("Nombre: "), createGridBagConstraints(0, 0,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panDetalle.add(getTxtNombreProducto(),  createGridBagConstraints(1, 0,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Precio: "), createGridBagConstraints(0, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtPrecioProducto(),  createGridBagConstraints(1, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Artículo: "), createGridBagConstraints(0, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getCmbArticulos(),  createGridBagConstraints(1, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Tipo de producto: "), createGridBagConstraints(0, 3,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getCmbTipoProducto(),  createGridBagConstraints(1, 3,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(getPnlControlesExtra(), createGridBagConstraints(0, 4,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 5, 5), 2, 1, 0, 0));
+			panDetalle.add(new JLabel("Artículo: "), createGridBagConstraints(0, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getCmbArticulos(),  createGridBagConstraints(1, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panDetalle.add(new JLabel("Tipo de producto: "), createGridBagConstraints(0, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getCmbTipoProducto(),  createGridBagConstraints(1, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panDetalle.add(getPnlControlesExtra(), createGridBagConstraints(0, 3,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 5, 5), 2, 1, 0, 0));
 		}
 		return panDetalle;
 	}
@@ -167,7 +162,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 							Articulo articulo = (Articulo)getCmbArticulos().getSelectedItem();
 							p.setColor(c);
 							p.setDescripcion((tipoProducto.getDescripcion() + " - " + c.getNombre() + " - " + articulo.getNombre()).trim().toUpperCase());
-							p.setPrecioDefault(new BigDecimal(getTxtPrecioProducto().getText().replace(',', '.')));
 							p.setArticulo(articulo);
 							p.setGamaColor(gama);
 							prodsTenido.add(p);
@@ -179,7 +173,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 				} else {
 					Articulo articulo = (Articulo)getCmbArticulos().getSelectedItem();
 					GamaColor gama = (GamaColor)getCmbGamas().getSelectedItem();
-					getProductoActual().setPrecioDefault(new BigDecimal(getTxtPrecioProducto().getText().replace(',', '.')));
 					getProductoActual().setArticulo(articulo);
 					((ProductoTenido)getProductoActual()).setGamaColor(gama);
 					getProductoActual().setDescripcion(getProductoActual().getDescripcion());
@@ -203,7 +196,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 		ETipoProducto tipoArticulo = (ETipoProducto)getCmbTipoProducto().getSelectedItem();
 		Articulo articulo = (Articulo)getCmbArticulos().getSelectedItem();
 		setProductoActual(ProductoFactory.createProducto(tipoArticulo));
-		getProductoActual().setPrecioDefault(new BigDecimal(getTxtPrecioProducto().getText().replace(',', '.')));
 		if(tipoArticulo != ETipoProducto.REPROCESO_SIN_CARGO && tipoArticulo != ETipoProducto.DEVOLUCION){
 			getProductoActual().setArticulo(articulo);
 		}
@@ -225,24 +217,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 	}
 
 	private boolean validar() {
-//		if(getTxtNombreProducto().getText().trim().length() == 0){
-//			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del producto", "Advertencia");
-//			getTxtNombreProducto().requestFocus();
-//			return false;
-//		}
-		
-		if(!GenericUtils.esNumerico(getTxtPrecioProducto().getText())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
-			getTxtPrecioProducto().requestFocus();
-			return false;
-		}
-
-		if(getTxtPrecioProducto().getText().trim().length() < 0){
-			CLJOptionPane.showErrorMessage(this, "Error en el precio del producto.", "Advertencia");
-			getTxtPrecioProducto().requestFocus();
-			return false;
-		}
-		
 		ETipoProducto tipoProducto = (ETipoProducto)getCmbTipoProducto().getSelectedItem();
 		
 		if(tipoProducto == ETipoProducto.ESTAMPADO){
@@ -301,7 +275,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 				getCmbTipoProducto().setSelectedItem(getProductoActual().getTipo());
 			}
 			getTxtNombreProducto().setText(getProductoActual().getDescripcion());
-			getTxtPrecioProducto().setText(String.valueOf(getProductoActual().getPrecioDefault()));
 			getCmbArticulos().setSelectedItem(getProductoActual().getArticulo());
 		}
 	}
@@ -309,7 +282,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 	@Override
 	public void limpiarDatos() {
 		getTxtNombreProducto().setText("");
-		getTxtPrecioProducto().setText("");
 		getCmbArticulos().setSelectedIndex(-1);
 		getCmbGamas().setSelectedIndex(-1);
 		getCmbEstampados().setSelectedIndex(-1);
@@ -381,16 +353,10 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 							getCmbArticulos().setEnabled(false);
 							getTxtNombreProducto().setText(ETipoProducto.REPROCESO_SIN_CARGO.getDescripcion());
 							getTxtNombreProducto().setEditable(false);
-							getTxtPrecioProducto().requestFocus();
-							getTxtPrecioProducto().setText("0");
-							getTxtPrecioProducto().setEditable(false);
 						}else if(itemSeleccionado == ETipoProducto.DEVOLUCION){
 							getCmbArticulos().setEnabled(false);
 							getTxtNombreProducto().setText(ETipoProducto.DEVOLUCION.getDescripcion());
 							getTxtNombreProducto().setEditable(false);
-							getTxtPrecioProducto().requestFocus();
-						}else{
-							getTxtPrecioProducto().setEditable(true);
 						}
 						itemTipoProductoSeleccionado(itemSeleccionado);
 					}
@@ -427,13 +393,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 		if(cmbGamas == null){
 			cmbGamas = new JComboBox();
 			GuiUtil.llenarCombo(cmbGamas,getGamaFacade().getAllOrderByName(), false);
-			cmbGamas.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if((e.getStateChange() == ItemEvent.SELECTED)){
-						getTxtPrecioProducto().setText(String.valueOf(((GamaColor)cmbGamas.getSelectedItem()).getPrecio()));
-					}
-				}
-			});
 		}
 		return cmbGamas;
 	}
@@ -510,14 +469,6 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 			dibujosFacade = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class);
 		}
 		return dibujosFacade;
-	}
-
-	
-	private CLJTextField getTxtPrecioProducto() {
-		if(txtPrecioProducto == null){
-			txtPrecioProducto = new CLJTextField();
-		}
-		return txtPrecioProducto;
 	}
 
 	private JComboBox getCmbArticulos() {

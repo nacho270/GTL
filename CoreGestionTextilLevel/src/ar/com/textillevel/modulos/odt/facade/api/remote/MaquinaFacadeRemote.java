@@ -8,6 +8,7 @@ import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TerminacionFraccionado;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 
 @Remote
 public interface MaquinaFacadeRemote {
@@ -26,4 +27,5 @@ public interface MaquinaFacadeRemote {
 
 	public TerminacionFraccionado save(TerminacionFraccionado terminacion) throws ValidacionException;
 
+	public List<Maquina> getBySector(ESectorMaquina sector);
 }

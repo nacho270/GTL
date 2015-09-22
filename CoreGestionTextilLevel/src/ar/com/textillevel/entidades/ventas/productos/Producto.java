@@ -1,7 +1,6 @@
 package ar.com.textillevel.entidades.ventas.productos;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -33,7 +32,6 @@ public abstract class Producto implements Serializable {
 	private static final long serialVersionUID = -311441841585244454L;
 	private Integer id;
 	private String descripcion;
-	private BigDecimal precioDefault;
 	private Articulo articulo;
 	private Float precioCalculado;
 
@@ -55,15 +53,6 @@ public abstract class Producto implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	@Column(name="A_PRECIO", nullable=false)
-	public BigDecimal getPrecioDefault() {
-		return precioDefault;
-	}
-
-	public void setPrecioDefault(BigDecimal precioDefault) {
-		this.precioDefault = precioDefault;
 	}
 
 	@ManyToOne

@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,6 +36,8 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
+import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAncho, E> extends JDialog {
@@ -67,7 +70,9 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private ETipoProducto tipoProducto;
 	private boolean acepto;
 	private DefinicionPrecio definicion;
+	
 	private TipoArticuloFacadeRemote tipoArticuloFacade;
+	private MaquinaFacadeRemote maquinaFacade;
 
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
 		this(padre, cliente, tipoProducto, new DefinicionPrecio());
@@ -346,15 +351,26 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	protected boolean validarDatosComunes(boolean validarPrecio) {
 		boolean usaAnchoExacto = getChkAnchoExacto().isSelected();
+		Float anchoMaximo = getAnchoMaximo();
 		if(usaAnchoExacto) {
 			if(StringUtil.isNullOrEmpty(getTxtAnchoExacto().getText())) {
 				CLJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no fue ingresado o es inválido.", "Error");
 				getTxtAnchoExacto().requestFocus();
 				return false;
 			}
+			if (getTxtAnchoExacto().getValue().floatValue() > anchoMaximo.floatValue()) {
+				CLJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no puede superar los " + anchoMaximo + " mts.", "Error");
+				getTxtAnchoExacto().requestFocus();
+				return false;
+			}
 		} else {
 			boolean validarRango = validarRango(getTxtAnchoInicial(), "Ancho Inicial", getTxtAnchoFinal(), "Ancho Final", true);
 			if(!validarRango) {
+				return false;
+			}
+			if (getTxtAnchoFinal().getValue().floatValue() > anchoMaximo.floatValue()) {
+				CLJOptionPane.showErrorMessage(this, "El 'Ancho Final' no puede superar los " + anchoMaximo + " mts.", "Error");
+				getTxtAnchoFinal().requestFocus();
 				return false;
 			}
 		}
@@ -365,17 +381,10 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		}
 		//Precio
 		if(validarPrecio) { // no entra aca solo en el caso de "agregar todas las gamas" en teñido
-			if(StringUtil.isNullOrEmpty(getTxtPrecio().getText()) && !GenericUtils.esNumerico(getTxtPrecio().getText())) {
-				CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
+			boolean okPrecio = validarPrecio(getTxtPrecio().getText());
+			if(!okPrecio) {
 				getTxtPrecio().requestFocus();
 				return false;
-			}
-			if(getPrecio() > UMBRAL_PRECIO) {
-				int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio es mayor a " + UMBRAL_PRECIO + " ¿Desea continuar?"), "Atención");
-				if(res == CLJOptionPane.NO_OPTION) {
-					getTxtPrecio().requestFocus();
-					return false;
-				}
 			}
 		}
 		//Rango Ancho Común
@@ -392,6 +401,44 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			}
 		}
 		return true;
+	}
+
+	protected boolean validarPrecio(String precio) {
+		if(StringUtil.isNullOrEmpty(precio) && !GenericUtils.esNumerico(precio)) {
+			CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
+			return false;
+		}
+		if(Float.valueOf(precio) < 0) {
+			CLJOptionPane.showErrorMessage(this, "El 'Precio' es menor a $0.", "Error");
+			return false;
+		}
+		if(Float.valueOf(precio) > UMBRAL_PRECIO) {
+			int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio es mayor a " + UMBRAL_PRECIO + " ¿Desea continuar?"), "Atención");
+			if(res == CLJOptionPane.NO_OPTION) {
+				return false;
+			}
+		} else if(Float.valueOf(precio) == 0f) {
+			int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio es $0 ¿Desea continuar?"), "Atención");
+			if(res == CLJOptionPane.NO_OPTION) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private Float getAnchoMaximo() {
+		List<Maquina> maquinas = getMaquinaFacade().getBySector(getTipoProducto().getSector());
+		Float anchoMaximo = Float.MIN_VALUE;
+		if(maquinas != null && !maquinas.isEmpty()) {
+			for(Maquina m : maquinas) {
+				if(m.getAnchoMax().floatValue() > anchoMaximo) {
+					anchoMaximo = m.getAnchoMax();
+				}
+			}
+			return anchoMaximo;
+		} else {
+			return 3.5f;
+		}
 	}
 
 	protected Float getAnchoExacto() {
@@ -476,4 +523,10 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return new DecimalNumericTextField(new Integer(0), new Integer(0));
 	}
 
+	private MaquinaFacadeRemote getMaquinaFacade() {
+		if(maquinaFacade == null) {
+			maquinaFacade = GTLBeanFactory.getInstance().getBean2(MaquinaFacadeRemote.class);
+		}
+		return maquinaFacade;
+	}
 }

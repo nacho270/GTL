@@ -411,6 +411,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					
 					getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
 					handleClickTablaVersiones();
+					getTablaDefiniciones().getBotonAgregar().doClick();
 				}
 			}
 			return false;

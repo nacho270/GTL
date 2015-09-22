@@ -203,13 +203,17 @@ public class DecimalNumericTextField extends JTextField {
 			if (insercionValida) {
 				try {
 					if (textoComponente.trim().compareTo("-") != 0) {
+						if(textoComponente.trim().matches("0\\d+")){
+							throw new ParseException(textoComponente, 1);
+						}
+						
 						valor = decimalFormat.parse(textoComponente);
 						if (valor instanceof Double) {
 							valor = new Float(((Double) valor).floatValue());
 						}
 					}
 				} catch (ParseException e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 					insercionValida = false;
 				}
 				if (valor != null) {
