@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,17 +29,20 @@ import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.NumUtil;
 import ar.clarin.fwjava.util.StringUtil;
+import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+import ar.com.textillevel.util.Utils;
 
 public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAncho, E> extends JDialog {
 
@@ -62,8 +66,6 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private static String TEXT_BTN_NUEVO = "Nuevo";
 	private static String TEXT_BTN_CANCELAR = "Cancelar";
 	
-	private static Float UMBRAL_PRECIO = 99.99f;
-
 	protected E elemSiendoEditado;
 
 	private Cliente cliente;
@@ -71,6 +73,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private boolean acepto;
 	private DefinicionPrecio definicion;
 	
+	private ParametrosGeneralesFacadeRemote parametrosFacade;
 	private TipoArticuloFacadeRemote tipoArticuloFacade;
 	private MaquinaFacadeRemote maquinaFacade;
 
@@ -408,17 +411,15 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
 			return false;
 		}
-		if(Float.valueOf(precio) < 0) {
+		if(Float.valueOf(precio.replace(",", ".")) < 0) {
 			CLJOptionPane.showErrorMessage(this, "El 'Precio' es menor a $0.", "Error");
 			return false;
 		}
-		if(Float.valueOf(precio) > UMBRAL_PRECIO) {
-			int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio es mayor a " + UMBRAL_PRECIO + " ¿Desea continuar?"), "Atención");
-			if(res == CLJOptionPane.NO_OPTION) {
-				return false;
-			}
-		} else if(Float.valueOf(precio) == 0f) {
-			int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio es $0 ¿Desea continuar?"), "Atención");
+		ParametrosGenerales pg = getParametrosFacade().getParametrosGenerales();
+		BigDecimal minimo = pg.getMontoMinimoValidacionPrecio();
+		BigDecimal maximo = pg.getMontoMaximoValidacionPrecio();
+		if(!Utils.dentroDelRango(Float.valueOf(precio.replace(",", ".")), minimo.floatValue(), maximo.floatValue())) {
+			int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio no se halla dentro del rango $" + minimo + " y $" + maximo + " ¿Desea continuar?"), "Atención");
 			if(res == CLJOptionPane.NO_OPTION) {
 				return false;
 			}
@@ -528,5 +529,12 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			maquinaFacade = GTLBeanFactory.getInstance().getBean2(MaquinaFacadeRemote.class);
 		}
 		return maquinaFacade;
+	}
+
+	public ParametrosGeneralesFacadeRemote getParametrosFacade() {
+		if(parametrosFacade == null) {
+			parametrosFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
+		}
+		return parametrosFacade;
 	}
 }

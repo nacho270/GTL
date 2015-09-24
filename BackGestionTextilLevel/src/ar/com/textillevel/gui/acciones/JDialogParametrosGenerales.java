@@ -37,6 +37,7 @@ import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogParametrosGenerales extends JDialog {
@@ -51,6 +52,8 @@ public class JDialogParametrosGenerales extends JDialog {
 	private CLJNumericTextField txtNroComienzoFactura;
 	private CLJNumericTextField txtNroComienzoRecibo;
 	private CLJNumericTextField txtValidezCotizaciones;
+	private DecimalNumericTextField txtMontoMinimoValidacionPrecio;
+	private DecimalNumericTextField txtMontoMaximoValidacionPrecio;
 	private CLJTextField txtPorcentajeIvaInscripto;
 	private CLJTextField txtPorcentajeIvaNoInscripto;
 	private CLJTextField txtPorcentajeSeguroMercaderia;
@@ -157,6 +160,8 @@ public class JDialogParametrosGenerales extends JDialog {
 			getParametrosGenerales().setNroComienzoOrdenDePagoPersona(getTxtNroComienzoOrdenDePagoPersona().getValue());
 			getParametrosGenerales().setCargaMinimaColor(new BigDecimal(Double.valueOf(getTxtCargaMinimaColor().getText().trim().replace(',', '.'))));
 			getParametrosGenerales().setCargaMinimaEstampado(new BigDecimal(Double.valueOf(getTxtCargaMinimaEstampado().getText().trim().replace(',', '.'))));
+			getParametrosGenerales().setMontoMinimoValidacionPrecio(new BigDecimal(getTxtMontoMinimoValidacionPrecio().getValue()));
+			getParametrosGenerales().setMontoMaximoValidacionPrecio(new BigDecimal(getTxtMontoMaximoValidacionPrecio().getValue()));
 			try {
 				getParametrosFacade().save(getParametrosGenerales());
 				setAcepto(true);
@@ -475,6 +480,36 @@ public class JDialogParametrosGenerales extends JDialog {
 			}
 		}
 
+		if (StringUtil.isNullOrEmpty(getTxtMontoMinimoValidacionPrecio().getText())) {
+			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtMontoMinimoValidacionPrecio().requestFocus();
+			return false;
+		} else {
+			if (!GenericUtils.esNumerico((getTxtMontoMinimoValidacionPrecio().getText()))) {
+				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				getTxtMontoMinimoValidacionPrecio().requestFocus();
+				return false;
+			}
+		}
+		
+		if (StringUtil.isNullOrEmpty(getTxtMontoMaximoValidacionPrecio().getText())) {
+			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtMontoMaximoValidacionPrecio().requestFocus();
+			return false;
+		} else {
+			if (!GenericUtils.esNumerico((getTxtMontoMaximoValidacionPrecio().getText()))) {
+				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				getTxtMontoMaximoValidacionPrecio().requestFocus();
+				return false;
+			}
+		}
+		
+		if (getTxtMontoMinimoValidacionPrecio().getValue().floatValue() >= getTxtMontoMaximoValidacionPrecio().getValue().floatValue()) {
+			CLJOptionPane.showErrorMessage(this, "El precio de validación mínimo deber ser menor al máximo.", "Error");
+			getTxtMontoMaximoValidacionPrecio().requestFocus();
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -836,7 +871,10 @@ public class JDialogParametrosGenerales extends JDialog {
 			panelTabVarios.add(getTxtCargaMinimaEstampado(), createGridBagConstraints(1, 8, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelTabVarios.add(new JLabel("Validez cotizaciones: "), createGridBagConstraints(0, 9, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelTabVarios.add(getTxtValidezCotizaciones(), createGridBagConstraints(1, 9, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-
+			panelTabVarios.add(new JLabel("Monto mínimo validacion precio: "), createGridBagConstraints(0, 10, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtMontoMinimoValidacionPrecio(), createGridBagConstraints(1, 10, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTabVarios.add(new JLabel("Monto máximo validacion precio: "), createGridBagConstraints(0, 11, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtMontoMaximoValidacionPrecio(), createGridBagConstraints(1, 11, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		
 		return panelTabVarios;
@@ -930,5 +968,25 @@ public class JDialogParametrosGenerales extends JDialog {
 			}
 		}
 		return txtValidezCotizaciones;
+	}
+
+	public DecimalNumericTextField getTxtMontoMinimoValidacionPrecio() {
+		if (txtMontoMinimoValidacionPrecio == null) {
+			txtMontoMinimoValidacionPrecio = new DecimalNumericTextField(new Integer(2), new Integer(2));
+			if (getParametrosGenerales() != null && getParametrosGenerales().getMontoMinimoValidacionPrecio()!= null) {
+				txtMontoMinimoValidacionPrecio.setValue(getParametrosGenerales().getMontoMinimoValidacionPrecio().doubleValue());
+			}
+		}
+		return txtMontoMinimoValidacionPrecio;
+	}
+
+	public DecimalNumericTextField getTxtMontoMaximoValidacionPrecio() {
+		if (txtMontoMaximoValidacionPrecio == null) {
+			txtMontoMaximoValidacionPrecio = new DecimalNumericTextField(new Integer(2), new Integer(2));
+			if (getParametrosGenerales() != null && getParametrosGenerales().getMontoMaximoValidacionPrecio()!= null) {
+				txtMontoMaximoValidacionPrecio.setValue(getParametrosGenerales().getMontoMaximoValidacionPrecio().doubleValue());
+			}
+		}
+		return txtMontoMaximoValidacionPrecio;
 	}
 }

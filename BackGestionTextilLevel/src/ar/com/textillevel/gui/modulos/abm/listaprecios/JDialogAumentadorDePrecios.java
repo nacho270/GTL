@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,15 +35,18 @@ import ar.clarin.fwjava.componentes.CLCursor;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTable;
 import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
@@ -453,6 +457,14 @@ public class JDialogAumentadorDePrecios extends JDialog {
 
 			List<DatosAumentoTO> datosAumento = getPanelTablaAumentos().getDatosAumento();
 
+			float maximoPorcentajeAumento = Float.MIN_VALUE;
+			for(DatosAumentoTO aumento : datosAumento) {
+				// busco el maximo para despues actualizar el rango de validacion
+				if (aumento.getPorcentajeAumento() > maximoPorcentajeAumento) {
+					maximoPorcentajeAumento = aumento.getPorcentajeAumento();
+				}
+			}
+			
 			for (Cliente c : getListaClientes()) {
 				try {
 					agregarFila(c.getRazonSocial());
@@ -505,6 +517,15 @@ public class JDialogAumentadorDePrecios extends JDialog {
 					actualizarUltimaFila(EEstadoAumentoPrecioCliente.ERROR);
 					continue;
 				}
+			}
+			try {
+				// actualizo rango de validacion
+				ParametrosGenerales pg = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales();
+				pg.setMontoMinimoValidacionPrecio(new BigDecimal(pg.getMontoMinimoValidacionPrecio().floatValue() + ( (pg.getMontoMinimoValidacionPrecio().floatValue() * maximoPorcentajeAumento) / 100) ));
+				pg.setMontoMaximoValidacionPrecio(new BigDecimal(pg.getMontoMaximoValidacionPrecio().floatValue() + ( (pg.getMontoMaximoValidacionPrecio().floatValue() * maximoPorcentajeAumento) / 100) ));
+				GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).save(pg);
+			} catch(CLException cle){
+				cle.printStackTrace();
 			}
 			desBloquearComponentes();
 			CLCursor.endWait(JDialogAumentadorDePrecios.this);

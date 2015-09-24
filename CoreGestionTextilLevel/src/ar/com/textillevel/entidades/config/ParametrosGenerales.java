@@ -50,6 +50,8 @@ public class ParametrosGenerales implements Serializable {
 	private Integer nroComienzoOrdenDePagoPersona;
 	private BigDecimal cargaMinimaColor;
 	private BigDecimal cargaMinimaEstampado;
+	private BigDecimal montoMinimoValidacionPrecio;
+	private BigDecimal montoMaximoValidacionPrecio;
 	private ConfiguracionNumeracionFactura configuracionFacturaA;
 	private ConfiguracionNumeracionFactura configuracionFacturaB;
 	
@@ -294,6 +296,24 @@ public class ParametrosGenerales implements Serializable {
 		this.validezCotizaciones = validezCotizaciones;
 	}
 	
+	@Column(name="A_MONTO_MIN_VALIDACION_PRECIO",nullable=false)
+	public BigDecimal getMontoMinimoValidacionPrecio() {
+		return montoMinimoValidacionPrecio;
+	}
+
+	public void setMontoMinimoValidacionPrecio(BigDecimal montoMinimoValidacionPrecio) {
+		this.montoMinimoValidacionPrecio = montoMinimoValidacionPrecio;
+	}
+
+	@Column(name="A_MONTO_MAX_VALIDACION_PRECIO",nullable=false)
+	public BigDecimal getMontoMaximoValidacionPrecio() {
+		return montoMaximoValidacionPrecio;
+	}
+
+	public void setMontoMaximoValidacionPrecio(BigDecimal montoMaximoValidacionPrecio) {
+		this.montoMaximoValidacionPrecio = montoMaximoValidacionPrecio;
+	}
+	
 	@Transient
 	public ConfiguracionNumeracionFactura getConfiguracionFacturaByTipoFactura(ETipoFactura tipo){
 		switch(tipo){
@@ -315,7 +335,7 @@ public class ParametrosGenerales implements Serializable {
 				|| porcentajeToleranciaMermaNegativa == null || precioPorTubo == null || numeracionCheque == null || nroSucursal == null || diasAvisoVencimientoDeCheque == null
 				|| diasVenceCheque == null || nroComienzoODT == null || nroComienzoFacturaB == null || nroIGJ == null || nroComienzoOrdenDePago == null || nroComienzoOrdenDeDeposito == null
 				|| cargaMinimaColor == null || cargaMinimaEstampado == null  || bancoDefault == null || umbralDeuda == null || nroComienzoOrdenDePagoPersona == null || validezCotizaciones == null
-				|| (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null);
+				|| montoMinimoValidacionPrecio == null || montoMaximoValidacionPrecio == null || (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null);
 	}
 
 }
