@@ -132,8 +132,8 @@ update t_articulo set a_gramaje = '0.37' where p_id = 24;
 update t_producto set a_descr='DESCRUDE', f_articulo_p_id=4, tipo='DESCR' where p_id=395;
 
 
+/*
 -- querys utiles
-
 --validacion de tipo producto y ancho repetido
 SELECT f_tipo_articulo_p_id, a_ancho, count(*)
 FROM t_articulo
@@ -142,3 +142,4 @@ having f_tipo_articulo_p_id is not null and a_ancho is not null and count(*) > 1
 
 select * from t_producto pr where not exists( select 1 from t_articulo art where art.p_id = pr.f_articulo_p_id);
 select * from t_remito_entrada_producto where f_producto_p_id in (368, 395, 1042);
+*/
