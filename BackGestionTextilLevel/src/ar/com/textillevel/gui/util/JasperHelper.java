@@ -142,6 +142,17 @@ public class JasperHelper {
 		}
 	}
 	
+	public static JasperPrint generarJasperPrint(CLJTable tabla, String titulo, String subtitulo, String filtros) {
+		if(tabla.getRowCount()>0) {
+			try {
+				return generarReporte(getPropiedadesImpresionListado(titulo, subtitulo,filtros, getData(tabla), tabla.getWidth() > ANCHO_P));
+			} catch (JRException e) {
+				BossError.gestionarError(new CLException("No se pudo convertir a PDF"));
+			}
+		}
+		return null;
+	}
+	
 	public static void imprimirReporte(JasperWrapperProperties properties, boolean preview, String titulo, Dimension dimension, boolean confirmacion) {
 		try {
 			JasperPrint jasperPrint = generarReporte(properties);

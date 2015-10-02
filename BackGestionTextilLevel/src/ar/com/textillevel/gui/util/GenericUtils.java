@@ -482,6 +482,15 @@ public class GenericUtils {
 		file.delete();
 	}
 	
+	public static void enviarResumenCuentaPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
+		File file = new File(System.getProperty("java.io.tmpdir") + "resumen.pdf");
+		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
+		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE), "Sres " + c.getRazonSocial() + ",<br>" + 
+				"Por medio de la presente, adjuntamos el resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE) + ".<br><br>Saluda Atte.<br>Textil Level S.A.",
+				file, c.getEmail());
+		file.delete();
+	}
+	
 	public static class SiNoResponse {
 		private int respose;
 		private boolean noVolverAPreguntar;
