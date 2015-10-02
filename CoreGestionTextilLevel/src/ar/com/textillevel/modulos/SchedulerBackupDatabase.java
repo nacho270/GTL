@@ -37,6 +37,7 @@ public class SchedulerBackupDatabase implements Schedulable{
 		logger.info("REALIZANDO BACKUP.....");
 		String username = "root";
 	    String database = System.getProperty("textillevel.backup.db", "gtl");
+	    String pass = System.getProperty("textillevel.backup.pass", "s4l3m");
 	    String mysqldumpPath = System.getProperty("textillevel.backup.MySQLDumpPath");
 	    String backupPath = System.getProperty("textillevel.backup.directorioBackup");
 	    String tempFile = System.getProperty("java.io.tmpdir") + "temp-backup.sql";
@@ -44,7 +45,7 @@ public class SchedulerBackupDatabase implements Schedulable{
 	    java.sql.Date hoy = DateUtil.getHoy();
 	    String fileName = DateUtil.getAnio(hoy) + "-" + DateUtil.getMes(hoy) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
 
-	    String command = "cmd.exe /c \"" +mysqldumpPath + " -u " + username  + " -ps4l3m " + database + " -r " + tempFile +"\"";
+	    String command = "cmd.exe /c \"" +mysqldumpPath + " -u " + username  + " -p"+ pass + " " + database + " -r " + tempFile +"\"";
 	    logger.info("EJECUTANDO: " + command);
 	    try {
 	        Process runtimeProcess = Runtime.getRuntime().exec(command);
