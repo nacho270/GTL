@@ -862,10 +862,24 @@ public class JFrameVerMovimientos extends JFrame {
 						GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
 							public void perform() {
 								try {
-									CLJTable tabla = getPanelTablaMovimientos().getTabla();
-									GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), JasperHelper.generarJasperPrint(tabla, "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - " + getLblDireccion().getText() + " - "
-											+ getLblCuit().getText() + " - " + getLblTelefono().getText() + " " + getLblCondicionVenta().getText(), null));
-									CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
+									String[] correcs= new String[]{"Excel", "PDF"};
+									Object opcion = JOptionPane.showInputDialog(null, "Seleccione formato a enviar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, correcs,correcs[0]);
+									if(opcion!=null){
+										CLJTable tabla = getPanelTablaMovimientos().getTabla();
+										if(opcion.equals("PDF")) {
+											File file = new File(System.getProperty("java.io.tmpdir") + "resumen.xls");
+											
+											GenericUtils.exportarAExcel(tabla, "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - " + getLblDireccion().getText() + " - "
+													+ getLblCuit().getText() + " - " + getLblTelefono().getText() + " " + getLblCondicionVenta().getText(), null, file.getAbsolutePath(), System.getProperty("intercalarColoresFilas") != null
+													&& System.getProperty("intercalarColoresFilas").equals(String.valueOf(true)));
+											
+											GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), file);
+										} else {
+											GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), JasperHelper.generarJasperPrint(tabla, "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - " + getLblDireccion().getText() + " - "
+													+ getLblCuit().getText() + " - " + getLblTelefono().getText() + " " + getLblCondicionVenta().getText(), null));
+										}
+										CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
+									}
 								}catch(Exception ex){
 									ex.printStackTrace();
 								}
