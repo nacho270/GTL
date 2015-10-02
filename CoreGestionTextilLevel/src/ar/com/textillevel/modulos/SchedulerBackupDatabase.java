@@ -44,7 +44,7 @@ public class SchedulerBackupDatabase implements Schedulable{
 	    java.sql.Date hoy = DateUtil.getHoy();
 	    String fileName = DateUtil.getAnio(hoy) + "-" + DateUtil.getMes(hoy) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
 
-	    String command = "cmd.exe /c \"" +mysqldumpPath + " -u " + username  + " " + database + " -r " + tempFile +"\"";
+	    String command = "cmd.exe /c \"" +mysqldumpPath + " -u " + username  + " -ps4l3m " + database + " -r " + tempFile +"\"";
 	    logger.info("EJECUTANDO: " + command);
 	    try {
 	        Process runtimeProcess = Runtime.getRuntime().exec(command);
