@@ -904,12 +904,17 @@ public class JFrameVerMovimientos extends JFrame {
 	private Map<String, Object> getParametersResumenCuenta(Cliente cliente) {
 		Map<String, Object> mapa = new HashMap<String, Object>();
 		if(getChkUltimosMovimientos().isSelected()){
-			mapa.put("FECHA", DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE));
+			mapa.put("FECHA", "DETALLE DE ULTIMOS 20 MOVIMIENTOS");
 		} else {
+			java.sql.Date fechaDesde = new java.sql.Date(getDPFechaDesde().getDate().getTime());
 			java.sql.Date fechaHasta = DateUtil.getManiana(new java.sql.Date(getDPFechaHasta().getDate().getTime()));
-			mapa.put("FECHA", DateUtil.dateToString(fechaHasta, DateUtil.SHORT_DATE));
+			mapa.put("FECHA", "DE " + DateUtil.dateToString(fechaDesde, DateUtil.SHORT_DATE) + " A " + DateUtil.dateToString(fechaHasta, DateUtil.SHORT_DATE));
 		}
-		mapa.put("SALDO", getTxtTotalCuenta().getText());
+		mapa.put("DIRECCION", cliente.getDireccionFiscal().getDireccion());
+		mapa.put("LOCALIDAD", cliente.getDireccionFiscal().getLocalidad().getNombreLocalidad());
+		mapa.put("TELEFONO", cliente.getTelefono());
+		mapa.put("MAIL", cliente.getEmail());
+		mapa.put("SALDO", "$ " + getTxtTotalCuenta().getText());
 		mapa.put("CLIENTE", cliente.getRazonSocial());
 		mapa.put("IS_TEST", GenericUtils.isSistemaTest());
 		return mapa;

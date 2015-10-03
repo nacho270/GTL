@@ -6,86 +6,126 @@
 	<parameter name="IS_TEST" class="java.lang.Boolean">
 		<defaultValueExpression><![CDATA[new java.lang.Boolean(false)]]></defaultValueExpression>
 	</parameter>
+	<parameter name="DIRECCION" class="java.lang.String"/>
+	<parameter name="TELEFONO" class="java.lang.String"/>
+	<parameter name="MAIL" class="java.lang.String"/>
+	<parameter name="LOCALIDAD" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="debe" class="java.lang.String"/>
 	<field name="haber" class="java.lang.String"/>
 	<field name="saldo" class="java.lang.String"/>
 	<title>
-		<band height="129" splitType="Stretch">
-			<staticText>
-				<reportElement x="108" y="72" width="160" height="13"/>
-				<textElement>
-					<font size="9" isBold="true" isItalic="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[Tintoreria y estamperia Industrial
-
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="108" y="85" width="160" height="16"/>
-				<textElement/>
-				<text><![CDATA[Tel/Fax: (5411) 4454-2279/2395]]></text>
-			</staticText>
+		<band height="145" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="128" width="555" height="1"/>
+				<reportElement x="0" y="132" width="555" height="1"/>
 				<graphicElement>
 					<pen lineWidth="1.25"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="432" y="10" width="123" height="20"/>
-				<textElement/>
+				<reportElement x="328" y="6" width="227" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA}]]></textFieldExpression>
 			</textField>
-			<image hAlign="Center">
-				<reportElement x="10" y="55" width="93" height="66">
-					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
-				</reportElement>
-				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="108" y="55" width="160" height="15"/>
-				<textElement>
-					<font size="11" isBold="true" isItalic="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[Textil Level S.A.
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="108" y="101" width="160" height="20" forecolor="#0033FF"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[administracion@textillevel.com]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="0" y="30" width="555" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="64" y="33" width="491" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{CLIENTE}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="126" y="11" width="306" height="20"/>
+				<reportElement x="130" y="6" width="188" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[RESUMEN DE CUENTA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="333" y="72" width="153" height="20"/>
-				<textElement>
-					<font isBold="true"/>
+				<reportElement x="238" y="104" width="153" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{SALDO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="286" y="72" width="42" height="20"/>
-				<textElement>
-					<font isBold="true"/>
+				<reportElement x="176" y="104" width="42" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Saldo:]]></text>
 			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="357" y="75" width="198" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MAIL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="64" y="75" width="222" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="64" y="55" width="222" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="357" y="55" width="198" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{LOCALIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="33" width="42" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="53" width="57" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="75" width="53" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="75" width="39" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[E-Mail:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="55" width="57" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Localidad:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="27" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25"/>
+				</graphicElement>
+			</line>
 		</band>
 	</title>
 	<columnHeader>
@@ -193,42 +233,79 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="54" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<textField evaluationTime="Report">
-				<reportElement x="288" y="13" width="40" height="20"/>
+				<reportElement x="288" y="9" width="40" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="208" y="13" width="80" height="20"/>
+				<reportElement x="208" y="9" width="80" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="68">
+		<band height="98">
 			<textField evaluationTime="Report">
-				<reportElement x="288" y="37" width="40" height="20"/>
+				<reportElement x="288" y="74" width="40" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="208" y="37" width="80" height="20"/>
+				<reportElement x="208" y="74" width="80" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="467" y="17" width="78" height="20"/>
-				<textElement/>
+				<reportElement x="436" y="17" width="97" height="20"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{SALDO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="420" y="17" width="47" height="20"/>
+				<reportElement x="379" y="17" width="47" height="20"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="17" width="160" height="13"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Tintoreria y estamperia Industrial
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="30" width="160" height="16"/>
+				<textElement/>
+				<text><![CDATA[Tel/Fax: (5411) 4454-2279/2395]]></text>
+			</staticText>
+			<image hAlign="Center">
+				<reportElement x="7" y="0" width="93" height="66">
+					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="105" y="0" width="160" height="15"/>
+				<textElement>
+					<font size="11" isBold="true" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Textil Level S.A.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="46" width="160" height="20" forecolor="#0033FF"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Saldo:]]></text>
+				<text><![CDATA[administracion@textillevel.com]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>
