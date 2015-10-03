@@ -942,7 +942,7 @@ public class JDialogCargarFacturaProveedor extends JDialog {
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 
 			tabla.setReorderingAllowed(false);
-			tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tabla.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			
 			return tabla;
 		}
@@ -1004,21 +1004,33 @@ public class JDialogCargarFacturaProveedor extends JDialog {
 		}
 
 		private void handleSeleccionImpuestos() {
-			int selectedRow = getTabla().getSelectedRow();
-			if(selectedRow != -1) {
-				ItemFacturaProveedor elemento = getElemento(selectedRow);
-				JDialogSeleccionarCrearImpuesto dialogSeleccionarCrearImpuesto = new JDialogSeleccionarCrearImpuesto(padre, proveedor, elemento.getImpuestos());
+			int selectedRowCount = getTabla().getSelectedRowCount();
+			if(selectedRowCount > 0) {
+				List<ItemFacturaProveedor> elementos = new ArrayList<ItemFacturaProveedor>();
+				List<ImpuestoItemProveedor> impuestos = new ArrayList<ImpuestoItemProveedor>();
+				int[] selectedRows = getTabla().getSelectedRows();
+				for(int i = 0; i < selectedRows.length; i ++) {
+					ItemFacturaProveedor itemFactura = getElemento(selectedRows[i]);
+					elementos.add(itemFactura);
+					impuestos.addAll(itemFactura.getImpuestos());
+				}
+				JDialogSeleccionarCrearImpuesto dialogSeleccionarCrearImpuesto = new JDialogSeleccionarCrearImpuesto(padre, proveedor, impuestos);
 				dialogSeleccionarCrearImpuesto.setVisible(true);
 				if(dialogSeleccionarCrearImpuesto.isAcepto()) {
-					elemento.getImpuestos().clear();
+					for(ItemFacturaProveedor elemento : elementos) {
+						elemento.getImpuestos().clear();
+					}
 					List<ImpuestoItemProveedor> impuestosSelectedResult = dialogSeleccionarCrearImpuesto.getImpuestosSelectedResult();
 					if(impuestosPorPciaOK(impuestosSelectedResult)) {
-						elemento.getImpuestos().addAll(impuestosSelectedResult);
-						getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), selectedRow, COL_IMPORTE);
-						getTabla().setValueAt(StringUtil.getCadena(elemento.getImpuestos(), ", "), selectedRow, COL_IMPUESTO);
+						int indexRows = 0;
+						for(ItemFacturaProveedor elemento : elementos) {
+							elemento.getImpuestos().addAll(impuestosSelectedResult);
+							getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), selectedRows[indexRows], COL_IMPORTE);
+							getTabla().setValueAt(StringUtil.getCadena(elemento.getImpuestos(), ", "), selectedRows[indexRows], COL_IMPUESTO);
+							indexRows++;
+						}
 						fireChangeItemFacturaEvent(getElementos());
 					}
-					
 				}
 			}
 		}
