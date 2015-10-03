@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -449,23 +450,35 @@ public class GenericUtils {
 		}
 		mailMessage.setSubject(asunto);
 		mailMessage.setSentDate(new java.util.Date());
+		
+		Multipart multipart = new MimeMultipart();
+		
+		MimeBodyPart mimeBodyPartCuerpo = new MimeBodyPart();
+		mimeBodyPartCuerpo.setContent(cuerpo, "text/html");
+		multipart.addBodyPart(mimeBodyPartCuerpo);
+
 		if (file != null) {
-			MimeBodyPart mimeBodyPartCuerpo = new MimeBodyPart();
-			mimeBodyPartCuerpo.setContent(cuerpo, "text/html");
-			
 			MimeBodyPart mimeBodyPartFile = new MimeBodyPart();
 	        DataSource source = new FileDataSource(file);
 	        mimeBodyPartFile.setDataHandler(new DataHandler(source));
 	        mimeBodyPartFile.setFileName(file.getName());
-	       
-	        Multipart multipart = new MimeMultipart();
-	        multipart.addBodyPart(mimeBodyPartCuerpo);
 	        multipart.addBodyPart(mimeBodyPartFile);
-	        mailMessage.setContent(multipart);
-	        mailMessage.saveChanges();
-		} else {
-			mailMessage.setContent(cuerpo, "text/html");
 		}
+		
+		try {
+			MimeBodyPart imagePart = new MimeBodyPart();
+			imagePart.setHeader("Content-ID", "<AbcXyz123>");
+			imagePart.setDisposition(MimeBodyPart.INLINE);
+			imagePart.attachFile(FileUtil.getResourceFile(GenericUtils.class, "ar/com/textillevel/imagenes/logo-gtl-email.png"));
+			multipart.addBodyPart(imagePart);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		mailMessage.setContent(multipart);
+		mailMessage.saveChanges();
+
 		Transport transport = getMailSession.getTransport("smtp");
 		transport.connect("smtp.gmail.com", mailServerProperties.getProperty("textillevel.email.user"),
 				mailServerProperties.getProperty("textillevel.email.pass"));
@@ -476,25 +489,30 @@ public class GenericUtils {
 	public static void enviarCotizacionPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
 		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
-		GenericUtils.enviarEmail("Nueva cotización", "Sres " + c.getRazonSocial() + ",<br>" + 
-				"Por medio de la presente, adjuntamos una nueva cotizaci&oacute;n de nuestros precios.<br><br>Saluda Atte.<br>Textil Level S.A.",
-				file, c.getEmail());
+		GenericUtils.enviarEmail("Cotización",
+				"<html><b>Estimado cliente:<br><br>" + 
+				"En esta oportunidad, nos dirigimos a Ud. a fin de comunicarle los nuevos precios sobre nuestros servicios.<br><br>"+
+				firma(), file, c.getEmail());
 		file.delete();
+	}
+	
+	private static String firma() {
+		return "Sin otro particular, lo saludamos muy atentamente.</b><br><br>" +
+			   "<img src=\"cid:AbcXyz123\"><br>" +
+			   "<font style=\"font-size:12.8px;text-align:center\" color=\"#999999\">" + 
+			   		"<b>Administraci&oacute;n Textil Level S.A<br>"
+			   		+ "Tel: (+54) 11 4454-2395 / 2279<br>"
+			   		+ "Av. San Martin 4215 Lomas Del Mirador</b>" +
+			   "</font></html>";
 	}
 	
 	public static void enviarResumenCuentaPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "resumen.pdf");
 		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
-		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE), "Sres " + c.getRazonSocial() + ",<br>" + 
-				"Por medio de la presente, adjuntamos el resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE) + ".<br><br>Saluda Atte.<br>Textil Level S.A.",
-				file, c.getEmail());
-		file.delete();
-	}
-	
-	public static void enviarResumenCuentaPorEmail(Cliente c, File file) throws JRException, FileNotFoundException, AddressException, MessagingException {
-		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE), "Sres " + c.getRazonSocial() + ",<br>" + 
-				"Por medio de la presente, adjuntamos el resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE) + ".<br><br>Saluda Atte.<br>Textil Level S.A.",
-				file, c.getEmail());
+		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE),
+				"<html><b>Estimado cliente:<br><br>" + 
+				"Por medio de la presente, adjuntamos resumen de cuenta.<br><br>" +
+				firma(), file, c.getEmail());
 		file.delete();
 	}
 	

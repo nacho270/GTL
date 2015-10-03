@@ -159,9 +159,9 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="22">
+		<band height="14">
 			<staticText>
-				<reportElement x="1" y="2" width="104" height="20"/>
+				<reportElement x="179" y="1" width="100" height="13"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -169,35 +169,13 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[SERVICIO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="105" y="2" width="86" height="20"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#FA0006"/>
-					<topPen lineWidth="1.0" lineColor="#FA0006"/>
-					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
-					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
-					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[ANCHO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="191" y="2" width="100" height="20"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#FA0006"/>
-					<topPen lineWidth="1.0" lineColor="#FA0006"/>
-					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
-					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
-					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<text><![CDATA[ARTICULO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="291" y="2" width="186" height="20"/>
+				<reportElement x="279" y="1" width="198" height="13"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -205,11 +183,13 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="477" y="2" width="78" height="20"/>
+				<reportElement x="477" y="1" width="78" height="13"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -217,15 +197,45 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<text><![CDATA[PRECIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="93" y="1" width="86" height="13"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ANCHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="1" width="92" height="13"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FA0006"/>
+					<topPen lineWidth="1.0" lineColor="#FA0006"/>
+					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
+					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
+					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SERVICIO]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="104" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="92" height="15"/>
 				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -233,11 +243,13 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoProducto}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="105" y="0" width="86" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="93" y="0" width="86" height="15"/>
 				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -245,11 +257,13 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ancho}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="291" y="0" width="186" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="279" y="0" width="198" height="15"/>
 				<box topPadding="3" bottomPadding="3">
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -257,11 +271,13 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="477" y="0" width="78" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="477" y="0" width="78" height="15"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -269,11 +285,13 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{precio}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="191" y="0" width="100" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="179" y="0" width="100" height="15"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
@@ -281,7 +299,9 @@
 					<bottomPen lineWidth="1.0" lineColor="#FA0006"/>
 					<rightPen lineWidth="1.0" lineColor="#FA0006"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoArticulo}]]></textFieldExpression>
 			</textField>
 		</band>

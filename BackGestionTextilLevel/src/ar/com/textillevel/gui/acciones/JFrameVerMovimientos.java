@@ -25,9 +25,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +49,7 @@ import javax.swing.filechooser.FileFilter;
 
 import main.GTLGlobalCache;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -348,6 +352,20 @@ public class JFrameVerMovimientos extends JFrame {
 
 		public GenerarFilaMovimientoVisitor createVisitorFilaMovimientos(BigDecimal transporte) {
 			return new GenerarFilaMovimientoVisitor(getTabla(), CANT_COLS_TBL_MOVS, transporte);
+		}
+
+		public List<MovimientoTO> createListaMovimientosTO() {
+			List<MovimientoTO> lista = new ArrayList<JFrameVerMovimientos.MovimientoTO>();
+			CLJTable tabla = getTabla();
+			for(int i = 0; i < tabla.getRowCount(); i++) {
+				MovimientoTO mto = new MovimientoTO();
+				mto.setDescripcion((String) tabla.getValueAt(i, COL_DESCR));
+				mto.setDebe((String) tabla.getValueAt(i, COL_DEBE));
+				mto.setHaber((String) tabla.getValueAt(i, COL_HABER));
+				mto.setSaldo((String) tabla.getValueAt(i, COL_SALDO));
+				lista.add(mto);
+			}
+			return lista;
 		}
 	}
 
@@ -857,29 +875,13 @@ public class JFrameVerMovimientos extends JFrame {
 			btnEnviarExtractoCuentaPorEmail.setEnabled(false);
 			btnEnviarExtractoCuentaPorEmail.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Cliente cliente = loadClienteBuscado();
+					final Cliente cliente = loadClienteBuscado();
 					if(cliente != null) {
 						GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
 							public void perform() {
 								try {
-									String[] correcs= new String[]{"Excel", "PDF"};
-									Object opcion = JOptionPane.showInputDialog(null, "Seleccione formato a enviar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, correcs,correcs[0]);
-									if(opcion!=null){
-										CLJTable tabla = getPanelTablaMovimientos().getTabla();
-										if(opcion.equals("PDF")) {
-											File file = new File(System.getProperty("java.io.tmpdir") + "resumen.xls");
-											
-											GenericUtils.exportarAExcel(tabla, "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - " + getLblDireccion().getText() + " - "
-													+ getLblCuit().getText() + " - " + getLblTelefono().getText() + " " + getLblCondicionVenta().getText(), null, file.getAbsolutePath(), System.getProperty("intercalarColoresFilas") != null
-													&& System.getProperty("intercalarColoresFilas").equals(String.valueOf(true)));
-											
-											GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), file);
-										} else {
-											GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), JasperHelper.generarJasperPrint(tabla, "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - " + getLblDireccion().getText() + " - "
-													+ getLblCuit().getText() + " - " + getLblTelefono().getText() + " " + getLblCondicionVenta().getText(), null));
-										}
-										CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
-									}
+									GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), createJasperResumenCuenta(cliente));
+									CLJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
 								}catch(Exception ex){
 									ex.printStackTrace();
 								}
@@ -892,6 +894,68 @@ public class JFrameVerMovimientos extends JFrame {
 		return btnEnviarExtractoCuentaPorEmail;
 	}
 
+	private static final String ARCHIVO_JASPER_RESUMEN_CUENTA = "/ar/com/textillevel/reportes/resumenCuenta.jasper";
+	
+	public JasperPrint createJasperResumenCuenta(Cliente cliente) {
+		JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_CUENTA);
+		return JasperHelper.fillReport(reporte, getParametersResumenCuenta(cliente), getPanelTablaMovimientos().createListaMovimientosTO());
+	}
+	
+	private Map<String, Object> getParametersResumenCuenta(Cliente cliente) {
+		Map<String, Object> mapa = new HashMap<String, Object>();
+		if(getChkUltimosMovimientos().isSelected()){
+			mapa.put("FECHA", DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE));
+		} else {
+			java.sql.Date fechaHasta = DateUtil.getManiana(new java.sql.Date(getDPFechaHasta().getDate().getTime()));
+			mapa.put("FECHA", DateUtil.dateToString(fechaHasta, DateUtil.SHORT_DATE));
+		}
+		mapa.put("SALDO", getTxtTotalCuenta().getText());
+		mapa.put("CLIENTE", cliente.getRazonSocial());
+		mapa.put("IS_TEST", GenericUtils.isSistemaTest());
+		return mapa;
+	}
+	
+	public static class MovimientoTO implements Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		private String descripcion;
+		private String debe;
+		private String haber;
+		private String saldo;
+
+		public String getDescripcion() {
+			return descripcion;
+		}
+
+		public void setDescripcion(String descripcion) {
+			this.descripcion = descripcion;
+		}
+
+		public String getDebe() {
+			return debe;
+		}
+
+		public void setDebe(String debe) {
+			this.debe = debe;
+		}
+
+		public String getHaber() {
+			return haber;
+		}
+
+		public void setHaber(String haber) {
+			this.haber = haber;
+		}
+
+		public String getSaldo() {
+			return saldo;
+		}
+
+		public void setSaldo(String saldo) {
+			this.saldo = saldo;
+		}
+	}
 	
 //	public JButton getBtnEliminarRecibo() {
 //		if (btnEliminarRecibo == null) {
