@@ -803,7 +803,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 
 			tabla.setReorderingAllowed(false);
-			tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tabla.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			
 			return tabla;
 		}
