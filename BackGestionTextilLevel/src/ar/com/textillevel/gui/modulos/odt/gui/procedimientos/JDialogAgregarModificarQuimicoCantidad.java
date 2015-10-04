@@ -205,7 +205,7 @@ public class JDialogAgregarModificarQuimicoCantidad extends JDialog {
 	public JComboBox getCmbQuimicos() {
 		if(cmbQuimicos == null){
 			cmbQuimicos = new JComboBox();
-			List<MateriaPrima> quimicos = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class).getAllOrderByTipos(ETipoMateriaPrima.QUIMICO);
+			List<MateriaPrima> quimicos = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class).getAllOrderByTipos(false, ETipoMateriaPrima.QUIMICO);
 			CollectionUtils.filter(quimicos, new Predicate() {
 				public boolean evaluate(Object arg0) {
 					Quimico q = (Quimico)arg0;

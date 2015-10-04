@@ -21,8 +21,8 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 	@EJB
 	private MateriaPrimaDAOLocal materiaPrimaDAOLocal;
 
-	public List<MateriaPrima> getAllOrderByName() {
-		return materiaPrimaDAOLocal.getAllOrderByName();
+	public List<MateriaPrima> getAllOrderByName(boolean incluirRepetidos) {
+		return materiaPrimaDAOLocal.getAllOrderByName(incluirRepetidos);
 	}
 
 	public void remove(MateriaPrima materiaPrima) {
@@ -33,20 +33,16 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 		return materiaPrimaDAOLocal.save(materiaPrima);
 	}
 
-	public MateriaPrima getByIdEager(Integer idMateriaPrima) {
-		return materiaPrimaDAOLocal.getByIdEager(idMateriaPrima);
-	}
-
 	public Anilina getAnilinaByColorIndex(Integer colorIndex) {
 		return materiaPrimaDAOLocal.getAnilinaByColorIndex(colorIndex);
 	}
 
-	public boolean existeAnilina(TipoAnilina tipoAnilina, Integer colorIndex, BigDecimal concentracion) {
-		return materiaPrimaDAOLocal.existeAnilina(tipoAnilina,colorIndex,concentracion);
+	public boolean existeAnilina(TipoAnilina tipoAnilina, Integer colorIndex, BigDecimal concentracion, Integer idAExcluir) {
+		return materiaPrimaDAOLocal.existeAnilina(tipoAnilina,colorIndex,concentracion, idAExcluir);
 	}
 
-	public List<MateriaPrima> getAllOrderByTipos(final ETipoMateriaPrima... tipos) {
-		List<MateriaPrima> all = getAllOrderByName();
+	public List<MateriaPrima> getAllOrderByTipos(boolean incluirRepetidos, final ETipoMateriaPrima... tipos) {
+		List<MateriaPrima> all = getAllOrderByName(incluirRepetidos);
 		List<MateriaPrima> filtradas = new ArrayList<MateriaPrima>();
 		for(MateriaPrima mp : all){
 			for(ETipoMateriaPrima etmp : tipos){
@@ -68,6 +64,10 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 
 	public <T extends MateriaPrima> List<T> getAllByClase(Class<T> clazz) {
 		return materiaPrimaDAOLocal.getAllByClase(clazz);
+	}
+
+	public MateriaPrima getByIdEager(Integer id) {
+		return materiaPrimaDAOLocal.getByIdEager(id);
 	}
 
 }

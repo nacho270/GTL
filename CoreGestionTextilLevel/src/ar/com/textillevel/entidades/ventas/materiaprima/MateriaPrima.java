@@ -2,16 +2,21 @@ package ar.com.textillevel.entidades.ventas.materiaprima;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -32,7 +37,13 @@ public abstract class MateriaPrima implements Serializable {
 	private Integer idTipoUnidad;
 	private String observaciones;
 	private BigDecimal concentracion;
+	private List<MateriaPrima> mpHijas; // esto es para marcar que MPs son iguales a esta
+	private Integer idPadre; // mapeo para los querys
 	
+	public MateriaPrima() {
+		this.mpHijas = new ArrayList<MateriaPrima>();
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "P_ID")
@@ -95,6 +106,25 @@ public abstract class MateriaPrima implements Serializable {
 		this.concentracion = concentracion;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "F_MP_PADRE", nullable = true)
+	public List<MateriaPrima> getMpHijas() {
+		return mpHijas;
+	}
+
+	public void setMpHijas(List<MateriaPrima> mpHijas) {
+		this.mpHijas = mpHijas;
+	}
+	
+	@Column(name = "F_MP_PADRE", nullable = true, insertable = false, updatable = false)
+	protected Integer getIdPadre() {
+		return idPadre;
+	}
+
+	protected void setIdPadre(Integer idPadre) {
+		this.idPadre = idPadre;
+	}
+	
 	@Override
 	@Transient
 	public String toString() {

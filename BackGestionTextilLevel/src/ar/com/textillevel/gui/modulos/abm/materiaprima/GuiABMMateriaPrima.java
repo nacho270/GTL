@@ -76,6 +76,7 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	private JComboBox cmbTipoMateriaPrima;
 	private JComboBox cmbUnidades;
 	private CLJTextArea txtObservaciones;
+	private JButton btnVerSeleccionarHijos;
 
 	private CardLayout cardLayout;
 
@@ -149,7 +150,8 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			JScrollPane jsp = new JScrollPane(getTxtObservaciones(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			jsp.setPreferredSize(new Dimension(500, 80));
 			panDetalle.add(jsp, createGridBagConstraints(1, 4, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(getPnlControlesExtra(), createGridBagConstraints(0, 5, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 5, 5), 2, 1, 0, 0));
+			panDetalle.add(getBtnVerSeleccionarHijos(), createGridBagConstraints(0, 5, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getPnlControlesExtra(), createGridBagConstraints(0, 6, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 5, 5), 2, 1, 0, 0));
 		}
 		return panDetalle;
 	}
@@ -174,7 +176,7 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	}
 
 	private void refreshMaterasPrimas(){
-		setMats(getMateriaPrimaFacade().getAllOrderByName());
+		setMats(getMateriaPrimaFacade().getAllOrderByName(false));
 		lista.removeAll();
 	}
 	
@@ -315,7 +317,7 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			}
 			
 			BigDecimal concentracion = getTxtConcentracion().getText().trim().length()>0?new BigDecimal(getTxtConcentracion().getText().replace(',', '.')):null;
-			if (getMateriaPrimaFacade().existeAnilina(((TipoAnilina) getCmbTipoAnilina().getSelectedItem()), getTxtColorIndex().getValue(),concentracion)) {
+			if (getMateriaPrimaFacade().existeAnilina(((TipoAnilina) getCmbTipoAnilina().getSelectedItem()), getTxtColorIndex().getValue(),concentracion,getMateriaPrimaActual().getId())) {
 				CLJOptionPane.showErrorMessage(this, "Ya existe una anilina para el tipo, el color index" + (concentracion != null? " y la concentración indicada":"")+".", "Error");
 				return false;
 			}
@@ -384,7 +386,8 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 
 	@Override
 	public void itemSelectorSeleccionado(int nivelItemSelector) {
-		setMateriaPrimaActual((MateriaPrima) lista.getSelectedValue());
+		MateriaPrima mpEager = getMateriaPrimaFacade().getByIdEager(((MateriaPrima) lista.getSelectedValue()).getId());
+		setMateriaPrimaActual(mpEager);
 		limpiarDatos();
 		if (getMateriaPrimaActual() != null) {
 			getCmbTipoMateriaPrima().setSelectedItem(getMateriaPrimaActual().getTipo());
@@ -830,5 +833,22 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			txtDiametroCabezal.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtDiametroCabezal;
+	}
+
+	private JButton getBtnVerSeleccionarHijos() {
+		if (btnVerSeleccionarHijos == null) {
+			btnVerSeleccionarHijos = new JButton("Ver/Seleccionar hijos");
+			btnVerSeleccionarHijos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JDialogSelccionarHijosMateriaPrima d = new JDialogSelccionarHijosMateriaPrima(GuiABMMateriaPrima.this.getFrame(), getMateriaPrimaActual());
+					d.setVisible(true);
+					if(d.isAcepto()) {
+						getMateriaPrimaActual().getMpHijas().clear();
+						getMateriaPrimaActual().getMpHijas().addAll(d.getMateriasPrimasSeleccionadas());
+					}
+				}
+			});
+		}
+		return btnVerSeleccionarHijos;
 	}
 }

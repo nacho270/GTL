@@ -383,7 +383,7 @@ public class JDialogAltaNuevaMateriaPrimaYPrecioMateriaPrima extends JDialog {
 			}
 
 			BigDecimal concentracion = getTxtConcentracion().getText().trim().length()>0?new BigDecimal(getTxtConcentracion().getText().replace(',', '.')):null;
-			if (getMateriaPrimaFacade().existeAnilina(((TipoAnilina) getCmbTipoAnilina().getSelectedItem()), getTxtColorIndex().getValue(),concentracion)) {
+			if (getMateriaPrimaFacade().existeAnilina(((TipoAnilina) getCmbTipoAnilina().getSelectedItem()), getTxtColorIndex().getValue(),concentracion,getMateriaPrima().getId())) {
 				CLJOptionPane.showErrorMessage(this, "Ya existe una anilina para el tipo, el color index" + (concentracion != null? " y la concentración indicada":"")+".", "Error");
 				return false;
 			}

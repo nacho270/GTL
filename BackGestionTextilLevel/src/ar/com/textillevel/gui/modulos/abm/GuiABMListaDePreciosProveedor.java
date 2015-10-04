@@ -65,7 +65,7 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 
 	public GuiABMListaDePreciosProveedor(Integer idModulo) {
 		super();
-		this.allMateriaPrimaList = getMateriaPrimaFacade().getAllOrderByName();
+		this.allMateriaPrimaList = getMateriaPrimaFacade().getAllOrderByName(false);
 		Collections.sort(allMateriaPrimaList, new MateriaPrimaComparator());
 		setHijoCreado(true);
 		setTitle("Administrar Listas de Precios");
