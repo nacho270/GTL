@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,14 +23,24 @@ import ar.clarin.fwjava.util.FileUtil;
 import ar.clarin.fwjava.util.StringUtil;
 import ar.com.textillevel.util.Utils;
 
-public class SchedulerBackupDatabase implements Schedulable{
+public class SchedulerBackupDatabase implements Schedulable {
 
 	private static final Logger logger = Logger.getLogger(SchedulerBackupDatabase.class);
-	
+
 	private static final Integer DEJAR_ULTIMOS_N_DEFAULT = 6;
-	
+	private static final String HORA_DEFAULT = "18:00";
+
 	public void perform(Date arg0, long arg1) {
-		boolean habilitado = Utils.esAfirmativo(System.getProperty("textillevel.backup.habilitado", "false"));
+		String horaEjecucion = System.getProperty("textillevel.backup.horaEjecucion", HORA_DEFAULT);
+	    //Si no es la hora de ejecución sale
+	    Timestamp now = DateUtil.getAhora();
+		int horas = DateUtil.getHoras(now);
+		int minutos = DateUtil.getMinutos(now);
+		if(!horaEjecucion.equals(horas +":" + minutos)) {
+	    	return;
+	    }
+
+	    boolean habilitado = Utils.esAfirmativo(System.getProperty("textillevel.backup.habilitado", "false"));
 		if (!habilitado) {
 			logger.info("LA REALIZACION DE BACKUP NO SE ENCUENTRA HABILITADA.....");
 			return;
@@ -43,6 +54,8 @@ public class SchedulerBackupDatabase implements Schedulable{
 	    String tempFile = System.getProperty("java.io.tmpdir") + "temp-backup.sql";
 	    String dejarUltimosN = System.getProperty("textillevel.backup.dejarUltimosN");
 	    java.sql.Date hoy = DateUtil.getHoy();
+
+
 	    String fileName = DateUtil.getAnio(hoy) + "-" + DateUtil.getMes(hoy) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
 
 	    String command = "cmd.exe /c \"" +mysqldumpPath + " -u " + username  + " -p"+ pass + " " + database + " -r " + tempFile +"\"";

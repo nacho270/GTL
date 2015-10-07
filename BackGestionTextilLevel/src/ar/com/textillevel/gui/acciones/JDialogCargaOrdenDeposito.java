@@ -434,7 +434,10 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 			CLJOptionPane.showErrorMessage(this, "Debe ingresar la persona responsable del depósito", "Error");
 			return false;
 		}
-		
+		if(getPanelFecha().getDate() == null) {
+			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha", "Error");
+			return false;
+		}
 		return true;
 	}
 

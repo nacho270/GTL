@@ -4,9 +4,8 @@
 		<attribute name="SchedulableClass">ar.com.textillevel.modulos.SchedulerBackupDatabase</attribute>
 		<attribute name="StartAtStartup">true</attribute>
 		<attribute name="FixedRate">true</attribute>
-		<attribute name="DateFormat">dd/MM/yy HH:mm</attribute>
-		<attribute name="InitialStartDate">01/09/2015 18:15</attribute>
-		<attribute name="SchedulePeriod">86400000</attribute>
+		<attribute name="InitialStartDate">NOW</attribute>
+		<attribute name="SchedulePeriod">60000</attribute> <!-- 1 minuto -->
 		<attribute name="InitialRepetitions">-1</attribute>
 		<depends>
 			<mbean code="javax.management.timer.Timer" name="initBackupDataBase:service=Timer"></mbean>
