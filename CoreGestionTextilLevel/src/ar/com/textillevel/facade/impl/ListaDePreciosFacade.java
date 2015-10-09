@@ -94,6 +94,9 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		}
 		VersionListaDePrecios versionActual = getVersionListaPrecioActual(cliente);
 		definicion = versionActual.getDefinicionPorTipoProducto(producto.getTipo());
+		if(definicion == null) {
+			return null;
+		}
 		return definicion.getPrecio(producto);
 	}
 

@@ -19,6 +19,7 @@ import ar.com.textillevel.util.GTLBeanFactory;
 public class ProductosAndPreciosHelper {
 
 	private static final int NRO_CLIENTE_DEFAULT = 1;
+	private static final String PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS = "El cliente no posee una lista de precios y no se pueden obtener los productos.\n ¿Desea usar la lista de precios por defecto?";
 
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
 	private ClienteFacadeRemote clienteFacade;
@@ -41,7 +42,7 @@ public class ProductosAndPreciosHelper {
 			precioProdClienteOK = false;
 		}
 		if(!precioProdClienteOK) {
-			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap("El cliente no posee una lista de precios o bien la tiene pero el producto no está definido en ella.\n ¿Desea usar la lista de precios por defecto?"), "Advertencia");
+			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
 			if(resp == CLJOptionPane.YES_OPTION) {
 				boolean precioProdClienteDefaultOK = true;
 				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_DEFAULT);
@@ -49,13 +50,17 @@ public class ProductosAndPreciosHelper {
 				if(clienteDefault != null) {
 					try {
 						precio = getListaDePreciosFacade().getPrecioProducto(producto, clienteDefault);
-						return new BigDecimal(precio.floatValue());
+						if(precio == null) {
+							precioProdClienteDefaultOK = false;
+						} else {
+							return new BigDecimal(precio.floatValue());
+						}
 					} catch (ValidacionException e1) {
 						precioProdClienteDefaultOK = false;
 					}
 				}
 				if(!precioProdClienteDefaultOK) {
-					CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto no está definido en su lista de precios."), "Advertencia");					
+					CLJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + producto + "' no está definido en su lista de precios."), "Advertencia");					
 				}
 			}
 		} else {
@@ -68,7 +73,7 @@ public class ProductosAndPreciosHelper {
 		try {
 			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente), getListaDePreciosFacade().getProductos(cliente));
 		} catch (ValidacionException e) {
-			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap("El cliente no posee una lista de precios y no se pueden obtener los productos.\n ¿Desea usar la lista de precios por defecto?"), "Advertencia");
+			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
 			if(resp == CLJOptionPane.YES_OPTION) {
 				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_DEFAULT);
 				if(clienteDefault == null) {

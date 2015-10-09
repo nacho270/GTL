@@ -367,9 +367,15 @@ public class JDialogCargaFactura extends JDialog {
 		if (parametrosGenerales2 == null) {
 			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
+			return;
 		}
 		setParametrosGenerales(parametrosGenerales2);
-		inicializarFactura(nroFactura);
+		try {
+			inicializarFactura(nroFactura);
+		} catch(ProductoSinPrecioException e) {
+			dispose();
+			return;
+		}
 		construct();
 		agregarSeguroYTubos(llevaSeguro);
 		llenarDatosCliente(getCliente());
@@ -393,10 +399,16 @@ public class JDialogCargaFactura extends JDialog {
 		if (parametrosGenerales2 == null) {
 			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
+			return;
 		}
 		setParametrosGenerales(parametrosGenerales2);
 		setCliente(cliente);
-		inicializarFactura(nroFactura);
+		try {
+			inicializarFactura(nroFactura);
+		} catch(ProductoSinPrecioException e) {
+			dispose();
+			return;
+		}
 		getFactura().setItems(new ArrayList<ItemFactura>());
 		getFactura().setCliente(getCliente());
 		construct();
@@ -466,7 +478,7 @@ public class JDialogCargaFactura extends JDialog {
 		return itft;
 	}
 
-	private void llenarItemsFacturaConRemito() {
+	private void llenarItemsFacturaConRemito() throws ProductoSinPrecioException {
 		//Armo un map con los totales de metros por producto en base a las piezas de los remitos
 		Map<Producto, BigDecimal> mapTotalPorProducto = new HashMap<Producto, BigDecimal>();
 
@@ -505,6 +517,9 @@ public class JDialogCargaFactura extends JDialog {
 			BigDecimal totalByProducto = mapTotalPorProducto.get(p);
 			itp.setCantidad(totalByProducto);
 			BigDecimal precio = helper.getPrecio(p);
+			if(precio == null) {
+				throw new ProductoSinPrecioException();
+			}
 			itp.setImporte(totalByProducto.multiply(precio));
 			itp.setDescripcion(p.getDescripcion());
 			itp.setProducto(p);
@@ -791,7 +806,7 @@ public class JDialogCargaFactura extends JDialog {
 		fila[COL_CANTIDAD] =itf.getCantidad();// getDecimalFormat().format(itf.getCantidad());
 		fila[COL_DESCRIPCION] = itf.getDescripcion();
 		fila[COL_UNIDAD] = itf.getUnidad().getDescripcion();
-		fila[COL_PRECIO_UNITARIO] = getDecimalFormat().format(itf.getPrecioUnitario());
+		fila[COL_PRECIO_UNITARIO] = itf.getPrecioUnitario();
 		fila[COL_IMPORTE] = getDecimalFormat().format(itf.getImporte().doubleValue());
 		fila[COL_OBJ_FACTURA] = itf;
 		return fila;
@@ -1064,6 +1079,7 @@ public class JDialogCargaFactura extends JDialog {
 							return;
 						}
 					}catch(NumberFormatException nfe){
+						CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap("Ha ocurrido un error en la conversión de precios. Por favor, revise si los datos son correctos."), "Error");
 						System.out.println("error de formateo de numerooooooooooooooooo");
 					}
 				}
@@ -1884,7 +1900,7 @@ public class JDialogCargaFactura extends JDialog {
 		return factura;
 	}
 
-	private void inicializarFactura(Integer nroFactura) {
+	private void inicializarFactura(Integer nroFactura) throws ProductoSinPrecioException {
 		this.factura = new Factura();
 		this.factura.setRemitos(this.getRemitos());
 		ETipoFactura tipoFactura = null;
@@ -2206,4 +2222,11 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		return txtNrosGenericos;
 	}
+
+	private static class ProductoSinPrecioException extends Exception {
+
+		private static final long serialVersionUID = 1L;
+
+	}
+
 }
