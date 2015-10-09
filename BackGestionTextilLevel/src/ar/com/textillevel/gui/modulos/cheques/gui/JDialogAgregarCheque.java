@@ -29,6 +29,7 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
 import org.apache.taglibs.string.util.StringW;
@@ -36,6 +37,7 @@ import org.apache.taglibs.string.util.StringW;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
 import ar.clarin.fwjava.componentes.CLJTextField;
 import ar.clarin.fwjava.componentes.CLTxtComboBoxBusqueda;
+import ar.clarin.fwjava.componentes.error.CLException;
 import ar.clarin.fwjava.util.DateUtil;
 import ar.clarin.fwjava.util.GuiUtil;
 import ar.clarin.fwjava.util.NumUtil;
@@ -51,6 +53,7 @@ import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.componentes.JDialogBusquedaAndSeleccionItems;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.controles.intellisense.JDialogIntellisense;
@@ -63,7 +66,7 @@ public class JDialogAgregarCheque extends JDialog {
 
 	private static final long serialVersionUID = 2011134895322286079L;
 
-	private JComboBox cmbBanco;
+	private JTextField txtBanco;
 	private PanelDatePicker fechaDeposito;
 	private PanelDatePicker fechaEntrada;
 	private CLJTextField txtImporteCheque;
@@ -80,14 +83,18 @@ public class JDialogAgregarCheque extends JDialog {
 	private JPanel panelBotones;
 	private JPanel panelGeneral;
 	private JPanel panCliente;
+	private JPanel panBanco;
 	private JFormattedTextField txtCUIT;
-	private CLTxtComboBusquedaUsuarioByCodigo comboBusquedaUsuario;
+	private ComboBusquedaClienteByCodigo comboBusquedaCliente;
+	private ComboBusquedaBanco comboBusquedaBanco;
 	private JDialogIntellisense dialogIntellisense;
+	private LinkableLabel lblElegirBanco;
 	
 	private Cheque cheque;
 	private boolean acepto;
 	private boolean consulta;
 	private Cliente cliente;
+	private Banco banco;
 	private BancoFacadeRemote bancoFacade;
 	private ChequeFacadeRemote chequeFacade;
 	private ClienteFacadeRemote clienteFacade;
@@ -117,6 +124,7 @@ public class JDialogAgregarCheque extends JDialog {
 		setCheque(cheque2);
 		setCliente(cliente);
 		getLblelegirCliente().setVisible(false);
+		getLblelegirBanco().setVisible(false);		
 		getTxtNroCliente().setText(String.valueOf(cliente.getNroCliente()));
 		if(getCheque().getNumeracion()==null){
 			setNumeracionCheque();
@@ -141,6 +149,7 @@ public class JDialogAgregarCheque extends JDialog {
 		if(isConsulta){
 			GuiUtil.setEstadoPanel(getPanelGeneral(), false);
 			getLblelegirCliente().setVisible(false);
+			getLblelegirBanco().setVisible(false);
 			getBtnGrabar().setEnabled(false);
 		}
 		if(isParaAgregar()){
@@ -148,6 +157,7 @@ public class JDialogAgregarCheque extends JDialog {
 			getTxtNumeracionCheque().setText(""+getCheque().getNumeracion().getLetra()+getCheque().getNumeracion().getNumero());
 			getTxtImporteCheque().setText("");
 			getTxtNroCheque().setText("");
+			getTxtBanco().setText("");
 			getTxtCUIT().setText("");
 			getCheque().setId(null);
 		}
@@ -168,6 +178,7 @@ public class JDialogAgregarCheque extends JDialog {
 		if(isConsulta){
 			GuiUtil.setEstadoPanel(getPanelGeneral(), false);
 			getLblelegirCliente().setVisible(false);
+			getLblelegirBanco().setVisible(false);
 			getBtnGrabar().setEnabled(false);
 		}
 		if(isParaAgregar()){
@@ -195,6 +206,7 @@ public class JDialogAgregarCheque extends JDialog {
 		setCheque(cheque2);
 		setCliente(cliente);
 		getLblelegirCliente().setVisible(false);
+		getLblelegirBanco().setVisible(false);		
 		getTxtNroCliente().setText(String.valueOf(cliente.getNroCliente()));
 		if(getCheque().getNumeracion()==null){
 			setNumeracionCheque();
@@ -210,7 +222,7 @@ public class JDialogAgregarCheque extends JDialog {
 		setCliente(cliente2);
 		getTxtNroCliente().setText(String.valueOf(cheque.getCliente().getNroCliente()));
 		getLblelegirCliente().setVisible(false);
-		GuiUtil.setEstadoPanel(getComboBusquedaUsuario(), false);
+		GuiUtil.setEstadoPanel(getComboBusquedaCliente(), false);
 	}
 	
 	public JDialogAgregarCheque(Frame padre, Cheque cheque, boolean isConsulta, boolean paraAgregar, boolean noPermitirElegirCliente) {
@@ -224,6 +236,7 @@ public class JDialogAgregarCheque extends JDialog {
 		if(isConsulta){
 			GuiUtil.setEstadoPanel(getPanelGeneral(), false);
 			getLblelegirCliente().setVisible(false);
+			getLblelegirBanco().setVisible(false);
 			getBtnGrabar().setEnabled(false);
 		}
 		if(isParaAgregar()){
@@ -284,8 +297,16 @@ public class JDialogAgregarCheque extends JDialog {
 			panelGeneral.add(getTxtNumeracionCheque(),  GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 5), 1, 1, 1, 0));
 			panelGeneral.add(getFechaEntrada(),  GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
 			panelGeneral.add(getPanelElegirCliente(), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
+			
+			panelGeneral.add(getPanelElegirBanco(),  GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
+			
+			/*
 			panelGeneral.add(new JLabel("Banco: "),  GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelGeneral.add(getCmbBanco(), GenericUtils.createGridBagConstraints(1, 3,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelGeneral.add(getTxtBanco(), GenericUtils.createGridBagConstraints(1, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelGeneral.add(getComboBusquedaBanco(), GenericUtils.createGridBagConstraints(2, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			*/
+			
+			
 			panelGeneral.add(new JLabel("CUIT/DNI: "), GenericUtils.createGridBagConstraints(0, 4,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelGeneral.add(getTxtCUIT(),  GenericUtils.createGridBagConstraints(1, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelGeneral.add(new JLabel("Número: "), GenericUtils.createGridBagConstraints(0, 5,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
@@ -305,11 +326,24 @@ public class JDialogAgregarCheque extends JDialog {
 			panCliente.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
 			panCliente.add(new JLabel("Cliente N°: "));
 			panCliente.add(getTxtNroCliente());
-			panCliente.add(getComboBusquedaUsuario());
+			panCliente.add(getComboBusquedaCliente());
 			panCliente.add(getLblelegirCliente());
 		}
 		return panCliente;
 	}
+	
+	private JPanel getPanelElegirBanco(){
+		if(panBanco == null){
+			panBanco = new JPanel();
+			panBanco.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+			panBanco.add(new JLabel("Banco: "));
+			panBanco.add(getTxtBanco());
+			panBanco.add(getComboBusquedaBanco());
+			panBanco.add(getLblelegirBanco());
+		}
+		return panBanco;
+	}
+
 	
 	public Cheque getCheque() {
 		return cheque;
@@ -327,15 +361,17 @@ public class JDialogAgregarCheque extends JDialog {
 		this.acepto = acepto;
 	}
 
-	private JComboBox getCmbBanco() {
-		if (cmbBanco == null) {
-			cmbBanco = new JComboBox();
-			GuiUtil.llenarCombo(cmbBanco, getBancoFacade().getAllOrderByName(), true);
-			if(getCheque()!=null){
-				cmbBanco.setSelectedItem(getCheque().getBanco());
+	private JTextField getTxtBanco() {
+		if (txtBanco == null) {
+			txtBanco = new JTextField();
+			txtBanco.setEditable(false);
+			txtBanco.setPreferredSize(new Dimension(160, 20));
+			if(getCheque()!=null && getCheque().getBanco() != null){
+				txtBanco.setText(getCheque().getBanco().getNombre());
+				this.banco = getCheque().getBanco();
 			}
 		}
-		return cmbBanco;
+		return txtBanco;
 	}
 
 	private BancoFacadeRemote getBancoFacade() {
@@ -382,13 +418,41 @@ public class JDialogAgregarCheque extends JDialog {
 						if (clienteElegido != null) {
 							setCliente(clienteElegido);
 							getTxtNroCliente().setText(String.valueOf(clienteElegido.getNroCliente()));
-							getComboBusquedaUsuario().reset();
+							getComboBusquedaCliente().reset();
 						}
 					}
 				}
 			};
 		}
 		return lblElegirCliente;
+	}
+
+	private LinkableLabel getLblelegirBanco() {
+		if (lblElegirBanco == null) {
+			lblElegirBanco = new LinkableLabel("Elegir Banco") {
+
+				private static final long serialVersionUID = 580819185565135378L;
+
+				@Override
+				public void labelClickeada(MouseEvent e) {
+					if (e.getClickCount() == 1) {
+						JDialogBusquedaAndSeleccionItems<Banco> jdialog = new JDialogBusquedaAndSeleccionItems<Banco>(padre, "Elegir Bancos", "Banco", getBancoFacade().getAllOrderByName()) {
+
+							private static final long serialVersionUID = 1L;
+							
+						};
+						jdialog.setVisible(true);
+						Banco bancoElegido = jdialog.getSelectedItem();
+						if(bancoElegido != null) {
+							banco = bancoElegido;
+							getTxtBanco().setText(bancoElegido.getNombre());
+							getComboBusquedaBanco().reset();
+						}
+					}
+				}
+			};
+		}
+		return lblElegirBanco;
 	}
 
 	public Cliente getCliente() {
@@ -576,12 +640,15 @@ public class JDialogAgregarCheque extends JDialog {
 			getTxtNroCheque().requestFocus();
 			return false;
 		}
-		
+		if(banco == null) {
+			CLJOptionPane.showErrorMessage(this, "Debe elegir un Banco.", "Error");
+			return false;
+		}
 		return true;
 	}
 
 	private void capturarDatos() {
-		getCheque().setBanco((Banco)getCmbBanco().getSelectedItem());
+		getCheque().setBanco(banco);
 		getCheque().setEstadoCheque(EEstadoCheque.PENDIENTE_COBRAR);
 		getCheque().setFechaDeposito(DateUtil.getManiana(new java.sql.Date(getFechaDeposito().getDate().getTime())));
 		getCheque().setImporte(new BigDecimal(getTxtImporteCheque().getText().trim().replace(',','.')));
@@ -716,7 +783,7 @@ public class JDialogAgregarCheque extends JDialog {
 		return btnAceptarAgregar;
 	}
 	
-	private class CLTxtComboBusquedaUsuarioByCodigo extends CLTxtComboBoxBusqueda<Cliente> {
+	private class ComboBusquedaClienteByCodigo extends CLTxtComboBoxBusqueda<Cliente> {
 
 		private static final long serialVersionUID = -8069636605971687535L;
 
@@ -756,6 +823,43 @@ public class JDialogAgregarCheque extends JDialog {
 		}
 	}
 
+	private class ComboBusquedaBanco extends CLTxtComboBoxBusqueda<Banco> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected List<Banco> buscar(String text) throws CLException {
+			List<Banco> bancos = new ArrayList<Banco>();
+			Banco banco = getBancoFacade().getBancoByCodigo(Integer.valueOf(text));
+			if(banco!=null){
+				JDialogAgregarCheque.this.banco = banco;
+				getTxtBanco().setText(banco.getNombre());
+				bancos.add(banco);
+			}
+			return bancos;
+		}
+
+		@Override
+		protected boolean realizarBusqueda(String text) {
+			if (StringUtil.isNullOrEmptyString(text)) {
+				return false;
+			}
+			if (!NumUtil.esNumerico(text)) {
+				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public void noHayResultado() {
+			CLJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
+			getTxtBanco().setText("");
+			JDialogAgregarCheque.this.banco = null;			
+		}
+
+	}
+
 	public boolean isAgregaOtro() {
 		return agregaOtro;
 	}
@@ -779,11 +883,18 @@ public class JDialogAgregarCheque extends JDialog {
 		return clienteFacade;
 	}
 	
-	private CLTxtComboBusquedaUsuarioByCodigo getComboBusquedaUsuario() {
-		if(comboBusquedaUsuario == null){
-			comboBusquedaUsuario = new CLTxtComboBusquedaUsuarioByCodigo();
+	private ComboBusquedaClienteByCodigo getComboBusquedaCliente() {
+		if(comboBusquedaCliente == null){
+			comboBusquedaCliente = new ComboBusquedaClienteByCodigo();
 		}
-		return comboBusquedaUsuario;
+		return comboBusquedaCliente;
+	}
+
+	private ComboBusquedaBanco getComboBusquedaBanco() {
+		if(comboBusquedaBanco == null) {
+			comboBusquedaBanco = new ComboBusquedaBanco();
+		}
+		return comboBusquedaBanco; 
 	}
 
 	private Set<String> getCuits() {
