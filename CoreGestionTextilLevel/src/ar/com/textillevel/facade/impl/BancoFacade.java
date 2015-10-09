@@ -16,7 +16,7 @@ public class BancoFacade implements BancoFacadeRemote{
 	private BancoDAOLocal bancoDao;
 
 	public List<Banco> getAllOrderByName() {
-		return bancoDao.getAllOrderBy("nombre");
+		return bancoDao.getAllBancos();
 	}
 
 	public void remove(Banco banco) {

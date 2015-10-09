@@ -10,7 +10,7 @@ import ar.com.textillevel.dao.api.local.BancoDAOLocal;
 import ar.com.textillevel.entidades.cheque.Banco;
 
 @Stateless
-public class BancoDAO extends GenericDAO<Banco, Integer> implements BancoDAOLocal{
+public class BancoDAO extends GenericDAO<Banco, Integer> implements BancoDAOLocal {
 	
 	@SuppressWarnings("unchecked")
 	public Banco getBancoByCodigo(Integer codigoBanco) {
@@ -23,4 +23,12 @@ public class BancoDAO extends GenericDAO<Banco, Integer> implements BancoDAOLoca
 		}
 		return list.get(0);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Banco> getAllBancos() {
+		String hql = " SELECT b FROM Banco b left join fetch b.direccion dir left join fetch dir.localidad  ORDER BY b.nombre";
+		Query q = getEntityManager().createQuery(hql);
+		return q.getResultList();
+	}
+
 }
