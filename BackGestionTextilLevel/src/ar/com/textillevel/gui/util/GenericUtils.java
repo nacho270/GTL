@@ -80,6 +80,7 @@ public class GenericUtils {
 	private static NumberFormat df3;
 	private static NumberFormat df4;
 	private static DecimalFormat dfMovimientos;
+	private static DecimalFormat dfListaPrecios;
 	private static final Double TOLEARANCIA_A_CERO = 0.009;
 	
 	/* Corresponden al DateUtil.getDia(date) */
@@ -122,6 +123,11 @@ public class GenericUtils {
 		symbols.setDecimalSeparator(',');
 		symbols.setGroupingSeparator('.');
 		dfMovimientos.setDecimalFormatSymbols(symbols);
+		
+		dfListaPrecios = (DecimalFormat) DecimalFormat.getNumberInstance(new Locale("es_AR"));
+		dfListaPrecios.setMaximumFractionDigits(3);
+		dfListaPrecios.setMinimumFractionDigits(3);
+		dfListaPrecios.setMinimumIntegerDigits(1);
 	}
 	
 	
@@ -264,6 +270,11 @@ public class GenericUtils {
 	public static NumberFormat getDecimalFormatFactura(){
 		return df4;
 	}
+	
+	public static NumberFormat getDecimalFormatListaPrecios(){
+		return dfListaPrecios;
+	}
+	
 	public static NumberFormat getDecimalFormatTablaMovimientos() {
 		return dfMovimientos;
 	}

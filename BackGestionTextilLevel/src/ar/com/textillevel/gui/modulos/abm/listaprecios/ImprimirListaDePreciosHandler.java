@@ -161,6 +161,9 @@ public class ImprimirListaDePreciosHandler {
 		List<DefinicionPrecioTO> definicionesTO = new ArrayList<ImprimirListaDePreciosHandler.DefinicionPrecioTO>();
 		for(int i = 0; i < this.definiciones.size(); i++) {
 			DefinicionPrecio dp = this.definiciones.get(i);
+			if (dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+				continue;
+			}
 			for (RangoAncho ra : dp.getRangos()) {
 				if (ra instanceof RangoAnchoArticuloTenido) {
 					RangoAnchoArticuloTenido raat = (RangoAnchoArticuloTenido) ra;
@@ -171,7 +174,7 @@ public class ImprimirListaDePreciosHandler {
 							dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase());
 							dTO.setDescripcion(pg.getGamaCliente().getNombre());
-							dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
+							dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 							definicionesTO.add(dTO);
 						}
 					}
@@ -185,7 +188,7 @@ public class ImprimirListaDePreciosHandler {
 									dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
 									dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 									dTO.setTipoArticulo(gtabe.getTipoArticulo().getNombre().toUpperCase());
-									dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
+									dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(rce.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 									dTO.setDescripcion("BASE " + pbe.getGama().getNombre().toUpperCase() + ". " + rcc.toString().toUpperCase() + " COLORES.\n" + rce.toString() + " DE COBERTURA.");
 									definicionesTO.add(dTO);
 								}
@@ -200,7 +203,7 @@ public class ImprimirListaDePreciosHandler {
 						dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 						dTO.setDescripcion("-");
 						dTO.setTipoArticulo(pta.getTipoArticulo().getNombre().toUpperCase());
-						dTO.setPrecio("$ " + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
+						dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(pta.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 						definicionesTO.add(dTO);
 					}
 				} 
