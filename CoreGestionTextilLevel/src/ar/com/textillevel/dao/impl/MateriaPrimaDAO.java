@@ -57,7 +57,9 @@ public class MateriaPrimaDAO extends GenericDAO<MateriaPrima, Integer> implement
 	}
 
 	public boolean existeMateriaPrima(String nombre, Integer idAExcluir) {
-		String hql = " SELECT COUNT(*) FROM MateriaPrima mp WHERE LOWER(mp.descripcion) = LOWER(:descripcion) "+
+		String hql = " SELECT COUNT(*) FROM MateriaPrima mp "
+					+ " WHERE LOWER(mp.descripcion) = LOWER(:descripcion) "
+					+ "		AND mp.idPadre IS NULL "+ // por el tema de que los hijos tienen el mismo nombre que los padres
 					 (idAExcluir != null?" AND mp.id <> :idAExcluir ": " ");
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("descripcion", nombre);
@@ -87,6 +89,14 @@ public class MateriaPrimaDAO extends GenericDAO<MateriaPrima, Integer> implement
 		MateriaPrima mp = getById(id);
 		mp.getMpHijas().size();
 		return mp;
+	}
+
+	public void updateTipoManualmente(Integer id, String tipo) {
+		Query q = getEntityManager().createNativeQuery(" UPDATE t_materia_prima SET TIPO = :tipo WHERE P_ID = :id ");
+		q.setParameter("tipo", tipo);
+		q.setParameter("id", id);
+		q.executeUpdate();
+		this.getEntityManager().flush();
 	}
 
 }

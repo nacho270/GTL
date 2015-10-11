@@ -159,6 +159,18 @@ public class ImprimirListaDePreciosHandler {
 
 	private List<DefinicionPrecioTO> createDefiniciones() {
 		List<DefinicionPrecioTO> definicionesTO = new ArrayList<ImprimirListaDePreciosHandler.DefinicionPrecioTO>();
+		
+//		Esto es para que el header se imprima como una definicion mas y asi evitar que no salga en todas las hojas
+//		Anda, pero como el tipo de producto se muestra alineado a la izquierda, el titulo tambien y queda mal
+//		Reverti el cambio en el jasper. En el caso de volver a ponerlo, hay que borrar los titulos y la banda "Column header"
+//		DefinicionPrecioTO header = new DefinicionPrecioTO();
+//		header.setTipoProducto("<html><center>SERVICIO</center></html>");
+//		header.setAncho("ANCHO");
+//		header.setTipoArticulo("ARTICULO");
+//		header.setDescripcion("DESCRIPCION");
+//		header.setPrecio("PRECIO");
+//		definicionesTO.add(header);
+		
 		for(int i = 0; i < this.definiciones.size(); i++) {
 			DefinicionPrecio dp = this.definiciones.get(i);
 			if (dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {

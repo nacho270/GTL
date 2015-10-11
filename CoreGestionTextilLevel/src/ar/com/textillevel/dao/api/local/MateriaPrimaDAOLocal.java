@@ -28,4 +28,6 @@ public interface MateriaPrimaDAOLocal extends DAOLocal<MateriaPrima, Integer> {
 
 	public abstract MateriaPrima getByIdEager(Integer id);
 
+	public abstract void updateTipoManualmente(Integer id, String tipo);
+
 }

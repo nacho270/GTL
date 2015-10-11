@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.DiscriminatorValue;
 
 import ar.com.textillevel.dao.api.local.MateriaPrimaDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
@@ -30,7 +31,17 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 	}
 
 	public MateriaPrima save(MateriaPrima materiaPrima) {
-		return materiaPrimaDAOLocal.save(materiaPrima);
+		if(materiaPrima.getId() != null) {
+			String tipo = materiaPrima.getClass().getAnnotation(DiscriminatorValue.class).value();
+			materiaPrimaDAOLocal.updateTipoManualmente(materiaPrima.getId(), tipo);
+		}
+		if (!materiaPrima.getMpHijas().isEmpty()) {
+			for (MateriaPrima mpHija : materiaPrima.getMpHijas()) {
+				materiaPrimaDAOLocal.save(mpHija);
+			}
+		}
+		MateriaPrima mp = materiaPrimaDAOLocal.save(materiaPrima);
+		return mp;
 	}
 
 	public Anilina getAnilinaByColorIndex(Integer colorIndex) {
@@ -47,6 +58,7 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 		for(MateriaPrima mp : all){
 			for(ETipoMateriaPrima etmp : tipos){
 				if(mp.getTipo() == etmp){
+					mp.getMpHijas().size();
 					filtradas.add(mp);
 				}
 			}

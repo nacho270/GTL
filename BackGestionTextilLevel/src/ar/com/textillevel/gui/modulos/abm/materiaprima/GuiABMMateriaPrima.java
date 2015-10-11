@@ -231,9 +231,9 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 
 	private void capturarSetearDatos() {
 		ETipoMateriaPrima tipoMateriaPrima = (ETipoMateriaPrima) getCmbTipoMateriaPrima().getSelectedItem();
-		if (getMateriaPrimaActual().getId() == null) {
-			setMateriaPrimaActual(MateriaPrimaFactory.createMateriaPrima(tipoMateriaPrima));
-		}
+		Integer idActual = getMateriaPrimaActual().getId();
+		setMateriaPrimaActual(MateriaPrimaFactory.createMateriaPrima(tipoMateriaPrima));
+		getMateriaPrimaActual().setId(idActual);
 		if (getTxtConcentracion().getText().trim().length() > 0) {
 			getMateriaPrimaActual().setConcentracion(new BigDecimal(getTxtConcentracion().getText().replace(',', '.')));
 		}
@@ -261,6 +261,13 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		if(tipoMateriaPrima == ETipoMateriaPrima.CABEZAL){
 			((Cabezal)getMateriaPrimaActual()).setDiametroCabezal(new BigDecimal(Double.valueOf(getTxtDiametroCabezal().getText().replace(',', '.'))));
 		}
+		
+		// copio el nombre del padre a todos los hijos
+		if(!getMateriaPrimaActual().getMpHijas().isEmpty()) {
+			for(MateriaPrima mp : getMateriaPrimaActual().getMpHijas()) {
+				mp.setDescripcion(getMateriaPrimaActual().getDescripcion());
+			}
+		}
 	}
 
 	private boolean validar() {
@@ -277,21 +284,11 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			return false;
 		}
 		
-		if(getMateriaPrimaFacade().existeMateriaPrima(getTxtDescripcion().getText().trim(),getMateriaPrimaActual().getId())){
-			CLJOptionPane.showErrorMessage(this, "Ya existe un materia prima con el nombre ingresado", "Error");
-			getTxtDescripcion().requestFocus();
-			return false;
-		}
-
-//		if (!GenericUtils.esNumerico(getTxtStockActual().getText())) {
-//			CLJOptionPane.showErrorMessage(this, "Solo puede ingresar números.", "Advertencia");
-//			getTxtStockActual().requestFocus();
-//			return false;
-//		}
-//
-//		if (!GenericUtils.esNumerico(getTxtPuntoPedido().getText())) {
-//			CLJOptionPane.showErrorMessage(this, "Solo puede ingresar números.", "Advertencia");
-//			getTxtPuntoPedido().requestFocus();
+		// TODO QUITADO TEMPORALMENTE!! Volver a agregar
+		
+//		if(getMateriaPrimaFacade().existeMateriaPrima(getTxtDescripcion().getText().trim(),getMateriaPrimaActual().getId())){
+//			CLJOptionPane.showErrorMessage(this, "Ya existe un materia prima con el nombre ingresado", "Error");
+//			getTxtDescripcion().requestFocus();
 //			return false;
 //		}
 
@@ -315,12 +312,13 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 				getTxtColorIndex().requestFocus();
 				return false;
 			}
+			// TODO QUITADO TEMPORALMENTE!! Volver a agregar
 			
-			BigDecimal concentracion = getTxtConcentracion().getText().trim().length()>0?new BigDecimal(getTxtConcentracion().getText().replace(',', '.')):null;
-			if (getMateriaPrimaFacade().existeAnilina(((TipoAnilina) getCmbTipoAnilina().getSelectedItem()), getTxtColorIndex().getValue(),concentracion,getMateriaPrimaActual().getId())) {
-				CLJOptionPane.showErrorMessage(this, "Ya existe una anilina para el tipo, el color index" + (concentracion != null? " y la concentración indicada":"")+".", "Error");
-				return false;
-			}
+//			BigDecimal concentracion = getTxtConcentracion().getText().trim().length()>0?new BigDecimal(getTxtConcentracion().getText().replace(',', '.')):null;
+//			if (getMateriaPrimaFacade().existeAnilina(((TipoAnilina) getCmbTipoAnilina().getSelectedItem()), getTxtColorIndex().getValue(),concentracion,getMateriaPrimaActual().getId())) {
+//				CLJOptionPane.showErrorMessage(this, "Ya existe una anilina para el tipo, el color index" + (concentracion != null? " y la concentración indicada":"")+".", "Error");
+//				return false;
+//			}
 		}
 		
 		if(tipoMateriaPrima ==ETipoMateriaPrima.CILINDRO){

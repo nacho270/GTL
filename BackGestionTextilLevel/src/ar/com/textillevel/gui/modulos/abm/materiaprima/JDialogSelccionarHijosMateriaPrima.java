@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 
 import ar.clarin.fwjava.componentes.CLCheckBoxList;
 import ar.clarin.fwjava.componentes.CLJOptionPane;
@@ -43,7 +48,14 @@ public class JDialogSelccionarHijosMateriaPrima extends JDialog{
 	}
 
 	private void setUpScreen() {
+		setTitle("Seleccionar hijos para " + materiaPrima.getDescripcion());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				salir();
+			}
+		});
 		setModal(true);
 		setSize(new Dimension(250, 400));
 		setResizable(false);
@@ -75,7 +87,18 @@ public class JDialogSelccionarHijosMateriaPrima extends JDialog{
 					}
 				}
 			};
-			List<MateriaPrima> mps = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class).getAllOrderByTipos(true, materiaPrima.getTipo());
+			boolean yaTieneHijas = !materiaPrima.getMpHijas().isEmpty();
+			List<MateriaPrima> mps = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class).
+					getAllOrderByTipos(yaTieneHijas, materiaPrima.getTipo());
+			if(!yaTieneHijas) {
+				CollectionUtils.filter(mps, new Predicate() {
+					public boolean evaluate(Object arg0) {
+						MateriaPrima mp = (MateriaPrima) arg0;
+						return mp.getMpHijas().isEmpty();
+					}
+				});
+			}
+			
 			Object[] materiasPrimas = new Object[mps.size() - 1]; // para no incluir el actual
 			int i=0;
 			for(MateriaPrima m : mps) {
