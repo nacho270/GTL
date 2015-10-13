@@ -14,8 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;

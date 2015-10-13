@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
@@ -17,7 +17,7 @@ public class ModuloStockTelasFisicasModel extends ModuloModel<ItemMateriaPrimaTO
 
 	private Set<DetallePiezaFisicaTO> piezasElegidas = new HashSet<DetallePiezaFisicaTO>();
 
-	public ModuloStockTelasFisicasModel(Integer id) throws CLException{
+	public ModuloStockTelasFisicasModel(Integer id) throws FWException{
 		super(id, BuilderModuloStockTelasFisicas.getInstance(),
 				  BuilderModuloStockTelasFisicas.getInstance(),
 				  BuilderModuloStockTelasFisicas.getInstance(),

@@ -16,9 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.valesdeatencion.ValeAtencion;
 import ar.com.textillevel.modulos.personal.entidades.legajos.valesdeatencion.ValeEnfermedad;
@@ -27,7 +27,7 @@ public class JDialogInputJustifAltaValEnfermedad extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private CLDateField txtFecha;
+	private FWDateField txtFecha;
 	private JTextField txtDiagnostico;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -73,9 +73,9 @@ public class JDialogInputJustifAltaValEnfermedad extends JDialog {
 		return panel;
 	}
 
-	private CLDateField getTxtFecha() {
+	private FWDateField getTxtFecha() {
 		if(txtFecha==null){
-			txtFecha = new CLDateField();
+			txtFecha = new FWDateField();
 			txtFecha.setFecha(DateUtil.getHoy());
 		}
 		return txtFecha;

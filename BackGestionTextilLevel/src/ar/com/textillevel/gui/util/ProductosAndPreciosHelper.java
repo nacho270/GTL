@@ -7,8 +7,8 @@ import javax.swing.JDialog;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
@@ -42,8 +42,8 @@ public class ProductosAndPreciosHelper {
 			precioProdClienteOK = false;
 		}
 		if(!precioProdClienteOK) {
-			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
-			if(resp == CLJOptionPane.YES_OPTION) {
+			int resp = FWJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
+			if(resp == FWJOptionPane.YES_OPTION) {
 				boolean precioProdClienteDefaultOK = true;
 				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_DEFAULT);
 				precioProdClienteDefaultOK = clienteDefault != null;
@@ -60,7 +60,7 @@ public class ProductosAndPreciosHelper {
 					}
 				}
 				if(!precioProdClienteDefaultOK) {
-					CLJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + producto + "' no está definido en su lista de precios."), "Advertencia");					
+					FWJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + producto + "' no está definido en su lista de precios."), "Advertencia");					
 				}
 			}
 		} else {
@@ -73,16 +73,16 @@ public class ProductosAndPreciosHelper {
 		try {
 			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente), getListaDePreciosFacade().getProductos(cliente));
 		} catch (ValidacionException e) {
-			int resp = CLJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
-			if(resp == CLJOptionPane.YES_OPTION) {
+			int resp = FWJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
+			if(resp == FWJOptionPane.YES_OPTION) {
 				Cliente clienteDefault = getClienteFacade().getClienteByNumero(NRO_CLIENTE_DEFAULT);
 				if(clienteDefault == null) {
-					CLJOptionPane.showErrorMessage(dialogoLlamador, "No fue cargado el cliente NRO. '" + NRO_CLIENTE_DEFAULT + "'.", "Advertencia");
+					FWJOptionPane.showErrorMessage(dialogoLlamador, "No fue cargado el cliente NRO. '" + NRO_CLIENTE_DEFAULT + "'.", "Advertencia");
 				} else {
 					try {
 						return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault), getListaDePreciosFacade().getProductos(clienteDefault));
 					} catch (ValidacionException e1) {
-						CLJOptionPane.showErrorMessage(dialogoLlamador, "La lista de precios por defecto tampoco fue cargada.", "Advertencia");
+						FWJOptionPane.showErrorMessage(dialogoLlamador, "La lista de precios por defecto tampoco fue cargada.", "Advertencia");
 					}
 				}
 			}

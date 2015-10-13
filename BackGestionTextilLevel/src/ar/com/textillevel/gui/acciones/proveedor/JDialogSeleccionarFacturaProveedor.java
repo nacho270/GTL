@@ -33,12 +33,12 @@ import main.acciones.compras.OperacionSobreFacturaProveedorHandler;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemFacturaMateriaPrima;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemFacturaProveedor;
@@ -206,11 +206,11 @@ public class JDialogSeleccionarFacturaProveedor extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaFacturas = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tablaFacturas = new FWJTable(0, CANT_COLS);
 			tablaFacturas.setStringColumn(COL_FACTURA, "FACTURA", 590, 590, true);
 			tablaFacturas.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tablaFacturas.setAlignment(COL_FACTURA, CLJTable.CENTER_ALIGN);
+			tablaFacturas.setAlignment(COL_FACTURA, FWJTable.CENTER_ALIGN);
 			tablaFacturas.addMouseListener(new MouseAdapter () {
 
 				@Override
@@ -273,20 +273,20 @@ public class JDialogSeleccionarFacturaProveedor extends JDialog {
 				OperacionSobreFacturaProveedorHandler operacionHandler = new OperacionSobreFacturaProveedorHandler(owner, fp, false); 
 				operacionHandler.showFacturaProveedorDialog();
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(JDialogSeleccionarFacturaProveedor.this, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
+				FWJOptionPane.showErrorMessage(JDialogSeleccionarFacturaProveedor.this, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
 				return;
 			}
 		}
 
 		@Override
 		public boolean validarQuitar() {
-			if(CLJOptionPane.showQuestionMessage(owner, "¿Está seguro que desea eliminar la factura?", "Confirmación") == CLJOptionPane.YES_OPTION) { 
+			if(FWJOptionPane.showQuestionMessage(owner, "¿Está seguro que desea eliminar la factura?", "Confirmación") == FWJOptionPane.YES_OPTION) { 
 				FacturaProveedor fp = getElemento(getTabla().getSelectedRow());
 				try {
 					getFacturaProveedorFacade().borrarFactura(fp, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-					CLJOptionPane.showInformationMessage(owner, "Factura borrada éxitosamente.", "Información");
+					FWJOptionPane.showInformationMessage(owner, "Factura borrada éxitosamente.", "Información");
 				} catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(JDialogSeleccionarFacturaProveedor.this, StringW.wordWrap(e.getMensajeError()), "Imposible Eliminar");
+					FWJOptionPane.showErrorMessage(JDialogSeleccionarFacturaProveedor.this, StringW.wordWrap(e.getMensajeError()), "Imposible Eliminar");
 					return false;
 				}
 				return true;

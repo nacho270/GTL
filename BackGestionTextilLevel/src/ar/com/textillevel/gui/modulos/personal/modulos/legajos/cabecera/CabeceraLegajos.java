@@ -13,12 +13,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.contratos.ETipoContrato;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
@@ -30,8 +30,8 @@ public class CabeceraLegajos extends Cabecera<ModeloCabeceraLegajos>{
 
 	private static final long serialVersionUID = 8594740077787010404L;
 
-	private CLJNumericTextField txtNroLegajo;
-	private CLJTextField txtNombreOApellido;
+	private FWJNumericTextField txtNroLegajo;
+	private FWJTextField txtNombreOApellido;
 	private JComboBox cmbSindicatos;
 	private JButton btnBuscar;
 	private JComboBox cmbTipoBusqueda;
@@ -71,9 +71,9 @@ public class CabeceraLegajos extends Cabecera<ModeloCabeceraLegajos>{
 		return modelo;
 	}
 
-	private CLJNumericTextField getTxtNroLegajo() {
+	private FWJNumericTextField getTxtNroLegajo() {
 		if(txtNroLegajo == null){
-			txtNroLegajo = new CLJNumericTextField();
+			txtNroLegajo = new FWJNumericTextField();
 			txtNroLegajo.setColumns(15);
 		}
 		return txtNroLegajo;
@@ -111,9 +111,9 @@ public class CabeceraLegajos extends Cabecera<ModeloCabeceraLegajos>{
 		return cmbTipoBusqueda;
 	}
 	
-	public CLJTextField getTxtNombreOApellido() {
+	public FWJTextField getTxtNombreOApellido() {
 		if(txtNombreOApellido == null){
-			txtNombreOApellido = new CLJTextField();
+			txtNombreOApellido = new FWJTextField();
 			txtNombreOApellido.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtNombreOApellido;

@@ -20,12 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
@@ -42,12 +42,12 @@ public class JDialogAgregarValeAnticipo extends JDialog {
 	private Empleado empleado;
 
 	private PanelDatePicker panelFecha;
-	private CLJTextField txtNombreEmpleado;
-	private CLJTextField txtMonto;
-	private CLJTextField txtMontoLetras;
-	private CLJTextField txtUsuario;
-	private CLJNumericTextField txtNumeroVale;
-	private CLJTextArea txtConcepto;
+	private FWJTextField txtNombreEmpleado;
+	private FWJTextField txtMonto;
+	private FWJTextField txtMontoLetras;
+	private FWJTextField txtUsuario;
+	private FWJNumericTextField txtNumeroVale;
+	private FWJTextArea txtConcepto;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
@@ -132,18 +132,18 @@ public class JDialogAgregarValeAnticipo extends JDialog {
 		return panelFecha;
 	}
 
-	public CLJTextField getTxtNombreEmpleado() {
+	public FWJTextField getTxtNombreEmpleado() {
 		if (txtNombreEmpleado == null) {
-			txtNombreEmpleado = new CLJTextField();
+			txtNombreEmpleado = new FWJTextField();
 			txtNombreEmpleado.setText(getEmpleado().toString());
 			txtNombreEmpleado.setEditable(false);
 		}
 		return txtNombreEmpleado;
 	}
 
-	public CLJTextField getTxtMonto() {
+	public FWJTextField getTxtMonto() {
 		if (txtMonto == null) {
-			txtMonto = new CLJTextField();
+			txtMonto = new FWJTextField();
 			txtMonto.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -156,17 +156,17 @@ public class JDialogAgregarValeAnticipo extends JDialog {
 		return txtMonto;
 	}
 
-	public CLJTextField getTxtMontoLetras() {
+	public FWJTextField getTxtMontoLetras() {
 		if (txtMontoLetras == null) {
-			txtMontoLetras = new CLJTextField();
+			txtMontoLetras = new FWJTextField();
 			txtMontoLetras.setEditable(false);
 		}
 		return txtMontoLetras;
 	}
 
-	public CLJTextField getTxtUsuario() {
+	public FWJTextField getTxtUsuario() {
 		if (txtUsuario == null) {
-			txtUsuario = new CLJTextField();
+			txtUsuario = new FWJTextField();
 			txtUsuario.setEditable(false);
 			txtUsuario.setPreferredSize(new Dimension(100, 20));
 			txtUsuario.setText(GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
@@ -174,12 +174,12 @@ public class JDialogAgregarValeAnticipo extends JDialog {
 		return txtUsuario;
 	}
 
-	public CLJNumericTextField getTxtNumeroVale() {
+	public FWJNumericTextField getTxtNumeroVale() {
 		if (txtNumeroVale == null) {
-			txtNumeroVale = new CLJNumericTextField();
+			txtNumeroVale = new FWJNumericTextField();
 			txtNumeroVale.setEditable(false);
 			txtNumeroVale.setColumns(10);
-			txtNumeroVale.setHorizontalAlignment(CLJNumericTextField.CENTER);
+			txtNumeroVale.setHorizontalAlignment(FWJNumericTextField.CENTER);
 			Integer proximoNumero = getEmpleado().getLegajo().getUltimoNumeroVale() + 1;
 			txtNumeroVale.setValue(proximoNumero.longValue());
 		}
@@ -223,22 +223,22 @@ public class JDialogAgregarValeAnticipo extends JDialog {
 	
 	private boolean validar(){
 		if(getPanelFecha().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar una fecha válida", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar una fecha válida", "Error");
 			getPanelFecha().requestFocus();
 			return false;
 		}
 		if(getTxtConcepto().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el concepto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el concepto", "Error");
 			getTxtConcepto().requestFocus();
 			return false;
 		}
 		if(getTxtMonto().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el monto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el monto", "Error");
 			getTxtMonto().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(getTxtMonto().getText())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar un monto válido", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar un monto válido", "Error");
 			getTxtMonto().requestFocus();
 			return false;
 		}
@@ -258,9 +258,9 @@ public class JDialogAgregarValeAnticipo extends JDialog {
 		return btnCancelar;
 	}
 
-	public CLJTextArea getTxtConcepto() {
+	public FWJTextArea getTxtConcepto() {
 		if(txtConcepto == null){
-			txtConcepto = new CLJTextArea(MAX_LONG_CONCEPTO);
+			txtConcepto = new FWJTextArea(MAX_LONG_CONCEPTO);
 		}
 		return txtConcepto;
 	}

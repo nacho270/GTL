@@ -18,10 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
@@ -39,9 +39,9 @@ public class JDialogParamBusquedaCorreccionFactura extends JDialog {
 
 	private JPanel panelCentral;
 	private JPanel panelBotones;
-	private CLJNumericTextField txtNroSucursal;
+	private FWJNumericTextField txtNroSucursal;
 	private JComboBox cmbTipoCorreccion;
-	private CLJNumericTextField txtNroCorreccion;
+	private FWJNumericTextField txtNroCorreccion;
 	private CorreccionFactura correccionFactura;
 	private ParametrosGeneralesFacadeRemote paramGenerales;
 	private CorreccionFacadeRemote cfr;
@@ -103,7 +103,7 @@ public class JDialogParamBusquedaCorreccionFactura extends JDialog {
 						ETipoCorreccionFactura tipoCorrecion = ETipoCorreccionFactura.getByDescripcion((String)getCmbTipoCorreccion().getSelectedItem());
 						correccionFactura = cfr.getCorreccionByNumero(Integer.valueOf(getTxtNroCorreccion().getText()), tipoCorrecion, Integer.valueOf(getTxtNroSucursal().getText()));
 						if(correccionFactura == null) {
-							CLJOptionPane.showErrorMessage(owner, tipoCorrecion.getDescripcion() + " no encontrada.", "Error");
+							FWJOptionPane.showErrorMessage(owner, tipoCorrecion.getDescripcion() + " no encontrada.", "Error");
 						} else {
 							dispose();
 						}
@@ -117,12 +117,12 @@ public class JDialogParamBusquedaCorreccionFactura extends JDialog {
 	private boolean validar() {
 		ETipoCorreccionFactura tipoCorrecion = ETipoCorreccionFactura.getByDescripcion((String)getCmbTipoCorreccion().getSelectedItem());
 		if(StringUtil.isNullOrEmpty(getTxtNroSucursal().getText())) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar el número de sucursal.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar el número de sucursal.", "Error");
 			getTxtNroSucursal().requestFocus();
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtNroCorreccion().getText())) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar el número de " + tipoCorrecion.getDescripcion() + ".", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar el número de " + tipoCorrecion.getDescripcion() + ".", "Error");
 			getTxtNroCorreccion().requestFocus();
 			return false;
 		}
@@ -144,7 +144,7 @@ public class JDialogParamBusquedaCorreccionFactura extends JDialog {
 
 	private JTextField getTxtNroSucursal() {
 		if(txtNroSucursal == null) {
-			txtNroSucursal = new CLJNumericTextField();
+			txtNroSucursal = new FWJNumericTextField();
 			txtNroSucursal.setValue(new Long(paramGenerales.getParametrosGenerales().getNroSucursal()));
 		}
 		return txtNroSucursal;
@@ -152,7 +152,7 @@ public class JDialogParamBusquedaCorreccionFactura extends JDialog {
 
 	private JTextField getTxtNroCorreccion() {
 		if(txtNroCorreccion == null) {
-			txtNroCorreccion = new CLJNumericTextField();
+			txtNroCorreccion = new FWJNumericTextField();
 		}
 		return txtNroCorreccion;
 	}

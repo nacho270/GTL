@@ -2,15 +2,17 @@ package ar.com.textillevel.skin;
 
 import java.awt.Color;
 import java.awt.Font;
+
 import javax.swing.UIManager;
-import ar.clarin.fwjava.componentes.CLCalendar;
-import ar.clarin.fwjava.templates.main.skin.ISkinDecorator;
+
+import ar.com.fwcommon.componentes.FWCalendar;
+import ar.com.fwcommon.templates.main.skin.ISkinDecorator;
 
 public class SkinDecoratorModerno implements ISkinDecorator {
 
 	//Imágenes
-	private static final String ICONO_VENTANA = "ar/clarin/fwsgp/imagenes/ico_logo_trans.png";
-	private static final String ICONO_LOGIN = "ar/clarin/fwsgp/imagenes/logo_login_trans.png";
+	private static final String ICONO_VENTANA = "ar/com/fwsgp/imagenes/ico_logo_trans.png";
+	private static final String ICONO_LOGIN = "ar/com/fwsgp/imagenes/logo_login_trans.png";
 	//Colores
 	private static final Color COLOR_AZUL = new Color(40, 100, 180);
 	private static final Color COLOR_VERDE = new Color(98, 158, 98);
@@ -32,7 +34,7 @@ public class SkinDecoratorModerno implements ISkinDecorator {
 		UIManager.put("TaskPane.backgroundGradientStart", COLOR_AZUL);
 		UIManager.put("TaskPane.backgroundGradientEnd", COLOR_AZUL);
 		//Calendario
-        CLCalendar.weekDaysForeground = COLOR_AZUL;
+        FWCalendar.weekDaysForeground = COLOR_AZUL;
 	}
 
 	public Font getDefaultFont() {

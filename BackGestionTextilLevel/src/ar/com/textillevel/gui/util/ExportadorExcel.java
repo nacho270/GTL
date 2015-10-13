@@ -23,11 +23,11 @@ import org.apache.poi.hssf.usermodel.contrib.HSSFRegionUtil;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
 
-import ar.clarin.fwjava.IndicadorProgreso;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTable.DateColumn;
-import ar.clarin.fwjava.util.MiscUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.IndicadorProgreso;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTable.DateColumn;
+import ar.com.fwcommon.util.MiscUtil;
+import ar.com.fwcommon.util.StringUtil;
 
 public class ExportadorExcel {
 
@@ -38,14 +38,14 @@ public class ExportadorExcel {
 		
 	}
 	
-	public void exportarAExcel(CLJTable tabla, String titulo, String subtitulo, String filtros, String ruta, IndicadorProgreso indicador, 
+	public void exportarAExcel(FWJTable tabla, String titulo, String subtitulo, String filtros, String ruta, IndicadorProgreso indicador, 
 			boolean intercalar,List<List<TituloInfoTO>>  lista) {
 		HSSFWorkbook libro = new HSSFWorkbook();
 		generarHoja(libro, tabla, titulo, subtitulo, filtros, indicador, intercalar, lista);
 		guardarLibro(libro, ruta);
 	}
 
-	private void generarHoja(HSSFWorkbook libro, CLJTable tabla, String titulo, String subtitulo, String filtros, IndicadorProgreso indicador, 
+	private void generarHoja(HSSFWorkbook libro, FWJTable tabla, String titulo, String subtitulo, String filtros, IndicadorProgreso indicador, 
 			boolean intercalar, List<List<TituloInfoTO>>  lista) {
 		generarHoja(NOMBRE_HOJA_DEFAULT, libro, tabla, titulo, subtitulo, filtros, indicador, intercalar, lista);
 	}
@@ -81,7 +81,7 @@ public class ExportadorExcel {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void generarHoja(String nombreHoja, HSSFWorkbook libro, CLJTable tabla, String titulo, String subtitulo, String filtros, 
+	private void generarHoja(String nombreHoja, HSSFWorkbook libro, FWJTable tabla, String titulo, String subtitulo, String filtros, 
 			IndicadorProgreso indicador, boolean intercalar, List<List<TituloInfoTO>> listaTituloInfo) {
 		if (nombreHoja == null) {
 			nombreHoja = NOMBRE_HOJA_DEFAULT;
@@ -269,9 +269,9 @@ public class ExportadorExcel {
 		delimitarAgruparEncabezados(libro, hoja, colFin);
 		//
 		//
-		List<CLJTable.GrupoCeldas> gruposCeldas = tabla.getGruposCeldas();
-		for (Iterator<CLJTable.GrupoCeldas> i = gruposCeldas.iterator(); i.hasNext();) {
-			CLJTable.GrupoCeldas grupoCeldas = i.next();
+		List<FWJTable.GrupoCeldas> gruposCeldas = tabla.getGruposCeldas();
+		for (Iterator<FWJTable.GrupoCeldas> i = gruposCeldas.iterator(); i.hasNext();) {
+			FWJTable.GrupoCeldas grupoCeldas = i.next();
 			Region region = new Region(grupoCeldas.getFila() + 5, (short) grupoCeldas.getCol(), grupoCeldas.getFila() + grupoCeldas.getAlto() + 4, (short) (grupoCeldas.getCol()
 					+ grupoCeldas.getAncho() - 1));
 			hoja.addMergedRegion(region);
@@ -289,7 +289,7 @@ public class ExportadorExcel {
 		return formatoFechaCompatibleExcel;
 	}
 
-	private short getFormatoDato(HSSFWorkbook libro, CLJTable tabla, int fila, int col) {
+	private short getFormatoDato(HSSFWorkbook libro, FWJTable tabla, int fila, int col) {
 		if (tabla.getMask(fila, col) != null) {
 			return libro.createDataFormat().getFormat(getFormatoFechaCompatibleExcel(tabla.getMask(fila, col)));
 		} else if (tabla.getTipoColumna(col).getMask() != null) {
@@ -303,17 +303,17 @@ public class ExportadorExcel {
 		return 0;
 	}
 
-	private short getAlineacionCelda(CLJTable tabla, int fila, int col) {
+	private short getAlineacionCelda(FWJTable tabla, int fila, int col) {
 		int alineacionCelda = tabla.getAlignmentCell(fila, col);
-		if (alineacionCelda == CLJTable.CENTER_ALIGN) {
+		if (alineacionCelda == FWJTable.CENTER_ALIGN) {
 			return HSSFCellStyle.ALIGN_CENTER;
-		} else if (alineacionCelda == CLJTable.RIGHT_ALIGN) {
+		} else if (alineacionCelda == FWJTable.RIGHT_ALIGN) {
 			return HSSFCellStyle.ALIGN_RIGHT;
 		}
 		return HSSFCellStyle.ALIGN_LEFT;
 	}
 
-	private HSSFCellStyle getCellStyle(HSSFWorkbook libro, ArrayList<FuenteCelda> fuentesCeldas, CLJTable tabla, int fila, int col, boolean intercalar) {
+	private HSSFCellStyle getCellStyle(HSSFWorkbook libro, ArrayList<FuenteCelda> fuentesCeldas, FWJTable tabla, int fila, int col, boolean intercalar) {
 		Font fuenteCelda = tabla.getFontCell(fila, col);
 		short color = (fila % 2 == 0 && !tabla.isCeldaGrupo(fila, col) && intercalar) ? new HSSFColor.GREY_25_PERCENT().getIndex() : new HSSFColor.WHITE().getIndex();
 		short formatoDato = getFormatoDato(libro, tabla, fila, col);

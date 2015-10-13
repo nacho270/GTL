@@ -18,10 +18,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 
 public class JDialogQuestionNumberInput extends JDialog {
 
@@ -29,7 +29,7 @@ public class JDialogQuestionNumberInput extends JDialog {
 
 	private JButton btnSI;
 	private JButton btnCancelar;
-	private CLJNumericTextField txtNumberInput;
+	private FWJNumericTextField txtNumberInput;
 	private JPanel pnlBotones;
 	private JPanel pnlDatos;
 	private Integer numberInput;
@@ -121,7 +121,7 @@ public class JDialogQuestionNumberInput extends JDialog {
 							setAcepto(true);
 							dispose();
 						}else{
-							CLJOptionPane.showErrorMessage(JDialogQuestionNumberInput.this, "Falta completar el campo '" + textoLblInput + "'", "Error");
+							FWJOptionPane.showErrorMessage(JDialogQuestionNumberInput.this, "Falta completar el campo '" + textoLblInput + "'", "Error");
 						}
 					}catch(RuntimeException re){
 						BossError.gestionarError(re);
@@ -146,9 +146,9 @@ public class JDialogQuestionNumberInput extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJNumericTextField getTxtNumberInput() {
+	private FWJNumericTextField getTxtNumberInput() {
 		if(txtNumberInput == null){
-			txtNumberInput = new CLJNumericTextField(Long.MIN_VALUE, Long.MAX_VALUE);
+			txtNumberInput = new FWJNumericTextField(Long.MIN_VALUE, Long.MAX_VALUE);
 			txtNumberInput.setPreferredSize(new Dimension(100, 20));
 			txtNumberInput.setValue(numberInput == null ? null : numberInput.longValue());
 			txtNumberInput.addKeyListener(new KeyAdapter() {

@@ -22,13 +22,13 @@ import javax.swing.JTabbedPane;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
@@ -48,32 +48,32 @@ public class JDialogParametrosGenerales extends JDialog {
 	private ParametrosGeneralesFacadeRemote parametrosFacade;
 	private BancoFacadeRemote bancoFacade;
 
-	private CLJNumericTextField txtNroComienzoRemito;
-	private CLJNumericTextField txtNroComienzoFactura;
-	private CLJNumericTextField txtNroComienzoRecibo;
-	private CLJNumericTextField txtValidezCotizaciones;
+	private FWJNumericTextField txtNroComienzoRemito;
+	private FWJNumericTextField txtNroComienzoFactura;
+	private FWJNumericTextField txtNroComienzoRecibo;
+	private FWJNumericTextField txtValidezCotizaciones;
 	private DecimalNumericTextField txtMontoMinimoValidacionPrecio;
 	private DecimalNumericTextField txtMontoMaximoValidacionPrecio;
-	private CLJTextField txtPorcentajeIvaInscripto;
-	private CLJTextField txtPorcentajeIvaNoInscripto;
-	private CLJTextField txtPorcentajeSeguroMercaderia;
-	private CLJTextField txtPorcentajeMerma;
-	private CLJTextField txtPrecioTubo;
-	private CLJTextField txtLetraCheque;
-	private CLJTextField txtNumeroCheque;
-	private CLJTextField txtCargaMinimaColor;
-	private CLJTextField txtCargaMinimaEstampado;
-	private CLJNumericTextField txtNroSucursal;
-	private CLJNumericTextField txtDiasAvisoVencimientoCheque;
-	private CLJNumericTextField txtDiasVencenCheques;
-	private CLJNumericTextField txtNroComienzoODT;
-	private CLJNumericTextField txtNroIGJ;
-	private CLJNumericTextField txtNroComienzoFacturaB;
-	private CLJNumericTextField txtNroComienzoOrdenDePago;
-	private CLJNumericTextField txtNroComienzoOrdenDeDeposito;
-	private CLJNumericTextField txtNroComienzoOrdenDePagoPersona;
+	private FWJTextField txtPorcentajeIvaInscripto;
+	private FWJTextField txtPorcentajeIvaNoInscripto;
+	private FWJTextField txtPorcentajeSeguroMercaderia;
+	private FWJTextField txtPorcentajeMerma;
+	private FWJTextField txtPrecioTubo;
+	private FWJTextField txtLetraCheque;
+	private FWJTextField txtNumeroCheque;
+	private FWJTextField txtCargaMinimaColor;
+	private FWJTextField txtCargaMinimaEstampado;
+	private FWJNumericTextField txtNroSucursal;
+	private FWJNumericTextField txtDiasAvisoVencimientoCheque;
+	private FWJNumericTextField txtDiasVencenCheques;
+	private FWJNumericTextField txtNroComienzoODT;
+	private FWJNumericTextField txtNroIGJ;
+	private FWJNumericTextField txtNroComienzoFacturaB;
+	private FWJNumericTextField txtNroComienzoOrdenDePago;
+	private FWJNumericTextField txtNroComienzoOrdenDeDeposito;
+	private FWJNumericTextField txtNroComienzoOrdenDePagoPersona;
 	private JComboBox cmbBancos;
-	private CLJTextField txtMinimoDeuda;
+	private FWJTextField txtMinimoDeuda;
 	private JButton btnConfigurarNumeracionA;
 	private JButton btnConfigurarNumeracionB;
 	
@@ -112,8 +112,8 @@ public class JDialogParametrosGenerales extends JDialog {
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Parametros generales");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Parametros generales");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -165,9 +165,9 @@ public class JDialogParametrosGenerales extends JDialog {
 			try {
 				getParametrosFacade().save(getParametrosGenerales());
 				setAcepto(true);
-				CLJOptionPane.showInformationMessage(this, "La configuración ha sido guarda con exito", "Parametros generales");
+				FWJOptionPane.showInformationMessage(this, "La configuración ha sido guarda con exito", "Parametros generales");
 				dispose();
-			} catch (CLException cle) {
+			} catch (FWException cle) {
 				BossError.gestionarError(cle);
 			}
 		}
@@ -181,7 +181,7 @@ public class JDialogParametrosGenerales extends JDialog {
 		if (parametrosFacade == null) {
 			try {
 				parametrosFacade = GTLBeanFactory.getInstance().getBean(ParametrosGeneralesFacadeRemote.class);
-			} catch (CLException e) {
+			} catch (FWException e) {
 				BossError.gestionarError(e);
 			}
 		}
@@ -190,126 +190,126 @@ public class JDialogParametrosGenerales extends JDialog {
 
 	private boolean validar() {
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoFactura().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoFactura().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoFactura().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoFactura().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoRemito().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoRemito().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoRemito().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoRemito().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoRecibo().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoRecibo().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoRecibo().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoRecibo().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtPorcentajeIvaInscripto().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtPorcentajeIvaInscripto().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtPorcentajeIvaInscripto().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtPorcentajeIvaInscripto().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtPorcentajeIvaNoInscripto().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtPorcentajeIvaNoInscripto().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtPorcentajeIvaNoInscripto().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtPorcentajeIvaNoInscripto().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtPorcentajeSeguroMercaderia().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtPorcentajeSeguroMercaderia().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtPorcentajeSeguroMercaderia().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtPorcentajeSeguroMercaderia().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtPorcentajeMerma().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtPorcentajeMerma().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtPorcentajeMerma().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtPorcentajeMerma().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtPrecioTubo().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtPrecioTubo().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtPrecioTubo().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtPrecioTubo().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtLetraCheque().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtLetraCheque().requestFocus();
 			return false;
 		}
 
 		if (getTxtLetraCheque().getText().trim().length() > 1) {
-			CLJOptionPane.showErrorMessage(this, "Solo se puede ingresar un caracter", "Error");
+			FWJOptionPane.showErrorMessage(this, "Solo se puede ingresar un caracter", "Error");
 			getTxtLetraCheque().requestFocus();
 			return false;
 		}
 
 		if (!Character.isLetter(getTxtLetraCheque().getText().trim().charAt(0))) {
-			CLJOptionPane.showErrorMessage(this, "Solo se pueden ingresar letras", "Error");
+			FWJOptionPane.showErrorMessage(this, "Solo se pueden ingresar letras", "Error");
 			getTxtLetraCheque().requestFocus();
 			return false;
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtNumeroCheque().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNumeroCheque().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNumeroCheque().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNumeroCheque().requestFocus();
 				return false;
 			}
@@ -324,188 +324,188 @@ public class JDialogParametrosGenerales extends JDialog {
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtNroSucursal().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroSucursal().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroSucursal().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroSucursal().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtDiasAvisoVencimientoCheque().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtDiasAvisoVencimientoCheque().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtDiasAvisoVencimientoCheque().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtDiasAvisoVencimientoCheque().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtDiasVencenCheques().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtDiasVencenCheques().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtDiasVencenCheques().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtDiasVencenCheques().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoODT().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoODT().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoODT().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoODT().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtNroIGJ().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroIGJ().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroIGJ().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroIGJ().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoFacturaB().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoFacturaB().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoFacturaB().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoFacturaB().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoOrdenDePago().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoOrdenDePago().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoOrdenDePago().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoOrdenDePago().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoOrdenDeDeposito().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoOrdenDeDeposito().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoOrdenDeDeposito().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoOrdenDeDeposito().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtMinimoDeuda().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtMinimoDeuda().requestFocus();
 			return false;
 		} else {
 			String textoMinimoDeuda = getTxtMinimoDeuda().getText().trim().replaceAll("\\.", "").replaceAll(",", ".");
 			if (!GenericUtils.esNumerico((textoMinimoDeuda))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtMinimoDeuda().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtNroComienzoOrdenDePagoPersona().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtNroComienzoOrdenDePagoPersona().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtNroComienzoOrdenDePagoPersona().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtNroComienzoOrdenDePagoPersona().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtCargaMinimaColor().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtCargaMinimaColor().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtCargaMinimaColor().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtCargaMinimaColor().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtCargaMinimaEstampado().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtCargaMinimaEstampado().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtCargaMinimaEstampado().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtCargaMinimaEstampado().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtValidezCotizaciones().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtValidezCotizaciones().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtValidezCotizaciones().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtValidezCotizaciones().requestFocus();
 				return false;
 			}
 		}
 
 		if (StringUtil.isNullOrEmpty(getTxtMontoMinimoValidacionPrecio().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtMontoMinimoValidacionPrecio().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtMontoMinimoValidacionPrecio().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtMontoMinimoValidacionPrecio().requestFocus();
 				return false;
 			}
 		}
 		
 		if (StringUtil.isNullOrEmpty(getTxtMontoMaximoValidacionPrecio().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 			getTxtMontoMaximoValidacionPrecio().requestFocus();
 			return false;
 		} else {
 			if (!GenericUtils.esNumerico((getTxtMontoMaximoValidacionPrecio().getText()))) {
-				CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 				getTxtMontoMaximoValidacionPrecio().requestFocus();
 				return false;
 			}
 		}
 		
 		if (getTxtMontoMinimoValidacionPrecio().getValue().floatValue() >= getTxtMontoMaximoValidacionPrecio().getValue().floatValue()) {
-			CLJOptionPane.showErrorMessage(this, "El precio de validación mínimo deber ser menor al máximo.", "Error");
+			FWJOptionPane.showErrorMessage(this, "El precio de validación mínimo deber ser menor al máximo.", "Error");
 			getTxtMontoMaximoValidacionPrecio().requestFocus();
 			return false;
 		}
@@ -517,15 +517,15 @@ public class JDialogParametrosGenerales extends JDialog {
 		ChequeFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(ChequeFacadeRemote.class);
 		Integer ultimoNumeroInternoCheque = cfr.getUltimoNumeroInternoCheque(letra);
 		if (ultimoNumeroInternoCheque != null && ultimoNumeroInternoCheque > numero) {
-			CLJOptionPane.showWarningMessage(this, StringW.wordWrap("La letra ingresada ya contiene numeros asigandos.\n\nEl ultimo número es: " + ultimoNumeroInternoCheque + ". Se asigna: "
+			FWJOptionPane.showWarningMessage(this, StringW.wordWrap("La letra ingresada ya contiene numeros asigandos.\n\nEl ultimo número es: " + ultimoNumeroInternoCheque + ". Se asigna: "
 					+ (ultimoNumeroInternoCheque + 1) + "."), "Parametros generales");
 			getTxtNumeroCheque().setText(String.valueOf(ultimoNumeroInternoCheque + 1));
 		}
 	}
 
-	private CLJNumericTextField getTxtNroComienzoRemito() {
+	private FWJNumericTextField getTxtNroComienzoRemito() {
 		if (txtNroComienzoRemito == null) {
-			txtNroComienzoRemito = new CLJNumericTextField();
+			txtNroComienzoRemito = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoRemito() != null) {
 				txtNroComienzoRemito.setValue(getParametrosGenerales().getNroComienzoRemito().longValue());
 			}
@@ -533,9 +533,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroComienzoRemito;
 	}
 
-	private CLJNumericTextField getTxtNroComienzoFactura() {
+	private FWJNumericTextField getTxtNroComienzoFactura() {
 		if (txtNroComienzoFactura == null) {
-			txtNroComienzoFactura = new CLJNumericTextField();
+			txtNroComienzoFactura = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoFactura() != null) {
 				txtNroComienzoFactura.setValue(getParametrosGenerales().getNroComienzoFactura().longValue());
 			}
@@ -543,9 +543,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroComienzoFactura;
 	}
 
-	private CLJTextField getTxtPorcentajeIvaInscripto() {
+	private FWJTextField getTxtPorcentajeIvaInscripto() {
 		if (txtPorcentajeIvaInscripto == null) {
-			txtPorcentajeIvaInscripto = new CLJTextField();
+			txtPorcentajeIvaInscripto = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getPorcentajeIVAInscripto() != null) {
 				txtPorcentajeIvaInscripto.setText(String.valueOf((getParametrosGenerales().getPorcentajeIVAInscripto().doubleValue())));
 			}
@@ -553,9 +553,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtPorcentajeIvaInscripto;
 	}
 
-	private CLJTextField getTxtPorcentajeIvaNoInscripto() {
+	private FWJTextField getTxtPorcentajeIvaNoInscripto() {
 		if (txtPorcentajeIvaNoInscripto == null) {
-			txtPorcentajeIvaNoInscripto = new CLJTextField();
+			txtPorcentajeIvaNoInscripto = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getPorcentajeIVANoInscripto() != null) {
 				txtPorcentajeIvaNoInscripto.setText(String.valueOf((getParametrosGenerales().getPorcentajeIVANoInscripto().doubleValue())));
 			}
@@ -563,9 +563,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtPorcentajeIvaNoInscripto;
 	}
 
-	private CLJTextField getTxtPorcentajeSeguroMercaderia() {
+	private FWJTextField getTxtPorcentajeSeguroMercaderia() {
 		if (txtPorcentajeSeguroMercaderia == null) {
-			txtPorcentajeSeguroMercaderia = new CLJTextField();
+			txtPorcentajeSeguroMercaderia = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getPorcentajeSeguro() != null) {
 				txtPorcentajeSeguroMercaderia.setText(String.valueOf((getParametrosGenerales().getPorcentajeSeguro().doubleValue())));
 			}
@@ -573,9 +573,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtPorcentajeSeguroMercaderia;
 	}
 	
-	public CLJTextField getTxtCargaMinimaColor() {
+	public FWJTextField getTxtCargaMinimaColor() {
 		if (txtCargaMinimaColor == null) {
-			txtCargaMinimaColor = new CLJTextField();
+			txtCargaMinimaColor = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getCargaMinimaColor() != null) {
 				txtCargaMinimaColor.setText(String.valueOf((getParametrosGenerales().getCargaMinimaColor().doubleValue())));
 			}
@@ -583,9 +583,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtCargaMinimaColor;
 	}
 
-	public CLJTextField getTxtCargaMinimaEstampado() {
+	public FWJTextField getTxtCargaMinimaEstampado() {
 		if (txtCargaMinimaEstampado == null) {
-			txtCargaMinimaEstampado = new CLJTextField();
+			txtCargaMinimaEstampado = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getCargaMinimaEstampado() != null) {
 				txtCargaMinimaEstampado.setText(String.valueOf((getParametrosGenerales().getCargaMinimaEstampado().doubleValue())));
 			}
@@ -653,9 +653,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return gbc;
 	}
 
-	private CLJTextField getTxtPorcentajeMerma() {
+	private FWJTextField getTxtPorcentajeMerma() {
 		if (txtPorcentajeMerma == null) {
-			txtPorcentajeMerma = new CLJTextField();
+			txtPorcentajeMerma = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getPorcentajeToleranciaMermaNegativa() != null) {
 				txtPorcentajeMerma.setText(String.valueOf((getParametrosGenerales().getPorcentajeIVANoInscripto().doubleValue())));
 			}
@@ -663,9 +663,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtPorcentajeMerma;
 	}
 
-	public CLJTextField getTxtPrecioTubo() {
+	public FWJTextField getTxtPrecioTubo() {
 		if (txtPrecioTubo == null) {
-			txtPrecioTubo = new CLJTextField();
+			txtPrecioTubo = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getPrecioPorTubo() != null) {
 				txtPrecioTubo.setText(String.valueOf((getParametrosGenerales().getPrecioPorTubo().doubleValue())));
 			}
@@ -673,9 +673,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtPrecioTubo;
 	}
 
-	private CLJTextField getTxtLetraCheque() {
+	private FWJTextField getTxtLetraCheque() {
 		if (txtLetraCheque == null) {
-			txtLetraCheque = new CLJTextField();
+			txtLetraCheque = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNumeracionCheque() != null) {
 				txtLetraCheque.setText(String.valueOf((getParametrosGenerales().getNumeracionCheque().getLetra())));
 			}
@@ -683,9 +683,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtLetraCheque;
 	}
 
-	private CLJTextField getTxtNumeroCheque() {
+	private FWJTextField getTxtNumeroCheque() {
 		if (txtNumeroCheque == null) {
-			txtNumeroCheque = new CLJTextField();
+			txtNumeroCheque = new FWJTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNumeracionCheque() != null) {
 				txtNumeroCheque.setText(String.valueOf((getParametrosGenerales().getNumeracionCheque().getNumero())));
 			}
@@ -693,9 +693,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNumeroCheque;
 	}
 
-	private CLJNumericTextField getTxtNroSucursal() {
+	private FWJNumericTextField getTxtNroSucursal() {
 		if (txtNroSucursal == null) {
-			txtNroSucursal = new CLJNumericTextField();
+			txtNroSucursal = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroSucursal() != null) {
 				txtNroSucursal.setText(String.valueOf(getParametrosGenerales().getNroSucursal()));
 			}
@@ -703,9 +703,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroSucursal;
 	}
 
-	private CLJNumericTextField getTxtNroComienzoRecibo() {
+	private FWJNumericTextField getTxtNroComienzoRecibo() {
 		if (txtNroComienzoRecibo == null) {
-			txtNroComienzoRecibo = new CLJNumericTextField();
+			txtNroComienzoRecibo = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoRecibo() != null) {
 				txtNroComienzoRecibo.setValue(getParametrosGenerales().getNroComienzoRecibo().longValue());
 			}
@@ -713,9 +713,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroComienzoRecibo;
 	}
 
-	private CLJNumericTextField getTxtDiasAvisoVencimientoCheque() {
+	private FWJNumericTextField getTxtDiasAvisoVencimientoCheque() {
 		if (txtDiasAvisoVencimientoCheque == null) {
-			txtDiasAvisoVencimientoCheque = new CLJNumericTextField();
+			txtDiasAvisoVencimientoCheque = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getDiasAvisoVencimientoDeCheque() != null) {
 				txtDiasAvisoVencimientoCheque.setValue(getParametrosGenerales().getDiasAvisoVencimientoDeCheque().longValue());
 			}
@@ -724,9 +724,9 @@ public class JDialogParametrosGenerales extends JDialog {
 	}
 
 	
-	private CLJNumericTextField getTxtDiasVencenCheques() {
+	private FWJNumericTextField getTxtDiasVencenCheques() {
 		if (txtDiasVencenCheques == null) {
-			txtDiasVencenCheques = new CLJNumericTextField();
+			txtDiasVencenCheques = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getDiasVenceCheque() != null) {
 				txtDiasVencenCheques.setValue(getParametrosGenerales().getDiasVenceCheque().longValue());
 			}
@@ -734,9 +734,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtDiasVencenCheques;
 	}
 
-	private CLJNumericTextField getTxtNroComienzoODT() {
+	private FWJNumericTextField getTxtNroComienzoODT() {
 		if (txtNroComienzoODT == null) {
-			txtNroComienzoODT = new CLJNumericTextField();
+			txtNroComienzoODT = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoODT() != null) {
 				txtNroComienzoODT.setValue(getParametrosGenerales().getNroComienzoODT().longValue());
 			}
@@ -744,9 +744,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroComienzoODT;
 	}
 
-	private CLJNumericTextField getTxtNroIGJ() {
+	private FWJNumericTextField getTxtNroIGJ() {
 		if (txtNroIGJ == null) {
-			txtNroIGJ = new CLJNumericTextField();
+			txtNroIGJ = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroIGJ() != null) {
 				txtNroIGJ.setValue(getParametrosGenerales().getNroIGJ().longValue());
 			}
@@ -762,9 +762,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		this.acepto = acepto;
 	}
 
-	private CLJNumericTextField getTxtNroComienzoFacturaB() {
+	private FWJNumericTextField getTxtNroComienzoFacturaB() {
 		if(txtNroComienzoFacturaB == null){
-			txtNroComienzoFacturaB = new CLJNumericTextField();
+			txtNroComienzoFacturaB = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoFacturaB() != null) {
 				txtNroComienzoFacturaB.setValue(getParametrosGenerales().getNroComienzoFacturaB().longValue());
 			}
@@ -772,9 +772,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroComienzoFacturaB;
 	}
 	
-	private CLJNumericTextField getTxtNroComienzoOrdenDePago() {
+	private FWJNumericTextField getTxtNroComienzoOrdenDePago() {
 		if(txtNroComienzoOrdenDePago == null){
-			txtNroComienzoOrdenDePago = new CLJNumericTextField();
+			txtNroComienzoOrdenDePago = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoOrdenDePago() != null) {
 				txtNroComienzoOrdenDePago.setValue(getParametrosGenerales().getNroComienzoOrdenDePago().longValue());
 			}
@@ -782,9 +782,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtNroComienzoOrdenDePago;
 	}
 
-	private CLJNumericTextField getTxtNroComienzoOrdenDeDeposito() {
+	private FWJNumericTextField getTxtNroComienzoOrdenDeDeposito() {
 		if(txtNroComienzoOrdenDeDeposito == null){
-			txtNroComienzoOrdenDeDeposito = new CLJNumericTextField();
+			txtNroComienzoOrdenDeDeposito = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoOrdenDeDeposito() != null) {
 				txtNroComienzoOrdenDeDeposito.setValue(getParametrosGenerales().getNroComienzoOrdenDeDeposito().longValue());
 			}
@@ -898,9 +898,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return cmbBancos;
 	}
 	
-	private CLJTextField getTxtMinimoDeuda() {
+	private FWJTextField getTxtMinimoDeuda() {
 		if(txtMinimoDeuda == null){
-			txtMinimoDeuda = new CLJTextField();
+			txtMinimoDeuda = new FWJTextField();
 			if(getParametrosGenerales()!=null && getParametrosGenerales().getUmbralDeuda()!=null){
 				txtMinimoDeuda.setText(GenericUtils.getDecimalFormat().format(getParametrosGenerales().getUmbralDeuda()));
 			}
@@ -908,9 +908,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtMinimoDeuda;
 	}
 
-	private CLJNumericTextField getTxtNroComienzoOrdenDePagoPersona() {
+	private FWJNumericTextField getTxtNroComienzoOrdenDePagoPersona() {
 		if(txtNroComienzoOrdenDePagoPersona == null){
-			txtNroComienzoOrdenDePagoPersona = new CLJNumericTextField();
+			txtNroComienzoOrdenDePagoPersona = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getNroComienzoOrdenDePagoPersona() != null) {
 				txtNroComienzoOrdenDePagoPersona.setValue(getParametrosGenerales().getNroComienzoOrdenDePagoPersona().longValue());
 			}
@@ -960,9 +960,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return btnConfigurarNumeracionB;
 	}
 
-	public CLJNumericTextField getTxtValidezCotizaciones() {
+	public FWJNumericTextField getTxtValidezCotizaciones() {
 		if (txtValidezCotizaciones == null) {
-			txtValidezCotizaciones = new CLJNumericTextField();
+			txtValidezCotizaciones = new FWJNumericTextField();
 			if (getParametrosGenerales() != null && getParametrosGenerales().getValidezCotizaciones() != null) {
 				txtValidezCotizaciones.setValue(getParametrosGenerales().getValidezCotizaciones().longValue());
 			}

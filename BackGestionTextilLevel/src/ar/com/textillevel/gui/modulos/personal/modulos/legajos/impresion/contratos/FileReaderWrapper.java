@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
 
-import ar.clarin.fwjava.util.FileUtil;
+import ar.com.fwcommon.util.FileUtil;
 
 public class FileReaderWrapper {
 

@@ -22,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cascade;
 
-import ar.clarin.fwjava.entidades.Mes;
+import ar.com.fwcommon.entidades.Mes;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EEstadoReciboSueldo;
 

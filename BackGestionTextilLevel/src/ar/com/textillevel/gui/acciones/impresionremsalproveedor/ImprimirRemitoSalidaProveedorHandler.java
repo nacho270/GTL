@@ -17,9 +17,9 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRemitoSalidaProveedor;
@@ -51,7 +51,7 @@ public class ImprimirRemitoSalidaProveedorHandler {
 				break;
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-				CLJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				JasperReport reporte = null;

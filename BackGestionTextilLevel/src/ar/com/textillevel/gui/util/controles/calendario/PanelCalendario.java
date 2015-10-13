@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.util.controles.calendario.renderers.DefaultEventosRenderer;
 import ar.com.textillevel.gui.util.controles.calendario.renderers.EventosRenderer;
 

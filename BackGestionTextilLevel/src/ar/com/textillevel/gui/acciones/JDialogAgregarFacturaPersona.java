@@ -27,13 +27,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -49,15 +49,15 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 	private static final long serialVersionUID = 8227095054206482927L;
 
 	private PanelDatePicker panelFecha;
-	private CLJTextField txtTotal;
-	private CLJTextArea txtDetalle;
-	private CLJTextField txtPersona;
-	private CLJNumericTextField txtNroFactura;
+	private FWJTextField txtTotal;
+	private FWJTextArea txtDetalle;
+	private FWJTextField txtPersona;
+	private FWJNumericTextField txtNroFactura;
 	private JButton btnGuardar;
 	private JButton btnSalir;
 	private PanelTablaImpuestosFacturaPersona panelTabla;
 	private JComboBox cmbTipoFactura;
-	private CLJTextField txtMontoFinal;
+	private FWJTextField txtMontoFinal;
 	
 	
 	
@@ -177,9 +177,9 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 		return panelFecha;
 	}
 
-	public CLJTextField getTxtTotal() {
+	public FWJTextField getTxtTotal() {
 		if(txtTotal == null){
-			txtTotal = new CLJTextField();
+			txtTotal = new FWJTextField();
 			txtTotal.setPreferredSize(new Dimension(120, 20));
 			txtTotal.addFocusListener(new FocusAdapter() {
 				@Override
@@ -191,27 +191,27 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 		return txtTotal;
 	}
 
-	public CLJTextArea getTxtDetalle() {
+	public FWJTextArea getTxtDetalle() {
 		if(txtDetalle == null){
-			txtDetalle = new CLJTextArea(500);
+			txtDetalle = new FWJTextArea(500);
 			txtDetalle.setLineWrap(true);
 			txtDetalle.setPreferredSize(new Dimension(300, 170));
 		}
 		return txtDetalle;
 	}
 
-	public CLJTextField getTxtPersona() {
+	public FWJTextField getTxtPersona() {
 		if(txtPersona == null){
-			txtPersona = new CLJTextField();
+			txtPersona = new FWJTextField();
 			txtPersona.setEditable(false);
 			txtPersona.setPreferredSize(new Dimension(220, 20));
 		}
 		return txtPersona;
 	}
 
-	public CLJNumericTextField getTxtNroFactura() {
+	public FWJNumericTextField getTxtNroFactura() {
 		if(txtNroFactura == null){
-			txtNroFactura = new CLJNumericTextField();
+			txtNroFactura = new FWJNumericTextField();
 			txtNroFactura.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtNroFactura;
@@ -247,34 +247,34 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 				fp.setUsuarioCreador(usrName);
 				getFacturaFacade().guardarFactura(fp, usrName);
 			}
-			CLJOptionPane.showInformationMessage(this, "La factura se ha guardado con éxito", "Información");
+			FWJOptionPane.showInformationMessage(this, "La factura se ha guardado con éxito", "Información");
 			dispose();
 		}
 	}
 
 	private boolean validar() {
 		if(getTxtNroFactura().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el número de factura", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el número de factura", "Error");
 			getTxtNroFactura().requestFocus();
 			return false;
 		}
 		if(getTxtDetalle().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el detalle de la factura", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el detalle de la factura", "Error");
 			getTxtDetalle().requestFocus();
 			return false;
 		}
 		if(getTxtTotal().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el monto de la factura", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el monto de la factura", "Error");
 			getTxtTotal().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(getTxtTotal().getText().trim())){
-			CLJOptionPane.showErrorMessage(this, "El monto debe ser numérico", "Error");
+			FWJOptionPane.showErrorMessage(this, "El monto debe ser numérico", "Error");
 			getTxtTotal().requestFocus();
 			return false;
 		}
 		if(!isEdicion() && getFacturaFacade().existeNroFacturaParaPersona(getTxtNroFactura().getValue(), getPersona())){
-			CLJOptionPane.showErrorMessage(this, "Ya existe el número de factura ingresado para dicha persona.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Ya existe el número de factura ingresado para dicha persona.", "Error");
 			getTxtNroFactura().requestFocus();
 			return false;
 		}
@@ -355,20 +355,20 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0,CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0,CANT_COLS);
 			tabla.setStringColumn(COL_NOMBRE_IMPUESTO, "Impuesto", 100, 100, true);
 			tabla.setStringColumn(COL_PORC_IMPUESTO, "Porc.", 70, 70, true);
 			tabla.setFloatColumn(COL_MONTO_IMPUESTO, "Monto", 90, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setAlignment(COL_NOMBRE_IMPUESTO, CLJTable.LEFT_ALIGN);
-			tabla.setAlignment(COL_PORC_IMPUESTO, CLJTable.RIGHT_ALIGN);
-			tabla.setAlignment(COL_MONTO_IMPUESTO, CLJTable.RIGHT_ALIGN);
-			tabla.setHeaderAlignment(COL_NOMBRE_IMPUESTO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PORC_IMPUESTO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_MONTO_IMPUESTO, CLJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_NOMBRE_IMPUESTO, FWJTable.LEFT_ALIGN);
+			tabla.setAlignment(COL_PORC_IMPUESTO, FWJTable.RIGHT_ALIGN);
+			tabla.setAlignment(COL_MONTO_IMPUESTO, FWJTable.RIGHT_ALIGN);
+			tabla.setHeaderAlignment(COL_NOMBRE_IMPUESTO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PORC_IMPUESTO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_MONTO_IMPUESTO, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 
@@ -394,7 +394,7 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 					refreshTable();
 				}
 			}else{
-				CLJOptionPane.showErrorMessage(JDialogAgregarFacturaPersona.this, "Debe cargar el monto", "Error");
+				FWJOptionPane.showErrorMessage(JDialogAgregarFacturaPersona.this, "Debe cargar el monto", "Error");
 			}
 			return false;
 		}
@@ -450,9 +450,9 @@ public class JDialogAgregarFacturaPersona extends JDialog {
 	}
 
 	
-	public CLJTextField getTxtMontoFinal() {
+	public FWJTextField getTxtMontoFinal() {
 		if(txtMontoFinal == null){
-			txtMontoFinal = new CLJTextField();
+			txtMontoFinal = new FWJTextField();
 			txtMontoFinal.setEditable(false);
 		}
 		return txtMontoFinal;

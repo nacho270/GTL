@@ -31,7 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.GuiUtil;
 
 public class FotoVarianteTest {
 

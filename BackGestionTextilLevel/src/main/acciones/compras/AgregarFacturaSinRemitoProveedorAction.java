@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import javax.swing.Action;
 
 import main.GTLGlobalCache;
-
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.enums.ETipoFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;

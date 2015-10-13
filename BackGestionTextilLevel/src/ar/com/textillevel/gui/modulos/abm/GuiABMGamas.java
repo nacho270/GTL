@@ -12,11 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
@@ -32,8 +32,8 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	
-	private CLJTextField txtNombreGama;
-	private CLCheckBoxList<Color> listaColores;
+	private FWJTextField txtNombreGama;
+	private FWCheckBoxList<Color> listaColores;
 	
 	private ColorFacadeRemote colorFacade;
 	private GamaColorFacadeRemote gamaColorFacade;
@@ -117,7 +117,7 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la gama seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la gama seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getGamaColorFacade().remove(getGamaActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -139,13 +139,13 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getTxtNombreGama().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre de la gama.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre de la gama.", "Advertencia");
 			getTxtNombreGama().requestFocus();
 			return false;
 		}
 
 		if(getListaColores().getSelectedValues().length==0){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir al menos un color para la gama.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir al menos un color para la gama.", "Advertencia");
 			return false;
 		}
 		
@@ -163,7 +163,7 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 		for(int i = 0; i<selectedValues.length;i++){
 			Color color =(Color) selectedValues[i];
 			if(color.getGama()!=null && !color.getGama().getId().equals(getGamaActual().getId())){
-				CLJOptionPane.showErrorMessage(this, "El color " + color.getNombre() + " ya esta asociado a una gama.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "El color " + color.getNombre() + " ya esta asociado a una gama.", "Advertencia");
 				ok = false;
 				break;
 			}
@@ -188,7 +188,7 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 			getTxtNombreGama().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un color", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un color", "Error");
 			return false;
 		}
 	}
@@ -258,16 +258,16 @@ public class GuiABMGamas extends GuiABMListaTemplate {
 		this.gamaActual = gamaActual;
 	}
 
-	public CLJTextField getTxtNombreGama() {
+	public FWJTextField getTxtNombreGama() {
 		if(txtNombreGama == null){
-			txtNombreGama = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreGama = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreGama;
 	}
 
-	public CLCheckBoxList<Color> getListaColores() {
+	public FWCheckBoxList<Color> getListaColores() {
 		if(listaColores == null){
-			listaColores = new CLCheckBoxList<Color>();
+			listaColores = new FWCheckBoxList<Color>();
 		}
 		return listaColores;
 	}

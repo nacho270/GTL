@@ -21,9 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.entidades.Dia;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.entidades.Dia;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.HorarioDia;
 import ar.com.textillevel.modulos.personal.entidades.legajos.RangoDias;
@@ -209,20 +209,20 @@ public class JDialogAgregarModificarHorario extends JDialog {
 		Dia diaDesde = (Dia) getCmbDiaDesde().getSelectedItem();
 		Dia diaHasta = (Dia) getCmbDiaHasta().getSelectedItem();
 		if (diaDesde.getNroDia() > diaHasta.getNroDia()) {
-			CLJOptionPane.showErrorMessage(this, "El 'Día desde' debe ser anterior al 'Día hasta'", "Error");
+			FWJOptionPane.showErrorMessage(this, "El 'Día desde' debe ser anterior al 'Día hasta'", "Error");
 			return false;
 		}
 		if(diaDesde.getNroDia() == diaHasta.getNroDia()){
 			Integer horaDesde = (Integer)getJsHorasDesde().getValue();
 			Integer horaHasta = (Integer)getJsHorasHasta().getValue();
 			if(horaDesde>horaHasta){
-				CLJOptionPane.showErrorMessage(this, "La 'Hora desde' debe ser anterior a la 'Hora hasta'", "Error");
+				FWJOptionPane.showErrorMessage(this, "La 'Hora desde' debe ser anterior a la 'Hora hasta'", "Error");
 				return false;
 			}else if(horaDesde == horaHasta){
 				Integer minutosDesde = (Integer)getJsMinutosDesde().getValue();
 				Integer minutosHasta = (Integer)getJsMinutosHasta().getValue();
 				if(minutosDesde>=minutosHasta){
-					CLJOptionPane.showErrorMessage(this, "El 'Horario desde' debe ser anterior al 'Horario hasta'", "Error");
+					FWJOptionPane.showErrorMessage(this, "El 'Horario desde' debe ser anterior al 'Horario hasta'", "Error");
 					return false;
 				}
 			}
@@ -244,7 +244,7 @@ public class JDialogAgregarModificarHorario extends JDialog {
 		
 		for (HorarioDia horario : getOtrosDiasConfigurados()){
 			if(horario.seSolapa(horarioDiaTemp)){
-				CLJOptionPane.showErrorMessage(this, "El horario ingresado se solapa con otro ya existente.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El horario ingresado se solapa con otro ya existente.", "Error");
 				return false;
 			}
 		}

@@ -10,7 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJTextField;
+import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.gui.acciones.RemitoEntradaLinkeableLabel;
 import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
@@ -23,22 +23,22 @@ public class PanCabeceraDatosODT extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	
-	private CLJTextField txtProducto;
+	private FWJTextField txtProducto;
 	
-	private CLJTextField txtTotalMetros;
-	private CLJTextField txtTotalKilos;
-	private CLJTextField txtGramaje;
+	private FWJTextField txtTotalMetros;
+	private FWJTextField txtTotalKilos;
+	private FWJTextField txtGramaje;
 	private RemitoEntradaLinkeableLabel remitoLinkeableLabel;
 	
-	private CLJTextField txtCliente;
-	private CLJTextField txtTotalPiezas;
-	private CLJTextField txtArticulo;
-	private CLJTextField txtColor;
+	private FWJTextField txtCliente;
+	private FWJTextField txtTotalPiezas;
+	private FWJTextField txtArticulo;
+	private FWJTextField txtColor;
 
-	private CLJTextField txtTarima;
-	private CLJTextField txtMaquina;
-	private CLJTextField txtAnchoCrudo;
-	private CLJTextField txtAnchoFinal;
+	private FWJTextField txtTarima;
+	private FWJTextField txtMaquina;
+	private FWJTextField txtAnchoCrudo;
+	private FWJTextField txtAnchoFinal;
 	
 	private OrdenDeTrabajo odt;
 	private RemitoEntrada remitoEntrada;
@@ -98,9 +98,9 @@ public class PanCabeceraDatosODT extends JPanel {
 		return lblTitlo;
 	}
 
-	private CLJTextField getTxtProducto() {
+	private FWJTextField getTxtProducto() {
 		if(txtProducto == null) {
-			txtProducto = new CLJTextField();
+			txtProducto = new FWJTextField();
 			txtProducto.setText(odt.getProducto().toString());
 			txtProducto.setEditable(false);
 		}
@@ -115,9 +115,9 @@ public class PanCabeceraDatosODT extends JPanel {
 		return remitoLinkeableLabel;
 	}
 
-	private CLJTextField getTxtTotalMetros() {
+	private FWJTextField getTxtTotalMetros() {
 		if(txtTotalMetros == null) {
-			txtTotalMetros = new CLJTextField();
+			txtTotalMetros = new FWJTextField();
 			if(remitoEntrada.getId() != null) {
 				txtTotalMetros.setText(GenericUtils.getDecimalFormat().format(odt.getTotalMetros().doubleValue()));
 			}
@@ -126,9 +126,9 @@ public class PanCabeceraDatosODT extends JPanel {
 		return txtTotalMetros;
 	}
 
-	private CLJTextField getTxtTotalKilos() {
+	private FWJTextField getTxtTotalKilos() {
 		if(txtTotalKilos == null) {
-			txtTotalKilos = new CLJTextField();
+			txtTotalKilos = new FWJTextField();
 			if(remitoEntrada.getId() != null) {
 				txtTotalKilos.setText(GenericUtils.getDecimalFormat().format(remitoEntrada.getPesoTotal().doubleValue()));
 			}
@@ -137,81 +137,81 @@ public class PanCabeceraDatosODT extends JPanel {
 		return txtTotalKilos;
 	}
 
-	private CLJTextField getTxtGramaje() {
+	private FWJTextField getTxtGramaje() {
 		if(txtGramaje == null) {
-			txtGramaje = new CLJTextField();
+			txtGramaje = new FWJTextField();
 			txtGramaje.setText(odtDatosHelper.getDescGramaje());
 			txtGramaje.setEnabled(false);
 		}
 		return txtGramaje;
 	}
 
-	private CLJTextField getTxtCliente() {
+	private FWJTextField getTxtCliente() {
 		if(txtCliente == null) {
-			txtCliente = new CLJTextField();
+			txtCliente = new FWJTextField();
 			txtCliente.setText(odtDatosHelper.getDescCliente());
 			txtCliente.setEnabled(false);
 		}
 		return txtCliente;
 	}
 
-	private CLJTextField getTxtTotalPiezas() {
+	private FWJTextField getTxtTotalPiezas() {
 		if(txtTotalPiezas == null) {
-			txtTotalPiezas = new CLJTextField();
+			txtTotalPiezas = new FWJTextField();
 			txtTotalPiezas.setText(String.valueOf(odt.getPiezas().size()));
 			txtTotalPiezas.setEnabled(false);
 		}
 		return txtTotalPiezas;
 	}
 
-	private CLJTextField getTxtArticulo() {
+	private FWJTextField getTxtArticulo() {
 		if(txtArticulo == null) {
-			txtArticulo = new CLJTextField();
+			txtArticulo = new FWJTextField();
 			txtArticulo.setText(odtDatosHelper.getDescArticulo());
 			txtArticulo.setEnabled(false);
 		}
 		return txtArticulo;
 	}
 	
-	private CLJTextField getTxtColor() {
+	private FWJTextField getTxtColor() {
 		if(txtColor == null) {
-			txtColor = new CLJTextField();
+			txtColor = new FWJTextField();
 			txtColor.setText(odtDatosHelper.getDescColor());
 			txtColor.setEnabled(false);
 		}
 		return txtColor;
 	}
 
-	private CLJTextField getTxtTarima() {
+	private FWJTextField getTxtTarima() {
 		if(txtTarima == null) {
-			txtTarima = new CLJTextField();
+			txtTarima = new FWJTextField();
 			txtTarima.setText(odtDatosHelper.getDescTarima());
 			txtTarima.setEnabled(false);
 		}
 		return txtTarima;
 	}
 
-	private CLJTextField getTxtMaquina() {
+	private FWJTextField getTxtMaquina() {
 		if(txtMaquina == null) {
-			txtMaquina = new CLJTextField();
+			txtMaquina = new FWJTextField();
 			txtMaquina.setText(null);
 			txtMaquina.setEnabled(false);
 		}
 		return txtMaquina;
 	}
 
-	private CLJTextField getTxtAnchoCrudo() {
+	private FWJTextField getTxtAnchoCrudo() {
 		if(txtAnchoCrudo == null) {
-			txtAnchoCrudo = new CLJTextField();
+			txtAnchoCrudo = new FWJTextField();
 			txtAnchoCrudo.setText(odtDatosHelper.getDescAnchoCrudo());
 			txtAnchoCrudo.setEnabled(false);
 		}
 		return txtAnchoCrudo;
 	}
 
-	private CLJTextField getTxtAnchoFinal() {
+	private FWJTextField getTxtAnchoFinal() {
 		if(txtAnchoFinal == null) {
-			txtAnchoFinal = new CLJTextField();
+			txtAnchoFinal = new FWJTextField();
 			txtAnchoFinal.setText(odtDatosHelper.getDescAnchoFinal());
 			txtAnchoFinal.setEnabled(false);
 		}

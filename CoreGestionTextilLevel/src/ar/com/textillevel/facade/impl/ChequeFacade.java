@@ -12,10 +12,10 @@ import java.util.Locale;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;

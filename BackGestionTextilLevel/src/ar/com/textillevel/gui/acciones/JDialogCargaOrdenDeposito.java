@@ -25,12 +25,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
@@ -57,14 +57,14 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 	
 	private JComboBox cmbBancos;
 
-	private CLJTextField txtCantidadCheques;
-	private CLJTextField txtTotalCheques;
-	private CLJTextField txtTotalLetras;
-	private CLJTextField txtPersonaResponsable;
+	private FWJTextField txtCantidadCheques;
+	private FWJTextField txtTotalCheques;
+	private FWJTextField txtTotalLetras;
+	private FWJTextField txtPersonaResponsable;
 
-	private CLJNumericTextField txtNroOrden;
+	private FWJNumericTextField txtNroOrden;
 	
-	private CLJTextField txtBusquedaCheques;
+	private FWJTextField txtBusquedaCheques;
 	private JButton btnBuscar;
 
 	private PanelDatePicker panelFecha;
@@ -181,8 +181,8 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setDateColumn(COL_FECHA_DEPOSITO, "Fecha de depósito", 100, true);
 			tabla.setStringColumn(COL_NRO_CHEQUE, "Número", 120, 120, true);
 			tabla.setStringColumn(COL_NRO_INTERNO, "Número interno", 80, 80, true);
@@ -191,10 +191,10 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setHeaderAlignment(COL_FECHA_DEPOSITO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NRO_CHEQUE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NRO_INTERNO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_IMPORTE, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_DEPOSITO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NRO_CHEQUE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NRO_INTERNO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_IMPORTE, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 
@@ -210,7 +210,7 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 
 		@Override
 		public boolean validarQuitar() {
-			CLJTable tabla = getPanelTablaCheques().getTabla();
+			FWJTable tabla = getPanelTablaCheques().getTabla();
 			DepositoCheque dep = modelo.getDepositos().get(tabla.getSelectedRow());
 			modelo.getIdsYaUtilizados().remove(dep.getCheque().getId());
 			modelo.getDepositos().remove(dep);
@@ -344,35 +344,35 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 		return cmbBancos;
 	}
 
-	private CLJTextField getTxtCantidadCheques() {
+	private FWJTextField getTxtCantidadCheques() {
 		if(txtCantidadCheques == null){
-			txtCantidadCheques = new CLJTextField();
+			txtCantidadCheques = new FWJTextField();
 			txtCantidadCheques.setPreferredSize(new Dimension(120, 20));
 			txtCantidadCheques.setEditable(false);
 		}
 		return txtCantidadCheques;
 	}
 
-	private CLJTextField getTxtTotalCheques() {
+	private FWJTextField getTxtTotalCheques() {
 		if(txtTotalCheques == null){
-			txtTotalCheques = new CLJTextField();
+			txtTotalCheques = new FWJTextField();
 			txtTotalCheques.setPreferredSize(new Dimension(120,20));
 			txtTotalCheques.setEditable(false);
 		}
 		return txtTotalCheques;
 	}
 
-	private CLJTextField getTxtTotalLetras() {
+	private FWJTextField getTxtTotalLetras() {
 		if(txtTotalLetras == null){
-			txtTotalLetras = new CLJTextField();
+			txtTotalLetras = new FWJTextField();
 			txtTotalLetras.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtTotalLetras;
 	}
 
-	private CLJNumericTextField getTxtNroOrden() {
+	private FWJNumericTextField getTxtNroOrden() {
 		if(txtNroOrden == null){
-			txtNroOrden = new CLJNumericTextField();
+			txtNroOrden = new FWJNumericTextField();
 			txtNroOrden.setEditable(false);
 			txtNroOrden.setPreferredSize(new Dimension(120, 20));
 		}
@@ -410,7 +410,7 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 						orden.setTotalLetras(getTxtTotalLetras().getText().trim());
 						orden.setPersonaResponsable(getTxtPersonaResponsable().getText().trim());
 						setOrdenFinal(getOrdenFacade().guardarOrden(orden, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName()));
-						if(CLJOptionPane.showQuestionMessage(JDialogCargaOrdenDeposito.this, "Desea imprimir?", "Pregunta")==CLJOptionPane.YES_OPTION){
+						if(FWJOptionPane.showQuestionMessage(JDialogCargaOrdenDeposito.this, "Desea imprimir?", "Pregunta")==FWJOptionPane.YES_OPTION){
 							imprimir();
 						}
 						dispose();
@@ -423,19 +423,19 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 	
 	private boolean validar(){
 		if(modelo.getDepositos()==null || (modelo.getDepositos()!=null && modelo.getDepositos().isEmpty())){
-			CLJOptionPane.showErrorMessage(JDialogCargaOrdenDeposito.this, "Debe elegir los cheques", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaOrdenDeposito.this, "Debe elegir los cheques", "Error");
 			return false;
 		}
 		if(getCmbBancos().getSelectedItem()==null){
-			CLJOptionPane.showErrorMessage(JDialogCargaOrdenDeposito.this, "Debe elegir un banco", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaOrdenDeposito.this, "Debe elegir un banco", "Error");
 			return false;
 		}
 		if(getTxtPersonaResponsable().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la persona responsable del depósito", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la persona responsable del depósito", "Error");
 			return false;
 		}
 		if(getPanelFecha().getDate() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha", "Error");
 			return false;
 		}
 		return true;
@@ -475,7 +475,7 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 
 	private void salir() {
 		if(!isConsulta()){
-			if(CLJOptionPane.showQuestionMessage(JDialogCargaOrdenDeposito.this, "Desea salir?", "Pregunta") == CLJOptionPane.YES_OPTION){
+			if(FWJOptionPane.showQuestionMessage(JDialogCargaOrdenDeposito.this, "Desea salir?", "Pregunta") == FWJOptionPane.YES_OPTION){
 				dispose();
 			}
 		}else{
@@ -513,16 +513,16 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 		this.consulta = consulta;
 	}
 
-	private CLJTextField getTxtPersonaResponsable() {
+	private FWJTextField getTxtPersonaResponsable() {
 		if(txtPersonaResponsable == null){
-			txtPersonaResponsable = new CLJTextField();
+			txtPersonaResponsable = new FWJTextField();
 		}
 		return txtPersonaResponsable;
 	}
 	
-	private CLJTextField getTxtBusquedaCheques() {
+	private FWJTextField getTxtBusquedaCheques() {
 		if (txtBusquedaCheques == null) {
-			txtBusquedaCheques = new CLJTextField();
+			txtBusquedaCheques = new FWJTextField();
 			txtBusquedaCheques.setPreferredSize(new Dimension(120, 20));
 			txtBusquedaCheques.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -557,7 +557,7 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 							getTxtBusquedaCheques().setText("");
 						}
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogCargaOrdenDeposito.this, "Debe ingresar los números a buscar", "Error");
+						FWJOptionPane.showErrorMessage(JDialogCargaOrdenDeposito.this, "Debe ingresar los números a buscar", "Error");
 					}
 				}
 			});
@@ -572,7 +572,7 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 		for(int i = 0; i < numeros.length;i++){
 			numeros[i]= numeros[i].replaceAll("\\s+", "").trim();
 			if(!numeros[i].matches("[0-9]+\\s{0,1}")){
-				CLJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
+				FWJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
 				return null;
 			}
 			if(GenericUtils.esNumerico(numeros[i])){
@@ -581,7 +581,7 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 				numeracion.setNumero(Integer.valueOf(numeros[i]));
 				lista.add(numeracion);
 			}else{
-				CLJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
+				FWJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
 				return null;
 			}
 		}

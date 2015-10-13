@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDePago;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarProveedor;

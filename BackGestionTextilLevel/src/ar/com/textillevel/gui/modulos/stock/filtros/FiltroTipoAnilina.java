@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.stock.filtros;
 
 import java.awt.Dimension;
 
-import ar.clarin.fwjava.templates.modulo.model.filtros.FiltroListaOpciones;
-import ar.clarin.fwjava.templates.modulo.model.filtros.FiltroRenderingInformation;
+import ar.com.fwcommon.templates.modulo.model.filtros.FiltroListaOpciones;
+import ar.com.fwcommon.templates.modulo.model.filtros.FiltroRenderingInformation;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.TipoAnilina;

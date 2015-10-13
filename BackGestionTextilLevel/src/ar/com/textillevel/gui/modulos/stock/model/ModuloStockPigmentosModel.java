@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.stock.model;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
@@ -13,7 +13,7 @@ import ar.com.textillevel.util.GTLBeanFactory;
 
 public class ModuloStockPigmentosModel extends ModuloModel<ItemMateriaPrimaTO, ModeloCabeceraStock>{
 
-	public ModuloStockPigmentosModel(Integer id) throws CLException{
+	public ModuloStockPigmentosModel(Integer id) throws FWException{
 		super(id, BuilderModuloStockPigmentos.getInstance(),
 				  BuilderModuloStockPigmentos.getInstance(),
 				  BuilderModuloStockPigmentos.getInstance(),

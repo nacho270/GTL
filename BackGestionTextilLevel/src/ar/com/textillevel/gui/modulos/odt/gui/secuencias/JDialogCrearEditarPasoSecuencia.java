@@ -20,9 +20,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.PanelTablaInstrucciones;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
@@ -41,7 +41,7 @@ public class JDialogCrearEditarPasoSecuencia extends JDialog {
 	private JComboBox cmbSector;
 	private JComboBox cmbProceso;
 	private JComboBox cmbSubproceso;
-	private CLJTextField txtObservaciones;
+	private FWJTextField txtObservaciones;
 	private PanelTablaInstruccionesSinAcciones tablaPasos;
 
 	private JButton btnAceptar;
@@ -205,9 +205,9 @@ public class JDialogCrearEditarPasoSecuencia extends JDialog {
 		return cmbSubproceso;
 	}
 
-	public CLJTextField getTxtObservaciones() {
+	public FWJTextField getTxtObservaciones() {
 		if(txtObservaciones == null){
-			txtObservaciones = new CLJTextField(MAX_LONG_OBS);
+			txtObservaciones = new FWJTextField(MAX_LONG_OBS);
 		}
 		return txtObservaciones;
 	}
@@ -218,15 +218,15 @@ public class JDialogCrearEditarPasoSecuencia extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(getCmbSector().getSelectedItem() == null){
-						CLJOptionPane.showErrorMessage(JDialogCrearEditarPasoSecuencia.this, "Debe ingresar el sector", "Error");
+						FWJOptionPane.showErrorMessage(JDialogCrearEditarPasoSecuencia.this, "Debe ingresar el sector", "Error");
 						return;
 					}
 					if(getCmbProceso().getSelectedItem() == null){
-						CLJOptionPane.showErrorMessage(JDialogCrearEditarPasoSecuencia.this, "Debe ingresar el proceso", "Error");
+						FWJOptionPane.showErrorMessage(JDialogCrearEditarPasoSecuencia.this, "Debe ingresar el proceso", "Error");
 						return;
 					}
 					if(getCmbSubproceso().getSelectedItem() == null){
-						CLJOptionPane.showErrorMessage(JDialogCrearEditarPasoSecuencia.this, "Debe ingresar el subproceso", "Error");
+						FWJOptionPane.showErrorMessage(JDialogCrearEditarPasoSecuencia.this, "Debe ingresar el subproceso", "Error");
 						return;
 					}
 					getPasoActual().setObservaciones(getTxtObservaciones().getText());

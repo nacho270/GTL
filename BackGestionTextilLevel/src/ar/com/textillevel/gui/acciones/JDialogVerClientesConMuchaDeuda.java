@@ -15,9 +15,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.to.ClienteDeudaTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 
@@ -96,8 +96,8 @@ public class JDialogVerClientesConMuchaDeuda extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TBL_CLIENTES);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_CLIENTES);
 			tabla.setStringColumn(COL_RAZON_SOCIAL, "Razón social", 220, 220, true);
 			tabla.setStringColumn(COL_DEUDA, "Deuda", 100, 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);

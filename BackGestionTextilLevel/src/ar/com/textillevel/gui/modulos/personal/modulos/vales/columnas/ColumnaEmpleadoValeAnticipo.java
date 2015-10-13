@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.vales.columnas;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaString;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.vale.ValeAnticipo;
 
 public class ColumnaEmpleadoValeAnticipo extends ColumnaString<ValeAnticipo>{

@@ -16,9 +16,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.InfoDireccion;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
@@ -29,12 +29,12 @@ public class JDialogAgregarModificarEmpleoAnterior extends JDialog {
 	private static final long serialVersionUID = -979571680007335043L;
 
 	private PanelDomicilioCompleto panelDomicilio;
-	private CLJTextField txtEmpleador;
+	private FWJTextField txtEmpleador;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJTextField txtTareas;
+	private FWJTextField txtTareas;
 	private JCheckBox chkCertificado;
-	private CLJTextField txtReferencia;
+	private FWJTextField txtReferencia;
 	
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -133,9 +133,9 @@ public class JDialogAgregarModificarEmpleoAnterior extends JDialog {
 		return panelDomicilio;
 	}
 
-	public CLJTextField getTxtEmpleador() {
+	public FWJTextField getTxtEmpleador() {
 		if(txtEmpleador == null){
-			txtEmpleador = new CLJTextField();
+			txtEmpleador = new FWJTextField();
 		}
 		return txtEmpleador;
 	}
@@ -156,9 +156,9 @@ public class JDialogAgregarModificarEmpleoAnterior extends JDialog {
 		return panelFechaHasta;
 	}
 
-	public CLJTextField getTxtTareas() {
+	public FWJTextField getTxtTareas() {
 		if(txtTareas == null){
-			txtTareas = new CLJTextField();
+			txtTareas = new FWJTextField();
 		}
 		return txtTareas;
 	}
@@ -204,22 +204,22 @@ public class JDialogAgregarModificarEmpleoAnterior extends JDialog {
 
 	private boolean validar() {
 		if(getTxtEmpleador().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del empleador", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del empleador", "Error");
 			getTxtEmpleador().requestFocus();
 			return false;
 		}
 		if(getPanelFechaDesde().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar una 'Fecha desde' válida", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar una 'Fecha desde' válida", "Error");
 			getPanelFechaDesde().requestFocus();
 			return false;
 		}
 		if(getPanelFechaHasta().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar una 'Fecha hasta' válida", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar una 'Fecha hasta' válida", "Error");
 			getPanelFechaHasta().requestFocus();
 			return false;
 		}
 		if(getTxtReferencia().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar la referencia", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar la referencia", "Error");
 			getTxtReferencia().requestFocus();
 			return false;
 		}
@@ -239,9 +239,9 @@ public class JDialogAgregarModificarEmpleoAnterior extends JDialog {
 		return btnCancelar;
 	}
 	
-	public CLJTextField getTxtReferencia() {
+	public FWJTextField getTxtReferencia() {
 		if(txtReferencia == null){
-			txtReferencia = new CLJTextField();
+			txtReferencia = new FWJTextField();
 		}
 		return txtReferencia;
 	}

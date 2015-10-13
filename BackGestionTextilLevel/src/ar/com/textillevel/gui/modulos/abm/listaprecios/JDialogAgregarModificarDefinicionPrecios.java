@@ -24,11 +24,11 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.NumUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.NumUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -48,7 +48,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	private static final long serialVersionUID = 1317620079501375084L;
 
-	private CLJTextField txtTipoProducto;
+	private FWJTextField txtTipoProducto;
 	private JCheckBox chkAnchoExacto;
 	private DecimalNumericTextField txtAnchoInicial;
 	private DecimalNumericTextField txtAnchoFinal;
@@ -181,8 +181,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar definición de precios");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar definición de precios");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}
@@ -200,9 +200,9 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return btnCancelar;
 	}
 
-	public CLJTextField getTxtTipoProducto() {
+	public FWJTextField getTxtTipoProducto() {
 		if (txtTipoProducto == null) {
-			txtTipoProducto = new CLJTextField(getTipoProducto().getDescripcion().toUpperCase());
+			txtTipoProducto = new FWJTextField(getTipoProducto().getDescripcion().toUpperCase());
 			txtTipoProducto.setEditable(false);
 			txtTipoProducto.setPreferredSize(new Dimension(300, 20));
 			txtTipoProducto.setSize(new Dimension(300, 20));
@@ -357,12 +357,12 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		Float anchoMaximo = getAnchoMaximo();
 		if(usaAnchoExacto) {
 			if(StringUtil.isNullOrEmpty(getTxtAnchoExacto().getText())) {
-				CLJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no fue ingresado o es inválido.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no fue ingresado o es inválido.", "Error");
 				getTxtAnchoExacto().requestFocus();
 				return false;
 			}
 			if (getTxtAnchoExacto().getValue().floatValue() > anchoMaximo.floatValue()) {
-				CLJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no puede superar los " + anchoMaximo + " mts.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El 'Ancho Exacto' no puede superar los " + anchoMaximo + " mts.", "Error");
 				getTxtAnchoExacto().requestFocus();
 				return false;
 			}
@@ -372,14 +372,14 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 				return false;
 			}
 			if (getTxtAnchoFinal().getValue().floatValue() > anchoMaximo.floatValue()) {
-				CLJOptionPane.showErrorMessage(this, "El 'Ancho Final' no puede superar los " + anchoMaximo + " mts.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El 'Ancho Final' no puede superar los " + anchoMaximo + " mts.", "Error");
 				getTxtAnchoFinal().requestFocus();
 				return false;
 			}
 		}
 		//Tipo Articulo
 		if(getCmbTipoArticulo().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un 'Tipo de Artículo'.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un 'Tipo de Artículo'.", "Error");
 			return false;
 		}
 		//Precio
@@ -399,7 +399,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		if(getDefinicion() != null) {
 			rangoAnchoExistente = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
 			if(rangoAnchoExistente != null && (rangoAnchoSiendoEditado == null || rangoAnchoExistente!=rangoAnchoSiendoEditado)) {
-				CLJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
+				FWJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
 				return false;
 			}
 		}
@@ -408,19 +408,19 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 
 	protected boolean validarPrecio(String precio) {
 		if(StringUtil.isNullOrEmpty(precio) && !GenericUtils.esNumerico(precio)) {
-			CLJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
+			FWJOptionPane.showErrorMessage(this, "El 'Precio' no fue ingresado o es inválido.", "Error");
 			return false;
 		}
 		if(Float.valueOf(precio.replace(",", ".")) < 0) {
-			CLJOptionPane.showErrorMessage(this, "El 'Precio' es menor a $0.", "Error");
+			FWJOptionPane.showErrorMessage(this, "El 'Precio' es menor a $0.", "Error");
 			return false;
 		}
 		ParametrosGenerales pg = getParametrosFacade().getParametrosGenerales();
 		BigDecimal minimo = pg.getMontoMinimoValidacionPrecio();
 		BigDecimal maximo = pg.getMontoMaximoValidacionPrecio();
 		if(!Utils.dentroDelRango(Float.valueOf(precio.replace(",", ".")), minimo.floatValue(), maximo.floatValue())) {
-			int res = CLJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio no se halla dentro del rango $" + minimo + " y $" + maximo + " ¿Desea continuar?"), "Atención");
-			if(res == CLJOptionPane.NO_OPTION) {
+			int res = FWJOptionPane.showQuestionMessage(this, StringW.wordWrap("El precio no se halla dentro del rango $" + minimo + " y $" + maximo + " ¿Desea continuar?"), "Atención");
+			if(res == FWJOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
@@ -475,19 +475,19 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected boolean validarRango(DecimalNumericTextField desde, String labelDesde, DecimalNumericTextField hasta, String labelHasta, boolean isFloat) {
 		if(StringUtil.isNullOrEmpty(desde.getText()) || (isFloat  ? !GenericUtils.esNumerico(desde.getText()) : !NumUtil.esNumerico(desde.getText()))) {
-			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' no fue ingresado o es inválido.", "Error");
+			FWJOptionPane.showErrorMessage(this, "'" + labelDesde + "' no fue ingresado o es inválido.", "Error");
 			desde.requestFocus();
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(hasta.getText()) || (isFloat  ? !GenericUtils.esNumerico(hasta.getText()) : !NumUtil.esNumerico(hasta.getText()))) {
-			CLJOptionPane.showErrorMessage(this, "'" + labelHasta + "' no fue ingresado o es inválido.", "Error");
+			FWJOptionPane.showErrorMessage(this, "'" + labelHasta + "' no fue ingresado o es inválido.", "Error");
 			hasta.requestFocus();
 			return false;
 		}
 		Comparable desdeVal = isFloat ? desde.getValueWithNull() : desde.getValueWithNull().intValue();
 		Comparable hastaVal = isFloat ? hasta.getValueWithNull() : hasta.getValueWithNull().intValue();
 		if(desdeVal.compareTo(hastaVal) >= 0) {
-			CLJOptionPane.showErrorMessage(this, "'" + labelDesde + "' debe ser menor a '" + labelHasta + "'" , "Error");
+			FWJOptionPane.showErrorMessage(this, "'" + labelDesde + "' debe ser menor a '" + labelHasta + "'" , "Error");
 			desde.requestFocus();
 			return false;
 		}

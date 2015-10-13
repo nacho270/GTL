@@ -5,7 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.entidades.Dia;
+import ar.com.fwcommon.entidades.Dia;
 import ar.com.textillevel.modulos.personal.dao.api.DiaDAOLocal;
 
 @Stateless

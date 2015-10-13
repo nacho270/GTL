@@ -31,16 +31,16 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
@@ -84,18 +84,18 @@ public class JDialogCargaRecibo extends JDialog {
 
 	private static final long serialVersionUID = -273160864757961489L;
 
-	private CLJTextField txtRetencionIVA;
-	private CLJTextField txtRetencionGanancias;
-	private CLJTextField txtRetencionIIBB;
-	private CLJTextField txtEfectivo;
-	private CLJTextField txtTotalRecibo;
+	private FWJTextField txtRetencionIVA;
+	private FWJTextField txtRetencionGanancias;
+	private FWJTextField txtRetencionIIBB;
+	private FWJTextField txtEfectivo;
+	private FWJTextField txtTotalRecibo;
 
-	private CLJTextField txtRazonSocial;
-	private CLJTextField txtDomicilio;
-	private CLJTextField txtIva;
-	private CLJTextField txtCuit;
-	private CLJTextField txtCantPesos;
-	private CLJTextField txtTotalFacturas;
+	private FWJTextField txtRazonSocial;
+	private FWJTextField txtDomicilio;
+	private FWJTextField txtIva;
+	private FWJTextField txtCuit;
+	private FWJTextField txtCantPesos;
+	private FWJTextField txtTotalFacturas;
 	private JTextField txtNroRecibo;
 	private PanelDatePicker panFecha;
 
@@ -129,9 +129,9 @@ public class JDialogCargaRecibo extends JDialog {
 
 	private JPanel panTransferencias;
 
-	private CLJTextField txtImporteTransf;
-	private CLJTextField txtNroTransf;
-	private CLJTextField txtObservaciones;
+	private FWJTextField txtImporteTransf;
+	private FWJTextField txtNroTransf;
+	private FWJTextField txtObservaciones;
 
 	
 	public JDialogCargaRecibo(Frame owner, Recibo recibo, boolean modoConsulta) {
@@ -222,9 +222,9 @@ public class JDialogCargaRecibo extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 
-	private CLJTextField getTxtRetencionIVA() {
+	private FWJTextField getTxtRetencionIVA() {
 		if (txtRetencionIVA == null) {
-			txtRetencionIVA = new CLJTextField();
+			txtRetencionIVA = new FWJTextField();
 			txtRetencionIVA.setPreferredSize(new Dimension(70, 20));
 			txtRetencionIVA.addFocusListener(new FocusAdapter() {
 
@@ -239,9 +239,9 @@ public class JDialogCargaRecibo extends JDialog {
 		return txtRetencionIVA;
 	}
 
-	private CLJTextField getTxtRetencionGanancias() {
+	private FWJTextField getTxtRetencionGanancias() {
 		if (txtRetencionGanancias == null) {
-			txtRetencionGanancias = new CLJTextField();
+			txtRetencionGanancias = new FWJTextField();
 			txtRetencionGanancias.setPreferredSize(new Dimension(70, 20));
 			txtRetencionGanancias.addFocusListener(new FocusAdapter() {
 
@@ -256,9 +256,9 @@ public class JDialogCargaRecibo extends JDialog {
 		return txtRetencionGanancias;
 	}
 
-	private CLJTextField getTxtRetencionIIBB() {
+	private FWJTextField getTxtRetencionIIBB() {
 		if (txtRetencionIIBB == null) {
-			txtRetencionIIBB = new CLJTextField();
+			txtRetencionIIBB = new FWJTextField();
 			txtRetencionIIBB.setPreferredSize(new Dimension(70, 20));
 			txtRetencionIIBB.addFocusListener(new FocusAdapter() {
 
@@ -274,9 +274,9 @@ public class JDialogCargaRecibo extends JDialog {
 	}
 
 	
-	private CLJTextField getTxtEfectivo() {
+	private FWJTextField getTxtEfectivo() {
 		if (txtEfectivo == null) {
-			txtEfectivo = new CLJTextField();
+			txtEfectivo = new FWJTextField();
 			txtEfectivo.setPreferredSize(new Dimension(70, 20));
 			txtEfectivo.addFocusListener(new FocusAdapter() {
 
@@ -327,53 +327,53 @@ public class JDialogCargaRecibo extends JDialog {
 		return total;
 	}
 	
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if (txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField();
+			txtRazonSocial = new FWJTextField();
 			txtRazonSocial.setPreferredSize(new Dimension(150, 20));
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
 	}
 
-	private CLJTextField getTxtDomicilio() {
+	private FWJTextField getTxtDomicilio() {
 		if (txtDomicilio == null) {
-			txtDomicilio = new CLJTextField();
+			txtDomicilio = new FWJTextField();
 			txtDomicilio.setPreferredSize(new Dimension(150, 20));
 			txtDomicilio.setEditable(false);
 		}
 		return txtDomicilio;
 	}
 
-	private CLJTextField getTxtIva() {
+	private FWJTextField getTxtIva() {
 		if (txtIva == null) {
-			txtIva = new CLJTextField();
+			txtIva = new FWJTextField();
 			txtIva.setPreferredSize(new Dimension(150, 20));
 			txtIva.setEditable(false);
 		}
 		return txtIva;
 	}
 
-	private CLJTextField getTxtCuit() {
+	private FWJTextField getTxtCuit() {
 		if (txtCuit == null) {
-			txtCuit = new CLJTextField();
+			txtCuit = new FWJTextField();
 			txtCuit.setPreferredSize(new Dimension(150, 20));
 			txtCuit.setEditable(false);
 		}
 		return txtCuit;
 	}
 
-	private CLJTextField getTxtCantPesos() {
+	private FWJTextField getTxtCantPesos() {
 		if (txtCantPesos == null) {
-			txtCantPesos = new CLJTextField();
+			txtCantPesos = new FWJTextField();
 			txtCantPesos.setPreferredSize(new Dimension(150, 20));
 		}
 		return txtCantPesos;
 	}
 
-	private CLJTextField getTxtTotalFacturas() {
+	private FWJTextField getTxtTotalFacturas() {
 		if (txtTotalFacturas == null) {
-			txtTotalFacturas = new CLJTextField();
+			txtTotalFacturas = new FWJTextField();
 			txtTotalFacturas.setPreferredSize(new Dimension(150, 20));
 			txtTotalFacturas.setEditable(false);
 		}
@@ -391,13 +391,13 @@ public class JDialogCargaRecibo extends JDialog {
 						try {
 							getBtnGuardar().setEnabled(false);
 							getReciboFacade().ingresarRecibo(recibo, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-							CLJOptionPane.showInformationMessage(JDialogCargaRecibo.this, "El recibo se ha grabado con éxito.", "Información");
-							if(CLJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Desea imprimir el Recibo?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+							FWJOptionPane.showInformationMessage(JDialogCargaRecibo.this, "El recibo se ha grabado con éxito.", "Información");
+							if(FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Desea imprimir el Recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 								imprimirRecibo();
 							}
 							dispose();
 						} catch (ValidacionException e1) {
-							CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap(e1.getMensajeError()), "Atención");
+							FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap(e1.getMensajeError()), "Atención");
 						}
 					}
 				}
@@ -503,7 +503,7 @@ public class JDialogCargaRecibo extends JDialog {
 		return formaPagoList;
 	}
 
-	private BigDecimal getMontoEfectivoInTextField(CLJTextField txt) {
+	private BigDecimal getMontoEfectivoInTextField(FWJTextField txt) {
 		String strValue = txt.getText().trim();
 		if (StringUtil.isNullOrEmpty(strValue) || !GenericUtils.esNumerico(strValue)) {
 			return null;
@@ -515,50 +515,50 @@ public class JDialogCargaRecibo extends JDialog {
 	private boolean validar() {
 		String msgPanelFactura = getPanelTablaPagosRecibo().validar();
 		if (!StringUtil.isNullOrEmpty(msgPanelFactura)) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap(msgPanelFactura), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap(msgPanelFactura), "Error");
 			return false;
 		}
 		String efectivo = getTxtEfectivo().getText().trim();
 		if (!StringUtil.isNullOrEmpty(efectivo) && !GenericUtils.esNumerico(efectivo)) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor del efectivo debe ser numérico y mayor que cero."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor del efectivo debe ser numérico y mayor que cero."), "Error");
 			getTxtEfectivo().requestFocus();
 			return false;
 		}
 		String iva = getTxtRetencionIVA().getText().trim();
 		if (!StringUtil.isNullOrEmpty(iva) && !GenericUtils.esNumerico(iva)) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor del IVA debe ser numérico y mayor que cero."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor del IVA debe ser numérico y mayor que cero."), "Error");
 			getTxtRetencionIVA().requestFocus();
 			return false;
 		}
 		String retencionGan = getTxtRetencionGanancias().getText().trim();
 		if (!StringUtil.isNullOrEmpty(retencionGan) && !GenericUtils.esNumerico(retencionGan)) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor de las retenciones de ganancias debe ser numérico y mayor que cero."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor de las retenciones de ganancias debe ser numérico y mayor que cero."), "Error");
 			getTxtRetencionGanancias().requestFocus();
 			return false;
 		}
 		String retencionIIBB = getTxtRetencionIIBB().getText().trim();
 		if (!StringUtil.isNullOrEmpty(retencionIIBB) && !GenericUtils.esNumerico(retencionIIBB)) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor de las retenciones de ingresos brutos ser numérico y mayor que cero."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El valor de las retenciones de ingresos brutos ser numérico y mayor que cero."), "Error");
 			getTxtRetencionIIBB().requestFocus();
 			return false;
 		}
 		if (StringUtil.isNullOrEmpty(getTxtCantPesos().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar la cantidad de pesos."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar la cantidad de pesos."), "Error");
 			getTxtCantPesos().requestFocus();
 			return false;
 		}
 		BigDecimal totalMontoPagado = getTotalMontoPagado();
 		if (totalMontoPagado.compareTo(new BigDecimal(0)) == 0) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar cheques, efectivo o retenciones."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar cheques, efectivo o retenciones."), "Error");
 			return false;
 		}
 		if(totalMontoPagado.compareTo(getPanelTablaPagosRecibo().getTotalPagoFacturas()) != 0) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El monto total ingresado y el que hay que pagar no conciden. Por favor, presione el botón 'Verificar' o revise el monto ingresado."), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El monto total ingresado y el que hay que pagar no conciden. Por favor, presione el botón 'Verificar' o revise el monto ingresado."), "Error");
 			return false;
 		}
 		java.util.Date date = getPanelFecha().getDate();
 		if(date == null) {
-			CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar una fecha con el formato dd/mm/aaaa"), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar una fecha con el formato dd/mm/aaaa"), "Error");
 			getPanelFecha().requestFocus();
 			return false;
 		}
@@ -574,18 +574,18 @@ public class JDialogCargaRecibo extends JDialog {
 		
 		if(!StringUtil.isNullOrEmpty(txtImporteTx)) {
 			if(!GenericUtils.esNumerico(txtImporteTx)) {
-				CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El importe de la transferencia bancaria debe ser numérico."), "Error");
+				FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El importe de la transferencia bancaria debe ser numérico."), "Error");
 				getTxtImporteTransf().requestFocus();
 				return false;
 			}
 			String txtNroTx = getTxtNroTransf().getText().trim();
 			if(StringUtil.isNullOrEmpty(txtNroTx)) {
-				CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar el número de la transferencia bancaria."), "Error");
+				FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Debe ingresar el número de la transferencia bancaria."), "Error");
 				getTxtNroTransf().requestFocus();
 				return false;
 			}
 			if(!GenericUtils.esNumerico(txtNroTx)) {
-				CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El número de la transferencia bancaria debe ser numérico."), "Error");
+				FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("El número de la transferencia bancaria debe ser numérico."), "Error");
 				getTxtNroTransf().requestFocus();
 				return false;
 			}
@@ -623,15 +623,15 @@ public class JDialogCargaRecibo extends JDialog {
 						dispose();
 						return;
 					}
-					if (CLJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Está seguro que desea salir?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+					if (FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Está seguro que desea salir?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 						List<Cheque> cheques = getPanelTablaCheque().getElementos();
 						if(!cheques.isEmpty() && recibo.getId() == null) {
-							if (CLJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Desea borrar los cheques agregados?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+							if (FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Desea borrar los cheques agregados?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 								ChequeFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(ChequeFacadeRemote.class);
 								try {
 									cfr.eliminarCheques(cheques, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 								} catch (ValidacionException e1) {
-									CLJOptionPane.showErrorMessage(JDialogCargaRecibo.this, e1.getMensajeError(), "Error");
+									FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, e1.getMensajeError(), "Error");
 								}
 							}
 						}
@@ -696,16 +696,16 @@ public class JDialogCargaRecibo extends JDialog {
 		return panTransferencias;
 	}
 
-	private CLJTextField getTxtObservaciones() {
+	private FWJTextField getTxtObservaciones() {
 		if(txtObservaciones == null) {
-			txtObservaciones = new CLJTextField();
+			txtObservaciones = new FWJTextField();
 		}
 		return txtObservaciones;
 	}
 	
-	private CLJTextField getTxtImporteTransf() {
+	private FWJTextField getTxtImporteTransf() {
 		if(txtImporteTransf == null) {
-			txtImporteTransf = new CLJTextField();
+			txtImporteTransf = new FWJTextField();
 			txtImporteTransf.addFocusListener(new FocusAdapter() {
 
 				@Override
@@ -719,9 +719,9 @@ public class JDialogCargaRecibo extends JDialog {
 		return txtImporteTransf;
 	}
 
-	private CLJTextField getTxtNroTransf() {
+	private FWJTextField getTxtNroTransf() {
 		if(txtNroTransf == null) {
-			txtNroTransf = new CLJTextField();
+			txtNroTransf = new FWJTextField();
 		}
 		return txtNroTransf;
 	}
@@ -828,9 +828,9 @@ public class JDialogCargaRecibo extends JDialog {
 		return pnlTotales;
 	}
 
-	private CLJTextField getTxtTotalRecibo() {
+	private FWJTextField getTxtTotalRecibo() {
 		if (txtTotalRecibo == null) {
-			txtTotalRecibo = new CLJTextField();
+			txtTotalRecibo = new FWJTextField();
 			txtTotalRecibo.setPreferredSize(new Dimension(70, 20));
 			txtTotalRecibo.setEditable(false);
 		}
@@ -888,8 +888,8 @@ public class JDialogCargaRecibo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaFacturas = new CLJTable(0, CANT_COLS_TBL_PAGOS_RECIBO);
+		protected FWJTable construirTabla() {
+			FWJTable tablaFacturas = new FWJTable(0, CANT_COLS_TBL_PAGOS_RECIBO);
 			tablaFacturas.setStringColumn(COL_FECHA, "Fecha", 230, 100, true);
 			tablaFacturas.setStringColumn(COL_CONCEPTO_PAGO_RECIBO, "Concepto", 200, 200, true);
 			tablaFacturas.setFloatColumn(COL_IMPORTE_PAGO_RECIBO, "Importe Pagado", 0, Float.MAX_VALUE, 100, true);
@@ -960,7 +960,7 @@ public class JDialogCargaRecibo extends JDialog {
 		public void gestionarAgregadosNC() {
 			List<NotaCredito> ncList = getNotaCreditoList();
 			if(!ncList.isEmpty()) {
-				if(CLJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, StringW.wordWrap("El cliente tiene notas de créditos disponibles ¿Desea agregarlas?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+				if(FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, StringW.wordWrap("El cliente tiene notas de créditos disponibles ¿Desea agregarlas?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 					agregarElementos(ncList);
 				}
 			} 
@@ -977,8 +977,8 @@ public class JDialogCargaRecibo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaNC = new CLJTable(0, CANT_COLS_TBL_NC);
+		protected FWJTable construirTabla() {
+			FWJTable tablaNC = new FWJTable(0, CANT_COLS_TBL_NC);
 			tablaNC.setStringColumn(COL_FECHA_NC, "Fecha", 230, 100, true);
 			tablaNC.setStringColumn(COL_NC, "Concepto", 150, 150, true);
 			tablaNC.setFloatColumn(COL_IMPORTE, "Importe", 80, true);
@@ -1045,7 +1045,7 @@ public class JDialogCargaRecibo extends JDialog {
 		public boolean gestionarAgregadoCheques() {
 			List<Cheque> chequesDisponibles = getChequesDisponibles();
 			if(!chequesDisponibles.isEmpty()) {
-				if(CLJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, StringW.wordWrap("El cliente tiene cheques disponibles ¿Desea agregarlos?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+				if(FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, StringW.wordWrap("El cliente tiene cheques disponibles ¿Desea agregarlos?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 					for(Cheque cheque : chequesDisponibles) {
 						handleSeleccionCheque(cheque);
 					}
@@ -1101,7 +1101,7 @@ public class JDialogCargaRecibo extends JDialog {
 						}while(agregaOtro && acepto);
 					}
 					return false;
-				}catch(CLException cle){
+				}catch(FWException cle){
 					BossError.gestionarError(cle);
 					return false;
 				}
@@ -1190,8 +1190,8 @@ public class JDialogCargaRecibo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaCheques = new CLJTable(0, CANT_COLS_TBL_CHEQUE);
+		protected FWJTable construirTabla() {
+			FWJTable tablaCheques = new FWJTable(0, CANT_COLS_TBL_CHEQUE);
 			tablaCheques.setComboColumn(COL_BANCO, "Banco", getCmbBanco(), 100, true);
 			tablaCheques.setStringColumn(COL_NRO, "Nº", 50, 100, true);
 			tablaCheques.setStringColumn(COL_NRO_INTERNO, "Nº Interno", 60, 60, true);
@@ -1218,7 +1218,7 @@ public class JDialogCargaRecibo extends JDialog {
 									try {
 										cheque = cfr.grabarCheque(cheque, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 										updateCheque(cheque);
-									} catch (CLException e1) {
+									} catch (FWException e1) {
 										e1.printStackTrace();
 									}
 								}
@@ -1276,15 +1276,15 @@ public class JDialogCargaRecibo extends JDialog {
 
 		private final PanelTablaCheque panTablaCheque;
 		private final PanelTablaNotaCredito panelTablaNC;
-		private final CLJTextField txtEfectivo;
-		private final CLJTextField txtRetencionIVA;
-		private final CLJTextField txtRetencionGanancias;
-		private final CLJTextField txtRetencionIIBB;
-		private final CLJTextField txtNroTx;
-		private final CLJTextField txtImporteTx;
-		private final CLJTextField txtObservaciones;
+		private final FWJTextField txtEfectivo;
+		private final FWJTextField txtRetencionIVA;
+		private final FWJTextField txtRetencionGanancias;
+		private final FWJTextField txtRetencionIIBB;
+		private final FWJTextField txtNroTx;
+		private final FWJTextField txtImporteTx;
+		private final FWJTextField txtObservaciones;
 
-		public MostrarFormaPagoVisitor(PanelTablaCheque panTablaCheque, PanelTablaNotaCredito panelTablaNC, CLJTextField txtEfectivo, CLJTextField txtRetencionIVA, CLJTextField txtRetencionGanancias, CLJTextField txtRetencionIIBB, CLJTextField txtNroTx, CLJTextField txtImporteTx, CLJTextField txtObservaciones) {
+		public MostrarFormaPagoVisitor(PanelTablaCheque panTablaCheque, PanelTablaNotaCredito panelTablaNC, FWJTextField txtEfectivo, FWJTextField txtRetencionIVA, FWJTextField txtRetencionGanancias, FWJTextField txtRetencionIIBB, FWJTextField txtNroTx, FWJTextField txtImporteTx, FWJTextField txtObservaciones) {
 			this.panelTablaNC = panelTablaNC;
 			this.panTablaCheque = panTablaCheque;
 			this.txtEfectivo = txtEfectivo;
@@ -1436,7 +1436,7 @@ public class JDialogCargaRecibo extends JDialog {
 				CorreccionFactura correccion = cfr.getCorreccionById(prnd.getId());
 				JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(null,correccion, true);
 				dialogCargaFactura.setVisible(true);
-			} catch (CLException e) {
+			} catch (FWException e) {
 				BossError.gestionarError(e);
 			}
 		}

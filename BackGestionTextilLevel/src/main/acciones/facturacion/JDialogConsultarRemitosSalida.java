@@ -28,16 +28,16 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -66,12 +66,12 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 	private JButton btnBuscar;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJTextField txtNroCliente;
-	private CLJTextField txtNombreProveedor;
+	private FWJTextField txtNroCliente;
+	private FWJTextField txtNombreProveedor;
 	private LinkableLabel lblElegirCliente;
 	private LinkableLabel lblElegirProveedor;	
 	private PanTablaRemitosSalida panTablaRemitosSalida;
-	private CLJNumericTextField txtNroRemito;
+	private FWJNumericTextField txtNroRemito;
 
 	private RemitoSalidaFacadeRemote remitoSalidaFacade;
 
@@ -246,7 +246,7 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 						setAcepto(true);
 						dispose();
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
+						FWJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
 					}
 				}
 			});
@@ -312,18 +312,18 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 		return panProveedor;
 	}
 
-	private CLJTextField getTxtNombreProveedor() {
+	private FWJTextField getTxtNombreProveedor() {
 		if (txtNombreProveedor == null) {
-			txtNombreProveedor = new CLJTextField();
+			txtNombreProveedor = new FWJTextField();
 			txtNombreProveedor.setEditable(false);
 			txtNombreProveedor.setPreferredSize(new Dimension(50, 20));
 		}
 		return txtNombreProveedor;
 	}
 
-	private CLJNumericTextField getTxtNroRemito() {
+	private FWJNumericTextField getTxtNroRemito() {
 		if (txtNroRemito == null) {
-			txtNroRemito = new CLJNumericTextField();
+			txtNroRemito = new FWJNumericTextField();
 			txtNroRemito.setPreferredSize(new Dimension(50, 20));
 			
 			txtNroRemito.addActionListener(new ActionListener() {
@@ -338,9 +338,9 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 		return txtNroRemito;
 	}
 
-	private CLJTextField getTxtNroCliente() {
+	private FWJTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJTextField();
+			txtNroCliente = new FWJTextField();
 			txtNroCliente.setEditable(false);
 			txtNroCliente.setPreferredSize(new Dimension(50, 20));
 		}
@@ -403,7 +403,7 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 		getPanTablaRemitosSalida().getTabla().removeAllRows();
 		if(getRbtPorClienteOrProveedor().isSelected()) {
 			if(getCliente() == null && getProveedor() == null) {
-				CLJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, "Debe seleccionar un cliente o un proveedor.", "Error");
+				FWJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, "Debe seleccionar un cliente o un proveedor.", "Error");
 				return;
 			}
 			if(getCliente() != null) {
@@ -418,7 +418,7 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 			}
 		} else {
 			if(StringUtil.isNullOrEmpty(getTxtNroRemito().getText()) || getTxtNroRemito().getValue() == null) {
-				CLJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, "Debe ingresar un número de remito.", "Error");
+				FWJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, "Debe ingresar un número de remito.", "Error");
 				return;
 			}
 			getPanTablaRemitosSalida().agregarElementos(getRemitoSalidaFacade().getRemitosByNroRemitoConPiezasYProductos(getTxtNroRemito().getValue()));
@@ -483,16 +483,16 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 				btnAnularRemitoSalida.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						if(CLJOptionPane.showQuestionMessage(JDialogConsultarRemitosSalida.this, "¿Está seguro que desea anular el Remito de Salida?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+						if(FWJOptionPane.showQuestionMessage(JDialogConsultarRemitosSalida.this, "¿Está seguro que desea anular el Remito de Salida?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 							int selectedRow = getTabla().getSelectedRow();
 							RemitoSalida remitoSalida = getPanTablaRemitosSalida().getElemento(selectedRow);
 							try {
 								getRemitoSalidaFacade().checkEliminacionOrAnulacionRemitoSalida(remitoSalida.getId());
 								getRemitoSalidaFacade().anularRemitoSalida(remitoSalida);
-								CLJOptionPane.showInformationMessage(JDialogConsultarRemitosSalida.this, "El remito se ha anulado con éxito.", "Información");
+								FWJOptionPane.showInformationMessage(JDialogConsultarRemitosSalida.this, "El remito se ha anulado con éxito.", "Información");
 								buscarRemitos();
 							} catch (ValidacionException e1) {
-								CLJOptionPane.showInformationMessage(JDialogConsultarRemitosSalida.this, StringW.wordWrap(e1.getMensajeError()), "Información");
+								FWJOptionPane.showInformationMessage(JDialogConsultarRemitosSalida.this, StringW.wordWrap(e1.getMensajeError()), "Información");
 							}
 						}
 					}
@@ -505,15 +505,15 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_REMITO, "REMITO", 200, 200, true);
 			tabla.setStringColumn(COL_CLIENTE, "CLIENTE", 190, 190, true);
 			tabla.setStringColumn(COL_PROVEEDOR, "PROVEEDOR", 190, 190, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_REMITO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CLIENTE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROVEEDOR, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_REMITO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CLIENTE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROVEEDOR, FWJTable.CENTER_ALIGN);
 			tabla.addMouseListener(new MouseAdapter () {
 
 				@Override
@@ -575,7 +575,7 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 					OperacionSobreRemitoSalidaHandler handler = new OperacionSobreRemitoSalidaHandler(frame, remitoConPiezasYProductos, false);
 					handler.showRemitoEntradaDialog();
 				} catch (ValidacionException e1) {
-					CLJOptionPane.showErrorMessage(frame, StringW.wordWrap(e1.getMensajeError()), "Imposible Editar");
+					FWJOptionPane.showErrorMessage(frame, StringW.wordWrap(e1.getMensajeError()), "Imposible Editar");
 				}
 			}
 			buscarRemitos();
@@ -583,7 +583,7 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 
 		@Override
 		public boolean validarQuitar() {
-			if(CLJOptionPane.showQuestionMessage(frame, "¿Está seguro que desea eliminar el remito?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(frame, "¿Está seguro que desea eliminar el remito?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				RemitoSalida remitoSalida = getElemento(getTabla().getSelectedRow());
 				try {
 					if(remitoSalida.getTipoRemitoSalida() == null || remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.CLIENTE || remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.PROVEEDOR) {
@@ -591,9 +591,9 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 					} else {
 						getRemitoSalidaFacade().eliminarRemitoSalida01OrVentaTela(remitoSalida.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 					}
-					CLJOptionPane.showInformationMessage(frame, "Remito borrado éxitosamente.", "Información");				
+					FWJOptionPane.showInformationMessage(frame, "Remito borrado éxitosamente.", "Información");				
 				} catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, StringW.wordWrap(e.getMensajeError()), "Imposible Eliminar");
+					FWJOptionPane.showErrorMessage(JDialogConsultarRemitosSalida.this, StringW.wordWrap(e.getMensajeError()), "Imposible Eliminar");
 					return false;
 				}
 				return true;

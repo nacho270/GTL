@@ -4,9 +4,9 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
-public class MenuChat extends CLJMenu {
+public class MenuChat extends FWJMenu {
 
 	private static final long serialVersionUID = 6347837601938238673L;
 

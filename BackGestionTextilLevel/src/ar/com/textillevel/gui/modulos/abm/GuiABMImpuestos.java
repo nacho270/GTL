@@ -15,10 +15,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.gente.Provincia;
@@ -36,8 +36,8 @@ public class GuiABMImpuestos extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombreImpuesto;
-	private CLJTextField txtPorcDescuento;
+	private FWJTextField txtNombreImpuesto;
+	private FWJTextField txtPorcDescuento;
 	private JComboBox cmbTipoImpuesto;
 	private JComboBox cmbProvincia;
 
@@ -113,16 +113,16 @@ public class GuiABMImpuestos extends GuiABMListaTemplate {
 		return gbc;
 	}
 	
-	private CLJTextField getTxtNombreImpuesto() {
+	private FWJTextField getTxtNombreImpuesto() {
 		if(txtNombreImpuesto == null){
-			txtNombreImpuesto = new CLJTextField(MAX_LONGITUD_IMPUESTO);
+			txtNombreImpuesto = new FWJTextField(MAX_LONGITUD_IMPUESTO);
 		}
 		return txtNombreImpuesto;
 	}
 
-	private CLJTextField getTxtPorcDescuento() {
+	private FWJTextField getTxtPorcDescuento() {
 		if(txtPorcDescuento == null){
-			txtPorcDescuento = new CLJTextField();
+			txtPorcDescuento = new FWJTextField();
 		}
 		return txtPorcDescuento;
 	}
@@ -152,7 +152,7 @@ public class GuiABMImpuestos extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el impuesto seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el impuesto seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getImpuestoFacade().remove(getImpuestoActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -172,35 +172,35 @@ public class GuiABMImpuestos extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getTxtNombreImpuesto().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del impuesto.", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del impuesto.", this.getTitle());
 			getTxtNombreImpuesto().requestFocus();
 			return false;
 		}
 		
 		if(getTxtPorcDescuento().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje de descuento del impuesto.", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje de descuento del impuesto.", this.getTitle());
 			getTxtPorcDescuento().requestFocus();
 			return false;
 		}
 		
 		if(getCmbTipoImpuesto().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el tipo de impuesto.", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el tipo de impuesto.", this.getTitle());
 			return false;
 		}
 		String monto = getTxtPorcDescuento().getText().replace(',', '.');
 		if(!GenericUtils.esNumerico(monto)){
-			CLJOptionPane.showErrorMessage(this, "El campo debe ser numérico", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "El campo debe ser numérico", this.getTitle());
 			return false;
 		}
 		Double porcDescuento = new Double(monto);
 		Provincia selectedItemProvincia = (Provincia)getCmbProvincia().getSelectedItem();
 		if(getImpuestoFacade().existsOtroImpuestoWithParams(getImpuestoActual().getId(), porcDescuento, (ETipoImpuesto)getCmbTipoImpuesto().getSelectedItem(),selectedItemProvincia)) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap("Ya existe otro impuesto con el mismo porcentaje de descuento"+(selectedItemProvincia!=null?", tipo de impuesto y provincia.":" y tipo de impuesto.")), this.getTitle());
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap("Ya existe otro impuesto con el mismo porcentaje de descuento"+(selectedItemProvincia!=null?", tipo de impuesto y provincia.":" y tipo de impuesto.")), this.getTitle());
 			return false;
 		}
 		if(((ETipoImpuesto)getCmbTipoImpuesto().getSelectedItem())==ETipoImpuesto.INGRESOS_BRUTOS){
 			if(getCmbProvincia().getSelectedIndex()<0){
-				CLJOptionPane.showErrorMessage(this, StringW.wordWrap("Debe elegir la provincia para este impuesto."), this.getTitle());
+				FWJOptionPane.showErrorMessage(this, StringW.wordWrap("Debe elegir la provincia para este impuesto."), this.getTitle());
 				return false;
 			}
 		}
@@ -224,7 +224,7 @@ public class GuiABMImpuestos extends GuiABMListaTemplate {
 			getTxtNombreImpuesto().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un impuesto.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un impuesto.", "Error");
 			return false;
 		}
 	}

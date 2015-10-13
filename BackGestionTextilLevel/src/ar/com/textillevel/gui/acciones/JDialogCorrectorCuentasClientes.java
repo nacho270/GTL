@@ -30,13 +30,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLCursor;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.componentes.FWCursor;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
@@ -61,13 +61,13 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 	private static final int COL_RESULTADO = 1;
 
 	private JCheckBox chkSeleccionarCliente;
-	private CLJTextField txtNroCliente;
+	private FWJTextField txtNroCliente;
 	private JButton btnSalir;
 	private JButton btnCorregir;
 	private JProgressBar progreso;
 	private JLabel lblEstado;
 	private JLabel lblWorking;
-	private CLJTable tablaAvance;
+	private FWJTable tablaAvance;
 	private JScrollPane jsp;
 	private JComboBox cmbTipoCuenta;
 
@@ -138,9 +138,9 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 		return chkSeleccionarCliente;
 	}
 
-	public CLJTextField getTxtNroCliente() {
+	public FWJTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJTextField();
+			txtNroCliente = new FWJTextField();
 			txtNroCliente.setEnabled(false);
 			txtNroCliente.setEditable(false);
 			txtNroCliente.setPreferredSize(new Dimension(100, 20));
@@ -182,13 +182,13 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 				if (GenericUtils.esNumerico(textoIngresado)) {
 					Cliente cl = getClienteFacade().getClienteByNumero(Integer.valueOf(textoIngresado));
 					if (cl == null) {
-						CLJOptionPane.showErrorMessage(this, "No se ha encontrado al cliente indicado", "Error");
+						FWJOptionPane.showErrorMessage(this, "No se ha encontrado al cliente indicado", "Error");
 						return;
 					}
 					EntidadWrapper entidad = new EntidadWrapper(cl);
 					new ThreadCorreccion(entidad).start();
 				} else {
-					CLJOptionPane.showErrorMessage(this, "El número de cliente debe ser numérico", "Error");
+					FWJOptionPane.showErrorMessage(this, "El número de cliente debe ser numérico", "Error");
 					return;
 				}
 			} else {
@@ -197,12 +197,12 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 			}
 		} else {
 			ETipoCuenta tipoEntidad = (ETipoCuenta) getCmbTipoCuenta().getSelectedItem();
-			if (CLJOptionPane.showQuestionMessage(this, "Va a corregir todas las cuentas de '" + tipoEntidad + "'. ¿Desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "Va a corregir todas las cuentas de '" + tipoEntidad + "'. ¿Desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 				List<EntidadWrapper> entidades = getEntidades();
 				if (entidades != null && !entidades.isEmpty()) {
 					new ThreadCorreccion(entidades).start();
 				} else {
-					CLJOptionPane.showErrorMessage(this, "No se han encontrado clientes en el sistema", "Error");
+					FWJOptionPane.showErrorMessage(this, "No se han encontrado clientes en el sistema", "Error");
 					return;
 				}
 			}
@@ -267,7 +267,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 		@Override
 		public void run() {
 			bloquearComponentes();
-			CLCursor.startWait(JDialogCorrectorCuentasClientes.this);
+			FWCursor.startWait(JDialogCorrectorCuentasClientes.this);
 			if (getEntidad() == null) {
 				double avance = 100f / getListaEntidades().size();
 				double avanceAcumulado = 0;
@@ -299,7 +299,7 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 				}
 			}
 			desBloquearComponentes();
-			CLCursor.endWait(JDialogCorrectorCuentasClientes.this);
+			FWCursor.endWait(JDialogCorrectorCuentasClientes.this);
 		}
 
 		private void actualizarUltimaFila(EEstadoCorreccionCuentaCliente estado) {
@@ -375,9 +375,9 @@ public class JDialogCorrectorCuentasClientes extends JDialog {
 		return lblEstado;
 	}
 
-	public CLJTable getTablaAvance() {
+	public FWJTable getTablaAvance() {
 		if (tablaAvance == null) {
-			tablaAvance = new CLJTable(0, CANT_COLS);
+			tablaAvance = new FWJTable(0, CANT_COLS);
 			tablaAvance.setStringColumn(COL_CLIENTE, "Razón Social", 250, 250, true);
 			tablaAvance.setStringColumn(COL_RESULTADO, "Resultado", 100, 100, true);
 			tablaAvance.setReorderingAllowed(false);

@@ -2,8 +2,9 @@ package ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo;
 
 import java.util.Collections;
 import java.util.List;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.builders.BuilderAccionesReciboSueldo;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.cabecera.ModeloCabeceraReciboSueldo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.to.BusquedaReciboSueldoParams;
@@ -19,7 +20,7 @@ public class ModuloReciboSueldoModel extends ModuloModel<InfoReciboSueltoTO, Mod
 		super();
 	}
 
-	public ModuloReciboSueldoModel(Integer id) throws CLException {
+	public ModuloReciboSueldoModel(Integer id) throws FWException {
 		super(id, BuilderAccionesReciboSueldo.getInstance(), BuilderAccionesReciboSueldo.getInstance(), BuilderAccionesReciboSueldo.getInstance(), BuilderAccionesReciboSueldo.getInstance());
 		setTitulo("Administrar Recibos de Sueldo");
 	}

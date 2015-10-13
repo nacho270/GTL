@@ -47,17 +47,17 @@ import main.GTLGlobalCache;
 import main.acciones.facturacion.IngresoRemitoSalidaHandler;
 import main.acciones.facturacion.OperacionSobreRemitoEntradaHandler;
 import main.acciones.facturacion.OperacionSobreRemitoSalidaHandler;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuentaarticulo.CuentaArticulo;
 import ar.com.textillevel.entidades.cuentaarticulo.movimientos.MovimientoCuentaArticulo;
 import ar.com.textillevel.entidades.cuentaarticulo.movimientos.MovimientoDebeCuentaArticulo;
@@ -105,11 +105,11 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 	private PanelDatePicker txtFechaDesde;
 	private PanelDatePicker txtFechaHasta;
 	private JComboBox cmbTipoBusquedaCliente;
-	private CLJNumericTextField txtBusquedaCliente;
+	private FWJNumericTextField txtBusquedaCliente;
 	private JButton btnBuscar;
 	private JPanel panelSur;
 	private JButton btnSalir;
-	private CLJTextField txtTotalCuenta;
+	private FWJTextField txtTotalCuenta;
 	private JPanel panelAcciones;
 	private JPanel panelDatosUsuario;
 	private JLabel lblNombre;
@@ -194,8 +194,8 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, ¿Está seguro?", "Cuenta de Telas");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, ¿Está seguro?", "Cuenta de Telas");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -220,8 +220,8 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TBL_MOVS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_MOVS);
 			tabla.setStringColumn(COL_DESCR, "Descripción", 160, 260, true);
 			tabla.setFloatColumn(COL_DEBE, "Debe", 80, true);
 			tabla.setFloatColumn(COL_HABER, "Haber", 80, true);
@@ -231,13 +231,13 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 			tabla.setStringColumn(COL_OBSERVACIONES, "Observaciones", 150, 150, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			tabla.setReorderingAllowed(false);
-			tabla.setHeaderAlignment(COL_DESCR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_DEBE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_HABER, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_SALDO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_VERIFICADO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_USR_VERIFICACION, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_OBSERVACIONES, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DEBE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_HABER, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_SALDO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_VERIFICADO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_USR_VERIFICACION, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_OBSERVACIONES, FWJTable.CENTER_ALIGN);
 			tabla.addMouseListener(new MouseAdapter() {
 
 				@Override
@@ -423,21 +423,21 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 
 				public void actionPerformed(ActionEvent evt) {
 					if(getDPFechaDesde().getDate()==null){
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La 'fecha desde' ingresada no es válida", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La 'fecha desde' ingresada no es válida", "Error");
 						return;
 					}
 					if(getDPFechaHasta().getDate()==null){
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La 'fecha hasta' ingresada no es válida", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La 'fecha hasta' ingresada no es válida", "Error");
 						return;
 					}
 					if (!getDPFechaDesde().getDate().after(getDPFechaHasta().getDate())) {
 						if (getTxtBusquedaCliente().getText().trim().length() > 0) {
 							buscarMovimientos();
 						} else {
-							CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "Debe ingresar un cliente", "Error");
+							FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "Debe ingresar un cliente", "Error");
 						}
 					} else {
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La 'fecha desde' no debe ser posterior a la 'fecha hasta'", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La 'fecha desde' no debe ser posterior a la 'fecha hasta'", "Error");
 					}
 				}
 			});
@@ -447,7 +447,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 
 	private void buscarMovimientos() {
 		if(clienteElegido == null || articuloElegido == null) {
-			CLJOptionPane.showInformationMessage(this, "Debe seleccionar el cliente y un artículo.", "Información");
+			FWJOptionPane.showInformationMessage(this, "Debe seleccionar el cliente y un artículo.", "Información");
 			return;
 		}
 		CuentaArticulo cuentaArticulo = getCuentaFacade().getCuentaArticulo(clienteElegido, articuloElegido, EUnidad.METROS);
@@ -468,7 +468,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 			getBtnAgregarRemitoEntrada01().setEnabled(false);
 			getBtnAgregarRemitoSalida01().setEnabled(false);
 			getBtnAgregarRemitoVentaTela().setEnabled(false);
-			CLJOptionPane.showWarningMessage(JFrameVerMovimientosCuentaArticulo.this, "No se han encontrado resultados", "Error");
+			FWJOptionPane.showWarningMessage(JFrameVerMovimientosCuentaArticulo.this, "No se han encontrado resultados", "Error");
 		}
 	}
 
@@ -522,9 +522,9 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 		return cmbTipoBusquedaCliente;
 	}
 
-	private CLJNumericTextField getTxtBusquedaCliente() {
+	private FWJNumericTextField getTxtBusquedaCliente() {
 		if (txtBusquedaCliente == null) {
-			txtBusquedaCliente = new CLJNumericTextField();
+			txtBusquedaCliente = new FWJNumericTextField();
 			txtBusquedaCliente.setPreferredSize(new Dimension(100, 20));
 			txtBusquedaCliente.addActionListener(new ActionListener() {
 
@@ -532,13 +532,13 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 					String nroClienteStr = getTxtBusquedaCliente().getText();
 					if(StringUtil.isNullOrEmpty(nroClienteStr)) {
 						clienteElegido = null;
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "Debe ingresar un número de cliente.", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "Debe ingresar un número de cliente.", "Error");
 						llenarTablaMovimientos(new ArrayList<MovimientoCuentaArticulo>());
 					} else {
 						clienteElegido = getClienteFacade().getClienteByNumero(Integer.valueOf(nroClienteStr));
 					}
 					if(clienteElegido == null) {
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "No existe ningún cliente con el número ingresado.", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "No existe ningún cliente con el número ingresado.", "Error");
 						llenarTablaMovimientos(new ArrayList<MovimientoCuentaArticulo>());
 					} else {
 						getBtnBuscar().doClick();
@@ -596,9 +596,9 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 		return btnSalir;
 	}
 
-	private CLJTextField getTxtTotalCuenta() {
+	private FWJTextField getTxtTotalCuenta() {
 		if (txtTotalCuenta == null) {
-			txtTotalCuenta = new CLJTextField();
+			txtTotalCuenta = new FWJTextField();
 			txtTotalCuenta.setPreferredSize(new Dimension(100, 20));
 			txtTotalCuenta.setEditable(false);
 		}
@@ -688,16 +688,16 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png"); 
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png"); 
 			btnExportarAExcel.setToolTipText("Exportar a Excel");
 			btnExportarAExcel.setEnabled(false);
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaMovimientos().getTabla();
+						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - Cliente Nro - " + getTxtBusquedaCliente().getText(), EXTENSION_EXCEL);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -768,9 +768,9 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaMovimientos().getTabla();
+						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - Cliente Nro - " + getTxtBusquedaCliente().getText(), EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -786,7 +786,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -796,11 +796,11 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 
@@ -909,7 +909,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 								getCuentaFacade().actualizarMovimiento(mov);
 
 							} else {
-								CLJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+								FWJOptionPane.showErrorMessage(JFrameVerMovimientosCuentaArticulo.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 							}
 						}
 					}else{
@@ -1001,7 +1001,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 						dialogAgregarRemitoEntrada.setVisible(true);
 						RemitoEntradaProveedor remitoEntradaProveedor = dialogAgregarRemitoEntrada.getRemitoEntradaProveedor();
 						if(remitoEntradaProveedor != null) {
-							if(CLJOptionPane.showQuestionMessage(JFrameVerMovimientosCuentaArticulo.this, "¿Desea Cargar la Factura del Proveedor?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+							if(FWJOptionPane.showQuestionMessage(JFrameVerMovimientosCuentaArticulo.this, "¿Desea Cargar la Factura del Proveedor?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 								RemitoEntradaProveedorFacadeRemote repfr = GTLBeanFactory.getInstance().getBean2(RemitoEntradaProveedorFacadeRemote.class);
 								remitoEntradaProveedor = repfr.getByIdEager(remitoEntradaProveedor.getId());
 								FacturaProveedor fp = new FacturaProveedor();

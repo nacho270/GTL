@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.to.ClienteDeudaTO;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogInformeClientesMorosos;
@@ -61,7 +61,7 @@ public class InformeMorososAction implements Action{
 			}
 			new JDialogInformeClientesMorosos(frame, clientes, suma, ETipoInformeDeuda.CLIENTE).setVisible(true);
 		}else{
-			CLJOptionPane.showInformationMessage(frame, "No se han encontrado clientes con deuda", "Información");
+			FWJOptionPane.showInformationMessage(frame, "No se han encontrado clientes con deuda", "Información");
 		}
 	}
 }

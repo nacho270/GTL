@@ -9,8 +9,8 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.facade.api.remote.InfoLocalidadFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -44,19 +44,19 @@ public class PanelDomicilio extends JPanel {
 	public boolean validar(){
 		String validacionDireccion = getPanelDireccion().validar();
 		if(validacionDireccion!=null){
-			CLJOptionPane.showErrorMessage(this, validacionDireccion, "Error");
+			FWJOptionPane.showErrorMessage(this, validacionDireccion, "Error");
 			return false;
 		}
 		String validacionTelefono = getPanelTelefono().validar();
 		if(validacionTelefono !=null){
-			CLJOptionPane.showErrorMessage(this, validacionTelefono, "Error");
+			FWJOptionPane.showErrorMessage(this, validacionTelefono, "Error");
 			return false;
 		}
 		if(!StringUtil.isNullOrEmptyString(getPanelTelefono().getValorCodigoArea())){
 			Integer codigoAreaLocalidad = getPanelDireccion().getInfoDireccion().getLocalidad().getCodigoArea();
 			Integer codigoAreaIngresado = Integer.valueOf(getPanelTelefono().getValorCodigoArea());
 			if(!codigoAreaIngresado.equals(codigoAreaLocalidad)){
-				if(CLJOptionPane.showQuestionMessage(this, "El código de área ingresado para la localidad es incorrecto. Esto se modificará automáticamente. Desea continuar?", "Pregunta")==CLJOptionPane.NO_OPTION){
+				if(FWJOptionPane.showQuestionMessage(this, "El código de área ingresado para la localidad es incorrecto. Esto se modificará automáticamente. Desea continuar?", "Pregunta")==FWJOptionPane.NO_OPTION){
 					return false;
 				}else{
 					getPanelTelefono().setValorCodigoArea(String.valueOf(codigoAreaLocalidad));

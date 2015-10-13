@@ -3,14 +3,14 @@ package ar.com.textillevel.gui.modulos.personal.modulos.vales.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.acciones.AccionAgregarValeAnticipo;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.acciones.AccionImprimirValeAnticipo;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.acciones.AccionMarcarValeUtilizado;
@@ -47,7 +47,7 @@ public class BuilderAccionesValesAnticipo implements IBuilderAcciones<ValeAntici
 		return null;
 	}
 
-	public Acciones<ValeAnticipo> construirAcciones(int idModel) throws CLException {
+	public Acciones<ValeAnticipo> construirAcciones(int idModel) throws FWException {
 		Acciones<ValeAnticipo> acciones = new Acciones<ValeAnticipo>();
 		List<Accion<ValeAnticipo>> accionesCreacion = new ArrayList<Accion<ValeAnticipo>>();
 		accionesCreacion.add(new AccionAgregarValeAnticipo());

@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.CuentaOwnerTO;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;

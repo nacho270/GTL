@@ -3,7 +3,7 @@ package ar.com.textillevel.modulos.fe.connector;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.modulos.fe.cliente.dto.Err;
 import ar.com.textillevel.modulos.fe.cliente.dto.Obs;
 import ar.com.textillevel.modulos.fe.cliente.responses.FECAEResponse;

@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import javax.swing.Action;
 
 import main.GTLGlobalCache;
-
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.enums.ETipoFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
@@ -63,7 +62,7 @@ public class AgregarRemitoEntradaProveedorAction implements Action{
 			jdarep.setVisible(true);
 			RemitoEntradaProveedor remitoEntrada = jdarep.getRemitoEntrada();
 			if(remitoEntrada != null) {
-				if(CLJOptionPane.showQuestionMessage(frame, "¿Desea Cargar la Factura del Proveedor?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+				if(FWJOptionPane.showQuestionMessage(frame, "¿Desea Cargar la Factura del Proveedor?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 					RemitoEntradaProveedorFacadeRemote repfr = GTLBeanFactory.getInstance().getBean2(RemitoEntradaProveedorFacadeRemote.class);
 					remitoEntrada = repfr.getByIdEager(remitoEntrada.getId());
 					FacturaProveedor fp = new FacturaProveedor();

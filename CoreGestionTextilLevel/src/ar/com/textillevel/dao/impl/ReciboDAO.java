@@ -10,8 +10,8 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.ReciboDAOLocal;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
@@ -149,7 +149,7 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		}
 	}
 
-	public void rollBackPagosFacturaYNotasDeDebito(Recibo recibo) throws CLException {
+	public void rollBackPagosFacturaYNotasDeDebito(Recibo recibo) throws FWException {
 		recibo = getByIdEager(recibo.getId());
 		RollBackPagoReciboVisitor rbprv = new RollBackPagoReciboVisitor();
 		for(PagoRecibo pr : recibo.getPagoReciboList()){

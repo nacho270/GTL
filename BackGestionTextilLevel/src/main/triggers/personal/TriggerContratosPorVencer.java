@@ -3,7 +3,7 @@ package main.triggers.personal;
 import java.util.List;
 
 import main.triggers.Trigger;
-import ar.clarin.fwjava.templates.main.AbstractMainTemplate;
+import ar.com.fwcommon.templates.main.AbstractMainTemplate;
 import ar.com.textillevel.gui.modulos.personal.gui.JDialogContratosPorVencer;
 import ar.com.textillevel.modulos.personal.entidades.configuracion.ParametrosGeneralesPersonal;
 import ar.com.textillevel.modulos.personal.entidades.legajos.to.DatosVencimientoContratoEmpleadoTO;

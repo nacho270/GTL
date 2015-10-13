@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaCreditoProveedor;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.facade.api.remote.CorreccionFacturaProveedorFacadeRemote;
@@ -30,7 +30,7 @@ public class JDialogBuscarNotasDeCreditoNoUtilizadas extends JDialog {
 	private final List<NotaCreditoProveedor> notasCreditoSeleccionadas;
 
 	private JTabbedPane panelTabs;
-	private CLCheckBoxList<NotaCreditoProveedor> listaCheckNotaCreditoProveedor;
+	private FWCheckBoxList<NotaCreditoProveedor> listaCheckNotaCreditoProveedor;
 	private JPanel panelSur;
 	private JPanel panelTabCentralFacturas;
 
@@ -98,9 +98,9 @@ public class JDialogBuscarNotasDeCreditoNoUtilizadas extends JDialog {
 		return panelTabs;
 	}
 
-	public CLCheckBoxList<NotaCreditoProveedor> getListaCheckNotaCredito() {
+	public FWCheckBoxList<NotaCreditoProveedor> getListaCheckNotaCredito() {
 		if (listaCheckNotaCreditoProveedor == null) {
-			listaCheckNotaCreditoProveedor = new CLCheckBoxList<NotaCreditoProveedor>(){
+			listaCheckNotaCreditoProveedor = new FWCheckBoxList<NotaCreditoProveedor>(){
 
 				private static final long serialVersionUID = 4501839806754196510L;
 
@@ -127,7 +127,7 @@ public class JDialogBuscarNotasDeCreditoNoUtilizadas extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if(getNotasCreditoSeleccionadas().size()==0){
-						CLJOptionPane.showErrorMessage(JDialogBuscarNotasDeCreditoNoUtilizadas.this, "Debe elegir al menos una nota de crédito", "Error");
+						FWJOptionPane.showErrorMessage(JDialogBuscarNotasDeCreditoNoUtilizadas.this, "Debe elegir al menos una nota de crédito", "Error");
 						return;
 					}else{
 						setAcepto(true);

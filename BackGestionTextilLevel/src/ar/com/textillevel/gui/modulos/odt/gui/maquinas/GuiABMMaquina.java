@@ -18,12 +18,12 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.MaquinaSectorCosido;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.MaquinaSectorEstampado;
@@ -49,7 +49,7 @@ public class GuiABMMaquina extends GuiABMListaTemplate {
 
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private JComboBox cmbTipoMaquina;
 
 	private CardLayout cardLayout;
@@ -138,9 +138,9 @@ public class GuiABMMaquina extends GuiABMListaTemplate {
 		return cmbTipoMaquina;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombre;
 	}
@@ -169,7 +169,7 @@ public class GuiABMMaquina extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMMaquina.this, "¿Está seguro que desea eliminar la máquina seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMMaquina.this, "¿Está seguro que desea eliminar la máquina seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getMaquinaFacade().remove(getMaquinaActual());
 				lista.setSelectedIndex(-1);
 			}
@@ -184,7 +184,7 @@ public class GuiABMMaquina extends GuiABMListaTemplate {
 				lista.setSelectedValue(maquinaRefresh, true);
 				return true;
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(GuiABMMaquina.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMMaquina.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				e.printStackTrace();
 				return false;
 			}
@@ -217,12 +217,12 @@ public class GuiABMMaquina extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText())) {
-			CLJOptionPane.showErrorMessage(GuiABMMaquina.this, "Falta Completar el campo 'Nombre'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMMaquina.this, "Falta Completar el campo 'Nombre'", "Advertencia");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getCmbTipoMaquina().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(GuiABMMaquina.this, "Falta seleccionar un tipo de máquina.", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMMaquina.this, "Falta seleccionar un tipo de máquina.", "Advertencia");
 			return false;
 		}
 
@@ -253,7 +253,7 @@ public class GuiABMMaquina extends GuiABMListaTemplate {
 			getTxtNombre().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una máquina", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una máquina", "Error");
 			return false;
 		}
 	}

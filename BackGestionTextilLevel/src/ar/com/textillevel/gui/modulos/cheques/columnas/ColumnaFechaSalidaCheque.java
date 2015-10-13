@@ -2,7 +2,7 @@ package ar.com.textillevel.gui.modulos.cheques.columnas;
 
 import java.util.Date;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaDate;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaDate;
 import ar.com.textillevel.entidades.cheque.Cheque;
 
 public class ColumnaFechaSalidaCheque extends ColumnaDate<Cheque>{

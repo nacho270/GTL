@@ -14,8 +14,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoInformeProduccion;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;

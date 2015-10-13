@@ -18,9 +18,9 @@ import java.util.zip.ZipOutputStream;
 import org.apache.log4j.Logger;
 import org.jboss.varia.scheduler.Schedulable;
 
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.FileUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.FileUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.util.Utils;
 
 public class SchedulerBackupDatabase implements Schedulable {

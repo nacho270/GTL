@@ -12,8 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.InfoDireccion;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.domicilio.InfoDomicilio;
@@ -121,7 +121,7 @@ public class JDialogAgregarModificarDomicilio extends JDialog {
 
 	private boolean validar() {
 		if(getPanelFecha().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir una fecha válida", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir una fecha válida", "Error");
 			getPanelFecha().requestFocus();
 			return false;
 		}

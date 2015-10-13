@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.textillevel.gui.modulos.odt.gui.PanTablaVisualizacionFormulaCliente;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.MateriaPrimaCantidad;
@@ -76,8 +76,8 @@ public class PanTablaQuimicosPigmentosVisualizacion extends PanTablaVisualizacio
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_DESCRIPCION, "MATERIA PRIMA", 200, 200, true);
 			tabla.setFloatColumn(COL_PROPORCION, "PROPORCION (%)", 100, true);
 			tabla.setFloatColumn(COL_UNIDAD, "UNIDAD", 100, true);

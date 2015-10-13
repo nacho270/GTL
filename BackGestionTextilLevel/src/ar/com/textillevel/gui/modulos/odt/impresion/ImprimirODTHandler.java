@@ -18,7 +18,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.InstruccionProcedimientoRenderer;
 import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
@@ -66,13 +66,13 @@ public class ImprimirODTHandler {
 			}else{
 				valida = true;
 				if(forma != EFormaImpresionODT.ENCABEZADO && odt.getSecuenciaDeTrabajo() == null){
-					CLJOptionPane.showErrorMessage(parent, "La orden de trabajo no tiene secuencia asignada", "Error");
+					FWJOptionPane.showErrorMessage(parent, "La orden de trabajo no tiene secuencia asignada", "Error");
 					valida = false;
 				}else if( (forma == EFormaImpresionODT.ENCABEZADO_SECUENCIA || forma == EFormaImpresionODT.AMBOS || forma == EFormaImpresionODT.RESUMEN_ARTIULOS) && !tieneFormula(ETipoProducto.TENIDO)){
-					CLJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia, debe tener cargada la formula de teñido", "Error");
+					FWJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia, debe tener cargada la formula de teñido", "Error");
 					valida = false;
 				}else if(forma == EFormaImpresionODT.ESTAMPADO && !tieneFormula(ETipoProducto.ESTAMPADO)){
-					CLJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia de estampado, debe tener cargada la formula", "Error");
+					FWJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia de estampado, debe tener cargada la formula", "Error");
 					valida = false;
 				}
 			}

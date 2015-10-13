@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 
 /*
  * Hay que tener cuidado, cuando la antiguedad es menor a 6 meses, no debe entrar en ninguno de los periodos

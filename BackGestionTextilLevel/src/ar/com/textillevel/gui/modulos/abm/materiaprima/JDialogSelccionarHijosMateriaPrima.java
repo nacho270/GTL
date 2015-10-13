@@ -19,9 +19,9 @@ import javax.swing.JScrollPane;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.facade.api.remote.MateriaPrimaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -32,7 +32,7 @@ public class JDialogSelccionarHijosMateriaPrima extends JDialog{
 	
 	private JButton btnCancelar;
 	private JButton btnAceptar;
-	private CLCheckBoxList<MateriaPrima> listaMps;
+	private FWCheckBoxList<MateriaPrima> listaMps;
 
 	private boolean acepto;
 	private MateriaPrima materiaPrima;
@@ -71,9 +71,9 @@ public class JDialogSelccionarHijosMateriaPrima extends JDialog{
 		add(panelSur, BorderLayout.SOUTH);		
 	}
 
-	public CLCheckBoxList<MateriaPrima> getListaMps() {
+	public FWCheckBoxList<MateriaPrima> getListaMps() {
 		if (listaMps == null) {
-			listaMps = new CLCheckBoxList<MateriaPrima>() {
+			listaMps = new FWCheckBoxList<MateriaPrima>() {
 
 				private static final long serialVersionUID = 8161545033580410261L;
 
@@ -127,7 +127,7 @@ public class JDialogSelccionarHijosMateriaPrima extends JDialog{
 	}
 
 	private void salir() {
-		if(CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar. Esta seguro?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if(FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar. Esta seguro?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}

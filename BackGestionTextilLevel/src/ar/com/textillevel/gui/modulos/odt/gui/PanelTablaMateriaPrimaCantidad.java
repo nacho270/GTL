@@ -4,8 +4,8 @@ import java.awt.Dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.MateriaPrimaCantidad;
@@ -44,8 +44,8 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 	}
 
 	@Override
-	protected CLJTable construirTabla() {
-		CLJTable tabla = new CLJTable(0, CANT_COLS);
+	protected FWJTable construirTabla() {
+		FWJTable tabla = new FWJTable(0, CANT_COLS);
 		tabla.setStringColumn(COL_MATERIA_PRIMA, createLabelTipoMateriaPrima(), 200, 200, true);
 		tabla.setStringColumn(COL_CANTIDAD, "Proporción (%)", 100, 100, true);
 		tabla.setStringColumn(COL_UNIDAD, "Unidad", 70, 70, true);
@@ -53,9 +53,9 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 		tabla.setReorderingAllowed(false);
 		tabla.setAllowHidingColumns(false);
 		tabla.setAllowSorting(false);
-		tabla.setHeaderAlignment(COL_MATERIA_PRIMA, CLJTable.CENTER_ALIGN);
-		tabla.setHeaderAlignment(COL_CANTIDAD, CLJTable.CENTER_ALIGN);
-		tabla.setHeaderAlignment(COL_UNIDAD, CLJTable.CENTER_ALIGN);
+		tabla.setHeaderAlignment(COL_MATERIA_PRIMA, FWJTable.CENTER_ALIGN);
+		tabla.setHeaderAlignment(COL_CANTIDAD, FWJTable.CENTER_ALIGN);
+		tabla.setHeaderAlignment(COL_UNIDAD, FWJTable.CENTER_ALIGN);
 		return tabla;
 	}
 

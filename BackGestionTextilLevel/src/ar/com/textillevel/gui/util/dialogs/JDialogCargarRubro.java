@@ -13,10 +13,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 import ar.com.textillevel.entidades.enums.ETipoRubro;
 import ar.com.textillevel.entidades.gente.Rubro;
 import ar.com.textillevel.facade.api.remote.RubroPersonaFacadeRemote;
@@ -29,7 +29,7 @@ public class JDialogCargarRubro extends JDialog{
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtNombreRubro;
+	private FWJTextField txtNombreRubro;
 	private JPanel pnlBotones;
 	private JPanel pnlDatos;
 
@@ -98,10 +98,10 @@ public class JDialogCargarRubro extends JDialog{
 							rubroPersona.setNombre(getTxtNombre().getText().toUpperCase());
 							rubroPersona.setTipoRubro(tipoRubro);
 							rubroNuevo = rubroPersonaFacade.save(rubroPersona);
-							CLJOptionPane.showInformationMessage(JDialogCargarRubro.this, "Los datos se han guardado correctamente", "Carga rubro");
+							FWJOptionPane.showInformationMessage(JDialogCargarRubro.this, "Los datos se han guardado correctamente", "Carga rubro");
 							dispose();
 						}else{
-							CLJOptionPane.showErrorMessage(JDialogCargarRubro.this, "Debe completar los datos.", "Carga rubro");
+							FWJOptionPane.showErrorMessage(JDialogCargarRubro.this, "Debe completar los datos.", "Carga rubro");
 						}
 					}catch(RuntimeException re){
 						BossError.gestionarError(re);
@@ -124,9 +124,9 @@ public class JDialogCargarRubro extends JDialog{
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombreRubro == null){
-			txtNombreRubro = new CLJTextField();
+			txtNombreRubro = new FWJTextField();
 			txtNombreRubro.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtNombreRubro;

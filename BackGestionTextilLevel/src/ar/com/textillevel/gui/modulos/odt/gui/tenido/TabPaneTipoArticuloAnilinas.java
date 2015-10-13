@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.JTabbedPane;
 
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.Reactivo;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;

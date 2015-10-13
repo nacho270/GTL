@@ -7,8 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.web.spring.exception.NoSessionException;
 
 public class SessionMap {

@@ -27,16 +27,16 @@ import javax.swing.text.MaskFormatter;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -71,27 +71,27 @@ public class JDialogDetalleContacto extends JDialog {
 	private static final int MAX_LONGITUD_SITIO_WEB = 100;
 
 	private JPanel panDetalle;
-	private CLJTextField txtRazonSocial;
-	private CLJTextField txtNombreCorto;
-	private CLJTextField txtContacto;
+	private FWJTextField txtRazonSocial;
+	private FWJTextField txtNombreCorto;
+	private FWJTextField txtContacto;
 	private JFormattedTextField txtCuit;
-	private CLJTextArea txtObservaciones;
+	private FWJTextArea txtObservaciones;
 	private JButton btnSalir;
-	private CLJTextField txtEmail;
-	private CLJTextField txtSkype;
-	private CLJNumericTextField txtNroCliente;
+	private FWJTextField txtEmail;
+	private FWJTextField txtSkype;
+	private FWJNumericTextField txtNroCliente;
 	private PanDatosDireccion panDatosDireccionFiscal;
 	private PanDatosDireccion panDatosDireccionReal;
 	private PanDatosTelefono panTelefonoFijo;
 	private PanDatosTelefono panCelular;
-	private CLJTextField txtNombres;
-	private CLJTextField txtApellido;
+	private FWJTextField txtNombres;
+	private FWJTextField txtApellido;
 	private PanDatosDireccion panDatosDireccion;
 	private JComboBox cmbRubro;
 	private PanDatosTelefono panFax;
 	private JComboBox cmbPosicionIva;
-	private CLJTextField txtSitioWeb;
-	private CLJTextField txtIngBrutos;
+	private FWJTextField txtSitioWeb;
+	private FWJTextField txtIngBrutos;
 	private JComboBox cmbCondicionVenta;
 
 	private JButton btnEditar;
@@ -280,9 +280,9 @@ public class JDialogDetalleContacto extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTextField getTxtSitioWeb() {
+	private FWJTextField getTxtSitioWeb() {
 		if (txtSitioWeb == null) {
-			txtSitioWeb = new CLJTextField(MAX_LONGITUD_SITIO_WEB);
+			txtSitioWeb = new FWJTextField(MAX_LONGITUD_SITIO_WEB);
 		}
 		return txtSitioWeb;
 	}
@@ -341,17 +341,17 @@ public class JDialogDetalleContacto extends JDialog {
 		this.contacto = contacto;
 	}
 
-	private CLJTextField getTxtContacto() {
+	private FWJTextField getTxtContacto() {
 		if (txtContacto == null) {
-			txtContacto = new CLJTextField(MAX_LONGITUD_CONTACTO);
+			txtContacto = new FWJTextField(MAX_LONGITUD_CONTACTO);
 			txtContacto.setPreferredSize(new Dimension(150, 20));
 		}
 		return txtContacto;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if (txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 		}
 		return txtRazonSocial;
 	}
@@ -367,17 +367,17 @@ public class JDialogDetalleContacto extends JDialog {
 		return txtCuit;
 	}
 
-	private CLJTextArea getTxtObservaciones() {
+	private FWJTextArea getTxtObservaciones() {
 		if (txtObservaciones == null) {
-			txtObservaciones = new CLJTextArea(MAX_LONGITUD_OBSERVACIONES);
+			txtObservaciones = new FWJTextArea(MAX_LONGITUD_OBSERVACIONES);
 			txtObservaciones.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		}
 		return txtObservaciones;
 	}
 
-	private CLJTextField getTxtNombreCorto() {
+	private FWJTextField getTxtNombreCorto() {
 		if (txtNombreCorto == null) {
-			txtNombreCorto = new CLJTextField(MAX_LONGITUD_NOMBRE_CORTO);
+			txtNombreCorto = new FWJTextField(MAX_LONGITUD_NOMBRE_CORTO);
 		}
 		return txtNombreCorto;
 	}
@@ -395,25 +395,25 @@ public class JDialogDetalleContacto extends JDialog {
 		return btnSalir;
 	}
 
-	private CLJTextField getTxtEmail() {
+	private FWJTextField getTxtEmail() {
 		if (txtEmail == null) {
-			txtEmail = new CLJTextField(MAX_LONGITUD_EMAIL);
+			txtEmail = new FWJTextField(MAX_LONGITUD_EMAIL);
 			txtEmail.setPreferredSize(new Dimension(250, 20));
 		}
 		return txtEmail;
 	}
 
-	private CLJTextField getTxtSkype() {
+	private FWJTextField getTxtSkype() {
 		if (txtSkype == null) {
-			txtSkype = new CLJTextField(MAX_LONGITUD_SKYPE);
+			txtSkype = new FWJTextField(MAX_LONGITUD_SKYPE);
 			txtSkype.setPreferredSize(new Dimension(150, 20));
 		}
 		return txtSkype;
 	}
 
-	private CLJNumericTextField getTxtNroCliente() {
+	private FWJNumericTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJNumericTextField();
+			txtNroCliente = new FWJNumericTextField();
 		}
 		return txtNroCliente;
 	}
@@ -506,16 +506,16 @@ public class JDialogDetalleContacto extends JDialog {
 		return infoLocalidadRemote;
 	}
 
-	private CLJTextField getTxtNombres() {
+	private FWJTextField getTxtNombres() {
 		if (txtNombres == null) {
-			txtNombres = new CLJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
+			txtNombres = new FWJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
 		}
 		return txtNombres;
 	}
 
-	private CLJTextField getTxtApellido() {
+	private FWJTextField getTxtApellido() {
 		if (txtApellido == null) {
-			txtApellido = new CLJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
+			txtApellido = new FWJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
 		}
 		return txtApellido;
 	}
@@ -577,71 +577,71 @@ public class JDialogDetalleContacto extends JDialog {
 	private boolean validarProveedor() {
 		String textoRazonSocial = getTxtRazonSocial().getText().trim();
 		if (StringUtil.isNullOrEmpty(textoRazonSocial)) {
-			CLJOptionPane.showErrorMessage(this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
 			getTxtRazonSocial().requestFocus();
 			return false;
 		}
 
 		if (getTxtCuit().getText().trim().length() < 13) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.", "Advertencia");
 			getTxtCuit().requestFocus();
 			return false;
 		}
 		
 		if (getTxtIngBrutos().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'ING. BRUTOS'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el campo 'ING. BRUTOS'.", "Advertencia");
 			getTxtIngBrutos().requestFocus();
 			return false;
 		}
 		
 		if(getCmbPosicionIva().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.","Advertencia");
 			return false;
 		}
 
 		if(getCmbCondicionVenta().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE VENTA'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE VENTA'.","Advertencia");
 			return false;
 		}
 		
 		if (StringUtil.isNullOrEmpty(getPanCelular().getDatos()) && StringUtil.isNullOrEmpty(getPanTelefonoFijo().getDatos()) && StringUtil.isNullOrEmpty(getPanFax().getDatos())) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un telefono", "Administrar proveedores");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un telefono", "Administrar proveedores");
 			return false;
 		}
 
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if (textoErrorTelefono != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
 			return false;
 		}
 
 		String textoErrorCelular = getPanCelular().validar();
 		if (textoErrorCelular != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorCelular), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorCelular), "Advertencia");
 			return false;
 		}
 
 		String textoErrorFax = getPanFax().validar();
 		if (textoErrorFax != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorFax), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorFax), "Advertencia");
 			return false;
 		}
 
 		String textoErrorDirFiscal = getPanDatosDireccionFiscal().validar();
 		if (textoErrorDirFiscal != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
 			return false;
 		}
 
 		String textoErrorDirReal = getPanDatosDireccionReal().validar();
 		if (textoErrorDirReal != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
 			return false;
 		}
 
 		String strMail = getTxtEmail().getText();
 		if (!StringUtil.isNullOrEmpty(strMail) && !EmailValidator.getInstance().isValid(strMail.trim())) {
-			CLJOptionPane.showErrorMessage(this, "El EMAIL ingresado no es válido", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "El EMAIL ingresado no es válido", "Advertencia");
 			getTxtEmail().requestFocus();
 			return false;
 		}
@@ -660,39 +660,39 @@ public class JDialogDetalleContacto extends JDialog {
 	private boolean validarPersona() {
 		String textoNombres = getTxtNombres().getText().trim();
 		if (StringUtil.isNullOrEmpty(textoNombres)) {
-			CLJOptionPane.showErrorMessage(this, "Falta completar el campo 'NOMBRES'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Falta completar el campo 'NOMBRES'", "Advertencia");
 			getTxtNombres().requestFocus();
 			return false;
 		}
 		String textoRazonSocial = getTxtApellido().getText().trim();
 		if (StringUtil.isNullOrEmpty(textoRazonSocial)) {
-			CLJOptionPane.showErrorMessage(this, "Falta completar el campo 'APELLIDO'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Falta completar el campo 'APELLIDO'", "Advertencia");
 			getTxtApellido().requestFocus();
 			return false;
 		}
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if (textoErrorTelefono != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
 			return false;
 		}
 		String textoErrorCelular = getPanCelular().validar();
 		if (textoErrorCelular != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorCelular), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorCelular), "Advertencia");
 			return false;
 		}
 		String strMail = getTxtEmail().getText();
 		if (!StringUtil.isNullOrEmpty(strMail) && !EmailValidator.getInstance().isValid(strMail.trim())) {
-			CLJOptionPane.showErrorMessage(this, "El 'EMAIL' ingresado no es válido", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "El 'EMAIL' ingresado no es válido", "Advertencia");
 			getTxtEmail().requestFocus();
 			return false;
 		}
 		Rubro rubro = (Rubro) getCmbRubro().getSelectedItem();
 		if (rubro == null) {
-			CLJOptionPane.showErrorMessage(this, "Falta seleccionar el 'RUBRO'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Falta seleccionar el 'RUBRO'", "Advertencia");
 			return false;
 		}
 		if (StringUtil.isNullOrEmpty(getPanCelular().getDatos()) && StringUtil.isNullOrEmpty(getPanTelefonoFijo().getDatos())) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un teléfono", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un teléfono", "Advertencia");
 			return false;
 		}
 		return true;
@@ -711,59 +711,59 @@ public class JDialogDetalleContacto extends JDialog {
 		if (valTxtNroCliente != null) {
 			boolean existeNroCliente = getClienteFacade().existeNroCliente(getClienteActual().getId(), valTxtNroCliente);
 			if (existeNroCliente) {
-				CLJOptionPane.showErrorMessage(this, StringW.wordWrap("El número de cliente " + valTxtNroCliente + " ya está asignado a otro cliente."), "Error");
+				FWJOptionPane.showErrorMessage(this, StringW.wordWrap("El número de cliente " + valTxtNroCliente + " ya está asignado a otro cliente."), "Error");
 				getTxtNroCliente().requestFocus();
 				return false;
 			}
 		}
 		String textoRazonSocial = getTxtRazonSocial().getText().trim();
 		if (StringUtil.isNullOrEmpty(textoRazonSocial)) {
-			CLJOptionPane.showErrorMessage(this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
 			getTxtRazonSocial().requestFocus();
 			return false;
 		}
 		if (getTxtCuit().getText().trim().length() < 13) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.", "Advertencia");
 			getTxtCuit().requestFocus();
 			return false;
 		}
 		if (getCmbPosicionIva().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.", "Advertencia");
 			return false;
 		}
 
 		if (StringUtil.isNullOrEmpty(getPanCelular().getDatos()) && StringUtil.isNullOrEmpty(getPanTelefonoFijo().getDatos()) && StringUtil.isNullOrEmpty(getPanFax().getDatos())) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un teléfono", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un teléfono", "Advertencia");
 			return false;
 		}
 		String textoErrorDirFiscal = getPanDatosDireccionFiscal().validar();
 		if (textoErrorDirFiscal != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
 			return false;
 		}
 		String textoErrorDirReal = getPanDatosDireccionReal().validar();
 		if (textoErrorDirReal != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
 			return false;
 		}
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if (textoErrorTelefono != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
 			return false;
 		}
 		String textoErrorCelular = getPanCelular().validar();
 		if (textoErrorCelular != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorCelular), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorCelular), "Advertencia");
 			return false;
 		}
 		String textoErrorFax = getPanFax().validar();
 		if (textoErrorFax != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorFax), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorFax), "Advertencia");
 			return false;
 		}
 		String strMail = getTxtEmail().getText();
 		if (!StringUtil.isNullOrEmpty(strMail) && !EmailValidator.getInstance().isValid(strMail.trim())) {
-			CLJOptionPane.showErrorMessage(this, "El EMAIL ingresado no es válido", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "El EMAIL ingresado no es válido", "Advertencia");
 			getTxtEmail().requestFocus();
 			return false;
 		}
@@ -797,7 +797,7 @@ public class JDialogDetalleContacto extends JDialog {
 			// return false;
 			// }else{
 			getProveedorFacade().guardarProveedor(getProveedorActual());
-			CLJOptionPane.showInformationMessage(this, "Los datos del proveedor se han guardado con exito", "Administrar proveedores");
+			FWJOptionPane.showInformationMessage(this, "Los datos del proveedor se han guardado con exito", "Administrar proveedores");
 			// }
 			return true;
 		}
@@ -808,7 +808,7 @@ public class JDialogDetalleContacto extends JDialog {
 		if (validarPersona()) {
 			capturarSetearDatosPersona();
 			getPersonaFacade().save(getPersonaActual());
-			CLJOptionPane.showInformationMessage(this, "Los datos de la persona se han guardado con éxito", "Administrar Clientes");
+			FWJOptionPane.showInformationMessage(this, "Los datos de la persona se han guardado con éxito", "Administrar Clientes");
 			return true;
 		}
 		return false;
@@ -830,10 +830,10 @@ public class JDialogDetalleContacto extends JDialog {
 			capturarSetearDatosCliente();
 			try {
 				getClienteFacade().save(getClienteActual());
-				CLJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
+				FWJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
 				return true;
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+				FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			}
 		}
 		return false;
@@ -961,29 +961,29 @@ public class JDialogDetalleContacto extends JDialog {
 	}
 
 	public void eliminarCliente() {
-		if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el cliente seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el cliente seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 			try {
 				getClienteFacade().remove(getClienteActual());
 				dispose();
-			} catch (CLRuntimeException cle) {
+			} catch (FWRuntimeException cle) {
 				BossError.gestionarError(cle);
 			}
 		}
 	}
 
 	public void eliminarPersona() {
-		if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar a la persona seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar a la persona seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 			try {
 				getPersonaFacade().remove(getPersonaActual());
 				dispose();
-			} catch (CLRuntimeException ex) {
+			} catch (FWRuntimeException ex) {
 				BossError.gestionarError(ex);
 			}
 		}
 	}
 
 	public void eliminarProveedor() {
-		if (CLJOptionPane.showQuestionMessage(this, "Se eliminar\u00E1 al proveedor. Desea continuar?", "Administrar proveedores") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Se eliminar\u00E1 al proveedor. Desea continuar?", "Administrar proveedores") == FWJOptionPane.YES_OPTION) {
 			try {
 				getProveedorFacade().eliminarProveedor(getProveedorActual().getId());
 				dispose();
@@ -993,9 +993,9 @@ public class JDialogDetalleContacto extends JDialog {
 		}
 	}
 
-	private CLJTextField getTxtIngBrutos() {
+	private FWJTextField getTxtIngBrutos() {
 		if (txtIngBrutos == null) {
-			txtIngBrutos = new CLJTextField();
+			txtIngBrutos = new FWJTextField();
 		}
 		return txtIngBrutos;
 	}

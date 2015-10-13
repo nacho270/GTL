@@ -9,8 +9,8 @@ import main.GTLMainTemplate;
 
 import org.apache.log4j.Logger;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.error.CLErrorDialog;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.error.FWErrorDialog;
 
 public class EventQueueProxy extends EventQueue {
 
@@ -53,7 +53,7 @@ public class EventQueueProxy extends EventQueue {
 //				message += "\n\nFatal: " + t.getClass();
 //			}
 //			JOptionPane.showMessageDialog(null, StringW.wordWrap(message),"Error general", JOptionPane.ERROR_MESSAGE);
-			new CLErrorDialog(BossError.ERR_APLICACION, message, null, null, t, null).setVisible(true);
+			new FWErrorDialog(BossError.ERR_APLICACION, message, null, null, t, null).setVisible(true);
 		}
 	}
 }

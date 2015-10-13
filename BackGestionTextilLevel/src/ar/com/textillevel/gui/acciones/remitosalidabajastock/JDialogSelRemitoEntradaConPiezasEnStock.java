@@ -23,10 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxListDialog;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxListDialog;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -45,7 +45,7 @@ public class JDialogSelRemitoEntradaConPiezasEnStock extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaRemitosEntrada;
+	private FWJTable tablaRemitosEntrada;
 	private Frame owner;
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
 	private Map<RemitoEntrada, List<PiezaRemito>> resultMap;
@@ -92,9 +92,9 @@ public class JDialogSelRemitoEntradaConPiezasEnStock extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaRemitoEntrada() {
+	private FWJTable getTablaRemitoEntrada() {
 		if(tablaRemitosEntrada == null) {
-			tablaRemitosEntrada = new CLJTable(0, 4) {
+			tablaRemitosEntrada = new FWJTable(0, 4) {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
@@ -110,7 +110,7 @@ public class JDialogSelRemitoEntradaConPiezasEnStock extends JDialog {
 			tablaRemitosEntrada.setStringColumn(2, "PIEZAS ELEGIDAS", 220, 220, true);
 
 			tablaRemitosEntrada.setStringColumn(3, "", 0, 0, true);
-			tablaRemitosEntrada.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaRemitosEntrada.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaRemitosEntrada.addMouseListener(new MouseAdapter () {
 
 				@Override
@@ -171,7 +171,7 @@ public class JDialogSelRemitoEntradaConPiezasEnStock extends JDialog {
 
 	@SuppressWarnings("unchecked")
 	private void handleSeleccionRemitoEntrada(RemitoEntrada re) {
-		CLCheckBoxListDialog dialogo = new CLCheckBoxListDialog(owner);
+		FWCheckBoxListDialog dialogo = new FWCheckBoxListDialog(owner);
 		dialogo.setTitle("Seleccione las piezas");
 		dialogo.setValores(re.getPiezas(), true);
 		dialogo.setVisible(true);

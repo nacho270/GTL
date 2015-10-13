@@ -11,11 +11,11 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.ArticuloDAOLocal;
 import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
 import ar.com.textillevel.dao.api.local.RemitoEntradaDAOLocal;
@@ -302,7 +302,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		
 		try {
 			rep = remitoEntradaProveedorFacade.save(rep);
-		} catch (CLException e) {
+		} catch (FWException e) {
 			e.printStackTrace();
 		}
 

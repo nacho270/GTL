@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.builders.BuilderAccionesLegajo;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.cabecera.ModeloCabeceraLegajos;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
@@ -18,7 +18,7 @@ public class ModuloLegajosModel extends ModuloModel<Empleado, ModeloCabeceraLega
 		super();
 	}
 
-	public ModuloLegajosModel(Integer id) throws CLException {
+	public ModuloLegajosModel(Integer id) throws FWException {
 		super(id, BuilderAccionesLegajo.getInstance(), BuilderAccionesLegajo.getInstance(),BuilderAccionesLegajo.getInstance(), BuilderAccionesLegajo.getInstance());
 		setTitulo("Administrar legajos");
 	}

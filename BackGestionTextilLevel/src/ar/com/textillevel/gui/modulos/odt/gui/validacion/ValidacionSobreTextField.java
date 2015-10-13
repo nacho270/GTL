@@ -2,13 +2,13 @@ package ar.com.textillevel.gui.modulos.odt.gui.validacion;
 
 import java.awt.Component;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 
 public abstract class ValidacionSobreTextField extends Validacion {
 
 	private DecimalNumericTextField textField;
-	private CLJNumericTextField textFieldInteger;
+	private FWJNumericTextField textFieldInteger;
 	private String label;
 
 	public ValidacionSobreTextField(Component owner, DecimalNumericTextField textField, String label) {
@@ -17,7 +17,7 @@ public abstract class ValidacionSobreTextField extends Validacion {
 		this.label = label;
 	}
 
-	public ValidacionSobreTextField(Component owner, CLJNumericTextField textFieldInteger, String label) {
+	public ValidacionSobreTextField(Component owner, FWJNumericTextField textFieldInteger, String label) {
 		super(owner);
 		this.textFieldInteger = textFieldInteger;
 		this.label = label;
@@ -31,7 +31,7 @@ public abstract class ValidacionSobreTextField extends Validacion {
 		return textField;
 	}
 	
-	protected CLJNumericTextField getTextFieldInteger() {
+	protected FWJNumericTextField getTextFieldInteger() {
 		return textFieldInteger;
 	}
 

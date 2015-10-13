@@ -2,7 +2,7 @@ package ar.com.textillevel.modulos.alertas.enums;
 
 import java.sql.Timestamp;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 
 public enum EPosposicionAlerta {
 	

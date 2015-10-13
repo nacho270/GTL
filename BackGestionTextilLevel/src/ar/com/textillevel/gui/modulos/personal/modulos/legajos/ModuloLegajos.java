@@ -3,10 +3,10 @@ package ar.com.textillevel.gui.modulos.personal.modulos.legajos;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.ModuloTemplate;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.ModuloTemplate;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.cabecera.CabeceraLegajos;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.cabecera.ModeloCabeceraLegajos;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
@@ -15,7 +15,7 @@ public class ModuloLegajos extends ModuloTemplate<Empleado, ModeloCabeceraLegajo
 
 	private static final long serialVersionUID = 1559337530291271435L;
 
-	public ModuloLegajos(Integer idModulo) throws CLException {
+	public ModuloLegajos(Integer idModulo) throws FWException {
 		super(idModulo);
 		actualizar();
 		pack();
@@ -27,7 +27,7 @@ public class ModuloLegajos extends ModuloTemplate<Empleado, ModeloCabeceraLegajo
 	}
 
 	@Override
-	protected List<ModuloModel<Empleado, ModeloCabeceraLegajos>> createModulosModel() throws CLException {
+	protected List<ModuloModel<Empleado, ModeloCabeceraLegajos>> createModulosModel() throws FWException {
 		List<ModuloModel<Empleado,ModeloCabeceraLegajos>> modulosModel = new ArrayList<ModuloModel<Empleado,ModeloCabeceraLegajos>>();
 		modulosModel.add(new ModuloLegajosModel(getIdModulo()));
 		return modulosModel;	

@@ -2,9 +2,9 @@ package ar.com.textillevel.gui.modulos.stock.acciones;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
@@ -23,7 +23,7 @@ public class AccionVerMovimientosStockPrecioMateriaPrima extends Accion<ItemMate
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws CLException {
+	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws FWException {
 		ItemMateriaPrimaTO item = e.getSelectedElements().get(0);
 		List<PrecioMateriaPrima> lista = GTLBeanFactory.getInstance().getBean2(PrecioMateriaPrimaFacadeRemote.class).getPrecioMateriaPrimaByIdsMateriasPrimas(item.getIdsMateriasPrimas());
 		if (lista != null && !lista.isEmpty()) {

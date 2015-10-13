@@ -11,8 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.controles.PanelBusquedaClienteMinimal;
@@ -24,7 +24,7 @@ public class JDialogCrearEditarSecuencia extends JDialog {
 
 	private static final int MAX_LONG_NOMBRE = 50;
 	
-	private CLJTextField txtNombreSecuencia;
+	private FWJTextField txtNombreSecuencia;
 	private PanelBusquedaClienteMinimal panelBusquedaCliente;
 	private PanelPasosSecuencia panelPasos;
 	private JButton btnAceptar;
@@ -99,9 +99,9 @@ public class JDialogCrearEditarSecuencia extends JDialog {
 		this.acepto = acepto;
 	}
 
-	public CLJTextField getTxtNombreSecuencia() {
+	public FWJTextField getTxtNombreSecuencia() {
 		if(txtNombreSecuencia == null){
-			txtNombreSecuencia = new CLJTextField(MAX_LONG_NOMBRE);
+			txtNombreSecuencia = new FWJTextField(MAX_LONG_NOMBRE);
 		}
 		return txtNombreSecuencia;
 	}

@@ -7,9 +7,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
@@ -144,7 +144,7 @@ public class ReciboFacade implements ReciboFacadeRemote, ReciboFacadeLocal {
 		return reciboDAO.getByIdEager(id);
 	}
 
-	public void anularRecibo(Recibo recibo, String usuario) throws CLException {
+	public void anularRecibo(Recibo recibo, String usuario) throws FWException {
 		/**
 		 * Pasos:
 		 * set estado recibo = rechazado

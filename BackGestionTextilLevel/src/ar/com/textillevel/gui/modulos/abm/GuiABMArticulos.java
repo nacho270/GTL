@@ -13,13 +13,13 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
@@ -36,8 +36,8 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombreTipoArticulo;
-	private CLJTextField txtSigla;
+	private FWJTextField txtNombreTipoArticulo;
+	private FWJTextField txtSigla;
 	private PanelTablaArticulos panelTablaArticulos;
 	private PanelSeleccionarElementos<TipoArticulo> panSelTipoArticulos;
 
@@ -111,13 +111,13 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el tipo de artículo seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el tipo de artículo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				try {
 					getTipoArticuloFacade().remove(getTipoArticuloActual());
 					cargarLista();
 					itemSelectorSeleccionado(-1);
 				} catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(GuiABMArticulos.this, StringW.wordWrap(e.getMensajeError()), "Error");
+					FWJOptionPane.showErrorMessage(GuiABMArticulos.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				}
 			}
 		}
@@ -137,13 +137,13 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if (getTxtNombreTipoArticulo().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del artículo.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del artículo.", "Advertencia");
 			getTxtNombreTipoArticulo().requestFocus();
 			return false;
 		}
 
 		if (getTxtSigla().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar la descripción del artículo.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar la descripción del artículo.", "Advertencia");
 			getTxtSigla().requestFocus();
 			return false;
 		}
@@ -184,7 +184,7 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 			getTxtNombreTipoArticulo().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de artículo", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de artículo", "Error");
 			return false;
 		}
 	}
@@ -253,16 +253,16 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 		this.articuloActual = tipoArticuloActual;
 	}
 
-	private CLJTextField getTxtNombreTipoArticulo() {
+	private FWJTextField getTxtNombreTipoArticulo() {
 		if (txtNombreTipoArticulo == null) {
-			txtNombreTipoArticulo = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreTipoArticulo = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreTipoArticulo;
 	}
 
-	private CLJTextField getTxtSigla() {
+	private FWJTextField getTxtSigla() {
 		if (txtSigla == null) {
-			txtSigla = new CLJTextField(MAX_LONGITUD_SIGLA);
+			txtSigla = new FWJTextField(MAX_LONGITUD_SIGLA);
 		}
 		return txtSigla;
 	}
@@ -307,16 +307,16 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_NOMBRE, "NOMBRE", 100, 100, true);
-			tabla.setHeaderAlignment(COL_NOMBRE, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NOMBRE, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_DESCR, "DESCRIPCION", 225, 225, true);
-			tabla.setHeaderAlignment(COL_DESCR, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_ANCHO, "ANCHO", 100, 100, true);
-			tabla.setHeaderAlignment(COL_ANCHO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ANCHO, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_GRAMAJE, "GRAMAJE", 120, 120, true);
-			tabla.setHeaderAlignment(COL_GRAMAJE, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_GRAMAJE, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			return tabla;
 		}

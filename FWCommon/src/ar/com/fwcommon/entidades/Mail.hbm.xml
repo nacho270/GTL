@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-lazy="false">
+   <class name="ar.com.fwcommon.entidades.Mail" table="T_Mail">
+      <id name="idMail" column="P_IdMail" type="int" unsaved-value="0">
+         <generator class="identity"/>
+      </id>
+      <property name="aplicacion" column="A_Aplicacion" type="string" />
+      <property name="usuario" column="A_Usuario" type="string" />
+      <property name="origen" column="A_Origen" type="string" />
+      <property name="asunto" column="A_Asunto" type="string" />
+      <property name="cuerpo" column="A_Cuerpo" type="string" />
+      <property name="direccionRespuesta" column="A_DireccionRespuesta" />
+      <property name="fechaAlta" column="A_FechaAlta" type="timestamp" update="false" insert="false"/>
+      <property name="fechaEnvio" column="A_FechaEnvio" type="timestamp" />
+      <property name="estado" column="A_Estado" type="int" />
+  	  <bag name="destinatarios" lazy="false" cascade="save-update">
+		 <key column="F_IdMail" />
+		 <one-to-many class="ar.com.fwcommon.entidades.Destinatario"/>
+  	  </bag>
+   </class>
+</hibernate-mapping>

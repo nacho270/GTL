@@ -1,10 +1,11 @@
 package ar.com.textillevel.facade.impl;
 
 import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.dao.api.local.ContenedorMateriaPrimaDAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ContenedorMateriaPrima;
 import ar.com.textillevel.facade.api.remote.ContenedorMateriaPrimaFacadeRemote;
@@ -22,7 +23,7 @@ public class ContenedorMateriaPrimaFacade implements ContenedorMateriaPrimaFacad
 	public void remove(ContenedorMateriaPrima contenedorActual) {
 		try {
 			contenedorMateriaPrimaDAO.remove(contenedorActual);
-		} catch (CLException e) {
+		} catch (FWException e) {
 			e.printStackTrace();
 		}
 	}

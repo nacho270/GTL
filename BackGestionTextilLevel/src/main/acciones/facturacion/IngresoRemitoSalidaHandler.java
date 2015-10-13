@@ -4,7 +4,7 @@ import java.awt.Frame;
 import java.util.Collections;
 import java.util.List;
 
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;

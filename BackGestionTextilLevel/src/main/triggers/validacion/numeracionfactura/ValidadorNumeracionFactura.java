@@ -2,7 +2,7 @@ package main.triggers.validacion.numeracionfactura;
 
 import main.triggers.validacion.numeracionfactura.exceptions.VencimientoNumeracionPorFechaException;
 import main.triggers.validacion.numeracionfactura.exceptions.VencimientoNumeracionPorNumerosException;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.config.ConfiguracionNumeracionFactura;
 import ar.com.textillevel.entidades.config.NumeracionFactura;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;

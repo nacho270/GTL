@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 
@@ -31,7 +31,7 @@ public class JDialogIngresarBajaEmpleado extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private PanelDatePicker panelFechaBaja;
-	private CLJTextField txtObservacionesBaja;
+	private FWJTextField txtObservacionesBaja;
 
 	private Date fechaElegida;
 	private String observacionesIngresadas;
@@ -83,7 +83,7 @@ public class JDialogIngresarBajaEmpleado extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					java.util.Date date = getPanelFechaBaja().getDate();
 					if(date == null){
-						CLJOptionPane.showErrorMessage(JDialogIngresarBajaEmpleado.this, "Debe ingresar la fecha de baja", "Error");
+						FWJOptionPane.showErrorMessage(JDialogIngresarBajaEmpleado.this, "Debe ingresar la fecha de baja", "Error");
 						return;
 					}else{
 						Date fechaElegida2 = new Date(date.getTime());
@@ -93,7 +93,7 @@ public class JDialogIngresarBajaEmpleado extends JDialog {
 							setAcepto(true);
 							dispose();
 						}else{
-							CLJOptionPane.showErrorMessage(JDialogIngresarBajaEmpleado.this, StringW.wordWrap("La fecha de baja debe ser igual o posterior a la última fecha de alta en la AFIP: " + DateUtil.dateToString(getFechaAltaAfip(), DateUtil.SHORT_DATE)), "Error");
+							FWJOptionPane.showErrorMessage(JDialogIngresarBajaEmpleado.this, StringW.wordWrap("La fecha de baja debe ser igual o posterior a la última fecha de alta en la AFIP: " + DateUtil.dateToString(getFechaAltaAfip(), DateUtil.SHORT_DATE)), "Error");
 							return;
 						}
 					}
@@ -126,9 +126,9 @@ public class JDialogIngresarBajaEmpleado extends JDialog {
 		return panelFechaBaja;
 	}
 
-	public CLJTextField getTxtObservacionesBaja() {
+	public FWJTextField getTxtObservacionesBaja() {
 		if (txtObservacionesBaja == null) {
-			txtObservacionesBaja = new CLJTextField();
+			txtObservacionesBaja = new FWJTextField();
 		}
 		return txtObservacionesBaja;
 	}

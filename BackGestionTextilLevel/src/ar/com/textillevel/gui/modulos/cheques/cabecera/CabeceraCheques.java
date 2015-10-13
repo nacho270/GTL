@@ -22,12 +22,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -56,7 +56,7 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 	private JComboBox cmbEstadoCheque;
 	private JComboBox cmbTipoBusquedaCliente;
 	private JComboBox cmbTipoFecha;
-	private CLJTextField txtBusquedaCliente;
+	private FWJTextField txtBusquedaCliente;
 	private final JButton btnBuscar;
 	private ModeloCabeceraCheques modeloCabeceraCheques;
 	private JCheckBox chkUsarFecha;
@@ -141,12 +141,12 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 					if(getTxtBusquedaCliente().getText().trim().length()>0){
 						if(((String)getCmbTipoBusquedaCliente().getSelectedItem()).equalsIgnoreCase("NUMERACION INTERNA")){
 							if(getTxtBusquedaCliente().getText().length()<2){
-								CLJOptionPane.showErrorMessage(CabeceraCheques.this, "La numeración consta de al menos 2 caracteres", "Error");
+								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "La numeración consta de al menos 2 caracteres", "Error");
 								return;
 							}
 //							if(!getTxtBusquedaCliente().getText().matches("[a-zA-Z]{1}[0-9]+")){
 							if(!getTxtBusquedaCliente().getText().matches("[0-9]+")){ //antes validaba el formato a455...ahora solo quiere numeros.
-								CLJOptionPane.showErrorMessage(CabeceraCheques.this, "el formato de numeración no es correcto", "Error");
+								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "el formato de numeración no es correcto", "Error");
 								return;
 							}
 						}else if (((String)getCmbTipoBusquedaCliente().getSelectedItem()).equalsIgnoreCase("NOMBRE PROVEEDOR")||
@@ -154,7 +154,7 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 							
 						}else {
 							if(!GenericUtils.esNumerico(getTxtBusquedaCliente().getText())){
-								CLJOptionPane.showErrorMessage(CabeceraCheques.this, "Solo puede ingresar números para esta busqueda", "Error");
+								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "Solo puede ingresar números para esta busqueda", "Error");
 								return;
 							}
 						}
@@ -163,7 +163,7 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 					refrescar();
 					notificar();
 				} else {
-					CLJOptionPane.showErrorMessage(CabeceraCheques.this, "La 'fecha desde' no debe ser posterior a la 'fecha hasta'", "Error");
+					FWJOptionPane.showErrorMessage(CabeceraCheques.this, "La 'fecha desde' no debe ser posterior a la 'fecha hasta'", "Error");
 				}
 			}
 		});
@@ -197,7 +197,7 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 				fechaHasta = new Timestamp(model.getFechaHasta().getTime());
 			if ((model.getFechaDesde() != null) && (model.getFechaHasta() != null)) {
 				if (fechaHasta.before(fechaDesde)) {
-					CLJOptionPane.showErrorMessage(this, "La fecha 'Hasta' debe ser mayor o igual que la fecha 'Desde'", "Validación de fechas");
+					FWJOptionPane.showErrorMessage(this, "La fecha 'Hasta' debe ser mayor o igual que la fecha 'Desde'", "Validación de fechas");
 					return;
 				}
 			}
@@ -311,9 +311,9 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 		return cmbTipoBusquedaCliente;
 	}
 
-	public CLJTextField getTxtBusquedaCliente() {
+	public FWJTextField getTxtBusquedaCliente() {
 		if(txtBusquedaCliente == null){
-			txtBusquedaCliente = new CLJTextField();
+			txtBusquedaCliente = new FWJTextField();
 			txtBusquedaCliente.setPreferredSize(new Dimension(100, 20));
 			txtBusquedaCliente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

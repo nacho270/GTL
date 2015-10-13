@@ -24,12 +24,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
@@ -264,25 +264,25 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 			Float temp = getPanSelectedTemperaturas().getItemIngresado();
 			if(sectorMaquina == ESectorMaquina.SECTOR_HUMEDO) {
 				if (temp > 130) {
-					CLJOptionPane.showWarningMessage(this, "La temperatura máxima permitida es de 130 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
+					FWJOptionPane.showWarningMessage(this, "La temperatura máxima permitida es de 130 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
 					temp = 130f;
 				}
 			} else if(sectorMaquina == ESectorMaquina.SECTOR_SECO) {
 				if (temp < 120) {
-					CLJOptionPane.showWarningMessage(this, "La temperatura mínimia permitida es de 120 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
+					FWJOptionPane.showWarningMessage(this, "La temperatura mínimia permitida es de 120 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
 					temp = 120f;
 				}
 				if (temp > 210) {
-					CLJOptionPane.showWarningMessage(this, "La temperatura máxima permitida es de 210 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
+					FWJOptionPane.showWarningMessage(this, "La temperatura máxima permitida es de 210 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
 					temp = 210f;
 				}
 			} else if(sectorMaquina == ESectorMaquina.SECTOR_ESTAMPERIA) {
 				if (temp < 120) {
-					CLJOptionPane.showWarningMessage(this, "La temperatura mínimia permitida es de 120 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
+					FWJOptionPane.showWarningMessage(this, "La temperatura mínimia permitida es de 120 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
 					temp = 120f;
 				}
 				if (temp > 150) {
-					CLJOptionPane.showWarningMessage(this, "La temperatura máxima permitida es de 150 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
+					FWJOptionPane.showWarningMessage(this, "La temperatura máxima permitida es de 150 ºC.\nSe ha ajustado el valor automáticamente", "Advertencia");
 					temp = 150f;
 				}
 			}
@@ -295,37 +295,37 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 		public boolean validar() {
 			Integer vueltas = getPanSelectedVueltas().getItemIngresado();
 			if (vueltas == null) {				
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de vueltas/pasadas.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de vueltas/pasadas.", "Error");
 				return false;
 			}
 			if(vueltas == 0) {
-				CLJOptionPane.showErrorMessage(this, "La cantidad de vueltas/pasadas debe ser mayor a 0.", "Error");
+				FWJOptionPane.showErrorMessage(this, "La cantidad de vueltas/pasadas debe ser mayor a 0.", "Error");
 				return false;
 			}
 			if (getPanSelectedTemperaturas().getItemIngresado() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar la temperatura", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar la temperatura", "Error");
 				return false;
 			}
 			try {
 				Float cantidad = getPanSelectedTemperaturas().getItemIngresado();
 				if (cantidad <= 0) {
-					CLJOptionPane.showErrorMessage(this, "La temperatura debe ser mayor a 0", "Error");
+					FWJOptionPane.showErrorMessage(this, "La temperatura debe ser mayor a 0", "Error");
 					return false;
 				}
 			} catch (NumberFormatException nfe) {
-				CLJOptionPane.showErrorMessage(this, "Error en el formato de la temperatura", "Error");
+				FWJOptionPane.showErrorMessage(this, "Error en el formato de la temperatura", "Error");
 				return false;
 			}
 			if(getPanSelectedVelocidades().getItemIngresado() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar la velocidad", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar la velocidad", "Error");
 				return false;
 			}
 			if(getPanSelectedVelocidades().getItemIngresado() <= 0f) {
-				CLJOptionPane.showErrorMessage(this, "La velocidad debe ser mayor a 0", "Error");
+				FWJOptionPane.showErrorMessage(this, "La velocidad debe ser mayor a 0", "Error");
 				return false;
 			}
 			if (getInstruccion().getQuimicos().size() == 0) {
-				if (CLJOptionPane.showQuestionMessage(this, "No ha ingresado quimicos. Desea continuar?", "Pregunta") == CLJOptionPane.NO_OPTION) {
+				if (FWJOptionPane.showQuestionMessage(this, "No ha ingresado quimicos. Desea continuar?", "Pregunta") == FWJOptionPane.NO_OPTION) {
 					return false;
 				}
 			}
@@ -389,8 +389,8 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 			}
 
 			@Override
-			protected CLJTable construirTabla() {
-				CLJTable tabla = new CLJTable(0, CANT_COLS);
+			protected FWJTable construirTabla() {
+				FWJTable tabla = new FWJTable(0, CANT_COLS);
 				tabla.setStringColumn(COL_QUIMICO, "Químico", 200, 200, true);
 				tabla.setStringColumn(COL_CANTIDAD, "Proporción (%)", 100, 100, true);
 				tabla.setStringColumn(COL_UNIDAD, "Unidad", 70, 70, true);
@@ -398,9 +398,9 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 				tabla.setReorderingAllowed(false);
 				tabla.setAllowHidingColumns(false);
 				tabla.setAllowSorting(false);
-				tabla.setHeaderAlignment(COL_QUIMICO, CLJTable.CENTER_ALIGN);
-				tabla.setHeaderAlignment(COL_CANTIDAD, CLJTable.CENTER_ALIGN);
-				tabla.setHeaderAlignment(COL_UNIDAD, CLJTable.CENTER_ALIGN);
+				tabla.setHeaderAlignment(COL_QUIMICO, FWJTable.CENTER_ALIGN);
+				tabla.setHeaderAlignment(COL_CANTIDAD, FWJTable.CENTER_ALIGN);
+				tabla.setHeaderAlignment(COL_UNIDAD, FWJTable.CENTER_ALIGN);
 				return tabla;
 			}
 
@@ -581,7 +581,7 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 
 		private static final long serialVersionUID = -3242876826507087879L;
 
-		private CLJTextField txtDescripcion;
+		private FWJTextField txtDescripcion;
 
 		protected PanelInstruccionTexto() {
 			super(new InstruccionProcedimientoTexto());
@@ -611,7 +611,7 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 		@Override
 		public boolean validar() {
 			if (StringUtil.isNullOrEmpty(getTxtDescripcion().getText())) {
-				CLJOptionPane.showErrorMessage(JDialogAltaInstruccionProcedimiento.this, "Debe ingresar la especificación", "Error");
+				FWJOptionPane.showErrorMessage(JDialogAltaInstruccionProcedimiento.this, "Debe ingresar la especificación", "Error");
 				getTxtDescripcion().requestFocus();
 				return false;
 			}
@@ -623,9 +623,9 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 //			getTxtDescripcion().setText(InstruccionProcedimientoRenderer.getDescripcionInstruccion(getInstruccionActual()));
 		}
 
-		public CLJTextField getTxtDescripcion() {
+		public FWJTextField getTxtDescripcion() {
 			if (txtDescripcion == null) {
-				txtDescripcion = new CLJTextField(200);
+				txtDescripcion = new FWJTextField(200);
 			}
 			return txtDescripcion;
 		}

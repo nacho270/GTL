@@ -1,6 +1,6 @@
 package ar.com.textillevel.entidades.documentos.ordendepago.pagos.visitor;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;

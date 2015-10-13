@@ -2,8 +2,8 @@ package ar.com.textillevel.util;
 
 import java.sql.Date;
 
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 
 public class ODTCodigoHelper {
 

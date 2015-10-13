@@ -19,11 +19,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.acciones.facturacion.IngresoRemitoSalidaHandler;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
@@ -40,9 +40,9 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 
 	private JButton btnAceptar;
 
-	private CLJTextField txtNombreArticulo;
-	private CLJTextField txtNombreTipoTela;
-	private CLJTextField txtCantPiezasSeleccionadas;
+	private FWJTextField txtNombreArticulo;
+	private FWJTextField txtNombreTipoTela;
+	private FWJTextField txtCantPiezasSeleccionadas;
 
 	private ETipoTela tipoTelaElegida;
 	private Articulo articuloElegido;
@@ -158,8 +158,8 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			int size = getTipoTelaElegida() == ETipoTela.CRUDA ? 0 : 500;
 			tabla.setStringColumn(COL_PROCESO, "Proceso", size, size, true);
 			tabla.setStringColumn(COL_PROVEEDOR, "Proveedor", 250, 250, true);
@@ -169,11 +169,11 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setHeaderAlignment(COL_PROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROVEEDOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CANT_PIEZAS_ELEGIDAS, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CANT_PIEZAS, CLJTable.CENTER_ALIGN);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROVEEDOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CANT_PIEZAS_ELEGIDAS, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CANT_PIEZAS, FWJTable.CENTER_ALIGN);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			tabla.addMouseListener(new MouseAdapter() {
 
 				@Override
@@ -298,9 +298,9 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 		return piezasSelected;
 	}
 
-	private CLJTextField getTxtNombreArticulo() {
+	private FWJTextField getTxtNombreArticulo() {
 		if (txtNombreArticulo == null) {
-			txtNombreArticulo = new CLJTextField();
+			txtNombreArticulo = new FWJTextField();
 			txtNombreArticulo.setPreferredSize(new Dimension(200, 20));
 			txtNombreArticulo.setEditable(false);
 		}
@@ -323,9 +323,9 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 		this.articuloElegido = articuloElegido;
 	}
 
-	private CLJTextField getTxtNombreTipoTela() {
+	private FWJTextField getTxtNombreTipoTela() {
 		if (txtNombreTipoTela == null) {
-			txtNombreTipoTela = new CLJTextField();
+			txtNombreTipoTela = new FWJTextField();
 			txtNombreTipoTela.setPreferredSize(new Dimension(200, 20));
 			txtNombreTipoTela.setEditable(false);
 		}
@@ -339,9 +339,9 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 		return precioMateriaPrimaFacade;
 	}
 
-	private CLJTextField getTxtCantPiezasSeleccionadas() {
+	private FWJTextField getTxtCantPiezasSeleccionadas() {
 		if (txtCantPiezasSeleccionadas == null) {
-			txtCantPiezasSeleccionadas = new CLJTextField();
+			txtCantPiezasSeleccionadas = new FWJTextField();
 			txtCantPiezasSeleccionadas.setPreferredSize(new Dimension(60, 20));
 			txtCantPiezasSeleccionadas.setEditable(false);
 		}

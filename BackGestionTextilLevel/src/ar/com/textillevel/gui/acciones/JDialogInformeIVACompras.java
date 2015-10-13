@@ -15,11 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.acciones.informes.IvaComprasParam;
-
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.to.ivacompras.IVAComprasTO;
@@ -44,7 +43,7 @@ public class JDialogInformeIVACompras extends JDialog {
 	private JButton btnAceptar;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJTextField txtNroCliente;
+	private FWJTextField txtNroCliente;
 	private LinkableLabel lblElegirProveedor;
 	
 	private Frame frame;
@@ -151,10 +150,10 @@ public class JDialogInformeIVACompras extends JDialog {
 							JDialogReporteIVAComprasPreview jDialogReporteIVAComprasPreview = new JDialogReporteIVAComprasPreview(frame, ivaCompras, ivaComprasParam);
 							jDialogReporteIVAComprasPreview.setVisible(true);
 						}else{
-							CLJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");
+							FWJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");
 						}
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogInformeIVACompras.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
+						FWJOptionPane.showErrorMessage(JDialogInformeIVACompras.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
 					}
 				}
 			});
@@ -189,9 +188,9 @@ public class JDialogInformeIVACompras extends JDialog {
 		return panProveedor;
 	}
 
-	private CLJTextField getTxtNroCliente() {
+	private FWJTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJTextField();
+			txtNroCliente = new FWJTextField();
 			txtNroCliente.setEditable(false);
 			txtNroCliente.setPreferredSize(new Dimension(50, 20));
 		}

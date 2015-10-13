@@ -11,13 +11,13 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.antiguedad.Antiguedad;
@@ -117,7 +117,7 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la configuración para el sindicato seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la configuración para el sindicato seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getAntiguedadFacade().remove(getConfiguracionAntiguedadActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -131,7 +131,7 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 			getPanelFechaDesde().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
 			return false;
 		}
 	}
@@ -147,7 +147,7 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 		if (validar()) {
 			capturarDatos();
 			ConfiguracionAntiguedad conf = getAntiguedadFacade().save(getConfiguracionAntiguedadActual());
-			CLJOptionPane.showInformationMessage(getFrame(), "La configuración se ha grabado con éxito", "Información");
+			FWJOptionPane.showInformationMessage(getFrame(), "La configuración se ha grabado con éxito", "Información");
 			lista.setSelectedValue(conf, true);
 			return true;
 		}
@@ -161,12 +161,12 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if (getPanelFechaDesde().getDate() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe elegir una 'Fecha desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir una 'Fecha desde'", "Error");
 			getPanelFechaDesde().requestFocus();
 			return false;
 		}
 		if(getConfiguracionAntiguedadActual().getAntiguedades().size()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe agregar al menos una entrada de antigüedad.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe agregar al menos una entrada de antigüedad.", "Error");
 			getPanelFechaDesde().requestFocus();
 			return false;
 		}
@@ -176,7 +176,7 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 			java.sql.Date fecha = new java.sql.Date(getPanelFechaDesde().getDate().getTime());
 			Date configuracionParaFechaAnterior = getAntiguedadFacade().getConfiguracionParaFechaAnterior(sindicato, fecha);
 			if (configuracionParaFechaAnterior != null) {
-				CLJOptionPane.showErrorMessage(this, "Ya existe una configuración de antigüedad anterior para el sindicato elegido. Elija una fecha posterior a " + DateUtil.dateToString(fecha), "Error");
+				FWJOptionPane.showErrorMessage(this, "Ya existe una configuración de antigüedad anterior para el sindicato elegido. Elija una fecha posterior a " + DateUtil.dateToString(fecha), "Error");
 				getPanelFechaDesde().requestFocus();
 				return false;
 			}
@@ -229,8 +229,8 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_PUESTO, "Puesto", 100, 100, true);
 			tabla.setMultilineColumn(COL_VALORES, "Valores", 200, true);
 //			tabla.setStringColumn(COL_VALORES, "Valores", 100,100,true);
@@ -280,9 +280,9 @@ public class GuiABMConfiguracionAntiguedades extends GuiABMListaTemplate {
 					refreshTable();
 				}
 			} catch (YaHayUnPuestoCualquieraException e) {
-				CLJOptionPane.showErrorMessage(GuiABMConfiguracionAntiguedades.this.getFrame(), StringW.wordWrap("No se pueden agregar puestos debido a que ya hay una entrada con valor 'CUALQUIERA'. Modifique esta entrada asignandole puesto para poder ingresar mas."), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMConfiguracionAntiguedades.this.getFrame(), StringW.wordWrap("No se pueden agregar puestos debido a que ya hay una entrada con valor 'CUALQUIERA'. Modifique esta entrada asignandole puesto para poder ingresar mas."), "Error");
 			} catch (NoSePuedenAgregarMasPuestosException e) {
-				CLJOptionPane.showErrorMessage(GuiABMConfiguracionAntiguedades.this.getFrame(), StringW.wordWrap("No se pueden agregar puestos debido a que ya se han utilizado todos los disponibles."), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMConfiguracionAntiguedades.this.getFrame(), StringW.wordWrap("No se pueden agregar puestos debido a que ya se han utilizado todos los disponibles."), "Error");
 			}
 			return false;
 		}

@@ -15,9 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 
 public class JDialogPasswordInput extends JDialog {
 
@@ -98,7 +98,7 @@ public class JDialogPasswordInput extends JDialog {
 
 	private boolean validar() {
 		if (getTxtPass().getPassword().length == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la clave", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la clave", "Error");
 			getTxtPass().requestFocus();
 			return false;
 		}

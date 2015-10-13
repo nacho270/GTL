@@ -7,9 +7,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
-import ar.clarin.fwjava.util.NumUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.dao.impl.GenericDAO;
+import ar.com.fwcommon.util.NumUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.modulos.personal.dao.api.EmpleadoDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.contratos.ETipoContrato;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;

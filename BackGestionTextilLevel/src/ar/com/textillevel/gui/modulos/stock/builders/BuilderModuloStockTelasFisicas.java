@@ -3,19 +3,19 @@ package ar.com.textillevel.gui.modulos.stock.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.status.IBuilderStatuses;
-import ar.clarin.fwjava.templates.modulo.model.status.Statuses;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
-import ar.clarin.fwjava.templates.modulo.model.totales.IBuilderTotales;
-import ar.clarin.fwjava.templates.modulo.model.totales.TotalGeneral;
-import ar.clarin.fwjava.templates.modulo.model.totales.Totales;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.status.IBuilderStatuses;
+import ar.com.fwcommon.templates.modulo.model.status.Statuses;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
+import ar.com.fwcommon.templates.modulo.model.totales.TotalGeneral;
+import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.gui.modulos.stock.acciones.AccionBorrarPiezasEnMemoria;
 import ar.com.textillevel.gui.modulos.stock.acciones.AccionDarSalida01PiezasEnMemoria;
@@ -41,7 +41,7 @@ public class BuilderModuloStockTelasFisicas implements IBuilderAcciones<ItemMate
 		return instance;
 	}
 
-	public Acciones<ItemMateriaPrimaTO> construirAcciones(int idModel) throws CLException {
+	public Acciones<ItemMateriaPrimaTO> construirAcciones(int idModel) throws FWException {
 		Acciones<ItemMateriaPrimaTO> acciones = new Acciones<ItemMateriaPrimaTO>();
 		List<Accion<ItemMateriaPrimaTO>> accionesCreacion = new ArrayList<Accion<ItemMateriaPrimaTO>>();
 		accionesCreacion.add(new AccionDarSalida01PiezasEnMemoria());

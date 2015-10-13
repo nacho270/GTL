@@ -14,10 +14,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -98,8 +98,8 @@ public class JDialogListaChequesVencidos extends JDialog{
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TBL_CHEQUES);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_CHEQUES);
 			tabla.setStringColumn(COL_NUMERACION, "Número", 100,100,true);
 			tabla.setStringColumn(COL_FECHA_DEPOSITO, "Fecha de deposito", 100, 100, true);
 			tabla.setStringColumn(COL_FECHA_VENCIMIENTO, "Fecha de vencimiento", 120, 120, true);

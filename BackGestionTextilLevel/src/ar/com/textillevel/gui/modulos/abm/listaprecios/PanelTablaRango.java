@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios;
 
-import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 
 public abstract class PanelTablaRango <T extends RangoAncho, E> extends PanelTabla<T> {

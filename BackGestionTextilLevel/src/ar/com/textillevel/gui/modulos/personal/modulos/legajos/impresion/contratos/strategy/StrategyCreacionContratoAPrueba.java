@@ -3,7 +3,7 @@ package ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.contra
 import java.util.HashMap;
 import java.util.Map;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.contratos.EComodinesContrato;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.contratos.FileReaderAndReplacer;
 import ar.com.textillevel.gui.util.GenericUtils;

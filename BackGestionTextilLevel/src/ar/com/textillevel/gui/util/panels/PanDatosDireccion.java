@@ -14,12 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.modulo.model.listeners.ListChangeEvent;
-import ar.clarin.fwjava.templates.modulo.model.listeners.ListChangeListener;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.modulo.model.listeners.ListChangeEvent;
+import ar.com.fwcommon.templates.modulo.model.listeners.ListChangeListener;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.gente.InfoDireccion;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.gui.util.dialogs.JDialogCargaInfoLocalidad;
@@ -33,8 +33,8 @@ public class PanDatosDireccion extends JPanel {
 	public static final Integer OTRO = -1;
 
 	private final Frame frame;
-	private CLJTextField txtDireccion;
-	private CLJNumericTextField txtCP;
+	private FWJTextField txtDireccion;
+	private FWJNumericTextField txtCP;
 	private JComboBox cmbLocalidad;
 	private InfoDireccion direccion;
 	private List<InfoLocalidad> infoLocalidadList;
@@ -116,16 +116,16 @@ public class PanDatosDireccion extends JPanel {
 		return direccion;
 	}
 
-	private CLJTextField getTxtDireccion() {
+	private FWJTextField getTxtDireccion() {
 		if(txtDireccion == null) {
-			txtDireccion = new CLJTextField(MAX_LONGITUD_DIRECCION);
+			txtDireccion = new FWJTextField(MAX_LONGITUD_DIRECCION);
 		}
 		return txtDireccion;
 	}
 
-	private CLJNumericTextField getTxtCP() {
+	private FWJNumericTextField getTxtCP() {
 		if(txtCP == null) {
-			txtCP = new CLJNumericTextField();
+			txtCP = new FWJNumericTextField();
 			txtCP.setEditable(false);
 		}
 		return txtCP;

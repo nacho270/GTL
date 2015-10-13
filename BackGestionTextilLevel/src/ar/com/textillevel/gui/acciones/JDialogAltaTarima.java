@@ -14,10 +14,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.Tarima;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -26,7 +26,7 @@ public class JDialogAltaTarima extends JDialog {
 
 	private static final long serialVersionUID = 7014638560974798493L;
 
-	private CLJNumericTextField txtNumeroTarima;
+	private FWJNumericTextField txtNumeroTarima;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
@@ -67,9 +67,9 @@ public class JDialogAltaTarima extends JDialog {
 		return panel;
 	}
 
-	private CLJNumericTextField getTxtNumeroTarima() {
+	private FWJNumericTextField getTxtNumeroTarima() {
 		if(txtNumeroTarima == null){
-			txtNumeroTarima = new CLJNumericTextField();
+			txtNumeroTarima = new FWJNumericTextField();
 			txtNumeroTarima.setPreferredSize(new Dimension(50, 20));
 			txtNumeroTarima.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -86,7 +86,7 @@ public class JDialogAltaTarima extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(getTxtNumeroTarima().getText().trim().length()==0){
-						CLJOptionPane.showErrorMessage(JDialogAltaTarima.this, "Debe ingresar el número de tarima", "Error");
+						FWJOptionPane.showErrorMessage(JDialogAltaTarima.this, "Debe ingresar el número de tarima", "Error");
 						getTxtNumeroTarima().requestFocus();
 						return;
 					}
@@ -96,7 +96,7 @@ public class JDialogAltaTarima extends JDialog {
 						tarima = getTarimaFacade().save(tarima);
 					} catch (ValidacionException e1) {
 						tarima = null;
-						CLJOptionPane.showErrorMessage(JDialogAltaTarima.this,StringW.wordWrap(e1.getMensajeError()) ,"Error");
+						FWJOptionPane.showErrorMessage(JDialogAltaTarima.this,StringW.wordWrap(e1.getMensajeError()) ,"Error");
 						return;
 					}
 					dispose();

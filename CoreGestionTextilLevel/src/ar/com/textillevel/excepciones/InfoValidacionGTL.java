@@ -2,7 +2,7 @@ package ar.com.textillevel.excepciones;
 
 import java.io.Serializable;
 
-import ar.clarin.fwjava.componentes.error.validaciones.InfoValidacionAbstract;
+import ar.com.fwcommon.componentes.error.validaciones.InfoValidacionAbstract;
 
 public class InfoValidacionGTL extends InfoValidacionAbstract implements Serializable{
 	

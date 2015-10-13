@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.JButton;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.portal.AccionesModulo;
 
 public abstract class ActionSecurityListener implements ActionListener {
@@ -27,7 +27,7 @@ public abstract class ActionSecurityListener implements ActionListener {
 		if(checkPermisos()) {
 			execute(e);
 		} else {
-			CLJOptionPane.showInformationMessage(null, "No tiene permisos para ejecutar la accion", "Información");
+			FWJOptionPane.showInformationMessage(null, "No tiene permisos para ejecutar la accion", "Información");
 		}
 	}
 

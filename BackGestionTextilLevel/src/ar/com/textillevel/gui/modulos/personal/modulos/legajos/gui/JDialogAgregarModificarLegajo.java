@@ -37,14 +37,14 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.entidades.Dia;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.entidades.Dia;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
@@ -83,23 +83,23 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 	private JComboBox cmbPuestos;
 	private JComboBox cmbCategorias;
 	private JComboBox cmbContratos;
-	private CLJTextField txtPrecioHora;
-	private CLJNumericTextField txtNumeroLegajo;
-	private CLJTextField txtSueldoEstimadoQuincenal;
-	private CLJTextField txtSueldoEstimadoMensual;
-	private CLJTextField txtObservaciones;
-	private CLJTextField txtOtrasObservaciones;
+	private FWJTextField txtPrecioHora;
+	private FWJNumericTextField txtNumeroLegajo;
+	private FWJTextField txtSueldoEstimadoQuincenal;
+	private FWJTextField txtSueldoEstimadoMensual;
+	private FWJTextField txtObservaciones;
+	private FWJTextField txtOtrasObservaciones;
 	private PanelDatePicker fechaAltaAfip;
-	private CLJNumericTextField txtNroTarjeta;
+	private FWJNumericTextField txtNroTarjeta;
 	private PanelTablaHorarios tablaHorarios;
 	private PanelDatePicker fechaAltaContrato;
-	private CLJNumericTextField txtDuracionContrato;
+	private FWJNumericTextField txtDuracionContrato;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JCheckBox chkAfiliadoASindicato;
 	private JFormattedTextField txtCtaBanco;
 	private JComboBox cmbBancoPago;
-	private CLJTextField txtFechaFinContrato;
+	private FWJTextField txtFechaFinContrato;
 
 	private boolean acepto;
 	private LegajoEmpleado legajo;
@@ -252,8 +252,8 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_RANGO_DIAS, "Días", 180, 180, true);
 			tabla.setStringColumn(COL_RANGO_HORAS, "Horario", 180, 180, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -419,9 +419,9 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		return cmbContratos;
 	}
 
-	private CLJTextField getTxtPrecioHora() {
+	private FWJTextField getTxtPrecioHora() {
 		if (txtPrecioHora == null) {
-			txtPrecioHora = new CLJTextField();
+			txtPrecioHora = new FWJTextField();
 //			txtPrecioHora.setEditable(GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin());
 			txtPrecioHora.setPreferredSize(new Dimension(80, 20));
 			txtPrecioHora.addFocusListener(new FocusAdapter() {
@@ -435,41 +435,41 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		return txtPrecioHora;
 	}
 
-	private CLJNumericTextField getTxtNumeroLegajo() {
+	private FWJNumericTextField getTxtNumeroLegajo() {
 		if (txtNumeroLegajo == null) {
-			txtNumeroLegajo = new CLJNumericTextField();
+			txtNumeroLegajo = new FWJNumericTextField();
 			txtNumeroLegajo.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtNumeroLegajo;
 	}
 
-	private CLJTextField getTxtSueldoEstimadoQuincenal() {
+	private FWJTextField getTxtSueldoEstimadoQuincenal() {
 		if (txtSueldoEstimadoQuincenal == null) {
-			txtSueldoEstimadoQuincenal = new CLJTextField();
+			txtSueldoEstimadoQuincenal = new FWJTextField();
 			txtSueldoEstimadoQuincenal.setEditable(false);
 		}
 		return txtSueldoEstimadoQuincenal;
 	}
 
-	private CLJTextField getTxtSueldoEstimadoMensual() {
+	private FWJTextField getTxtSueldoEstimadoMensual() {
 		if (txtSueldoEstimadoMensual == null) {
-			txtSueldoEstimadoMensual = new CLJTextField();
+			txtSueldoEstimadoMensual = new FWJTextField();
 			txtSueldoEstimadoMensual.setEditable(false);
 		}
 		return txtSueldoEstimadoMensual;
 	}
 
-	private CLJTextField getTxtObservaciones() {
+	private FWJTextField getTxtObservaciones() {
 		if (txtObservaciones == null) {
-			txtObservaciones = new CLJTextField();
+			txtObservaciones = new FWJTextField();
 			((AbstractDocument) txtObservaciones.getDocument()).setDocumentFilter(new UppercaseDocumentFilter());
 		}
 		return txtObservaciones;
 	}
 
-	private CLJTextField getTxtOtrasObservaciones() {
+	private FWJTextField getTxtOtrasObservaciones() {
 		if (txtOtrasObservaciones == null) {
-			txtOtrasObservaciones = new CLJTextField();
+			txtOtrasObservaciones = new FWJTextField();
 			((AbstractDocument) txtOtrasObservaciones.getDocument()).setDocumentFilter(new UppercaseDocumentFilter());
 		}
 		return txtOtrasObservaciones;
@@ -484,9 +484,9 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		return fechaAltaAfip;
 	}
 
-	private CLJNumericTextField getTxtNroTarjeta() {
+	private FWJNumericTextField getTxtNroTarjeta() {
 		if (txtNroTarjeta == null) {
-			txtNroTarjeta = new CLJNumericTextField();
+			txtNroTarjeta = new FWJNumericTextField();
 			txtNroTarjeta.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtNroTarjeta;
@@ -541,7 +541,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		Puesto puesto = (Puesto) getCmbPuestos().getSelectedItem();
 		BigDecimal valorHora = ValorHoraHandler.getInstance().getValorHoraCategoriaPuesto(cat, puesto);
 		if (valorHora == null) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarModificarLegajo.this,
+			FWJOptionPane.showErrorMessage(JDialogAgregarModificarLegajo.this,
 					StringW.wordWrap("No existe una configuración para la fecha actual, que pueda determinar el valor de la hora para el puesto y la categoría seleccionada."), "Error");
 			return;
 		}
@@ -549,7 +549,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, está seguro?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, está seguro?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}
@@ -588,7 +588,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 					ultima.setFechaAlta(new java.sql.Date(date.getTime()));
 					getLegajo().getHistorialVigencias().set(getLegajo().getHistorialVigencias().indexOf(ultima), ultima);
 				}else{
-					if(CLJOptionPane.showQuestionMessage(this, "Va a dar de alta nuevamente al empleado, esta seguro de continuar?", "Advertencia")==CLJOptionPane.YES_OPTION){
+					if(FWJOptionPane.showQuestionMessage(this, "Va a dar de alta nuevamente al empleado, esta seguro de continuar?", "Advertencia")==FWJOptionPane.YES_OPTION){
 						VigenciaEmpleado vigencia = new VigenciaEmpleado();
 						vigencia.setFechaAlta( new java.sql.Date(date.getTime()));
 						getLegajo().getHistorialVigencias().add(vigencia);
@@ -628,38 +628,38 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 
 	private boolean validar() {
 		if (getTxtNumeroLegajo().getValueWithNull() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar un número de legajo", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar un número de legajo", "Error");
 			getTxtNroTarjeta().requestFocus();
 			return false;
 		}
 		if (getCmbSindicatos().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
 			getCmbSindicatos().requestFocus();
 			return false;
 		}
 		if (getCmbCategorias().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(this, "Debe elegir una categoria", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir una categoria", "Error");
 			getCmbCategorias().requestFocus();
 			return false;
 		}
 		if (getLegajo().getHorario().size() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe elegir el horario a cumplir", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir el horario a cumplir", "Error");
 			return false;
 		}
 		if (getCmbContratos().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(this, "Debe elegir el tipo de contrato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir el tipo de contrato", "Error");
 			getCmbContratos().requestFocus();
 			return false;
 		}
 		if (getPanelFechaAltaContrato().getDate() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe elegir la fecha de alta del contrato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir la fecha de alta del contrato", "Error");
 			getPanelFechaAltaContrato().requestFocus();
 			return false;
 		}
 		
 		if ((getLegajo().getNroLegajo() == null || !getLegajo().getNroLegajo().equals(getTxtNumeroLegajo().getValue()))
 				&& GTLPersonalBeanFactory.getInstance().getBean2(EmpleadoFacadeRemote.class).getEmpleadoByNumeroLegajo(getTxtNumeroLegajo().getValue()) != null) {
-			CLJOptionPane.showErrorMessage(this, "Ya existe un legajo con el número ingresado", "Error");
+			FWJOptionPane.showErrorMessage(this, "Ya existe un legajo con el número ingresado", "Error");
 			getTxtNumeroLegajo().requestFocus();
 			return false;
 		}
@@ -671,29 +671,29 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		Contrato contratoSeleccionado = (Contrato) getCmbContratos().getSelectedItem();
 		if(contratoSeleccionado.getTipoContrato() != ETipoContrato.EFECTIVO){
 			if (getTxtDuracionContrato().getValueWithNull() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe elegir la duración del contrato", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe elegir la duración del contrato", "Error");
 				getTxtDuracionContrato().requestFocus();
 				return false;
 			}
 			if (getTxtDuracionContrato().getValue() > MAX_DURACION_CONTRATO) {
-				CLJOptionPane.showErrorMessage(this, "La duración del contrato de ser " + MAX_DURACION_CONTRATO + " días como máximo.", "Error");
+				FWJOptionPane.showErrorMessage(this, "La duración del contrato de ser " + MAX_DURACION_CONTRATO + " días como máximo.", "Error");
 				getTxtDuracionContrato().requestFocus();
 				return false;
 			}
 		}
 		if (getContratoEmpleado().getContrato() == null) {// creacion de nuevo legajo
 			if (contratoSeleccionado.getTipoContrato() == ETipoContrato.EFECTIVO) {
-				CLJOptionPane.showErrorMessage(this, "No puede cargarse a un trabajador como efectivo sin antes estar contratado.", "Error");
+				FWJOptionPane.showErrorMessage(this, "No puede cargarse a un trabajador como efectivo sin antes estar contratado.", "Error");
 				return false;
 			}
 		} else {
 			if (getContratoEmpleado().getContrato().getTipoContrato() == ETipoContrato.EFECTIVO && contratoSeleccionado.getTipoContrato() != ETipoContrato.EFECTIVO) {
-				CLJOptionPane.showErrorMessage(this, "Un empleado efectivo no puede volver a tener un contrato.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Un empleado efectivo no puede volver a tener un contrato.", "Error");
 				return false;
 			}
 		}
 		if(contratoSeleccionado.getTipoContrato() == ETipoContrato.EFECTIVO && getTxtCtaBanco().getText().length()<12){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar un número de cuenta correcto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar un número de cuenta correcto", "Error");
 			getTxtCtaBanco().requestFocus();
 			return false;
 		}
@@ -706,7 +706,7 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 				java.sql.Date fechaSql = new java.sql.Date(date.getTime());
 				if(ultima.getFechaBaja()!=null){
 					if(!fechaSql.after(ultima.getFechaBaja())){
-						CLJOptionPane.showErrorMessage(this, "La nueva fecha de alta es anterior a la fecha de última baja: " +DateUtil.dateToString(ultima.getFechaBaja()), "Error");
+						FWJOptionPane.showErrorMessage(this, "La nueva fecha de alta es anterior a la fecha de última baja: " +DateUtil.dateToString(ultima.getFechaBaja()), "Error");
 						return false;
 					}
 				}
@@ -749,11 +749,11 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 			mensaje += (isAdmin ? "\n\nDesea continuar?" : "");
 
 			if (isAdmin) {
-				if (CLJOptionPane.showQuestionMessage(this, mensaje, "Advertencia") == CLJOptionPane.NO_OPTION) {
+				if (FWJOptionPane.showQuestionMessage(this, mensaje, "Advertencia") == FWJOptionPane.NO_OPTION) {
 					ret = false;
 				}
 			} else {
-				CLJOptionPane.showErrorMessage(this, mensaje, "Error");
+				FWJOptionPane.showErrorMessage(this, mensaje, "Error");
 				ret = false;
 			}
 		}
@@ -791,9 +791,9 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		return fechaAltaContrato;
 	}
 
-	private CLJNumericTextField getTxtDuracionContrato() {
+	private FWJNumericTextField getTxtDuracionContrato() {
 		if (txtDuracionContrato == null) {
-			txtDuracionContrato = new CLJNumericTextField();
+			txtDuracionContrato = new FWJNumericTextField();
 			txtDuracionContrato.setColumns(10);
 			txtDuracionContrato.addKeyListener(new KeyAdapter() {
 
@@ -847,9 +847,9 @@ public class JDialogAgregarModificarLegajo extends JDialog {
 		return cmbBancoPago;
 	}
 
-	private CLJTextField getTxtFechaFinContrato() {
+	private FWJTextField getTxtFechaFinContrato() {
 		if (txtFechaFinContrato == null) {
-			txtFechaFinContrato = new CLJTextField();
+			txtFechaFinContrato = new FWJTextField();
 			txtFechaFinContrato.setEditable(false);
 			txtFechaFinContrato.setPreferredSize(new Dimension(120, 20));
 		}

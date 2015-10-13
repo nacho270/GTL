@@ -25,11 +25,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.configuracion.DatosAlarmaFinContrato;
 import ar.com.textillevel.modulos.personal.entidades.configuracion.ParametrosGeneralesPersonal;
@@ -44,8 +44,8 @@ public class JDialogParametrosGenerales extends JDialog {
 	private ParametrosGeneralesPersonal parametrosGenerales;
 	private ParametrosGeneralesPersonalFacadeRemote parametrosFacade;
 
-	private CLJNumericTextField txtMaximoTiempoFueraDeLaEmpresa;
-	private CLJNumericTextField txtToleranciaHorasExtra;
+	private FWJNumericTextField txtMaximoTiempoFueraDeLaEmpresa;
+	private FWJNumericTextField txtToleranciaHorasExtra;
 
 	private boolean acepto;
 
@@ -80,8 +80,8 @@ public class JDialogParametrosGenerales extends JDialog {
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Parametros generales");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Parametros generales");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -202,9 +202,9 @@ public class JDialogParametrosGenerales extends JDialog {
 				getParametrosGenerales().setToleranciaParaHorasExtra(getTxtToleranciaHorasExtra().getValue());
 				getParametrosFacade().save(getParametrosGenerales());
 				setAcepto(true);
-				CLJOptionPane.showInformationMessage(this, "La configuración ha sido guarda con éxito", "Parametros generales");
+				FWJOptionPane.showInformationMessage(this, "La configuración ha sido guarda con éxito", "Parametros generales");
 				dispose();
-			} catch (CLException cle) {
+			} catch (FWException cle) {
 				BossError.gestionarError(cle);
 			}
 		}
@@ -212,19 +212,19 @@ public class JDialogParametrosGenerales extends JDialog {
 
 	private boolean validar() {
 		if(getTxtToleranciaHorasExtra().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de minutos de tolerancia de para las fichadas", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de minutos de tolerancia de para las fichadas", "Error");
 			getTxtToleranciaHorasExtra().requestFocus();
 			return false;
 		}
 		if(getTxtMaximoTiempoFueraDeLaEmpresa().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el tiempo máximo que puede permanecer una persona sin trabajar en la empresa para no perder su antigüedad", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el tiempo máximo que puede permanecer una persona sin trabajar en la empresa para no perder su antigüedad", "Error");
 			getTxtMaximoTiempoFueraDeLaEmpresa().requestFocus();
 			return false;
 		}
 		if(getParametrosGenerales().getAlarmasFinContrato() != null && !getParametrosGenerales().getAlarmasFinContrato().isEmpty()){
 			for(DatosAlarmaFinContrato d : getParametrosGenerales().getAlarmasFinContrato()){
 				if(d.getDiasAntes()==null){
-					CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de días para el aviso del fin de los contratos: " + d.getTipoContrato().getDescripcion(), "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de días para el aviso del fin de los contratos: " + d.getTipoContrato().getDescripcion(), "Error");
 					return false;
 				}
 			}
@@ -239,9 +239,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return parametrosFacade;
 	}
 
-	public CLJNumericTextField getTxtMaximoTiempoFueraDeLaEmpresa() {
+	public FWJNumericTextField getTxtMaximoTiempoFueraDeLaEmpresa() {
 		if(txtMaximoTiempoFueraDeLaEmpresa == null){
-			txtMaximoTiempoFueraDeLaEmpresa = new CLJNumericTextField();
+			txtMaximoTiempoFueraDeLaEmpresa = new FWJNumericTextField();
 			if(getParametrosGenerales()!=null && getParametrosGenerales().getMaximoPeriodoFueraDeLaEmpresa()!=null){
 				txtMaximoTiempoFueraDeLaEmpresa.setValue(getParametrosGenerales().getMaximoPeriodoFueraDeLaEmpresa().longValue());
 			}
@@ -250,9 +250,9 @@ public class JDialogParametrosGenerales extends JDialog {
 		return txtMaximoTiempoFueraDeLaEmpresa;
 	}
 
-	public CLJNumericTextField getTxtToleranciaHorasExtra() {
+	public FWJNumericTextField getTxtToleranciaHorasExtra() {
 		if(txtToleranciaHorasExtra == null){
-			txtToleranciaHorasExtra = new CLJNumericTextField();
+			txtToleranciaHorasExtra = new FWJNumericTextField();
 			if(getParametrosGenerales()!=null && getParametrosGenerales().getToleranciaParaHorasExtra()!=null){
 				txtToleranciaHorasExtra.setValue(getParametrosGenerales().getToleranciaParaHorasExtra().longValue());
 			}
@@ -265,7 +265,7 @@ public class JDialogParametrosGenerales extends JDialog {
 		private static final long serialVersionUID = 5155237126852329355L;
 		
 		private JCheckBox chkHabilitar;
-		private CLJNumericTextField txtDias;
+		private FWJNumericTextField txtDias;
 		
 		private DatosAlarmaFinContrato datosAlarma;
 		
@@ -306,9 +306,9 @@ public class JDialogParametrosGenerales extends JDialog {
 			return chkHabilitar;
 		}
 		
-		public CLJNumericTextField getTxtDias() {
+		public FWJNumericTextField getTxtDias() {
 			if(txtDias == null){
-				txtDias = new CLJNumericTextField();
+				txtDias = new FWJNumericTextField();
 				txtDias.setPreferredSize(new Dimension(120, 20));
 				txtDias.setEditable(false);
 				txtDias.addKeyListener(new KeyAdapter() {

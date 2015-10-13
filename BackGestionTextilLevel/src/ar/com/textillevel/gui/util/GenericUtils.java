@@ -56,12 +56,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.krysalis.barcode4j.impl.int2of5.Interleaved2Of5Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.FileUtil;
-import ar.clarin.fwjava.util.StringUtil;
-import ar.clarin.fwjava.util.SwingWorker;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.FileUtil;
+import ar.com.fwcommon.util.StringUtil;
+import ar.com.fwcommon.util.SwingWorker;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
 import ar.com.textillevel.gui.util.dialogs.WaitDialog;
@@ -226,8 +226,8 @@ public class GenericUtils {
 		return aux;
 	}
 	
-	public static void exportarAExcel(CLJTable tabla, String titulo, String subtitulo, String filtros, String ruta, boolean intercalar) {
-		ar.clarin.fwjava.util.MiscUtil.exportarAExcel(tabla, titulo, subtitulo, filtros, ruta, null, intercalar);
+	public static void exportarAExcel(FWJTable tabla, String titulo, String subtitulo, String filtros, String ruta, boolean intercalar) {
+		ar.com.fwcommon.util.MiscUtil.exportarAExcel(tabla, titulo, subtitulo, filtros, ruta, null, intercalar);
 	}
 	
 	public static void ponerFondoAnulada(final JScrollPane sp) {
@@ -246,7 +246,7 @@ public class GenericUtils {
 		    };  
 		    SwingUtilities.invokeLater(r);  
 		} catch (IOException e) {
-			CLJOptionPane.showErrorMessage(null, e.getMessage(), "Error");
+			FWJOptionPane.showErrorMessage(null, e.getMessage(), "Error");
 		}
 	}
 	

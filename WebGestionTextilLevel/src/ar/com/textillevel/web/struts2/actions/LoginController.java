@@ -13,7 +13,7 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.portal.Modulo;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.web.util.BeanHelper;

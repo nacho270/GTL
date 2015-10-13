@@ -27,13 +27,13 @@ import javax.swing.event.EventListenerList;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.RemoteFileUtil;
 import ar.com.textillevel.gui.util.dialogs.JFileChooserImage;
@@ -170,7 +170,7 @@ public class JDialogVerHistorialAcciones extends JDialog {
 		public PanTablaAccionHistorica() {
 			getBotonAgregar().setVisible(false);
 			getBotonEliminar().setVisible(false);
-			BossEstilos.decorateButton(getBtnUploadFile(), "ar/clarin/fwjava/imagenes/b_flecha_subir.png", "ar/clarin/fwjava/imagenes/b_des_flecha_subir.png");
+			BossEstilos.decorateButton(getBtnUploadFile(), "ar/com/fwcommon/imagenes/b_flecha_subir.png", "ar/com/fwcommon/imagenes/b_des_flecha_subir.png");
 			agregarBoton(getBtnUploadFile());
 			getBtnUploadFile().setEnabled(false);
 		}
@@ -220,18 +220,18 @@ public class JDialogVerHistorialAcciones extends JDialog {
 					} catch (Exception ex) {
 						fileNameToTransfer = null;
 						ex.printStackTrace();
-						CLJOptionPane.showErrorMessage(JDialogVerHistorialAcciones.this, StringW.wordWrap(ex.getMessage()), "Error al transferir el archivo");
+						FWJOptionPane.showErrorMessage(JDialogVerHistorialAcciones.this, StringW.wordWrap(ex.getMessage()), "Error al transferir el archivo");
 					}
 				} else {
-					CLJOptionPane.showErrorMessage(JDialogVerHistorialAcciones.this, "La imagen no es de un formato válido", "Tama\u00F1o inválido");
+					FWJOptionPane.showErrorMessage(JDialogVerHistorialAcciones.this, "La imagen no es de un formato válido", "Tama\u00F1o inválido");
 				}
 			}
 			return fileNameToTransfer;
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_FECHA_HORA, "Fecha", 100, 100, true);
 			tabla.setMultilineColumn(COL_RESUMEN, "Resumen", 180,  true);
 			tabla.setStringColumn(COL_USUARIO, "Usuario", 100, 100, true);
@@ -272,7 +272,7 @@ public class JDialogVerHistorialAcciones extends JDialog {
 			if(filaSeleccionada != -1) {
 				AccionHistorica elemento = getElemento(filaSeleccionada);
 				if(StringUtil.isNullOrEmpty(elemento.getFullNameDocCargado())) {
-					CLJOptionPane.showInformationMessage(JDialogVerHistorialAcciones.this, "La acción no contiene un documento asociado.", "Información");
+					FWJOptionPane.showInformationMessage(JDialogVerHistorialAcciones.this, "La acción no contiene un documento asociado.", "Información");
 					return;
 				} else {
 					JDialogVisualizarDocumento dialogo = new JDialogVisualizarDocumento(padre, elemento);

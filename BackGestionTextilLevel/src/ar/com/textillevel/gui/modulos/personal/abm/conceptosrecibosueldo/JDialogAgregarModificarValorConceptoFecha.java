@@ -21,10 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.conceptos.ValorConceptoFecha;
@@ -36,7 +36,7 @@ public class JDialogAgregarModificarValorConceptoFecha extends JDialog {
 	private ButtonGroup grupoRadios;
 	private JRadioButton radioValorNumerico;
 	private JRadioButton radioValorPorcentual;
-	private CLJTextField txtValor;
+	private FWJTextField txtValor;
 
 	private PanelDatePicker panelFecha;
 	private JButton btnAceptar;
@@ -187,24 +187,24 @@ public class JDialogAgregarModificarValorConceptoFecha extends JDialog {
 	
 	private boolean validar(){
 		if(getPanelFecha().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir la fecha de validez", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir la fecha de validez", "Error");
 			getPanelFecha().requestFocus();
 			return false;
 		}
 		if(getTxtValor().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir el valor", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir el valor", "Error");
 			getTxtValor().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(getTxtValor().getText().trim())){
-			CLJOptionPane.showErrorMessage(this, "El valor ingresado no es numérico", "Error");
+			FWJOptionPane.showErrorMessage(this, "El valor ingresado no es numérico", "Error");
 			getTxtValor().requestFocus();
 			return false;
 		}
 		for(ValorConceptoFecha valor : getValoresYaElegidos()){
 			Date fecha = getPanelFecha().getDate();
 			if(!fecha.after(valor.getFechaDesde())){
-				CLJOptionPane.showErrorMessage(this, "Debe elegir un valor posterior a " + DateUtil.dateToString(valor.getFechaDesde()), "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe elegir un valor posterior a " + DateUtil.dateToString(valor.getFechaDesde()), "Error");
 				return false;
 			}
 		}
@@ -225,9 +225,9 @@ public class JDialogAgregarModificarValorConceptoFecha extends JDialog {
 		return btnCancelar;
 	}
 
-	public CLJTextField getTxtValor() {
+	public FWJTextField getTxtValor() {
 		if (txtValor == null) {
-			txtValor = new CLJTextField();
+			txtValor = new FWJTextField();
 		}
 		return txtValor;
 	}

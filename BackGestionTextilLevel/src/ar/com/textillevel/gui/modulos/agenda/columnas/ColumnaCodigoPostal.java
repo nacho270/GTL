@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.agenda.columnas;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaInt;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaInt;
 import ar.com.textillevel.entidades.gente.IAgendable;
 
 public class ColumnaCodigoPostal extends ColumnaInt<IAgendable> {

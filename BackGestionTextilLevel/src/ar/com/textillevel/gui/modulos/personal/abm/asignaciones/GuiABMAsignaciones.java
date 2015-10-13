@@ -22,12 +22,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.facade.api.remote.QuincenaFacadeRemote;
 import ar.com.textillevel.gui.modulos.personal.abm.tareas.JDialogCargarCategoriaValorPuesto;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -201,7 +201,7 @@ public class GuiABMAsignaciones extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Configuración seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Configuración seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getAsignacionFacade().remove(getAsignacionActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -214,7 +214,7 @@ public class GuiABMAsignaciones extends GuiABMListaTemplate {
 			setModoEdicion(true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una Configuración", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una Configuración", "Error");
 			return false;
 		}
 	}
@@ -240,46 +240,46 @@ public class GuiABMAsignaciones extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getPanFechaDesde().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha desde.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha desde.", "Error");
 			return false;
 		}
 		if(getPanFechaHasta().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha hasta.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha hasta.", "Error");
 			return false;
 		}
 		if(getTipoAsignacionSel() == ETipoAsignacion.SIMPLE) {
 			String importeStr = getTxtImporte().getText();
 			if(StringUtil.isNullOrEmpty(importeStr)) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el importe.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el importe.", "Error");
 				getTxtImporte().requestFocus();
 				return false;
 			}
 			if(!GenericUtils.esNumerico(importeStr)) {
-				CLJOptionPane.showErrorMessage(this, "El importe debe ser numérico.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El importe debe ser numérico.", "Error");
 				getTxtImporte().requestFocus();
 				return false;
 			}
 		} else {
 			String importeStr = getTxtPorcSueldoBruto().getText();
 			if(StringUtil.isNullOrEmpty(importeStr)) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje.", "Error");
 				getTxtPorcSueldoBruto().requestFocus();
 				return false;
 			}
 			if(!GenericUtils.esNumerico(importeStr)) {
-				CLJOptionPane.showErrorMessage(this, "El porcentaje debe ser numérico.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El porcentaje debe ser numérico.", "Error");
 				getTxtPorcSueldoBruto().requestFocus();
 				return false;
 			}
 			if(StringUtil.isNullOrEmpty(getTxtVisualizacionEnRS().getText())) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el texto de visualización en el recibo de sueldo.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el texto de visualización en el recibo de sueldo.", "Error");
 				getTxtVisualizacionEnRS().requestFocus();
 				return false;
 			}
 		}
 		Sindicato sindicato = (Sindicato)getItemComboMaestroSeleccionado();
 		if(sindicato.getTipoCobro() == ETipoCobro.QUINCENAL && getCmbQuincena().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar la quincena.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar la quincena.", "Error");
 			return false;
 		}
 		return true;
@@ -521,8 +521,8 @@ public class GuiABMAsignaciones extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_CATEGORIA, "CATEGORIA", 100, 100, true);
 			tabla.setMultilineColumn(COL_DETALLE_VALOR_POR_PUESTO, "VALOR HORA POR PUESTOS", 200, true);
 			tabla.setStringColumn(COL_VALOR_HORA_X_DEFECTO, "VALOR HORA POR DEFECTO", 150, 150, true);

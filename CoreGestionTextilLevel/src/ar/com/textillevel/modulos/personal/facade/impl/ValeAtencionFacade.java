@@ -5,8 +5,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.dao.api.AccionValeAtencionDAOLocal;
 import ar.com.textillevel.modulos.personal.dao.api.AntiFichadaDAOLocal;
 import ar.com.textillevel.modulos.personal.dao.api.ValeAtencionDAOLocal;

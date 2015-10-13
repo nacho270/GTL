@@ -14,10 +14,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 
 public class JDialogCantFilasInput extends JDialog {
 
@@ -25,7 +25,7 @@ public class JDialogCantFilasInput extends JDialog {
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJNumericTextField txtCantFilas;
+	private FWJNumericTextField txtCantFilas;
 	private JPanel pnlBotones;
 	private JPanel pnlDatos;
 	private Integer cantFilas;
@@ -90,7 +90,7 @@ public class JDialogCantFilasInput extends JDialog {
 							cantFilas = Integer.valueOf(getTxtCantFilas().getText());
 							dispose();
 						}else{
-							CLJOptionPane.showErrorMessage(JDialogCantFilasInput.this, "Debe ingresar la cantidad de filas.", "Error");
+							FWJOptionPane.showErrorMessage(JDialogCantFilasInput.this, "Debe ingresar la cantidad de filas.", "Error");
 						}
 					}catch(RuntimeException re){
 						BossError.gestionarError(re);
@@ -114,9 +114,9 @@ public class JDialogCantFilasInput extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJNumericTextField getTxtCantFilas() {
+	private FWJNumericTextField getTxtCantFilas() {
 		if(txtCantFilas == null){
-			txtCantFilas = new CLJNumericTextField(Long.MIN_VALUE, Long.MAX_VALUE);
+			txtCantFilas = new FWJNumericTextField(Long.MIN_VALUE, Long.MAX_VALUE);
 			txtCantFilas.setPreferredSize(new Dimension(100, 20));
 			txtCantFilas.addKeyListener(new KeyAdapter() {
 

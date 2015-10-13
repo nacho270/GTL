@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.enums.ETipoInformeProduccion;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.informeproduccion.ClienteCantidadTO;

@@ -18,8 +18,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.ordendepago.formapago.FormaPagoOrdenDePago;
 import ar.com.textillevel.entidades.documentos.ordendepago.pagos.PagoOrdenDePago;
@@ -52,7 +52,7 @@ public class ImprimirOrdenDePagoHandler {
 				break;
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-				CLJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				OrdenDePagoTO orden = new OrdenDePagoTO(getOrden());

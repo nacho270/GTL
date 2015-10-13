@@ -11,11 +11,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoRubro;
 import ar.com.textillevel.entidades.gente.Rubro;
 import ar.com.textillevel.facade.api.remote.RubroPersonaFacadeRemote;
@@ -29,7 +29,7 @@ public class GuiABMRubro extends GuiABMListaTemplate {
 	
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private JComboBox cmbTipoRubro;
 
 	private Rubro rubro;
@@ -79,9 +79,9 @@ public class GuiABMRubro extends GuiABMListaTemplate {
 		return cmbTipoRubro;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombre;
 	}
@@ -111,7 +111,7 @@ public class GuiABMRubro extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMRubro.this, "¿Está seguro que desea eliminar el rubro seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMRubro.this, "¿Está seguro que desea eliminar el rubro seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getRubroFacadeRemote().remove(getRubroActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -137,12 +137,12 @@ public class GuiABMRubro extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText())) {
-			CLJOptionPane.showErrorMessage(GuiABMRubro.this, "Falta Completar el campo 'Nombre'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMRubro.this, "Falta Completar el campo 'Nombre'", "Advertencia");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getCmbTipoRubro().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(GuiABMRubro.this, "Falta seleccionar un tipo.", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMRubro.this, "Falta seleccionar un tipo.", "Advertencia");
 			return false;
 		}
 		return true;
@@ -155,7 +155,7 @@ public class GuiABMRubro extends GuiABMListaTemplate {
 			getTxtNombre().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una materia prima", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una materia prima", "Error");
 			return false;
 		}
 	}

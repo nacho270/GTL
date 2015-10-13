@@ -32,11 +32,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.gui.modulos.chat.client.ChatClient;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.chat.mensajes.MensajeChat;
@@ -240,8 +240,8 @@ public class ChatWindow extends JFrame {
 
 		private static final int MAX_LENGTH_MENSAJE = 500;
 
-		private CLJTextArea txtAreaConversacion;
-		private CLJTextField txtInput;
+		private FWJTextArea txtAreaConversacion;
+		private FWJTextField txtInput;
 		private JButton btnEnviar;
 		private String usuario;
 
@@ -265,18 +265,18 @@ public class ChatWindow extends JFrame {
 			return panelSur;
 		}
 
-		public CLJTextArea getTxtAreaConversacion() {
+		public FWJTextArea getTxtAreaConversacion() {
 			if (txtAreaConversacion == null) {
-				txtAreaConversacion = new CLJTextArea();
+				txtAreaConversacion = new FWJTextArea();
 				txtAreaConversacion.setEditable(false);
 				txtAreaConversacion.setLineWrap(true);
 			}
 			return txtAreaConversacion;
 		}
 
-		public CLJTextField getTxtInput() {
+		public FWJTextField getTxtInput() {
 			if (txtInput == null) {
-				txtInput = new CLJTextField(MAX_LENGTH_MENSAJE);
+				txtInput = new FWJTextField(MAX_LENGTH_MENSAJE);
 				txtInput.setPreferredSize(new Dimension(680, 20));
 				txtInput.addActionListener(new ActionListener() {
 
@@ -301,7 +301,7 @@ public class ChatWindow extends JFrame {
 							getTxtAreaConversacion().setCaretPosition(getTxtAreaConversacion().getText().length());
 							getTxtInput().setText("");
 						} catch (IOException e1) {
-							CLJOptionPane.showErrorMessage(ChatWindow.this, "Se ha producido un error al enviar el mensaje", "Error");
+							FWJOptionPane.showErrorMessage(ChatWindow.this, "Se ha producido un error al enviar el mensaje", "Error");
 							e1.printStackTrace();
 						}
 					}

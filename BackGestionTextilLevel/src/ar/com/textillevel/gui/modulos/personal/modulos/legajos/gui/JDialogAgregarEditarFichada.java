@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.FichadaLegajo;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.enums.EFormaIngresoFichada;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.enums.ETipoFichada;

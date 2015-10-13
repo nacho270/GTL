@@ -16,9 +16,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.gui.util.GenericUtils;
 
@@ -30,10 +30,10 @@ public class JDialogEditarArticulo extends JDialog {
 	private JPanel pnlDatos;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtNombre;
-	private CLJTextField txtDescripcion;
-	private CLJTextField txtGramaje;
-	private CLJTextField txtAncho;
+	private FWJTextField txtNombre;
+	private FWJTextField txtDescripcion;
+	private FWJTextField txtGramaje;
+	private FWJTextField txtAncho;
 
 	private Articulo articulo;
 	private boolean acepto;
@@ -118,13 +118,13 @@ public class JDialogEditarArticulo extends JDialog {
 	private boolean validar() {
 		String anchoStr = getTxtAncho().getText();
 		if(StringUtil.isNullOrEmpty(anchoStr) || !GenericUtils.esNumerico(anchoStr)) {
-			CLJOptionPane.showErrorMessage(JDialogEditarArticulo.this, "Debe ingresar un ancho válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarArticulo.this, "Debe ingresar un ancho válido.", "Error");
 			getTxtAncho().requestFocus();
 			return false;
 		}
 		String gramajeStr = getTxtGramaje().getText();
 		if(StringUtil.isNullOrEmpty(gramajeStr) || !GenericUtils.esNumerico(gramajeStr)) {
-			CLJOptionPane.showErrorMessage(JDialogEditarArticulo.this, "Debe ingresar un gramaje válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarArticulo.this, "Debe ingresar un gramaje válido.", "Error");
 			getTxtGramaje().requestFocus();
 			return false;
 		}
@@ -145,30 +145,30 @@ public class JDialogEditarArticulo extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtGramaje() {
+	private FWJTextField getTxtGramaje() {
 		if(txtGramaje == null) {
-			txtGramaje = new CLJTextField();
+			txtGramaje = new FWJTextField();
 		}
 		return txtGramaje;
 	}
 
-	private CLJTextField getTxtAncho() {
+	private FWJTextField getTxtAncho() {
 		if(txtAncho == null) {
-			txtAncho = new CLJTextField();
+			txtAncho = new FWJTextField();
 		}
 		return txtAncho;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 		}
 		return txtNombre;
 	}
 
-	private CLJTextField getTxtDescripcion() {
+	private FWJTextField getTxtDescripcion() {
 		if(txtDescripcion == null) {
-			txtDescripcion = new CLJTextField();
+			txtDescripcion = new FWJTextField();
 		}
 		return txtDescripcion;
 	}

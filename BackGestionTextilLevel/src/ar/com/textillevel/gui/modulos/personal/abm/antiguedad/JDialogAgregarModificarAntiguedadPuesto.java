@@ -14,10 +14,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.modulos.personal.entidades.antiguedad.Antiguedad;
 import ar.com.textillevel.modulos.personal.entidades.antiguedad.ValorAntiguedad;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Puesto;
@@ -134,8 +134,8 @@ public class JDialogAgregarModificarAntiguedadPuesto extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0,CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0,CANT_COLS);
 			tabla.setIntColumn(COL_ANIOS, "Años", 100, true);
 			tabla.setFloatColumn(COL_VALOR, "Valor", 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -251,11 +251,11 @@ public class JDialogAgregarModificarAntiguedadPuesto extends JDialog {
 
 	private boolean validar() {
 		if(getAntiguedadActual().getValoresAntiguedad().isEmpty()){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un valor para una antigüedad", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un valor para una antigüedad", "Error");
 			return false;
 		}
 		if(getPuestosUsados().size()-1>0 && getCmbPuestos().getSelectedItem()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir un puesto debido a que ya se han elegido otros.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir un puesto debido a que ya se han elegido otros.", "Error");
 			return false;
 		}
 		return true;

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ContenedorMateriaPrima;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RelacionContenedorPrecioMatPrima;
 

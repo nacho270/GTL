@@ -44,13 +44,13 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.ColorCilindro;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
@@ -77,7 +77,7 @@ public class JDialogEditarVariante extends JDialog {
 	private JButton btnAgregarImagen;
 	private JButton btnQuitarImagen;
 	
-	private CLJTextField txtNombreVariante;
+	private FWJTextField txtNombreVariante;
 	private JComboBox cmbColorParaFondo;
 	private JComboBox cmbGama;
 	private JCheckBox chkFondoSeEstampaEnCilindro;
@@ -209,20 +209,20 @@ public class JDialogEditarVariante extends JDialog {
 
 	private boolean validar() {
 		if(getTxtNombreVariante().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe ingresar el nombre.", JDialogEditarVariante.this.getTitle());
+			FWJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe ingresar el nombre.", JDialogEditarVariante.this.getTitle());
 			getTxtNombreVariante().requestFocus();
 			return false;
 		}
 		if(getCmbGama().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe seleccionar una gama.", JDialogEditarVariante.this.getTitle());
+			FWJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe seleccionar una gama.", JDialogEditarVariante.this.getTitle());
 			return false;
 		}
 		if(getCmbColorParaFondo().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe seleccionar un color de fondo.", JDialogEditarVariante.this.getTitle());
+			FWJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe seleccionar un color de fondo.", JDialogEditarVariante.this.getTitle());
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtCobertura().getText())) {
-			CLJOptionPane.showErrorMessage(this, "El % de cobertura no fue ingresado o es inválido.", "Error");
+			FWJOptionPane.showErrorMessage(this, "El % de cobertura no fue ingresado o es inválido.", "Error");
 			getTxtCobertura().requestFocus();
 			return false;
 		}
@@ -237,7 +237,7 @@ public class JDialogEditarVariante extends JDialog {
 				}
 			}
 			if(!existeCilindroParaElFondo) {
-				CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe asignar un cilindro para el fondo.", JDialogEditarVariante.this.getTitle());
+				FWJOptionPane.showErrorMessage(JDialogEditarVariante.this, "Debe asignar un cilindro para el fondo.", JDialogEditarVariante.this.getTitle());
 				return false;
 			}
 		} else {
@@ -250,7 +250,7 @@ public class JDialogEditarVariante extends JDialog {
 				}
 			}
 			if(existeCilindroParaElFondo) {
-				CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, StringW.wordWrap("Debe quitar el cilindro para el fondo y definir un color para ese cilindro."), JDialogEditarVariante.this.getTitle());
+				FWJOptionPane.showErrorMessage(JDialogEditarVariante.this, StringW.wordWrap("Debe quitar el cilindro para el fondo y definir un color para ese cilindro."), JDialogEditarVariante.this.getTitle());
 				return false;
 			}
 		}
@@ -270,9 +270,9 @@ public class JDialogEditarVariante extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombreVariante() {
+	private FWJTextField getTxtNombreVariante() {
 		if(txtNombreVariante == null){
-			txtNombreVariante = new CLJTextField();
+			txtNombreVariante = new FWJTextField();
 		}
 		return txtNombreVariante;
 	}
@@ -445,7 +445,7 @@ public class JDialogEditarVariante extends JDialog {
 					
 					//Si ya hay una foto cargada con cilindros pregunto antes de pisar la foto
 					if(varianteEstampado.getImagenEstampado() != null && !getPanTablaColorCilindro().getElementos().isEmpty()) {
-						yaExisteUnaFotoConCilindros = CLJOptionPane.showQuestionMessage(JDialogEditarVariante.this, StringW.wordWrap("Al cambiar la foto se borrará toda la configuración de cilindros ¿Desea continuar?"), "Advertencia") == CLJOptionPane.YES_OPTION;
+						yaExisteUnaFotoConCilindros = FWJOptionPane.showQuestionMessage(JDialogEditarVariante.this, StringW.wordWrap("Al cambiar la foto se borrará toda la configuración de cilindros ¿Desea continuar?"), "Advertencia") == FWJOptionPane.YES_OPTION;
 						if(!yaExisteUnaFotoConCilindros) {
 							return;
 						}
@@ -482,11 +482,11 @@ public class JDialogEditarVariante extends JDialog {
 
 								habilitarBotonesImagen(true, true);
 							} else {
-								CLJOptionPane.showErrorMessage(JDialogEditarVariante.this, "La imagen seleccionada supera las dimensiones esperadas.\n" + "El ancho máximo esperado debe ser menor o igual a: "
+								FWJOptionPane.showErrorMessage(JDialogEditarVariante.this, "La imagen seleccionada supera las dimensiones esperadas.\n" + "El ancho máximo esperado debe ser menor o igual a: "
 										+ ANCHO_IMAGEN + " pixeles.\n" + "El alto máximo esperado debe ser menor o igual a: " + ALTO_IMAGEN + " pixeles.\n", "Dimensiones inválidas");
 							}
 						} else{
-							CLJOptionPane.showErrorMessage(null,"La imagen no es de un formato válido", "Tama\u00F1o inválido");
+							FWJOptionPane.showErrorMessage(null,"La imagen no es de un formato válido", "Tama\u00F1o inválido");
 						}
 					}
 				}
@@ -609,8 +609,8 @@ public class JDialogEditarVariante extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_NRO_CILINDRO, "CILINDRO", 70);
 			tabla.setStringColumn(COL_COLOR, "COLOR", 130);
 			tabla.setStringColumn(COL_METROS_POR_COLOR, "MTS. POR COLOR", 100);

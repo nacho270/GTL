@@ -6,8 +6,8 @@ import java.util.Map;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.recibo.to.ResumenReciboTO;
@@ -25,7 +25,7 @@ public interface ReciboDAOLocal extends DAOLocal<Recibo, Integer> {
 
 	public InfoCuentaTO getInfoReciboYPagosRecibidos(Integer nroCliente);
 
-	public void rollBackPagosFacturaYNotasDeDebito(Recibo recibo) throws CLException ;
+	public void rollBackPagosFacturaYNotasDeDebito(Recibo recibo) throws FWException ;
 
 	public Date getUltimaFechaReciboGrabado();
 	

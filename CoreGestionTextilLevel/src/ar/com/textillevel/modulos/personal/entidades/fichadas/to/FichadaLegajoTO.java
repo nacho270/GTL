@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.FichadaLegajo;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.enums.EEstadoDiaFichada;
 

@@ -9,8 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import ar.clarin.fwjava.entidades.Dia;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.entidades.Dia;
+import ar.com.fwcommon.util.DateUtil;
 
 @Embeddable
 public class RangoDias implements Serializable {

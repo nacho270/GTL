@@ -3,7 +3,7 @@ package ar.com.textillevel.gui.modulos.personal.modulos.legajos.columnas;
 import java.util.Date;
 import java.util.List;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaDate;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaDate;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.VigenciaEmpleado;
 

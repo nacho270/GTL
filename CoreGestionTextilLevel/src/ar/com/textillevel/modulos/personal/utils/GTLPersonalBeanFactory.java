@@ -1,7 +1,7 @@
 package ar.com.textillevel.modulos.personal.utils;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.BeanFactoryRemoteAbstract;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.BeanFactoryRemoteAbstract;
 import ar.com.textillevel.facade.api.remote.QuincenaFacadeRemote;
 import ar.com.textillevel.modulos.personal.facade.api.remote.AFJPFacadeRemote;
 import ar.com.textillevel.modulos.personal.facade.api.remote.AntiFichadaFacadeRemote;
@@ -36,7 +36,7 @@ public class GTLPersonalBeanFactory extends BeanFactoryRemoteAbstract {
 
 	private static GTLPersonalBeanFactory instance;
 	
-	protected GTLPersonalBeanFactory() throws CLException {
+	protected GTLPersonalBeanFactory() throws FWException {
 		super("GTL");
 		addJndiName(ArtFacadeRemote.class);
 		addJndiName(EmpresaSegurosFacadeRemote.class);
@@ -73,7 +73,7 @@ public class GTLPersonalBeanFactory extends BeanFactoryRemoteAbstract {
 		if(instance == null) {
 			try {
 				instance = new GTLPersonalBeanFactory();
-			} catch (CLException e) {
+			} catch (FWException e) {
 				e.printStackTrace();
 			}
 		}

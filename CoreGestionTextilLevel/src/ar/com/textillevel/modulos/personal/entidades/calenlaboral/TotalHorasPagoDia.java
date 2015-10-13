@@ -10,7 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import ar.clarin.fwjava.entidades.Dia;
+
+import ar.com.fwcommon.entidades.Dia;
 
 @Entity
 @Table(name = "T_PERS_TOTAL_HORAS_PAGO_DIA")

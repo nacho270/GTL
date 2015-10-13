@@ -18,10 +18,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -36,7 +36,7 @@ public class JDialogEditarFormulaEstampado extends JDialog {
 	private JPanel pnlDatos;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private JComboBox cmbColor;
 	private TabPaneAnilinaPigmentoCantidad tabPaneAnilinas;
 
@@ -117,17 +117,17 @@ public class JDialogEditarFormulaEstampado extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText().trim())) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormulaEstampado.this, "Falta ingresar el nombre.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormulaEstampado.this, "Falta ingresar el nombre.", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getCmbColor().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormulaEstampado.this, "Falta seleccionar color.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormulaEstampado.this, "Falta seleccionar color.", "Error");
 			return false;
 		}
 		String msgValidacionTabPanel = getTabPaneAnilinaPigmento().validar();
 		if(!StringUtil.isNullOrEmpty(msgValidacionTabPanel)) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormulaEstampado.this, StringW.wordWrap(msgValidacionTabPanel), "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormulaEstampado.this, StringW.wordWrap(msgValidacionTabPanel), "Error");
 			return false;
 		}
 
@@ -149,9 +149,9 @@ public class JDialogEditarFormulaEstampado extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 			txtNombre.setEnabled(!modoConsulta);
 		}
 		return txtNombre;

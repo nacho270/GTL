@@ -19,9 +19,9 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 
 public class JDialogSeleccionarItem<T> extends JDialog {
 
@@ -30,7 +30,7 @@ public class JDialogSeleccionarItem<T> extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLCheckBoxList<T> checkBoxList;
+	private FWCheckBoxList<T> checkBoxList;
 	private final List<T> itemsList = new ArrayList<T>();
 	
 	private boolean acepto;
@@ -114,7 +114,7 @@ public class JDialogSeleccionarItem<T> extends JDialog {
 	private void handleItemSeleccionado() {
 		int[] selectedIndices = getCheckBoxList().getSelectedIndices();
 		if(selectedIndices.length == 0) {
-			CLJOptionPane.showErrorMessage(JDialogSeleccionarItem.this, "Debe seleccionar al menos un item.", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogSeleccionarItem.this, "Debe seleccionar al menos un item.", getTitle());
 			return;
 		}
 		for(int index : selectedIndices) {
@@ -127,9 +127,9 @@ public class JDialogSeleccionarItem<T> extends JDialog {
 		return itemsList;
 	}
 
-	private CLCheckBoxList<T> getCheckBoxList() {
+	private FWCheckBoxList<T> getCheckBoxList() {
 		if(checkBoxList == null) {
-			checkBoxList = new CLCheckBoxList<T>();
+			checkBoxList = new FWCheckBoxList<T>();
 		}
 		return checkBoxList;
 	}

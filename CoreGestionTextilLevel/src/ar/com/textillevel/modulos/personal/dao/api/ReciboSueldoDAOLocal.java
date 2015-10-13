@@ -2,8 +2,8 @@ package ar.com.textillevel.modulos.personal.dao.api;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
-import ar.clarin.fwjava.entidades.Mes;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
+import ar.com.fwcommon.entidades.Mes;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.ReciboSueldo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EQuincena;

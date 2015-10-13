@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.enums.EEstadoDiaFichada;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.to.FichadaLegajoTO;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.AnotacionReciboSueldo;

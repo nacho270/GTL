@@ -1,9 +1,9 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.legajos.acciones;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogAgregarValeAnticipo;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.valeanticipo.ImpresionValeAnticipoHandler;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
@@ -23,15 +23,15 @@ public class AccionAgregarVale extends Accion<Empleado> {
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<Empleado> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Empleado> e) throws FWException {
 		Empleado empleado = e.getSelectedElements().get(0);
 		JDialogAgregarValeAnticipo dialog = new JDialogAgregarValeAnticipo(e.getSource().getFrame(), empleado);
 		dialog.setVisible(true);
 		if(dialog.isAcepto()){
 			ValeAnticipo valeAnticipo = dialog.getValeAnticipo();
 			GTLPersonalBeanFactory.getInstance().getBean2(ValeAnticipoFacadeRemote.class).save(valeAnticipo,empleado);
-			CLJOptionPane.showInformationMessage(e.getSource().getFrame(), "El vale se ha creado satisfactoriamente", "Información");
-			if(CLJOptionPane.showQuestionMessage(e.getSource().getFrame(), "Desea imprimir el vale?", "Pregunta")==CLJOptionPane.YES_OPTION){
+			FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "El vale se ha creado satisfactoriamente", "Información");
+			if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "Desea imprimir el vale?", "Pregunta")==FWJOptionPane.YES_OPTION){
 				ImpresionValeAnticipoHandler handler = new ImpresionValeAnticipoHandler(valeAnticipo,e.getSource().getFrame());
 				handler.imprimir();
 			}

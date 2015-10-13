@@ -40,18 +40,18 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableCellRenderer;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cuenta.CuentaPersona;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
@@ -88,11 +88,11 @@ public class JFrameVerMovimientosPersona extends JFrame {
 	private JPanel panelCabecera;
 	private PanelDatePicker txtFechaDesde;
 	private PanelDatePicker txtFechaHasta;
-	private CLJTextField txtBusquedaPersona;
+	private FWJTextField txtBusquedaPersona;
 	private JButton btnBuscar;
 	private JPanel panelSur;
 	private JButton btnSalir;
-	private CLJTextField txtTotalCuenta;
+	private FWJTextField txtTotalCuenta;
 	private JPanel panelAcciones;
 	private JPanel panelDatosUsuario;
 	private JLabel lblNombre;
@@ -174,8 +174,8 @@ public class JFrameVerMovimientosPersona extends JFrame {
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, esta seguro?", "Factura");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, esta seguro?", "Factura");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -216,8 +216,8 @@ public class JFrameVerMovimientosPersona extends JFrame {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TBL_MOVS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_MOVS);
 			tabla.setStringColumn(COL_PAGOS, "Pagos", 0);
 			tabla.setStringColumn(COL_DESCR, "Descripción", 220, 320, true);
 			tabla.setFloatColumn(COL_DEBE, "Debe", 80, true);
@@ -229,17 +229,17 @@ public class JFrameVerMovimientosPersona extends JFrame {
 			tabla.setStringColumn(COL_USUARIO_CREADOR, "Usuario creador", 100, 100, true);
 			tabla.setStringColumn(COL_OBSERVACIONES, "Observaciones", 220, 320, true);
 			tabla.setReorderingAllowed(false);
-			tabla.setHeaderAlignment(COL_PAGOS, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_DESCR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_DEBE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_HABER, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_SALDO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_VERIFICADO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_USUARIO_VERIFICADOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_USUARIO_CREADOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_OBSERVACIONES, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_USUARIO_VERIFICADOR, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_USUARIO_CREADOR, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PAGOS, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DEBE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_HABER, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_SALDO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_VERIFICADO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_USUARIO_VERIFICADOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_USUARIO_CREADOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_OBSERVACIONES, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_USUARIO_VERIFICADOR, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_USUARIO_CREADOR, FWJTable.CENTER_ALIGN);
 			tabla.getColumnModel().getColumn(COL_PAGOS).setCellRenderer(getCellRenderer());
 			consultaDocumentoMovimientoVisitor = new ConsultarDocumentoVisitor(JFrameVerMovimientosPersona.this);
 			tabla.addMouseListener(new MouseAdapter() {
@@ -446,21 +446,21 @@ public class JFrameVerMovimientosPersona extends JFrame {
 
 				public void actionPerformed(ActionEvent evt) {
 					if(getDPFechaDesde().getDate()==null){
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La 'fecha desde' ingresada no es válida", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La 'fecha desde' ingresada no es válida", "Error");
 						return;
 					}
 					if(getDPFechaHasta().getDate()==null){
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La 'fecha hasta' ingresada no es válida", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La 'fecha hasta' ingresada no es válida", "Error");
 						return;
 					}
 					if (!getDPFechaDesde().getDate().after(getDPFechaHasta().getDate())) {
 						if (getPersonaElegida()!=null) {
 							buscarMovimientos();
 						} else {
-							CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "Debe elegir una persona", "Error");
+							FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "Debe elegir una persona", "Error");
 						}
 					} else {
-						CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La 'fecha desde' no debe ser posterior a la 'fecha hasta'", "Error");
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La 'fecha desde' no debe ser posterior a la 'fecha hasta'", "Error");
 					}
 				}
 			});
@@ -507,7 +507,7 @@ public class JFrameVerMovimientosPersona extends JFrame {
 					AccionEliminarCuentaPersonaVisitor racv = new AccionEliminarCuentaPersonaVisitor(JFrameVerMovimientosPersona.this);
 					movimientoCuenta.aceptarVisitor(racv);
 				} else {
-					CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+					FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 				}
 			}
 		}else{
@@ -538,7 +538,7 @@ public class JFrameVerMovimientosPersona extends JFrame {
 									AccionConfirmarCuentaVisitor racv = new AccionConfirmarCuentaVisitor(JFrameVerMovimientosPersona.this);
 									((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
 								} else {
-									CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+									FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 								}
 							}
 						}else{
@@ -574,7 +574,7 @@ public class JFrameVerMovimientosPersona extends JFrame {
 									EditarDocumentoVisitor racv = new EditarDocumentoVisitor(JFrameVerMovimientosPersona.this);
 									((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
 								} else {
-									CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+									FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 								}
 							}
 						}else{
@@ -653,10 +653,10 @@ public class JFrameVerMovimientosPersona extends JFrame {
 	//			pintarFacturasPagadas(mapaColores, infoCuentaTO);
 	//			pintarRecibosSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
 			} else {
-				CLJOptionPane.showWarningMessage(JFrameVerMovimientosPersona.this, "No se han encontrado resultados", "Error");
+				FWJOptionPane.showWarningMessage(JFrameVerMovimientosPersona.this, "No se han encontrado resultados", "Error");
 			}
 		}catch(ValidacionException vle){
-			CLJOptionPane.showErrorMessage(this, vle.getMensajeError(), "Error");
+			FWJOptionPane.showErrorMessage(this, vle.getMensajeError(), "Error");
 		}
 	}
 	
@@ -770,9 +770,9 @@ public class JFrameVerMovimientosPersona extends JFrame {
 		return btnSalir;
 	}
 
-	private CLJTextField getTxtTotalCuenta() {
+	private FWJTextField getTxtTotalCuenta() {
 		if (txtTotalCuenta == null) {
-			txtTotalCuenta = new CLJTextField();
+			txtTotalCuenta = new FWJTextField();
 			txtTotalCuenta.setPreferredSize(new Dimension(100, 20));
 			txtTotalCuenta.setEditable(false);
 		}
@@ -911,16 +911,16 @@ public class JFrameVerMovimientosPersona extends JFrame {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png"); 
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png"); 
 			btnExportarAExcel.setToolTipText("Exportar a Excel");
 			btnExportarAExcel.setEnabled(false);
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaMovimientos().getTabla();
+						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - " + getPersonaElegida().getRazonSocial(), EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -991,9 +991,9 @@ public class JFrameVerMovimientosPersona extends JFrame {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaMovimientos().getTabla();
+						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - " + getPersonaElegida().getRazonSocial(), EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -1009,7 +1009,7 @@ public class JFrameVerMovimientosPersona extends JFrame {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -1019,11 +1019,11 @@ public class JFrameVerMovimientosPersona extends JFrame {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JFrameVerMovimientosPersona.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 
@@ -1075,9 +1075,9 @@ public class JFrameVerMovimientosPersona extends JFrame {
 		return lblTelefono;
 	}
 	
-	private CLJTextField getTxtBusquedaPersona() {
+	private FWJTextField getTxtBusquedaPersona() {
 		if (txtBusquedaPersona == null) {
-			txtBusquedaPersona = new CLJTextField();
+			txtBusquedaPersona = new FWJTextField();
 			txtBusquedaPersona.setEditable(false);
 			txtBusquedaPersona.setPreferredSize(new Dimension(100, 20));
 			txtBusquedaPersona.addActionListener(new ActionListener() {
@@ -1124,20 +1124,20 @@ public class JFrameVerMovimientosPersona extends JFrame {
 
 	public void eliminarOrdenDePago(OrdenDePagoAPersona ordenDePago) {
 		try {
-			if(CLJOptionPane.showQuestionMessage(this, "Esta seguro que desea eliminar la órden?", "Pregunta")==CLJOptionPane.YES_OPTION){
+			if(FWJOptionPane.showQuestionMessage(this, "Esta seguro que desea eliminar la órden?", "Pregunta")==FWJOptionPane.YES_OPTION){
 				getOrdenFacade().eliminarOrden(ordenDePago, getUsuarioAdministrador().getUsrName());
-				CLJOptionPane.showInformationMessage(this, "La órden ha sido eliminada", "Información");
+				FWJOptionPane.showInformationMessage(this, "La órden ha sido eliminada", "Información");
 				buscarMovimientos();
 			}
-		} catch (CLException e) {
+		} catch (FWException e) {
 			BossError.gestionarError(e);
 		}
 	}
 
 	public void eliminarFactura(FacturaPersona factura) {
-		if(CLJOptionPane.showQuestionMessage(this, "Esta seguro que desea eliminar la factura?", "Pregunta")==CLJOptionPane.YES_OPTION){
+		if(FWJOptionPane.showQuestionMessage(this, "Esta seguro que desea eliminar la factura?", "Pregunta")==FWJOptionPane.YES_OPTION){
 			getFacturaFacade().eliminarFactura(factura, getUsuarioAdministrador().getUsrName());
-			CLJOptionPane.showInformationMessage(this, "La factura ha sido eliminada", "Información");
+			FWJOptionPane.showInformationMessage(this, "La factura ha sido eliminada", "Información");
 			buscarMovimientos();
 		}
 	}

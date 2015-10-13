@@ -8,7 +8,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.util.AnotacionesHelper;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.util.AntiguedadHelper;
 import ar.com.textillevel.gui.util.GenericUtils;

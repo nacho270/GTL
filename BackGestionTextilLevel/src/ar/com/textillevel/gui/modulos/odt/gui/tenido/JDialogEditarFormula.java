@@ -20,10 +20,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
@@ -44,7 +44,7 @@ public class JDialogEditarFormula extends JDialog {
 	private JPanel pnlDatos;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private JComboBox cmbTipoArticulo;
 	private JComboBox cmbColor;
 	private TabPaneTipoArticuloAnilinas tabPaneAnilinas;
@@ -115,7 +115,7 @@ public class JDialogEditarFormula extends JDialog {
 						for(TenidoTipoArticulo tta : formula.getTenidosComponentes()) {
 							for(AnilinaCantidad ac : tta.getAnilinasCantidad()) {
 								if(ac.getCantidad() > MAX_PROPORCION_ANILINA) {
-									if(CLJOptionPane.showQuestionMessage(JDialogEditarFormula.this, "La proporcion '" + ac.getCantidad() + "' supera el " + MAX_PROPORCION_ANILINA + "% ¿Desea Continuar?", "Confirmación") == CLJOptionPane.NO_OPTION) {
+									if(FWJOptionPane.showQuestionMessage(JDialogEditarFormula.this, "La proporcion '" + ac.getCantidad() + "' supera el " + MAX_PROPORCION_ANILINA + "% ¿Desea Continuar?", "Confirmación") == FWJOptionPane.NO_OPTION) {
 										return;
 									}
 								}
@@ -140,21 +140,21 @@ public class JDialogEditarFormula extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText().trim())) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta ingresar el nombre.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta ingresar el nombre.", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getCmbTipoArticulo().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta seleccionar el tipo de artículo.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta seleccionar el tipo de artículo.", "Error");
 			return false;
 		}
 		if(getCmbColor().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta seleccionar color.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta seleccionar color.", "Error");
 			return false;
 		}
 		String msgValidacionTabPanel = getTabPaneAnilinas().validar();
 		if(!StringUtil.isNullOrEmpty(msgValidacionTabPanel)) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormula.this, StringW.wordWrap(msgValidacionTabPanel), "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormula.this, StringW.wordWrap(msgValidacionTabPanel), "Error");
 			return false;
 		}
 
@@ -176,9 +176,9 @@ public class JDialogEditarFormula extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 			txtNombre.setEnabled(!modoConsulta);
 		}
 		return txtNombre;

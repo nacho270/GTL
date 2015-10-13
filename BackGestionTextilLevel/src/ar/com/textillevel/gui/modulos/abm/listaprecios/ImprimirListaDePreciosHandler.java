@@ -16,9 +16,9 @@ import net.sf.jasperreports.engine.JasperReport;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.EUnidad;
@@ -88,14 +88,14 @@ public class ImprimirListaDePreciosHandler {
 	public void imprimir() {
 		Cotizacion ultCotizacionVigente = getListaDePreciosFacade().getUltimaCotizacionVigente(versionListaDePrecios);
 		if(ultCotizacionVigente == null) {
-			int resp = CLJOptionPane.showQuestionMessage(padre, "No existe una cotización vigente ¿Desea crear una?", "Atención");
+			int resp = FWJOptionPane.showQuestionMessage(padre, "No existe una cotización vigente ¿Desea crear una?", "Atención");
 			JDialogSeleccionarDefinicionesAImprimir d = new JDialogSeleccionarDefinicionesAImprimir(padre, definiciones);
 			d.setVisible(true);
 			if (d.isAcepto()) {
 				this.definiciones = d.getDefinicionesAImprimir();
 				boolean okValidez = false;
 				String inputValidez = null;
-				if(resp == CLJOptionPane.YES_OPTION) {
+				if(resp == FWJOptionPane.YES_OPTION) {
 					do {
 						if(!okValidez) {
 							Object input = JOptionPane.showInputDialog(padre, "Ingrese la validez de la cotización (días): ", "Ingrese la validez de la cotización", JOptionPane.INFORMATION_MESSAGE, null, null, String.valueOf(parametros.getValidezCotizaciones()));
@@ -104,9 +104,9 @@ public class ImprimirListaDePreciosHandler {
 							}
 							inputValidez = input.toString();
 							if(inputValidez.trim().length()==0 || !GenericUtils.esNumerico(inputValidez)) {
-								CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
+								FWJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
 							} else if(Integer.valueOf(inputValidez) > 60){
-								CLJOptionPane.showErrorMessage(padre, "La validez no puede superar los 60 días.", "error");
+								FWJOptionPane.showErrorMessage(padre, "La validez no puede superar los 60 días.", "error");
 							} else {
 								okValidez = true;
 								break;
@@ -120,7 +120,7 @@ public class ImprimirListaDePreciosHandler {
 					Cotizacion cotizacion = generarYGrabarCotizacion(Integer.valueOf(inputValidez));
 					imprimir(inputValidez, cotizacion != null ? cotizacion.getNumero() : null);
 					if(cotizacion != null) {
-						CLJOptionPane.showInformationMessage(padre, "Se generó la cotización número '" + cotizacion.getNumero() + "'.", "Información");
+						FWJOptionPane.showInformationMessage(padre, "Se generó la cotización número '" + cotizacion.getNumero() + "'.", "Información");
 					}
 				} else {
 					imprimir("30", null);
@@ -153,7 +153,7 @@ public class ImprimirListaDePreciosHandler {
 			Cotizacion cotizacion = getListaDePreciosFacade().generarCotizacion(cliente, versionListaDePrecios, validez);
 			return cotizacion;
 		} catch (ValidacionException e) {
-			CLJOptionPane.showErrorMessage(padre, StringW.wordWrap("La cotización no se pudo generar. Probablemente se hicieron dos en el mismo momento. Por favor, reintente la operación."), "Error");
+			FWJOptionPane.showErrorMessage(padre, StringW.wordWrap("La cotización no se pudo generar. Probablemente se hicieron dos en el mismo momento. Por favor, reintente la operación."), "Error");
 			return null;
 		}
 	}

@@ -7,8 +7,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
-import ar.clarin.fwjava.util.NumUtil;
+import ar.com.fwcommon.dao.impl.GenericDAO;
+import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;

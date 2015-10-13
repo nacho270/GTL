@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.util.controles.calendario.renderers;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
 import ar.com.textillevel.gui.util.controles.calendario.EventoCalendario;
 
 public class EventosTablaSinBotonesRenderer implements EventosRenderer<PanelTablaSinBotones<EventoCalendario>> {
@@ -25,15 +25,15 @@ public class EventosTablaSinBotonesRenderer implements EventosRenderer<PanelTabl
 		private static final int COL_OBJ = 1;
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0,CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0,CANT_COLS);
 			tabla.setStringColumn(COL_DESC, "Eventos", 210,210,true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
 			tabla.setAllowHidingColumns(false);
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowSorting(false);
-			tabla.setHeaderAlignment(COL_DESC, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_DESC, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESC, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_DESC, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 

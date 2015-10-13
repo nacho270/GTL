@@ -2,8 +2,8 @@ package ar.com.textillevel.skin;
 
 import javax.swing.Icon;
 
-import ar.clarin.fwjava.templates.main.skin.AbstractSkin;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.templates.main.skin.AbstractSkin;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.gui.util.ESkin;
 
 public class SkinModerno extends AbstractSkin {

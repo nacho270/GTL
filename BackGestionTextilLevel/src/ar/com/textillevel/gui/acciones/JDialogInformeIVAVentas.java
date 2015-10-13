@@ -19,14 +19,14 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.CLTxtComboBoxBusqueda;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.NumUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.FWTxtComboBoxBusqueda;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.NumUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
@@ -51,7 +51,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
 	private JComboBox cmbTipoFactura;
-	private CLJTextField txtNroCliente;
+	private FWJTextField txtNroCliente;
 	private LinkableLabel lblElegirCliente;
 	private CLTxtComboBusquedaUsuarioByCodigo comboBusquedaUsuario;
 	
@@ -150,7 +150,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(getPanelFechaDesde().getDate() == null || getPanelFechaHasta().getDate() ==null){
-						CLJOptionPane.showErrorMessage(JDialogInformeIVAVentas.this, "Alguna de las fechas son inválidas", "Error");
+						FWJOptionPane.showErrorMessage(JDialogInformeIVAVentas.this, "Alguna de las fechas son inválidas", "Error");
 						return;
 					}
 					if(!getPanelFechaDesde().getDate().after(getPanelFechaHasta().getDate())){
@@ -164,7 +164,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 						setAcepto(true);
 						dispose();
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogInformeIVAVentas.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
+						FWJOptionPane.showErrorMessage(JDialogInformeIVAVentas.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
 					}
 				}
 			});
@@ -211,9 +211,9 @@ public class JDialogInformeIVAVentas extends JDialog {
 		return panCliente;
 	}
 	
-	private CLJTextField getTxtNroCliente() {
+	private FWJTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJTextField();
+			txtNroCliente = new FWJTextField();
 			txtNroCliente.setEditable(false);
 			txtNroCliente.setPreferredSize(new Dimension(50, 20));
 		}
@@ -252,7 +252,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 		return comboBusquedaUsuario;
 	}
 	
-	private class CLTxtComboBusquedaUsuarioByCodigo extends CLTxtComboBoxBusqueda<Cliente> {
+	private class CLTxtComboBusquedaUsuarioByCodigo extends FWTxtComboBoxBusqueda<Cliente> {
 
 		private static final long serialVersionUID = -8069636605971687535L;
 
@@ -278,7 +278,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 				return false;
 			}
 			if (!NumUtil.esNumerico(text)) {
-				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
+				FWJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
 				return false;
 			}
 			return true;
@@ -286,7 +286,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 
 		@Override
 		public void noHayResultado() {
-			CLJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
+			FWJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
 			setCliente(null);
 			getTxtNroCliente().setText("");
 		}

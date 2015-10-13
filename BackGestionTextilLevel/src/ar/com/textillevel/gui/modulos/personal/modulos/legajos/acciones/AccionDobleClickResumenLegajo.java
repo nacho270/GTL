@@ -1,7 +1,7 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.legajos.acciones;
 
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogResumenLegajo;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 

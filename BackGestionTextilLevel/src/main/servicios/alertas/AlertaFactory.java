@@ -1,6 +1,6 @@
 package main.servicios.alertas;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.modulos.alertas.entidades.AlertaFaltaStock;
 import ar.com.textillevel.modulos.alertas.enums.ETipoAlerta;

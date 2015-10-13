@@ -11,10 +11,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.ETipoCobro;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.ObraSocial;
@@ -32,7 +32,7 @@ public class GuiABMSindicato extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private JComboBox cmbTipoCobro;
 	private JComboBox cmbObraSocial;
 
@@ -104,7 +104,7 @@ public class GuiABMSindicato extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el Sindicato seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el Sindicato seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getSindicatoFacade().remove(getSindicatoActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -118,7 +118,7 @@ public class GuiABMSindicato extends GuiABMListaTemplate {
 			getTxtNombre().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
 			return false;
 		}
 	}
@@ -142,16 +142,16 @@ public class GuiABMSindicato extends GuiABMListaTemplate {
 	
 	private boolean validar() {
 		if(getTxtNombre().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del Sindicato.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del Sindicato.", "Advertencia");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getCmbTipoCobro().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de cobro.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de cobro.", "Advertencia");
 			return false;
 		}
 		if(getCmbObraSocial().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una obra social.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una obra social.", "Advertencia");
 			return false;
 		}
 		return true;
@@ -198,9 +198,9 @@ public class GuiABMSindicato extends GuiABMListaTemplate {
 		this.sindicatoActual = sindicato;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null){
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombre;
 	}

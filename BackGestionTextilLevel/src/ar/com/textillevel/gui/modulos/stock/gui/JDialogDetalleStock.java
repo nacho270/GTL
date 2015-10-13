@@ -26,11 +26,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileFilter;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
@@ -49,7 +49,7 @@ public class JDialogDetalleStock extends JDialog {
 	private static final String EXTENSION_EXCEL = ".xls";
 	private static final String EXTENSION_PDF = ".pdf";
 
-	private CLJTable tablaPreciosMateriaPrima;
+	private FWJTable tablaPreciosMateriaPrima;
 
 	private JButton btnExportarAExcel;
 	private JButton btnImprimirListado;
@@ -169,7 +169,7 @@ public class JDialogDetalleStock extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Está seguro que desea salir?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Está seguro que desea salir?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -181,15 +181,15 @@ public class JDialogDetalleStock extends JDialog {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 			btnExportarAExcel.setEnabled(false);
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getTablaPreciosMateriaPrima().getRowCount() > 0) {
-						CLJTable tabla = getTablaPreciosMateriaPrima();
+						FWJTable tabla = getTablaPreciosMateriaPrima();
 						mostrarFileChooser("Listado de Stock materias primas de proveedores", EXTENSION_EXCEL);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -227,9 +227,9 @@ public class JDialogDetalleStock extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getTablaPreciosMateriaPrima().getRowCount() > 0) {
-						CLJTable tabla = getTablaPreciosMateriaPrima();
+						FWJTable tabla = getTablaPreciosMateriaPrima();
 						mostrarFileChooser("Listado de Stock materias primas de proveedores", EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -244,7 +244,7 @@ public class JDialogDetalleStock extends JDialog {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -254,11 +254,11 @@ public class JDialogDetalleStock extends JDialog {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JDialogDetalleStock.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogDetalleStock.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 
@@ -292,10 +292,10 @@ public class JDialogDetalleStock extends JDialog {
 		return preciosMateriaPrima;
 	}
 
-	private CLJTable getTablaPreciosMateriaPrima() {
+	private FWJTable getTablaPreciosMateriaPrima() {
 		if (tablaPreciosMateriaPrima == null) {
 			setTipoMateriaPrima(getPreciosMateriaPrima().get(0).getMateriaPrima().getTipo());
-			tablaPreciosMateriaPrima = new CLJTable(0, getTipoMateriaPrima() == ETipoMateriaPrima.ANILINA ? CANT_COL_ANILINA : getTipoMateriaPrima() == ETipoMateriaPrima.TELA ? CANT_COL_TELA: CANT_COL);
+			tablaPreciosMateriaPrima = new FWJTable(0, getTipoMateriaPrima() == ETipoMateriaPrima.ANILINA ? CANT_COL_ANILINA : getTipoMateriaPrima() == ETipoMateriaPrima.TELA ? CANT_COL_TELA: CANT_COL);
 			llenarColumnas(tablaPreciosMateriaPrima);
 			tablaPreciosMateriaPrima.setReorderingAllowed(false);
 			tablaPreciosMateriaPrima.setAllowHidingColumns(false);
@@ -325,7 +325,7 @@ public class JDialogDetalleStock extends JDialog {
 		return tablaPreciosMateriaPrima;
 	}
 
-	private void llenarColumnas(CLJTable tabla) {
+	private void llenarColumnas(FWJTable tabla) {
 		tabla.setStringColumn(COL_DESCR, "Descripción", 200, 200, true);
 		tabla.setStringColumn(COL_PROV, "Proveedor", 150, 150, true);
 		tabla.setFloatColumn(COL_STOCK, "Stock actual", 100, true);

@@ -11,9 +11,9 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.NumUtil;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.BancoDAOLocal;
 import ar.com.textillevel.dao.api.local.ClienteDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;

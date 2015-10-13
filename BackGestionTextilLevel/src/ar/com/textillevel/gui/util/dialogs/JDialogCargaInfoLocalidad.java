@@ -13,10 +13,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.facade.api.remote.InfoLocalidadFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -30,9 +30,9 @@ public class JDialogCargaInfoLocalidad extends JDialog{
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	
-	private CLJTextField txtNombreLocalidad;
-	private CLJNumericTextField txtCodArea;
-	private CLJNumericTextField txtCodigoPostal;
+	private FWJTextField txtNombreLocalidad;
+	private FWJNumericTextField txtCodArea;
+	private FWJNumericTextField txtCodigoPostal;
 	
 	private JPanel pnlBotones;
 	private JPanel pnlDatos;
@@ -95,7 +95,7 @@ public class JDialogCargaInfoLocalidad extends JDialog{
 							newInfo.setCodigoPostal(getTxtCodigoPostal().getValue());
 							newInfo.setNombreLocalidad(getTxtNombreLocalidad().getText().toUpperCase());
 							infoLocalidadNueva = infoLocalidadFacade.guardarInfoLocalidad(newInfo);
-							CLJOptionPane.showInformationMessage(JDialogCargaInfoLocalidad.this, "Los datos se han guardado correctamente", "Carga localidad");
+							FWJOptionPane.showInformationMessage(JDialogCargaInfoLocalidad.this, "Los datos se han guardado correctamente", "Carga localidad");
 							dispose();
 						}
 					}catch(RuntimeException re){
@@ -105,22 +105,22 @@ public class JDialogCargaInfoLocalidad extends JDialog{
 
 				private boolean validar() {
 					if(getTxtNombreLocalidad().getText().trim().length() == 0){
-						CLJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "Debe ingresar la localidad", JDialogCargaInfoLocalidad.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "Debe ingresar la localidad", JDialogCargaInfoLocalidad.this.getTitle());
 						return false;
 					}
 					
 					if(getTxtCodigoPostal().getText().trim().length() == 0){
-						CLJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "Debe ingresar el código postal", JDialogCargaInfoLocalidad.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "Debe ingresar el código postal", JDialogCargaInfoLocalidad.this.getTitle());
 						return false;
 					}
 					
 					if(getTxtCodArea().getText().trim().length() == 0){
-						CLJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "Debe ingresar el código de área", JDialogCargaInfoLocalidad.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "Debe ingresar el código de área", JDialogCargaInfoLocalidad.this.getTitle());
 						return false;
 					}
 					
 					if(getTxtCodArea().getText().equalsIgnoreCase(getTxtCodigoPostal().getText())){
-						CLJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "El código postal no puede conincidir con el código de área", JDialogCargaInfoLocalidad.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaInfoLocalidad.this, "El código postal no puede conincidir con el código de área", JDialogCargaInfoLocalidad.this.getTitle());
 						return false;
 					}
 					
@@ -143,23 +143,23 @@ public class JDialogCargaInfoLocalidad extends JDialog{
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombreLocalidad() {
+	private FWJTextField getTxtNombreLocalidad() {
 		if(txtNombreLocalidad == null){
-			txtNombreLocalidad = new CLJTextField();
+			txtNombreLocalidad = new FWJTextField();
 		}
 		return txtNombreLocalidad;
 	}
 
-	private CLJNumericTextField getTxtCodArea() {
+	private FWJNumericTextField getTxtCodArea() {
 		if(txtCodArea == null){
-			txtCodArea = new CLJNumericTextField();
+			txtCodArea = new FWJNumericTextField();
 		}
 		return txtCodArea;
 	}
 
-	private CLJNumericTextField getTxtCodigoPostal() {
+	private FWJNumericTextField getTxtCodigoPostal() {
 		if(txtCodigoPostal == null){
-			txtCodigoPostal = new CLJNumericTextField();
+			txtCodigoPostal = new FWJNumericTextField();
 		}
 		return txtCodigoPostal;
 	}

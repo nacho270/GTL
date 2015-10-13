@@ -5,7 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.modulos.personal.dao.api.AccionSancionDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.AccionSancion;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.Sancion;

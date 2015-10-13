@@ -18,11 +18,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.entidades.Dia;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.entidades.Dia;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.TotalHorasPagoDia;
 import ar.com.textillevel.modulos.personal.facade.api.remote.DiaFacadeRemote;
@@ -40,7 +40,7 @@ public class JDialogCargarTotalHorasPagoDia extends JDialog {
 	private JPanel panelBotones;
 
 	private JComboBox cmbDia;
-	private CLJNumericTextField txtTotalHoras;
+	private FWJNumericTextField txtTotalHoras;
 	private JCheckBox chkSeDiscriminaEnRS;
 
 	private TotalHorasPagoDia totalHorasPagoDia;
@@ -132,12 +132,12 @@ public class JDialogCargarTotalHorasPagoDia extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtTotalHoras().getText())) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar un total de horas.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar un total de horas.", "Error");
 			getTxtTotalHoras().requestFocus();
 			return false;
 		}
 		if(getTxtTotalHoras().getValue()<=0) {
-			CLJOptionPane.showErrorMessage(owner, "El total de horas debe ser mayor a cero.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "El total de horas debe ser mayor a cero.", "Error");
 			getTxtTotalHoras().requestFocus();
 			return false;
 		}
@@ -157,9 +157,9 @@ public class JDialogCargarTotalHorasPagoDia extends JDialog {
 		return btnSalir;
 	}
 	
-	public CLJNumericTextField getTxtTotalHoras() {
+	public FWJNumericTextField getTxtTotalHoras() {
 		if(txtTotalHoras == null) {
-			txtTotalHoras = new CLJNumericTextField();
+			txtTotalHoras = new FWJNumericTextField();
 		}
 		return txtTotalHoras;
 	}

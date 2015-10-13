@@ -2,10 +2,10 @@ package ar.com.textillevel.gui.modulos.eventos;
 
 import java.util.List;
 
-import ar.clarin.fwjava.auditoria.ejb.Evento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.auditoria.ejb.Evento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.facade.api.remote.EventoFacadeRemote;
 import ar.com.textillevel.gui.modulos.eventos.builders.BuilderAccionesVisorEventos;
 import ar.com.textillevel.gui.modulos.eventos.cabecera.CabeceraVisorEventos;
@@ -14,7 +14,7 @@ import ar.com.textillevel.util.GTLBeanFactory;
 
 public class ModuloVisorEventosModel extends ModuloModel<Evento, ModeloCabeceraVisorEventos>{
 
-	public ModuloVisorEventosModel(Integer id) throws CLException {
+	public ModuloVisorEventosModel(Integer id) throws FWException {
 		super(id, BuilderAccionesVisorEventos.getInstance(), 
 				  BuilderAccionesVisorEventos.getInstance(), 
 				  BuilderAccionesVisorEventos.getInstance(), 

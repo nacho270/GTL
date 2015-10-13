@@ -14,10 +14,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.AccionProcedimiento;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.AccionProcedimientoFacadeRemote;
@@ -27,7 +27,7 @@ public class JDialogAltaAccionProcedimiento extends JDialog {
 
 	private static final long serialVersionUID = -9175208734020691699L;
 
-	private CLJTextField txtNombreAccion;
+	private FWJTextField txtNombreAccion;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
@@ -70,9 +70,9 @@ public class JDialogAltaAccionProcedimiento extends JDialog {
 		return panel;
 	}
 
-	private CLJTextField getTxtNombreAccion() {
+	private FWJTextField getTxtNombreAccion() {
 		if (txtNombreAccion == null) {
-			txtNombreAccion = new CLJTextField();
+			txtNombreAccion = new FWJTextField();
 			txtNombreAccion.setPreferredSize(new Dimension(200, 20));
 			txtNombreAccion.addActionListener(new ActionListener() {
 
@@ -91,7 +91,7 @@ public class JDialogAltaAccionProcedimiento extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getTxtNombreAccion().getText().trim().length() == 0) {
-						CLJOptionPane.showErrorMessage(JDialogAltaAccionProcedimiento.this, "Debe ingresar el nombre de la acción", "Error");
+						FWJOptionPane.showErrorMessage(JDialogAltaAccionProcedimiento.this, "Debe ingresar el nombre de la acción", "Error");
 						getTxtNombreAccion().requestFocus();
 						return;
 					}
@@ -102,7 +102,7 @@ public class JDialogAltaAccionProcedimiento extends JDialog {
 						accion = getAccionFacade().save(accion);
 					} catch (ValidacionException e1) {
 						accion = null;
-						CLJOptionPane.showErrorMessage(JDialogAltaAccionProcedimiento.this, StringW.wordWrap(e1.getMensajeError()), "Error");
+						FWJOptionPane.showErrorMessage(JDialogAltaAccionProcedimiento.this, StringW.wordWrap(e1.getMensajeError()), "Error");
 						return;
 					}
 					dispose();

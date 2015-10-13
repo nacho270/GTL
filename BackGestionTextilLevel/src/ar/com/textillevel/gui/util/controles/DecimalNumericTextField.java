@@ -17,7 +17,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import ar.clarin.fwjava.componentes.FixedSizeFilter;
+import ar.com.fwcommon.componentes.FixedSizeFilter;
 
 public class DecimalNumericTextField extends JTextField {
 

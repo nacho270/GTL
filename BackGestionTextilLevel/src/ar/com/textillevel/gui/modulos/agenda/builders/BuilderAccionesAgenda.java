@@ -3,19 +3,19 @@ package ar.com.textillevel.gui.modulos.agenda.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionesAdicionales;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
-import ar.clarin.fwjava.templates.modulo.model.totales.IBuilderTotales;
-import ar.clarin.fwjava.templates.modulo.model.totales.TotalGeneral;
-import ar.clarin.fwjava.templates.modulo.model.totales.Totales;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionesAdicionales;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
+import ar.com.fwcommon.templates.modulo.model.totales.TotalGeneral;
+import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.entidades.gente.IAgendable;
 import ar.com.textillevel.gui.modulos.agenda.acciones.AccionDobleClickItemAgenda;
 import ar.com.textillevel.gui.modulos.agenda.acciones.AccionVerDetallesContactoBuscado;
@@ -39,7 +39,7 @@ public class BuilderAccionesAgenda implements IBuilderAcciones<IAgendable>,
 		return instance;
 	}
 	
-	public Acciones<IAgendable> construirAcciones(int idModel) throws CLException {
+	public Acciones<IAgendable> construirAcciones(int idModel) throws FWException {
 		Acciones<IAgendable> acciones = new Acciones<IAgendable>();
 		List<Accion<IAgendable>> accionesConsulta = new ArrayList<Accion<IAgendable>>();
 		accionesConsulta.add(new AccionVerDetallesContactoBuscado());
@@ -71,7 +71,7 @@ public class BuilderAccionesAgenda implements IBuilderAcciones<IAgendable>,
 		return totales;
 	}
 
-	public AccionesAdicionales<IAgendable> construirAccionAdicional(int idModel) throws CLException {
+	public AccionesAdicionales<IAgendable> construirAccionAdicional(int idModel) throws FWException {
 		AccionesAdicionales<IAgendable> acciones = new AccionesAdicionales<IAgendable>();
 		acciones.addSingleElement(new AccionDobleClickItemAgenda());
 		return acciones;

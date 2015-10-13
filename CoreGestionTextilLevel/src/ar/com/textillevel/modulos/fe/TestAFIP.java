@@ -1,6 +1,6 @@
 package ar.com.textillevel.modulos.fe;
 
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -23,7 +23,7 @@ public class TestAFIP {
 		System.getProperties().setProperty("java.naming.provider.url", "localhost:1099");
 	}
 
-	public static void main(String[] args) throws CLException {
+	public static void main(String[] args) throws FWException {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		System.out.println("HASH: " + authData.getHash());
 		System.out.println("TOKEN: " + authData.getToken());

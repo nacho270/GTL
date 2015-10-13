@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTableAnalisis;
-import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTableAnalisis;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -48,8 +48,8 @@ public class PanTablaQuimicos extends PanTablaVisualizacionFormulaCliente {
 	public void setTenidos(List<TenidoTipoArticulo> tenidos) {
 		getPanInternal().limpiar();
 		getPanInternal().agregarElementos(tenidos);
-		((CLJTableAnalisis)getPanInternal().getTabla()).agruparColumna(0);
-		((CLJTableAnalisis)getPanInternal().getTabla()).agruparColumnaExtendido(1);
+		((FWJTableAnalisis)getPanInternal().getTabla()).agruparColumna(0);
+		((FWJTableAnalisis)getPanInternal().getTabla()).agruparColumnaExtendido(1);
 	}
 
 	private class PanTablaAnilinasReactivosCantidad extends PanelTabla<TenidoTipoArticulo> {
@@ -79,8 +79,8 @@ public class PanTablaQuimicos extends PanTablaVisualizacionFormulaCliente {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTableAnalisis(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTableAnalisis(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTÍCULO", 120, 120, true);
 			tabla.setStringColumn(COL_TIPO_FORMULABLE, "TIPO DE MATERIA PRIMA", 150, 150, true);
 			tabla.setStringColumn(COL_NOMBRE_FORMULABLE, "NOMBRE", 200, 200, true);

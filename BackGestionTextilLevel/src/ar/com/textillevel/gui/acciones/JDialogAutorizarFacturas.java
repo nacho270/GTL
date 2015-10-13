@@ -23,15 +23,15 @@ import javax.swing.event.ListSelectionListener;
 import org.apache.taglibs.string.util.StringW;
 
 import net.sf.jasperreports.engine.JRException;
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
@@ -119,8 +119,8 @@ public class JDialogAutorizarFacturas extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO, "Documento", 100, 100, true);
 			tabla.setIntColumn(COL_NUMERO, "Número", 60, true);
 			tabla.setDateColumn(COL_FECHA, "Fecha", 70, true);
@@ -186,7 +186,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 				btnAutorizar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (mapaDocumentosSeleccionados.keySet().size() > 1) {
-							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Seleccione documentos del mismo tipo.", "Error");
+							FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Seleccione documentos del mismo tipo.", "Error");
 							return;
 						}
 
@@ -195,7 +195,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 						
 						int[] selectedRows = getTabla().getSelectedRows();
 						if(selectedRows[0] != primerIndiceReal) {
-							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, 
+							FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, 
 									"Debe seleccionar la primera " + tipoDocumentoSeleccionado.getDescripcion(), "Error");
 							return;
 						}
@@ -208,7 +208,7 @@ public class JDialogAutorizarFacturas extends JDialog {
 								} else {
 									DocumentoContableCliente docActual = getElemento(indice.intValue());
 									if (ultimoDoc.getNroFactura().intValue() +1 != docActual.getNroFactura().intValue()) {
-										CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Debe seleccionar " + tipoDocumentoSeleccionado.getDescripcion() + " consecutivas", "Error");
+										FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Debe seleccionar " + tipoDocumentoSeleccionado.getDescripcion() + " consecutivas", "Error");
 										return;
 									}
 								}
@@ -218,15 +218,15 @@ public class JDialogAutorizarFacturas extends JDialog {
 						try {
 							for(int i : selectedRows) {
 								DocumentoContableCliente docAut = getDocFacade().autorizarDocumentoContableAFIP(getElemento(i));
-								if(CLJOptionPane.showQuestionMessage(JDialogAutorizarFacturas.this, "El documento ha sido autorizado con exito.\nDesea imprimir el documento?", "Pregunta") == CLJOptionPane.YES_OPTION){
+								if(FWJOptionPane.showQuestionMessage(JDialogAutorizarFacturas.this, "El documento ha sido autorizado con exito.\nDesea imprimir el documento?", "Pregunta") == FWJOptionPane.YES_OPTION){
 									imprimir(docAut);
 								}
 							}
 							llenarTabla();
 						} catch (ValidacionExceptionSinRollback e1) {
-							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
+							FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
 						} catch (ValidacionException e1) {
-							CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
+							FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, e1.getMensajeError(), "Error");
 						}
 					}
 				});
@@ -243,22 +243,22 @@ public class JDialogAutorizarFacturas extends JDialog {
 				break;
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-				CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				try{
 					ImpresionFacturaHandler ifHandler = new ImpresionFacturaHandler(docAut, input);
 					ifHandler.imprimir();
-				}catch(CLException cle){
+				}catch(FWException cle){
 					BossError.gestionarError(cle);
 				}catch(JRException jre){
 					jre.printStackTrace();
-					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al imprimir.", "Error");
+					FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al imprimir.", "Error");
 				}catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, StringW.wordWrap(e.getMensajeError()), "Error");
+					FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				}catch(IOException ioe) {
 					ioe.printStackTrace();
-					CLJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al generar el código de barras.", "Error");
+					FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Se ha producido un error al generar el código de barras.", "Error");
 				}
 			}
 		} while (!ok);

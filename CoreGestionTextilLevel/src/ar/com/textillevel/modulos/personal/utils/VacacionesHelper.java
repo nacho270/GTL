@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.RegistroVacacionesLegajo;
 import ar.com.textillevel.modulos.personal.entidades.vacaciones.ConfiguracionVacaciones;
 import ar.com.textillevel.modulos.personal.entidades.vacaciones.PeriodoVacaciones;

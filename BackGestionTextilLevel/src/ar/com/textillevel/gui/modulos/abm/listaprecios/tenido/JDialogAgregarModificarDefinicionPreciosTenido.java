@@ -23,9 +23,9 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
@@ -65,13 +65,13 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
 		if (definicionAModificar.getId() == null) {
 			if (gamas == null || gamas.isEmpty()) {
-				CLJOptionPane.showWarningMessage(this, "El cliente no cuenta con gamas definidas. Debe ingresarlas.", "Advertencia");
+				FWJOptionPane.showWarningMessage(this, "El cliente no cuenta con gamas definidas. Debe ingresarlas.", "Advertencia");
 				JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(this, getCliente());
 				d.setVisible(true);
 				if (d.isAcepto()) {
 					gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
 				} else {
-					CLJOptionPane.showWarningMessage(this, StringW.wordWrap("No se puede dar de alta la lista de precios para teñido si tener definidas las gamas cliente."), "Advertencia");
+					FWJOptionPane.showWarningMessage(this, StringW.wordWrap("No se puede dar de alta la lista de precios para teñido si tener definidas las gamas cliente."), "Advertencia");
 					setAcepto(false);
 					dispose();
 				}
@@ -243,7 +243,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	private boolean validarGama(GamaColorCliente gamaColorCliente) {
 		//Gama
 		if(gamaColorCliente == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Gama'.", "Error");
 			return false;
 		}
 		RangoAnchoArticuloTenido rangoAnchoArticuloTenido = (RangoAnchoArticuloTenido)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
@@ -252,7 +252,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			if(grupo != null) {
 				PrecioGama pg = grupo.getPrecioGama(gamaColorCliente);
 				if(pg != null && (elemSiendoEditado == null  || elemSiendoEditado != pg)) {
-					CLJOptionPane.showErrorMessage(this, "Ya existe un precio para la gama " + gamaColorCliente.getNombre(), "Error");
+					FWJOptionPane.showErrorMessage(this, "Ya existe un precio para la gama " + gamaColorCliente.getNombre(), "Error");
 					getTxtPrecio().requestFocus();
 					return false;
 				}
@@ -323,7 +323,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 					break;
 				}
 				if(inputPrecio.trim().length()==0 || !GenericUtils.esNumerico(inputPrecio)) {
-					CLJOptionPane.showErrorMessage(JDialogAgregarModificarDefinicionPreciosTenido.this, "Ingreso incorrecto", "error");
+					FWJOptionPane.showErrorMessage(JDialogAgregarModificarDefinicionPreciosTenido.this, "Ingreso incorrecto", "error");
 				} else {
 					boolean okPrecio = validarPrecio(inputPrecio);
 					if (okPrecio) {
@@ -357,7 +357,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		private JButton btnAceptar;
 		private JButton btnCancelar;
 		private JButton btnSaltar;
-		private CLJTextField txtNumberInput;
+		private FWJTextField txtNumberInput;
 		private JPanel pnlBotones;
 		private String precioInput;
 		private String txtIngreso;
@@ -444,9 +444,9 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			return btnSaltar;
 		}
 
-		private CLJTextField getTxtNumberInput() {
+		private FWJTextField getTxtNumberInput() {
 			if (txtNumberInput == null) {
-				txtNumberInput = new CLJTextField();
+				txtNumberInput = new FWJTextField();
 				txtNumberInput.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyPressed(KeyEvent e) {

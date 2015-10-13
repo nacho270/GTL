@@ -21,9 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
@@ -40,7 +40,7 @@ public class JDialogSeleccionarMateriaPrima extends JDialog {
 	
 	private JComboBox cmbTipoMatPrima;
 	private JComboBox cmbTipoAnilina;
-	private CLCheckBoxList<MateriaPrima> checkBoxList;
+	private FWCheckBoxList<MateriaPrima> checkBoxList;
 	private JButton btnBuscar;
 	private boolean acepto;
 	private List<MateriaPrima> matPrimaSelectedList;
@@ -172,7 +172,7 @@ public class JDialogSeleccionarMateriaPrima extends JDialog {
 
 				private boolean validar() {
 					if(getClCheckBoxList().getSelectedValues().length == 0){
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarMateriaPrima.this, "Debe seleccionar al menos un producto.", JDialogSeleccionarMateriaPrima.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarMateriaPrima.this, "Debe seleccionar al menos un producto.", JDialogSeleccionarMateriaPrima.this.getTitle());
 						return false;
 					}
 					return true;
@@ -194,9 +194,9 @@ public class JDialogSeleccionarMateriaPrima extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLCheckBoxList<MateriaPrima> getClCheckBoxList() {
+	private FWCheckBoxList<MateriaPrima> getClCheckBoxList() {
 		if(checkBoxList == null) {
-			checkBoxList = new CLCheckBoxList<MateriaPrima>() {
+			checkBoxList = new FWCheckBoxList<MateriaPrima>() {
 
 				private static final long serialVersionUID = -8028977693425752374L;
 

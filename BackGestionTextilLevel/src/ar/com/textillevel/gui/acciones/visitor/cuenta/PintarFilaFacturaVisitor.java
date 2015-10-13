@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebePersona;
@@ -19,13 +19,13 @@ import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 
 public class PintarFilaFacturaVisitor implements IFilaMovimientoVisitor {
 
-	private CLJTable tabla;
+	private FWJTable tabla;
 	private Map<Recibo, Color> mapaColores;
 	private Integer filaActual;
 	private CellRenderer renderer;
 	private Map<Integer, List<Integer>> mapaRecibosYPagosRecibos;
 	
-	public PintarFilaFacturaVisitor(CLJTable tabla, Map<Recibo, Color> mapaColores, CellRenderer renderer, Map<Integer, List<Integer>> mapaRecibosYPagosRecibos) {
+	public PintarFilaFacturaVisitor(FWJTable tabla, Map<Recibo, Color> mapaColores, CellRenderer renderer, Map<Integer, List<Integer>> mapaRecibosYPagosRecibos) {
 		this.tabla = tabla;
 		this.mapaColores = mapaColores;
 		this.renderer = renderer;
@@ -48,11 +48,11 @@ public class PintarFilaFacturaVisitor implements IFilaMovimientoVisitor {
 		
 	}
 
-	public CLJTable getTabla() {
+	public FWJTable getTabla() {
 		return tabla;
 	}
 
-	public void setTabla(CLJTable tabla) {
+	public void setTabla(FWJTable tabla) {
 		this.tabla = tabla;
 	}
 

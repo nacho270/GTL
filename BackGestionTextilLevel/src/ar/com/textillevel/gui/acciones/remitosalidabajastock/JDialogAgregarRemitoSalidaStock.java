@@ -35,15 +35,15 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
@@ -71,17 +71,17 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 	private static final int MAX_LONGITUD_RAZ_SOCIAL = 50;
 
 	private JPanel panDetalle;
-	private CLJTextField txtRazonSocial;
+	private FWJTextField txtRazonSocial;
 	private PanelTablaPieza panTablaPieza;
 	private JPanel pnlBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
 	private JTextField txtNroRemito;
-	private CLDateField txtFechaEmision;
+	private FWDateField txtFechaEmision;
 	private JTextField txtRemitosEntrada;
 	private JTextField txtCodODT;
-	private CLJTextField txtPesoTotal;
+	private FWJTextField txtPesoTotal;
 	private JTextField txtProductos;
 	private RemitoSalida remitoSalida;
 	private JPanel panTotales; 
@@ -343,9 +343,9 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 		return new ArrayList<Articulo>(articuloSet);
 	}
 	
-	private CLJTextField getTxtPesoTotal() {
+	private FWJTextField getTxtPesoTotal() {
 		if(txtPesoTotal == null) {
-			txtPesoTotal = new CLJTextField();
+			txtPesoTotal = new FWJTextField();
 		}
 		return txtPesoTotal;
 	}
@@ -358,24 +358,24 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 		return txtCodODT;
 	}
 
-	private CLDateField getTxtFechaEmision() {
+	private FWDateField getTxtFechaEmision() {
 		if(txtFechaEmision == null) {
-			txtFechaEmision = new CLDateField();
+			txtFechaEmision = new FWDateField();
 		}
 		return txtFechaEmision;
 	}
 
 	private JTextField getTxtNroRemito() {
 		if(txtNroRemito == null) {
-			txtNroRemito = new CLJTextField();
+			txtNroRemito = new FWJTextField();
 			txtNroRemito.setEditable(false);
 		}
 		return txtNroRemito;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if(txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
@@ -424,14 +424,14 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 						try {
 							remitoSalidaSaved = getRemitoSalidaFacade().ingresarRemitoSalidaPorSalida01(remitoSalidaTO);
 							setRemitoSalida(remitoSalidaSaved);
-							CLJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaStock.this, "El remito se ha grabado con éxito", "Información");
-							if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalidaStock.this, "¿Desea imprimir el remito?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+							FWJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaStock.this, "El remito se ha grabado con éxito", "Información");
+							if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalidaStock.this, "¿Desea imprimir el remito?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 								ImprimirRemitoHandler imprimirRemitoHandler = new ImprimirRemitoHandler(remitoSalidaSaved, getParametrosGeneralesFacade().getParametrosGenerales().getNroSucursal(), JDialogAgregarRemitoSalidaStock.this);
 								imprimirRemitoHandler.imprimir();
 							}
 							dispose();
 						} catch (ValidacionException e1) {
-							CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, StringW.wordWrap(e1.getMensajeError()), "Error");
+							FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, StringW.wordWrap(e1.getMensajeError()), "Error");
 						}
 					} 
 				}
@@ -466,22 +466,22 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 	private boolean validar() {
 		String pesoTotalStr = getTxtPesoTotal().getText();
 		if(StringUtil.isNullOrEmpty(pesoTotalStr) || !GenericUtils.esNumerico(pesoTotalStr)) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, "Debe ingresar un peso total válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, "Debe ingresar un peso total válido.", "Error");
 			getTxtPesoTotal().requestFocus();
 			return false;
 		}
 		if(getPanTablaPieza().getTabla().getRowCount() == 0) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, "Debe ingresar al menos una pieza", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, "Debe ingresar al menos una pieza", "Error");
 			return false;
 		}
 		String msgValidacionPiezas = getPanTablaPieza().validarElementos();
 		if(msgValidacionPiezas != null) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, StringW.wordWrap(msgValidacionPiezas), "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, StringW.wordWrap(msgValidacionPiezas), "Error");
 			return false;
 		}
 		boolean existRepeatedValues = getPanTablaPieza().getTabla().existRepeatedValues(new int[]{0});
 		if(existRepeatedValues) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, "Los números de piezas deben ser distintos.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalidaStock.this, "Los números de piezas deben ser distintos.", "Error");
 			return false;
 		}
 		return true;
@@ -573,7 +573,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 				PiezaRemito pr = (PiezaRemito)getTabla().getValueAt(row, COL_OBJ);
 				OrdenDeTrabajo odtAssigned = (OrdenDeTrabajo)getTabla().getValueAt(row, COL_ODT);
 				if(odtAssigned != null && odtAssigned.getId() != null) {
-					CLJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaStock.this, "No se puede cambiar la ODT de la pieza de " + pr.getMetros(), "Información");
+					FWJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaStock.this, "No se puede cambiar la ODT de la pieza de " + pr.getMetros(), "Información");
 					continue;
 				} else {
 					getTabla().setValueAt(selectedODT, row, COL_ODT);
@@ -615,8 +615,8 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaPiezaEntrada = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tablaPiezaEntrada = new FWJTable(0, CANT_COLS);
 			tablaPiezaEntrada.setIntColumn(COL_NRO_PIEZA, "NUMERO", 1, 10000, 50, false);
 			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA, "METROS", 0, Float.MAX_VALUE, 50, true);
 			tablaPiezaEntrada.setStringColumn(COL_OBSERVACIONES, "OBSERVACIONES", 220, 220, false);

@@ -39,15 +39,15 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLCheckBoxListDialog;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWCheckBoxListDialog;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.wfsanciones.WorkflowEstadoSancionVisitor;
@@ -117,7 +117,7 @@ public class JDialogResumenLegajo extends JDialog {
 	private JTextField txtDocumento;
 	private JLabel lblDocumento;
 	
-	private CLJNumericTextField txtSumaDiasRemanentes;
+	private FWJNumericTextField txtSumaDiasRemanentes;
 	
 	private JLabel lblFotoEmpleado;
 	private JComboBox cmbTipoSancion;
@@ -222,7 +222,7 @@ public class JDialogResumenLegajo extends JDialog {
 				}
 				getTxtSumaDiasRemanentes().setValue(diasCorrespondientes.longValue() - sumaDiasRemanentes.longValue());
 			}else{
-				CLJOptionPane.showWarningMessage(this, "Atención: No se ha cargado la configuración de vacaciones", "Advertencia");
+				FWJOptionPane.showWarningMessage(this, "Atención: No se ha cargado la configuración de vacaciones", "Advertencia");
 			}
 		}
 	}
@@ -493,7 +493,7 @@ public class JDialogResumenLegajo extends JDialog {
 						CartaDocumento cd = (CartaDocumento)elemento; //No está habilitada para apercibimientos
 						EstadoSancion estadoSancion = SancionEstadoFactory.getInstance().getEstadoSancion(cd.getEstadoCD());
 						if(estadoSancion.getEstadosSiguientes().size() == 1) {
-							if(CLJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+							if(FWJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 								EstadoSancion nextEstadoSancion = estadoSancion.getEstadosSiguientes().iterator().next();
 								WorkflowEstadoSancionVisitor visitor = new WorkflowEstadoSancionVisitor(owner, cd, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName()); 
 								nextEstadoSancion.accept(visitor);
@@ -508,7 +508,7 @@ public class JDialogResumenLegajo extends JDialog {
 							}
 							Object opcion = JOptionPane.showInputDialog(JDialogResumenLegajo.this, "Seleccione la operación a realizar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, correcs,correcs[0]);
 							if(opcion != null) {
-								if(CLJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+								if(FWJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 									EEStadoCartaDocumento enumEstadoCD = EEStadoCartaDocumento.getByDescripcion((String)opcion);
 									EstadoSancion nextEstadoSancion = SancionEstadoFactory.getInstance().getEstadoSancion(enumEstadoCD);
 									WorkflowEstadoSancionVisitor visitor = new WorkflowEstadoSancionVisitor(owner, cd, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName()); 
@@ -525,8 +525,8 @@ public class JDialogResumenLegajo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setDateColumn(COL_FECHA, "FECHA");
 			tabla.setStringColumn(COL_TIPO_SANCION, "SANCION", 100, 100, true);
 			tabla.setMultilineColumn(COL_DETALLE_SANCION, "DETALLE", 330, true);
@@ -634,7 +634,7 @@ public class JDialogResumenLegajo extends JDialog {
 						cd.setTipoCD(tipoCD);
 						List<Sancion> sancionesNoAsociadas = getSancionFacade().getSancionesNoAsociadas(empleado.getLegajo(), cd.getTipoCD());
 						if(!sancionesNoAsociadas.isEmpty()) {
-							CLCheckBoxListDialog lista = new CLCheckBoxListDialog(owner);
+							FWCheckBoxListDialog lista = new FWCheckBoxListDialog(owner);
 							lista.setValores(sancionesNoAsociadas, true);
 							lista.setVisible(true);
 							cd.getSancionesAsociadas().addAll(lista.getValoresSeleccionados());
@@ -652,13 +652,13 @@ public class JDialogResumenLegajo extends JDialog {
 
 		@Override
 		public boolean validarQuitar() {
-			if(CLJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea eliminar la sanción junto con toda su historia?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea eliminar la sanción junto con toda su historia?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 				if(esAdminOrIngresoPasswordDeAdmin()) {
 					try {
 						getSancionFacade().eliminarSancion(getElemento(getTabla().getSelectedRow()));
 						return true;
 					} catch (ValidacionException e) {
-						CLJOptionPane.showErrorMessage(JDialogResumenLegajo.this, StringW.wordWrap(e.getMensajeError()), "Error");
+						FWJOptionPane.showErrorMessage(JDialogResumenLegajo.this, StringW.wordWrap(e.getMensajeError()), "Error");
 					}
 				}
 				
@@ -695,7 +695,7 @@ public class JDialogResumenLegajo extends JDialog {
 						ValeAtencion elemento = getElemento(getTabla().getSelectedRow());
 						EstadoValeAtencion estadoValeAtencion = ValeAtencionEstadoFactory.getInstance().getEstadoValeAtencion(elemento.getEstadoValeAtencion());
 						if(estadoValeAtencion.getEstadosSiguientes().size() == 1) {
-							if(CLJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+							if(FWJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 								EstadoValeAtencion nextEstadoValeAtencion = estadoValeAtencion.getEstadosSiguientes().iterator().next();
 								WorkflowEstadoValeAtencionVisitor visitor = new WorkflowEstadoValeAtencionVisitor(owner, elemento, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName()); 
 								nextEstadoValeAtencion.accept(visitor);
@@ -710,7 +710,7 @@ public class JDialogResumenLegajo extends JDialog {
 							}
 							Object opcion = JOptionPane.showInputDialog(JDialogResumenLegajo.this, "Seleccione la operación a realizar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, correcs,correcs[0]);
 							if(opcion != null) {
-								if(CLJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+								if(FWJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea realizar la acción?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 									EEStadoValeEnfermedad enumEstadoVA = EEStadoValeEnfermedad.getByDescripcion((String)opcion);
 									EstadoValeAtencion nextEstadoValeAtencion = ValeAtencionEstadoFactory.getInstance().getEstadoValeAtencion(enumEstadoVA);
 									WorkflowEstadoValeAtencionVisitor visitor = new WorkflowEstadoValeAtencionVisitor(owner, elemento, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName()); 
@@ -734,8 +734,8 @@ public class JDialogResumenLegajo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setDateColumn(COL_FECHA, "FECHA");
 			tabla.setStringColumn(COL_TIPO_VALE_ATENCION, "VALE", 100, 100, true);
 			tabla.setMultilineColumn(COL_DETALLE_VALE_ATENCION, "DETALLE", 350, true);
@@ -849,13 +849,13 @@ public class JDialogResumenLegajo extends JDialog {
 
 		@Override
 		public boolean validarQuitar() {
-			if(CLJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea eliminar el vale de atención junto con toda su historia?"), "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(JDialogResumenLegajo.this, StringW.wordWrap("¿Está seguro que desea eliminar el vale de atención junto con toda su historia?"), "Confirmación") == FWJOptionPane.YES_OPTION) {
 				if(esAdminOrIngresoPasswordDeAdmin()) {
 					try {
 						getValeAtencionFacade().eliminarValeAtencion(getElemento(getTabla().getSelectedRow()));
 						return true;
 					} catch (ValidacionException e) {
-						CLJOptionPane.showErrorMessage(JDialogResumenLegajo.this, StringW.wordWrap(e.getMensajeError()), "Error");
+						FWJOptionPane.showErrorMessage(JDialogResumenLegajo.this, StringW.wordWrap(e.getMensajeError()), "Error");
 					}
 				}
 			}
@@ -886,8 +886,8 @@ public class JDialogResumenLegajo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_NRO, "NUMERO", 60, 60, true);
 			tabla.setDateColumn(COL_FECHA, "FECHA");
 			tabla.setStringColumn(COL_ESTADO, "ESTADO", 80, 80, true);
@@ -940,8 +940,8 @@ public class JDialogResumenLegajo extends JDialog {
 			if(dialog.isAcepto()){
 				ValeAnticipo valeAnticipo = dialog.getValeAnticipo();
 				valeAnticipo = getValeAnticipoFacade().save(valeAnticipo,empleado);
-				CLJOptionPane.showInformationMessage(owner, "El vale se ha creado satisfactoriamente", "Información");
-				if(CLJOptionPane.showQuestionMessage(owner, "Desea imprimir el vale?", "Pregunta")==CLJOptionPane.YES_OPTION){
+				FWJOptionPane.showInformationMessage(owner, "El vale se ha creado satisfactoriamente", "Información");
+				if(FWJOptionPane.showQuestionMessage(owner, "Desea imprimir el vale?", "Pregunta")==FWJOptionPane.YES_OPTION){
 					ImpresionValeAnticipoHandler handler = new ImpresionValeAnticipoHandler(valeAnticipo,owner);
 					handler.imprimir();
 				}
@@ -1015,8 +1015,8 @@ public class JDialogResumenLegajo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setDateColumn(COL_FECHA_DESDE, "Desde", 100, true);
 			tabla.setDateColumn(COL_FECHA_HASTA, "Hasta", 100, true);
 			tabla.setIntColumn(COL_DIAS_TOMADOS, "Días tomados", 100, true);
@@ -1054,7 +1054,7 @@ public class JDialogResumenLegajo extends JDialog {
 			if(fila >-1){
 				ConfiguracionVacaciones conf = getConfiguracionFacade().getConfiguracionVacaciones(DateUtil.getHoy());
 				if(conf == null){
-					CLJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No existe una configuración de vacaciones vigente para la fecha actual", "Error");
+					FWJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No existe una configuración de vacaciones vigente para la fecha actual", "Error");
 					return;
 				}
 				LegajoEmpleado legajo = empleado.getLegajo();
@@ -1078,7 +1078,7 @@ public class JDialogResumenLegajo extends JDialog {
 						refreshTableVacaciones();
 					}
 				}else{
-					CLJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No se pueden modificar los registros de vacaciones pasados","Error");
+					FWJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No se pueden modificar los registros de vacaciones pasados","Error");
 				}
 			}
 		}
@@ -1101,7 +1101,7 @@ public class JDialogResumenLegajo extends JDialog {
 					GTLPersonalBeanFactory.getInstance().getBean2(VacacionesFacadeRemote.class).borrarPeriodoVacaciones(empleado,reg);
 					refreshTableVacaciones();
 				}else{
-					CLJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No se pueden borrar los registros de vacaciones pasados","Error");
+					FWJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No se pueden borrar los registros de vacaciones pasados","Error");
 				}
 			}
 			return false;
@@ -1111,7 +1111,7 @@ public class JDialogResumenLegajo extends JDialog {
 		public boolean validarAgregar() {
 			ConfiguracionVacaciones conf = getConfiguracionFacade().getConfiguracionVacaciones(DateUtil.getHoy());
 			if(conf == null){
-				CLJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No existe una configuración de vacaciones vigente para la fecha actual", "Error");
+				FWJOptionPane.showErrorMessage(JDialogResumenLegajo.this, "No existe una configuración de vacaciones vigente para la fecha actual", "Error");
 				return false;
 			}
 			LegajoEmpleado legajo = empleado.getLegajo();
@@ -1119,7 +1119,7 @@ public class JDialogResumenLegajo extends JDialog {
 			VigenciaEmpleado ultima = historialVigencias.get(historialVigencias.size()-1);
 			PeriodoVacaciones periodoCorrespondiente = VacacionesHelper.getPeriodoCorrespondiente(conf, ultima.getFechaAlta());
 			if(periodoCorrespondiente == null){
-				CLJOptionPane.showWarningMessage(JDialogResumenLegajo.this, "El empleado tiene menos de " + conf.getMesesMinimosParaEntrar() + " meses de antigüedad.\nSe calcula 1 día de vacaciones por cada 20 trabajados.", "Advertencia");
+				FWJOptionPane.showWarningMessage(JDialogResumenLegajo.this, "El empleado tiene menos de " + conf.getMesesMinimosParaEntrar() + " meses de antigüedad.\nSe calcula 1 día de vacaciones por cada 20 trabajados.", "Advertencia");
 				//TODO: CALCULAR 1 DIA POR CADA 20 TRABAJADOS
 			}
 			List<RegistroVacacionesLegajo> historialVacaciones = legajo.getHistorialVacaciones();
@@ -1153,9 +1153,9 @@ public class JDialogResumenLegajo extends JDialog {
 		return panel;
 	}
 
-	private CLJNumericTextField getTxtSumaDiasRemanentes() {
+	private FWJNumericTextField getTxtSumaDiasRemanentes() {
 		if(txtSumaDiasRemanentes == null){
-			txtSumaDiasRemanentes = new CLJNumericTextField();
+			txtSumaDiasRemanentes = new FWJNumericTextField();
 			txtSumaDiasRemanentes.setPreferredSize(new Dimension(120, 20));
 			txtSumaDiasRemanentes.setEditable(false);
 		}

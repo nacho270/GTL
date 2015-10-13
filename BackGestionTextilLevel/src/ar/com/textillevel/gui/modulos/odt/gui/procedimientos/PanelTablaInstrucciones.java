@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.odt.gui.procedimientos;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.gui.util.panels.PanelTablaAgregarQuitarSubirBajarModificar;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
 
@@ -21,14 +21,14 @@ public abstract class PanelTablaInstrucciones extends PanelTablaAgregarQuitarSub
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setMultilineColumn(COL_DESCRIPCION, "Descripción", 400, true, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setHeaderAlignment(COL_DESCRIPCION, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCRIPCION, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 

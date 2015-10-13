@@ -27,9 +27,9 @@ import javax.swing.JScrollPane;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
@@ -45,7 +45,7 @@ public class JDialogSeleccionarStockTela extends JDialog {
 	private JButton btnCancelar;
 	private JComboBox cmbArticulo;
 	private JPanel pnlBotones;
-	private CLJTable tablaStockPMP;
+	private FWJTable tablaStockPMP;
 	private PrecioMateriaPrimaFacadeRemote remitoEntradaFacade;
 	private ArticuloFacadeRemote articuloFacade;
 	private PiezaRemitoSalidaTO piezaRemitoSalidaTO;
@@ -130,14 +130,14 @@ public class JDialogSeleccionarStockTela extends JDialog {
 		return cmbArticulo;
 	}
 
-	private CLJTable getTablaStockPMP() {
+	private FWJTable getTablaStockPMP() {
 		if(tablaStockPMP == null) {
-			tablaStockPMP = new CLJTable(0, 4);
+			tablaStockPMP = new FWJTable(0, 4);
 			tablaStockPMP.setStringColumn(0, "TELA", 250, 250, true);
 			tablaStockPMP.setStringColumn(1, "STOCK DISPONIBLE", 120, 120, true);
 			tablaStockPMP.setFloatColumn(2, "STOCK ELEGIDO", 0f, Float.MAX_VALUE,  120, false);
 			tablaStockPMP.setStringColumn(3, "", 0, 0, true);
-			tablaStockPMP.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaStockPMP.setAlignment(0, FWJTable.CENTER_ALIGN);
 		}
 		return tablaStockPMP;
 	}
@@ -201,7 +201,7 @@ public class JDialogSeleccionarStockTela extends JDialog {
 			PrecioMateriaPrima pmp = (PrecioMateriaPrima)getTablaStockPMP().getValueAt(i, 3);
 			BigDecimal stockConsumido = getStockConsumido(pmp);
 			if(stockConsumir != null && (stockConsumir > 0 && pmp.getStockInicialDisponible().subtract(stockConsumido).floatValue() < stockConsumir)) {
-				CLJOptionPane.showErrorMessage(JDialogSeleccionarStockTela.this, StringW.wordWrap("La cantidad a elegir debe ser mayor a cero y menor o igual al stock disponible"), "Error");
+				FWJOptionPane.showErrorMessage(JDialogSeleccionarStockTela.this, StringW.wordWrap("La cantidad a elegir debe ser mayor a cero y menor o igual al stock disponible"), "Error");
 				return false;
 			}
 		}

@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.recibo.to.ResumenReciboTO;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
@@ -24,7 +24,7 @@ public interface ReciboFacadeRemote {
 	
 	public Recibo saveRecibo(Recibo recibo);
 	
-	public void anularRecibo(Recibo recibo, String usuario) throws CLException;
+	public void anularRecibo(Recibo recibo, String usuario) throws FWException;
 	
 	public void borrarRecibo(Recibo recibo, String usuario) throws ValidacionException;
 

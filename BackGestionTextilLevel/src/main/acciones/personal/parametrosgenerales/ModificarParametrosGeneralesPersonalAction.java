@@ -6,8 +6,8 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.gui.modulos.personal.abm.configuracion.JDialogParametrosGenerales;
 import ar.com.textillevel.modulos.personal.entidades.configuracion.ParametrosGeneralesPersonal;
 import ar.com.textillevel.modulos.personal.facade.api.remote.ParametrosGeneralesPersonalFacadeRemote;
@@ -50,7 +50,7 @@ public class ModificarParametrosGeneralesPersonalAction implements Action {
 			ParametrosGeneralesPersonalFacadeRemote pgfr = GTLPersonalBeanFactory.getInstance().getBean(ParametrosGeneralesPersonalFacadeRemote.class);
 			ParametrosGeneralesPersonal pg = pgfr.getParametrosGenerales();
 			new JDialogParametrosGenerales(frame, pg).setVisible(true);
-		} catch (CLException e1) {
+		} catch (FWException e1) {
 			BossError.gestionarError(e1);
 		}
 	}

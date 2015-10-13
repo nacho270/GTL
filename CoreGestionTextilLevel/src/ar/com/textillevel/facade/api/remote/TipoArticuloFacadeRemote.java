@@ -1,9 +1,10 @@
 package ar.com.textillevel.facade.api.remote;
 
 import java.util.List;
+
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 
 @Remote

@@ -2,7 +2,7 @@ package ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.contra
 
 import java.util.Map;
 
-import ar.clarin.fwjava.templates.main.AbstractMainTemplate;
+import ar.com.fwcommon.templates.main.AbstractMainTemplate;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogInputFirmante;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.HorarioDia;

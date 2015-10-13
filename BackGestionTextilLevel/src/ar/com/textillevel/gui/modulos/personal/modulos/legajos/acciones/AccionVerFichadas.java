@@ -2,9 +2,9 @@ package ar.com.textillevel.gui.modulos.personal.modulos.legajos.acciones;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogVerInfoFichadas;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 
@@ -19,7 +19,7 @@ public class AccionVerFichadas extends Accion<Empleado>{
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<Empleado> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Empleado> e) throws FWException {
 		new JDialogVerInfoFichadas(e.getSource().getFrame(), e.getSelectedElements().get(0).getLegajo()).setVisible(true);
 		return false;
 	}

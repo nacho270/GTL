@@ -18,10 +18,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
@@ -52,7 +52,7 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 	
 	private JPanel pnlControlesExtra;
 	
-	private CLJTextField txtNombreProducto;
+	private FWJTextField txtNombreProducto;
 	private JComboBox cmbArticulos;
 	private JComboBox cmbTipoProducto;
 	
@@ -139,7 +139,7 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el producto seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el producto seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getProductosFacade().remove(getProductoActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -155,7 +155,7 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 				if(getFlagModificarTenido()==null || !getFlagModificarTenido()){
 					GamaColor gama = (GamaColor)getCmbGamas().getSelectedItem();
 					List<Color> colores = gama.getColores();
-					if(CLJOptionPane.showQuestionMessage(this, "Atención: Se grabarán " + colores.size() + " productos. ¿Desea continuar?", "Advertencia")==CLJOptionPane.YES_OPTION){
+					if(FWJOptionPane.showQuestionMessage(this, "Atención: Se grabarán " + colores.size() + " productos. ¿Desea continuar?", "Advertencia")==FWJOptionPane.YES_OPTION){
 						List<ProductoTenido> prodsTenido = new ArrayList<ProductoTenido>();
 						for(Color c : colores){
 							ProductoTenido p = new ProductoTenido();
@@ -221,19 +221,19 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 		
 		if(tipoProducto == ETipoProducto.ESTAMPADO){
 			if(getCmbEstampados().getSelectedItem() == null){
-				CLJOptionPane.showErrorMessage(this, "Debe seleccionar un estampado.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe seleccionar un estampado.", "Advertencia");
 				return false;
 			}
 			
 			if(getCmbVariantes().getSelectedItem() == null){
-				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una variante.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe seleccionar una variante.", "Advertencia");
 				return false;
 			}
 		}
 		
 		if(tipoProducto == ETipoProducto.TENIDO){
 			if(getCmbGamas().getSelectedItem() == null){
-				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una gama de colores.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe seleccionar una gama de colores.", "Advertencia");
 				return false;
 			}
 		}
@@ -250,7 +250,7 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 			getTxtNombreProducto().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un producto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un producto", "Error");
 			return false;
 		}
 	}
@@ -331,9 +331,9 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 		return pnlControlesExtra;
 	}
 
-	private CLJTextField getTxtNombreProducto() {
+	private FWJTextField getTxtNombreProducto() {
 		if(txtNombreProducto == null){
-			txtNombreProducto = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreProducto = new FWJTextField(MAX_LONGITUD_NOMBRE);
 			txtNombreProducto.setEditable(false);
 		}
 		return txtNombreProducto;

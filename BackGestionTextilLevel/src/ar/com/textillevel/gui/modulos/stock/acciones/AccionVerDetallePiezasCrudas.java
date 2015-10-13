@@ -2,9 +2,9 @@ package ar.com.textillevel.gui.modulos.stock.acciones;
 
 import java.util.Set;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
@@ -23,7 +23,7 @@ public class AccionVerDetallePiezasCrudas extends Accion<ItemMateriaPrimaTO>{
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws CLException {
+	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws FWException {
 		ModuloStockTelasFisicasModel moduloModel = (ModuloStockTelasFisicasModel)e.getSource().getModulosModel().get(1);
 		JDialogDetallePiezasFisicas jDialogDetallePiezasFisicas = new JDialogDetallePiezasFisicas(e.getSource().getFrame(), ((ItemMateriaPrimaTelaTO)e.getSelectedElements().get(0)).getArticulo(),ETipoTela.CRUDA, moduloModel.getPiezasElegidas());
 		jDialogDetallePiezasFisicas.setVisible(true);

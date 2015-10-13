@@ -8,8 +8,8 @@ import javax.ejb.Stateless;
 
 import org.jboss.annotation.IgnoreDependency;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionFacturaProveedorDAOLocal;

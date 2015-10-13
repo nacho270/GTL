@@ -23,7 +23,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRemitoSalidaProveedor;

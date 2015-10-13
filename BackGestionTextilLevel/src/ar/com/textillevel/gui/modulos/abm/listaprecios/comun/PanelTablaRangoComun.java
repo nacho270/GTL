@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.abm.listaprecios.comun;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
@@ -22,16 +22,16 @@ public class PanelTablaRangoComun extends PanelTablaRango<RangoAnchoComun, Preci
 	}
 
 	@Override
-	protected CLJTable construirTabla() {
-		CLJTable tabla = new CLJTable(0, CANT_COLS);
+	protected FWJTable construirTabla() {
+		FWJTable tabla = new FWJTable(0, CANT_COLS);
 		tabla.setStringColumn(COL_ANCHO, "ANCHO", 150, 150, true);
 		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTICULO", 150, 150, true);
 		tabla.setFloatColumn(COL_PRECIO, "PRECIO", 100, true);
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-		tabla.setHeaderAlignment(COL_ANCHO, CLJTable.CENTER_ALIGN);
-		tabla.setHeaderAlignment(COL_TIPO_ARTICULO, CLJTable.CENTER_ALIGN);
-		tabla.setHeaderAlignment(COL_PRECIO, CLJTable.CENTER_ALIGN);
-		tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+		tabla.setHeaderAlignment(COL_ANCHO, FWJTable.CENTER_ALIGN);
+		tabla.setHeaderAlignment(COL_TIPO_ARTICULO, FWJTable.CENTER_ALIGN);
+		tabla.setHeaderAlignment(COL_PRECIO, FWJTable.CENTER_ALIGN);
+		tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 		tabla.setAllowHidingColumns(false);
 		tabla.setAllowSorting(false);
 		tabla.setReorderingAllowed(false);

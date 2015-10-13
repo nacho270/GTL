@@ -7,7 +7,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaCreditoProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;

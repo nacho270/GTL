@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.controles.calendario.EventoCalendario;
 
 public class DefaultEventosRenderer implements EventosRenderer<JLabel> {

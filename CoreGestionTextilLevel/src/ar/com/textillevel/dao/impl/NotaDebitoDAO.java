@@ -1,9 +1,11 @@
 package ar.com.textillevel.dao.impl;
 
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.Query;
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.NotaDebitoDAOLocal;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 

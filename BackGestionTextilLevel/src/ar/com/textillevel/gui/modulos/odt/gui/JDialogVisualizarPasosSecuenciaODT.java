@@ -17,9 +17,9 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.InstruccionProcedimientoRenderer;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.JDialogSeleccionarInstruccion;
@@ -102,8 +102,8 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 		}
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS){
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS){
 
 				private static final long serialVersionUID = -7020923238057433347L;
 
@@ -134,11 +134,11 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			tabla.setStringColumn(COL_OBJ_INST, "", 0);
 			tabla.setStringColumn(COL_ORDEN_PASO, "", 0);
 			tabla.setStringColumn(COL_ORDEN_INSTRUCCION_PASO, "", 0);
-			tabla.setHeaderAlignment(COL_SECTOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PASO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_OBS, CLJTable.CENTER_ALIGN);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setHeaderAlignment(COL_SECTOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PASO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_OBS, FWJTable.CENTER_ALIGN);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);

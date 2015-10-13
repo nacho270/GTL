@@ -12,9 +12,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.InfoDireccion;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Referencia;
 
@@ -23,7 +23,7 @@ public class JDialogAgregarModificarReferencia extends JDialog {
 	private static final long serialVersionUID = 2321649030764682533L;
 
 	private PanelDomicilioCompleto panelDomicilio;
-	private CLJTextField txtReferencia;
+	private FWJTextField txtReferencia;
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -99,9 +99,9 @@ public class JDialogAgregarModificarReferencia extends JDialog {
 		return panelDomicilio;
 	}
 
-	public CLJTextField getTxtReferencia() {
+	public FWJTextField getTxtReferencia() {
 		if(txtReferencia == null){
-			txtReferencia = new CLJTextField();
+			txtReferencia = new FWJTextField();
 			txtReferencia.setPreferredSize(new Dimension(240, 20));
 		}
 		return txtReferencia;
@@ -136,7 +136,7 @@ public class JDialogAgregarModificarReferencia extends JDialog {
 
 	private boolean validar() {
 		if(getTxtReferencia().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre de la referencia", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre de la referencia", "Error");
 			getTxtReferencia().requestFocus();
 			return false;
 		}

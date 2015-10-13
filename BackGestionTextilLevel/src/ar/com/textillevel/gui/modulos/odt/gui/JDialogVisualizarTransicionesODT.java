@@ -23,11 +23,11 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
@@ -172,7 +172,7 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 						}
 					}
 					if(pasosDelSectorActual.isEmpty()) {
-						CLJOptionPane.showInformationMessage(JDialogVisualizarTransicionesODT.this, StringW.wordWrap("No existen pasos definidos dentro de la secuencia de trabajo para el sector '" + sectorMaquinaActual + "' ."), "Atención");
+						FWJOptionPane.showInformationMessage(JDialogVisualizarTransicionesODT.this, StringW.wordWrap("No existen pasos definidos dentro de la secuencia de trabajo para el sector '" + sectorMaquinaActual + "' ."), "Atención");
 					} else {
 						abrirDialogoVisualizador(pasosDelSectorActual);	
 					}
@@ -273,8 +273,8 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -285,15 +285,15 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 
 			});
 			tabla.setStringColumn(COL_TRANSICION, "DETALLE", 150, 150, true);
-			tabla.setHeaderAlignment(COL_TRANSICION, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_TRANSICION, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_ESTADO, "ESTADO", 100, 100, true);
-			tabla.setHeaderAlignment(COL_ESTADO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ESTADO, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_FECHA_HORA, "FECHA/HORA", 120, 120, true);
-			tabla.setHeaderAlignment(COL_FECHA_HORA, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_HORA, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_USUARIO, "USUARIO", 120, 120, true);
-			tabla.setHeaderAlignment(COL_FECHA_HORA, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_HORA, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_OBSERVACIONES, "OBSERVACIONES", 150, 150, true);
-			tabla.setHeaderAlignment(COL_OBSERVACIONES, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_OBSERVACIONES, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			return tabla;
 		}

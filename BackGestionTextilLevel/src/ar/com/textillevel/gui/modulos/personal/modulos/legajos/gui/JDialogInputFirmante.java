@@ -12,16 +12,16 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJLetterTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJLetterTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 
 public class JDialogInputFirmante extends JDialog {
 
 	private static final long serialVersionUID = 6608151259865894905L;
 
 	private JComboBox cmbPrefijo;
-	private CLJLetterTextField txtNombre;
+	private FWJLetterTextField txtNombre;
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -70,9 +70,9 @@ public class JDialogInputFirmante extends JDialog {
 		return cmbPrefijo;
 	}
 
-	public CLJLetterTextField getTxtNombre() {
+	public FWJLetterTextField getTxtNombre() {
 		if(txtNombre == null){
-			txtNombre = new CLJLetterTextField(30);
+			txtNombre = new FWJLetterTextField(30);
 			txtNombre.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					getBtnAceptar().doClick();
@@ -108,7 +108,7 @@ public class JDialogInputFirmante extends JDialog {
 						setResultado(((EPrefijo)getCmbPrefijo().getSelectedItem()).descripcion+""+getTxtNombre().getText().trim());
 						dispose();
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogInputFirmante.this, "Debe ingresar el nombre del firmante", "Error");
+						FWJOptionPane.showErrorMessage(JDialogInputFirmante.this, "Debe ingresar el nombre del firmante", "Error");
 						getTxtNombre().requestFocus();
 						return;
 					}

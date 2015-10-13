@@ -11,19 +11,19 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLBotonCalendario;
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWBotonCalendario;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 
 public class JDialogInputFecha extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private CLDateField txtFecha;
+	private FWDateField txtFecha;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLBotonCalendario btnFecha;
+	private FWBotonCalendario btnFecha;
 	private JPanel panelCentral;
 	
 	private Date fecha;
@@ -64,9 +64,9 @@ public class JDialogInputFecha extends JDialog {
 		return panel;
 	}
 
-	public CLDateField getTxtFecha() {
+	public FWDateField getTxtFecha() {
 		if(txtFecha==null){
-			txtFecha = new CLDateField();
+			txtFecha = new FWDateField();
 			txtFecha.setFecha(DateUtil.getHoy());
 			txtFecha.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -107,9 +107,9 @@ public class JDialogInputFecha extends JDialog {
 		return fecha;
 	}
 
-	private CLBotonCalendario getBtnFecha() {
+	private FWBotonCalendario getBtnFecha() {
 		if(btnFecha == null) {
-			btnFecha = new CLBotonCalendario(DateUtil.getHoy()) {
+			btnFecha = new FWBotonCalendario(DateUtil.getHoy()) {
 
 				private static final long serialVersionUID = 1L;
 

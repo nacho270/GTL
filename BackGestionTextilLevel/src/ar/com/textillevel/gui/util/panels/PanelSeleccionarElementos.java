@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxListDialog;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxListDialog;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 
 public class PanelSeleccionarElementos<T> extends JPanel {
@@ -70,7 +70,7 @@ public class PanelSeleccionarElementos<T> extends JPanel {
 
 				@SuppressWarnings("unchecked")
 				public void actionPerformed(ActionEvent e) {
-					CLCheckBoxListDialog clCheckBoxListDialog = new CLCheckBoxListDialog(owner);
+					FWCheckBoxListDialog clCheckBoxListDialog = new FWCheckBoxListDialog(owner);
 					clCheckBoxListDialog.setTitle(PanelSeleccionarElementos.this.titleLabel);
 					clCheckBoxListDialog.setValores(elements, true);
 					

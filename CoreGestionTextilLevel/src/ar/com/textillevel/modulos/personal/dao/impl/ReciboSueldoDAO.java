@@ -5,8 +5,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
-import ar.clarin.fwjava.entidades.Mes;
+import ar.com.fwcommon.dao.impl.GenericDAO;
+import ar.com.fwcommon.entidades.Mes;
 import ar.com.textillevel.modulos.personal.dao.api.ReciboSueldoDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.ItemReciboSueldo;

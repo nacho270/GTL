@@ -30,15 +30,15 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
@@ -61,13 +61,13 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	private JPanel panelImagen;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private PanelTablaVariante panelTablaVariante;
 	private JLabel lblImagen;
 	private JButton btnAgregarImagen;
 	private JButton btnQuitarImagen;
 	private String pathAnterior;
-	private CLJNumericTextField txtNroDibujo;
+	private FWJNumericTextField txtNroDibujo;
 	private JTextField txtAnchoCilindro;
 	
 	private DibujoEstampado dibujo;
@@ -129,9 +129,9 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 		return panelImagen;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombre;
 	}
@@ -162,7 +162,7 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMDibujoEstampado.this, "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMDibujoEstampado.this, "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getDibujoEstampadoFacadeRemote().remove(getDibujoActual());
 				lista.setSelectedIndex(-1);
 			}
@@ -191,39 +191,39 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText())) {
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Falta Completar el campo 'Nombre'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Falta Completar el campo 'Nombre'", "Advertencia");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		Integer nroDibujo = getTxtNroDibujo().getValue();
 		if(nroDibujo==null){
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Falta Completar el campo 'Número'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Falta Completar el campo 'Número'", "Advertencia");
 			getTxtNroDibujo().requestFocus();
 			return false;
 		}
 		if(nroDibujo < COTA_MINIMA_NRO_DIBUJO) {
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "El Número de Dibujo no puede ser menor a " + COTA_MINIMA_NRO_DIBUJO, "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "El Número de Dibujo no puede ser menor a " + COTA_MINIMA_NRO_DIBUJO, "Advertencia");
 			getTxtNroDibujo().requestFocus();
 			return false;
 		}
 		if(getDibujoEstampadoFacadeRemote().existsNroDibujo(dibujo.getId(), nroDibujo)) {
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "El Número " + nroDibujo + " ya está siendo usado para otro dibujo.", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "El Número " + nroDibujo + " ya está siendo usado para otro dibujo.", "Advertencia");
 			getTxtNroDibujo().requestFocus();
 			return false;
 		}
 		String text = getTxtAnchoCilindro().getText();
 		if(!GenericUtils.esNumerico(text)) {
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Debe ingresar un ancho de cilindro numérico.", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Debe ingresar un ancho de cilindro numérico.", "Advertencia");
 			getTxtAnchoCilindro().requestFocus();
 			return false;
 		}
 		if(getPanelTablaVariante().getTabla().getRowCount() == 0) {
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Debe definir al menos una variante.", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "Debe definir al menos una variante.", "Advertencia");
 			return false;
 		}
 		String mensaje = getPanelTablaVariante().validar();
 		if(mensaje != null) {
-			CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, StringW.wordWrap(mensaje), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, StringW.wordWrap(mensaje), "Advertencia");
 			return false;
 		}
 		return true;
@@ -236,7 +236,7 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 			getTxtNombre().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un dibujo", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un dibujo", "Error");
 			return false;
 		}
 	}
@@ -357,7 +357,7 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 		protected void botonModificarPresionado(int filaSeleccionada) {
 			if(filaSeleccionada != -1) {
 				if(getTxtNroDibujo().getValue() == null) {
-					CLJOptionPane.showInformationMessage(GuiABMDibujoEstampado.this, "Por favor, ingrese el número de dibujo", "Error");
+					FWJOptionPane.showInformationMessage(GuiABMDibujoEstampado.this, "Por favor, ingrese el número de dibujo", "Error");
 					return;
 				}
 
@@ -393,8 +393,8 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaVariante = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tablaVariante = new FWJTable(0, CANT_COLS);
 			tablaVariante.setStringColumn(COL_VARIANTE, "Nombre", 200, 200, true);
 			tablaVariante.setMultilineColumn(COL_COLOR, "Cilindro/Colores", 350, true);
 			tablaVariante.setStringColumn(COL_OBJ, "", 0, 0, true);
@@ -430,7 +430,7 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 		@Override
 		public boolean validarAgregar() {
 			if(getTxtNroDibujo().getValue() == null) {
-				CLJOptionPane.showInformationMessage(GuiABMDibujoEstampado.this, "Por favor, ingrese el número de dibujo", "Error");
+				FWJOptionPane.showInformationMessage(GuiABMDibujoEstampado.this, "Por favor, ingrese el número de dibujo", "Error");
 				return false;
 			}
 			
@@ -515,11 +515,11 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 								loadImageFile(file.getAbsolutePath());
 								habilitarBotonesImagen(true, true);
 							} else {
-								CLJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "La imagen seleccionada supera las dimensiones esperadas.\n" + "El ancho máximo esperado debe ser menor o igual a: "
+								FWJOptionPane.showErrorMessage(GuiABMDibujoEstampado.this, "La imagen seleccionada supera las dimensiones esperadas.\n" + "El ancho máximo esperado debe ser menor o igual a: "
 										+ ANCHO_IMAGEN + " pixeles.\n" + "El alto máximo esperado debe ser menor o igual a: " + ALTO_IMAGEN + " pixeles.\n", "Dimensiones inválidas");
 							}
 						} else{
-							CLJOptionPane.showErrorMessage(null,"La imagen no es de un formato válido", "Tama\u00F1o inválido");
+							FWJOptionPane.showErrorMessage(null,"La imagen no es de un formato válido", "Tama\u00F1o inválido");
 						}
 					}
 				}
@@ -611,9 +611,9 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 //		return true;
 	}
 
-	private CLJNumericTextField getTxtNroDibujo() {
+	private FWJNumericTextField getTxtNroDibujo() {
 		if(txtNroDibujo == null){
-			txtNroDibujo = new CLJNumericTextField();
+			txtNroDibujo = new FWJNumericTextField();
 			txtNroDibujo.setMaxLength(4);
 		}
 		return txtNroDibujo;

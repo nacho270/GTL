@@ -3,19 +3,19 @@ package ar.com.textillevel.gui.modulos.stock.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionesAdicionales;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
-import ar.clarin.fwjava.templates.modulo.model.totales.IBuilderTotales;
-import ar.clarin.fwjava.templates.modulo.model.totales.TotalGeneral;
-import ar.clarin.fwjava.templates.modulo.model.totales.Totales;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionesAdicionales;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
+import ar.com.fwcommon.templates.modulo.model.totales.TotalGeneral;
+import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.gui.modulos.stock.acciones.AccionDobleClickVerMovimientosStock;
 import ar.com.textillevel.gui.modulos.stock.acciones.AccionVerMovimientosStockPrecioMateriaPrima;
@@ -35,13 +35,13 @@ public class BuilderModuloStockPigmentos implements IBuilderAccionAdicional<Item
 		return instance;
 	}
 	
-	public AccionesAdicionales<ItemMateriaPrimaTO> construirAccionAdicional(int idModel) throws CLException {
+	public AccionesAdicionales<ItemMateriaPrimaTO> construirAccionAdicional(int idModel) throws FWException {
 		AccionesAdicionales<ItemMateriaPrimaTO> acciones = new AccionesAdicionales<ItemMateriaPrimaTO>();
 		acciones.addSingleElement(new AccionDobleClickVerMovimientosStock());
 		return acciones;
 	}
 
-	public Acciones<ItemMateriaPrimaTO> construirAcciones(int idModel) throws CLException {
+	public Acciones<ItemMateriaPrimaTO> construirAcciones(int idModel) throws FWException {
 		Acciones<ItemMateriaPrimaTO> acciones = new Acciones<ItemMateriaPrimaTO>();
 		List<Accion<ItemMateriaPrimaTO>> accionesCreacion = new ArrayList<Accion<ItemMateriaPrimaTO>>();
 		accionesCreacion.add(new AccionVerMovimientosStockPrecioMateriaPrima());

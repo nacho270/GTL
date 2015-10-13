@@ -15,11 +15,11 @@ import javax.ejb.Stateless;
 
 import org.jboss.annotation.IgnoreDependency;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaProveedorDAOLocal;
 import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
@@ -222,7 +222,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		//procedo a eliminar
 		try {
 			remitoSalidaDAOLocal.remove(remitoSalida);
-		} catch (CLException e) {
+		} catch (FWException e) {
 			e.printStackTrace();
 		}
 		auditoriaFacade.auditar(usrName, "Eliminación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.BAJA, remitoSalida);

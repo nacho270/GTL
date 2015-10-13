@@ -27,13 +27,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
@@ -69,13 +69,13 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 
 	private List<MateriaPrima> mats;
 
-	private CLJTextField txtNombreProducto;
-	private CLJTextField txtConcentracion;
+	private FWJTextField txtNombreProducto;
+	private FWJTextField txtConcentracion;
 //	private CLJTextField txtStockActual;
 //	private CLJTextField txtPuntoPedido;
 	private JComboBox cmbTipoMateriaPrima;
 	private JComboBox cmbUnidades;
-	private CLJTextArea txtObservaciones;
+	private FWJTextArea txtObservaciones;
 	private JButton btnVerSeleccionarHijos;
 
 	private CardLayout cardLayout;
@@ -83,8 +83,8 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	// anilina
 	private JPanel pnlAnilina;
 	private JComboBox cmbTipoAnilina;
-	private CLJNumericTextField txtColorIndex;
-	private CLJTextField txtHexaDecimalColor;
+	private FWJNumericTextField txtColorIndex;
+	private FWJTextField txtHexaDecimalColor;
 	private JPanel panColor;
 	private JButton btnElegirColor;
 	private Color colorAnilina;
@@ -98,12 +98,12 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	//cilindro
 	private JPanel pnlCilindro;
 	private JComboBox cmbAnchoCilindro;
-	private CLJTextField txtMeshCilindro;
-	private CLJTextField txtDiametroCilindro;
+	private FWJTextField txtMeshCilindro;
+	private FWJTextField txtDiametroCilindro;
 	
 	//cabezal
 	private JPanel pnlCabezal;
-	private CLJTextField txtDiametroCabezal;
+	private FWJTextField txtDiametroCabezal;
 
 	private MateriaPrima materiaPrima;
 
@@ -208,7 +208,7 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la materia prima seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la materia prima seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getMateriaPrimaFacade().remove(getMateriaPrimaActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -273,13 +273,13 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	private boolean validar() {
 
 		if (getTxtDescripcion().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la descripción", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la descripción", "Advertencia");
 			getTxtDescripcion().requestFocus();
 			return false;
 		}
 
 		if (getTxtConcentracion().getText().trim().length() > 0 && !GenericUtils.esNumerico(getTxtConcentracion().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Solo puede ingresar números.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Solo puede ingresar números.", "Advertencia");
 			getTxtConcentracion().requestFocus();
 			return false;
 		}
@@ -297,18 +297,18 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		if (tipoMateriaPrima == ETipoMateriaPrima.ANILINA) {
 
 			if (getCmbTipoAnilina().getSelectedItem() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de anilina.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de anilina.", "Advertencia");
 				return false;
 			}
 			
 			if(getTxtColorIndex().getText().trim().length() == 0){
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el color index", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el color index", "Advertencia");
 				getTxtColorIndex().requestFocus();
 				return false;
 			}
 
 			if (!GenericUtils.esNumerico(getTxtColorIndex().getText())) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
 				getTxtColorIndex().requestFocus();
 				return false;
 			}
@@ -323,25 +323,25 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		
 		if(tipoMateriaPrima ==ETipoMateriaPrima.CILINDRO){
 			if(getTxtMeshCilindro().getText().trim().length() == 0){
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el mesh del cilindro", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el mesh del cilindro", "Advertencia");
 				getTxtMeshCilindro().requestFocus();
 				return false;
 			}
 
 			if (!GenericUtils.esNumerico(getTxtMeshCilindro().getText())) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
 				getTxtMeshCilindro().requestFocus();
 				return false;
 			}
 			
 			if(getTxtDiametroCilindro().getText().trim().length() == 0){
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el diámetro", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el diámetro", "Advertencia");
 				getTxtDiametroCilindro().requestFocus();
 				return false;
 			}
 
 			if (!GenericUtils.esNumerico(getTxtDiametroCilindro().getText())) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
 				getTxtDiametroCilindro().requestFocus();
 				return false;
 			}
@@ -349,13 +349,13 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		
 		if(tipoMateriaPrima == ETipoMateriaPrima.CABEZAL){
 			if(getTxtDiametroCabezal().getText().trim().length() == 0){
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar el diámetro", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar el diámetro", "Advertencia");
 				getTxtDiametroCabezal().requestFocus();
 				return false;
 			}
 
 			if (!GenericUtils.esNumerico(getTxtDiametroCabezal().getText())) {
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar solo números.", "Advertencia");
 				getTxtDiametroCabezal().requestFocus();
 				return false;
 			}
@@ -372,7 +372,7 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			getTxtDescripcion().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un producto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un producto", "Error");
 			return false;
 		}
 	}
@@ -494,16 +494,16 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		return pnlControlesExtra;
 	}
 
-	private CLJTextField getTxtDescripcion() {
+	private FWJTextField getTxtDescripcion() {
 		if (txtNombreProducto == null) {
-			txtNombreProducto = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreProducto = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreProducto;
 	}
 
-	private CLJTextField getTxtConcentracion() {
+	private FWJTextField getTxtConcentracion() {
 		if (txtConcentracion == null) {
-			txtConcentracion = new CLJTextField();
+			txtConcentracion = new FWJTextField();
 		}
 		return txtConcentracion;
 	}
@@ -629,17 +629,17 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		return cmbTipoAnilina;
 	}
 
-	private CLJNumericTextField getTxtColorIndex() {
+	private FWJNumericTextField getTxtColorIndex() {
 		if (txtColorIndex == null) {
-			txtColorIndex = new CLJNumericTextField();
+			txtColorIndex = new FWJNumericTextField();
 			txtColorIndex.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtColorIndex;
 	}
 
-	private CLJTextField getTxtHexaDecimalColor() {
+	private FWJTextField getTxtHexaDecimalColor() {
 		if (txtHexaDecimalColor == null) {
-			txtHexaDecimalColor = new CLJTextField();
+			txtHexaDecimalColor = new FWJTextField();
 			txtHexaDecimalColor.setPreferredSize(new Dimension(120, 20));
 			txtHexaDecimalColor.setEditable(false);
 			txtHexaDecimalColor.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
@@ -647,9 +647,9 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		return txtHexaDecimalColor;
 	}
 
-	private CLJTextArea getTxtObservaciones() {
+	private FWJTextArea getTxtObservaciones() {
 		if (txtObservaciones == null) {
-			txtObservaciones = new CLJTextArea(MAX_LONGITUD_OBSERVACIONES);
+			txtObservaciones = new FWJTextArea(MAX_LONGITUD_OBSERVACIONES);
 			txtObservaciones.setPreferredSize(new Dimension(510, 50));
 			txtObservaciones.setLineWrap(true);
 			txtObservaciones.setBorder(BorderFactory.createLineBorder(Color.BLUE.darker()));
@@ -759,17 +759,17 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		return cmbAnchoCilindro;
 	}
 
-	private CLJTextField getTxtMeshCilindro() {
+	private FWJTextField getTxtMeshCilindro() {
 		if(txtMeshCilindro == null){
-			txtMeshCilindro = new CLJTextField();
+			txtMeshCilindro = new FWJTextField();
 			txtMeshCilindro.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtMeshCilindro;
 	}
 
-	private CLJTextField getTxtDiametroCilindro() {
+	private FWJTextField getTxtDiametroCilindro() {
 		if(txtDiametroCilindro == null){
-			txtDiametroCilindro = new CLJTextField();
+			txtDiametroCilindro = new FWJTextField();
 			txtDiametroCilindro.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtDiametroCilindro;
@@ -825,9 +825,9 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 		return pnlCabezal;
 	}
 	
-	private CLJTextField getTxtDiametroCabezal() {
+	private FWJTextField getTxtDiametroCabezal() {
 		if(txtDiametroCabezal == null){
-			txtDiametroCabezal = new CLJTextField();
+			txtDiametroCabezal = new FWJTextField();
 			txtDiametroCabezal.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtDiametroCabezal;

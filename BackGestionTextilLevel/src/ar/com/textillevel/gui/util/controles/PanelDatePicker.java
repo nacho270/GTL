@@ -6,14 +6,14 @@ import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLBotonCalendario;
-import ar.clarin.fwjava.componentes.CLDateField;
+import ar.com.fwcommon.componentes.FWBotonCalendario;
+import ar.com.fwcommon.componentes.FWDateField;
 
 @SuppressWarnings("serial")
 public class PanelDatePicker extends JPanel {
 
-	private CLDateField txtFecha;
-	private CLBotonCalendario btnFecha;
+	private FWDateField txtFecha;
+	private FWBotonCalendario btnFecha;
 	private JLabel lblFecha;
 
 	public PanelDatePicker() {
@@ -36,17 +36,17 @@ public class PanelDatePicker extends JPanel {
 		return lblFecha;
 	}
 
-	private CLDateField getFecha() {
+	private FWDateField getFecha() {
 		if(txtFecha == null) {
-			txtFecha = new CLDateField();
+			txtFecha = new FWDateField();
 			txtFecha.setFecha(new java.sql.Date(System.currentTimeMillis()));
 		}
 		return txtFecha;
 	}
 
-	private CLBotonCalendario getBtnCalendario() {
+	private FWBotonCalendario getBtnCalendario() {
 		if (btnFecha == null) {
-			btnFecha = new CLBotonCalendario() {
+			btnFecha = new FWBotonCalendario() {
 
 				private static final long serialVersionUID = -3859887013841770893L;
 

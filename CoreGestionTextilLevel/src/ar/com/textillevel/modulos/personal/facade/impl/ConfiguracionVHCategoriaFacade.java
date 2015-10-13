@@ -2,10 +2,11 @@ package ar.com.textillevel.modulos.personal.facade.impl;
 
 import java.sql.Date;
 import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.dao.api.ConfiguracionVHCategoriaDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.ConfiguracionValorHoraCategoria;
 import ar.com.textillevel.modulos.personal.facade.api.remote.ConfiguracionVHCategoriaFacadeRemote;

@@ -15,9 +15,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.gui.modulos.odt.impresion.ImprimirODTHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -96,7 +96,7 @@ public class JDialogSeleccionarImprimirODT extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					List<OrdenDeTrabajo> selectedODTs = getPanTablaODTs().getSelectedODTs();
 					if(selectedODTs.isEmpty()) {
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarImprimirODT.this, "Por favor, seleccione al menos una ODT.", "Error");
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarImprimirODT.this, "Por favor, seleccione al menos una ODT.", "Error");
 						return;
 					}
 					for(OrdenDeTrabajo odt : selectedODTs) {
@@ -150,12 +150,12 @@ public class JDialogSeleccionarImprimirODT extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaODT = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tablaODT = new FWJTable(0, CANT_COLS);
 			tablaODT.setStringColumn(COL_ODT, "ODT", 290, 290, true);
-			tablaODT.setHeaderAlignment(COL_ODT, CLJTable.CENTER_ALIGN);
+			tablaODT.setHeaderAlignment(COL_ODT, FWJTable.CENTER_ALIGN);
 			tablaODT.setCheckColumn(COL_CHK_SEL_IMP_ODT, "IMPRIMIR", 80, false);
-			tablaODT.setHeaderAlignment(COL_CHK_SEL_IMP_ODT, CLJTable.CENTER_ALIGN);
+			tablaODT.setHeaderAlignment(COL_CHK_SEL_IMP_ODT, FWJTable.CENTER_ALIGN);
 			tablaODT.setStringColumn(COL_OBJ, "", 0, 0, true);
 			return tablaODT;
 		}

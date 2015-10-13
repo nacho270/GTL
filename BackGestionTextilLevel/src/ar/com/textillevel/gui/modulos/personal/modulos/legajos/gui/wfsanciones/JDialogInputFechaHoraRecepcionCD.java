@@ -18,15 +18,15 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 
 public class JDialogInputFechaHoraRecepcionCD extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private CLDateField txtFecha;
+	private FWDateField txtFecha;
 	private JSpinner jsHoras;
 	private JSpinner jsMinutos;
 	private JButton btnAceptar;
@@ -70,9 +70,9 @@ public class JDialogInputFechaHoraRecepcionCD extends JDialog {
 		return panel;
 	}
 
-	public CLDateField getTxtFecha() {
+	public FWDateField getTxtFecha() {
 		if(txtFecha==null){
-			txtFecha = new CLDateField();
+			txtFecha = new FWDateField();
 			txtFecha.setFecha(DateUtil.getHoy());
 		}
 		return txtFecha;

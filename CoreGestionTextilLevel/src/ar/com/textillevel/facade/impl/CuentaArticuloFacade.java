@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.CuentaArticuloDAOLocal;
 import ar.com.textillevel.dao.api.local.MovimientoCuentaArticuloDAOLocal;
 import ar.com.textillevel.entidades.cuentaarticulo.CuentaArticulo;

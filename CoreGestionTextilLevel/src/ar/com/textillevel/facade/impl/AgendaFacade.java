@@ -7,8 +7,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.AlphabeticComparator;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.AlphabeticComparator;
 import ar.com.textillevel.dao.api.local.ClienteDAOLocal;
 import ar.com.textillevel.dao.api.local.PersonaDAOLocal;
 import ar.com.textillevel.dao.api.local.ProveedorDAOLocal;
@@ -30,7 +30,7 @@ public class AgendaFacade implements AgendaFacadeRemote{
 	private PersonaDAOLocal personaDAO;
 	
 	@SuppressWarnings("unchecked")
-	public List<IAgendable> buscar(String criterio,ETipoBusquedaAgenda tipoBusqueda, Rubro rubroPersona) throws CLException{
+	public List<IAgendable> buscar(String criterio,ETipoBusquedaAgenda tipoBusqueda, Rubro rubroPersona) throws FWException{
 		
 		List<IAgendable> ret = new ArrayList<IAgendable>();
 		

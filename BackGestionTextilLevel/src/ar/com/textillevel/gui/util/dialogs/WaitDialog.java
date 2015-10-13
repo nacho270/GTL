@@ -5,8 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 
 public class WaitDialog extends JDialog {
 

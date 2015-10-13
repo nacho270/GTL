@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.modulos.personal.informes.vacaciones.planificacion.JDialogPlanificacionVacaciones;
 import ar.com.textillevel.gui.util.dialogs.JDialogInputFechaDesdeHasta;
 import ar.com.textillevel.modulos.personal.entidades.legajos.RegistroVacacionesLegajo;
@@ -61,7 +61,7 @@ public class PlanificacionVacacionesPersonalAction implements Action {
 			
 			//se asume que la fecha hasta es mayor a la fecha desde, por ende, si el mes hasta es menor al desde, es otro año
 			if(mesHasta<mesDesde){
-				CLJOptionPane.showErrorMessage(frame, "Las fechas deben corresponder al mismo año", "Error");
+				FWJOptionPane.showErrorMessage(frame, "Las fechas deben corresponder al mismo año", "Error");
 				return;
 			}
 			fechaDesde = DateUtil.setDia(fechaDesde, 1);
@@ -73,7 +73,7 @@ public class PlanificacionVacacionesPersonalAction implements Action {
 			if(regs!=null && !regs.isEmpty()){
 				new JDialogPlanificacionVacaciones(frame,regs,fechaDesde,fechaHasta).setVisible(true);
 			}else{
-				CLJOptionPane.showErrorMessage(frame, "No se han encontrado resultados", "Error");
+				FWJOptionPane.showErrorMessage(frame, "No se han encontrado resultados", "Error");
 			}
 		}
 	}

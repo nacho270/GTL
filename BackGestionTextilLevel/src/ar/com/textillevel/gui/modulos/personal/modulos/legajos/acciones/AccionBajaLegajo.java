@@ -2,10 +2,10 @@ package ar.com.textillevel.gui.modulos.personal.modulos.legajos.acciones;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogIngresarBajaEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
@@ -24,7 +24,7 @@ public class AccionBajaLegajo extends Accion<Empleado> {
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<Empleado> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Empleado> e) throws FWException {
 		Empleado empleado = e.getSelectedElements().get(0);
 		List<VigenciaEmpleado> historialVigencias = empleado.getLegajo().getHistorialVigencias();
 		VigenciaEmpleado ultima = historialVigencias.get(historialVigencias.size()-1);
@@ -37,7 +37,7 @@ public class AccionBajaLegajo extends Accion<Empleado> {
 			empleado.getLegajo().setHistorialVigencias(historialVigencias);
 			empleado.getLegajo().setDadoDeBaja(true);
 			GTLPersonalBeanFactory.getInstance().getBean2(EmpleadoFacadeRemote.class).save(empleado);
-			CLJOptionPane.showInformationMessage(e.getSource().getFrame(), "El empleado se ha dado de baja correctamente", "Información");
+			FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "El empleado se ha dado de baja correctamente", "Información");
 			return true;
 		}
 		return false;

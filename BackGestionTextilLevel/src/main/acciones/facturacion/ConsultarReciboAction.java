@@ -7,10 +7,10 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.facade.api.remote.ReciboFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaRecibo;
@@ -62,11 +62,11 @@ public class ConsultarReciboAction implements Action{
 						break;
 					}
 					if(inputRecibo.trim().length()==0 || !GenericUtils.esNumerico(inputRecibo)) {
-						CLJOptionPane.showErrorMessage(frame, "Ingreso incorrecto", "error");
+						FWJOptionPane.showErrorMessage(frame, "Ingreso incorrecto", "error");
 					} else {
 						recibo = rfr.getByNroReciboEager(Integer.valueOf(inputRecibo.trim()));
 						if(recibo == null){
-							CLJOptionPane.showErrorMessage(frame, "Recibo no encontrado", "Error");
+							FWJOptionPane.showErrorMessage(frame, "Recibo no encontrado", "Error");
 						}else{
 							okRecibo = true;
 							JDialogCargaRecibo dialogCargaRecibo = new JDialogCargaRecibo(frame, recibo, true);
@@ -78,7 +78,7 @@ public class ConsultarReciboAction implements Action{
 				}
 			} while (!okRecibo);
 
-		} catch (CLException e1) {
+		} catch (FWException e1) {
 			BossError.gestionarError(e1);
 		}
 	}

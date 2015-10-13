@@ -17,10 +17,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.ConfigFormaPagoSindicato;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.TotalHorasPagoDia;
@@ -128,12 +128,12 @@ public class JDialogCargarConfigFormaPagoSindicato extends JDialog {
 
 	private boolean validar() {
 		if(getCmbSindicato().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(owner, "Debe seleccionar un sindicato.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe seleccionar un sindicato.", "Error");
 			return false;
 		}
 		String txtValidacionTotalHorasDia = getPanTablaTotalHorasPagoDia().validar();
 		if(txtValidacionTotalHorasDia != null) {
-			CLJOptionPane.showErrorMessage(owner, txtValidacionTotalHorasDia, "Error");
+			FWJOptionPane.showErrorMessage(owner, txtValidacionTotalHorasDia, "Error");
 			return false;
 		}
 		return true;
@@ -178,8 +178,8 @@ public class JDialogCargarConfigFormaPagoSindicato extends JDialog {
 		}
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_DIA, "DIA", 50, 50, true);
 			tabla.setMultilineColumn(COL_TOTAL_HORAS, "TOTAL DE HORAS A PAGAR", 150, true);
 			tabla.setStringColumn(COL_DISCRIMINA_EN_RS, "DISCRIMINA EN EL RECIBO DE SUELDO", 200, 200, true);

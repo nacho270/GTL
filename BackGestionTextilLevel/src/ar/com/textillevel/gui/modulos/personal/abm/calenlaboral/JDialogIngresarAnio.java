@@ -20,11 +20,11 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.CalendarioAnualFeriado;
 import ar.com.textillevel.modulos.personal.facade.api.remote.CalendarioAnualFeriadoFacadeRemote;
@@ -115,7 +115,7 @@ public class JDialogIngresarAnio extends JDialog {
 							calendario = calendarioFacade.copiarCalendario(calendario, calenEjemplo);
 							dispose();
 						} catch(ValidacionException ee) {
-							CLJOptionPane.showErrorMessage(owner, StringW.wordWrap(ee.getMensajeError()), "Error");
+							FWJOptionPane.showErrorMessage(owner, StringW.wordWrap(ee.getMensajeError()), "Error");
 							calendario = null;
 						}
 					}
@@ -127,11 +127,11 @@ public class JDialogIngresarAnio extends JDialog {
 
 	private boolean validar() {
 		if(getCmbAnios().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(owner, "Debe seleccionar un calendario.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe seleccionar un calendario.", "Error");
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtAnioIngresado().getText())) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar un año.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar un año.", "Error");
 			getTxtAnioIngresado().requestFocus();
 			return false;
 		}
@@ -152,7 +152,7 @@ public class JDialogIngresarAnio extends JDialog {
 	
 	public JTextField getTxtAnioIngresado() {
 		if(txtAnioIngresado == null) {
-			txtAnioIngresado = new CLJNumericTextField();
+			txtAnioIngresado = new FWJNumericTextField();
 		}
 		return txtAnioIngresado;
 	}

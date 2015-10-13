@@ -11,16 +11,16 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.util.GuiUtil;
 
 @SuppressWarnings("serial")
 public class PanelPaginador extends JPanel
 {
 	private JButton btnNext;
 	private JButton btnPrev;
-	private CLJNumericTextField txtPagina;
-	private CLJNumericTextField txtPaginaTotal;
+	private FWJNumericTextField txtPagina;
+	private FWJNumericTextField txtPaginaTotal;
 	private int rowsPageSize = 30;
 	private int rowsCount;
 	private int pageIndex = 1;
@@ -83,11 +83,11 @@ public class PanelPaginador extends JPanel
 		return btnNext;		
 	}
 	
-	private CLJNumericTextField getTxtPagina()
+	private FWJNumericTextField getTxtPagina()
 	{
 		if (txtPagina == null)
 		{
-			txtPagina = new CLJNumericTextField();
+			txtPagina = new FWJNumericTextField();
 			txtPagina.setColumns(8);
 			txtPagina.setPreferredSize(new Dimension(10,20));
 			txtPagina.setText(String.valueOf(pageIndex));
@@ -118,11 +118,11 @@ public class PanelPaginador extends JPanel
 		return txtPagina;
 	}
 	
-	private CLJNumericTextField getTxtPaginaTotal()
+	private FWJNumericTextField getTxtPaginaTotal()
 	{
 		if (txtPaginaTotal == null)
 		{
-			txtPaginaTotal = new CLJNumericTextField();
+			txtPaginaTotal = new FWJNumericTextField();
 			txtPaginaTotal.setColumns(8);
 			txtPaginaTotal.setText("1");
 			txtPaginaTotal.setEnabled(false);

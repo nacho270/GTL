@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.entidades.Mes;
+import ar.com.fwcommon.entidades.Mes;
 
 @Remote
 public interface MesFacadeRemote {

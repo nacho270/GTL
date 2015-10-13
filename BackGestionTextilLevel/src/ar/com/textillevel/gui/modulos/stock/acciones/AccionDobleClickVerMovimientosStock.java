@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.stock.acciones;
 
 import java.util.List;
 
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;

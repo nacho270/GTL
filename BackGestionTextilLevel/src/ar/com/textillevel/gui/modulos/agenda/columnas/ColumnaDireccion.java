@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.agenda.columnas;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaString;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
 import ar.com.textillevel.entidades.gente.IAgendable;
 
 public class ColumnaDireccion extends ColumnaString<IAgendable> {

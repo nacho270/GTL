@@ -11,8 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
@@ -232,7 +232,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		if(validarDatosComunes(true)) {
 			//Base
 			if(getCmbBase().getSelectedItem() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Base'.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe seleccionar una 'Base'.", "Error");
 				return false;
 			}
 			GamaColor base = (GamaColor)getCmbBase().getSelectedItem();
@@ -264,7 +264,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 					if(precioBase != null) {
 						rangoCantColoresExistente = precioBase.getRangoSolapadoCon(minCantColores, maxCantColores);
 						if(rangoCantColoresExistente != null && (rangoCantColoresSiendoEditado != null && !rangoCantColoresSiendoEditado.equals(rangoCantColoresExistente))) {
-							CLJOptionPane.showErrorMessage(this, "Rango Cantidad de Colores Existente", "Error");
+							FWJOptionPane.showErrorMessage(this, "Rango Cantidad de Colores Existente", "Error");
 							return false;
 						}
 						rangoCantColoresExistente = precioBase.getRango(minCantColores, maxCantColores);
@@ -279,13 +279,13 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 				List<RangoCoberturaEstampado> rangosCobertura = rangoCantColoresExistente.getRangoCobertura(minCobertura, maxCobertura);
 				if(!rangosCobertura.isEmpty()) {
 					if(rangosCobertura.size()>1) {
-						CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
+						FWJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
 						return false;
 					} else {
 						rangoCoberturaExistente = rangosCobertura.get(0);
 					}
 					if(rangoCoberturaExistente != null && (elemSiendoEditado == null || elemSiendoEditado!=rangoCoberturaExistente)) {
-						CLJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
+						FWJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
 						return false;
 					}
 				}
@@ -304,7 +304,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 						boolean mismoRango = rangoAnchoArticulo.getAnchoExacto() != null && rangoAnchoArticulo.getAnchoExacto().equals(getAnchoExacto()) ||
 								 			 rangoAnchoArticulo.getAnchoMinimo().equals(getAnchoInicial()) && rangoAnchoArticulo.getAnchoMaximo().equals(getAnchoFinal());
 						if(mismoRango) {
-							CLJOptionPane.showErrorMessage(this, "El precio no puede ser el mismo para diferentes gamas y mismo ancho.", "Error");
+							FWJOptionPane.showErrorMessage(this, "El precio no puede ser el mismo para diferentes gamas y mismo ancho.", "Error");
 							getTxtPrecio().requestFocus();
 							return false;
 						}

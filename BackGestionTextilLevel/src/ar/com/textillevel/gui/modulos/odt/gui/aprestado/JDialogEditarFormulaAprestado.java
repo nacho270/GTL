@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.aprestado.FormulaAprestadoCliente;
 
@@ -31,7 +31,7 @@ public class JDialogEditarFormulaAprestado extends JDialog {
 	private JPanel pnlDatos;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private TabPaneQuimicoCantidad tabPaneQuimico;
 
 	private FormulaAprestadoCliente formula;
@@ -104,13 +104,13 @@ public class JDialogEditarFormulaAprestado extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText().trim())) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormulaAprestado.this, "Falta ingresar el nombre.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormulaAprestado.this, "Falta ingresar el nombre.", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		String msgValidacionTabPanel = getTabPaneQuimico().validar();
 		if(!StringUtil.isNullOrEmpty(msgValidacionTabPanel)) {
-			CLJOptionPane.showErrorMessage(JDialogEditarFormulaAprestado.this, StringW.wordWrap(msgValidacionTabPanel), "Error");
+			FWJOptionPane.showErrorMessage(JDialogEditarFormulaAprestado.this, StringW.wordWrap(msgValidacionTabPanel), "Error");
 			return false;
 		}
 
@@ -132,9 +132,9 @@ public class JDialogEditarFormulaAprestado extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if(txtNombre == null) {
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 			txtNombre.setEnabled(!modoConsulta);
 		}
 		return txtNombre;

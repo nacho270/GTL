@@ -20,8 +20,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import main.servicios.alertas.AlertaFactory;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
@@ -171,7 +171,7 @@ public class JDialogSeleccionarCrearSecuenciaDeTrabajo extends JDialog {
 						}
 						tratarStock(precioMPFacade, mapaStock);
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "Debe elegir una secuencia", "Error");
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "Debe elegir una secuencia", "Error");
 					}
 				}
 
@@ -202,11 +202,11 @@ public class JDialogSeleccionarCrearSecuenciaDeTrabajo extends JDialog {
 						crearSecuenciaODT();
 					}else{ //warnings
 						if(!mpDebajoPtoReposicion.isEmpty()){
-							CLJOptionPane.showWarningMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "Las siguientes materias primas quedarán por debajo el punto de pedido:\n"+createListaWaringMP(mpDebajoPtoReposicion), "Advertencia");
+							FWJOptionPane.showWarningMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "Las siguientes materias primas quedarán por debajo el punto de pedido:\n"+createListaWaringMP(mpDebajoPtoReposicion), "Advertencia");
 							crearAlertas(mpDebajoPtoReposicion);
 						}
 						if(!mpStockInsuficiente.isEmpty()){
-							if(CLJOptionPane.showQuestionMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "No cuenta con stock suficiente de las siguientes materias primas. Desea continuar?\n"+createListaWaringMP(mpStockInsuficiente), "Pregunta")==CLJOptionPane.YES_OPTION){
+							if(FWJOptionPane.showQuestionMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "No cuenta con stock suficiente de las siguientes materias primas. Desea continuar?\n"+createListaWaringMP(mpStockInsuficiente), "Pregunta")==FWJOptionPane.YES_OPTION){
 								crearSecuenciaODT();
 								crearAlertas(mpStockInsuficiente);
 							}else{

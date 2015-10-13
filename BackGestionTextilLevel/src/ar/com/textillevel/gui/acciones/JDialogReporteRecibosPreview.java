@@ -26,13 +26,13 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.filechooser.FileFilter;
 
 import net.sf.jasperreports.engine.JasperPrint;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.recibo.to.ResumenReciboTO;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -236,7 +236,7 @@ public class JDialogReporteRecibosPreview extends JDialog {
 		private static final int COL_TOTAL = 7;
 		private static final int COL_ID = 8;
 
-		private CLJTable tablaImpuestos;
+		private FWJTable tablaImpuestos;
 
 		private JButton btnExportarAExcel;
 		private JPanel panelBotones;
@@ -254,19 +254,19 @@ public class JDialogReporteRecibosPreview extends JDialog {
 			llenarTabla();
 		}
 
-		public CLJTable getTabla() {
+		public FWJTable getTabla() {
 			return tablaImpuestos;
 		}
 
 		private JButton getBtnExportarAExcel() {
 			if (btnExportarAExcel == null) {
-				btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+				btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 				btnExportarAExcel.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
 						if (getTabla().getRowCount() > 0) {
 							mostrarFileChooser(getTituloReporte(), EXTENSION_EXCEL);
-							File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+							File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 							if (archivoIngresado != null) {
 								if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 									archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -291,7 +291,7 @@ public class JDialogReporteRecibosPreview extends JDialog {
 		}
 
 		private void mostrarFileChooser(String nombreArchivo, String extension) {
-			File directorioCorriente = CLFileSelector.getLastSelectedFile();
+			File directorioCorriente = FWFileSelector.getLastSelectedFile();
 			if (directorioCorriente != null) {
 				String nombreSugerido = null;
 				try {
@@ -301,11 +301,11 @@ public class JDialogReporteRecibosPreview extends JDialog {
 						nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 					}
 				} catch (IOException e1) {
-					CLJOptionPane.showErrorMessage(null, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+					FWJOptionPane.showErrorMessage(null, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 					return;
 				}
 				File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-				CLFileSelector.setLastSelectedFile(archivoSugerido);
+				FWFileSelector.setLastSelectedFile(archivoSugerido);
 			}
 		}
 
@@ -364,7 +364,7 @@ public class JDialogReporteRecibosPreview extends JDialog {
 		}
 
 
-		private CLJTable getTablaImpuestos() {
+		private FWJTable getTablaImpuestos() {
 			if(tablaImpuestos == null) {
 				rebuildTabla();
 			}
@@ -372,7 +372,7 @@ public class JDialogReporteRecibosPreview extends JDialog {
 		}
 
 		private void rebuildTabla() {
-			tablaImpuestos = new CLJTable(0, CANT_COLS);
+			tablaImpuestos = new FWJTable(0, CANT_COLS);
 			tablaImpuestos.setStringColumn(COL_DESCR_RECIBO, "RECIBO", 170, 170, true);
 			tablaImpuestos.setStringColumn(COL_TOT_CHEQUES, "TOTAL CHEQUES", 90, 90, true);
 			tablaImpuestos.setStringColumn(COL_TOT_NC, "TOTAL NOTAS DE CREDITO", 150, 150, true);

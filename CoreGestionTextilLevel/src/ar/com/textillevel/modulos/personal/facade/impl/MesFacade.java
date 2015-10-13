@@ -1,9 +1,11 @@
 package ar.com.textillevel.modulos.personal.facade.impl;
 
 import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import ar.clarin.fwjava.entidades.Mes;
+
+import ar.com.fwcommon.entidades.Mes;
 import ar.com.textillevel.modulos.personal.dao.api.MesDAOLocal;
 import ar.com.textillevel.modulos.personal.facade.api.remote.MesFacadeRemote;
 

@@ -12,9 +12,9 @@ import javax.swing.JOptionPane;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidacionComboElementoOtro;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidacionCompletitud;
@@ -112,10 +112,10 @@ public class PanDatosMaquinaSectorTerminadoFraccionado extends PanDatosMaquinaCo
 				terminacion.setNombre(input);
 				try {
 					return GTLBeanFactory.getInstance().getBean2(MaquinaFacadeRemote.class).save(terminacion);
-				} catch (CLRuntimeException e) {
-					CLJOptionPane.showErrorMessage(null, StringW.wordWrap(e.getMessage()), "Error");
+				} catch (FWRuntimeException e) {
+					FWJOptionPane.showErrorMessage(null, StringW.wordWrap(e.getMessage()), "Error");
 				} catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(null, StringW.wordWrap(e.getMessage()), "Error");
+					FWJOptionPane.showErrorMessage(null, StringW.wordWrap(e.getMessage()), "Error");
 				}
 				return null;
 			}

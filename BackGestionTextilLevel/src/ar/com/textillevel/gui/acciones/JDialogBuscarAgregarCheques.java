@@ -24,11 +24,11 @@ import javax.swing.JScrollPane;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
@@ -45,14 +45,14 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 
 	private static final long serialVersionUID = -5396796400215355847L;
 
-	private CLCheckBoxList<Cheque> chkListCheques;
+	private FWCheckBoxList<Cheque> chkListCheques;
 	private JCheckBox chkSeleccionarTodos;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJTextField txtImporteDesde;
-	private CLJTextField txtImporteHasta;
-	private CLJTextField txtNumeroCheque;
-	private CLJTextField txtNumeroInternoCheque;
+	private FWJTextField txtImporteDesde;
+	private FWJTextField txtImporteHasta;
+	private FWJTextField txtNumeroCheque;
+	private FWJTextField txtNumeroInternoCheque;
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -99,9 +99,9 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		this.add(getPnlSur(),BorderLayout.SOUTH);
 	}
 
-	private CLCheckBoxList<Cheque> getChkListCheques() {
+	private FWCheckBoxList<Cheque> getChkListCheques() {
 		if (chkListCheques == null) {
-			chkListCheques = new CLCheckBoxList<Cheque>(){
+			chkListCheques = new FWCheckBoxList<Cheque>(){
 
 				private static final long serialVersionUID = 4501839806754196510L;
 
@@ -135,7 +135,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 
 				private boolean validar() {
 					if (getChkListCheques().getSelectedValues().length == 0) {
-						CLJOptionPane.showErrorMessage(JDialogBuscarAgregarCheques.this, "Debe seleccionar al menos un cheque.", JDialogBuscarAgregarCheques.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogBuscarAgregarCheques.this, "Debe seleccionar al menos un cheque.", JDialogBuscarAgregarCheques.this.getTitle());
 						return false;
 					}
 					return true;
@@ -183,33 +183,33 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		return panelFechaHasta;
 	}
 
-	public CLJTextField getTxtImporteDesde() {
+	public FWJTextField getTxtImporteDesde() {
 		if (txtImporteDesde == null) {
-			txtImporteDesde = new CLJTextField();
+			txtImporteDesde = new FWJTextField();
 			txtImporteDesde.setPreferredSize(new Dimension(120,20));
 		}
 		return txtImporteDesde;
 	}
 
-	private CLJTextField getTxtImporteHasta() {
+	private FWJTextField getTxtImporteHasta() {
 		if (txtImporteHasta == null) {
-			txtImporteHasta = new CLJTextField();
+			txtImporteHasta = new FWJTextField();
 			txtImporteHasta.setPreferredSize(new Dimension(120,20));
 		}
 		return txtImporteHasta;
 	}
 
-	private CLJTextField getTxtNumeroCheque() {
+	private FWJTextField getTxtNumeroCheque() {
 		if (txtNumeroCheque == null) {
-			txtNumeroCheque = new CLJTextField();
+			txtNumeroCheque = new FWJTextField();
 			txtNumeroCheque.setPreferredSize(new Dimension(120,20));
 		}
 		return txtNumeroCheque;
 	}
 
-	public CLJTextField getTxtNumeroInternoCheque() {
+	public FWJTextField getTxtNumeroInternoCheque() {
 		if (txtNumeroInternoCheque == null) {
-			txtNumeroInternoCheque = new CLJTextField();
+			txtNumeroInternoCheque = new FWJTextField();
 			txtNumeroInternoCheque.setPreferredSize(new Dimension(120,20));
 		}
 		return txtNumeroInternoCheque;
@@ -300,7 +300,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		
 		if(getTxtImporteDesde().getText().trim().length()!=0){
 			if(!GenericUtils.esNumerico(getTxtImporteDesde().getText().trim())){
-				CLJOptionPane.showErrorMessage(this, "El campo debe ser numérico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo debe ser numérico", "Error");
 				getTxtImporteDesde().requestFocus();
 				return;
 			}
@@ -309,7 +309,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		
 		if(getTxtImporteHasta().getText().trim().length()>0){
 			if(!GenericUtils.esNumerico(getTxtImporteHasta().getText().trim())){
-				CLJOptionPane.showErrorMessage(this, "El campo debe ser numérico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo debe ser numérico", "Error");
 				getTxtImporteHasta().requestFocus();
 				return;
 			}
@@ -318,7 +318,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		
 		if(getTxtNumeroInternoCheque().getText().trim().length()>0){
 			if(getTxtNumeroInternoCheque().getText().trim().length()<2){
-				CLJOptionPane.showErrorMessage(JDialogBuscarAgregarCheques.this, "La numeración consta de al menos 2 caracteres", "Error");
+				FWJOptionPane.showErrorMessage(JDialogBuscarAgregarCheques.this, "La numeración consta de al menos 2 caracteres", "Error");
 				return;
 			}
 //			if(!getTxtNumeroInternoCheque().getText().trim().matches("[a-zA-Z]{1}[0-9]+")){
@@ -330,7 +330,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		
 		if(getTxtNumeroCheque().getText().trim().length()>0){
 			if(!GenericUtils.esNumerico(getTxtNumeroCheque().getText().trim())){
-				CLJOptionPane.showErrorMessage(this, "El campo debe ser numérico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo debe ser numérico", "Error");
 				getTxtNumeroCheque().requestFocus();
 				return;
 			}
@@ -357,20 +357,20 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		List<Cheque> lista2 = new ArrayList<Cheque>();
 		if(numeracionInterna!=null || numeroCheque!=null){
 			if(lista == null || (lista!=null && lista.isEmpty())){
-				CLJOptionPane.showWarningMessage(this, "No se han encontrado resultados", "Búsqueda de cheques");
+				FWJOptionPane.showWarningMessage(this, "No se han encontrado resultados", "Búsqueda de cheques");
 				return;
 			}else{
 				for(Cheque cheque : lista ){
 					if(cheque.getEstadoCheque() == EEstadoCheque.EN_CARTERA){
 						lista2.add(cheque);
 					}else{
-						CLJOptionPane.showWarningMessage(this, StringW.wordWrap("El cheque " + cheque.getNumeracion() + " no se puede utilizar debido a que tiene estado: " + cheque.getEstadoCheque()), "Búsqueda de cheques");
+						FWJOptionPane.showWarningMessage(this, StringW.wordWrap("El cheque " + cheque.getNumeracion() + " no se puede utilizar debido a que tiene estado: " + cheque.getEstadoCheque()), "Búsqueda de cheques");
 					}
 				}
 				getChkListCheques().setValues(lista2.toArray());
 			}
 		}else if(lista == null || (lista!=null && lista.isEmpty())){
-			CLJOptionPane.showWarningMessage(this, "No se han encontrado resultados", "Búsqueda de cheques");
+			FWJOptionPane.showWarningMessage(this, "No se han encontrado resultados", "Búsqueda de cheques");
 			return;
 		}else{
 			getChkListCheques().setValues(lista.toArray());
@@ -384,7 +384,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 		for(int i = 0; i < numeros.length;i++){
 //			numeros[i]= numeros[i].replaceAll("\\s+", "").trim();
 			if(!numeros[i].matches("[0-9]+\\s{0,1}")){
-				CLJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
+				FWJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
 				return null;
 			}
 			if(GenericUtils.esNumerico(numeros[i])){
@@ -393,7 +393,7 @@ public class JDialogBuscarAgregarCheques extends JDialog {
 				numeracion.setNumero(Integer.valueOf(numeros[i]));
 				lista.add(numeracion);
 			}else{
-				CLJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
+				FWJOptionPane.showErrorMessage(this, "<html>El número <b>" + numeros[i] + "</b> no tiene el formato correcto<html>", "Error");
 				return null;
 			}
 		}

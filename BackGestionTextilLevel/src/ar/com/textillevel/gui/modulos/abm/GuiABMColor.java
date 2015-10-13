@@ -9,10 +9,10 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -26,7 +26,7 @@ public class GuiABMColor extends GuiABMListaTemplate{
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	
-	private CLJTextField txtNombreColor;
+	private FWJTextField txtNombreColor;
 	
 	private ColorFacadeRemote colorFacade;
 	private Color colorActual;
@@ -101,7 +101,7 @@ public class GuiABMColor extends GuiABMListaTemplate{
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el color seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el color seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getColorFacade().remove(getColorActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -121,7 +121,7 @@ public class GuiABMColor extends GuiABMListaTemplate{
 
 	private boolean validar() {
 		if(getTxtNombreColor().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del color.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del color.", "Advertencia");
 			getTxtNombreColor().requestFocus();
 			return false;
 		}
@@ -139,7 +139,7 @@ public class GuiABMColor extends GuiABMListaTemplate{
 			getTxtNombreColor().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un color", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un color", "Error");
 			return false;
 		}
 	}
@@ -194,9 +194,9 @@ public class GuiABMColor extends GuiABMListaTemplate{
 		return colorFacade;
 	}
 
-	public CLJTextField getTxtNombreColor() {
+	public FWJTextField getTxtNombreColor() {
 		if(txtNombreColor == null){
-			txtNombreColor = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreColor = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreColor;
 	}

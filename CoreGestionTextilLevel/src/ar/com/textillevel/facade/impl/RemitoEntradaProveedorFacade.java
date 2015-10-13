@@ -7,9 +7,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.FacturaProveedorDAOLocal;
 import ar.com.textillevel.dao.api.local.RelacionContenedorPrecioMatPrimaDAOLocal;
 import ar.com.textillevel.dao.api.local.RemitoEntradaProveedorDAOLocal;
@@ -50,7 +50,7 @@ public class RemitoEntradaProveedorFacade implements RemitoEntradaProveedorFacad
 	private RelacionContenedorPrecioMatPrimaDAOLocal relacionContenedorPrecioMatPrimaDAO;
 
 	
-	public RemitoEntradaProveedor save(RemitoEntradaProveedor remito) throws CLException {
+	public RemitoEntradaProveedor save(RemitoEntradaProveedor remito) throws FWException {
 		//Si es modificación hago un undo del movimiento de stock
 		if(remito.getId() != null) {
 			undoStock(remito);

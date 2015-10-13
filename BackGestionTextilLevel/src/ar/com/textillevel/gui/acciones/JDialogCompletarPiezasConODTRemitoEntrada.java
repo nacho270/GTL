@@ -40,14 +40,14 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
@@ -67,14 +67,14 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 	private static final int MAX_LONGITUD_RAZ_SOCIAL = 50;
 
 	private JPanel panDetalle;
-	private CLJTextField txtRazonSocial;
+	private FWJTextField txtRazonSocial;
 	private PanelTablaPieza panTablaPieza;
 	private JPanel pnlBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJNumericTextField txtNroRemito;
-	private CLDateField txtFechaEmision;
-	private CLJTextField txtPesoTotal;
+	private FWJNumericTextField txtNroRemito;
+	private FWDateField txtFechaEmision;
+	private FWJTextField txtPesoTotal;
 	private JButton btnSelProductos;
 	private JTextField txtProductos;
 	private RemitoEntrada remitoEntrada;
@@ -346,16 +346,16 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 		return txtProductos;
 	}
 
-	private CLJTextField getTxtPesoTotal() {
+	private FWJTextField getTxtPesoTotal() {
 		if(txtPesoTotal == null) {
-			txtPesoTotal = new CLJTextField();
+			txtPesoTotal = new FWJTextField();
 		}
 		return txtPesoTotal;
 	}
 
-	private CLDateField getTxtFechaEmision() {
+	private FWDateField getTxtFechaEmision() {
 		if(txtFechaEmision == null) {
-			txtFechaEmision = new CLDateField();
+			txtFechaEmision = new FWDateField();
 			if(remitoEntrada.getId() != null) {
 				txtFechaEmision.setFecha(remitoEntrada.getFechaEmision());
 			}
@@ -364,9 +364,9 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 		return txtFechaEmision;
 	}
 
-	private CLJNumericTextField getTxtNroRemito() {
+	private FWJNumericTextField getTxtNroRemito() {
 		if(txtNroRemito == null) {
-			txtNroRemito = new CLJNumericTextField(new Long(0), Long.MAX_VALUE);
+			txtNroRemito = new FWJNumericTextField(new Long(0), Long.MAX_VALUE);
 			if(remitoEntrada.getId() != null) {
 				getTxtNroRemito().setText(remitoEntrada.getNroRemito().toString());
 			}
@@ -375,9 +375,9 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 		return txtNroRemito;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if(txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
@@ -421,7 +421,7 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 					if(validar()) {
 						List<OrdenDeTrabajo> odtCapturedList = capturarSetearDatos();
 						getRemitoEntradaFacade().completarPiezasRemitoEntrada(remitoEntrada, odtCapturedList, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-						CLJOptionPane.showInformationMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "El remito se ha grabado con éxito.", "Atención");
+						FWJOptionPane.showInformationMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "El remito se ha grabado con éxito.", "Atención");
 						dispose();
 					} 
 				}
@@ -462,27 +462,27 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 	private boolean validar() {
 		String pesoTotalStr = getTxtPesoTotal().getText();
 		if(StringUtil.isNullOrEmpty(pesoTotalStr) || !GenericUtils.esNumerico(pesoTotalStr)) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe ingresar un peso total válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe ingresar un peso total válido.", "Error");
 			getTxtPesoTotal().requestFocus();
 			return false;
 		}
 		Integer nroRemito = getTxtNroRemito().getValue();
 		if(nroRemito == null || nroRemito <= 0) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe ingresar un número de remito.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe ingresar un número de remito.", "Error");
 			getTxtNroRemito().requestFocus();
 			return false;
 		}
 		if(!esRemitoEntrada01() && getCmbCondicionVenta().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe seleccionar una condición de venta.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe seleccionar una condición de venta.", "Error");
 			return false;
 		}
 		if(getRbtOpcionConPiezasODT().isSelected() && StringUtil.isNullOrEmpty(getTxtProductos().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe seleccionar al menos un producto.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "Debe seleccionar al menos un producto.", "Error");
 			return false;
 		}
 		String msgValidacionPiezas = getPanTablaPieza().validar();
 		if(msgValidacionPiezas != null) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, StringW.wordWrap(msgValidacionPiezas), "Error");
+			FWJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, StringW.wordWrap(msgValidacionPiezas), "Error");
 			return false;
 		}
 		return true;
@@ -713,8 +713,8 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 		
 		@SuppressWarnings("serial")
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaPiezaEntrada = new CLJTable(0, CANT_COLS) {
+		protected FWJTable construirTabla() {
+			FWJTable tablaPiezaEntrada = new FWJTable(0, CANT_COLS) {
 
 				@Override
 				public void cellEdited(int cell, int row) {
@@ -825,7 +825,7 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 			Integer cantFilas = dialogCantFilasInput.getCantFilas();
 			if(cantFilas != null) {
 				if(getTabla().getRowCount() + cantFilas > CANT_FILAS_MAX) {
-					CLJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "La cantidad de piezas debe ser menor a " + CANT_FILAS_MAX, "Error");
+					FWJOptionPane.showErrorMessage(JDialogCompletarPiezasConODTRemitoEntrada.this, "La cantidad de piezas debe ser menor a " + CANT_FILAS_MAX, "Error");
 				} else {
 					addRowsInTabla(cantFilas);
 				}

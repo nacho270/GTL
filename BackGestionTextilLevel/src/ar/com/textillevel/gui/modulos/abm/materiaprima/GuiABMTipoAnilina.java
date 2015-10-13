@@ -7,12 +7,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.TipoAnilina;
 import ar.com.textillevel.facade.api.remote.TipoAnilinaFacadeRemote;
@@ -30,7 +32,7 @@ public class GuiABMTipoAnilina extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombreAnilina;
+	private FWJTextField txtNombreAnilina;
 	private PanSeleccionTipoArticulos panSelTipoArticulos;
 
 	private TipoAnilina tipoAnilinaActual;
@@ -95,7 +97,7 @@ public class GuiABMTipoAnilina extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el tipo de anilina seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el tipo de anilina seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getTipoAnilinaFacade().remove(getTipoAnilinaActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -116,7 +118,7 @@ public class GuiABMTipoAnilina extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getTxtDescripcionAnilina().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del tipo de la anilina.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del tipo de la anilina.", "Advertencia");
 			getTxtDescripcionAnilina().requestFocus();
 			return false;
 		}
@@ -136,7 +138,7 @@ public class GuiABMTipoAnilina extends GuiABMListaTemplate {
 			getTxtDescripcionAnilina().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un artículo", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un artículo", "Error");
 			return false;
 		}
 	}
@@ -194,9 +196,9 @@ public class GuiABMTipoAnilina extends GuiABMListaTemplate {
 		this.tipoAnilinaActual = tipoAnilina;
 	}
 
-	private CLJTextField getTxtDescripcionAnilina() {
+	private FWJTextField getTxtDescripcionAnilina() {
 		if(txtNombreAnilina == null){
-			txtNombreAnilina = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreAnilina = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreAnilina;
 	}

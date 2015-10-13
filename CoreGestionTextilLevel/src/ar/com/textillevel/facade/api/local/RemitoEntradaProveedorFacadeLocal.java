@@ -2,14 +2,14 @@ package ar.com.textillevel.facade.api.local;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 
 @Local
 public interface RemitoEntradaProveedorFacadeLocal {
 
-	public RemitoEntradaProveedor save(RemitoEntradaProveedor remito) throws CLException;
+	public RemitoEntradaProveedor save(RemitoEntradaProveedor remito) throws FWException;
 
 	public void eliminarRemitoEntrada(Integer idRemitoEntrada) throws ValidacionException;
 	

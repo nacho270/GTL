@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.controles.calendario.EventoCalendario;
 
 public class EventosScrollTextAreaRenderer implements EventosRenderer<JScrollPane> {

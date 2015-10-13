@@ -28,11 +28,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaBonificacion;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaOtro;
@@ -97,28 +97,28 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JPanel panelOtro;
 	private JPanel panelTelaCruda;
 
-	private CLJTextField txtDescripcion;
+	private FWJTextField txtDescripcion;
 	
-	private CLJTextField txtBonificacion;
-	private CLJTextField txtRecargo;
-	private CLJTextField txtCantMetros;
-	private CLJTextField txtPrecioUnitario;
-	private CLJTextField txtPorcentajeSeguro;
-	private CLJTextField txtPrecioTubo;
-	private CLJTextField txtPorcentajePercepcion;
-	private CLJNumericTextField txtTubos;
+	private FWJTextField txtBonificacion;
+	private FWJTextField txtRecargo;
+	private FWJTextField txtCantMetros;
+	private FWJTextField txtPrecioUnitario;
+	private FWJTextField txtPorcentajeSeguro;
+	private FWJTextField txtPrecioTubo;
+	private FWJTextField txtPorcentajePercepcion;
+	private FWJNumericTextField txtTubos;
 	private JComboBox cmbProductos;
 	private JComboBox cmbArticulos;
 	
 	//PANEL STOCK
 	private JComboBox cmbTipoVentaStock; //tela o cilindro
 	private JComboBox cmbPrecioMateriaPrima;
-	private CLJTextField txtStockInput;
+	private FWJTextField txtStockInput;
 	private JLabel lblStockActual;
 	
 	//PANEL TELA CRUDA
-	private CLJTextField txtPrecioUnitarioTelaCruda;
-	private CLJTextField txtCantidadMetrosTelaCruda;
+	private FWJTextField txtPrecioUnitarioTelaCruda;
+	private FWJTextField txtCantidadMetrosTelaCruda;
 	
 	private CardLayout cardLayout;
 
@@ -468,12 +468,12 @@ public class JDialogAgregarItemFactura extends JDialog {
 		switch (itemSeleccionado) {
 			case BONIFICACION: {
 				if(StringUtil.isNullOrEmpty(getTxtBonificacion().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtBonificacion().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtBonificacion().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtBonificacion().requestFocus();
 						return false;
 					}
@@ -482,12 +482,12 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case RECARGO: {
 				if(StringUtil.isNullOrEmpty(getTxtRecargo().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtRecargo().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtRecargo().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtRecargo().requestFocus();
 						return false;
 					}
@@ -496,12 +496,12 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case PRODUCTO: {
 				if(StringUtil.isNullOrEmpty(getTxtCantMetros().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtCantMetros().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtCantMetros().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtCantMetros().requestFocus();
 						return false;
 					}
@@ -510,22 +510,22 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case TELA_CRUDA: {
 				if(StringUtil.isNullOrEmpty(getTxtCantidadMetrosTelaCruda().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtCantidadMetrosTelaCruda().requestFocus();
 					return false;
 				}				
 				if(StringUtil.isNullOrEmpty(getTxtPrecioUnitarioTelaCruda().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtPrecioUnitarioTelaCruda().requestFocus();
 					return false;
 				}
 				if (!GenericUtils.esNumerico((getTxtCantidadMetrosTelaCruda().getText()))) {
-					CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+					FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 					getTxtCantMetros().requestFocus();
 					return false;
 				}
 				if (!GenericUtils.esNumerico((getTxtPrecioUnitarioTelaCruda().getText()))) {
-					CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+					FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 					getTxtCantMetros().requestFocus();
 					return false;
 				}
@@ -533,23 +533,23 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case TUBOS: {
 				if(StringUtil.isNullOrEmpty(getTxtPrecioTubo().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtPrecioTubo().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtPrecioTubo().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtPrecioTubo().requestFocus();
 						return false;
 					}
 				}
 				if(StringUtil.isNullOrEmpty(getTxtTubos().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtTubos().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtTubos().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtTubos().requestFocus();
 						return false;
 					}
@@ -558,12 +558,12 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case SEGURO: {
 				if(StringUtil.isNullOrEmpty(getTxtPorcentajeSeguro().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtPorcentajeSeguro().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtPorcentajeSeguro().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtPorcentajeSeguro().requestFocus();
 						return false;
 					}
@@ -572,12 +572,12 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case PERCEPCION: {
 				if(StringUtil.isNullOrEmpty(getTxtPorcentajePercepcion().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtPorcentajePercepcion().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtPorcentajePercepcion().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtPorcentajePercepcion().requestFocus();
 						return false;
 					}
@@ -586,18 +586,18 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case STOCK:{
 				if(StringUtil.isNullOrEmpty(getTxtStockInput().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
 					getTxtStockInput().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtStockInput().getText()))) {
-						CLJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
 						getTxtStockInput().requestFocus();
 						return false;
 					}
 					BigDecimal stockIngresado = new BigDecimal(getTxtStockInput().getText().replace(',', '.'));
 					if(stockIngresado.compareTo(getStockActual()) == 1){
-						CLJOptionPane.showErrorMessage(this, "El stock ingresado debe ser menor a " + getStockActual().doubleValue(), "Error");
+						FWJOptionPane.showErrorMessage(this, "El stock ingresado debe ser menor a " + getStockActual().doubleValue(), "Error");
 						getTxtStockInput().requestFocus();
 						return false;
 					}
@@ -606,17 +606,17 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case OTRO:{
 				if(StringUtil.isNullOrEmpty(getTxtDescripcion().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe ingresar la descripción del item", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe ingresar la descripción del item", "Error");
 					getTxtDescripcion().requestFocus();
 					return false;
 				}
 				if(StringUtil.isNullOrEmpty(getTxtPrecioUnitario().getText())){
-					CLJOptionPane.showErrorMessage(this, "Debe ingresar el precio del item", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe ingresar el precio del item", "Error");
 					getTxtPrecioUnitario().requestFocus();
 					return false;
 				}
 				if(!GenericUtils.esNumerico(getTxtPrecioUnitario().getText())){
-					CLJOptionPane.showErrorMessage(this, "El precio debe ser numérico", "Error");
+					FWJOptionPane.showErrorMessage(this, "El precio debe ser numérico", "Error");
 					getTxtPrecioUnitario().requestFocus();
 					return false;
 				}
@@ -677,25 +677,25 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return panelBotones;
 	}
 
-	private CLJTextField getTxtBonificacion() {
+	private FWJTextField getTxtBonificacion() {
 		if (txtBonificacion == null) {
-			txtBonificacion = new CLJTextField();
+			txtBonificacion = new FWJTextField();
 			txtBonificacion.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtBonificacion;
 	}
 
-	private CLJTextField getTxtRecargo() {
+	private FWJTextField getTxtRecargo() {
 		if (txtRecargo == null) {
-			txtRecargo = new CLJTextField();
+			txtRecargo = new FWJTextField();
 			txtRecargo.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtRecargo;
 	}
 
-	private CLJNumericTextField getTxtTubos() {
+	private FWJNumericTextField getTxtTubos() {
 		if (txtTubos == null) {
-			txtTubos = new CLJNumericTextField();
+			txtTubos = new FWJNumericTextField();
 			txtTubos.setPreferredSize(new Dimension(350, 20));
 			txtTubos.setSize(new Dimension(350, 20));
 			txtTubos.setText(String.valueOf(getNroPiezas()));
@@ -734,17 +734,17 @@ public class JDialogAgregarItemFactura extends JDialog {
 		dispose();
 	}
 
-	private CLJTextField getTxtCantMetros() {
+	private FWJTextField getTxtCantMetros() {
 		if (txtCantMetros == null) {
-			txtCantMetros = new CLJTextField();
+			txtCantMetros = new FWJTextField();
 			txtCantMetros.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtCantMetros;
 	}
 
-	private CLJTextField getTxtPrecioUnitario() {
+	private FWJTextField getTxtPrecioUnitario() {
 		if (txtPrecioUnitario == null) {
-			txtPrecioUnitario = new CLJTextField();
+			txtPrecioUnitario = new FWJTextField();
 			txtPrecioUnitario.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtPrecioUnitario;
@@ -774,9 +774,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 		this.porcentajeSeguro = porcentajeSeguro;
 	}
 
-	private CLJTextField getTxtPorcentajeSeguro() {
+	private FWJTextField getTxtPorcentajeSeguro() {
 		if (txtPorcentajeSeguro == null) {
-			txtPorcentajeSeguro = new CLJTextField();
+			txtPorcentajeSeguro = new FWJTextField();
 			txtPorcentajeSeguro.setText(String.valueOf(getPorcentajeSeguro().doubleValue()));
 			txtPorcentajeSeguro.setPreferredSize(new Dimension(100, 20));
 		}
@@ -793,9 +793,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return panelSeguro;
 	}
 
-	private CLJTextField getTxtPrecioTubo() {
+	private FWJTextField getTxtPrecioTubo() {
 		if (txtPrecioTubo == null) {
-			txtPrecioTubo = new CLJTextField();
+			txtPrecioTubo = new FWJTextField();
 			txtPrecioTubo.setPreferredSize(new Dimension(350, 20));
 			txtPrecioTubo.setSize(new Dimension(350, 20));
 			txtPrecioTubo.setText(String.valueOf(getPrecioTubo().doubleValue()));
@@ -822,9 +822,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return panelPercepcion;
 	}
 	
-	private CLJTextField getTxtPorcentajePercepcion() {
+	private FWJTextField getTxtPorcentajePercepcion() {
 		if(txtPorcentajePercepcion == null){
-			txtPorcentajePercepcion = new CLJTextField();
+			txtPorcentajePercepcion = new FWJTextField();
 			txtPorcentajePercepcion.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtPorcentajePercepcion;
@@ -887,9 +887,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return cmbPrecioMateriaPrima;
 	}
 	
-	private CLJTextField getTxtStockInput() {
+	private FWJTextField getTxtStockInput() {
 		if(txtStockInput == null){
-			txtStockInput = new CLJTextField();
+			txtStockInput = new FWJTextField();
 		}
 		return txtStockInput;
 	}
@@ -926,9 +926,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 		GuiUtil.llenarCombo(getCmbPrecioMateriaPrima(), preciosMateriaPrimaByTipoVentaStock, true);
 	}
 	
-	private CLJTextField getTxtDescripcion() {
+	private FWJTextField getTxtDescripcion() {
 		if(txtDescripcion == null){
-			txtDescripcion = new CLJTextField();
+			txtDescripcion = new FWJTextField();
 			txtDescripcion.setPreferredSize(new Dimension(350, 20));
 			txtDescripcion.setSize(new Dimension(350, 20));
 		}
@@ -950,17 +950,17 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return articulosFacade;
 	}
 
-	private CLJTextField getTxtPrecioUnitarioTelaCruda() {
+	private FWJTextField getTxtPrecioUnitarioTelaCruda() {
 		if (txtPrecioUnitarioTelaCruda == null) {
-			txtPrecioUnitarioTelaCruda = new CLJTextField();
+			txtPrecioUnitarioTelaCruda = new FWJTextField();
 			txtPrecioUnitarioTelaCruda.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtPrecioUnitarioTelaCruda;
 	}
 
-	private CLJTextField getTxtCantidadMetrosTelaCruda() {
+	private FWJTextField getTxtCantidadMetrosTelaCruda() {
 		if (txtCantidadMetrosTelaCruda == null) {
-			txtCantidadMetrosTelaCruda = new CLJTextField();
+			txtCantidadMetrosTelaCruda = new FWJTextField();
 			txtCantidadMetrosTelaCruda.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtCantidadMetrosTelaCruda;

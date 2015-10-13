@@ -6,10 +6,9 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.gui.util.ESkin;
-
 import main.GTLMainTemplate;
 
 public class CambioSkinAzulAction implements Action{
@@ -49,7 +48,7 @@ public class CambioSkinAzulAction implements Action{
 	public void actionPerformed(ActionEvent e) {
 		try {
 			mainTemplate.cambiarSkin(ESkin.AZUL);
-		} catch (CLException e1) {
+		} catch (FWException e1) {
 			BossError.gestionarError(e1);
 		}
 	}

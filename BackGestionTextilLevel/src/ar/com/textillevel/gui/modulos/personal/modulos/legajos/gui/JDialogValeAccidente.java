@@ -26,9 +26,9 @@ import javax.swing.SpinnerNumberModel;
 import org.apache.taglibs.string.util.StringW;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
@@ -190,7 +190,7 @@ public class JDialogValeAccidente extends JDialog {
 				ValeAccidente valeAccSaved = getValeAtencionFacade().ingresarValeAccidente(getValeAccidente(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				setValeAccidente(valeAccSaved);
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(JDialogValeAccidente.this, e.getMensajeError(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogValeAccidente.this, e.getMensajeError(), "Error");
 				setValeAccidente(null);
 				setAcepto(false);
 				dispose();
@@ -210,22 +210,22 @@ public class JDialogValeAccidente extends JDialog {
 
 	private boolean validar() {
 		if(getTxtDescrAccidente().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la descripción del accidente.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la descripción del accidente.", "Error");
 			getTxtDescrAccidente().requestFocus();
 			return false;
 		}
 		if(getFechaVale().getDate()==null) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha del vale.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha del vale.", "Error");
 			getFechaVale().requestFocus();
 			return false;
 		}
 		RangoHorario horario = legajo.getHorario(new java.sql.Date(getFechaVale().getDate().getTime()));
 		if(horario == null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap("No se puede ingresar el vale para esa fecha porque el empleado no tiene un horario definido para ese día."), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap("No se puede ingresar el vale para esa fecha porque el empleado no tiene un horario definido para ese día."), "Error");
 			return false;
 		}
 		if(horario.getHoraHasta().equals((Integer)getJsHorasSalida().getValue())  && horario.getMinutosHasta() < (Integer)getJsMinutosSalida().getValue()) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap("El horario de salida debe ser menor al configurado: " + horario.toString()), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap("El horario de salida debe ser menor al configurado: " + horario.toString()), "Error");
 			return false;
 		}
 		return true;

@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -39,7 +39,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaODTs;
+	private FWJTable tablaODTs;
 	private Cliente cliente;
 	private Frame owner;
 	private OrdenDeTrabajoFacadeRemote odtFacade;
@@ -101,9 +101,9 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaOdts() {
+	private FWJTable getTablaOdts() {
 		if(tablaODTs == null) {
-			tablaODTs = new CLJTable(0, 2) {
+			tablaODTs = new FWJTable(0, 2) {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
@@ -115,7 +115,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			};
 			tablaODTs.setStringColumn(0, "ODT", 460, 460, true);
 			tablaODTs.setStringColumn(1, "", 0, 0, true);
-			tablaODTs.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaODTs.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaODTs.addMouseListener(new MouseAdapter () {
 
 				@Override

@@ -1,7 +1,8 @@
 package ar.com.textillevel.modulos.personal.entidades.recibosueldo.to;
 
 import java.io.Serializable;
-import ar.clarin.fwjava.entidades.Mes;
+
+import ar.com.fwcommon.entidades.Mes;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EQuincena;
 

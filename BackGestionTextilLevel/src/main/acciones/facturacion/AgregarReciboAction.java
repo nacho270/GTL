@@ -3,8 +3,10 @@ package main.acciones.facturacion;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+
 import javax.swing.Action;
-import ar.clarin.fwjava.util.GuiUtil;
+
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;

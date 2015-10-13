@@ -25,8 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.panels.PanComboConElementoOtro;
@@ -209,7 +209,7 @@ public class JDialogSeleccionarInstruccion extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(JDialogSeleccionarInstruccion.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(JDialogSeleccionarInstruccion.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}

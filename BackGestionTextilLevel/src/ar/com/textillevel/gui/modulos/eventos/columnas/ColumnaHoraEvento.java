@@ -1,8 +1,8 @@
 package ar.com.textillevel.gui.modulos.eventos.columnas;
 
-import ar.clarin.fwjava.auditoria.ejb.Evento;
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaString;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.auditoria.ejb.Evento;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
+import ar.com.fwcommon.util.DateUtil;
 
 public class ColumnaHoraEvento extends ColumnaString<Evento>{
 

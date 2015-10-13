@@ -11,8 +11,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.CotizacionDAOLocal;
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoDAOLocal;

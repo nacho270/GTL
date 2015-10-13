@@ -20,9 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Categoria;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Puesto;
@@ -129,23 +129,23 @@ public class JDialogIngresarValorPuesto extends JDialog {
 
 	private boolean validar() {
 		if(getCmbPuesto().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(owner, "Debe seleccionar un puesto.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe seleccionar un puesto.", "Error");
 			return false;
 		}
 		String valorHoraStr = getTxtValorHora().getText();
 		if(StringUtil.isNullOrEmpty(valorHoraStr)) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar un valor por hora.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar un valor por hora.", "Error");
 			getTxtValorHora().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(valorHoraStr)) {
-			CLJOptionPane.showErrorMessage(owner, "El valor de la hora debe ser numérico.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "El valor de la hora debe ser numérico.", "Error");
 			getTxtValorHora().requestFocus();
 			return false;
 		}
 		double valorHora = GenericUtils.getDoubleValueInJTextField(getTxtValorHora());
 		if(valorHora <= 0) {
-			CLJOptionPane.showErrorMessage(owner, "El valor de la hora debe ser mayor a cero.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "El valor de la hora debe ser mayor a cero.", "Error");
 			getTxtValorHora().requestFocus();
 			return false;
 		}

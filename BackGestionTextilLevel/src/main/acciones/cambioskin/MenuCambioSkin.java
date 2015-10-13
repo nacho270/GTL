@@ -5,10 +5,9 @@ import java.awt.Frame;
 import javax.swing.JMenuItem;
 
 import main.GTLMainTemplate;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
-
-public class MenuCambioSkin extends CLJMenu {
+public class MenuCambioSkin extends FWJMenu {
 
 	private static final long serialVersionUID = 1423099650817991471L;
 	

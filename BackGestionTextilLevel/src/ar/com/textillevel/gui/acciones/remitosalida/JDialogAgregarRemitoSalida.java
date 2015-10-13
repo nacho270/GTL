@@ -34,14 +34,14 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
@@ -64,7 +64,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private static final int MAX_LONGITUD_RAZ_SOCIAL = 50;
 
 	private JPanel panDetalle;
-	private CLJTextField txtRazonSocial;
+	private FWJTextField txtRazonSocial;
 	private PanelTablaPieza panTablaPieza;
 	private JPanel pnlBotones;
 	private JButton btnAceptar;
@@ -72,10 +72,10 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private JButton btnImprimir;
 
 	private JTextField txtNroRemito;
-	private CLDateField txtFechaEmision;
+	private FWDateField txtFechaEmision;
 	private JTextField txtRemitosEntrada;
 	private JTextField txtCodODT;
-	private CLJTextField txtPesoTotal;
+	private FWJTextField txtPesoTotal;
 	private JTextField txtProductos;
 	private RemitoSalida remitoSalida;
 	private List<RemitoSalida> remitosSalida;
@@ -320,9 +320,9 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		return txtProductos;
 	}
 
-	private CLJTextField getTxtPesoTotal() {
+	private FWJTextField getTxtPesoTotal() {
 		if(txtPesoTotal == null) {
-			txtPesoTotal = new CLJTextField();
+			txtPesoTotal = new FWJTextField();
 			if(modoConsulta || remitoSalida.getId() != null) {
 				txtPesoTotal.setText(remitoSalida.getPesoTotal().toString());
 			}
@@ -338,9 +338,9 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		return txtCodODT;
 	}
 
-	private CLDateField getTxtFechaEmision() {
+	private FWDateField getTxtFechaEmision() {
 		if(txtFechaEmision == null) {
-			txtFechaEmision = new CLDateField();
+			txtFechaEmision = new FWDateField();
 			if(modoConsulta || remitoSalida.getId() != null) {
 				txtFechaEmision.setFecha(remitoSalida.getFechaEmision());
 			}
@@ -350,7 +350,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 	private JTextField getTxtNroRemito() {
 		if(txtNroRemito == null) {
-			txtNroRemito = new CLJTextField();
+			txtNroRemito = new FWJTextField();
 			txtNroRemito.setEditable(false);
 			if(modoConsulta || remitoSalida.getId() != null) {
 				txtNroRemito.setText(remitoSalida.getNroRemito().toString());
@@ -359,9 +359,9 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		return txtNroRemito;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if(txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
@@ -440,7 +440,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 							   .append("como consecuencia se grabarán " + cantRemitos + " remitos con números : " + StringUtil.getCadena(nrosRemito, ", "))
 							   .append(". ¿Desea Continuar?");
 
-							if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(msg.toString()), "Advertencia") == CLJOptionPane.YES_OPTION) {
+							if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(msg.toString()), "Advertencia") == FWJOptionPane.YES_OPTION) {
 								List<RemitoSalida> remitosSalida = calcularRemitosSalida(remitoSalida, cantRemitos);
 								//Se calcula la merma de cada uno
 								for(RemitoSalida rs : remitosSalida) {
@@ -467,13 +467,13 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 								setRemitoSalida(null);
 								BigDecimal toleranciaPorcentajeMerma = getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeToleranciaMermaNegativa();
 								if(toleranciaPorcentajeMerma == null) {
-									CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap("Falta configurar el porcentaje de tolerancia de merma en los parámetros generales."), "Error");
+									FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap("Falta configurar el porcentaje de tolerancia de merma en los parámetros generales."), "Error");
 									return;
 								}
 								JDialogResultadoAltaRemitoSalida dialogResultadoAltaRemitoSalida = new JDialogResultadoAltaRemitoSalida(JDialogAgregarRemitoSalida.this, remitosSalidaSaved, toleranciaPorcentajeMerma);
 								GuiUtil.centrar(dialogResultadoAltaRemitoSalida);
 								dialogResultadoAltaRemitoSalida.setVisible(true);
-								if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalida.this, "¿Desea imprimir los remitos?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+								if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalida.this, "¿Desea imprimir los remitos?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 									ImprimirRemitoHandler imprimirRemitoHandler = new ImprimirRemitoHandler(remitosSalidaSaved, getParametrosGeneralesFacade().getParametrosGenerales().getNroSucursal(), JDialogAgregarRemitoSalida.this);
 									imprimirRemitoHandler.imprimir();
 									dispose();
@@ -490,7 +490,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 						//Valido y seteo el peso total válido cuando se trata de un remito de salida simple
 						String pesoTotalStr = getTxtPesoTotal().getText();
 						if(StringUtil.isNullOrEmpty(pesoTotalStr) || !GenericUtils.esNumerico(pesoTotalStr)) {
-							CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, "Debe ingresar un peso total válido.", "Error");
+							FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, "Debe ingresar un peso total válido.", "Error");
 							getTxtPesoTotal().requestFocus();
 							return;
 						}
@@ -504,14 +504,14 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 						setRemitosSalida(null);
 						BigDecimal toleranciaPorcentajeMerma = getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeToleranciaMermaNegativa();
 						if(toleranciaPorcentajeMerma == null) {
-							CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap("Falta configurar el porcentaje de tolerancia de merma en los parámetros generales."), "Error");
+							FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap("Falta configurar el porcentaje de tolerancia de merma en los parámetros generales."), "Error");
 							return;
 						}
 						JDialogResultadoAltaRemitoSalida dialogResultadoAltaRemitoSalida = new JDialogResultadoAltaRemitoSalida(JDialogAgregarRemitoSalida.this, Collections.singletonList(remitoSalidaSaved), toleranciaPorcentajeMerma);
 						GuiUtil.centrar(dialogResultadoAltaRemitoSalida);
 						dialogResultadoAltaRemitoSalida.setVisible(true);
 
-						if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalida.this, "¿Desea imprimir el remito?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+						if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalida.this, "¿Desea imprimir el remito?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 							ImprimirRemitoHandler imprimirRemitoHandler = new ImprimirRemitoHandler(remitoSalidaSaved, getParametrosGeneralesFacade().getParametrosGenerales().getNroSucursal(), JDialogAgregarRemitoSalida.this);
 							imprimirRemitoHandler.imprimir();
 						}
@@ -600,7 +600,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private boolean validar() {
 		String msgValidacionPiezas = getPanTablaPieza().validar();
 		if(msgValidacionPiezas != null) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(msgValidacionPiezas), "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(msgValidacionPiezas), "Error");
 			return false;
 		}
 		return true;
@@ -758,8 +758,8 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 		@SuppressWarnings("serial")
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaPiezaEntrada = new CLJTable(0, CANT_COLS) {
+		protected FWJTable construirTabla() {
+			FWJTable tablaPiezaEntrada = new FWJTable(0, CANT_COLS) {
 
 				@Override
 				public void cellEdited(int cell, int row) {
@@ -887,7 +887,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			Integer cantFilas = dialogCantFilasInput.getCantFilas();
 			if(cantFilas != null) {
 				if(remitoSalida.getPiezas().size() + cantFilas > CANT_FILAS_MAX) {
-					CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, "La cantidad de piezas debe ser menor a " + CANT_FILAS_MAX, "Error");
+					FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, "La cantidad de piezas debe ser menor a " + CANT_FILAS_MAX, "Error");
 				} else {
 					addRowsInTabla(cantFilas, false);
 				}
@@ -1004,7 +1004,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 						Integer cantRowsAgregar = dialogCantFilasInput.getCantFilas();
 						if(cantRowsAgregar != null) {
 							if(remitoSalida.getPiezas().size() + cantRowsAgregar > CANT_FILAS_MAX) {
-								CLJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, "La cantidad de piezas debe ser menor a " + CANT_FILAS_MAX, "Error");
+								FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, "La cantidad de piezas debe ser menor a " + CANT_FILAS_MAX, "Error");
 							} else {
 								PiezaRemito pSelected = getElemento(selectedRow);
 								for(int i = 1; i <= cantRowsAgregar; i++) {

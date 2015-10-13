@@ -7,7 +7,7 @@ import java.sql.Date;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
@@ -59,7 +59,7 @@ public class InformeIVAVentasAction implements Action{
 				JDialogReporteIVAVentasPreview jDialogReporteIVAVentasPreview = new JDialogReporteIVAVentasPreview(frame, ivaVentas, fechaDesde, fechaHasta);
 				jDialogReporteIVAVentasPreview.setVisible(true);
 			}else{
-				CLJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");
+				FWJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");
 			}
 		}
 	}

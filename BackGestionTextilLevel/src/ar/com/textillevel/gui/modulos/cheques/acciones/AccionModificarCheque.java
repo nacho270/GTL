@@ -1,11 +1,11 @@
 package ar.com.textillevel.gui.modulos.cheques.acciones;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
@@ -23,16 +23,16 @@ public class AccionModificarCheque extends Accion<Cheque>{
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<Cheque> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Cheque> e) throws FWException {
 		Cheque cheque = e.getSelectedElements().get(0);
 		JDialogAgregarCheque dialogAgregarCheque = new JDialogAgregarCheque(e.getSource().getFrame(), cheque,false,false);
 		if(dialogAgregarCheque.isAcepto()){
 			ChequeFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(ChequeFacadeRemote.class);
 			try{
 				cfr.grabarCheque(dialogAgregarCheque.getCheque(),GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-				CLJOptionPane.showInformationMessage(e.getSource().getFrame(), "El cheque se ha guardado con éxito", "Modificar de cheque");
+				FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "El cheque se ha guardado con éxito", "Modificar de cheque");
 				return true;
-			}catch(CLException cle){
+			}catch(FWException cle){
 				BossError.gestionarError(cle);
 				return false;
 			}

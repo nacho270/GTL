@@ -3,18 +3,18 @@ package ar.com.textillevel.gui.modulos.odt.builder;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionesAdicionales;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
-import ar.clarin.fwjava.templates.modulo.model.totales.IBuilderTotales;
-import ar.clarin.fwjava.templates.modulo.model.totales.Totales;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionesAdicionales;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
+import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionBorrarSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionCargarSecuenciaDeTrabajoODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionDobleClickODT;
@@ -36,7 +36,7 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 		return instance;
 	}
 	
-	public Acciones<OrdenDeTrabajo> construirAcciones(int idModel) throws CLException {
+	public Acciones<OrdenDeTrabajo> construirAcciones(int idModel) throws FWException {
 		Acciones<OrdenDeTrabajo> acciones = new Acciones<OrdenDeTrabajo>();
 		List<Accion<OrdenDeTrabajo>> accionesCreacion = new ArrayList<Accion<OrdenDeTrabajo>>();
 		accionesCreacion.add(new AccionCargarSecuenciaDeTrabajoODT());
@@ -62,7 +62,7 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 		return null;
 	}
 
-	public AccionesAdicionales<OrdenDeTrabajo> construirAccionAdicional(int idModel) throws CLException {
+	public AccionesAdicionales<OrdenDeTrabajo> construirAccionAdicional(int idModel) throws FWException {
 		AccionesAdicionales<OrdenDeTrabajo> acciones = new AccionesAdicionales<OrdenDeTrabajo>();
 		acciones.addSingleElement(new AccionDobleClickODT());
 		return acciones;

@@ -42,18 +42,18 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
@@ -111,27 +111,27 @@ public class JDialogCargaFactura extends JDialog {
 	private static final int COL_IMPORTE = 5;
 	private static final int COL_OBJ_FACTURA = 6;
 
-	private CLJTable tablaProductos;
+	private FWJTable tablaProductos;
 
-	private CLJTextField txtSubTotal;
-	private CLJTextField txtImpuestos;
-	private CLJTextField txtSubTotalConImpuestos;
-	private CLJTextField txtPorcentajeIVA;
-	private CLJTextField txtPorcentajeIVANoInscripto;
-	private CLJTextField txtImporteIVAInscripto;
-	private CLJTextField txtImporteIVANoInscripto;
-	private CLJTextField txtTotal;
+	private FWJTextField txtSubTotal;
+	private FWJTextField txtImpuestos;
+	private FWJTextField txtSubTotalConImpuestos;
+	private FWJTextField txtPorcentajeIVA;
+	private FWJTextField txtPorcentajeIVANoInscripto;
+	private FWJTextField txtImporteIVAInscripto;
+	private FWJTextField txtImporteIVANoInscripto;
+	private FWJTextField txtTotal;
 
-	private CLJTextField txtRazonSocial;
-	private CLJTextField txtDireccion;
-	private CLJTextField txtLocalidad;
-	private CLJTextField txtCondicionIVA;
-	private CLJTextField txtCuit;
+	private FWJTextField txtRazonSocial;
+	private FWJTextField txtDireccion;
+	private FWJTextField txtLocalidad;
+	private FWJTextField txtCondicionIVA;
+	private FWJTextField txtCuit;
 	private JComboBox cmbCondicionVenta;
-	private CLJTextField txtNrosGenericos;
+	private FWJTextField txtNrosGenericos;
 
 	private PanelDatePicker panelFecha;
-	private CLJTextField txtNroFactura;
+	private FWJTextField txtNroFactura;
 	private JLabel lblTipoDocumento;
 	private JLabel lblTipoFactura;
 	private LinkableLabel lblElegirFactura;
@@ -190,7 +190,7 @@ public class JDialogCargaFactura extends JDialog {
 		super(padre);
 		ParametrosGenerales parametrosGenerales2 = getParametrosGeneralesFacade().getParametrosGenerales();
 		if (parametrosGenerales2 == null) {
-			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
+			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
 		}
 		setCliente(correccion.getCliente());
@@ -258,7 +258,7 @@ public class JDialogCargaFactura extends JDialog {
 		iniciarCorreccion();
 		ParametrosGenerales parametrosGenerales2 = getParametrosGeneralesFacade().getParametrosGenerales();
 		if (parametrosGenerales2 == null) {
-			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
+			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
 		}
 		setParametrosGenerales(parametrosGenerales2);
@@ -292,7 +292,7 @@ public class JDialogCargaFactura extends JDialog {
 		setRemitos(GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdsConPiezasYProductos(extractIds(factura.getRemitos())));
 		ParametrosGenerales parametrosGenerales2 = getParametrosGeneralesFacade().getParametrosGenerales();
 		if (parametrosGenerales2 == null) {
-			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
+			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
 		}
 		setParametrosGenerales(parametrosGenerales2);
@@ -365,7 +365,7 @@ public class JDialogCargaFactura extends JDialog {
 		setCantTubos(cantTubos);
 		ParametrosGenerales parametrosGenerales2 = getParametrosGeneralesFacade().getParametrosGenerales();
 		if (parametrosGenerales2 == null) {
-			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
+			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
 			return;
 		}
@@ -397,7 +397,7 @@ public class JDialogCargaFactura extends JDialog {
 		super(padre);
 		ParametrosGenerales parametrosGenerales2 = getParametrosGeneralesFacade().getParametrosGenerales();
 		if (parametrosGenerales2 == null) {
-			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
+			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
 			return;
 		}
@@ -427,7 +427,7 @@ public class JDialogCargaFactura extends JDialog {
 			getFactura().getItems().add(getItemFacturaTubo());
 		}
 		if (!haySeguro()) {
-			if (CLJOptionPane.showQuestionMessage(this, "Desea agregar seguro?", "Alta de factura") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "Desea agregar seguro?", "Alta de factura") == FWJOptionPane.YES_OPTION) {
 				getFactura().getItems().add(getItemFacturaSeguro());
 			}
 		}
@@ -899,9 +899,9 @@ public class JDialogCargaFactura extends JDialog {
 		GuiUtil.centrar(this);
 	}
 
-	private CLJTable getTablaProductos() {
+	private FWJTable getTablaProductos() {
 		if (tablaProductos == null) {
-			tablaProductos = new CLJTable(0, CANT_COLS_TBL_FACTURA) {
+			tablaProductos = new FWJTable(0, CANT_COLS_TBL_FACTURA) {
 
 				private static final long serialVersionUID = -7960992084800303941L;
 
@@ -988,7 +988,7 @@ public class JDialogCargaFactura extends JDialog {
 								ItemFactura itemModificado = (ItemFactura) getValueAt(row, COL_OBJ_FACTURA);
 								String descripcion = (String) getValueAt(row, COL_DESCRIPCION);
 								if (descripcion.trim().length() == 0) {
-									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
+									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
 									return;
 								}
 								/*CeldaTablaProductos celda = new CeldaTablaProductos(0, COL_DESCRIPCION);
@@ -1002,7 +1002,7 @@ public class JDialogCargaFactura extends JDialog {
 							} else if (getValueAt(row, COL_OBJ_FACTURA) instanceof CorreccionFactura) {
 								String descripcion = (String) getValueAt(row, COL_DESCRIPCION);
 								if (descripcion.trim().length() == 0) {
-									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
+									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
 									return;
 								}
 								/*CeldaTablaProductos celda = new CeldaTablaProductos(0, COL_DESCRIPCION);
@@ -1042,7 +1042,7 @@ public class JDialogCargaFactura extends JDialog {
 										BigDecimal cant = new BigDecimal(valor);
 										BigDecimal stockGuardado = getPrecioMateriaPrimaFacade().getStockByPrecioMateriaPrima(pm);
 										if(cant.compareTo(stockGuardado)==1){
-											CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "El stock debe ser menor o igual a " + stockGuardado.doubleValue(), "Error");
+											FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "El stock debe ser menor o igual a " + stockGuardado.doubleValue(), "Error");
 											setBackgroundCell(row, cell, Color.YELLOW);
 											CeldaTablaProductos celda2 = new CeldaTablaProductos(row, cell);
 											Integer cantErrorFila2 = getMapFilaCantidadErrores().get(celda);
@@ -1079,7 +1079,7 @@ public class JDialogCargaFactura extends JDialog {
 							return;
 						}
 					}catch(NumberFormatException nfe){
-						CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap("Ha ocurrido un error en la conversión de precios. Por favor, revise si los datos son correctos."), "Error");
+						FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap("Ha ocurrido un error en la conversión de precios. Por favor, revise si los datos son correctos."), "Error");
 						System.out.println("error de formateo de numerooooooooooooooooo");
 					}
 				}
@@ -1096,17 +1096,17 @@ public class JDialogCargaFactura extends JDialog {
 		return tablaProductos;
 	}
 
-	private CLJTextField getTxtSubTotal() {
+	private FWJTextField getTxtSubTotal() {
 		if (txtSubTotal == null) {
-			txtSubTotal = new CLJTextField();
+			txtSubTotal = new FWJTextField();
 			txtSubTotal.setEditable(false);
 		}
 		return txtSubTotal;
 	}
 
-	private CLJTextField getTxtImpuestos() {
+	private FWJTextField getTxtImpuestos() {
 		if (txtImpuestos == null) {
-			txtImpuestos = new CLJTextField();
+			txtImpuestos = new FWJTextField();
 			txtImpuestos.setEnabled(false);
 			txtImpuestos.setEditable(false);
 			txtImpuestos.addKeyListener(new KeyAdapter() {
@@ -1134,17 +1134,17 @@ public class JDialogCargaFactura extends JDialog {
 		return txtImpuestos;
 	}
 
-	private CLJTextField getTxtSubTotalConImpuestos() {
+	private FWJTextField getTxtSubTotalConImpuestos() {
 		if (txtSubTotalConImpuestos == null) {
-			txtSubTotalConImpuestos = new CLJTextField();
+			txtSubTotalConImpuestos = new FWJTextField();
 			txtSubTotalConImpuestos.setEditable(false);
 		}
 		return txtSubTotalConImpuestos;
 	}
 
-	private CLJTextField getTxtPorcentajeIVA() {
+	private FWJTextField getTxtPorcentajeIVA() {
 		if (txtPorcentajeIVA == null) {
-			txtPorcentajeIVA = new CLJTextField();
+			txtPorcentajeIVA = new FWJTextField();
 			txtPorcentajeIVA.setPreferredSize(new Dimension(40, 20));
 			if(getFactura()!=null){
 				txtPorcentajeIVA.setText(getFactura().getPorcentajeIVAInscripto() != null ? getDecimalFormat().format(getFactura().getPorcentajeIVAInscripto()) : "");
@@ -1158,25 +1158,25 @@ public class JDialogCargaFactura extends JDialog {
 		return txtPorcentajeIVA;
 	}
 
-	private CLJTextField getTxtImporteIVAInscripto() {
+	private FWJTextField getTxtImporteIVAInscripto() {
 		if (txtImporteIVAInscripto == null) {
-			txtImporteIVAInscripto = new CLJTextField();
+			txtImporteIVAInscripto = new FWJTextField();
 			txtImporteIVAInscripto.setEditable(false);
 		}
 		return txtImporteIVAInscripto;
 	}
 
-	private CLJTextField getTxtImporteIVANoInscripto() {
+	private FWJTextField getTxtImporteIVANoInscripto() {
 		if (txtImporteIVANoInscripto == null) {
-			txtImporteIVANoInscripto = new CLJTextField();
+			txtImporteIVANoInscripto = new FWJTextField();
 			txtImporteIVANoInscripto.setEditable(false);
 		}
 		return txtImporteIVANoInscripto;
 	}
 
-	private CLJTextField getTxtPorcentajeIVANoInscripto() {
+	private FWJTextField getTxtPorcentajeIVANoInscripto() {
 		if (txtPorcentajeIVANoInscripto == null) {
-			txtPorcentajeIVANoInscripto = new CLJTextField();
+			txtPorcentajeIVANoInscripto = new FWJTextField();
 			txtPorcentajeIVANoInscripto.setPreferredSize(new Dimension(30, 20));
 			// txtPorcentajeIVANoInscripto.setText(String.valueOf(getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeIVANoInscripto().intValue()));
 			txtPorcentajeIVANoInscripto.setEditable(false);
@@ -1184,52 +1184,52 @@ public class JDialogCargaFactura extends JDialog {
 		return txtPorcentajeIVANoInscripto;
 	}
 
-	private CLJTextField getTxtTotal() {
+	private FWJTextField getTxtTotal() {
 		if (txtTotal == null) {
-			txtTotal = new CLJTextField();
+			txtTotal = new FWJTextField();
 			txtTotal.setEditable(false);
 		}
 		return txtTotal;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if (txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField();
+			txtRazonSocial = new FWJTextField();
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
 	}
 
-	private CLJTextField getTxtDireccion() {
+	private FWJTextField getTxtDireccion() {
 		if (txtDireccion == null) {
-			txtDireccion = new CLJTextField();
+			txtDireccion = new FWJTextField();
 			txtDireccion.setPreferredSize(new Dimension(200, 20));
 			txtDireccion.setEditable(false);
 		}
 		return txtDireccion;
 	}
 
-	private CLJTextField getTxtLocalidad() {
+	private FWJTextField getTxtLocalidad() {
 		if (txtLocalidad == null) {
-			txtLocalidad = new CLJTextField();
+			txtLocalidad = new FWJTextField();
 			txtLocalidad.setPreferredSize(new Dimension(200, 20));
 			txtLocalidad.setEditable(false);
 		}
 		return txtLocalidad;
 	}
 
-	private CLJTextField gettxtCondicionIVA() {
+	private FWJTextField gettxtCondicionIVA() {
 		if (txtCondicionIVA == null) {
-			txtCondicionIVA = new CLJTextField();
+			txtCondicionIVA = new FWJTextField();
 			txtCondicionIVA.setPreferredSize(new Dimension(150, 20));
 			txtCondicionIVA.setEditable(false);
 		}
 		return txtCondicionIVA;
 	}
 
-	private CLJTextField getTxtCuit() {
+	private FWJTextField getTxtCuit() {
 		if (txtCuit == null) {
-			txtCuit = new CLJTextField();
+			txtCuit = new FWJTextField();
 			txtCuit.setPreferredSize(new Dimension(147, 20));
 			txtCuit.setEditable(false);
 		}
@@ -1285,9 +1285,9 @@ public class JDialogCargaFactura extends JDialog {
 		}
 	}
 	
-	private CLJTextField getTxtNroFactura() {
+	private FWJTextField getTxtNroFactura() {
 		if (txtNroFactura == null) {
-			txtNroFactura = new CLJTextField();
+			txtNroFactura = new FWJTextField();
 			txtNroFactura.setPreferredSize(new Dimension(150, 20));
 			String nro; //StringUtil.fillLeftWithZeros(String.valueOf(getParametrosGenerales().getNroSucursal()), 4) + "-";
 			if (getFactura() != null) {
@@ -1449,7 +1449,7 @@ public class JDialogCargaFactura extends JDialog {
 	
 	private JButton getBtnAgregarProducto() {
 		if (btnAgregarProducto == null) {
-			btnAgregarProducto = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_agregar.png", "ar/clarin/fwjava/imagenes/b_agregar_des.png");
+			btnAgregarProducto = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_agregar.png", "ar/com/fwcommon/imagenes/b_agregar_des.png");
 			btnAgregarProducto.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -1462,21 +1462,21 @@ public class JDialogCargaFactura extends JDialog {
 
 						if (it instanceof ItemFacturaSeguro) {
 							if (haySeguro()) {
-								CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado el seguro.", "Error");
+								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado el seguro.", "Error");
 								return;
 							}
 						}
 
 						if (it instanceof ItemFacturaTubo) {
 							if (hayTubos()) {
-								CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se han cargado los tubos.", "Error");
+								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se han cargado los tubos.", "Error");
 								return;
 							}
 						}
 						
 						if (it instanceof ItemFacturaPercepcion) {
 							if (hayPercepcion()) {
-								CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado la percepción.", "Error");
+								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado la percepción.", "Error");
 								return;
 							}
 						}
@@ -1532,7 +1532,7 @@ public class JDialogCargaFactura extends JDialog {
 
 	private JButton getBtnQuitarProducto() {
 		if (btnQuitarProducto == null) {
-			btnQuitarProducto = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_eliminar.png", "ar/clarin/fwjava/imagenes/b_eliminar_des.png");
+			btnQuitarProducto = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_eliminar.png", "ar/com/fwcommon/imagenes/b_eliminar_des.png");
 			btnQuitarProducto.setEnabled(false);
 			btnQuitarProducto.addActionListener(new ActionListener() {
 
@@ -1608,20 +1608,20 @@ public class JDialogCargaFactura extends JDialog {
 								if (getFactura().getItems().size() > 0) {
 									okImprimir = guardarFactura();
 									if (okImprimir) {
-										CLJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con éxito", "Alta de factura");
+										FWJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con éxito", "Alta de factura");
 									} else {
 										dispose();
 										return;
 									}
 								} else {
-									CLJOptionPane.showErrorMessage(JDialogCargaFactura.this,"Debe elegir al menos un item para la factura","Error");
+									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this,"Debe elegir al menos un item para la factura","Error");
 								}
 							}
 						} else {
 							if(validarFecha()){
 								okImprimir = guardarCorreccion();
 								if(okImprimir){
-									CLJOptionPane.showInformationMessage(JDialogCargaFactura.this, "La " + getCorrecionFactura().getTipo().getDescripcion() + " se ha guardado con éxito", "Alta de nota de crédito y débito");
+									FWJOptionPane.showInformationMessage(JDialogCargaFactura.this, "La " + getCorrecionFactura().getTipo().getDescripcion() + " se ha guardado con éxito", "Alta de nota de crédito y débito");
 								}else{
 									dispose();
 									return;
@@ -1634,17 +1634,17 @@ public class JDialogCargaFactura extends JDialog {
 						}
 						if(okImprimir){
 							try{
-								if(CLJOptionPane.showQuestionMessage(JDialogCargaFactura.this, "Desea imprimir?", "Pregunta")==CLJOptionPane.YES_OPTION){
+								if(FWJOptionPane.showQuestionMessage(JDialogCargaFactura.this, "Desea imprimir?", "Pregunta")==FWJOptionPane.YES_OPTION){
 									imprimir();
 								}
 							}catch(JRException jre){
 								jre.printStackTrace();
-								CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al imprimir.", "Error");
+								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al imprimir.", "Error");
 							}
 							dispose();
 						}
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Hay errores en la tabla de productos. Asegurese de corregirlos y vuelva a intentarlo", "Error");
+						FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Hay errores en la tabla de productos. Asegurese de corregirlos y vuelva a intentarlo", "Error");
 					}
 				}
 			});
@@ -1663,11 +1663,11 @@ public class JDialogCargaFactura extends JDialog {
 
 	private boolean guardarCorreccion() {
 		if (getCorrecionFactura().getMontoTotal() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe especificar el monto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe especificar el monto", "Error");
 			return false;
 		}
 		if(getCorrecionFactura() instanceof NotaCredito && ((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().size()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir las facturas relacionadas", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir las facturas relacionadas", "Error");
 			return false;
 		}
 		if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
@@ -1694,10 +1694,10 @@ public class JDialogCargaFactura extends JDialog {
 		try {
 			setCorrecionFactura(isEdicion()?getCorreccionFacade().editarCorreccion(getCorrecionFactura(), usuario):getCorreccionFacade().guardarCorreccionYGenerarMovimiento(getCorrecionFactura(), usuario));
 		} catch (ValidacionException e) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
 		} catch (ValidacionExceptionSinRollback e) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
 		}
 		
@@ -1743,10 +1743,10 @@ public class JDialogCargaFactura extends JDialog {
 		try {
 			setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(),usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(), usuario));
 		} catch (ValidacionException e) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
 		} catch (ValidacionExceptionSinRollback e) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
 		}
 		return true;
@@ -1764,7 +1764,7 @@ public class JDialogCargaFactura extends JDialog {
 						imprimir();
 					}catch(JRException jre){
 						jre.printStackTrace();
-						CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al imprimir.", "Error");
+						FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al imprimir.", "Error");
 					}
 				}
 			});
@@ -1887,8 +1887,8 @@ public class JDialogCargaFactura extends JDialog {
 
 	private void salir() {
 		if (!isConsulta()) {
-			int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Factura");
-			if (ret == CLJOptionPane.YES_OPTION) {
+			int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Factura");
+			if (ret == FWJOptionPane.YES_OPTION) {
 				dispose();
 			}
 		} else {
@@ -1996,7 +1996,7 @@ public class JDialogCargaFactura extends JDialog {
 				break;
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-				CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				try{
@@ -2007,13 +2007,13 @@ public class JDialogCargaFactura extends JDialog {
 					}else{
 						setCorrecionFactura(ifHandler.getCorreccionFactura());
 					}
-				}catch(CLException cle){
+				}catch(FWException cle){
 					BossError.gestionarError(cle);
 				} catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap(e.getMensajeError()), "Error");
+					FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				}catch(IOException ioe) {
 					ioe.printStackTrace();
-					CLJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al generar el código de barras.", "Error");
+					FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se ha producido un error al generar el código de barras.", "Error");
 				}
 			}
 		} while (!ok);
@@ -2135,13 +2135,13 @@ public class JDialogCargaFactura extends JDialog {
 						return true;
 					}
 					getPanelFecha().setSelectedDate(f1);
-					CLJOptionPane.showInformationMessage(this, StringW.wordWrap("Atención, esto es una corrección. Se guardaró el documento.\n\nLa fecha debe ser: " + DateUtil.dateToString(f1, DateUtil.SHORT_DATE)), "Corrección");
+					FWJOptionPane.showInformationMessage(this, StringW.wordWrap("Atención, esto es una corrección. Se guardaró el documento.\n\nLa fecha debe ser: " + DateUtil.dateToString(f1, DateUtil.SHORT_DATE)), "Corrección");
 					return true;
 				} else {
 					if (!fechaIngresada.before(DateUtil.redondearFecha(f1)) && !fechaIngresada.after(DateUtil.redondearFecha(f2))) {
 						return true;
 					} else {
-						CLJOptionPane.showErrorMessage(this, "La fecha ingresada debe estar entre " + DateUtil.dateToString(f1, DateUtil.SHORT_DATE) + " y "
+						FWJOptionPane.showErrorMessage(this, "La fecha ingresada debe estar entre " + DateUtil.dateToString(f1, DateUtil.SHORT_DATE) + " y "
 								+ DateUtil.dateToString(f2, DateUtil.SHORT_DATE), "Error");
 						return false;
 					}
@@ -2150,7 +2150,7 @@ public class JDialogCargaFactura extends JDialog {
 				if (!getPanelFecha().getDate().before(DateUtil.redondearFecha(facturaAnteriorYPosterior.get(0)))) {
 					return true;
 				}
-				CLJOptionPane.showErrorMessage(this, "La fecha debe ser posterior a " + DateUtil.dateToString(facturaAnteriorYPosterior.get(0)), "Error");
+				FWJOptionPane.showErrorMessage(this, "La fecha debe ser posterior a " + DateUtil.dateToString(facturaAnteriorYPosterior.get(0)), "Error");
 				return false;
 			}
 		}
@@ -2215,9 +2215,9 @@ public class JDialogCargaFactura extends JDialog {
 		}
 	}
 	
-	public CLJTextField getTxtNrosGenericos() {
+	public FWJTextField getTxtNrosGenericos() {
 		if(txtNrosGenericos == null){
-			txtNrosGenericos = new CLJTextField();
+			txtNrosGenericos = new FWJTextField();
 			txtNrosGenericos.setEditable(false);
 		}
 		return txtNrosGenericos;

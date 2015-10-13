@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -33,7 +33,7 @@ public class JDialogSeleccionarCheque extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaCheque;
+	private FWJTable tablaCheque;
 	private Cliente cliente;
 	private Cheque cheque;
 	private List<Cheque> chequeList;
@@ -88,9 +88,9 @@ public class JDialogSeleccionarCheque extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaCheque() {
+	private FWJTable getTablaCheque() {
 		if(tablaCheque == null) {
-			tablaCheque = new CLJTable(0, CANT_COLS_TBL_CHEQUE) {
+			tablaCheque = new FWJTable(0, CANT_COLS_TBL_CHEQUE) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

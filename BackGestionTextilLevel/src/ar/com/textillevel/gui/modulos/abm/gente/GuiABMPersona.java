@@ -17,14 +17,14 @@ import javax.swing.JPanel;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoRubro;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.entidades.gente.Persona;
@@ -51,13 +51,13 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 	private JPanel panDetalle;
 	private PanDatosTelefono panTelefonoFijo;
 	private PanDatosTelefono panCelular;
-	private CLJTextField txtApellido;
-	private CLJTextField txtNombres;
+	private FWJTextField txtApellido;
+	private FWJTextField txtNombres;
 	
 	private JComboBox cmbRubro;
-	private CLJTextField txtEmail;
+	private FWJTextField txtEmail;
 	private PanDatosDireccion panDatosDireccion;
-	private CLJTextArea txtObservaciones;
+	private FWJTextArea txtObservaciones;
 
 	private Persona personaActual;
 	private List<InfoLocalidad> infoLocalidadList;
@@ -106,9 +106,9 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 		return panDetalle;
 	}
 
-	private CLJTextField getTxtNombres() {
+	private FWJTextField getTxtNombres() {
 		if(txtNombres == null) {
-			txtNombres = new CLJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
+			txtNombres = new FWJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
 		}
 		return txtNombres;
 	}
@@ -146,11 +146,11 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int arg0) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMPersona.this, "¿Está seguro que desea eliminar a la persona seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMPersona.this, "¿Está seguro que desea eliminar a la persona seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				try{
 					getPersonaFacade().remove(getPersonaActual());
 					lista.setSelectedIndex(-1);
-				}catch(CLRuntimeException ex){
+				}catch(FWRuntimeException ex){
 					BossError.gestionarError(ex);
 				}
 			}
@@ -163,7 +163,7 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 			capturarSetearDatos();
 			Persona personaRefresh = getPersonaFacade().save(getPersonaActual());
 			lista.setSelectedValue(personaRefresh, true);
-			CLJOptionPane.showInformationMessage(this, "Los datos de la persona se han guardado con éxito", "Administrar Clientes");
+			FWJOptionPane.showInformationMessage(this, "Los datos de la persona se han guardado con éxito", "Administrar Clientes");
 			return true;
 		}
 		return false;
@@ -183,39 +183,39 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 	private boolean validar() {
 		String textoNombres = getTxtNombres().getText().trim();
 		if(StringUtil.isNullOrEmpty(textoNombres)) {
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, "Falta completar el campo 'NOMBRES'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, "Falta completar el campo 'NOMBRES'", "Advertencia");
 			getTxtNombres().requestFocus();
 			return false;
 		}
 		String textoRazonSocial = getTxtApellido().getText().trim();
 		if(StringUtil.isNullOrEmpty(textoRazonSocial)) {
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, "Falta completar el campo 'APELLIDO'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, "Falta completar el campo 'APELLIDO'", "Advertencia");
 			getTxtApellido().requestFocus();
 			return false;
 		}
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if(textoErrorTelefono != null) {
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
 			return false;
 		}
 		String textoErrorCelular = getPanCelular().validar();
 		if(textoErrorCelular != null) {
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, StringW.wordWrap(textoErrorCelular), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, StringW.wordWrap(textoErrorCelular), "Advertencia");
 			return false;
 		}
 		String strMail = getTxtEmail().getText();
 		if(!StringUtil.isNullOrEmpty(strMail) && !EmailValidator.getInstance().isValid(strMail.trim())) {
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, "El 'EMAIL' ingresado no es válido", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, "El 'EMAIL' ingresado no es válido", "Advertencia");
 			getTxtEmail().requestFocus();
 			return false;
 		}
 		Rubro rubro = (Rubro)getCmbRubro().getSelectedItem();
 		if(rubro == null) {
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, "Falta seleccionar el 'RUBRO'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, "Falta seleccionar el 'RUBRO'", "Advertencia");
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getPanCelular().getDatos()) &&  StringUtil.isNullOrEmpty(getPanTelefonoFijo().getDatos())){
-			CLJOptionPane.showErrorMessage(GuiABMPersona.this, "Debe ingresar al menos un teléfono", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMPersona.this, "Debe ingresar al menos un teléfono", "Advertencia");
 			return false;
 		}
 		return true;
@@ -228,7 +228,7 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 			getTxtNombres().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
 			return false;
 		}
 	}
@@ -331,9 +331,9 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 		return cmbRubro;
 	}
 
-	private CLJTextField getTxtApellido() {
+	private FWJTextField getTxtApellido() {
 		if(txtApellido == null) {
-			txtApellido = new CLJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
+			txtApellido = new FWJTextField(MAX_LONGITUD_NOMBRE_Y_APELLIDO);
 		}
 		return txtApellido;
 	}
@@ -370,9 +370,9 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 		return panCelular;
 	}
 
-	private CLJTextArea getTxtObservaciones() {
+	private FWJTextArea getTxtObservaciones() {
 		if(txtObservaciones == null) {
-			txtObservaciones = new CLJTextArea(MAX_LONGITUD_OBSERVACIONES);
+			txtObservaciones = new FWJTextArea(MAX_LONGITUD_OBSERVACIONES);
 			txtObservaciones.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		}
 		return txtObservaciones;
@@ -440,9 +440,9 @@ public class GuiABMPersona extends GuiABMListaTemplate {
 		return infoLocalidadList;
 	}
 
-	private CLJTextField getTxtEmail() {
+	private FWJTextField getTxtEmail() {
 		if(txtEmail == null) {
-			txtEmail = new CLJTextField(MAX_LONGITUD_EMAIL);
+			txtEmail = new FWJTextField(MAX_LONGITUD_EMAIL);
 		}
 		return txtEmail;
 	}

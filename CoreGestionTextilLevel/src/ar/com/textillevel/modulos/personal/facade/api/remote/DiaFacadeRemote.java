@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.entidades.Dia;
+import ar.com.fwcommon.entidades.Dia;
 
 @Remote
 public interface DiaFacadeRemote {

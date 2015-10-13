@@ -10,10 +10,10 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.panels.PanelSeleccionarElementos;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Categoria;
@@ -33,7 +33,7 @@ public class GuiABMCategoria extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private PanelSeleccionarElementos<Puesto> panPuestos;
 
 	private SindicatoFacadeRemote sindicatoFacade;
@@ -121,7 +121,7 @@ public class GuiABMCategoria extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Categoría seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Categoría seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getCategoriaFacade().remove(getCategoriaActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -135,7 +135,7 @@ public class GuiABMCategoria extends GuiABMListaTemplate {
 			getTxtNombre().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una categoría", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una categoría", "Error");
 			return false;
 		}
 	}
@@ -159,12 +159,12 @@ public class GuiABMCategoria extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getTxtNombre().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre de la categoría.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre de la categoría.", "Advertencia");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getPanPuestos().getSelectedElements().isEmpty()) {
-			CLJOptionPane.showErrorMessage(this, "Debe definir al menos un puesto para la categoría.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe definir al menos un puesto para la categoría.", "Advertencia");
 			return false;
 		}
 		return true;
@@ -217,9 +217,9 @@ public class GuiABMCategoria extends GuiABMListaTemplate {
 		this.categoriaActual = categoria;
 	}
 
-	public CLJTextField getTxtNombre() {
+	public FWJTextField getTxtNombre() {
 		if(txtNombre == null){
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombre;
 	}

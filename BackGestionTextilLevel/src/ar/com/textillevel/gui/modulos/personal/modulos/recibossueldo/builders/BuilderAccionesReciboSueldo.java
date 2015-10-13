@@ -1,14 +1,14 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.builders;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionesAdicionales;
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionesAdicionales;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.acciones.AccionDobleClickReciboSueldo;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.acciones.AccionEliminarReciboSueldo;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.acciones.AccionReciboSueldo;
@@ -42,7 +42,7 @@ public class BuilderAccionesReciboSueldo implements IBuilderAcciones<InfoReciboS
 		return tabla;
 	}
 
-	public Acciones<InfoReciboSueltoTO> construirAcciones(int idModel) throws CLException {
+	public Acciones<InfoReciboSueltoTO> construirAcciones(int idModel) throws FWException {
 		Acciones<InfoReciboSueltoTO> acciones = new Acciones<InfoReciboSueltoTO>();
 		acciones.addSingleElement(new AccionReciboSueldo());
 		acciones.addSingleElement(new AccionEliminarReciboSueldo());
@@ -54,7 +54,7 @@ public class BuilderAccionesReciboSueldo implements IBuilderAcciones<InfoReciboS
 		return null;
 	}
 
-	public AccionesAdicionales<InfoReciboSueltoTO> construirAccionAdicional(int idModel) throws CLException {
+	public AccionesAdicionales<InfoReciboSueltoTO> construirAccionAdicional(int idModel) throws FWException {
 		AccionesAdicionales<InfoReciboSueltoTO> acciones = new AccionesAdicionales<InfoReciboSueltoTO>();
 		acciones.addSingleElement(new AccionDobleClickReciboSueldo());
 		return acciones;

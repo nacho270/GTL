@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ClienteDeudaTO;
 

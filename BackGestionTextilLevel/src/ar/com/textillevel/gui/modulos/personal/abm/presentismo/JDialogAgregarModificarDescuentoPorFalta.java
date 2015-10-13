@@ -19,10 +19,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.presentismo.DescuentoPresentismoPorAusencia;
 
@@ -30,8 +30,8 @@ public class JDialogAgregarModificarDescuentoPorFalta extends JDialog {
 
 	private static final long serialVersionUID = 683957088160450192L;
 
-	private CLJNumericTextField txtCantidadFaltas;
-	private CLJTextField txtPorcentajeDescuento;
+	private FWJNumericTextField txtCantidadFaltas;
+	private FWJTextField txtPorcentajeDescuento;
 	private JButton btnAceptar;
 	private JButton btnSalir;
 
@@ -85,17 +85,17 @@ public class JDialogAgregarModificarDescuentoPorFalta extends JDialog {
 		add(getPanelSur(),BorderLayout.SOUTH);
 	}
 
-	public CLJNumericTextField getTxtCantidadFaltas() {
+	public FWJNumericTextField getTxtCantidadFaltas() {
 		if(txtCantidadFaltas == null){
-			txtCantidadFaltas = new CLJNumericTextField();
+			txtCantidadFaltas = new FWJNumericTextField();
 			txtCantidadFaltas.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtCantidadFaltas;
 	}
 
-	public CLJTextField getTxtPorcentajeDescuento() {
+	public FWJTextField getTxtPorcentajeDescuento() {
 		if(txtPorcentajeDescuento == null){
-			txtPorcentajeDescuento = new CLJTextField();
+			txtPorcentajeDescuento = new FWJTextField();
 			txtPorcentajeDescuento.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtPorcentajeDescuento;
@@ -120,24 +120,24 @@ public class JDialogAgregarModificarDescuentoPorFalta extends JDialog {
 	
 	private boolean validar(){
 		if(getTxtCantidadFaltas().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de faltas", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de faltas", "Error");
 			getTxtCantidadFaltas().requestFocus();
 			return false;
 		}
 		if(getTxtPorcentajeDescuento().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje de descuento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje de descuento", "Error");
 			getTxtPorcentajeDescuento().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(getTxtPorcentajeDescuento().getText())){
-			CLJOptionPane.showErrorMessage(this, "El valor del porcentaje de descuento debe ser numérico", "Error");
+			FWJOptionPane.showErrorMessage(this, "El valor del porcentaje de descuento debe ser numérico", "Error");
 			getTxtPorcentajeDescuento().requestFocus();
 			return false;
 		}
 		if(getDescuentosExistentes()!=null && !getDescuentosExistentes().isEmpty()){
 			for(DescuentoPresentismoPorAusencia d : getDescuentosExistentes()){
 				if(d.getCantidadFaltas().equals(getTxtCantidadFaltas().getValue()) && !d.equals(getDescuentoActual())){
-					CLJOptionPane.showErrorMessage(this, "Ya ha ingresa el porcentaje de descuento para " + getTxtCantidadFaltas().getValue() + " falta/s.", "Error");
+					FWJOptionPane.showErrorMessage(this, "Ya ha ingresa el porcentaje de descuento para " + getTxtCantidadFaltas().getValue() + " falta/s.", "Error");
 					getTxtCantidadFaltas().requestFocus();
 					return false;
 				}

@@ -4,8 +4,8 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
@@ -50,8 +50,8 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 	}
 
 	@Override
-	protected CLJTable construirTabla() {
-		CLJTable tabla = new CLJTable(0, CANT_COLS);
+	protected FWJTable construirTabla() {
+		FWJTable tabla = new FWJTable(0, CANT_COLS);
 		tabla.setStringColumn(COL_NOMBRE, "NOMBRE DE LA FÓRMULA", 200, 200, true);
 		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTÍCULO", 180, 180, true);
 		tabla.setStringColumn(COL_COLOR, "COLOR", 180, 180, true);

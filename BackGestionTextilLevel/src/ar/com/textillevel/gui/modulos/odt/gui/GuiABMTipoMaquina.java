@@ -13,14 +13,14 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.JDialogAgregarModificarProcesoTipoMaquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
@@ -37,8 +37,8 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombre;
-	private CLJNumericTextField txtOrden;
+	private FWJTextField txtNombre;
+	private FWJNumericTextField txtOrden;
 	private PanProcesoTipoMaquina panelTablaProcesos;
 
 	private TipoMaquinaFacadeRemote tipoMaquinaFacade;
@@ -80,16 +80,16 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 		return panDetalle;
 	}
 
-	private CLJTextField getTxtNombre() {
+	private FWJTextField getTxtNombre() {
 		if (txtNombre == null) {
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombre;
 	}
 
-	private CLJNumericTextField getTxtOrden() {
+	private FWJNumericTextField getTxtOrden() {
 		if (txtOrden == null) {
-			txtOrden = new CLJNumericTextField();
+			txtOrden = new FWJNumericTextField();
 		}
 		return txtOrden;
 	}
@@ -126,7 +126,7 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el sector seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el sector seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getTipoMaquinaFacade().remove(getTipoMaquinaActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -142,7 +142,7 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 				tipoMaquinaRefresh = getTipoMaquinaFacade().save(getTipoMaquinaActual());
 				lista.setSelectedValue(tipoMaquinaRefresh, true);
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(GuiABMTipoMaquina.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMTipoMaquina.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				e.printStackTrace();
 				return false;
 			}
@@ -153,12 +153,12 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if (getTxtNombre().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del sector.", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del sector.", this.getTitle());
 			return false;
 		}
 
 		if (getTxtOrden().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el órden.", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el órden.", this.getTitle());
 			return false;
 		}
 
@@ -189,7 +189,7 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 			getPanelTablaProcesos().setTipoMaquina(tipoMaquina);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de máquina", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de máquina", "Error");
 			return false;
 		}
 	}
@@ -275,10 +275,10 @@ public class GuiABMTipoMaquina extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_PROCESO, "PROCESO", 560, 560, true);
-			tabla.setHeaderAlignment(COL_PROCESO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			return tabla;
 		}

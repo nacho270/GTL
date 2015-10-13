@@ -21,9 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.acciones.odt.JFrameVisionGeneralProduccion.ModeloFiltro;
 import ar.com.textillevel.gui.acciones.odt.componentes.PanelODTsMaquina;
 import ar.com.textillevel.gui.acciones.odt.event.BotonADerechaEventListener;
@@ -175,7 +175,7 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 		panelMaquina.addBotonDerechaActionListener(new BotonADerechaEventListener() {
 			public void botonDerechaPersionado(WorkFlowODTEvent eventData) {
 				if(eventData.isOficina()){
-					if(CLJOptionPane.showQuestionMessage(JDialogVisualizarODTsPorMaquinas.this, "Va a pasar la Orden de Trabajo a 'Oficina'. Desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION){
+					if(FWJOptionPane.showQuestionMessage(JDialogVisualizarODTsPorMaquinas.this, "Va a pasar la Orden de Trabajo a 'Oficina'. Desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION){
 						getOdtFacade().registrarAvanceODT(eventData.getOdtTO().getId(),EAvanceODT.FINALIZADO,true,GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}

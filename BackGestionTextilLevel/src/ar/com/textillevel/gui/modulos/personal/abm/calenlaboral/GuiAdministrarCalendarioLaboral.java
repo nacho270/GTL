@@ -15,14 +15,14 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.CalendarioAnualFeriado;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.ConfigFormaPagoSindicato;
@@ -39,7 +39,7 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJNumericTextField txtAnio;
+	private FWJNumericTextField txtAnio;
 	private PanTablaConfigFormaPagoSindicato panTablaConfigFormaPagoSindicato;
 	private PanTablaFeriados panTablaFeriados;
 
@@ -80,9 +80,9 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 		return panDetalle;
 	}
 	
-	private CLJNumericTextField getTxtAnio() {
+	private FWJNumericTextField getTxtAnio() {
 		if (txtAnio == null) {
-			txtAnio = new CLJNumericTextField();
+			txtAnio = new FWJNumericTextField();
 			txtAnio.setPreferredSize(new Dimension(50, 20));
 		}
 		return txtAnio;
@@ -113,7 +113,7 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
-		if(CLJOptionPane.showQuestionMessage(GuiAdministrarCalendarioLaboral.this, "¿Está seguro que desea eliminar calendario seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+		if(FWJOptionPane.showQuestionMessage(GuiAdministrarCalendarioLaboral.this, "¿Está seguro que desea eliminar calendario seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 			calendario = (CalendarioAnualFeriado)lista.getSelectedValue();
 			calendarioFacade.eliminarCalendario(calendario);
 		}
@@ -144,7 +144,7 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 				}
 				return true;
 			} catch(ValidacionException e) {
-				CLJOptionPane.showErrorMessage(GuiAdministrarCalendarioLaboral.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				FWJOptionPane.showErrorMessage(GuiAdministrarCalendarioLaboral.this, StringW.wordWrap(e.getMensajeError()), "Error");
 			}
 		}
 		return false;
@@ -239,8 +239,8 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_SINDICATO, "SINDICATO", 150, 150, true);
 			tabla.setMultilineColumn(COL_DESCR_CONFIG, "FORMA DE PAGO POR DIA", 400, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -332,8 +332,8 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_DESCR_FERIADO, "FERIADO", 170, 170, true);
 			tabla.setDateColumn(COL_FECHA_DESDE, "DESDE", 70, true);
 			tabla.setDateColumn(COL_FECHA_HASTA, "HASTA", 70, true);
@@ -396,7 +396,7 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 				anio = calendario.getAnio();
 			}
 			if(anio == null){
-				CLJOptionPane.showErrorMessage(getFrame(), "Debe ingresar el año", "Error");
+				FWJOptionPane.showErrorMessage(getFrame(), "Debe ingresar el año", "Error");
 				return false;
 			}
 			JDialogCargarFeriado dialogo = new JDialogCargarFeriado(GuiAdministrarCalendarioLaboral.this.getFrame(), anio,  feriado);
@@ -416,7 +416,7 @@ public class GuiAdministrarCalendarioLaboral extends GuiABMListaTemplate {
 				anio = calendario.getAnio();
 			}
 			if(anio == null){
-				CLJOptionPane.showErrorMessage(getFrame(), "Debe ingresar el año", "Error");
+				FWJOptionPane.showErrorMessage(getFrame(), "Debe ingresar el año", "Error");
 			}
 			JDialogCargarFeriado dialogo = new JDialogCargarFeriado(GuiAdministrarCalendarioLaboral.this.getFrame(), anio, feriado);
 			dialogo.setVisible(true);

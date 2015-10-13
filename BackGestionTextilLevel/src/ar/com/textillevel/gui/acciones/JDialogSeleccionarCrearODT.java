@@ -18,10 +18,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -107,7 +107,7 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					String txtValidacion = getPanTablaODTs().validarElementos();
 					if(txtValidacion != null) {
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarCrearODT.this, StringW.wordWrap(txtValidacion), "Error");
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarCrearODT.this, StringW.wordWrap(txtValidacion), "Error");
 						return;
 					}
 					OrdenDeTrabajo selectedODT = getPanTablaODTs().getSelectedODT();
@@ -176,8 +176,8 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaODT = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tablaODT = new FWJTable(0, CANT_COLS);
 			tablaODT.setStringColumn(COL_ODT, "ODT", 80, 80, true);
 			tablaODT.setComboColumn(COL_PRODUCTO, "PRODUCTO", getCmbProducto(), 200, false);
 			tablaODT.setStringColumn(COL_OBJ, "", 0, 0, true);

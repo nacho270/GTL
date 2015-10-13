@@ -6,12 +6,6 @@
 
 	<persistence-unit name="GTLDS" transaction-type="JTA">
 		<jta-data-source>java:/GTLDS</jta-data-source>
-		<!--
-		<class>ar.com.clarin.grandt.entidades.BasesTorneo</class>
-		<class>ar.com.clarin.grandt.entidades.ComoParticipar</class>
-		<class>ar.com.clarin.grandt.entidades.Reglamento</class>
-		<class>ar.com.clarin.grandt.entidades.TerminosYCondiciones</class>
-		-->
 		<properties>
 
 			
@@ -38,8 +32,6 @@
 				<property name="treecache.mbean.object_name" value="jboss.cache:service=EJB3EntityTreeCache"/>
 			 -->
 			<property name="hibernate.cache.use_query_cache" value="true" />
-			<!-- <property name="hibernate.cache.region_prefix" value="GDT"/>  -->
-			<!-- el insert de equipos toma, en forma optima, 15jug+1eq+1cambio=17 -->
 			<property name="hibernate.jdbc.batch_size" value="20"/>
 			<property name="hibernate.generate_statistics" value="true"/>
 
@@ -50,7 +42,7 @@
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			 -->
 
-			 <!-- <property name="hibernate.ejb.cfgfile" value="ar/com/clarin/grandt/dao/hibernate.cfg.xml"/>  -->
+			 <!-- <property name="hibernate.ejb.cfgfile" value="ar/com/com/grandt/dao/hibernate.cfg.xml"/>  -->
 		</properties>
 	</persistence-unit>
 		

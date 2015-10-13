@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;

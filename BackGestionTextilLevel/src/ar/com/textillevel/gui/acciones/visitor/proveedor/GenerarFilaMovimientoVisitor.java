@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebePersona;
@@ -26,13 +26,13 @@ import ar.com.textillevel.gui.util.GenericUtils;
 public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 
 	private double saldo;
-	private CLJTable tabla;
+	private FWJTable tabla;
 	private Integer cantCols;
 	private Map<Integer, Color> mapaColores;
 	private final List<InfoSecondPass> rowsPagosSaldoAFavor;
 	private BigDecimal transporte;
 
-	public GenerarFilaMovimientoVisitor(CLJTable tabla, Integer cantCols, BigDecimal transporte) {
+	public GenerarFilaMovimientoVisitor(FWJTable tabla, Integer cantCols, BigDecimal transporte) {
 		this.tabla = tabla;
 		this.cantCols = cantCols;
 		this.transporte = transporte;
@@ -158,11 +158,11 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		this.saldo = saldo;
 	}
 
-	public CLJTable getTabla() {
+	public FWJTable getTabla() {
 		return tabla;
 	}
 
-	public void setTabla(CLJTable tabla) {
+	public void setTabla(FWJTable tabla) {
 		this.tabla = tabla;
 	}
 

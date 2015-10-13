@@ -3,8 +3,8 @@ package ar.com.textillevel.facade.impl;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.dao.api.local.OrdenDePagoPersonaDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
@@ -43,20 +43,20 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote{
 		return nro+1;
 	}
 
-	public OrdenDePagoAPersona guardarOrden(OrdenDePagoAPersona orden, String usrName) throws CLException {
+	public OrdenDePagoAPersona guardarOrden(OrdenDePagoAPersona orden, String usrName) throws FWException {
 		orden = guardarInterno(orden, usrName);
 		auditoriaFacade.auditar(usrName, "Creacion de Orden de Pago a persona Nº: " + orden.getNroOrden(), EnumTipoEvento.ALTA, orden);
 		return orden;
 	}
 
-	private OrdenDePagoAPersona guardarInterno(OrdenDePagoAPersona orden, String usrName) throws CLException {
+	private OrdenDePagoAPersona guardarInterno(OrdenDePagoAPersona orden, String usrName) throws FWException {
 		guardarCheques(orden, usrName);
 		orden = ordenDao.save(orden);
 		cuentaFacade.crearMovimientoHaberPersona(orden);
 		return orden;
 	}
 
-	private void guardarCheques(OrdenDePagoAPersona orden, String usrName) throws CLException {
+	private void guardarCheques(OrdenDePagoAPersona orden, String usrName) throws FWException {
 		for(FormaPagoOrdenDePagoPersona fp : orden.getFormasDePago()){
 			if(fp instanceof FormaPagoOrdenDePagoPersonaCheque){
 				Cheque c = ((FormaPagoOrdenDePagoPersonaCheque)fp).getCheque();
@@ -72,12 +72,12 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote{
 		return ordenDao.getOrdenByNro(nroOrden);
 	}
 
-	public void eliminarOrden(OrdenDePagoAPersona orden, String usuario) throws CLException{
+	public void eliminarOrden(OrdenDePagoAPersona orden, String usuario) throws FWException{
 		orden = borrarOrdenDePagoInterno(orden, usuario);
 		auditoriaFacade.auditar(usuario, "Eliminación de órden de pago a persona  Nº: " + orden.getNroOrden(),EnumTipoEvento.BAJA,orden);
 	}
 	
-	private OrdenDePagoAPersona borrarOrdenDePagoInterno(OrdenDePagoAPersona orden, String usuario) throws CLException {
+	private OrdenDePagoAPersona borrarOrdenDePagoInterno(OrdenDePagoAPersona orden, String usuario) throws FWException {
 		orden = ordenDao.getOrdenByNro(orden.getNroOrden());
 		borrarCheques(orden, usuario);
 		cuentaFacade.borrarMovimientoOrdenDePagoPersona(orden);
@@ -85,7 +85,7 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote{
 		return orden;
 	}
 
-	private void borrarCheques(OrdenDePagoAPersona orden, String usuario) throws CLException {
+	private void borrarCheques(OrdenDePagoAPersona orden, String usuario) throws FWException {
 		for(FormaPagoOrdenDePagoPersona fp : orden.getFormasDePago()){
 			if(fp instanceof FormaPagoOrdenDePagoPersonaCheque){
 				Cheque c = ((FormaPagoOrdenDePagoPersonaCheque)fp).getCheque();
@@ -97,7 +97,7 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote{
 		}
 	}
 
-	public OrdenDePagoAPersona editarOrden(OrdenDePagoAPersona orden, String usuario) throws CLException {
+	public OrdenDePagoAPersona editarOrden(OrdenDePagoAPersona orden, String usuario) throws FWException {
 		OrdenDePagoAPersona ordenAnterior = ordenDao.getOrdenByNro(orden.getNroOrden());
 		cuentaFacade.actualizarMovimientoOrdenDePagoPersona(orden,ordenAnterior.getMontoTotal());
 		borrarCheques(orden, usuario);

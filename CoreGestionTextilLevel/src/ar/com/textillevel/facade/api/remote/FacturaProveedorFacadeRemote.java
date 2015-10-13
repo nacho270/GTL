@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.to.ivacompras.IVAComprasTO;

@@ -32,9 +32,9 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.facade.api.remote.EmpleadoFacadeRemote;
 import ar.com.textillevel.modulos.personal.utils.GTLPersonalBeanFactory;
@@ -44,13 +44,13 @@ public class JDialogSeleccionarEmpleado extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel panDetalle;
 	private JCheckBox chkBuscarNro;
-	private CLJNumericTextField txtNroLegajo;
+	private FWJNumericTextField txtNroLegajo;
 	private JTextField txtApellido;
 	private JButton btnBuscar;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaResultados;
+	private FWJTable tablaResultados;
 	private final EmpleadoFacadeRemote empleadoFacade;
 	private Empleado empleado;
 
@@ -123,9 +123,9 @@ public class JDialogSeleccionarEmpleado extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaResultados() {
+	private FWJTable getTablaResultados() {
 		if(tablaResultados == null) {
-			tablaResultados = new CLJTable(0, 2) {
+			tablaResultados = new FWJTable(0, 2) {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
@@ -136,7 +136,7 @@ public class JDialogSeleccionarEmpleado extends JDialog {
 			};
 			tablaResultados.setStringColumn(0, "EMPLEADO", 400, 400, true);
 			tablaResultados.setStringColumn(1, "", 0, 0, true);
-			tablaResultados.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaResultados.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tablaResultados.setAllowHidingColumns(false);
 			tablaResultados.setReorderingAllowed(false);
@@ -166,7 +166,7 @@ public class JDialogSeleccionarEmpleado extends JDialog {
 						Integer nroLegajo = getTxtNroLegajo().getValue();
 						Empleado empleado = empleadoFacade.getEmpleadoByNumeroLegajo(nroLegajo);
 						if(empleado == null) {
-							CLJOptionPane.showInformationMessage(JDialogSeleccionarEmpleado.this, "No se encontraron resultados.", "Atención");
+							FWJOptionPane.showInformationMessage(JDialogSeleccionarEmpleado.this, "No se encontraron resultados.", "Atención");
 							empleadoList = Collections.emptyList();
 						} else {
 							empleadoList = Collections.singletonList(empleado);
@@ -175,7 +175,7 @@ public class JDialogSeleccionarEmpleado extends JDialog {
 						String apellido = getTxtApellido().getText().trim();
 						empleadoList = empleadoFacade.getAllOrderByApellido(apellido,GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin());
 						if(empleadoList.isEmpty()) {
-							CLJOptionPane.showInformationMessage(JDialogSeleccionarEmpleado.this, "No se encontraron resultados.", "Atención");
+							FWJOptionPane.showInformationMessage(JDialogSeleccionarEmpleado.this, "No se encontraron resultados.", "Atención");
 						}
 					}
 					llenarTabla(empleadoList);
@@ -214,9 +214,9 @@ public class JDialogSeleccionarEmpleado extends JDialog {
 		return txtApellido;
 	}
 
-	private CLJNumericTextField getTxtNroLegajo() {
+	private FWJNumericTextField getTxtNroLegajo() {
 		if(txtNroLegajo == null) {
-			txtNroLegajo = new CLJNumericTextField(0, Long.MAX_VALUE);
+			txtNroLegajo = new FWJNumericTextField(0, Long.MAX_VALUE);
 			txtNroLegajo.addKeyListener(new KeyAdapter() {
 
 				@Override

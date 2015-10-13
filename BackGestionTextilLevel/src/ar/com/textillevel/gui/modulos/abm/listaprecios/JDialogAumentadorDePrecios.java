@@ -30,15 +30,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLCursor;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWCursor;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -68,7 +68,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
 	
 	private PanelDatePicker fechaInicioValidez;
-	private CLCheckBoxList<Cliente> chkListClientes;
+	private FWCheckBoxList<Cliente> chkListClientes;
 	private JButton btnSeleccionarTodos;
 	private JButton btnSeleccionarNinguno;
 	private PanelTablaAumentosTipoProducto panelTablaAumentos;
@@ -77,7 +77,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	private JProgressBar progreso;
 	private JLabel lblEstado;
 	private JLabel lblWorking;
-	private CLJTable tablaAvance;
+	private FWJTable tablaAvance;
 	private JScrollPane jsp;
 	
 	public JDialogAumentadorDePrecios(Frame padre) {
@@ -166,9 +166,9 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		return btnSeleccionarNinguno;
 	}
 	
-	private CLCheckBoxList<Cliente> getChkListClientes() {
+	private FWCheckBoxList<Cliente> getChkListClientes() {
 		if(chkListClientes == null) {
-			chkListClientes = new CLCheckBoxList<Cliente>(){
+			chkListClientes = new FWCheckBoxList<Cliente>(){
 
 				private static final long serialVersionUID = 5492341746189605276L;
 
@@ -202,26 +202,26 @@ public class JDialogAumentadorDePrecios extends JDialog {
 			btnAumentar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaAumentos().getTabla().getRowCount() == 0) {
-						CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Debe elegir un producto a aumentar", "Error");
+						FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Debe elegir un producto a aumentar", "Error");
 						return;
 					}
 					if(getClientesSeleccionados() == null){
-						CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Debe elegir al menos un cliente", "Error");
+						FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Debe elegir al menos un cliente", "Error");
 						return;
 					}
 					for(int i = 0; i<getPanelTablaAumentos().getTabla().getRowCount(); i++) {
 						if(getPanelTablaAumentos().getElemento(i).getPorcentajeAumento() == 0f){
-							CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "El valor a aumentar es incorrecto", "Error");
+							FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "El valor a aumentar es incorrecto", "Error");
 							getPanelTablaAumentos().getTabla().setRowSelectionInterval(i, i);
 							return;
 						}
 					}
 					if(getFechaInicioValidez().getDate().before(DateUtil.getHoy())) {
-						CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La fecha de inicio de validez debe ser igual o posterior a hoy.", "Error");
+						FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La fecha de inicio de validez debe ser igual o posterior a hoy.", "Error");
 						return;
 					}
-					if (CLJOptionPane.showQuestionMessage(JDialogAumentadorDePrecios.this, "Va a aumentar las listas de precios de " + getClientesSeleccionados().size() +
-							" clientes.\nDesea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+					if (FWJOptionPane.showQuestionMessage(JDialogAumentadorDePrecios.this, "Va a aumentar las listas de precios de " + getClientesSeleccionados().size() +
+							" clientes.\nDesea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 						JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JDialogAumentadorDePrecios.this, "Aumentar precios");
 						if (jDialogPasswordInput.isAcepto()) {
 							String pass = new String(jDialogPasswordInput.getPassword());
@@ -229,7 +229,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 							if (usrAdmin != null) {
 								new ThreadAumentador(getClientesSeleccionados()).start();
 							} else {
-								CLJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+								FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 							}
 						}
 					}
@@ -239,13 +239,13 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		return btnAumentar;
 	}
 	
-	public CLJTable getTablaAvance() {
+	public FWJTable getTablaAvance() {
 		if (tablaAvance == null) {
-			tablaAvance = new CLJTable(0, CANT_COLS);
+			tablaAvance = new FWJTable(0, CANT_COLS);
 			tablaAvance.setStringColumn(COL_CLIENTE, "CLIENTE", 300, 300, true);
 			tablaAvance.setStringColumn(COL_RESULTADO, "RESULTADO", 130, 130, true);
-			tablaAvance.setHeaderAlignment(COL_CLIENTE, CLJTable.CENTER_ALIGN);
-			tablaAvance.setHeaderAlignment(COL_RESULTADO, CLJTable.CENTER_ALIGN);
+			tablaAvance.setHeaderAlignment(COL_CLIENTE, FWJTable.CENTER_ALIGN);
+			tablaAvance.setHeaderAlignment(COL_RESULTADO, FWJTable.CENTER_ALIGN);
 			tablaAvance.setReorderingAllowed(false);
 			tablaAvance.setAllowHidingColumns(false);
 			tablaAvance.setAllowSorting(false);
@@ -339,22 +339,22 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		private static final int COL_OBJ = 2;
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			ETipoProducto[] productosFiltrados = ETipoProducto.valuesSinReprocesoSinTipo(ETipoProducto.REPROCESO_SIN_CARGO);
 			tabla.setComboColumn(COL_TIPO_PRODUCTO, "PRODUCTO", new JComboBox(productosFiltrados), 270, false);
 			ComboBoxTableCellEditor editor = new ComboBoxTableCellEditor(Arrays.asList(productosFiltrados));
 			tabla.getColumnModel().getColumn(COL_TIPO_PRODUCTO).setCellEditor(editor);
 			tabla.setFloatColumn(COL_AUMENTO, "AUMENTO (%)", 0f, 999999f, 90, false);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_AUMENTO, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_AUMENTO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_TIPO_PRODUCTO, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_TIPO_PRODUCTO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_AUMENTO, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_AUMENTO, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			return tabla;
 		}
 
@@ -446,7 +446,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		@Override
 		public void run() {
 			bloquearComponentes();
-			CLCursor.startWait(JDialogAumentadorDePrecios.this);
+			FWCursor.startWait(JDialogAumentadorDePrecios.this);
 			double avance = 100f / getListaClientes().size();
 			double avanceAcumulado = 0;
 			int contador = 1;
@@ -473,7 +473,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 					if (volverAPreguntarCotizacion){
 						if (cotizacionActual != null){
 							SiNoResponse preguntaCotizacion = GenericUtils.realizarPregunta(JDialogAumentadorDePrecios.this, "El cliente dispone de una cotizacion vigente. Desea actualizarla?", "Pregunta");
-							if(preguntaCotizacion.getRespose() == CLJOptionPane.YES_OPTION){
+							if(preguntaCotizacion.getRespose() == FWJOptionPane.YES_OPTION){
 								actualizarCotizacion = true;
 							}
 							if(preguntaCotizacion.isNoVolverAPreguntar()) {
@@ -489,7 +489,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 						if (cotizacionActual != null) {
 							if (volverAPreguntarEnviarEmail) {
 								SiNoResponse preguntaCotizacion = GenericUtils.realizarPregunta(JDialogAumentadorDePrecios.this, "Desea enviar la cotizacion actualizada por email?", "Pregunta");
-								if (preguntaCotizacion.getRespose() == CLJOptionPane.YES_OPTION) {
+								if (preguntaCotizacion.getRespose() == FWJOptionPane.YES_OPTION) {
 									enviarEmail = true;
 								}
 								if (preguntaCotizacion.isNoVolverAPreguntar()) {
@@ -524,11 +524,11 @@ public class JDialogAumentadorDePrecios extends JDialog {
 				pg.setMontoMinimoValidacionPrecio(new BigDecimal(pg.getMontoMinimoValidacionPrecio().floatValue() + ( (pg.getMontoMinimoValidacionPrecio().floatValue() * maximoPorcentajeAumento) / 100) ));
 				pg.setMontoMaximoValidacionPrecio(new BigDecimal(pg.getMontoMaximoValidacionPrecio().floatValue() + ( (pg.getMontoMaximoValidacionPrecio().floatValue() * maximoPorcentajeAumento) / 100) ));
 				GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).save(pg);
-			} catch(CLException cle){
+			} catch(FWException cle){
 				cle.printStackTrace();
 			}
 			desBloquearComponentes();
-			CLCursor.endWait(JDialogAumentadorDePrecios.this);
+			FWCursor.endWait(JDialogAumentadorDePrecios.this);
 		}
 
 		private void actualizarUltimaFila(EEstadoAumentoPrecioCliente estado) {

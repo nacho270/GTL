@@ -6,8 +6,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.ejb.Evento;
-import ar.clarin.fwjava.auditoria.ejb.EventoDAOLocal;
+import ar.com.fwcommon.auditoria.ejb.Evento;
+import ar.com.fwcommon.auditoria.ejb.EventoDAOLocal;
 import ar.com.textillevel.facade.api.remote.EventoFacadeRemote;
 
 @Stateless

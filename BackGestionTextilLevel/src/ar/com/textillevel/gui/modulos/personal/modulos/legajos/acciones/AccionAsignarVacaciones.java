@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogAgregarModificarPeriodoVacaciones;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
@@ -32,10 +32,10 @@ public class AccionAsignarVacaciones extends Accion<Empleado>{
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<Empleado> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Empleado> e) throws FWException {
 		ConfiguracionVacaciones conf = GTLPersonalBeanFactory.getInstance().getBean2(ConfiguracionVacacionesFacadeRemote.class).getConfiguracionVacaciones(DateUtil.getHoy());
 		if(conf == null){
-			CLJOptionPane.showErrorMessage(e.getSource().getFrame(), "No existe una configuración de vacaciones vigente para la fecha actual", "Error");
+			FWJOptionPane.showErrorMessage(e.getSource().getFrame(), "No existe una configuración de vacaciones vigente para la fecha actual", "Error");
 			return false;
 		}
 		Empleado empleado = e.getSelectedElements().get(0);
@@ -44,7 +44,7 @@ public class AccionAsignarVacaciones extends Accion<Empleado>{
 		VigenciaEmpleado ultima = historialVigencias.get(historialVigencias.size()-1);
 		PeriodoVacaciones periodoCorrespondiente = VacacionesHelper.getPeriodoCorrespondiente(conf, ultima.getFechaAlta());
 		if(periodoCorrespondiente == null){
-			CLJOptionPane.showWarningMessage(e.getSource().getFrame(), "El empleado tiene menos de " + conf.getMesesMinimosParaEntrar() + " meses de antigüedad.\nSe calcula 1 día de vacaciones por cada 20 trabajados.", "Advertencia");
+			FWJOptionPane.showWarningMessage(e.getSource().getFrame(), "El empleado tiene menos de " + conf.getMesesMinimosParaEntrar() + " meses de antigüedad.\nSe calcula 1 día de vacaciones por cada 20 trabajados.", "Advertencia");
 			//TODO: CALCULAR 1 DIA POR CADA 20 TRABAJADOS
 		}
 		List<RegistroVacacionesLegajo> historialVacaciones = legajo.getHistorialVacaciones();

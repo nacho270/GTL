@@ -21,11 +21,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 
 public abstract class JDialogBusquedaAndSeleccionItems<T> extends JDialog {
 
@@ -92,12 +92,12 @@ public abstract class JDialogBusquedaAndSeleccionItems<T> extends JDialog {
 		}
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla  = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla  = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_DESCR_ITEM, "ÍTEM", 320, 320, true);
-			tabla.setHeaderAlignment(COL_DESCR_ITEM, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCR_ITEM, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_OBJ, "", 0);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			
 			tabla.addMouseListener(new MouseAdapter () {
 

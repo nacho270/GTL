@@ -1,7 +1,7 @@
 package ar.com.textillevel.util;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.BeanFactoryRemoteAbstract;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.BeanFactoryRemoteAbstract;
 import ar.com.textillevel.facade.api.remote.AgendaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
@@ -68,7 +68,7 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 
 	private static GTLBeanFactory instance;
 	
-	protected GTLBeanFactory() throws CLException {
+	protected GTLBeanFactory() throws FWException {
 		super("GTL");
 		addJndiName(ClienteFacadeRemote.class);
 		addJndiName(ProveedorFacadeRemote.class);
@@ -137,7 +137,7 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 		if(instance == null) {
 			try {
 				instance = new GTLBeanFactory();
-			} catch (CLException e) {
+			} catch (FWException e) {
 				e.printStackTrace();
 			}
 		}

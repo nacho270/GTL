@@ -3,7 +3,7 @@ package ar.com.textillevel.facade.impl;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
@@ -19,7 +19,7 @@ public class ParametrosGeneralesFacade implements ParametrosGeneralesFacadeRemot
 		return parametrosGeneralesDAOLocal.getParametrosGenerales();
 	}
 
-	public ParametrosGenerales save(ParametrosGenerales parametrosGenerales)  throws CLException{
+	public ParametrosGenerales save(ParametrosGenerales parametrosGenerales)  throws FWException{
 		return parametrosGeneralesDAOLocal.save(parametrosGenerales);
 	}
 }

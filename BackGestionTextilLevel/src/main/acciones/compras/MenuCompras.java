@@ -5,14 +5,14 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
-public class MenuCompras extends CLJMenu{
+public class MenuCompras extends FWJMenu{
 
 	private static final long serialVersionUID = -3979378334806048624L;
 	
 	private JMenuItem menuItemAgregarRemitoEntrada;
-	private CLJMenu menuConsultas;
+	private FWJMenu menuConsultas;
 	private Frame frame;
 
 	public MenuCompras(Frame frame) {
@@ -23,9 +23,9 @@ public class MenuCompras extends CLJMenu{
 		add(getMenuConsultas());
 	}
 	
-	public CLJMenu getMenuConsultas(){
+	public FWJMenu getMenuConsultas(){
 		if(menuConsultas == null){
-			menuConsultas = new CLJMenu("Consultas");
+			menuConsultas = new FWJMenu("Consultas");
 			JMenuItem menuConsultarRemitoEntradaProveedor = new JMenuItem(new ConsultarRemitoEntradaProveedorAction(frame));
 			menuConsultarRemitoEntradaProveedor.setText("Consultar Remito Entrada Proveedor");
 			menuConsultas.add(menuConsultarRemitoEntradaProveedor);

@@ -41,14 +41,14 @@ import main.acciones.informes.IvaComprasParam;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.gente.Provincia;
@@ -159,7 +159,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 			JasperHelper.imprimirReporte(getPrint(), true, false, 1);
 		} catch (JRException e1) {
 			e1.printStackTrace();
-			CLJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
+			FWJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
 		}
 	}
 
@@ -230,7 +230,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 					if (getPanImpuestoIVACompras().getTabla().getRowCount() > 0) {
  						//TODO:
 //						mostrarFileChooser("Reporte IVA Ventas", EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -244,7 +244,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 								JasperHelper.exportarAPDF(getPrint(), archivoIngresado.getAbsolutePath());
 							} catch (JRException e1) {
 								e1.printStackTrace();
-								CLJOptionPane.showErrorMessage(JDialogReporteIVAComprasPreview.this, "Se ha producido un error al expoertar", "Error");
+								FWJOptionPane.showErrorMessage(JDialogReporteIVAComprasPreview.this, "Se ha producido un error al expoertar", "Error");
 							}
 						}
 					}
@@ -300,7 +300,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 		private static final int COL_PERC_IVA = 9;
 		private static final int COL_TOTAL_COMPRAS = 10;
 
-		private CLJTable tablaImpuestos;
+		private FWJTable tablaImpuestos;
 		private Map<Integer, ImpuestoWrapper> impuestosColMap;
 		private Map<Integer, ImpuestoWrapper> impuestosMap = new HashMap<Integer, ImpuestoWrapper>();
 		private Map<Integer, JTextField> impuestosTxtMap = new HashMap<Integer, JTextField>();
@@ -342,19 +342,19 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 			getLblAplicaEn().setVisible(false);
 		}
 
-		public CLJTable getTabla() {
+		public FWJTable getTabla() {
 			return tablaImpuestos;
 		}
 
 		private JButton getBtnExportarAExcel() {
 			if (btnExportarAExcel == null) {
-				btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+				btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 				btnExportarAExcel.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
 						if (getTabla().getRowCount() > 0) {
 							mostrarFileChooser(getTituloReporte(), EXTENSION_EXCEL);
-							File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+							File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 							if (archivoIngresado != null) {
 								if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 									archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -416,7 +416,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 
 		
 		private void mostrarFileChooser(String nombreArchivo, String extension) {
-			File directorioCorriente = CLFileSelector.getLastSelectedFile();
+			File directorioCorriente = FWFileSelector.getLastSelectedFile();
 			if (directorioCorriente != null) {
 				String nombreSugerido = null;
 				try {
@@ -426,11 +426,11 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 						nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 					}
 				} catch (IOException e1) {
-					CLJOptionPane.showErrorMessage(null, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+					FWJOptionPane.showErrorMessage(null, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 					return;
 				}
 				File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-				CLFileSelector.setLastSelectedFile(archivoSugerido);
+				FWFileSelector.setLastSelectedFile(archivoSugerido);
 			}
 		}
 
@@ -724,7 +724,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 			return impuestosColMap;
 		}
 
-		private CLJTable getTablaImpuestos() {
+		private FWJTable getTablaImpuestos() {
 			if(tablaImpuestos == null) {
 				rebuildTabla();
 			}
@@ -732,7 +732,7 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 		}
 
 		private void rebuildTabla() {
-			tablaImpuestos = new CLJTable(0, getTotalColumnas());
+			tablaImpuestos = new FWJTable(0, getTotalColumnas());
 			tablaImpuestos.setStringColumn(COL_FECHA, "Fecha comp", 60, 60, true);
 			tablaImpuestos.setStringColumn(COL_TIPO_CTE, "Tipo Comprobante", 100, 100, true);
 			tablaImpuestos.setStringColumn(COL_NRO_COMPROBANTE, "Nro. Comprobante", 120, 100, true);

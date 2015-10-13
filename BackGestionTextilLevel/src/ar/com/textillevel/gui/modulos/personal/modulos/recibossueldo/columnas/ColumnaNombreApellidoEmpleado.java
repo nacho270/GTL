@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.columnas;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaString;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.to.InfoReciboSueltoTO;
 

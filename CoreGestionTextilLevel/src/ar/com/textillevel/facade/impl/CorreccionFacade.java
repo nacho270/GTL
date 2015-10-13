@@ -7,10 +7,10 @@ import javax.ejb.Stateless;
 
 import org.jboss.annotation.IgnoreDependency;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionFacturaProveedorDAOLocal;
@@ -86,7 +86,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		return correccion;
 	}
 
-	public CorreccionFactura actualizarCorreccion(CorreccionFactura correccion) throws CLException {
+	public CorreccionFactura actualizarCorreccion(CorreccionFactura correccion) throws FWException {
 		return correccionDao.save(correccion);
 		//auditoriaFacade.auditar(usuario, "Actualización de nota de "+correccion.getTipo().getDescripcion() +" Nº: " + correccion.getNroCorreccion(), EnumTipoEvento.MODIFICACION, correccion);
 	}
@@ -120,7 +120,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		return correccion;
 	}
 
-	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
+	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws FWException, ValidacionException {
 		docContableFacade.checkAutorizacionAFIP(correccion);
 		correccion = getCorreccionById(correccion.getId());
 		if(correccion instanceof NotaDebito){
@@ -152,7 +152,7 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		auditoriaFacade.auditar(usrName, "Anulación de nota de "+correccion.getTipo().getDescripcion() +" Nº: ", EnumTipoEvento.MODIFICACION, correccion);
 	}
 	
-	public void eliminarCorreccion(CorreccionFactura correccion, String usrName) throws CLException, ValidacionException {
+	public void eliminarCorreccion(CorreccionFactura correccion, String usrName) throws FWException, ValidacionException {
 		docContableFacade.checkAutorizacionAFIP(correccion);
 		correccion = getCorreccionById(correccion.getId());
 		

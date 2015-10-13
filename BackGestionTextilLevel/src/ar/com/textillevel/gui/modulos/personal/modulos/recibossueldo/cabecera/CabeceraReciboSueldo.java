@@ -14,13 +14,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.entidades.Mes;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.entidades.Mes;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.ETipoCobro;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
@@ -34,9 +34,9 @@ public class CabeceraReciboSueldo extends Cabecera<ModeloCabeceraReciboSueldo> {
 	private static final long serialVersionUID = -5201286907217207478L;
 
 	private JLabel lblQuincena;
-	private CLJNumericTextField txtAnio;
-	private CLJNumericTextField txtNroLegajo;
-	private CLJTextField txtNombreOApellido;
+	private FWJNumericTextField txtAnio;
+	private FWJNumericTextField txtNroLegajo;
+	private FWJTextField txtNombreOApellido;
 	private JComboBox cmbSindicatos;
 	private JComboBox cmbMes;
 	private JComboBox cmbQuincena;
@@ -87,17 +87,17 @@ public class CabeceraReciboSueldo extends Cabecera<ModeloCabeceraReciboSueldo> {
 		return modelo;
 	}
 
-	private CLJNumericTextField getTxtNroLegajo() {
+	private FWJNumericTextField getTxtNroLegajo() {
 		if(txtNroLegajo == null){
-			txtNroLegajo = new CLJNumericTextField();
+			txtNroLegajo = new FWJNumericTextField();
 			txtNroLegajo.setColumns(15);
 		}
 		return txtNroLegajo;
 	}
 
-	private CLJNumericTextField getTxtAnio() {
+	private FWJNumericTextField getTxtAnio() {
 		if(txtAnio == null){
-			txtAnio = new CLJNumericTextField();
+			txtAnio = new FWJNumericTextField();
 			txtAnio.setColumns(15);
 			txtAnio.setValue(Long.valueOf(DateUtil.getAnio(DateUtil.getHoy())));
 		}
@@ -167,9 +167,9 @@ public class CabeceraReciboSueldo extends Cabecera<ModeloCabeceraReciboSueldo> {
 		return cmbQuincena;
 	}
 
-	public CLJTextField getTxtNombreOApellido() {
+	public FWJTextField getTxtNombreOApellido() {
 		if(txtNombreOApellido == null){
-			txtNombreOApellido = new CLJTextField();
+			txtNombreOApellido = new FWJTextField();
 			txtNombreOApellido.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtNombreOApellido;

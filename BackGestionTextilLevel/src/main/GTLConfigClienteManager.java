@@ -1,14 +1,14 @@
 package main;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.main.config.IConfigClienteManager;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.main.config.IConfigClienteManager;
 
 public class GTLConfigClienteManager implements IConfigClienteManager {
 
-	public void cargarConfiguracionCliente() throws CLException {
+	public void cargarConfiguracionCliente() throws FWException {
 	}
 
-	public void guardarConfiguracionCliente() throws CLException {
+	public void guardarConfiguracionCliente() throws FWException {
 	}
 
 }

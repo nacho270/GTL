@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.odt.gui.validacion;
 
 import java.awt.Component;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 
 public class ValidacionRangoTextFields extends Validacion {
@@ -12,8 +12,8 @@ public class ValidacionRangoTextFields extends Validacion {
 	private String labelMin;
 	private DecimalNumericTextField textFieldMax;
 	private String labelMax;
-	private CLJNumericTextField textNumericFieldMin;
-	private CLJNumericTextField textNumericFieldMax;
+	private FWJNumericTextField textNumericFieldMin;
+	private FWJNumericTextField textNumericFieldMax;
 	
 	public ValidacionRangoTextFields(Component owner, DecimalNumericTextField textFieldMin, String labelMin, DecimalNumericTextField textFieldMax, String labelMax) {
 		super(owner);
@@ -23,7 +23,7 @@ public class ValidacionRangoTextFields extends Validacion {
 		this.labelMax = labelMax;
 	}
 
-	public ValidacionRangoTextFields(Component owner, CLJNumericTextField textNumericFieldMin, String labelMin, CLJNumericTextField textNumericFieldMax, String labelMax) {
+	public ValidacionRangoTextFields(Component owner, FWJNumericTextField textNumericFieldMin, String labelMin, FWJNumericTextField textNumericFieldMax, String labelMax) {
 		super(owner);
 		this.textNumericFieldMin = textNumericFieldMin;
 		this.labelMin = labelMin;
@@ -47,23 +47,23 @@ public class ValidacionRangoTextFields extends Validacion {
 		return labelMax;
 	}
 
-	private CLJNumericTextField getTextNumericFieldMax() {
+	private FWJNumericTextField getTextNumericFieldMax() {
 		return textNumericFieldMax;
 	}
 
-	private CLJNumericTextField getTextNumericFieldMin() {
+	private FWJNumericTextField getTextNumericFieldMin() {
 		return textNumericFieldMin;
 	}
 
 	@Override
 	public boolean validate() {
 		if(getTextFieldMin() != null && getTextFieldMin().getValue() > getTextFieldMax().getValue()) {
-			CLJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelMin() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
+			FWJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelMin() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
 			getTextFieldMin().requestFocus();
 			return false;
 		}
 		if(getTextNumericFieldMin() != null && getTextNumericFieldMin().getValue() > getTextNumericFieldMax().getValue()) {
-			CLJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelMin() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
+			FWJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelMin() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
 			getTextNumericFieldMin().requestFocus();
 			return false;
 		}

@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.stock.gui.visitor;
 
 import java.math.BigDecimal;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.stock.MovimientoStockResta;
 import ar.com.textillevel.entidades.stock.MovimientoStockSuma;
@@ -11,10 +11,10 @@ import ar.com.textillevel.entidades.stock.visitor.IMovimientoStockVisitor;
 
 public class GenerarFilaMovimientoStockVisitor implements IMovimientoStockVisitor{
 
-	private final CLJTable tabla;
+	private final FWJTable tabla;
 	private final Integer cantCols;
 	
-	public GenerarFilaMovimientoStockVisitor(CLJTable tabla, Integer cantCols){
+	public GenerarFilaMovimientoStockVisitor(FWJTable tabla, Integer cantCols){
 		this.tabla = tabla;
 		this.cantCols = cantCols;
 	}

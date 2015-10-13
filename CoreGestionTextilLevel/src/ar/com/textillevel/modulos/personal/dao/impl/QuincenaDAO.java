@@ -2,7 +2,7 @@ package ar.com.textillevel.modulos.personal.dao.impl;
 
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.modulos.personal.dao.api.QuincenaDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.Quincena;
 

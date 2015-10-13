@@ -16,13 +16,13 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.contribuciones.Contribucion;
 import ar.com.textillevel.modulos.personal.entidades.contribuciones.PeriodoContribucion;
@@ -122,7 +122,7 @@ public class GuiABMContribuciones extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Contribución seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Contribución seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getContribucionFacade().remove(getContribucionActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -135,7 +135,7 @@ public class GuiABMContribuciones extends GuiABMListaTemplate {
 			setModoEdicion(true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una Contribución", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una Contribución", "Error");
 			return false;
 		}
 	}
@@ -159,12 +159,12 @@ public class GuiABMContribuciones extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText().trim())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar un nombre.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar un nombre.", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getPanTablaPeriodos().getElementos().isEmpty()) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un período.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un período.", "Error");
 			return false;
 		}
 		List<PeriodoContribucion> periodos = getPanTablaPeriodos().getElementos();
@@ -173,7 +173,7 @@ public class GuiABMContribuciones extends GuiABMListaTemplate {
 			for(int j = i+1; j < periodos.size(); j++) {
 				PeriodoContribucion pc2 = periodos.get(j);
 				if(pc.esVigenteEnFecha(pc2.getFechaDesde()) || pc2.esVigenteEnFecha(pc.getFechaDesde())) {
-					CLJOptionPane.showErrorMessage(this, StringW.wordWrap("Existen períodos que se solapan."), "Error");
+					FWJOptionPane.showErrorMessage(this, StringW.wordWrap("Existen períodos que se solapan."), "Error");
 					return false;
 				}
 			}
@@ -269,8 +269,8 @@ public class GuiABMContribuciones extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_PERIODO, "PERIODO", 200, 200, true);
 			tabla.setFloatColumn(COL_IMPORTE_FIJO, "IMPORTE FIJO", 150, true);
 			tabla.setFloatColumn(COL_PORCENTAJE, "PORCENTAJE", 150, true);

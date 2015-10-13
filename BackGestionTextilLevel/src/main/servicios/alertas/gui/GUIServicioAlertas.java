@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.alertas.entidades.Alerta;
 import ar.com.textillevel.modulos.alertas.entidades.AlertaFaltaStock;
@@ -38,7 +38,7 @@ public class GUIServicioAlertas extends JFrame {
 	private static GUIServicioAlertas instance;
 	
 	private JButton btnAceptar;
-	private CLJTable tablaAlertas;
+	private FWJTable tablaAlertas;
 
 	public static GUIServicioAlertas getInstance() {
 		return getInstance(false);
@@ -113,12 +113,12 @@ public class GUIServicioAlertas extends JFrame {
 		return btnAceptar;
 	}
 
-	public CLJTable getTablaAlertas() {
+	public FWJTable getTablaAlertas() {
 		if(tablaAlertas == null){
 			JComboBox cmbPosposicion = new JComboBox();
 			GuiUtil.llenarCombo(cmbPosposicion, Arrays.asList(EPosposicionAlerta.values()), false);
 			
-			tablaAlertas = new CLJTable(0, CANT_COLS){
+			tablaAlertas = new FWJTable(0, CANT_COLS){
 				private static final long serialVersionUID = 6326454265490690691L;
 				
 				@Override
@@ -146,8 +146,8 @@ public class GUIServicioAlertas extends JFrame {
 			tablaAlertas.setAllowHidingColumns(false);
 			tablaAlertas.setAllowSorting(false);
 			tablaAlertas.setReorderingAllowed(false);
-			tablaAlertas.setHeaderAlignment(COL_ALERTA, CLJTable.CENTER_ALIGN);
-			tablaAlertas.setHeaderAlignment(COL_ACCION_POSPOSICION, CLJTable.CENTER_ALIGN);
+			tablaAlertas.setHeaderAlignment(COL_ALERTA, FWJTable.CENTER_ALIGN);
+			tablaAlertas.setHeaderAlignment(COL_ACCION_POSPOSICION, FWJTable.CENTER_ALIGN);
 		}
 		return tablaAlertas;
 	}

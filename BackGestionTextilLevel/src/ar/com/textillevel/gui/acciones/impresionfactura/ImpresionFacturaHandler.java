@@ -10,10 +10,10 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
@@ -80,7 +80,7 @@ public class ImpresionFacturaHandler {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void imprimir() throws JRException, CLException, ValidacionException, IOException {
+	public void imprimir() throws JRException, FWException, ValidacionException, IOException {
 		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
 		FacturaTO factura = armarFacturaTO();
 		Map parameters = getParametros(factura);

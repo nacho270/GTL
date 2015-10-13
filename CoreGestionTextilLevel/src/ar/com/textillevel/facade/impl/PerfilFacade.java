@@ -5,7 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.dao.api.local.PerfilDAOLocal;
 import ar.com.textillevel.entidades.portal.Perfil;
 import ar.com.textillevel.facade.api.remote.PerfilFacadeRemote;

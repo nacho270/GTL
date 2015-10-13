@@ -9,9 +9,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.util.NumUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.util.NumUtil;
+import ar.com.fwcommon.util.StringUtil;
 
 /**
  * Componente para mostrar un número teléfonico manteniendo separado
@@ -21,8 +21,8 @@ public class PanDatosTelefono extends JPanel {
 
 	private static final long serialVersionUID = 2731301716903059350L;
 
-	private CLJNumericTextField txtCodArea;
-	private CLJNumericTextField txtNumero;
+	private FWJNumericTextField txtCodArea;
+	private FWJNumericTextField txtNumero;
 	private final String separator;
 	private final String title;
 
@@ -64,17 +64,17 @@ public class PanDatosTelefono extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
 
-	private CLJNumericTextField getTxtNumero() {
+	private FWJNumericTextField getTxtNumero() {
 		if(txtNumero == null) {
-			txtNumero = new CLJNumericTextField();
+			txtNumero = new FWJNumericTextField();
 			txtNumero.setPreferredSize(new Dimension(50, 20));
 		}
 		return txtNumero;
 	}
 
-	private CLJNumericTextField getTxtCodArea() {
+	private FWJNumericTextField getTxtCodArea() {
 		if(txtCodArea == null) {
-			txtCodArea = new CLJNumericTextField();
+			txtCodArea = new FWJNumericTextField();
 			txtCodArea.setPreferredSize(new Dimension(20, 20));
 		}
 		return txtCodArea;

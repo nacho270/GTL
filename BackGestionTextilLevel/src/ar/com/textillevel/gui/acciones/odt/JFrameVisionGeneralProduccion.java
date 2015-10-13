@@ -27,11 +27,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.acciones.odt.componentes.PanelEstadoActualMaquina;
 import ar.com.textillevel.gui.acciones.odt.event.BotonADerechaEventListener;
@@ -191,7 +191,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 						refreshView();
 					}
 				}else{
-					if(CLJOptionPane.showQuestionMessage(JFrameVisionGeneralProduccion.this, "Va a detener la Orden de Trabajo. Desea continuar?", "Pregunta")==CLJOptionPane.YES_OPTION){
+					if(FWJOptionPane.showQuestionMessage(JFrameVisionGeneralProduccion.this, "Va a detener la Orden de Trabajo. Desea continuar?", "Pregunta")==FWJOptionPane.YES_OPTION){
 						getOdtFacade().detenerODT(eventData.getOdtTO().getId(), GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}
@@ -207,7 +207,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		panelTipoMaquina.addBotonDerechaActionListener(new BotonADerechaEventListener() {
 			public void botonDerechaPersionado(WorkFlowODTEvent eventData) {
 				if(eventData.isOficina()){
-					if(CLJOptionPane.showQuestionMessage(JFrameVisionGeneralProduccion.this, "Va a pasar la Orden de Trabajo a 'Oficina'. Desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION){
+					if(FWJOptionPane.showQuestionMessage(JFrameVisionGeneralProduccion.this, "Va a pasar la Orden de Trabajo a 'Oficina'. Desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION){
 						getOdtFacade().registrarAvanceODT(eventData.getOdtTO().getId(),EAvanceODT.FINALIZADO,true,GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}
@@ -356,7 +356,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		private PanelDatePicker panelFechaDesde;
 		private PanelDatePicker panelFechaHasta;
 		private JComboBox cmbTipoBusquedaCliente;
-		private CLJNumericTextField txtBusquedaCliente;
+		private FWJNumericTextField txtBusquedaCliente;
 		private JButton btnBuscar;
 		private JButton btnCleanFilters;
 		
@@ -398,9 +398,9 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 			return cmbTipoBusquedaCliente;
 		}
 
-		private CLJNumericTextField getTxtBusquedaCliente() {
+		private FWJNumericTextField getTxtBusquedaCliente() {
 			if (txtBusquedaCliente == null) {
-				txtBusquedaCliente = new CLJNumericTextField();
+				txtBusquedaCliente = new FWJNumericTextField();
 				txtBusquedaCliente.setPreferredSize(new Dimension(100, 20));
 				txtBusquedaCliente.addActionListener(new ActionListener() {
 
@@ -419,7 +419,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 					public void actionPerformed(ActionEvent e) {
 						if(getChkFiltroFecha().isSelected()){
 							if(getPanelFechaDesde().getDate() == null || getPanelFechaHasta().getDate() ==null){
-								CLJOptionPane.showErrorMessage(JFrameVisionGeneralProduccion.this, "Alguna de las fechas son inválidas", "Error");
+								FWJOptionPane.showErrorMessage(JFrameVisionGeneralProduccion.this, "Alguna de las fechas son inválidas", "Error");
 								return;
 							}
 							getDatosFiltro().setFechaDesde(new java.sql.Date(getPanelFechaDesde().getDate().getTime()));

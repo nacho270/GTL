@@ -40,16 +40,16 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
@@ -73,16 +73,16 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private static final int MAX_LONGITUD_RAZ_SOCIAL = 50;
 
 	private JPanel panDetalle;
-	private CLJTextField txtRazonSocial;
+	private FWJTextField txtRazonSocial;
 	private PanelTablaPieza panTablaPieza;
 	private JPanel pnlBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJNumericTextField txtNroRemito;
-	private CLDateField txtFechaEmision;
-	private CLJTextField txtPesoTotal;
-	private CLJTextField txtAnchoCrudo;
-	private CLJTextField txtAnchoFinal;
+	private FWJNumericTextField txtNroRemito;
+	private FWDateField txtFechaEmision;
+	private FWJTextField txtPesoTotal;
+	private FWJTextField txtAnchoCrudo;
+	private FWJTextField txtAnchoFinal;
 	private PanComboTarima panComboTarima;
 	private JCheckBox chkEnPalet;
 	private JPanel panTarimaEnPalet;
@@ -168,7 +168,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			for(PiezaODT podt : odt.getPiezas()) {
 				PiezaRemito pr = getPiezaRemito(remitoEntrada.getPiezas(), podt.getPiezaRemito());
 				if(pr == null) {
-					throw new CLRuntimeException("Estado inconsistente!!!");
+					throw new FWRuntimeException("Estado inconsistente!!!");
 				}
 				podt.setPiezaRemito(pr);
 			}
@@ -410,9 +410,9 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		return txtProductos;
 	}
 
-	private CLJTextField getTxtPesoTotal() {
+	private FWJTextField getTxtPesoTotal() {
 		if(txtPesoTotal == null) {
-			txtPesoTotal = new CLJTextField();
+			txtPesoTotal = new FWJTextField();
 			if(modoConsulta || remitoEntrada.getId() != null) {
 				txtPesoTotal.setText(remitoEntrada.getPesoTotal().toString());
 			}
@@ -420,9 +420,9 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		return txtPesoTotal;
 	}
 
-	private CLJTextField getTxtAnchoCrudo() {
+	private FWJTextField getTxtAnchoCrudo() {
 		if(txtAnchoCrudo == null) {
-			txtAnchoCrudo = new CLJTextField();
+			txtAnchoCrudo = new FWJTextField();
 			if(modoConsulta || remitoEntrada.getId() != null) {
 				txtAnchoCrudo.setText(remitoEntrada.getAnchoCrudo() == null ? "" : remitoEntrada.getAnchoCrudo().toString());
 			}
@@ -430,9 +430,9 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		return txtAnchoCrudo;
 	}
 
-	private CLJTextField getTxtAnchoFinal() {
+	private FWJTextField getTxtAnchoFinal() {
 		if(txtAnchoFinal == null) {
-			txtAnchoFinal = new CLJTextField();
+			txtAnchoFinal = new FWJTextField();
 			if(modoConsulta || remitoEntrada.getId() != null) {
 				txtAnchoFinal.setText(remitoEntrada.getAnchoFinal() == null ? "" : remitoEntrada.getAnchoFinal().toString());
 			}
@@ -473,9 +473,9 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	}
 
 	
-	private CLDateField getTxtFechaEmision() {
+	private FWDateField getTxtFechaEmision() {
 		if(txtFechaEmision == null) {
-			txtFechaEmision = new CLDateField();
+			txtFechaEmision = new FWDateField();
 			if(modoConsulta || remitoEntrada.getId() != null) {
 				txtFechaEmision.setFecha(remitoEntrada.getFechaEmision());
 			}
@@ -483,9 +483,9 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		return txtFechaEmision;
 	}
 
-	private CLJNumericTextField getTxtNroRemito() {
+	private FWJNumericTextField getTxtNroRemito() {
 		if(txtNroRemito == null) {
-			txtNroRemito = new CLJNumericTextField(new Long(0), Long.MAX_VALUE);
+			txtNroRemito = new FWJNumericTextField(new Long(0), Long.MAX_VALUE);
 			if(modoConsulta || remitoEntrada.getId() != null) {
 				getTxtNroRemito().setText(remitoEntrada.getNroRemito().toString());
 			}
@@ -493,9 +493,9 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		return txtNroRemito;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if(txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
@@ -544,11 +544,11 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 						List<OrdenDeTrabajo> odtCapturedList = capturarSetearDatos();
 						RemitoEntrada remitoEntradaSaved = getRemitoEntradaFacade().save(remitoEntrada, odtCapturedList, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 						setRemitoEntrada(remitoEntradaSaved);
-						CLJOptionPane.showInformationMessage(JDialogAgregarRemitoEntrada.this, "El remito se ha grabado con éxito.", "Atención");
+						FWJOptionPane.showInformationMessage(JDialogAgregarRemitoEntrada.this, "El remito se ha grabado con éxito.", "Atención");
 
 						//si hay ODTs => pregunto si las quiere imprimir
 						if(!odtCapturedList.isEmpty()) {
-							if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, "¿Desea imprimir la(s) ODT(s)?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+							if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, "¿Desea imprimir la(s) ODT(s)?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 								JDialogSeleccionarImprimirODT dialogoImpresionODT = new JDialogSeleccionarImprimirODT(owner, odtCapturedList);
 								GuiUtil.centrarEnPadre(dialogoImpresionODT);
 								dialogoImpresionODT.setVisible(true);
@@ -608,45 +608,45 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private boolean validar() {
 		String pesoTotalStr = getTxtPesoTotal().getText();
 		if(StringUtil.isNullOrEmpty(pesoTotalStr) || !GenericUtils.esNumerico(pesoTotalStr)) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un peso total válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un peso total válido.", "Error");
 			getTxtPesoTotal().requestFocus();
 			return false;
 		}
 		String anchoCrudoStr = getTxtAnchoCrudo().getText();
 		if(StringUtil.isNullOrEmpty(anchoCrudoStr) || !GenericUtils.esNumerico(anchoCrudoStr)) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un ancho crudo válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un ancho crudo válido.", "Error");
 			getTxtAnchoCrudo().requestFocus();
 			return false;
 		}
 		String anchoFinalStr = getTxtAnchoFinal().getText();
 		if(StringUtil.isNullOrEmpty(anchoFinalStr) || !GenericUtils.esNumerico(anchoFinalStr)) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un ancho final válido.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un ancho final válido.", "Error");
 			getTxtAnchoFinal().requestFocus();
 			return false;
 		}
 		Integer nroRemito = getTxtNroRemito().getValue();
 		if(nroRemito == null || nroRemito <= 0) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un número de remito.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe ingresar un número de remito.", "Error");
 			getTxtNroRemito().requestFocus();
 			return false;
 		}
 		if(getCmbCondicionVenta().getSelectedIndex() == -1) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe seleccionar una condición de venta.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe seleccionar una condición de venta.", "Error");
 			return false;
 		}
 		if(getRbtOpcionConPiezasODT().isSelected() && StringUtil.isNullOrEmpty(getTxtProductos().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe seleccionar al menos un producto.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Debe seleccionar al menos un producto.", "Error");
 			return false;
 		}
 		String msgValidacionPiezas = getPanTablaPieza().validar();
 		if(msgValidacionPiezas != null) {
-			CLJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, StringW.wordWrap(msgValidacionPiezas), "Error");
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, StringW.wordWrap(msgValidacionPiezas), "Error");
 			return false;
 		}
 		BigDecimal anchoCrudo = new BigDecimal(getTxtAnchoCrudo().getText().trim().replace(',', '.'));
 		BigDecimal anchoFinal = new BigDecimal(getTxtAnchoFinal().getText().trim().replace(',', '.'));
 		if(anchoFinal.compareTo(anchoCrudo) > 0) {
-			if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, StringW.wordWrap("El ancho final es mayor que el ancho crudo. ¿Desea Continuar?"), "Confirmación") == CLJOptionPane.NO_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, StringW.wordWrap("El ancho final es mayor que el ancho crudo. ¿Desea Continuar?"), "Confirmación") == FWJOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
@@ -882,8 +882,8 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		
 		@SuppressWarnings("serial")
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaPiezaEntrada = new CLJTable(0, CANT_COLS) {
+		protected FWJTable construirTabla() {
+			FWJTable tablaPiezaEntrada = new FWJTable(0, CANT_COLS) {
 
 				@Override
 				public void cellEdited(int cell, int row) {

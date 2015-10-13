@@ -20,9 +20,9 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.gente.Proveedor;
@@ -37,7 +37,7 @@ public class JDialogSeleccionarCrearImpuesto extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLCheckBoxList<ImpuestoItemProveedor> checkBoxList;
+	private FWCheckBoxList<ImpuestoItemProveedor> checkBoxList;
 	private JButton btnAgregarImpuesto;
 	private final List<ImpuestoItemProveedor> allImpuestos;
 	private final List<ImpuestoItemProveedor> impuestosSelectedResult = new ArrayList<ImpuestoItemProveedor>();
@@ -149,9 +149,9 @@ public class JDialogSeleccionarCrearImpuesto extends JDialog {
 		dispose();
 	}
 
-	private CLCheckBoxList<ImpuestoItemProveedor> getCheckBoxList() {
+	private FWCheckBoxList<ImpuestoItemProveedor> getCheckBoxList() {
 		if(checkBoxList == null) {
-			checkBoxList = new CLCheckBoxList<ImpuestoItemProveedor>();
+			checkBoxList = new FWCheckBoxList<ImpuestoItemProveedor>();
 		}
 		return checkBoxList;
 	}
@@ -173,7 +173,7 @@ public class JDialogSeleccionarCrearImpuesto extends JDialog {
 
 	private JButton getBtnAgregarImpuesto() {
 		if(btnAgregarImpuesto == null) {
-			btnAgregarImpuesto = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_agregar_fila.png", "ar/clarin/fwjava/imagenes/b_agregar_fila_des.png");
+			btnAgregarImpuesto = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_agregar_fila.png", "ar/com/fwcommon/imagenes/b_agregar_fila_des.png");
 			btnAgregarImpuesto.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {

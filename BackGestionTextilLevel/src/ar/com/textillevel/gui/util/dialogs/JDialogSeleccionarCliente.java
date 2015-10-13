@@ -31,9 +31,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -43,13 +43,13 @@ public class JDialogSeleccionarCliente extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel panDetalle;
 	private JCheckBox chkBuscarNro;
-	private CLJNumericTextField txtNroCliente;
+	private FWJNumericTextField txtNroCliente;
 	private JTextField txtRazSoc;
 	private JButton btnBuscar;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaResultados;
+	private FWJTable tablaResultados;
 	private ClienteFacadeRemote clienteFacade;
 	private Cliente cliente;
 
@@ -116,9 +116,9 @@ public class JDialogSeleccionarCliente extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaResultados() {
+	private FWJTable getTablaResultados() {
 		if(tablaResultados == null) {
-			tablaResultados = new CLJTable(0, 2) {
+			tablaResultados = new FWJTable(0, 2) {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
@@ -130,7 +130,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 			};
 			tablaResultados.setStringColumn(0, "CLIENTE", 400, 400, true);
 			tablaResultados.setStringColumn(1, "", 0, 0, true);
-			tablaResultados.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaResultados.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tablaResultados.addMouseListener(new MouseAdapter () {
 
@@ -157,7 +157,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 						Integer nroCliente = getTxtNroCliente().getValue();
 						Cliente cliente = clienteFacade.getClienteByNumero(nroCliente);
 						if(cliente == null) {
-							CLJOptionPane.showInformationMessage(JDialogSeleccionarCliente.this, "No se encontraron resultados.", "Atención");
+							FWJOptionPane.showInformationMessage(JDialogSeleccionarCliente.this, "No se encontraron resultados.", "Atención");
 							clienteList = Collections.emptyList();
 						} else {
 							clienteList = Collections.singletonList(cliente);
@@ -166,7 +166,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 						String razSoc = getTxtRazSoc().getText().trim();
 						clienteList = clienteFacade.getAllByRazonSocial(razSoc);
 						if(clienteList.isEmpty()) {
-							CLJOptionPane.showInformationMessage(JDialogSeleccionarCliente.this, "No se encontraron resultados.", "Atención");
+							FWJOptionPane.showInformationMessage(JDialogSeleccionarCliente.this, "No se encontraron resultados.", "Atención");
 						}
 					}
 					llenarTabla(clienteList);
@@ -205,9 +205,9 @@ public class JDialogSeleccionarCliente extends JDialog {
 		return txtRazSoc;
 	}
 
-	private CLJNumericTextField getTxtNroCliente() {
+	private FWJNumericTextField getTxtNroCliente() {
 		if(txtNroCliente == null) {
-			txtNroCliente = new CLJNumericTextField(0, Long.MAX_VALUE);
+			txtNroCliente = new FWJNumericTextField(0, Long.MAX_VALUE);
 			txtNroCliente.addKeyListener(new KeyAdapter() {
 
 				@Override

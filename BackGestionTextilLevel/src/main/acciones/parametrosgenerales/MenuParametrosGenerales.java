@@ -5,9 +5,9 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
-public class MenuParametrosGenerales extends CLJMenu {
+public class MenuParametrosGenerales extends FWJMenu {
 
 	private static final long serialVersionUID = -7385942711273234287L;
 	private JMenuItem menuParametrosGenerales;

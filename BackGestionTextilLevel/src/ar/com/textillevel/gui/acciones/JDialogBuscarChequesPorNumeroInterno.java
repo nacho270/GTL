@@ -19,9 +19,9 @@ import javax.swing.JScrollPane;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
@@ -33,7 +33,7 @@ public class JDialogBuscarChequesPorNumeroInterno extends JDialog {
 
 	private static final long serialVersionUID = 7473745819598381285L;
 
-	private CLCheckBoxList<Cheque> chkCheques;
+	private FWCheckBoxList<Cheque> chkCheques;
 	private JButton btnSeleccionarTodo;
 	private JButton btnDeseleccionarTodo;
 	private JButton btnAceptar;
@@ -93,9 +93,9 @@ public class JDialogBuscarChequesPorNumeroInterno extends JDialog {
 		return panel;
 	}
 
-	private CLCheckBoxList<Cheque> getChkCheques() {
+	private FWCheckBoxList<Cheque> getChkCheques() {
 		if (chkCheques == null) {
-			chkCheques = new CLCheckBoxList<Cheque>() {
+			chkCheques = new FWCheckBoxList<Cheque>() {
 
 				private static final long serialVersionUID = 4501839806754196510L;
 
@@ -135,7 +135,7 @@ public class JDialogBuscarChequesPorNumeroInterno extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if(getChequesSeleccionados().isEmpty()){
-						CLJOptionPane.showErrorMessage(JDialogBuscarChequesPorNumeroInterno.this, "Debe seleccionar al menos un cheque", "Error");
+						FWJOptionPane.showErrorMessage(JDialogBuscarChequesPorNumeroInterno.this, "Debe seleccionar al menos un cheque", "Error");
 						return;
 					}
 					setAcepto(true);
@@ -149,7 +149,7 @@ public class JDialogBuscarChequesPorNumeroInterno extends JDialog {
 	private void buscar() {
 		List<Cheque> cheques = getChequeFacade().getChequesByNrosInternos(getListaNumeracionIngresada(), getIdsUtilizadosList());
 		if(cheques==null || (cheques!=null && cheques.isEmpty())){
-			CLJOptionPane.showErrorMessage(this, "No se han encontrado resultados", "Error");
+			FWJOptionPane.showErrorMessage(this, "No se han encontrado resultados", "Error");
 			return;
 		}
 		List<Cheque> lista2 = new ArrayList<Cheque>();
@@ -157,7 +157,7 @@ public class JDialogBuscarChequesPorNumeroInterno extends JDialog {
 			if(cheque.getEstadoCheque() == EEstadoCheque.EN_CARTERA){
 				lista2.add(cheque);
 			}else{
-				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("El cheque " + cheque.getNumeracion() + " no se puede utilizar debido a que tiene estado: " + cheque.getEstadoCheque()), "Búsqueda de cheques");
+				FWJOptionPane.showWarningMessage(this, StringW.wordWrap("El cheque " + cheque.getNumeracion() + " no se puede utilizar debido a que tiene estado: " + cheque.getEstadoCheque()), "Búsqueda de cheques");
 			}
 		}
 		if(lista2.isEmpty()){

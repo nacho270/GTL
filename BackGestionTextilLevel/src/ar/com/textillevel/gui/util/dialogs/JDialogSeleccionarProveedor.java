@@ -31,9 +31,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -43,13 +43,13 @@ public class JDialogSeleccionarProveedor extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel panDetalle;
 	private JCheckBox chkBuscarNombreCorto;
-	private CLJTextField txtNombreCortoProveedor;
+	private FWJTextField txtNombreCortoProveedor;
 	private JTextField txtRazSoc;
 	private JButton btnBuscar;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaResultados;
+	private FWJTable tablaResultados;
 	private ProveedorFacadeRemote proveedorFacade;
 	private Proveedor proveedor;
 
@@ -116,9 +116,9 @@ public class JDialogSeleccionarProveedor extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaResultados() {
+	private FWJTable getTablaResultados() {
 		if(tablaResultados == null) {
-			tablaResultados = new CLJTable(0, 2) {
+			tablaResultados = new FWJTable(0, 2) {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
@@ -130,7 +130,7 @@ public class JDialogSeleccionarProveedor extends JDialog {
 			};
 			tablaResultados.setStringColumn(0, "PROVEEDOR", 400, 400, true);
 			tablaResultados.setStringColumn(1, "", 0, 0, true);
-			tablaResultados.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaResultados.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tablaResultados.addMouseListener(new MouseAdapter () {
 
@@ -157,7 +157,7 @@ public class JDialogSeleccionarProveedor extends JDialog {
 						String nombreCorto = getTxtNombreCortoProveedor().getText();
 						List<Proveedor> proveedor = proveedorFacade.getProveedorByNombreCorto(nombreCorto);
 						if(proveedor == null || proveedor.isEmpty()) {
-							CLJOptionPane.showInformationMessage(JDialogSeleccionarProveedor.this, "No se encontraron resultados.", "Atención");
+							FWJOptionPane.showInformationMessage(JDialogSeleccionarProveedor.this, "No se encontraron resultados.", "Atención");
 							proveedorList = Collections.emptyList();
 						} else {
 							proveedorList = proveedor;
@@ -166,7 +166,7 @@ public class JDialogSeleccionarProveedor extends JDialog {
 						String razSoc = getTxtRazSoc().getText().trim();
 						proveedorList = proveedorFacade.getProveedorByRazonSocial(razSoc);
 						if(proveedorList.isEmpty()) {
-							CLJOptionPane.showInformationMessage(JDialogSeleccionarProveedor.this, "No se encontraron resultados.", "Atención");
+							FWJOptionPane.showInformationMessage(JDialogSeleccionarProveedor.this, "No se encontraron resultados.", "Atención");
 						}
 					}
 					llenarTabla(proveedorList);
@@ -205,9 +205,9 @@ public class JDialogSeleccionarProveedor extends JDialog {
 		return txtRazSoc;
 	}
 
-	private CLJTextField getTxtNombreCortoProveedor() {
+	private FWJTextField getTxtNombreCortoProveedor() {
 		if(txtNombreCortoProveedor == null) {
-			txtNombreCortoProveedor = new CLJTextField();
+			txtNombreCortoProveedor = new FWJTextField();
 			txtNombreCortoProveedor.addKeyListener(new KeyAdapter() {
 
 				@Override

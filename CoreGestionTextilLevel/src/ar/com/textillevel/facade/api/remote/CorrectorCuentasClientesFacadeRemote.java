@@ -1,7 +1,8 @@
 package ar.com.textillevel.facade.api.remote;
 
 import javax.ejb.Remote;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 
 @Remote
 public interface CorrectorCuentasClientesFacadeRemote {

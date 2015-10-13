@@ -10,9 +10,9 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.textillevel.entidades.gente.InfoDireccion;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.facade.api.remote.InfoLocalidadFacadeRemote;
@@ -25,9 +25,9 @@ public class PanelDomicilioCompleto extends JPanel{
 	private static final long serialVersionUID = 5946598740293668410L;
 
 	private PanelDomicilio panelDomicilio;
-	private CLJNumericTextField txtNumero;
-	private CLJTextField txtPiso;
-	private CLJTextField txtDto;
+	private FWJNumericTextField txtNumero;
+	private FWJTextField txtPiso;
+	private FWJTextField txtDto;
 	
 	private final Frame owner;
 	
@@ -46,7 +46,7 @@ public class PanelDomicilioCompleto extends JPanel{
 			return false;
 		}
 		if(getTxtNumero().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe indicar el número del domicilio", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe indicar el número del domicilio", "Error");
 			getTxtNumero().requestFocus();
 			return false;
 		}
@@ -108,25 +108,25 @@ public class PanelDomicilioCompleto extends JPanel{
 		return panelDomicilio;
 	}
 	
-	public CLJNumericTextField getTxtNumero() {
+	public FWJNumericTextField getTxtNumero() {
 		if(txtNumero == null){
-			txtNumero = new CLJNumericTextField();
+			txtNumero = new FWJNumericTextField();
 			txtNumero.setColumns(5);
 		}
 		return txtNumero;
 	}
 
-	public CLJTextField getTxtPiso() {
+	public FWJTextField getTxtPiso() {
 		if(txtPiso == null){
-			txtPiso = new CLJTextField();
+			txtPiso = new FWJTextField();
 			txtPiso.setPreferredSize(new Dimension(50, 20));
 		}
 		return txtPiso;
 	}
 	
-	public CLJTextField getTxtDto() {
+	public FWJTextField getTxtDto() {
 		if(txtDto == null){
-			txtDto = new CLJTextField();
+			txtDto = new FWJTextField();
 			txtDto.setPreferredSize(new Dimension(50, 20));
 		}
 		return txtDto;

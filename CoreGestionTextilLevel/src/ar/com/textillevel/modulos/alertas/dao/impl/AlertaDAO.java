@@ -6,8 +6,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.dao.impl.GenericDAO;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.portal.Perfil;
 import ar.com.textillevel.modulos.alertas.dao.api.local.AlertaDAOLocal;
 import ar.com.textillevel.modulos.alertas.entidades.Alerta;

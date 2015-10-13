@@ -2,9 +2,9 @@ package ar.com.textillevel.gui.acciones.visitor.cuenta;
 
 import java.awt.Frame;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebePersona;
@@ -43,7 +43,7 @@ public class ConsultaDocumentoVisitor implements IFilaMovimientoVisitor{
 				JDialogCargaRecibo dialogCargaRecibo = new JDialogCargaRecibo(padre,recibo , true);
 				GuiUtil.centrar(dialogCargaRecibo);
 				dialogCargaRecibo.setVisible(true);
-			} catch (CLException e) {
+			} catch (FWException e) {
 				BossError.gestionarError(e);
 			}
 		}else if(movimiento.getNotaCredito() !=null){
@@ -58,7 +58,7 @@ public class ConsultaDocumentoVisitor implements IFilaMovimientoVisitor{
 				Factura f = ffr.getByIdEager(movimiento.getFactura().getId());
 				JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(padre,f,true);
 				dialogCargaFactura.setVisible(true);
-			} catch (CLException e) {
+			} catch (FWException e) {
 				BossError.gestionarError(e);
 			}
 		}else if(movimiento.getNotaDebito() != null){
@@ -72,7 +72,7 @@ public class ConsultaDocumentoVisitor implements IFilaMovimientoVisitor{
 			correccion = cfr.getCorreccionById(correccion.getId());
 			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(padre,correccion, true);
 			dialogCargaFactura.setVisible(true);
-		} catch (CLException e) {
+		} catch (FWException e) {
 			BossError.gestionarError(e);
 		}
 	}

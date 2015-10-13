@@ -7,9 +7,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ListSelectionModel;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTablaSubirBajarModificar;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTablaSubirBajarModificar;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarPasosSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarTransicionesODT;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -35,7 +35,7 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 	public PanelTablaODT(Frame padre, String header) {
 		this.padre = padre;
 		setEncabezado(header);
-		CLJTable nuevaTabla = createNewTabla();
+		FWJTable nuevaTabla = createNewTabla();
 		rebuildTable(nuevaTabla);
 	}
 	
@@ -47,14 +47,14 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 			setEncabezado(tipoAvance.getDescripcion());
 		}
 		this.tipoAvance = tipoAvance;
-		CLJTable nuevaTabla = createNewTabla();
+		FWJTable nuevaTabla = createNewTabla();
 		rebuildTable(nuevaTabla);
 		setSize(new Dimension(500, 500));
 		setPreferredSize(new Dimension(500, 500));
 	}
 
-	private CLJTable createNewTabla() {
-		CLJTable nuevaTabla = new CLJTable(0, CANT_COLS); 
+	private FWJTable createNewTabla() {
+		FWJTable nuevaTabla = new FWJTable(0, CANT_COLS); 
 		nuevaTabla.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -80,14 +80,14 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 		nuevaTabla.setReorderingAllowed(false);
 		nuevaTabla.setAllowSorting(false);
 		nuevaTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		nuevaTabla.setHeaderAlignment(COL_ODT, CLJTable.CENTER_ALIGN);
-		nuevaTabla.setAlignment(COL_ODT, CLJTable.CENTER_ALIGN);
+		nuevaTabla.setHeaderAlignment(COL_ODT, FWJTable.CENTER_ALIGN);
+		nuevaTabla.setAlignment(COL_ODT, FWJTable.CENTER_ALIGN);
 		return nuevaTabla;
 	}
 
 	@Override
-	protected CLJTable construirTabla() {
-		return new CLJTable(0, CANT_COLS);
+	protected FWJTable construirTabla() {
+		return new FWJTable(0, CANT_COLS);
 	}
 
 	@Override

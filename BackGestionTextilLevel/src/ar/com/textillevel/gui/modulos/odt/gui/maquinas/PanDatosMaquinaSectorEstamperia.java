@@ -6,7 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
+
+import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidacionCompletitud;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidacionMayorQueCero;
@@ -28,8 +29,8 @@ public class PanDatosMaquinaSectorEstamperia extends PanDatosMaquinaCommon {
 	private static final String LABEL_CANT_CAMPOS = "CANT. DE CAMPOS";
 	private static final String LABEL_CANT_COLORES = "CANT. DE COLORES";
 
-	private CLJNumericTextField txtCantColores;
-	private CLJNumericTextField txtCantCampos;
+	private FWJNumericTextField txtCantColores;
+	private FWJNumericTextField txtCantCampos;
 
 	private DecimalNumericTextField txtTempMin;
 	private DecimalNumericTextField txtTempMax;
@@ -74,16 +75,16 @@ public class PanDatosMaquinaSectorEstamperia extends PanDatosMaquinaCommon {
 		add(getTxtCantColores(), GenericUtils.createGridBagConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 	}
 
-	private CLJNumericTextField getTxtCantColores() {
+	private FWJNumericTextField getTxtCantColores() {
 		if(txtCantColores == null) {
-			txtCantColores = new CLJNumericTextField();
+			txtCantColores = new FWJNumericTextField();
 		}
 		return txtCantColores;
 	}
 
-	private CLJNumericTextField getTxtCantCampos() {
+	private FWJNumericTextField getTxtCantCampos() {
 		if(txtCantCampos == null) {
-			txtCantCampos = new CLJNumericTextField();
+			txtCantCampos = new FWJNumericTextField();
 		}
 		return txtCantCampos;
 	}

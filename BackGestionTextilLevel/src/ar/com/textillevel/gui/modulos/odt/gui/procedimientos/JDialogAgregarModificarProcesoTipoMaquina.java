@@ -26,12 +26,12 @@ import javax.swing.JPanel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -48,7 +48,7 @@ public class JDialogAgregarModificarProcesoTipoMaquina extends JDialog {
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLJTextField txtNombreProceso;
+	private FWJTextField txtNombreProceso;
 	private JCheckBox chkRequiereMuestra;
 	private PanelTablaProcedimientos panelTabla;
 	private JComboBox cmbTipoArticulo;
@@ -160,8 +160,8 @@ public class JDialogAgregarModificarProcesoTipoMaquina extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO_ART, "Tipo Artículo", 100, 100, true);
 			tabla.setStringColumn(COL_NOMBRE, "Nombre", 200, 200, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -269,7 +269,7 @@ public class JDialogAgregarModificarProcesoTipoMaquina extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombreProceso().getText())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del proceso", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del proceso", "Error");
 			getTxtNombreProceso().requestFocus();
 			return false;
 		}
@@ -288,9 +288,9 @@ public class JDialogAgregarModificarProcesoTipoMaquina extends JDialog {
 		return btnCancelar;
 	}
 
-	public CLJTextField getTxtNombreProceso() {
+	public FWJTextField getTxtNombreProceso() {
 		if(txtNombreProceso == null){
-			txtNombreProceso = new CLJTextField(50);
+			txtNombreProceso = new FWJTextField(50);
 		}
 		return txtNombreProceso;
 	}
@@ -327,7 +327,7 @@ public class JDialogAgregarModificarProcesoTipoMaquina extends JDialog {
 	}
 	
 	private void salir(){
-		if(CLJOptionPane.showQuestionMessage(JDialogAgregarModificarProcesoTipoMaquina.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == CLJOptionPane.YES_OPTION){
+		if(FWJOptionPane.showQuestionMessage(JDialogAgregarModificarProcesoTipoMaquina.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == FWJOptionPane.YES_OPTION){
 			setAcepto(false);
 			dispose();
 		}

@@ -19,7 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 
 public class JDialogResultadoAltaRemitoSalida extends JDialog {

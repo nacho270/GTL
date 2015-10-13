@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.cuentaarticulo.movimientos.MovimientoCuentaArticulo;
 import ar.com.textillevel.entidades.cuentaarticulo.movimientos.MovimientoDebeCuentaArticulo;
 import ar.com.textillevel.entidades.cuentaarticulo.movimientos.MovimientoHaberCuentaArticulo;
@@ -14,9 +14,9 @@ import ar.com.textillevel.entidades.cuentaarticulo.movimientos.visitor.IMovimien
 public class FilaMovimientoCuentaArticuloVisitor implements IMovimientoCuentaArticuloVisitor {
 
 	private double saldo;
-	private final CLJTable tabla;
+	private final FWJTable tabla;
 
-	public FilaMovimientoCuentaArticuloVisitor(CLJTable tabla) {
+	public FilaMovimientoCuentaArticuloVisitor(FWJTable tabla) {
 		this.tabla = tabla;
 	}
 
@@ -48,7 +48,7 @@ public class FilaMovimientoCuentaArticuloVisitor implements IMovimientoCuentaArt
 		this.saldo = saldo;
 	}
 
-	private CLJTable getTabla() {
+	private FWJTable getTabla() {
 		return tabla;
 	}
 

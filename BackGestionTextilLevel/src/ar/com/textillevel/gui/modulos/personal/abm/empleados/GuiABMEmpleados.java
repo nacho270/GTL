@@ -35,17 +35,17 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJLetterTextField;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.componentes.FWJLetterTextField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.UppercaseDocumentFilterSoloLetras;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
@@ -83,8 +83,8 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 
 	// CONTROLES PANEL DATOS BASICOS
 
-	private CLJTextField txtNombre;
-	private CLJTextField txtApellido;
+	private FWJTextField txtNombre;
+	private FWJTextField txtApellido;
 	private JLabel lblFotoEmpleado;
 	private LinkableLabel linkLabelBuscarFoto;
 	private PanelDatePicker panelFechaNacimiento;
@@ -93,18 +93,18 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 	private JComboBox cmbSexo;
 	private PanelTablaInfoDomicilio panelTablaDomicilio;
 	private JFormattedTextField txtCuil;
-	private CLJNumericTextField txtDni;
-	private CLJNumericTextField txtCedula;
-	private CLJNumericTextField txtNroImpuestoGanancias;
+	private FWJNumericTextField txtDni;
+	private FWJNumericTextField txtCedula;
+	private FWJNumericTextField txtNroImpuestoGanancias;
 	private JComboBox cmbAFJP;
-	private CLJNumericTextField txtNroAFJP;
+	private FWJNumericTextField txtNroAFJP;
 	private JComboBox cmbEstudiosCursados;
-	private CLJLetterTextField txtProfesion;
+	private FWJLetterTextField txtProfesion;
 	private JCheckBox chkExhibeTitulos;
-	private CLJLetterTextField txtIdiomasQueHabla;
-	private CLJLetterTextField txtIdiomasQueLee;
-	private CLJLetterTextField txtIdiomasQueEscribe;
-	private CLJLetterTextField txtOtrosConocimienos;
+	private FWJLetterTextField txtIdiomasQueHabla;
+	private FWJLetterTextField txtIdiomasQueLee;
+	private FWJLetterTextField txtIdiomasQueEscribe;
+	private FWJLetterTextField txtOtrosConocimienos;
 	private JCheckBox chkJubilado;
 	private JCheckBox chkPrivado;
 	
@@ -136,7 +136,7 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 	private Empleado empleadoActual;
 	private EmpleadoFacadeRemote empleadoFacade;
 
-	public GuiABMEmpleados(Integer idModulo) throws CLException {
+	public GuiABMEmpleados(Integer idModulo) throws FWException {
 		super();
 		setHijoCreado(true);
 		setTitle("Administrar empleados");
@@ -195,12 +195,12 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar al empleado seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar al empleado seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				if(getEmpleadoActual().getLegajo()==null){
 					getEmpleadoFacade().remove(getEmpleadoActual());
 					itemSelectorSeleccionado(-1);
 				}else{
-					CLJOptionPane.showErrorMessage(this,"No se puede eliminar al empleado debido a que ya tiene cargado un legajo", "Error");
+					FWJOptionPane.showErrorMessage(this,"No se puede eliminar al empleado debido a que ya tiene cargado un legajo", "Error");
 				}
 			}
 		}
@@ -213,7 +213,7 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 			getTxtApellido().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un empleado", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un empleado", "Error");
 			return false;
 		}
 	}
@@ -230,7 +230,7 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		if (validar()) {
 			capturarDatos();
 			Empleado emp = getEmpleadoFacade().save(getEmpleadoActual());
-			CLJOptionPane.showInformationMessage(this, "Los datos del empleado se han guardado con éxito", "Administrar empleados");
+			FWJOptionPane.showInformationMessage(this, "Los datos del empleado se han guardado con éxito", "Administrar empleados");
 			lista.setSelectedValue(emp, true);
 			return true;
 		}
@@ -275,27 +275,27 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getTxtApellido().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el apellido del empleado", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el apellido del empleado", "Error");
 			getTxtApellido().requestFocus();
 			return false;
 		}
 		if(getTxtNombre().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del empleado", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del empleado", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getPanelFechaNacimiento().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar una fecha de nacimiento válida", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar una fecha de nacimiento válida", "Error");
 			getPanelFechaNacimiento().requestFocus();
 			return false;
 		}
  		if(getCmbNacionalidad().getSelectedIndex()<0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar una nacionalidad válida", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar una nacionalidad válida", "Error");
 			getCmbNacionalidad().requestFocus();
 			return false;
 		}
 		if(getEmpleadoActual().getInformacionEstadoCivil().size()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un estado civil", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un estado civil", "Error");
 			return false;
 		}
 		if(getEmpleadoActual().getInformacionEstadoCivil().size()>0){
@@ -306,26 +306,26 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 				}
 			}
 			if(!ok){
-				CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un estado civil válido", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un estado civil válido", "Error");
 				return false;
 			}
 		}
 		if(getEmpleadoActual().getDomicilios().size()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un domicilio", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un domicilio", "Error");
 			return false;
 		}
 		if(getTxtCuil().getText().trim().length() < 13) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el C.U.I.L de empleado.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el C.U.I.L de empleado.","Advertencia");
 			getTxtCuil().requestFocus();
 			return false;
 		}
 		if(getTxtDni().getValueWithNull() == null && getTxtCedula().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingesar al menos un número de documento (DNI Y/O Cédula)", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingesar al menos un número de documento (DNI Y/O Cédula)", "Error");
 			getTxtDni().requestFocus();
 			return false;
 		}
 		if(getCmbAFJP().getSelectedIndex()<0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la AFJP del empleado", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la AFJP del empleado", "Error");
 			getCmbAFJP().requestFocus();
 			return false;
 		}
@@ -336,7 +336,7 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 //		}
 		int edad = DateUtil.calcularEdad(getPanelFechaNacimiento().getDate());
 		if(edad < EDAD_MINIMA || edad > EDAD_MAXIMA){
-			CLJOptionPane.showErrorMessage(this, "El empleado tiene " + edad + " años. La edad estar entre " + EDAD_MINIMA + " y " + EDAD_MAXIMA + ".", "Error");
+			FWJOptionPane.showErrorMessage(this, "El empleado tiene " + edad + " años. La edad estar entre " + EDAD_MINIMA + " y " + EDAD_MAXIMA + ".", "Error");
 			getPanelFechaNacimiento().requestFocus();
 			return false;
 		}
@@ -574,10 +574,10 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		private static final int COL_OBJ = 2;
 
 		@Override
-		protected CLJTable construirTabla() {
+		protected FWJTable construirTabla() {
 			JComboBox cmbEstadoCivil = new JComboBox();
 			GuiUtil.llenarCombo(cmbEstadoCivil, Arrays.asList(EEstadoCivil.values()), false);
-			CLJTable tabla = new CLJTable(0, CANT_COLS){
+			FWJTable tabla = new FWJTable(0, CANT_COLS){
 
 				private static final long serialVersionUID = 45605064330426374L;
 
@@ -681,8 +681,8 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS) {
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS) {
 
 				private static final long serialVersionUID = 3029440665368037548L;
 
@@ -816,18 +816,18 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		}
 	}
 
-	public CLJTextField getTxtNombre() {
+	public FWJTextField getTxtNombre() {
 		if (txtNombre == null) {
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 			txtNombre.setPreferredSize(new Dimension(120, 20));
 			((AbstractDocument) txtNombre.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtNombre;
 	}
 
-	public CLJTextField getTxtApellido() {
+	public FWJTextField getTxtApellido() {
 		if (txtApellido == null) {
-			txtApellido = new CLJTextField();
+			txtApellido = new FWJTextField();
 			txtApellido.setPreferredSize(new Dimension(120, 20));
 			((AbstractDocument) txtApellido.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
@@ -869,7 +869,7 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 							setPathAnterior(file.getAbsolutePath());
 							loadImageFile(file.getAbsolutePath());
 						} else {
-							CLJOptionPane.showErrorMessage(null, "La imagen no es de un formato válido", "Tama\u00F1o inválido");
+							FWJOptionPane.showErrorMessage(null, "La imagen no es de un formato válido", "Tama\u00F1o inválido");
 						}
 					}
 				}
@@ -956,23 +956,23 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		return txtCuil;
 	}
 
-	public CLJNumericTextField getTxtDni() {
+	public FWJNumericTextField getTxtDni() {
 		if (txtDni == null) {
-			txtDni = new CLJNumericTextField();
+			txtDni = new FWJNumericTextField();
 		}
 		return txtDni;
 	}
 
-	public CLJNumericTextField getTxtCedula() {
+	public FWJNumericTextField getTxtCedula() {
 		if (txtCedula == null) {
-			txtCedula = new CLJNumericTextField();
+			txtCedula = new FWJNumericTextField();
 		}
 		return txtCedula;
 	}
 
-	public CLJNumericTextField getTxtNroImpuestoGanancias() {
+	public FWJNumericTextField getTxtNroImpuestoGanancias() {
 		if (txtNroImpuestoGanancias == null) {
-			txtNroImpuestoGanancias = new CLJNumericTextField();
+			txtNroImpuestoGanancias = new FWJNumericTextField();
 		}
 		return txtNroImpuestoGanancias;
 	}
@@ -1008,9 +1008,9 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		return cmbAFJP;
 	}
 
-	public CLJNumericTextField getTxtNroAFJP() {
+	public FWJNumericTextField getTxtNroAFJP() {
 		if (txtNroAFJP == null) {
-			txtNroAFJP = new CLJNumericTextField();
+			txtNroAFJP = new FWJNumericTextField();
 		}
 		return txtNroAFJP;
 	}
@@ -1023,9 +1023,9 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		return cmbEstudiosCursados;
 	}
 
-	public CLJLetterTextField getTxtProfesion() {
+	public FWJLetterTextField getTxtProfesion() {
 		if (txtProfesion == null) {
-			txtProfesion = new CLJLetterTextField();
+			txtProfesion = new FWJLetterTextField();
 			((AbstractDocument) txtProfesion.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtProfesion;
@@ -1038,33 +1038,33 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		return chkExhibeTitulos;
 	}
 
-	public CLJLetterTextField getTxtIdiomasQueHabla() {
+	public FWJLetterTextField getTxtIdiomasQueHabla() {
 		if (txtIdiomasQueHabla == null) {
-			txtIdiomasQueHabla = new CLJLetterTextField();
+			txtIdiomasQueHabla = new FWJLetterTextField();
 			((AbstractDocument) txtIdiomasQueHabla.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtIdiomasQueHabla;
 	}
 
-	public CLJLetterTextField getTxtIdiomasQueLee() {
+	public FWJLetterTextField getTxtIdiomasQueLee() {
 		if (txtIdiomasQueLee == null) {
-			txtIdiomasQueLee = new CLJLetterTextField();
+			txtIdiomasQueLee = new FWJLetterTextField();
 			((AbstractDocument) txtIdiomasQueLee.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtIdiomasQueLee;
 	}
 
-	public CLJLetterTextField getTxtIdiomasQueEscribe() {
+	public FWJLetterTextField getTxtIdiomasQueEscribe() {
 		if (txtIdiomasQueEscribe == null) {
-			txtIdiomasQueEscribe = new CLJLetterTextField();
+			txtIdiomasQueEscribe = new FWJLetterTextField();
 			((AbstractDocument) txtIdiomasQueEscribe.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtIdiomasQueEscribe;
 	}
 
-	public CLJLetterTextField getTxtOtrosConocimienos() {
+	public FWJLetterTextField getTxtOtrosConocimienos() {
 		if (txtOtrosConocimienos == null) {
-			txtOtrosConocimienos = new CLJLetterTextField();
+			txtOtrosConocimienos = new FWJLetterTextField();
 			((AbstractDocument) txtOtrosConocimienos.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtOtrosConocimienos;
@@ -1091,8 +1091,8 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_EMPLEADOR, "Empleador", 150, 150, true);
 			tabla.setStringColumn(COL_DOMICILIO, "Domicilio", 150, 150, true);
 			tabla.setStringColumn(COL_REFERENCIA, "Referencia", 150, 150, true);
@@ -1200,11 +1200,11 @@ public class GuiABMEmpleados extends GuiABMListaTemplate {
 			agregarBotonModificar();
 		}
 		@Override
-		protected CLJTable construirTabla() {
+		protected FWJTable construirTabla() {
 			JComboBox cmbParentescos = new JComboBox();
 			GuiUtil.llenarCombo(cmbParentescos, Arrays.asList(EParentesco.values()), true);
 			cmbParentescos.addItem("PADRE");
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setComboColumn(COL_PARENTESCO, "Parentesco", cmbParentescos, 100, true);
 			tabla.setStringColumn(COL_NOMBRE_Y_APELLIDO, "Nombre y apellido", 150, 150, true);
 			tabla.setDateColumn(COL_FECHA_NAC, "Fecha nac.", 80, true);

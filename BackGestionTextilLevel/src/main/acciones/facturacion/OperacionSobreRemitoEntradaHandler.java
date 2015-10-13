@@ -2,7 +2,8 @@ package main.acciones.facturacion;
 
 import java.awt.Frame;
 import java.util.List;
-import ar.clarin.fwjava.util.GuiUtil;
+
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogAgregarRemitoEntrada;

@@ -26,10 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
@@ -58,7 +58,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private JComboBox cmbArticulo;
 	private JComboBox cmbTipoProducto;
 	private JComboBox cmbGama;
-	private CLCheckBoxList<Producto> checkBoxList;
+	private FWCheckBoxList<Producto> checkBoxList;
 	private JTextArea txtProdSel;
 
 	private boolean acepto;
@@ -267,7 +267,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 				private boolean validar() {
 					if(getClCheckBoxList().getSelectedValues().length == 0){
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarProducto.this, "Debe seleccionar al menos un producto.", JDialogSeleccionarProducto.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarProducto.this, "Debe seleccionar al menos un producto.", JDialogSeleccionarProducto.this.getTitle());
 						return false;
 					}
 					return true;
@@ -289,9 +289,9 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLCheckBoxList<Producto> getClCheckBoxList() {
+	private FWCheckBoxList<Producto> getClCheckBoxList() {
 		if(checkBoxList == null) {
-			checkBoxList = new CLCheckBoxList<Producto>() {
+			checkBoxList = new FWCheckBoxList<Producto>() {
 
 				private static final long serialVersionUID = -8028977693425752374L;
 

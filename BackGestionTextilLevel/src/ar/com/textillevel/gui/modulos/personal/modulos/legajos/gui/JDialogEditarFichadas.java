@@ -17,12 +17,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.FichadaLegajo;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.enums.ETipoFichada;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.to.FichadaLegajoTO;
@@ -37,8 +37,8 @@ public class JDialogEditarFichadas extends JDialog {
 	private String nombreEmpleado;
 	
 	private PanelTablaFichada panelTabla;
-	private CLJTextField txtNombreEmpleado;
-	private CLDateField txtFechaFichada;
+	private FWJTextField txtNombreEmpleado;
+	private FWDateField txtFechaFichada;
 
 	private JButton btnAceptar;
 	private JButton btnSalir;
@@ -127,8 +127,8 @@ public class JDialogEditarFichadas extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO_FICHADA, "Tipo fichada", 80, 80, true);
 			tabla.setTimeColumn(COL_HORA_FICHADA, "Horario", 120, true);
 			tabla.setStringColumn(COL_FORMA_INGRESO_FICHADA, "Forma de ingreso", 120,120, true);
@@ -197,18 +197,18 @@ public class JDialogEditarFichadas extends JDialog {
 		return panelTabla;
 	}
 
-	public CLJTextField getTxtNombreEmpleado() {
+	public FWJTextField getTxtNombreEmpleado() {
 		if (txtNombreEmpleado == null) {
-			txtNombreEmpleado = new CLJTextField(getNombreEmpleado());
+			txtNombreEmpleado = new FWJTextField(getNombreEmpleado());
 			txtNombreEmpleado.setPreferredSize(new Dimension(200, 20));
 			txtNombreEmpleado.setEditable(false);
 		}
 		return txtNombreEmpleado;
 	}
 
-	public CLDateField getTxtFechaFichada() {
+	public FWDateField getTxtFechaFichada() {
 		if (txtFechaFichada == null) {
-			txtFechaFichada = new CLDateField(getFichada().getDia());
+			txtFechaFichada = new FWDateField(getFichada().getDia());
 			txtFechaFichada.setPreferredSize(new Dimension(90, 20));
 			txtFechaFichada.setEditable(false);
 		}
@@ -247,11 +247,11 @@ public class JDialogEditarFichadas extends JDialog {
 			tipoFichada = i%2==0?ETipoFichada.ENTRADA:ETipoFichada.SALIDA;
 			FichadaLegajo fl = getFichada().getFichadasComprendidas().get(i);
 			if(fl.getTipoFichada()!=tipoFichada){
-				CLJOptionPane.showErrorMessage(this, "Las fichadas son incorrectas. Deben empezar con 'Entrada' y luego intercalarse.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Las fichadas son incorrectas. Deben empezar con 'Entrada' y luego intercalarse.", "Error");
 				return false;
 			}
 			if(fl.getHorario().before(tsAnterior)){
-				CLJOptionPane.showErrorMessage(this, "Las fichadas son incorrectas. Deben estar ordenadas cronologicamente y de forma ascendente.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Las fichadas son incorrectas. Deben estar ordenadas cronologicamente y de forma ascendente.", "Error");
 				return false;
 			}
 			tsAnterior = fl.getHorario();

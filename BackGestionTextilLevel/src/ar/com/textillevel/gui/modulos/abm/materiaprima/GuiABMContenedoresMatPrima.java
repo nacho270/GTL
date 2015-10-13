@@ -10,11 +10,11 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.Bidon;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ContenedorMateriaPrima;
 import ar.com.textillevel.facade.api.remote.ContenedorMateriaPrimaFacadeRemote;
@@ -29,8 +29,8 @@ public class GuiABMContenedoresMatPrima extends GuiABMListaTemplate{
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
-	private CLJTextField txtNombreContenedor;
-	private CLJNumericTextField txtCapacidad;
+	private FWJTextField txtNombreContenedor;
+	private FWJNumericTextField txtCapacidad;
 
 	private ContenedorMateriaPrimaFacadeRemote contenedorFacade;
 	private ContenedorMateriaPrima contenedorActual;
@@ -82,16 +82,16 @@ public class GuiABMContenedoresMatPrima extends GuiABMListaTemplate{
 		return gbc;
 	}
 	
-	private CLJTextField getTxtNombreContenedor() {
+	private FWJTextField getTxtNombreContenedor() {
 		if(txtNombreContenedor == null){
-			txtNombreContenedor = new CLJTextField(MAX_LONGITUD_CONTENEDOR);
+			txtNombreContenedor = new FWJTextField(MAX_LONGITUD_CONTENEDOR);
 		}
 		return txtNombreContenedor;
 	}
 
-	private CLJNumericTextField getTxtCapacidad() {
+	private FWJNumericTextField getTxtCapacidad() {
 		if(txtCapacidad == null){
-			txtCapacidad = new CLJNumericTextField();
+			txtCapacidad = new FWJNumericTextField();
 		}
 		return txtCapacidad;
 	}
@@ -121,7 +121,7 @@ public class GuiABMContenedoresMatPrima extends GuiABMListaTemplate{
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el contenedor seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el contenedor seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getContenedorFacade().remove(getContenedorActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -141,13 +141,13 @@ public class GuiABMContenedoresMatPrima extends GuiABMListaTemplate{
 
 	private boolean validar() {
 		if(getTxtNombreContenedor().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del contenedor", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del contenedor", this.getTitle());
 			getTxtNombreContenedor().requestFocus();
 			return false;
 		}
 		
 		if(getTxtCapacidad().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la capacidad del contenedor", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la capacidad del contenedor", this.getTitle());
 			getTxtCapacidad().requestFocus();
 			return false;
 		}
@@ -167,7 +167,7 @@ public class GuiABMContenedoresMatPrima extends GuiABMListaTemplate{
 			getTxtNombreContenedor().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un contenedor", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un contenedor", "Error");
 			return false;
 		}
 	}

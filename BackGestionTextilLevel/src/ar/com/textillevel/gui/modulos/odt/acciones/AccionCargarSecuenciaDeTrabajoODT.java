@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogSeleccionarCrearSecuenciaDeTrabajo;
 import ar.com.textillevel.gui.modulos.odt.gui.secuencias.JDialogEditarSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -27,7 +27,7 @@ public class AccionCargarSecuenciaDeTrabajoODT extends Accion<OrdenDeTrabajo>{
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<OrdenDeTrabajo> e) throws CLException {
+	public boolean ejecutar(AccionEvent<OrdenDeTrabajo> e) throws FWException {
 		return ejecutarCargaSecuencia(e);
 	}
 
@@ -50,7 +50,7 @@ public class AccionCargarSecuenciaDeTrabajoODT extends Accion<OrdenDeTrabajo>{
 				dialog.setVisible(true);
 				if(dialog.isAcepto()){
 					GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).grabarODT(dialog.getOdt(),GTLGlobalCache.getInstance().getUsuarioSistema());
-					CLJOptionPane.showInformationMessage(e.getSource().getFrame(), "La orden de trabajo se ha guardado con éxito", "Información");
+					FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "La orden de trabajo se ha guardado con éxito", "Información");
 				}
 				return true;
 			}
@@ -59,7 +59,7 @@ public class AccionCargarSecuenciaDeTrabajoODT extends Accion<OrdenDeTrabajo>{
 			dialog.setVisible(true);
 			if(dialog.isAcepto()){
 				GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).grabarODT(dialog.getOdt(),GTLGlobalCache.getInstance().getUsuarioSistema());
-				CLJOptionPane.showInformationMessage(e.getSource().getFrame(), "La orden de trabajo se ha guardado con éxito", "Información");
+				FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "La orden de trabajo se ha guardado con éxito", "Información");
 				return true;
 			}
 		}

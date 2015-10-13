@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
 
 public class PanSelectedIntegerFromComboOrTextField extends PanSelectElementFromComboOrTextField<Integer> {
 
@@ -16,17 +16,17 @@ public class PanSelectedIntegerFromComboOrTextField extends PanSelectElementFrom
 
 	@Override
 	protected JTextField createTextField() {
-		return new CLJNumericTextField();
+		return new FWJNumericTextField();
 	}
 
 	@Override
 	protected Integer extractValueFromTextField() {
-		return ((CLJNumericTextField)getTextField()).getValue();
+		return ((FWJNumericTextField)getTextField()).getValue();
 	}
 
 	@Override
 	protected void setValueInTextField(Integer selectedItem) {
-		((CLJNumericTextField)getTextField()).setValue(new Long(selectedItem));
+		((FWJNumericTextField)getTextField()).setValue(new Long(selectedItem));
 	}
 
 }

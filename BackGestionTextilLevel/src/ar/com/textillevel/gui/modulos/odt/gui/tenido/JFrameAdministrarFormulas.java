@@ -19,9 +19,9 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.gui.util.controles.PanelBusquedaClienteMinimal;
@@ -94,8 +94,8 @@ public class JFrameAdministrarFormulas extends JFrame {
 	}
 
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, esta seguro?", "Administrar Fórmulas");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, esta seguro?", "Administrar Fórmulas");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -128,7 +128,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 						isModificar = !isModificar;
 						getTabPaneFormulas().getPersisterFormulaHandler().clear();
 					} catch (ValidacionException e1) {
-						CLJOptionPane.showErrorMessage(JFrameAdministrarFormulas.this, StringW.wordWrap(e1.getMensajeError()), "Administrar Fórmulas");
+						FWJOptionPane.showErrorMessage(JFrameAdministrarFormulas.this, StringW.wordWrap(e1.getMensajeError()), "Administrar Fórmulas");
 					}
 				}
 

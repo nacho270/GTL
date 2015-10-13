@@ -1,8 +1,8 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.acciones;
 
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.gui.JDialogReciboSueldo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.ReciboSueldo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EEstadoReciboSueldo;

@@ -31,13 +31,13 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
@@ -74,12 +74,12 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 	private JPanel panelBotones;
 	private JPanel panDetalle;
 
-	private CLJTextField txtRazonSocial;
-	private CLJTextField txtCuit;
-	private CLJTextField txtLocalidad;
-	private CLJTextField txtDireccion;
-	private CLJTextField txtPosicionIva;
-	private CLJTextField txtIngBrutos;
+	private FWJTextField txtRazonSocial;
+	private FWJTextField txtCuit;
+	private FWJTextField txtLocalidad;
+	private FWJTextField txtDireccion;
+	private FWJTextField txtPosicionIva;
+	private FWJTextField txtIngBrutos;
 	private JTextField txtNroRemito;
 
 	private JButton btnAceptar;
@@ -293,49 +293,49 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if (txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField();
+			txtRazonSocial = new FWJTextField();
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
 	}
 
-	private CLJTextField getTxtCuit() {
+	private FWJTextField getTxtCuit() {
 		if (txtCuit == null) {
-			txtCuit = new CLJTextField();
+			txtCuit = new FWJTextField();
 			txtCuit.setEditable(false);
 		}
 		return txtCuit;
 	}
 
-	private CLJTextField getTxtDireccion() {
+	private FWJTextField getTxtDireccion() {
 		if (txtDireccion == null) {
-			txtDireccion = new CLJTextField();
+			txtDireccion = new FWJTextField();
 			txtDireccion.setEditable(false);
 		}
 		return txtDireccion;
 	}
 
-	private CLJTextField getTxtLocalidad() {
+	private FWJTextField getTxtLocalidad() {
 		if (txtLocalidad == null) {
-			txtLocalidad = new CLJTextField();
+			txtLocalidad = new FWJTextField();
 			txtLocalidad.setEditable(false);
 		}
 		return txtLocalidad;
 	}
 
-	private CLJTextField getTxtPosicionIva() {
+	private FWJTextField getTxtPosicionIva() {
 		if (txtPosicionIva == null) {
-			txtPosicionIva = new CLJTextField();
+			txtPosicionIva = new FWJTextField();
 			txtPosicionIva.setEditable(false);
 		}
 		return txtPosicionIva;
 	}
 
-	private CLJTextField getTxtIngBrutos() {
+	private FWJTextField getTxtIngBrutos() {
 		if (txtIngBrutos == null) {
-			txtIngBrutos = new CLJTextField();
+			txtIngBrutos = new FWJTextField();
 			txtIngBrutos.setEditable(false);
 		}
 		return txtIngBrutos;
@@ -477,8 +477,8 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COL_PIEZAS) {
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COL_PIEZAS) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -504,9 +504,9 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 			tabla.setStringColumn(COL_DESCR_ITEM_RETORNABLE, "MAT. PRIMA / BIDON", 300, 300, false);
 			tabla.setIntColumn(COL_CANT_SALIDA_ITEM, "SALIDA", 120, false);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_STOCK_ACTUAL, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_DESCR_ITEM_RETORNABLE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CANT_SALIDA_ITEM, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_STOCK_ACTUAL, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCR_ITEM_RETORNABLE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CANT_SALIDA_ITEM, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 
@@ -603,12 +603,12 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 						try {
 							remitoSalidaSaved = getRemitoSalidaFacade().ingresarRemitoSalidaProveedor(remitoSalidaProveedor, facturasParaGenerarNC, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 						} catch (ValidacionException e1) {
-							CLJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaProveedor.this, StringW.wordWrap(e1.getMensajeError()), "Error");
+							FWJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaProveedor.this, StringW.wordWrap(e1.getMensajeError()), "Error");
 							return;
 						}
-						CLJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaProveedor.this, "El remito se ha guardado con éxito", "Información");
+						FWJOptionPane.showInformationMessage(JDialogAgregarRemitoSalidaProveedor.this, "El remito se ha guardado con éxito", "Información");
 
-						if(CLJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalidaProveedor.this, "¿Desea imprimir el remito de salida?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+						if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoSalidaProveedor.this, "¿Desea imprimir el remito de salida?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 							remitoSalidaSaved = getRemitoSalidaFacade().getByIdConPiezasYProductos(remitoSalidaSaved.getId());
 							ImprimirRemitoSalidaProveedorHandler imprimirRemitoHandler = new ImprimirRemitoSalidaProveedorHandler(remitoSalidaSaved, JDialogAgregarRemitoSalidaProveedor.this);
 							imprimirRemitoHandler.imprimir();
@@ -654,8 +654,8 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 
 	private void salir() {
 		if (!modoConsulta) {
-			int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, está seguro?", "Pregunta");
-			if (ret == CLJOptionPane.YES_OPTION) {
+			int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, está seguro?", "Pregunta");
+			if (ret == FWJOptionPane.YES_OPTION) {
 				dispose();
 			}
 		} else {
@@ -665,14 +665,14 @@ public class JDialogAgregarRemitoSalidaProveedor extends JDialog {
 
 	private boolean validar() {
 		if(getPanTablaItemRetornableProveedor().getElementos().size()==0){
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap("Debe existir al menos un contenedor para dar salida."), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap("Debe existir al menos un contenedor para dar salida."), "Error");
 			return false;
 		}
 		String textoValidacion = getPanTablaItemRetornableProveedor().validarElementos();
 		if (textoValidacion == null) {
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoValidacion), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoValidacion), "Error");
 			return false;
 		}
 	}

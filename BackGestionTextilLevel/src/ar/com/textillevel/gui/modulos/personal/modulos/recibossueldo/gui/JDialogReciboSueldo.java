@@ -21,10 +21,10 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.CalculadorTotalesVisitor;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.ReciboSueldoDatosHandler;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.cabecera.ModeloCabeceraReciboSueldo;
@@ -242,7 +242,7 @@ public class JDialogReciboSueldo extends JDialog {
 					if(check) {
 						reciboSueldo.setEstado(EEstadoReciboSueldo.CREADO);
 						reciboSueldo = getReciboSueldoFacade().guardarRecibo(reciboSueldo);
-						CLJOptionPane.showInformationMessage(owner, "El recibo se ha guardado con éxito", "Información");
+						FWJOptionPane.showInformationMessage(owner, "El recibo se ha guardado con éxito", "Información");
 						getBtnVerificar().setEnabled(true);
 					}
 				}
@@ -257,7 +257,7 @@ public class JDialogReciboSueldo extends JDialog {
 		boolean valorHoraDistintoYDecideContinuar = false;
 		BigDecimal valorHora = getMontoInTextField(getTxtValorHora());
 		if(valorHora == null || valorHora.compareTo(reciboSueldo.getValorHora()) != 0) {
-			valorHoraDistintoYDecideContinuar = CLJOptionPane.showQuestionMessage(owner, StringW.wordWrap("El valor de hora ingresado '" + valorHora + "' es diferente al utilizado para calcular los items. ¿Desea continuar?") , "Información") == CLJOptionPane.YES_OPTION;
+			valorHoraDistintoYDecideContinuar = FWJOptionPane.showQuestionMessage(owner, StringW.wordWrap("El valor de hora ingresado '" + valorHora + "' es diferente al utilizado para calcular los items. ¿Desea continuar?") , "Información") == FWJOptionPane.YES_OPTION;
 			if(!valorHoraDistintoYDecideContinuar) {
 				return false;
 			}
@@ -275,7 +275,7 @@ public class JDialogReciboSueldo extends JDialog {
 					if(check) {
 						reciboSueldo.setEstado(EEstadoReciboSueldo.VERIFICADO);
 						reciboSueldo = getReciboSueldoFacade().guardarRecibo(reciboSueldo);
-						CLJOptionPane.showInformationMessage(owner, "El recibo se ha verificado con éxito", "Información");
+						FWJOptionPane.showInformationMessage(owner, "El recibo se ha verificado con éxito", "Información");
 						getBtnGrabar().setEnabled(false);
 						getBtnVerificar().setEnabled(false);
 						getBtnImprimir().setEnabled(true);
@@ -340,8 +340,8 @@ public class JDialogReciboSueldo extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_CONCEPTO, "Descripción de los conceptos", 150, 150, true);
 			tabla.setStringColumn(COL_CODIGO, "Código", 50, 50, true);
 			tabla.setStringColumn(COL_UNIDADES, "Unidades", 70, 70, true);
@@ -401,9 +401,9 @@ public class JDialogReciboSueldo extends JDialog {
 
 		private class AgregarItemReciboSueldoVisitor implements IItemReciboSueldoVisitor {
 			
-			private CLJTable tabla;
+			private FWJTable tabla;
 
-			private AgregarItemReciboSueldoVisitor(CLJTable tabla) {
+			private AgregarItemReciboSueldoVisitor(FWJTable tabla) {
 				this.tabla = tabla;
 			}
 
@@ -502,7 +502,7 @@ public class JDialogReciboSueldo extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					BigDecimal valorHora = getMontoInTextField(getTxtValorHora());
 					if(valorHora == null) {
-						CLJOptionPane.showErrorMessage(JDialogReciboSueldo.this, "Debe ingresar un valor hora válido", "Error");
+						FWJOptionPane.showErrorMessage(JDialogReciboSueldo.this, "Debe ingresar un valor hora válido", "Error");
 						return;
 					} else {
 						//obtengo los vales antes de resetear los datos del RS
@@ -519,7 +519,7 @@ public class JDialogReciboSueldo extends JDialog {
 							new ReciboSueldoDatosHandler(reciboSueldo, modelo, valorHora, vales);
 							llenarDatosTabla();
 						} catch (InvalidStateReciboSueldoException e1) {
-							CLJOptionPane.showErrorMessage(JDialogReciboSueldo.this, StringW.wordWrap(e1.getMessage()), "Error");
+							FWJOptionPane.showErrorMessage(JDialogReciboSueldo.this, StringW.wordWrap(e1.getMessage()), "Error");
 							return;
 						}
 					}

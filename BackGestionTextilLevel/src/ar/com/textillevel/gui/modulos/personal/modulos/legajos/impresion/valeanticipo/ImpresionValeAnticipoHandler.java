@@ -12,8 +12,8 @@ import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.vale.ValeAnticipo;
@@ -42,7 +42,7 @@ public class ImpresionValeAnticipoHandler {
 				break;
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-				CLJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);

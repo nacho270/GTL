@@ -10,8 +10,8 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.modulos.personal.dao.api.CalendarioAnualFeriadoDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.CalendarioAnualFeriado;

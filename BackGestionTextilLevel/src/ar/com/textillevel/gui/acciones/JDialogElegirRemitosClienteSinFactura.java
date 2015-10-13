@@ -15,10 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
@@ -28,8 +28,8 @@ public class JDialogElegirRemitosClienteSinFactura extends JDialog {
 
 	private static final long serialVersionUID = 6510608624599552621L;
 
-	private CLJTextField txtNombreCliente;
-	private CLCheckBoxList<RemitoSalida> chkListRemitos;
+	private FWJTextField txtNombreCliente;
+	private FWCheckBoxList<RemitoSalida> chkListRemitos;
 	private JButton btnAceptar;
 	private JButton btnSalir;
 
@@ -55,7 +55,7 @@ public class JDialogElegirRemitosClienteSinFactura extends JDialog {
 				getChkListRemitos().setSelectedIndex(index, false);
 			}
 		}else{
-			CLJOptionPane.showErrorMessage(this, "No se han encontrado remitos sin factura", "Error");
+			FWJOptionPane.showErrorMessage(this, "No se han encontrado remitos sin factura", "Error");
 			dispose();
 		}
 	}
@@ -94,9 +94,9 @@ public class JDialogElegirRemitosClienteSinFactura extends JDialog {
 	}
 
 	
-	public CLJTextField getTxtNombreCliente() {
+	public FWJTextField getTxtNombreCliente() {
 		if (txtNombreCliente == null) {
-			txtNombreCliente = new CLJTextField(getCliente().getRazonSocial());
+			txtNombreCliente = new FWJTextField(getCliente().getRazonSocial());
 			txtNombreCliente.setEditable(false);
 			txtNombreCliente.setPreferredSize(new Dimension(230, 20));
 		}
@@ -111,9 +111,9 @@ public class JDialogElegirRemitosClienteSinFactura extends JDialog {
 		this.cliente = cliente;
 	}
 
-	public CLCheckBoxList<RemitoSalida> getChkListRemitos() {
+	public FWCheckBoxList<RemitoSalida> getChkListRemitos() {
 		if (chkListRemitos == null) {
-			chkListRemitos = new CLCheckBoxList<RemitoSalida>();
+			chkListRemitos = new FWCheckBoxList<RemitoSalida>();
 		}
 		return chkListRemitos;
 	}
@@ -133,7 +133,7 @@ public class JDialogElegirRemitosClienteSinFactura extends JDialog {
 						setAcepto(true);
 						dispose();
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogElegirRemitosClienteSinFactura.this, "Debe elegir al menos un remito", "Error");
+						FWJOptionPane.showErrorMessage(JDialogElegirRemitosClienteSinFactura.this, "Debe elegir al menos un remito", "Error");
 					}
 				}
 			});

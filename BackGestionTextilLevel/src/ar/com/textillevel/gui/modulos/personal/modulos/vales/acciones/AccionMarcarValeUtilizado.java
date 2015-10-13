@@ -1,9 +1,9 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.vales.acciones;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EEstadoValeAnticipo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.vale.ValeAnticipo;
 import ar.com.textillevel.modulos.personal.facade.api.remote.ValeAnticipoFacadeRemote;
@@ -20,7 +20,7 @@ public class AccionMarcarValeUtilizado extends Accion<ValeAnticipo>{
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<ValeAnticipo> e) throws CLException {
+	public boolean ejecutar(AccionEvent<ValeAnticipo> e) throws FWException {
 		ValeAnticipo vale = e.getSelectedElements().get(0);
 		vale.setEstadoValeAnticipo(EEstadoValeAnticipo.DESCONTADO);
 		GTLPersonalBeanFactory.getInstance().getBean2(ValeAnticipoFacadeRemote.class).acutalizarVale(vale);

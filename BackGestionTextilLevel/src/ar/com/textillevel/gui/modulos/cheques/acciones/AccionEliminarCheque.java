@@ -2,12 +2,12 @@ package ar.com.textillevel.gui.modulos.cheques.acciones;
 
 import java.util.List;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
@@ -27,13 +27,13 @@ public class AccionEliminarCheque extends Accion<Cheque>{
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<Cheque> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Cheque> e) throws FWException {
 		JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(e.getSource().getFrame(), "Eliminar cheque");
 		if (jDialogPasswordInput.isAcepto()) {
 			String pass = new String(jDialogPasswordInput.getPassword());
 			UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
 			if (usrAdmin != null) {
-				if(CLJOptionPane.showQuestionMessage(e.getSource().getFrame(), "Va a eliminar definitivamente los cheques seleccionados. Está seguro?", "Pregunta")==CLJOptionPane.YES_OPTION){
+				if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "Va a eliminar definitivamente los cheques seleccionados. Está seguro?", "Pregunta")==FWJOptionPane.YES_OPTION){
 					try{
 						boolean avisar = false;
 						List<Cheque> chequesSeleccionados = e.getSelectedElements();
@@ -42,21 +42,21 @@ public class AccionEliminarCheque extends Accion<Cheque>{
 								try {
 									GTLBeanFactory.getInstance().getBean2(ChequeFacadeRemote.class).eliminarCheque(c.getId(), usrAdmin.getUsrName());
 								} catch (ValidacionException e1) {
-									CLJOptionPane.showErrorMessage(e.getSource().getFrame(), "Error al eliminar el cheque Nº: " + c.getNumeracion()+". " +e1.getMensajeError(), "Error");
+									FWJOptionPane.showErrorMessage(e.getSource().getFrame(), "Error al eliminar el cheque Nº: " + c.getNumeracion()+". " +e1.getMensajeError(), "Error");
 								}
 							}else{
 								avisar=true;
 							}
 						}
 						if(avisar){
-							CLJOptionPane.showInformationMessage(e.getSource(), "Algunos cheques no han podido ser eliminados por no estar en estado PENDIENTE", "Advertencia");
+							FWJOptionPane.showInformationMessage(e.getSource(), "Algunos cheques no han podido ser eliminados por no estar en estado PENDIENTE", "Advertencia");
 						}
 					}catch(RuntimeException cle){
 						BossError.gestionarError(cle);
 					}
 				}
 			} else {
-				CLJOptionPane.showErrorMessage(e.getSource().getFrame(), "La clave ingresada no peternece a un usuario administrador", "Error");
+				FWJOptionPane.showErrorMessage(e.getSource().getFrame(), "La clave ingresada no peternece a un usuario administrador", "Error");
 			}
 		}
 			

@@ -7,9 +7,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.entidades.documentos.ordendedeposito.OrdenDeDeposito;
 import ar.com.textillevel.facade.api.remote.OrdenDeDepositoFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDeposito;
@@ -59,11 +59,11 @@ public class ConsultarOrdenDeDepositoAction implements Action{
 					break;
 				}
 				if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-					CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
+					FWJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
 				} else {
 					orden = oddfr.getOrdenByNro(Integer.valueOf(input.trim()));
 					if(orden == null){
-						CLJOptionPane.showErrorMessage(padre, "Orden no encontrada", "Error");
+						FWJOptionPane.showErrorMessage(padre, "Orden no encontrada", "Error");
 					}else{
 						ok = true;
 						new JDialogCargaOrdenDeposito(padre, orden).setVisible(true);	
@@ -71,7 +71,7 @@ public class ConsultarOrdenDeDepositoAction implements Action{
 				}
 			} while (!ok);
 
-		} catch (CLException e1) {
+		} catch (FWException e1) {
 			BossError.gestionarError(e1);
 		}
 	}

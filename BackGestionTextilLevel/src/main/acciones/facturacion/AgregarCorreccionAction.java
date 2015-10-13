@@ -7,9 +7,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
@@ -60,11 +60,11 @@ public class AgregarCorreccionAction implements Action{
 					break;
 				}
 				if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-					CLJOptionPane.showErrorMessage(frame, "Ingreso incorrecto", "error");
+					FWJOptionPane.showErrorMessage(frame, "Ingreso incorrecto", "error");
 				} else {
 					cliente = ffr.getClienteByNumero(Integer.valueOf(input.trim()));
 					if(cliente == null){
-						CLJOptionPane.showErrorMessage(frame, "Cliente no encontrado", "Error");
+						FWJOptionPane.showErrorMessage(frame, "Cliente no encontrado", "Error");
 					}else{
 						ok = true;
 						String[] correcs= new String[ETipoCorreccionFactura.values().length];
@@ -81,7 +81,7 @@ public class AgregarCorreccionAction implements Action{
 				}
 			} while (!ok);
 
-		} catch (CLException e1) {
+		} catch (FWException e1) {
 			BossError.gestionarError(e1);
 		}
 	}

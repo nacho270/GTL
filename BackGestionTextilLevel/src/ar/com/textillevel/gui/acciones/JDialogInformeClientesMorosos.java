@@ -23,14 +23,14 @@ import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.ClienteMorosoTO;
 import ar.com.textillevel.gui.util.ETipoInformeDeuda;
 import ar.com.textillevel.gui.util.ExportadorExcel;
@@ -47,7 +47,7 @@ public class JDialogInformeClientesMorosos extends JDialog {
 	private PanelTablaClientes panelTablaClientes;
 	private List<ClienteMorosoTO> clientes;
 	private BigDecimal totalDeuda;
-	private CLJTextField txtTotalDeuda;
+	private FWJTextField txtTotalDeuda;
 	private ETipoInformeDeuda tipoInforme;
 
 	private JasperPrint print;
@@ -136,8 +136,8 @@ public class JDialogInformeClientesMorosos extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TBL_CLIENTES);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_CLIENTES);
 			tabla.setStringColumn(COL_RAZON_SOCIAL, "Razón social", 320, 320, true);
 			tabla.setStringColumn(COL_DEUDA, "Deuda", 100, 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
@@ -224,7 +224,7 @@ public class JDialogInformeClientesMorosos extends JDialog {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -234,11 +234,11 @@ public class JDialogInformeClientesMorosos extends JDialog {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JDialogInformeClientesMorosos.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogInformeClientesMorosos.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 	
@@ -257,14 +257,14 @@ public class JDialogInformeClientesMorosos extends JDialog {
 	
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaClientes().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaClientes().getTabla();
+						FWJTable tabla = getPanelTablaClientes().getTabla();
 						mostrarFileChooser(getTipoInforme()==ETipoInformeDeuda.CLIENTE?"Informe de clientes con deuda":"Informe de deudas con proveedores", EXTENSION_EXCEL);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -296,7 +296,7 @@ public class JDialogInformeClientesMorosos extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaClientes().getTabla().getRowCount() > 0) {
 						mostrarFileChooser(getTipoInforme()==ETipoInformeDeuda.CLIENTE?"Informe de clientes con deuda":"Informe de deudas con proveedores", EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -305,7 +305,7 @@ public class JDialogInformeClientesMorosos extends JDialog {
 								JasperHelper.exportarAPDF(getPrint(), archivoIngresado.getAbsolutePath());
 							} catch (JRException e1) {
 								e1.printStackTrace();
-								CLJOptionPane.showErrorMessage(JDialogInformeClientesMorosos.this, "Se ha producido un error al expoertar", "Error");
+								FWJOptionPane.showErrorMessage(JDialogInformeClientesMorosos.this, "Se ha producido un error al expoertar", "Error");
 							}
 						}
 					}
@@ -320,13 +320,13 @@ public class JDialogInformeClientesMorosos extends JDialog {
 			JasperHelper.imprimirReporte(getPrint(), true, false, 1);
 		} catch (JRException e1) {
 			e1.printStackTrace();
-			CLJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
+			FWJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
 		}
 	}
 
-	public CLJTextField getTxtTotalDeuda() {
+	public FWJTextField getTxtTotalDeuda() {
 		if(txtTotalDeuda == null){
-			txtTotalDeuda = new CLJTextField();
+			txtTotalDeuda = new FWJTextField();
 			txtTotalDeuda.setEditable(false);
 			txtTotalDeuda.setPreferredSize(new Dimension(120, 20));
 			if(getTotalDeuda()!=null){

@@ -2,7 +2,7 @@ package ar.com.textillevel.entidades.documentos.recibo.to;
 
 import java.io.Serializable;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.util.Utils;

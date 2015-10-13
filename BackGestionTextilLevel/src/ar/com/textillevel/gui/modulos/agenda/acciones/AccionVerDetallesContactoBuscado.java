@@ -1,8 +1,8 @@
 package ar.com.textillevel.gui.modulos.agenda.acciones;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.gente.IAgendable;
 import ar.com.textillevel.gui.modulos.agenda.gui.JDialogDetalleContacto;
 
@@ -22,7 +22,7 @@ public class AccionVerDetallesContactoBuscado extends Accion<IAgendable> {
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<IAgendable> e) throws CLException {
+	public boolean ejecutar(AccionEvent<IAgendable> e) throws FWException {
 		new JDialogDetalleContacto(e.getSelectedElements().get(0),e.getSource().getFrame());
 		return true;
 	}

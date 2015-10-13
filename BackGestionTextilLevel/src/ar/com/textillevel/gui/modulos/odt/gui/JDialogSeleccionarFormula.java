@@ -16,9 +16,9 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
@@ -131,7 +131,7 @@ public class JDialogSeleccionarFormula extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					FormulaTenidoCliente formulaSeleccionada = getPanelFormulas().getFormulaElegida();
 					if (formulaSeleccionada == null) {
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarFormula.this, "Debe elegir una formula.", "Error");
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarFormula.this, "Debe elegir una formula.", "Error");
 						return;
 					}
 
@@ -150,11 +150,11 @@ public class JDialogSeleccionarFormula extends JDialog {
 					} else {
 						//si se crearon fórmulas entonces las grabo
 						List<FormulaCliente> formulasGrabadas = null;
-						boolean grabarTambienComoDefault = existeUnaTransient && CLJOptionPane.showQuestionMessage(JDialogSeleccionarFormula.this, StringW.wordWrap("¿Desea que la(s) fórmula(s) agregada(s) también se asocie(n) al cliente default?"), "Confirmación") == CLJOptionPane.YES_OPTION;
+						boolean grabarTambienComoDefault = existeUnaTransient && FWJOptionPane.showQuestionMessage(JDialogSeleccionarFormula.this, StringW.wordWrap("¿Desea que la(s) fórmula(s) agregada(s) también se asocie(n) al cliente default?"), "Confirmación") == FWJOptionPane.YES_OPTION;
 						try {
 							formulasGrabadas = getFormulaFacade().saveFormulas(persisterFormulaHandler.getFormulasToSave(), persisterFormulaHandler.getIdsFormulasToBorrar(), grabarTambienComoDefault, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 						} catch (ValidacionException e1) {
-							CLJOptionPane.showErrorMessage(JDialogSeleccionarFormula.this, StringW.wordWrap(e1.getMensajeError()), "Error");
+							FWJOptionPane.showErrorMessage(JDialogSeleccionarFormula.this, StringW.wordWrap(e1.getMensajeError()), "Error");
 							return;
 						}
 						

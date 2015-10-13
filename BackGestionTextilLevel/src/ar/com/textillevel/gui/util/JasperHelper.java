@@ -30,14 +30,14 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import ar.clarin.fwjava.AnchorTrick;
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.boss.ElementoListado;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.jasper.JasperWrapperProperties;
+import ar.com.fwcommon.AnchorTrick;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.boss.ElementoListado;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.jasper.JasperWrapperProperties;
 
 public class JasperHelper {
 
@@ -101,7 +101,7 @@ public class JasperHelper {
 				JasperPrintManager.printReport(reporte, conDialogoImpresion && i==0);
 				ret++;
 				if (esperarPorCopia && (i+1)<copias) {
-					if (CLJOptionPane.showQuestionMessage(null, "Continuar?", "Impresión") == CLJOptionPane.NO_OPTION) {
+					if (FWJOptionPane.showQuestionMessage(null, "Continuar?", "Impresión") == FWJOptionPane.NO_OPTION) {
 						break;
 					}
 				}
@@ -109,7 +109,7 @@ public class JasperHelper {
 		}catch (JRException je) {
 			if (je.getCause() != null && je.getCause().getMessage().equals("Printer is not accepting job.")) {
 				//throw new CLException(BossError.ERR_CONEXION, "No se puede imprimir", "La Impresora no responde o no esta accesible", je.getCause(), new String[] {"Verifique el estado de la impresora"});
-				CLJOptionPane.showErrorMessage(null, "No se puede imprimir, la impresora no responde o no esta disponible. Por favor, verifique el estado", "Error");
+				FWJOptionPane.showErrorMessage(null, "No se puede imprimir, la impresora no responde o no esta disponible. Por favor, verifique el estado", "Error");
 			} else {
 				//CLJOptionPane.showErrorMessage(null, "No se puede imprimir debido a que no se ha detectado una impresora.", "Error");
 				//throw new CLException(BossError.ERR_CONEXION, "No se puede imprimir", "La Impresora no responde o no esta accesible", je.getCause(), null);
@@ -126,28 +126,28 @@ public class JasperHelper {
 		return jasperPrint;
 	}
 	
-	public static void imprimirListado(CLJTable tabla, String titulo, String subtitulo, String filtros, boolean confirmacion) {
+	public static void imprimirListado(FWJTable tabla, String titulo, String subtitulo, String filtros, boolean confirmacion) {
 		if( tabla.getRowCount()>0) {
 			imprimirReporte(getPropiedadesImpresionListado(titulo, subtitulo,filtros, getData(tabla), tabla.getWidth() > ANCHO_P), confirmacion, titulo, new Dimension(810, 630), confirmacion);
 		}
 	}
 	
-	public static void listadoAPDF(CLJTable tabla, String titulo, String subtitulo, String filtros, boolean confirmacion,String path) {
+	public static void listadoAPDF(FWJTable tabla, String titulo, String subtitulo, String filtros, boolean confirmacion,String path) {
 		if( tabla.getRowCount()>0) {
 			try {
 				exportarAPDF(generarReporte(getPropiedadesImpresionListado(titulo, subtitulo,filtros, getData(tabla), tabla.getWidth() > ANCHO_P)),path);
 			} catch (JRException e) {
-				BossError.gestionarError(new CLException("No se pudo convertir a PDF"));
+				BossError.gestionarError(new FWException("No se pudo convertir a PDF"));
 			}
 		}
 	}
 	
-	public static JasperPrint generarJasperPrint(CLJTable tabla, String titulo, String subtitulo, String filtros) {
+	public static JasperPrint generarJasperPrint(FWJTable tabla, String titulo, String subtitulo, String filtros) {
 		if(tabla.getRowCount()>0) {
 			try {
 				return generarReporte(getPropiedadesImpresionListado(titulo, subtitulo,filtros, getData(tabla), tabla.getWidth() > ANCHO_P));
 			} catch (JRException e) {
-				BossError.gestionarError(new CLException("No se pudo convertir a PDF"));
+				BossError.gestionarError(new FWException("No se pudo convertir a PDF"));
 			}
 		}
 		return null;
@@ -157,7 +157,7 @@ public class JasperHelper {
 		try {
 			JasperPrint jasperPrint = generarReporte(properties);
 			imprimirComprobante(jasperPrint, true);
-		}catch (CLException e) {
+		}catch (FWException e) {
 			BossError.gestionarError(e);
 		}
 		catch (JRException e) {
@@ -165,19 +165,19 @@ public class JasperHelper {
 			if (e.getCause() != null && e.getCause() instanceof InvalidClassException) {
 				tipoDeError = BossError.ERR_APLICACION ;
 			}
-			BossError.gestionarError(new CLException(tipoDeError, "No se pudo imprimir el comprobante", "Error al generar el Reporte", e, new String[] {}));
+			BossError.gestionarError(new FWException(tipoDeError, "No se pudo imprimir el comprobante", "Error al generar el Reporte", e, new String[] {}));
 		}
 	}
 	
-	public static void imprimirComprobante(JasperPrint jasperPrint, boolean confirmacion) throws CLException {
+	public static void imprimirComprobante(JasperPrint jasperPrint, boolean confirmacion) throws FWException {
 		try {
 			JasperPrintManager.printReport(jasperPrint, confirmacion);
 		} catch (JRException je) {
 			if (je.getCause() != null && je.getCause().getMessage().equals("Printer is not accepting job.")) {
 				//throw new CLException(BossError.ERR_CONEXION, "No se puede imprimir", "La Impresora no responde o no esta accesible", je.getCause(), new String[] {"Verifique el estado de la impresora"});
-				CLJOptionPane.showErrorMessage(null, "No se puede imprimir, la impresora no responde o no esta disponible. Por favor, verifique el estado", "Error");
+				FWJOptionPane.showErrorMessage(null, "No se puede imprimir, la impresora no responde o no esta disponible. Por favor, verifique el estado", "Error");
 			} else {
-				CLJOptionPane.showErrorMessage(null, "No se puede imprimir debido a que no se ha detectado una impresora.", "Error");
+				FWJOptionPane.showErrorMessage(null, "No se puede imprimir debido a que no se ha detectado una impresora.", "Error");
 				//throw new CLException(BossError.ERR_CONEXION, "No se puede imprimir", "La Impresora no responde o no esta accesible", je.getCause(), null);
 			}
 		}
@@ -196,15 +196,15 @@ public class JasperHelper {
 		
 		properties.setParameters(parameters);
 		if(landscape) {
-			properties.setXmlReport("ar/clarin/fwjava/impresion/listadoTablaHorizontal.jasper");
+			properties.setXmlReport("ar/com/fwcommon/impresion/listadoTablaHorizontal.jasper");
 		} else {
-			properties.setXmlReport("ar/clarin/fwjava/impresion/listadoTablaVertical.jasper");
+			properties.setXmlReport("ar/com/fwcommon/impresion/listadoTablaVertical.jasper");
 		}
 		properties.setData(data);
 		return properties;
 	}
 	
-	private static List<ElementoListado> getData(CLJTable tabla) {
+	private static List<ElementoListado> getData(FWJTable tabla) {
 		tabla.clearSelection();
 
 		int anchoTabla = tabla.getWidth();

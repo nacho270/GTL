@@ -24,15 +24,15 @@ import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.to.ivaventas.DescripcionFacturaIVAVentasTO;
 import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
 import ar.com.textillevel.entidades.to.ivaventas.TotalesIVAVentasTO;
@@ -66,20 +66,20 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 	private JPanel panelTotales;
 
 	/* TOTALES RESP INSC */
-	private CLJTextField txtTotalNetoGravadoRI;
-	private CLJTextField txtTotalIvaRI;
-	private CLJTextField txtTotalPercepcionRI;
-	private CLJTextField txtTotalExentoRI;
-	private CLJTextField txtTotalNoGravadoRI;
-	private CLJTextField txtTotalRI;
+	private FWJTextField txtTotalNetoGravadoRI;
+	private FWJTextField txtTotalIvaRI;
+	private FWJTextField txtTotalPercepcionRI;
+	private FWJTextField txtTotalExentoRI;
+	private FWJTextField txtTotalNoGravadoRI;
+	private FWJTextField txtTotalRI;
 
 	/* TOTALES GRAL */
-	private CLJTextField txtTotalNetoGravadoGral;
-	private CLJTextField txtTotalIvaGral;
-	private CLJTextField txtTotalPercepcionGral;
-	private CLJTextField txtTotalExentoGral;
-	private CLJTextField txtTotalNoGravadoGral;
-	private CLJTextField txtTotalGral;
+	private FWJTextField txtTotalNetoGravadoGral;
+	private FWJTextField txtTotalIvaGral;
+	private FWJTextField txtTotalPercepcionGral;
+	private FWJTextField txtTotalExentoGral;
+	private FWJTextField txtTotalNoGravadoGral;
+	private FWJTextField txtTotalGral;
 
 	public JDialogReporteIVAVentasPreview(Frame padre, IVAVentasTO reporte, Date fechaDesde, Date fechaHasta) {
 		super(padre);
@@ -183,8 +183,8 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TBL_FACTS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_FACTS);
 			tabla.setStringColumn(COL_FECHA, "Fecha comp", 60, 60, true);
 			tabla.setStringColumn(COL_TIPO_CTE, "Tipo cte", 60, 60, true);
 			tabla.setStringColumn(COL_NRO_CTE, "Número cte", 120, 100, true);
@@ -238,7 +238,7 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 			JasperHelper.imprimirReporte(getPrint(), true, false, 1);
 		} catch (JRException e1) {
 			e1.printStackTrace();
-			CLJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
+			FWJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
 		}
 	}
 
@@ -356,97 +356,97 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 		return panelTotales;
 	}
 
-	private CLJTextField getTxtTotalNetoGravadoRI() {
+	private FWJTextField getTxtTotalNetoGravadoRI() {
 		if (txtTotalNetoGravadoRI == null) {
-			txtTotalNetoGravadoRI = new CLJTextField();
+			txtTotalNetoGravadoRI = new FWJTextField();
 			txtTotalNetoGravadoRI.setEditable(false);
 		}
 		return txtTotalNetoGravadoRI;
 	}
 
-	private CLJTextField getTxtTotalIvaRI() {
+	private FWJTextField getTxtTotalIvaRI() {
 		if (txtTotalIvaRI == null) {
-			txtTotalIvaRI = new CLJTextField();
+			txtTotalIvaRI = new FWJTextField();
 			txtTotalIvaRI.setEditable(false);
 		}
 		return txtTotalIvaRI;
 	}
 
-	private CLJTextField getTxtTotalPercepcionRI() {
+	private FWJTextField getTxtTotalPercepcionRI() {
 		if (txtTotalPercepcionRI == null) {
-			txtTotalPercepcionRI = new CLJTextField();
+			txtTotalPercepcionRI = new FWJTextField();
 			txtTotalPercepcionRI.setEditable(false);
 		}
 		return txtTotalPercepcionRI;
 	}
 
-	private CLJTextField getTxtTotalExentoRI() {
+	private FWJTextField getTxtTotalExentoRI() {
 		if (txtTotalExentoRI == null) {
-			txtTotalExentoRI = new CLJTextField();
+			txtTotalExentoRI = new FWJTextField();
 			txtTotalExentoRI.setEditable(false);
 		}
 		return txtTotalExentoRI;
 	}
 
-	private CLJTextField getTxtTotalNoGravadoRI() {
+	private FWJTextField getTxtTotalNoGravadoRI() {
 		if (txtTotalNoGravadoRI == null) {
-			txtTotalNoGravadoRI = new CLJTextField();
+			txtTotalNoGravadoRI = new FWJTextField();
 			txtTotalNoGravadoRI.setEditable(false);
 		}
 		return txtTotalNoGravadoRI;
 	}
 
-	private CLJTextField getTxtTotalRI() {
+	private FWJTextField getTxtTotalRI() {
 		if (txtTotalRI == null) {
-			txtTotalRI = new CLJTextField();
+			txtTotalRI = new FWJTextField();
 			txtTotalRI.setEditable(false);
 		}
 		return txtTotalRI;
 	}
 
-	private CLJTextField getTxtTotalNetoGravadoGral() {
+	private FWJTextField getTxtTotalNetoGravadoGral() {
 		if (txtTotalNetoGravadoGral == null) {
-			txtTotalNetoGravadoGral = new CLJTextField();
+			txtTotalNetoGravadoGral = new FWJTextField();
 			txtTotalNetoGravadoGral.setEditable(false);
 		}
 		return txtTotalNetoGravadoGral;
 	}
 
-	private CLJTextField getTxtTotalIvaGral() {
+	private FWJTextField getTxtTotalIvaGral() {
 		if (txtTotalIvaGral == null) {
-			txtTotalIvaGral = new CLJTextField();
+			txtTotalIvaGral = new FWJTextField();
 			txtTotalIvaGral.setEditable(false);
 		}
 		return txtTotalIvaGral;
 	}
 
-	private CLJTextField getTxtTotalPercepcionGral() {
+	private FWJTextField getTxtTotalPercepcionGral() {
 		if (txtTotalPercepcionGral == null) {
-			txtTotalPercepcionGral = new CLJTextField();
+			txtTotalPercepcionGral = new FWJTextField();
 			txtTotalPercepcionGral.setEditable(false);
 		}
 		return txtTotalPercepcionGral;
 	}
 
-	private CLJTextField getTxtTotalExentoGral() {
+	private FWJTextField getTxtTotalExentoGral() {
 		if (txtTotalExentoGral == null) {
-			txtTotalExentoGral = new CLJTextField();
+			txtTotalExentoGral = new FWJTextField();
 			txtTotalExentoGral.setEditable(false);
 		}
 		return txtTotalExentoGral;
 	}
 
-	private CLJTextField getTxtTotalNoGravadoGral() {
+	private FWJTextField getTxtTotalNoGravadoGral() {
 		if (txtTotalNoGravadoGral == null) {
-			txtTotalNoGravadoGral = new CLJTextField();
+			txtTotalNoGravadoGral = new FWJTextField();
 			txtTotalNoGravadoGral.setEditable(false);
 		}
 		return txtTotalNoGravadoGral;
 	}
 
-	private CLJTextField getTxtTotalGral() {
+	private FWJTextField getTxtTotalGral() {
 		if (txtTotalGral == null) {
-			txtTotalGral = new CLJTextField();
+			txtTotalGral = new FWJTextField();
 			txtTotalGral.setEditable(false);
 		}
 		return txtTotalGral;
@@ -454,14 +454,14 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTabla().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTabla().getTabla();
+						FWJTable tabla = getPanelTabla().getTabla();
 						mostrarFileChooser("Reporte IVA Ventas", EXTENSION_EXCEL);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -512,7 +512,7 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTabla().getTabla().getRowCount() > 0) {
 						mostrarFileChooser("Reporte IVA Ventas", EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -526,7 +526,7 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 								JasperHelper.exportarAPDF(getPrint(), archivoIngresado.getAbsolutePath());
 							} catch (JRException e1) {
 								e1.printStackTrace();
-								CLJOptionPane.showErrorMessage(JDialogReporteIVAVentasPreview.this, "Se ha producido un error al exportar", "Error");
+								FWJOptionPane.showErrorMessage(JDialogReporteIVAVentasPreview.this, "Se ha producido un error al exportar", "Error");
 							}
 						}
 					}
@@ -559,7 +559,7 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -569,11 +569,11 @@ public class JDialogReporteIVAVentasPreview extends JDialog {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JDialogReporteIVAVentasPreview.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogReporteIVAVentasPreview.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 

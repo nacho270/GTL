@@ -5,8 +5,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.entidades.Vigencia;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.entidades.Vigencia;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.facade.api.remote.QuincenaFacadeRemote;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.cabecera.ModeloCabeceraReciboSueldo;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.exception.InvalidStateReciboSueldoException;

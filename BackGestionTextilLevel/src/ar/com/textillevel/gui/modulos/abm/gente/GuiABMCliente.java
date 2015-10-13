@@ -28,17 +28,17 @@ import javax.swing.text.MaskFormatter;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -72,17 +72,17 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 	private PanDatosTelefono panTelefonoFijo;
 	private PanDatosTelefono panCelular;
 	private PanDatosTelefono panFax;
-	private CLJTextField txtRazonSocial;
-	private CLJTextField txtContacto;
-	private CLJTextField txtEmail;
+	private FWJTextField txtRazonSocial;
+	private FWJTextField txtContacto;
+	private FWJTextField txtEmail;
 	private JComboBox cmbPosicionIva;
 	private JComboBox cmbCondicionVenta;
-	private CLJTextField txtSkype;
+	private FWJTextField txtSkype;
 	private JFormattedTextField txtCUIT;
-	private CLJNumericTextField txtNroCliente;
+	private FWJNumericTextField txtNroCliente;
 	private PanDatosDireccion panDatosDireccionFiscal;
 	private PanDatosDireccion panDatosDireccionReal;
-	private CLJTextArea txtObservaciones;
+	private FWJTextArea txtObservaciones;
 	private Cliente clienteActual;
 	private List<InfoLocalidad> infoLocalidadList;
 	private ClienteFacadeRemote clienteFacadeRemote;
@@ -132,9 +132,9 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 		return cmbPosicionIva;
 	}
 
-	private CLJNumericTextField getTxtNroCliente() {
+	private FWJNumericTextField getTxtNroCliente() {
 		if(txtNroCliente == null) {
-			txtNroCliente = new CLJNumericTextField();
+			txtNroCliente = new FWJNumericTextField();
 		}
 		return txtNroCliente;
 	}
@@ -207,11 +207,11 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int arg0) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMCliente.this, "¿Está seguro que desea eliminar el cliente seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMCliente.this, "¿Está seguro que desea eliminar el cliente seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				try{
 					getClienteFacade().remove(getClienteActual());
 					itemSelectorSeleccionado(-1);
-				}catch(CLRuntimeException cle){
+				}catch(FWRuntimeException cle){
 					BossError.gestionarError(cle);
 				}
 			}
@@ -224,12 +224,12 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 			capturarSetearDatos();
 			try {
 				Cliente clienteRefresh = getClienteFacade().save(getClienteActual());
-				CLJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
+				FWJOptionPane.showInformationMessage(this, "Los datos del cliente se han guardado con éxito", "Administrar Clientes");
 				clienteList = getClienteFacade().getAllOrderByName();
 				lista.setSelectedValue(clienteRefresh, true);
 				return true;
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(e.getMensajeError()), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(e.getMensajeError()), "Error");
 				getTxtCUIT().requestFocus();
 			}
 		}
@@ -258,64 +258,64 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 		if(valTxtNroCliente != null) {
 			boolean existeNroCliente = getClienteFacade().existeNroCliente(getClienteActual().getId(), valTxtNroCliente);
 			if(existeNroCliente) {
-				CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap("El número de cliente " + valTxtNroCliente + " ya está asignado a otro cliente."), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap("El número de cliente " + valTxtNroCliente + " ya está asignado a otro cliente."), "Error");
 				getTxtNroCliente().requestFocus();
 				return false;
 			}
 		}
 		String textoRazonSocial = getTxtRazonSocial().getText().trim();
 		if(StringUtil.isNullOrEmpty(textoRazonSocial)) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
 			getTxtRazonSocial().requestFocus();
 			return false;
 		}
 		if(getTxtCUIT().getText().trim().length() < 13) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.","Advertencia");
 			getTxtCUIT().requestFocus();
 			return false;
 		}
 		if(getCmbPosicionIva().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.","Advertencia");
 			return false;
 		}
 		
 		if(getCmbCondicionVenta().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE VENTA'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE VENTA'.","Advertencia");
 			return false;
 		}
 		
 		if(StringUtil.isNullOrEmpty(getPanCelular().getDatos()) &&  StringUtil.isNullOrEmpty(getPanTelefonoFijo().getDatos()) && StringUtil.isNullOrEmpty(getPanFax().getDatos())){
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, "Debe ingresar al menos un teléfono", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, "Debe ingresar al menos un teléfono", "Advertencia");
 			return false;
 		}
 		String textoErrorDirFiscal = getPanDatosDireccionFiscal().validar();
 		if(textoErrorDirFiscal != null) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
 			return false;
 		}
 		String textoErrorDirReal = getPanDatosDireccionReal().validar();
 		if(textoErrorDirReal != null) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
 			return false;
 		}
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if(textoErrorTelefono != null) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
 			return false;
 		}
 		String textoErrorCelular = getPanCelular().validar();
 		if(textoErrorCelular != null) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorCelular), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorCelular), "Advertencia");
 			return false;
 		}
 		String textoErrorFax = getPanFax().validar();
 		if(textoErrorFax != null) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorFax), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, StringW.wordWrap(textoErrorFax), "Advertencia");
 			return false;
 		}
 		String strMail = getTxtEmail().getText();
 		if(!StringUtil.isNullOrEmpty(strMail) && !EmailValidator.getInstance().isValid(strMail.trim())) {
-			CLJOptionPane.showErrorMessage(GuiABMCliente.this, "El EMAIL ingresado no es válido", "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMCliente.this, "El EMAIL ingresado no es válido", "Advertencia");
 			getTxtEmail().requestFocus();
 			return false;
 		}
@@ -329,7 +329,7 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 			getTxtNroCliente().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
 			return false;
 		}
 	}
@@ -417,17 +417,17 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 		return gbc;
 	}
 
-	private CLJTextField getTxtContacto() {
+	private FWJTextField getTxtContacto() {
 		if(txtContacto == null) {
-			txtContacto = new CLJTextField(MAX_LONGITUD_CONTACTO);
+			txtContacto = new FWJTextField(MAX_LONGITUD_CONTACTO);
 			txtContacto.setPreferredSize(new Dimension(150, 20));
 		}
 		return txtContacto;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if(txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 		}
 		return txtRazonSocial;
 	}
@@ -540,9 +540,9 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 		return txtCUIT;
 	}
 
-	private CLJTextArea getTxtObservaciones() {
+	private FWJTextArea getTxtObservaciones() {
 		if(txtObservaciones == null) {
-			txtObservaciones = new CLJTextArea(MAX_LONGITUD_OBSERVACIONES);
+			txtObservaciones = new FWJTextArea(MAX_LONGITUD_OBSERVACIONES);
 			txtObservaciones.setPreferredSize(new Dimension(510, 50));
 			txtObservaciones.setLineWrap(true);
 			txtObservaciones.setBorder(BorderFactory.createLineBorder(Color.BLUE.darker()));
@@ -639,17 +639,17 @@ public class GuiABMCliente extends GuiABMListaTemplate {
 		return infoLocalidadList;
 	}
 
-	private CLJTextField getTxtEmail() {
+	private FWJTextField getTxtEmail() {
 		if(txtEmail == null) {
-			txtEmail = new CLJTextField(MAX_LONGITUD_EMAIL);
+			txtEmail = new FWJTextField(MAX_LONGITUD_EMAIL);
 			txtEmail.setPreferredSize(new Dimension(240, 20));			
 		}
 		return txtEmail;
 	}
 
-	private CLJTextField getTxtSkype() {
+	private FWJTextField getTxtSkype() {
 		if(txtSkype == null) {
-			txtSkype = new CLJTextField(MAX_LONGITUD_SKYPE);
+			txtSkype = new FWJTextField(MAX_LONGITUD_SKYPE);
 			txtSkype.setPreferredSize(new Dimension(240, 20));
 		}
 		return txtSkype;

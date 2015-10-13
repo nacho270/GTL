@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.RelacionContenedorPrecioMatPrimaDAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ContenedorMateriaPrima;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RelacionContenedorPrecioMatPrima;

@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.to.DatosVencimientoContratoEmpleadoTO;
 
 public class JDialogContratosPorVencer extends JDialog {
@@ -64,8 +64,8 @@ public class JDialogContratosPorVencer extends JDialog {
 		private static final int COL_OBJ = 2;
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_NOMBRE_APELLIDO, "Nombre y apellido", 250, 250, true);
 			tabla.setDateColumn(COL_FECHA_VENCIMIENTO, "Vencimiento", 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);

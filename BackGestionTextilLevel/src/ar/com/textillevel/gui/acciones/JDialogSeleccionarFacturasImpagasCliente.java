@@ -16,8 +16,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -29,7 +29,7 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
-	private CLCheckBoxList<Factura> checkBoxList;
+	private FWCheckBoxList<Factura> checkBoxList;
 	private boolean acepto;
 	private List<Factura> facturaSelectedList;
 	private List<Factura> allFacturaList;
@@ -124,7 +124,7 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 
 				private boolean validar() {
 					if (getClCheckBoxList().getSelectedValues().length == 0) {
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarFacturasImpagasCliente.this, "Debe seleccionar al menos una factura.", JDialogSeleccionarFacturasImpagasCliente.this
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarFacturasImpagasCliente.this, "Debe seleccionar al menos una factura.", JDialogSeleccionarFacturasImpagasCliente.this
 								.getTitle());
 						return false;
 					}
@@ -148,9 +148,9 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 		return btnCancelar;
 	}
 
-	private CLCheckBoxList<Factura> getClCheckBoxList() {
+	private FWCheckBoxList<Factura> getClCheckBoxList() {
 		if (checkBoxList == null) {
-			checkBoxList = new CLCheckBoxList<Factura>() {
+			checkBoxList = new FWCheckBoxList<Factura>() {
 
 				private static final long serialVersionUID = -8028977693425752374L;
 

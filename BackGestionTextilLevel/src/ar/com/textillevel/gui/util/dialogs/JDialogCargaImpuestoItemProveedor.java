@@ -18,10 +18,10 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.gente.Provincia;
@@ -40,8 +40,8 @@ public class JDialogCargaImpuestoItemProveedor extends JDialog{
 	private JButton btnCancelar;
 	
 	
-	private CLJTextField txtNombreImpuesto;
-	private CLJTextField txtPorcentaje;
+	private FWJTextField txtNombreImpuesto;
+	private FWJTextField txtPorcentaje;
 	private JComboBox cmbTipoImpuesto;
 	private JCheckBox chkAplicaEnProvincia;
 	private JComboBox cmbProvincia;
@@ -131,7 +131,7 @@ public class JDialogCargaImpuestoItemProveedor extends JDialog{
 								impuesto.setProvincia((Provincia)getCmbProvincia().getSelectedItem());
 							}
 							impuestoItemProveedor = impuestoItemProveedorFacade.save(impuesto);
-							CLJOptionPane.showInformationMessage(JDialogCargaImpuestoItemProveedor.this, "Los datos se han guardado correctamente", JDialogCargaImpuestoItemProveedor.this.getTitle());
+							FWJOptionPane.showInformationMessage(JDialogCargaImpuestoItemProveedor.this, "Los datos se han guardado correctamente", JDialogCargaImpuestoItemProveedor.this.getTitle());
 							dispose();
 						}
 					}catch(RuntimeException re){
@@ -141,33 +141,33 @@ public class JDialogCargaImpuestoItemProveedor extends JDialog{
 
 				private boolean validar() {
 					if(getTxtNombreImpuesto().getText().trim().length() == 0){
-						CLJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe ingresar el nombre del impuesto", JDialogCargaImpuestoItemProveedor.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe ingresar el nombre del impuesto", JDialogCargaImpuestoItemProveedor.this.getTitle());
 						getTxtNombreImpuesto().requestFocus();
 						return false;
 					}
 					String porc = getTxtPorcentaje().getText().trim();
 					if(porc.length() == 0){
 						getTxtPorcentaje().requestFocus();
-						CLJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe ingresar el porcentaje del impuesto", JDialogCargaImpuestoItemProveedor.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe ingresar el porcentaje del impuesto", JDialogCargaImpuestoItemProveedor.this.getTitle());
 						return false;
 					}
 					if(!GenericUtils.esNumerico(porc)) {
 						getTxtPorcentaje().requestFocus();
-						CLJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "El porcentaje debe ser numérico", JDialogCargaImpuestoItemProveedor.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "El porcentaje debe ser numérico", JDialogCargaImpuestoItemProveedor.this.getTitle());
 						return false;
 					}
 					if(getCmbTipoImpuesto().getSelectedIndex() == -1) {
-						CLJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe seleccionar el tipo de impuesto.", JDialogCargaImpuestoItemProveedor.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe seleccionar el tipo de impuesto.", JDialogCargaImpuestoItemProveedor.this.getTitle());
 						return false;
 					}
 					if(((ETipoImpuesto)getCmbTipoImpuesto().getSelectedItem()) == ETipoImpuesto.INGRESOS_BRUTOS && getCmbProvincia().getSelectedItem() == null) {
-						CLJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe seleccionar la provincia.", JDialogCargaImpuestoItemProveedor.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, "Debe seleccionar la provincia.", JDialogCargaImpuestoItemProveedor.this.getTitle());
 						return false;
 					}
 					Double porcDescuento = Double.valueOf(getTxtPorcentaje().getText().trim().replace(',', '.'));
 					Provincia selectedItemProvincia = (Provincia)getCmbProvincia().getSelectedItem();
 					if(impuestoItemProveedorFacade.existsOtroImpuestoWithParams(null, porcDescuento, (ETipoImpuesto)getCmbTipoImpuesto().getSelectedItem(),selectedItemProvincia)) {
-						CLJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, StringW.wordWrap("Ya existe otro impuesto con el mismo porcentaje de descuento"+(selectedItemProvincia!=null?", tipo de impuesto y provincia.":" y tipo de impuesto.")), JDialogCargaImpuestoItemProveedor.this.getTitle());
+						FWJOptionPane.showErrorMessage(JDialogCargaImpuestoItemProveedor.this, StringW.wordWrap("Ya existe otro impuesto con el mismo porcentaje de descuento"+(selectedItemProvincia!=null?", tipo de impuesto y provincia.":" y tipo de impuesto.")), JDialogCargaImpuestoItemProveedor.this.getTitle());
 						return false;
 					}
 					
@@ -190,16 +190,16 @@ public class JDialogCargaImpuestoItemProveedor extends JDialog{
 		return btnCancelar;
 	}
 
-	private CLJTextField getTxtNombreImpuesto() {
+	private FWJTextField getTxtNombreImpuesto() {
 		if(txtNombreImpuesto == null){
-			txtNombreImpuesto = new CLJTextField();
+			txtNombreImpuesto = new FWJTextField();
 		}
 		return txtNombreImpuesto;
 	}
 
-	private CLJTextField getTxtPorcentaje() {
+	private FWJTextField getTxtPorcentaje() {
 		if(txtPorcentaje == null){
-			txtPorcentaje = new CLJTextField();
+			txtPorcentaje = new FWJTextField();
 		}
 		return txtPorcentaje;
 	}

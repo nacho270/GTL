@@ -19,9 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.Apercibimiento;
@@ -143,7 +143,7 @@ public class JDialogApercibimiento extends JDialog {
 				Apercibimiento apercSaved = getSancionFacade().ingresarApercibimiento(getApercibimiento(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				setApercibimiento(apercSaved);
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(JDialogApercibimiento.this, e.getMensajeError(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogApercibimiento.this, e.getMensajeError(), "Error");
 				setApercibimiento(null);
 				setAcepto(false);
 				dispose();
@@ -163,13 +163,13 @@ public class JDialogApercibimiento extends JDialog {
 
 	private boolean validar() {
 		if(getTxtMotivo().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el motivo", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el motivo", "Error");
 			getTxtMotivo().requestFocus();
 			return false;
 		}
 
 		if(getFechaApercibimiento().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha", "Error");
 			getFechaApercibimiento().requestFocus();
 			return false;
 		}

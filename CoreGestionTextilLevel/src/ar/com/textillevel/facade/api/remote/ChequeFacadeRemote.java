@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
@@ -22,7 +22,7 @@ public interface ChequeFacadeRemote {
 	public List<Cheque> getChequesPorFechaYPaginado(String numeracionCheque, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha);
 	public List<Cheque> getChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha);
 	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha);
-	public Cheque grabarCheque(Cheque cheque, String usuario) throws CLException;
+	public Cheque grabarCheque(Cheque cheque, String usuario) throws FWException;
 	public Cheque getChequeByNumero(String nroCheque);
 	public Integer getUltimoNumeroInternoCheque(Character letra);
 	public List<Cheque> getChequesByCliente(Integer idCliente, EEstadoCheque estadoCheque);

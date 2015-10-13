@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
@@ -102,7 +102,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 			if(rangoAnchoComun != null) {
 				PrecioTipoArticulo pta = rangoAnchoComun.getPrecioArticulo(getTipoArticulo());
 				if(pta != null && (elemSiendoEditado == null  || elemSiendoEditado != pta)) {
-					CLJOptionPane.showErrorMessage(this, "Ya existe un precio para ese tipo de artículo.", "Error");
+					FWJOptionPane.showErrorMessage(this, "Ya existe un precio para ese tipo de artículo.", "Error");
 					getTxtPrecio().requestFocus();
 					return false;
 				}

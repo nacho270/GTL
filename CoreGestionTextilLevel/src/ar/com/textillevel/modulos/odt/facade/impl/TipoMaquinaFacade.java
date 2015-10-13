@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.modulos.odt.dao.api.local.TipoMaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;

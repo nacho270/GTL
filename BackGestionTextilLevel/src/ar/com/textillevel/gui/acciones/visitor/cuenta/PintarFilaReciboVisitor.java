@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebePersona;
@@ -19,7 +19,7 @@ import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 
 public class PintarFilaReciboVisitor implements IFilaMovimientoVisitor {
 
-	private CLJTable tabla;
+	private FWJTable tabla;
 	private Map<Integer, Color> mapaColores;
 	private Integer filaActual;
 	private CellRenderer renderer;
@@ -27,13 +27,13 @@ public class PintarFilaReciboVisitor implements IFilaMovimientoVisitor {
 	private boolean segundaPasada;
 	private static final String CHAR_MARKER_PAGO = "X";
 	
-	public PintarFilaReciboVisitor(CLJTable tabla, Map<Integer, Color> mapaColores, CellRenderer renderer) {
+	public PintarFilaReciboVisitor(FWJTable tabla, Map<Integer, Color> mapaColores, CellRenderer renderer) {
 		this.tabla = tabla;
 		this.mapaColores = mapaColores;
 		this.renderer = renderer;
 	}
 
-	public PintarFilaReciboVisitor(CLJTable tabla, Map<Integer, Color> mapaColores, CellRenderer cellRenderer, InfoCuentaTO infoCuentaTO) {
+	public PintarFilaReciboVisitor(FWJTable tabla, Map<Integer, Color> mapaColores, CellRenderer cellRenderer, InfoCuentaTO infoCuentaTO) {
 		this(tabla, mapaColores, cellRenderer);
 		this.infoCuentaTO = infoCuentaTO;
 		this.segundaPasada = true;
@@ -83,11 +83,11 @@ public class PintarFilaReciboVisitor implements IFilaMovimientoVisitor {
 		}
 	}
 
-	public CLJTable getTabla() {
+	public FWJTable getTabla() {
 		return tabla;
 	}
 
-	public void setTabla(CLJTable tabla) {
+	public void setTabla(FWJTable tabla) {
 		this.tabla = tabla;
 	}
 

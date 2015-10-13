@@ -1,9 +1,9 @@
 package ar.com.textillevel.gui.modulos.stock.acciones;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.gui.modulos.stock.model.ModuloStockTelasFisicasModel;
 
@@ -18,8 +18,8 @@ public class AccionBorrarPiezasEnMemoria extends Accion<ItemMateriaPrimaTO> {
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws CLException {
-		if(CLJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea eliminar las piezas en memoria?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws FWException {
+		if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea eliminar las piezas en memoria?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 			ModuloStockTelasFisicasModel moduloModel = (ModuloStockTelasFisicasModel)e.getSource().getModulosModel().get(1);
 			moduloModel.getPiezasElegidas().clear();
 		}

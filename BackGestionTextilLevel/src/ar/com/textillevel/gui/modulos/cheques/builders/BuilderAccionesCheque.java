@@ -3,16 +3,16 @@ package ar.com.textillevel.gui.modulos.cheques.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
-import ar.clarin.fwjava.templates.modulo.model.totales.IBuilderTotales;
-import ar.clarin.fwjava.templates.modulo.model.totales.Totales;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
+import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionAgregarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionConsultarCheque;
@@ -45,7 +45,7 @@ public class BuilderAccionesCheque implements IBuilderAcciones<Cheque>,
 		return instance;
 	}
 	
-	public Acciones<Cheque> construirAcciones(int idModel) throws CLException {
+	public Acciones<Cheque> construirAcciones(int idModel) throws FWException {
 		Acciones<Cheque> acciones = new Acciones<Cheque>();
 		List<Accion<Cheque>> accionesCreacion = new ArrayList<Accion<Cheque>>();
 		accionesCreacion.add(new AccionAgregarCheque());

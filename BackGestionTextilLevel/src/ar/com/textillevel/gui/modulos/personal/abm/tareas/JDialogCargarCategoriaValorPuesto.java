@@ -24,11 +24,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Categoria;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.CategoriaValorPuesto;
@@ -153,23 +153,23 @@ public class JDialogCargarCategoriaValorPuesto extends JDialog {
 	
 	private boolean validar() {
 		if(getCmbCategoria().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(owner, "Debe seleccionar una categoría.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe seleccionar una categoría.", "Error");
 			return false;
 		}
 		String valorHoraStr = getTxtValorHoraDefault().getText();
 		if(StringUtil.isNullOrEmpty(valorHoraStr)) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar un valor por hora default.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar un valor por hora default.", "Error");
 			getTxtValorHoraDefault().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(valorHoraStr)) {
-			CLJOptionPane.showErrorMessage(owner, "El valor de la hora default debe ser numérico.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "El valor de la hora default debe ser numérico.", "Error");
 			getTxtValorHoraDefault().requestFocus();
 			return false;
 		}
 		double valorHora = GenericUtils.getDoubleValueInJTextField(getTxtValorHoraDefault());
 		if(valorHora <= 0) {
-			CLJOptionPane.showErrorMessage(owner, "El valor de la hora default debe ser mayor a cero.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "El valor de la hora default debe ser mayor a cero.", "Error");
 			getTxtValorHoraDefault().requestFocus();
 			return false;
 		}
@@ -243,8 +243,8 @@ public class JDialogCargarCategoriaValorPuesto extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_PUESTO, "PUESTO", 200, 200, true);
 			tabla.setStringColumn(COL_VALOR_HORA, "VALOR HORA", 100, 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
@@ -308,7 +308,7 @@ public class JDialogCargarCategoriaValorPuesto extends JDialog {
 		public boolean validarAgregar() {
 			Categoria catSeleccionada = (Categoria)getCmbCategoria().getSelectedItem();
 			if(catSeleccionada == null) {
-				CLJOptionPane.showErrorMessage(JDialogCargarCategoriaValorPuesto.this.owner, "Debe seleccionar una categoría", "Atención");
+				FWJOptionPane.showErrorMessage(JDialogCargarCategoriaValorPuesto.this.owner, "Debe seleccionar una categoría", "Atención");
 			} else {
 				JDialogIngresarValorPuesto dialogo = new JDialogIngresarValorPuesto(JDialogCargarCategoriaValorPuesto.this.owner, catSeleccionada, getPuestosUtilizados(), new ValorPuesto());
 				dialogo.setVisible(true);

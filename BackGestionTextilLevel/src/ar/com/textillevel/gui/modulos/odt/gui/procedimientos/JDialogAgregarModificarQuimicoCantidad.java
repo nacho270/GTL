@@ -23,10 +23,10 @@ import javax.swing.JPanel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
@@ -41,7 +41,7 @@ public class JDialogAgregarModificarQuimicoCantidad extends JDialog {
 	private static final long serialVersionUID = -7227181759998277438L;
 
 	private JComboBox cmbQuimicos;
-	private CLJTextField txtCantidad;
+	private FWJTextField txtCantidad;
 	private JComboBox cmbUnidad;
 	
 	private JButton btnAceptar;
@@ -138,29 +138,29 @@ public class JDialogAgregarModificarQuimicoCantidad extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtCantidad().getText())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad", "Error");
 			getTxtCantidad().requestFocus();
 			return false;
 		}
 		if(!GenericUtils.esNumerico(getTxtCantidad().getText())){
-			CLJOptionPane.showErrorMessage(this, "La cantidad debe ser numérica", "Error");
+			FWJOptionPane.showErrorMessage(this, "La cantidad debe ser numérica", "Error");
 			getTxtCantidad().requestFocus();
 			return false;
 		}
 		try{
 			Float cantidad = Float.valueOf(getTxtCantidad().getText().replace(",", "."));
 			if(cantidad<=0){
-				CLJOptionPane.showErrorMessage(this, "La cantidad debe ser mayor a 0", "Error");
+				FWJOptionPane.showErrorMessage(this, "La cantidad debe ser mayor a 0", "Error");
 				getTxtCantidad().requestFocus();
 				return false;
 			}
 		}catch(NumberFormatException nfe){
-			CLJOptionPane.showErrorMessage(this, "Error en el formato de la cantidad", "Error");
+			FWJOptionPane.showErrorMessage(this, "Error en el formato de la cantidad", "Error");
 			getTxtCantidad().requestFocus();
 			return false;
 		}
 		if(getCmbUnidad().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar la unidad.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar la unidad.", "Error");
 			return false;
 		}
 		return true;
@@ -180,7 +180,7 @@ public class JDialogAgregarModificarQuimicoCantidad extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(JDialogAgregarModificarQuimicoCantidad.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(JDialogAgregarModificarQuimicoCantidad.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}
@@ -233,9 +233,9 @@ public class JDialogAgregarModificarQuimicoCantidad extends JDialog {
 		return cmbUnidad;
 	}
 
-	public CLJTextField getTxtCantidad() {
+	public FWJTextField getTxtCantidad() {
 		if(txtCantidad==null){
-			txtCantidad = new CLJTextField();
+			txtCantidad = new FWJTextField();
 		}
 		return txtCantidad;
 	}

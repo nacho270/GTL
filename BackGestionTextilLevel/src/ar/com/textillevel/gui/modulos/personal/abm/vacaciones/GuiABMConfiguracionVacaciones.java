@@ -12,13 +12,13 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.vacaciones.ConfiguracionVacaciones;
@@ -35,7 +35,7 @@ public class GuiABMConfiguracionVacaciones extends GuiABMListaTemplate {
 	private JPanel panelCentro;
 	
 	private PanelTablaPeriodosVacaciones panelTabla;
-	private CLJNumericTextField txtMesesMinimos;
+	private FWJNumericTextField txtMesesMinimos;
 	
 	private PanelDatePicker panelFechaDesde;
 	
@@ -110,8 +110,8 @@ public class GuiABMConfiguracionVacaciones extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setIntColumn(COL_ANIOS, "Antigüedad", 70, true);
 			tabla.setIntColumn(COL_DIAS, "Días", 70, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -202,9 +202,9 @@ public class GuiABMConfiguracionVacaciones extends GuiABMListaTemplate {
 		return panelTabla;
 	}
 
-	public CLJNumericTextField getTxtMesesMinimos() {
+	public FWJNumericTextField getTxtMesesMinimos() {
 		if(txtMesesMinimos==null){
-			txtMesesMinimos = new CLJNumericTextField(0, 99);
+			txtMesesMinimos = new FWJNumericTextField(0, 99);
 			if(getConfiguracionActual()!=null && getConfiguracionActual().getMesesMinimosParaEntrar()!=null){
 				txtMesesMinimos.setValue(getConfiguracionActual().getMesesMinimosParaEntrar().longValue());
 			}
@@ -242,7 +242,7 @@ public class GuiABMConfiguracionVacaciones extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la configuración seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la configuración seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getConfFacade().remove(getConfiguracionActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -271,7 +271,7 @@ public class GuiABMConfiguracionVacaciones extends GuiABMListaTemplate {
 		if(validar()){
 			capturarDatos();
 			ConfiguracionVacaciones conf = getConfFacade().save(getConfiguracionActual());
-			CLJOptionPane.showInformationMessage(GuiABMConfiguracionVacaciones.this.getFrame(), "La configuración se ha guardado exitosamente", "Información");
+			FWJOptionPane.showInformationMessage(GuiABMConfiguracionVacaciones.this.getFrame(), "La configuración se ha guardado exitosamente", "Información");
 			lista.setSelectedValue(conf, true);
 			return true;
 		}
@@ -290,12 +290,12 @@ public class GuiABMConfiguracionVacaciones extends GuiABMListaTemplate {
 	
 	private boolean validar() {
 		if(getTxtMesesMinimos().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de meses mínima", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de meses mínima", "Error");
 			getTxtMesesMinimos().requestFocus();
 			return false;
 		}
 		if(getConfiguracionActual().getPeriodos().isEmpty()){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar al menos un periodo", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un periodo", "Error");
 			return false;
 		}
 		return true;

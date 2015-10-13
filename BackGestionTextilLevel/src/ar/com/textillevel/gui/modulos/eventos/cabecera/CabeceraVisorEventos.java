@@ -14,10 +14,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.facade.api.remote.EventoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
@@ -104,7 +104,7 @@ public class CabeceraVisorEventos extends Cabecera<ModeloCabeceraVisorEventos> {
 				fechaHasta = new Timestamp(DateUtil.getManana(new Timestamp(model.getFechaHasta().getTime())).getTime());
 			if ((model.getFechaDesde() != null) && (model.getFechaHasta() != null)) {
 				if (fechaHasta.before(fechaDesde)) {
-					CLJOptionPane.showErrorMessage(this, "La fecha 'Hasta' debe ser mayor o igual que la fecha 'Desde'", "Validación de fechas");
+					FWJOptionPane.showErrorMessage(this, "La fecha 'Hasta' debe ser mayor o igual que la fecha 'Desde'", "Validación de fechas");
 					return;
 				}
 			}

@@ -21,13 +21,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.config.ConfiguracionNumeracionFactura;
 import ar.com.textillevel.entidades.config.NumeracionFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -39,9 +39,9 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 
 	private static final long serialVersionUID = -3557792841378986149L;
 
-	private CLJTextField txtTipoFactura;
-	private CLJNumericTextField txtDiasAntesAviso;
-	private CLJNumericTextField txtNrosAntesAviso;
+	private FWJTextField txtTipoFactura;
+	private FWJNumericTextField txtDiasAntesAviso;
+	private FWJNumericTextField txtNrosAntesAviso;
 	private PanelTablaNumeracionFactura panelTabla;
 	private JButton btnAceptar;
 	private JButton btnSalir;
@@ -105,12 +105,12 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 		add(panelSur,BorderLayout.SOUTH);
 	}
 
-	public CLJTextField getTxtTipoFactura() {
+	public FWJTextField getTxtTipoFactura() {
 		if (txtTipoFactura == null) {
-			txtTipoFactura = new CLJTextField();
+			txtTipoFactura = new FWJTextField();
 			txtTipoFactura.setEditable(false);
 			txtTipoFactura.setPreferredSize(new Dimension(50, 20));
-			txtTipoFactura.setHorizontalAlignment(CLJTextField.CENTER);
+			txtTipoFactura.setHorizontalAlignment(FWJTextField.CENTER);
 			txtTipoFactura.setText(getConfiguracionActual().getTipoFactura().getDescripcion());
 		}
 		return txtTipoFactura;
@@ -160,21 +160,21 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setDateColumn(COL_FECHA_DESDE, "Fecha Desde", 90, true);
 			tabla.setDateColumn(COL_FECHA_HASTA, "Fecha Hasta", 90, true);
 			tabla.setIntColumn(COL_NRO_DESDE, "Nro. Desde", 90, true);
 			tabla.setIntColumn(COL_NRO_HASTA, "Nro. Hasta", 90, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
-			tabla.setHeaderAlignment(COL_FECHA_DESDE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_FECHA_HASTA, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NRO_DESDE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NRO_HASTA, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_FECHA_DESDE, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_FECHA_HASTA, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_NRO_DESDE, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_NRO_HASTA, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_DESDE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_HASTA, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NRO_DESDE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NRO_HASTA, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_FECHA_DESDE, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_FECHA_HASTA, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_NRO_DESDE, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_NRO_HASTA, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
@@ -217,7 +217,7 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 					protected boolean validarAdicional(NumeracionFactura numeracionFactura) {
 						if(getUltimoNroFacturaImpreso() != null){
 							if( numeracionFactura.getNroDesde()<getUltimoNroFacturaImpreso()){
-								CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "El número 'desde' debe ser mayor al último número impreso: " + getUltimoNroFacturaImpreso(), "Error");
+								FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "El número 'desde' debe ser mayor al último número impreso: " + getUltimoNroFacturaImpreso(), "Error");
 								return false;
 							}
 							return true;
@@ -243,7 +243,7 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 					getConfiguracionActual().getNumeracion().remove(fila);
 					refreshTable();
 				}else{
-					CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Solo puede borrar la ultima numeración", "Error");
+					FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Solo puede borrar la ultima numeración", "Error");
 				}
 			}
 			return false;
@@ -259,7 +259,7 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 				protected boolean validarAdicional(NumeracionFactura numeracionFactura) {
 					if(getUltimoNroFacturaImpreso() != null){
 						if( numeracionFactura.getNroDesde()<getUltimoNroFacturaImpreso()){
-							CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "El número 'desde' debe ser mayor al último número impreso: " + getUltimoNroFacturaImpreso(), "Error");
+							FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "El número 'desde' debe ser mayor al último número impreso: " + getUltimoNroFacturaImpreso(), "Error");
 							return false;
 						}
 						return true;
@@ -283,11 +283,11 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 				NumeracionFactura n1 = numeracion.get(i);
 				NumeracionFactura n2 = numeracion.get(i+1);
 				if( (n1.getNroHasta()+1)< n2.getNroDesde()){
-					CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Los números ingresados no son consecutivos con otras numeraciones", "Error");
+					FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Los números ingresados no son consecutivos con otras numeraciones", "Error");
 					return false;
 				}
 				if(!DateUtil.getManiana(n1.getFechaHasta()).equals(n2.getFechaDesde())){
-					CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Las fechas ingresadas no son consecutivas con otras numeraciones", "Error");
+					FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Las fechas ingresadas no son consecutivas con otras numeraciones", "Error");
 					return false;
 				}
 			}
@@ -299,7 +299,7 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 		for(NumeracionFactura n : getConfiguracionActual().getNumeracion()){
 			if(numeracionFactura.getId() == null || !n.equals(numeracionFactura)){
 				if(n.seSolapaEnFecha(numeracionFactura)){
-					CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Las fechas ingresadas se solapan con las fechas de otra numeración", "");
+					FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Las fechas ingresadas se solapan con las fechas de otra numeración", "");
 					return false;
 				}
 			}
@@ -311,7 +311,7 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 		for(NumeracionFactura n : getConfiguracionActual().getNumeracion()){
 			if(numeracionFactura.getId() == null || !n.equals(numeracionFactura)){
 				if(n.seSolapaEnNumero(numeracionFactura)){
-					CLJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Los números ingresados se solapan con los números de otra numeración", "");
+					FWJOptionPane.showErrorMessage(JDialogAgregarModificarNumeracionesFactura.this, "Los números ingresados se solapan con los números de otra numeración", "");
 					return false;
 				}
 			}
@@ -324,7 +324,7 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 	};
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar los cambios. Desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar los cambios. Desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			List<NumeracionFactura> aRemover = new ArrayList<NumeracionFactura>();
 			for(NumeracionFactura n : getConfiguracionActual().getNumeracion()){
 				if(n.getId()==null){
@@ -365,12 +365,12 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 
 	private boolean validar(){
 		if(getTxtDiasAntesAviso().getValueWithNull() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar cuantos días antes se debe notificar del vencimiento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar cuantos días antes se debe notificar del vencimiento", "Error");
 			getTxtDiasAntesAviso().requestFocus();
 			return false;
 		}
 		if(getTxtNrosAntesAviso().getValueWithNull() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar cuantos números antes se debe notificar del vencimiento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar cuantos números antes se debe notificar del vencimiento", "Error");
 			getTxtNrosAntesAviso().requestFocus();
 			return false;
 		}
@@ -397,9 +397,9 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 	}
 
 	
-	public CLJNumericTextField getTxtDiasAntesAviso() {
+	public FWJNumericTextField getTxtDiasAntesAviso() {
 		if(txtDiasAntesAviso == null){
-			txtDiasAntesAviso = new CLJNumericTextField(1l, 365l);
+			txtDiasAntesAviso = new FWJNumericTextField(1l, 365l);
 			if(getConfiguracionActual()!=null && getConfiguracionActual().getDiasAntesAviso() != null){
 				txtDiasAntesAviso.setValue(getConfiguracionActual().getDiasAntesAviso().longValue());
 			}
@@ -407,9 +407,9 @@ public class JDialogAgregarModificarNumeracionesFactura extends JDialog {
 		return txtDiasAntesAviso;
 	}
 	
-	public CLJNumericTextField getTxtNrosAntesAviso() {
+	public FWJNumericTextField getTxtNrosAntesAviso() {
 		if(txtNrosAntesAviso == null){
-			txtNrosAntesAviso = new CLJNumericTextField(1l, 365l);
+			txtNrosAntesAviso = new FWJNumericTextField(1l, 365l);
 			if(getConfiguracionActual()!=null && getConfiguracionActual().getNumerosAntesAviso() != null){
 				txtNrosAntesAviso.setValue(getConfiguracionActual().getNumerosAntesAviso().longValue());
 			}

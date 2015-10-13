@@ -21,11 +21,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.CartaDocumento;
@@ -42,9 +42,9 @@ public class JDialogCartaDocumento extends JDialog {
 	private PanelDatePicker fechaCD;
 	private JTextArea txtMotivo;
 	private JTextArea txtObservaciones;
-	private CLJNumericTextField txtDiasSuspension;
+	private FWJNumericTextField txtDiasSuspension;
 	private JLabel lblDiasSuspencion;
-	private CLJNumericTextField txtPlazoDiasJustif;
+	private FWJNumericTextField txtPlazoDiasJustif;
 	private JLabel lblPlazoDiasJustif;
 	private JTextField txtSancionesRelacionadas;
 
@@ -202,7 +202,7 @@ public class JDialogCartaDocumento extends JDialog {
 				CartaDocumento cdSaved = getSancionFacade().ingresarCartaDocumento(getCartaDocumento(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				setCartaDocumento(cdSaved);
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(JDialogCartaDocumento.this, e.getMensajeError(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogCartaDocumento.this, e.getMensajeError(), "Error");
 				setCartaDocumento(null);
 				setAcepto(false);
 				dispose();
@@ -222,25 +222,25 @@ public class JDialogCartaDocumento extends JDialog {
 
 	private boolean validar() {
 		if(getTxtMotivo().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el texto de la carta documento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el texto de la carta documento", "Error");
 			getTxtMotivo().requestFocus();
 			return false;
 		}
 
 		if(getTxtMotivo().getText().trim().length() > 700){
-			CLJOptionPane.showErrorMessage(this, "La longitud máxima del motivo es de 700 caracteres", "Error");
+			FWJOptionPane.showErrorMessage(this, "La longitud máxima del motivo es de 700 caracteres", "Error");
 			getTxtMotivo().requestFocus();
 			return false;
 		}
 
 		if(getTxtObservaciones().getText().trim().length() > 700){
-			CLJOptionPane.showErrorMessage(this, "La longitud máxima de las observaciones es de 700 caracteres", "Error");
+			FWJOptionPane.showErrorMessage(this, "La longitud máxima de las observaciones es de 700 caracteres", "Error");
 			getTxtObservaciones().requestFocus();
 			return false;
 		}
 		
 		if(getFechaCD().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de entrada", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de entrada", "Error");
 			getFechaCD().requestFocus();
 			return false;
 		}
@@ -302,9 +302,9 @@ public class JDialogCartaDocumento extends JDialog {
 		return txtObservaciones;
 	}
 
-	private CLJNumericTextField getTxtDiasSuspension() {
+	private FWJNumericTextField getTxtDiasSuspension() {
 		if(txtDiasSuspension == null) {
-			txtDiasSuspension = new CLJNumericTextField();
+			txtDiasSuspension = new FWJNumericTextField();
 			if(getCartaDocumento() != null) {
 				txtDiasSuspension.setText(getCartaDocumento().getCantDiasSuspencion().toString());
 			}
@@ -312,9 +312,9 @@ public class JDialogCartaDocumento extends JDialog {
 		return txtDiasSuspension;
 	}
 
-	private CLJNumericTextField getTxtPlazoDiasJustif() {
+	private FWJNumericTextField getTxtPlazoDiasJustif() {
 		if(txtPlazoDiasJustif == null) {
-			txtPlazoDiasJustif = new CLJNumericTextField();
+			txtPlazoDiasJustif = new FWJNumericTextField();
 			if(getCartaDocumento() != null) {
 				txtPlazoDiasJustif.setText(getCartaDocumento().getCantDiasPlazoJustif().toString());
 			}

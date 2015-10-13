@@ -45,13 +45,13 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
@@ -97,9 +97,9 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 	private String tipoCorreccionFactura;
 	
 	private JTextField txtTotalConFactor;
-	private CLJTextField txtImpVarios;
-	private CLJTextField txtPercepIVA;
-	private CLJTable tablaImpuestos;
+	private FWJTextField txtImpVarios;
+	private FWJTextField txtPercepIVA;
+	private FWJTable tablaImpuestos;
 
 
 	private static final int COL_NOMBRE_IMPUESTO = 0;
@@ -203,9 +203,9 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 		return panTotal;
 	}
 
-	private CLJTextField getTxtImpVarios() {
+	private FWJTextField getTxtImpVarios() {
 		if (txtImpVarios == null) {
-			txtImpVarios = new CLJTextField();
+			txtImpVarios = new FWJTextField();
 			txtImpVarios.addFocusListener(new FocusAdapter() {
 
 				@Override
@@ -231,9 +231,9 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 		return txtImpVarios;
 	}
 
-	private CLJTextField getTxtPercepIVA() {
+	private FWJTextField getTxtPercepIVA() {
 		if (txtPercepIVA == null) {
-			txtPercepIVA = new CLJTextField();
+			txtPercepIVA = new FWJTextField();
 			txtPercepIVA.addFocusListener(new FocusAdapter() {
 
 				@Override
@@ -426,7 +426,7 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 					if(validar()) {
 						capturarSetearDatos();
 						getCorreccionFacade().guardarCorreccionYGenerarMovimiento(correccionFactura, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName(), null);
-						CLJOptionPane.showInformationMessage(JDialogCargarNotaDeCreditoProveedor.this, "La " + tipoCorreccionFactura + " ha sido grabada con éxito.", "Alta de " + tipoCorreccionFactura + " de Proveedor");
+						FWJOptionPane.showInformationMessage(JDialogCargarNotaDeCreditoProveedor.this, "La " + tipoCorreccionFactura + " ha sido grabada con éxito.", "Alta de " + tipoCorreccionFactura + " de Proveedor");
 						dispose();
 					}
 				}
@@ -455,11 +455,11 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 
 	private boolean validar() {
 		if(getPanelFecha().getDate() == null) {
-			CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, "Debe ingresar una fecha válida", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, "Debe ingresar una fecha válida", getTitle());
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtNroCorreccion().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, "Debe ingresar el número de " + tipoCorreccionFactura + ".", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, "Debe ingresar el número de " + tipoCorreccionFactura + ".", getTitle());
 			getTxtNroCorreccion().requestFocus();
 			return false;
 		}
@@ -467,24 +467,24 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 		Pattern p = Pattern.compile(regExpNroCorreccion);
 		Matcher matcher = p.matcher(getTxtNroCorreccion().getText().trim());
 		if(!matcher.matches()) {
-			CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, "Debe ingresar un número de " + tipoCorreccionFactura + " válido.", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, "Debe ingresar un número de " + tipoCorreccionFactura + " válido.", getTitle());
 			getTxtNroCorreccion().requestFocus();
 			return false;
 		}
 		String txtValidacion = getPanTablaItemFacturaCorreccion().validarElementos();
 		if(!StringUtil.isNullOrEmpty(txtValidacion)) {
-			CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
 			return false;
 		}
 		txtValidacion = getPanTablaItemFacturaCorreccion().validarFactorConversion();
 		if(!StringUtil.isNullOrEmpty(txtValidacion)) {
-			CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
 			return false;
 		}
 		boolean existeNroCorreccion = getCorreccionFacade().existeNroCorreccionByProveedor(correccionFactura.getId(), getTxtNroCorreccion().getText().trim(), proveedor.getId());
 		if(existeNroCorreccion) {
 			getTxtNroCorreccion().requestFocus();
-			CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap("El número de "  + tipoCorreccionFactura + " ya existe para el mismo proveedor."), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap("El número de "  + tipoCorreccionFactura + " ya existe para el mismo proveedor."), getTitle());
 			return false;
 		}
 		return true;
@@ -573,9 +573,9 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 		return factorSet.iterator().next();
 	}
 	
-	private CLJTable getTablaImpuestos() {
+	private FWJTable getTablaImpuestos() {
 		if(tablaImpuestos == null) {
-			tablaImpuestos = new CLJTable(0, 3);
+			tablaImpuestos = new FWJTable(0, 3);
 			tablaImpuestos.setStringColumn(COL_NOMBRE_IMPUESTO, "IMPUESTO", 200, 200, true);
 			tablaImpuestos.setStringColumn(COL_VALOR_IMPUESTO, "IMPORTE PESOS", 100);
 			tablaImpuestos.setStringColumn(COL_VALOR_IMPUESTO_CON_FACTOR, "IMPORTE DOLARES", 100);
@@ -706,9 +706,9 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 		}
 
 		
-		protected CLJTable construirTabla() {
+		protected FWJTable construirTabla() {
 			@SuppressWarnings("serial")
-			CLJTable tabla = new CLJTable(0, CANT_COLS) {
+			FWJTable tabla = new FWJTable(0, CANT_COLS) {
 
 				@Override
 				public void newRowSelected(int newRow, int oldRow) {
@@ -857,7 +857,7 @@ public class JDialogCargarNotaDeCreditoProveedor extends JDialog {
 		private boolean impuestosPorPciaOK(List<ImpuestoItemProveedor> impuestosSelectedResult) {
 			for(ImpuestoItemProveedor iip : impuestosSelectedResult) {
 				if(iip.getTipoImpuesto() == ETipoImpuesto.INGRESOS_BRUTOS && !iip.getProvincia().getId().equals(proveedor.getProvincia().getId())) {
-					CLJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap("El impuesto " + iip.toString() + " no puede elegirse porque no aplica en la provincia de origen del proveedor."), "Atención");
+					FWJOptionPane.showErrorMessage(JDialogCargarNotaDeCreditoProveedor.this, StringW.wordWrap("El impuesto " + iip.toString() + " no puede elegirse porque no aplica en la provincia de origen del proveedor."), "Atención");
 					return false;
 				}
 			}

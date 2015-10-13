@@ -15,7 +15,7 @@ import javax.ejb.Stateless;
 import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.dao.api.FichadaLegajoDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.CalendarioAnualFeriado;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.RangoDiasFeriado;

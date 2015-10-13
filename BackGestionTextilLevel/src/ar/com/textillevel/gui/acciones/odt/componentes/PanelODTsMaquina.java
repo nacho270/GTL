@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 import ar.com.textillevel.gui.acciones.odt.event.BotonADerechaEventListener;
 import ar.com.textillevel.gui.acciones.odt.event.BotonAIzquierdaEventListener;
 import ar.com.textillevel.gui.acciones.odt.event.BotonCambiarMaquinaActionListener;

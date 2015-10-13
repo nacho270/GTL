@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.VigenciaEmpleado;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.ReciboSueldo;

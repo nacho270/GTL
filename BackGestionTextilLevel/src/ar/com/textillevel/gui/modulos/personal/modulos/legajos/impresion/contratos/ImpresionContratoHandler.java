@@ -7,7 +7,7 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.contratos.strategy.CreacionContratoStrategyFactory;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.personal.entidades.contratos.ETipoContrato;
@@ -29,7 +29,7 @@ public class ImpresionContratoHandler {
 			String path =  "/ar/com/textillevel/reportes/"+pathArchivoContrato;
 			JasperReport reporte = JasperHelper.loadReporte(path);
 			if(reporte == null){
-				CLJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha encontrado el modelo llamado: " + pathArchivoContrato, "Error");
+				FWJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha encontrado el modelo llamado: " + pathArchivoContrato, "Error");
 				return;
 			}
 			Map<String, Object> parametrosContrato = getParametrosContrato( getEmpleado().getContratoEmpleado().getContrato().getTipoContrato());
@@ -37,11 +37,11 @@ public class ImpresionContratoHandler {
 				JasperPrint jasperPrint = JasperHelper.fillReport(reporte,parametrosContrato,Collections.singletonList("A"));
 					JasperHelper.visualizarReporte(jasperPrint);
 			}else{
-				CLJOptionPane.showErrorMessage(getFrame(), "Debe ingresar la persona que firma. Se ha cancelado la impresión", "Error");
+				FWJOptionPane.showErrorMessage(getFrame(), "Debe ingresar la persona que firma. Se ha cancelado la impresión", "Error");
 				return;
 			}
 		}else{
-			CLJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha definido el modelo del mismo.", "Error");
+			FWJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha definido el modelo del mismo.", "Error");
 			return;
 		}
 	}
@@ -52,27 +52,27 @@ public class ImpresionContratoHandler {
 			String path =  "/ar/com/textillevel/reportes/"+pathArchivoContrato;
 			JasperReport reporte = JasperHelper.loadReporte(path);
 			if(reporte == null){
-				CLJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha encontrado el modelo llamado: " + pathArchivoContrato, "Error");
+				FWJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha encontrado el modelo llamado: " + pathArchivoContrato, "Error");
 				return;
 			}
 			try {
 				Map<String, Object> parametrosContrato = getParametrosContrato(getEmpleado().getContratoEmpleado().getContrato().getTipoContrato());
 				if(parametrosContrato!=null){
 					JasperPrint jasperPrint = JasperHelper.fillReport(reporte,parametrosContrato,Collections.singletonList("A"));
-					if(CLJOptionPane.showQuestionMessage(getFrame(), "¿Desea previsualizar el contrato?", "Pregunta")==CLJOptionPane.YES_OPTION){
+					if(FWJOptionPane.showQuestionMessage(getFrame(), "¿Desea previsualizar el contrato?", "Pregunta")==FWJOptionPane.YES_OPTION){
 						JasperHelper.visualizarReporte(jasperPrint);
 					}else{
 						JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
 					}
 				}else{
-					CLJOptionPane.showErrorMessage(getFrame(), "Debe ingresar la persona que firma. Se ha cancelado la impresión", "Error");
+					FWJOptionPane.showErrorMessage(getFrame(), "Debe ingresar la persona que firma. Se ha cancelado la impresión", "Error");
 					return;
 				}
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
 		}else{
-			CLJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha definido el modelo del mismo.", "Error");
+			FWJOptionPane.showErrorMessage(getFrame(), "No se ha podido imprimir el contrato debido a que no se ha definido el modelo del mismo.", "Error");
 			return;
 		}
 	}

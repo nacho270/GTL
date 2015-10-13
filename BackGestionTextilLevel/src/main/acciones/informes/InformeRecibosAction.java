@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.recibo.to.ResumenReciboTO;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ReciboFacadeRemote;
@@ -62,7 +62,7 @@ public class InformeRecibosAction implements Action{
 				JDialogReporteRecibosPreview dialogo = new JDialogReporteRecibosPreview(frame, resumenReciboList, cliente, fechaDesde,  fechaHasta);
 				dialogo.setVisible(true);
 			}else{
-				CLJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");
+				FWJOptionPane.showWarningMessage(frame, "No se han encontrado resultados", "Advertencia");
 			}
 		}
 	}

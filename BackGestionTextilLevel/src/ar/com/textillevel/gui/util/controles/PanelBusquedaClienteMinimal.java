@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -22,7 +22,7 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 
 	private static final long serialVersionUID = 6987748755450833777L;
 
-	private CLJNumericTextField txtNroCliente;
+	private FWJNumericTextField txtNroCliente;
 	private JButton btnBuscar;
 	private JButton btnClear;
 	private JLabel lblResultado;
@@ -40,9 +40,9 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 		add(getLblResultado());
 	}
 
-	public CLJNumericTextField getTxtNroCliente() {
+	public FWJNumericTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJNumericTextField();
+			txtNroCliente = new FWJNumericTextField();
 			txtNroCliente.setPreferredSize(new Dimension(100, 20));
 			txtNroCliente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -60,7 +60,7 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getTxtNroCliente().getValueWithNull() == null) {
-						CLJOptionPane.showErrorMessage(PanelBusquedaClienteMinimal.this, "Debe ingresar el número de cliente", "Error");
+						FWJOptionPane.showErrorMessage(PanelBusquedaClienteMinimal.this, "Debe ingresar el número de cliente", "Error");
 						return;
 					}
 					Integer nroCliente = getTxtNroCliente().getValue();
@@ -78,7 +78,7 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 	}
 
 	protected void clienteNoEncontrado(Integer nroCliente) {
-		CLJOptionPane.showErrorMessage(PanelBusquedaClienteMinimal.this, "No se ha encontrado al cliente " + nroCliente +".", "Error");
+		FWJOptionPane.showErrorMessage(PanelBusquedaClienteMinimal.this, "No se ha encontrado al cliente " + nroCliente +".", "Error");
 	}
 
 	public JButton getBtnClear() {

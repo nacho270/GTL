@@ -1,15 +1,15 @@
 package ar.com.textillevel.gui.modulos.eventos.builders;
 
-import ar.clarin.fwjava.auditoria.ejb.Evento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Acciones;
-import ar.clarin.fwjava.templates.modulo.model.acciones.IBuilderAcciones;
-import ar.clarin.fwjava.templates.modulo.model.filtros.Filtros;
-import ar.clarin.fwjava.templates.modulo.model.filtros.IBuilderFiltros;
-import ar.clarin.fwjava.templates.modulo.model.tabla.IBuilderTabla;
-import ar.clarin.fwjava.templates.modulo.model.tabla.Tabla;
-import ar.clarin.fwjava.templates.modulo.model.totales.IBuilderTotales;
-import ar.clarin.fwjava.templates.modulo.model.totales.Totales;
+import ar.com.fwcommon.auditoria.ejb.Evento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
+import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
+import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
+import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
+import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
+import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
+import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.gui.modulos.eventos.columnas.ColumnaDescripcionEvento;
 import ar.com.textillevel.gui.modulos.eventos.columnas.ColumnaHoraEvento;
 import ar.com.textillevel.gui.modulos.eventos.columnas.ColumnaUsuarioEvento;
@@ -26,7 +26,7 @@ public class BuilderAccionesVisorEventos implements IBuilderAcciones<Evento>,
 		return instance;
 	}
 
-	public Acciones<Evento> construirAcciones(int idModel) throws CLException {
+	public Acciones<Evento> construirAcciones(int idModel) throws FWException {
 		return null;
 	}
 

@@ -1,10 +1,10 @@
 package ar.com.textillevel.gui.modulos.cheques.acciones;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
@@ -25,7 +25,7 @@ public class AccionDarSalidaCheque extends Accion<Cheque>{
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<Cheque> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Cheque> e) throws FWException {
 		JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(e.getSource().getFrame(), "Dar salida cheque");
 		if (jDialogPasswordInput.isAcepto()) {
 			String pass = new String(jDialogPasswordInput.getPassword());
@@ -54,7 +54,7 @@ public class AccionDarSalidaCheque extends Accion<Cheque>{
 					return false;
 				}
 			}else {
-				CLJOptionPane.showErrorMessage(e.getSource().getFrame(), "La clave ingresada no peternece a un usuario adminsitrador", "Error");
+				FWJOptionPane.showErrorMessage(e.getSource().getFrame(), "La clave ingresada no peternece a un usuario adminsitrador", "Error");
 			}
 		}
 		return false;

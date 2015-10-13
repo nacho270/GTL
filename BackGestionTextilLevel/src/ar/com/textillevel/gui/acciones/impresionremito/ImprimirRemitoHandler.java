@@ -22,10 +22,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
@@ -67,7 +67,7 @@ public class ImprimirRemitoHandler {
 				break;
 			}
 			if (cantImprimirStr.trim().length()==0 || !GenericUtils.esNumerico(cantImprimirStr)) {
-				CLJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				internalImprimir(cantImprimirStr);
@@ -120,9 +120,9 @@ public class ImprimirRemitoHandler {
 			JasperPrintManager.printReport(reporte, nroCopia==1);
 		}catch (JRException je) {
 			if (je.getCause() != null && je.getCause().getMessage().equals("Printer is not accepting job.")) {
-				CLJOptionPane.showErrorMessage(null, "No se puede imprimir, la impresora no responde o no esta disponible. Por favor, verifique el estado", "Error");
+				FWJOptionPane.showErrorMessage(null, "No se puede imprimir, la impresora no responde o no esta disponible. Por favor, verifique el estado", "Error");
 			} else {
-				CLJOptionPane.showErrorMessage(null, StringW.wordWrap(je.getMessage()), "Error");
+				FWJOptionPane.showErrorMessage(null, StringW.wordWrap(je.getMessage()), "Error");
 			}
 		}
 		return ret;

@@ -16,9 +16,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.vacaciones.PeriodoVacaciones;
 
@@ -29,8 +29,8 @@ public class JDialogInputDiasYAnios extends JDialog {
 	private JPanel panelCentro;
 	private JPanel panelSur;
 
-	private CLJNumericTextField txtCantDias;
-	private CLJNumericTextField txtAnios;
+	private FWJNumericTextField txtCantDias;
+	private FWJNumericTextField txtAnios;
 
 	private JButton btnAceptar;
 	private JButton btnSalir;
@@ -87,9 +87,9 @@ public class JDialogInputDiasYAnios extends JDialog {
 		this.periodoVacacionesActual = periodoVacacionesActual;
 	}
 
-	public CLJNumericTextField getTxtCantDias() {
+	public FWJNumericTextField getTxtCantDias() {
 		if (txtCantDias == null) {
-			txtCantDias = new CLJNumericTextField(0, 99);
+			txtCantDias = new FWJNumericTextField(0, 99);
 			if (getPeriodoVacacionesActual() != null && getPeriodoVacacionesActual().getCantidadDias() != null) {
 				txtCantDias.setValue(getPeriodoVacacionesActual().getCantidadDias().longValue());
 			}
@@ -97,9 +97,9 @@ public class JDialogInputDiasYAnios extends JDialog {
 		return txtCantDias;
 	}
 
-	public CLJNumericTextField getTxtAnios() {
+	public FWJNumericTextField getTxtAnios() {
 		if (txtAnios == null) {
-			txtAnios = new CLJNumericTextField(0, 99);
+			txtAnios = new FWJNumericTextField(0, 99);
 			if (getPeriodoVacacionesActual() != null && getPeriodoVacacionesActual().getAntiguedadAniosRequerida() != null) {
 				txtAnios.setValue(getPeriodoVacacionesActual().getAntiguedadAniosRequerida().longValue());
 			}
@@ -130,18 +130,18 @@ public class JDialogInputDiasYAnios extends JDialog {
 	
 	private boolean validar() {
 		if(getTxtAnios().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar los años de antigüedad requeridos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar los años de antigüedad requeridos", "Error");
 			getTxtAnios().requestFocus();
 			return false;
 		}
 		if(getTxtCantDias().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar los días de vacaciones correspondientes", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar los días de vacaciones correspondientes", "Error");
 			getTxtCantDias().requestFocus();
 			return false;
 		}
 		for(PeriodoVacaciones p : getPeriodosYaCargados()){
 			if(p.getAntiguedadAniosRequerida().equals(getTxtAnios().getValue())){
-				CLJOptionPane.showErrorMessage(this, "Ya existe un periodo para " +getTxtAnios().getValue() +" años de antigüedad.", "Error");
+				FWJOptionPane.showErrorMessage(this, "Ya existe un periodo para " +getTxtAnios().getValue() +" años de antigüedad.", "Error");
 				return false;
 			}
 		}

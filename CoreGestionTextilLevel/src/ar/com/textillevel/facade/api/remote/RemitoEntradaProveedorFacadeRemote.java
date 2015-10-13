@@ -5,15 +5,15 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 import ar.com.textillevel.entidades.gente.Proveedor;
 
 @Remote
 public interface RemitoEntradaProveedorFacadeRemote {
 
-	public RemitoEntradaProveedor save(RemitoEntradaProveedor remito) throws CLException;
+	public RemitoEntradaProveedor save(RemitoEntradaProveedor remito) throws FWException;
 
 	public List<RemitoEntradaProveedor> getRemitosNoAsocByProveedor(Proveedor provedor);
 

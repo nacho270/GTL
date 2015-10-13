@@ -2,7 +2,7 @@ package ar.com.textillevel.gui.modulos.odt.gui.validacion;
 
 import java.awt.Component;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.gui.util.controles.DecimalNumericTextField;
 
 public class ValidacionTernaTextFields extends Validacion {
@@ -51,17 +51,17 @@ public class ValidacionTernaTextFields extends Validacion {
 	@Override
 	public boolean validate() {
 		if(getTextFieldMin().getValue() > getTextFieldMax().getValue()) {
-			CLJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelMin() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
+			FWJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelMin() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
 			getTextFieldMin().requestFocus();
 			return false;
 		}
 		if(getTextFieldProm().getValue() < getTextFieldMin().getValue()) {
-			CLJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelProm() + "' debe ser mayor o igual que el campo '" + getLabelMin() + "'", "Error");
+			FWJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelProm() + "' debe ser mayor o igual que el campo '" + getLabelMin() + "'", "Error");
 			getTextFieldProm().requestFocus();
 			return false;
 		}
 		if(getTextFieldProm().getValue() > getTextFieldMax().getValue()) {
-			CLJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelProm() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
+			FWJOptionPane.showErrorMessage(getOwner(), "El campo '" + getLabelProm() + "' debe ser menor o igual que el campo '" + getLabelMax() + "'", "Error");
 			getTextFieldProm().requestFocus();
 			return false;
 		}

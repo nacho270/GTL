@@ -25,15 +25,15 @@ import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTableAnalisis;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTableAnalisis;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.to.informeproduccion.ClienteCantidadTO;
 import ar.com.textillevel.entidades.to.informeproduccion.InformeProduccionTO;
 import ar.com.textillevel.entidades.to.informeproduccion.ItemInformeProduccionTO;
@@ -62,10 +62,10 @@ public class JDialogInformeProduccionPreview extends JDialog {
 
 	private JasperPrint print;
 
-	private CLJTextField txtTotal;
-	private CLJTextField txtFechaDesde;
-	private CLJTextField txtFechaHasta;
-	private CLJTextField txtTotalDias;
+	private FWJTextField txtTotal;
+	private FWJTextField txtFechaDesde;
+	private FWJTextField txtFechaHasta;
+	private FWJTextField txtTotalDias;
 	
 	public JDialogInformeProduccionPreview(Frame padre, InformeProduccionTO informe, String strFechaDesde, String strFechaHasta, int restaFechas) {
 		super(padre);
@@ -136,8 +136,8 @@ public class JDialogInformeProduccionPreview extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTableAnalisis tabla = new CLJTableAnalisis(0,CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTableAnalisis tabla = new FWJTableAnalisis(0,CANT_COLS);
 			tabla.setStringColumn(COL_FECHA,"Fecha",120,120,true);
 			tabla.setStringColumn(COL_NOMBRE,"Nombre",300,300,true);
 			tabla.setStringColumn(COL_CANT, "Cantidad", 150,150,true);
@@ -145,12 +145,12 @@ public class JDialogInformeProduccionPreview extends JDialog {
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setAlignment(COL_FECHA, CLJTableAnalisis.CENTER_ALIGN);
-			tabla.setAlignment(COL_NOMBRE, CLJTableAnalisis.CENTER_ALIGN);
-			tabla.setAlignment(COL_CANT, CLJTableAnalisis.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_FECHA, CLJTableAnalisis.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NOMBRE, CLJTableAnalisis.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CANT, CLJTableAnalisis.CENTER_ALIGN);
+			tabla.setAlignment(COL_FECHA, FWJTableAnalisis.CENTER_ALIGN);
+			tabla.setAlignment(COL_NOMBRE, FWJTableAnalisis.CENTER_ALIGN);
+			tabla.setAlignment(COL_CANT, FWJTableAnalisis.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA, FWJTableAnalisis.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NOMBRE, FWJTableAnalisis.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CANT, FWJTableAnalisis.CENTER_ALIGN);
 			tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tabla.setPermiteSelector(true);
 			tabla.agruparColumna(COL_FECHA);
@@ -170,7 +170,7 @@ public class JDialogInformeProduccionPreview extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Desea salir?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Desea salir?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -243,14 +243,14 @@ public class JDialogInformeProduccionPreview extends JDialog {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTabla().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTabla().getTabla();
+						FWJTable tabla = getPanelTabla().getTabla();
 						mostrarFileChooser("Informe de producción", EXTENSION_EXCEL);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -282,7 +282,7 @@ public class JDialogInformeProduccionPreview extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTabla().getTabla().getRowCount() > 0) {
 						mostrarFileChooser("Informe de producción", EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -291,7 +291,7 @@ public class JDialogInformeProduccionPreview extends JDialog {
 								JasperHelper.exportarAPDF(getPrint(), archivoIngresado.getAbsolutePath());
 							} catch (JRException e1) {
 								e1.printStackTrace();
-								CLJOptionPane.showErrorMessage(JDialogInformeProduccionPreview.this, "Se ha producido un error al expoertar", "Error");
+								FWJOptionPane.showErrorMessage(JDialogInformeProduccionPreview.this, "Se ha producido un error al expoertar", "Error");
 							}
 						}
 					}
@@ -306,7 +306,7 @@ public class JDialogInformeProduccionPreview extends JDialog {
 			JasperHelper.imprimirReporte(getPrint(), true, false, 1);
 		} catch (JRException e1) {
 			e1.printStackTrace();
-			CLJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
+			FWJOptionPane.showErrorMessage(this, "Se ha producido un error al imprimir", "Error");
 		}
 	}
 	
@@ -360,7 +360,7 @@ public class JDialogInformeProduccionPreview extends JDialog {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -370,11 +370,11 @@ public class JDialogInformeProduccionPreview extends JDialog {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JDialogInformeProduccionPreview.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogInformeProduccionPreview.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 
@@ -386,9 +386,9 @@ public class JDialogInformeProduccionPreview extends JDialog {
 		this.informeProduccion = informeProduccion;
 	}
 
-	private CLJTextField getTxtTotal() {
+	private FWJTextField getTxtTotal() {
 		if(txtTotal == null){
-			txtTotal = new CLJTextField();
+			txtTotal = new FWJTextField();
 			txtTotal.setPreferredSize(new Dimension(120, 20));
 			txtTotal.setEditable(false);
 		}
@@ -402,27 +402,27 @@ public class JDialogInformeProduccionPreview extends JDialog {
 		return panelTabla;
 	}
 	
-	private CLJTextField getTxtFechaDesde() {
+	private FWJTextField getTxtFechaDesde() {
 		if(txtFechaDesde == null){
-			txtFechaDesde = new CLJTextField();
+			txtFechaDesde = new FWJTextField();
 			txtFechaDesde.setPreferredSize(new Dimension(120, 20));
 			txtFechaDesde.setEditable(false);
 		}
 		return txtFechaDesde;
 	}
 	
-	private CLJTextField getTxtFechaHasta() {
+	private FWJTextField getTxtFechaHasta() {
 		if(txtFechaHasta==null){
-			txtFechaHasta = new CLJTextField();
+			txtFechaHasta = new FWJTextField();
 			txtFechaHasta.setPreferredSize(new Dimension(120, 20));
 			txtFechaHasta.setEditable(false);
 		}
 		return txtFechaHasta;
 	}
 
-	private CLJTextField getTxtTotalDias() {
+	private FWJTextField getTxtTotalDias() {
 		if(txtTotalDias == null){
-			txtTotalDias = new CLJTextField();
+			txtTotalDias = new FWJTextField();
 			txtTotalDias.setPreferredSize(new Dimension(120, 20));
 			txtTotalDias.setEditable(false);
 		}

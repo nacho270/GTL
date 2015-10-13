@@ -21,10 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.AbstractDocument;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.InfoDireccion;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.UppercaseDocumentFilterSoloLetras;
@@ -41,9 +41,9 @@ public class JDialogAgregarModificarFamiliar extends JDialog {
 
 	private PanelDatePicker panelFechaNacimiento;
 	private JComboBox cmbParentesco;
-	private CLJNumericTextField txtNroDoc;
-	private CLJTextField txtNombre;
-	private CLJTextField txtApellido;
+	private FWJNumericTextField txtNroDoc;
+	private FWJTextField txtNombre;
+	private FWJTextField txtApellido;
 	
 	private JComboBox cmbListaFamiliares;
 
@@ -177,17 +177,17 @@ public class JDialogAgregarModificarFamiliar extends JDialog {
 
 	private boolean validar() {
 		if(getTxtNombre().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del familiar", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del familiar", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getTxtApellido().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el apellido del familiar", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el apellido del familiar", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getTxtNroDoc().getValueWithNull() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el documento del familiar", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el documento del familiar", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
@@ -223,26 +223,26 @@ public class JDialogAgregarModificarFamiliar extends JDialog {
 		return cmbParentesco;
 	}
 
-	public CLJNumericTextField getTxtNroDoc() {
+	public FWJNumericTextField getTxtNroDoc() {
 		if(txtNroDoc == null){
-			txtNroDoc = new CLJNumericTextField(0l,99999999l);
+			txtNroDoc = new FWJNumericTextField(0l,99999999l);
 			txtNroDoc.setColumns(5);
 		}
 		return txtNroDoc;
 	}
 
-	public CLJTextField getTxtNombre() {
+	public FWJTextField getTxtNombre() {
 		if(txtNombre == null){
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 			txtNombre.setPreferredSize(new Dimension(120, 20));
 			((AbstractDocument) txtNombre.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}
 		return txtNombre;
 	}
 
-	public CLJTextField getTxtApellido() {
+	public FWJTextField getTxtApellido() {
 		if(txtApellido == null){
-			txtApellido = new CLJTextField();
+			txtApellido = new FWJTextField();
 			txtApellido.setPreferredSize(new Dimension(120, 20));
 			((AbstractDocument) txtApellido.getDocument()).setDocumentFilter(new UppercaseDocumentFilterSoloLetras());
 		}

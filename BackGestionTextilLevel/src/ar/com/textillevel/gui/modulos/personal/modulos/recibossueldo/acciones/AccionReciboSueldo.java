@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxListDialog;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxListDialog;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.ReciboSueldoDatosHandler;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.cabecera.CabeceraReciboSueldo;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.cabecera.ModeloCabeceraReciboSueldo;
@@ -39,7 +39,7 @@ public class AccionReciboSueldo extends Accion<InfoReciboSueltoTO> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean ejecutar(AccionEvent<InfoReciboSueltoTO> e) throws CLException {
+	public boolean ejecutar(AccionEvent<InfoReciboSueltoTO> e) throws FWException {
 		InfoReciboSueltoTO irsto = e.getSelectedElements().get(0);
 		ReciboSueldo rs = null;
 		if(irsto.getReciboSueldo() == null) {
@@ -48,7 +48,7 @@ public class AccionReciboSueldo extends Accion<InfoReciboSueltoTO> {
 			//se buscan los vales aún no descontados y se ofrecen para incluirlos en el recibo de sueldo
 			List<ValeAnticipo> vales = getValesFacade().getValesEnEstado(irsto.getLegajo().getId(), EEstadoValeAnticipo.A_DESCONTAR);
 			if(!vales.isEmpty()) {
-				CLCheckBoxListDialog dialogoSelVales = new CLCheckBoxListDialog(e.getSource().getFrame());
+				FWCheckBoxListDialog dialogoSelVales = new FWCheckBoxListDialog(e.getSource().getFrame());
 				dialogoSelVales.setValores(vales, true);
 				dialogoSelVales.setTitle("Seleccione los vales");
 				dialogoSelVales.setVisible(true);
@@ -61,7 +61,7 @@ public class AccionReciboSueldo extends Accion<InfoReciboSueltoTO> {
 			try {
 				new ReciboSueldoDatosHandler(rs, model, valorHora, vales);
 			} catch (InvalidStateReciboSueldoException e1) {
-				CLJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMessage()), "Error");
+				FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMessage()), "Error");
 				return false;
 			}
 		} else {

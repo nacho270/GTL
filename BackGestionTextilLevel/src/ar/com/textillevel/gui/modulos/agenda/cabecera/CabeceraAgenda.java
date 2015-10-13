@@ -14,9 +14,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.entidades.enums.ETipoRubro;
 import ar.com.textillevel.entidades.gente.Rubro;
@@ -28,7 +28,7 @@ public class CabeceraAgenda extends Cabecera<ModeloCabeceraAgenda> {
 	private static final long serialVersionUID = 3945789175664432323L;
 
 	private JComboBox cmbCriterio;
-	private CLJTextField txtBusqueda;
+	private FWJTextField txtBusqueda;
 	private JButton btnBuscar;
 	private ModeloCabeceraAgenda modeloCabecera;
 	private JComboBox cmbRubroPersona;
@@ -124,9 +124,9 @@ public class CabeceraAgenda extends Cabecera<ModeloCabeceraAgenda> {
 		return cmbCriterio;
 	}
 
-	public CLJTextField getTxtBusqueda() {
+	public FWJTextField getTxtBusqueda() {
 		if(txtBusqueda == null){
-			txtBusqueda = new CLJTextField();
+			txtBusqueda = new FWJTextField();
 			txtBusqueda.setPreferredSize(new Dimension(150, 20));
 			txtBusqueda.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

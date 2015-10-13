@@ -12,12 +12,12 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
@@ -97,7 +97,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 	
-	public void eliminarFactura(Factura factura, String usrName) throws ValidacionException, CLException {
+	public void eliminarFactura(Factura factura, String usrName) throws ValidacionException, FWException {
 		if(!facturaDao.esLaUltimaFactura(factura, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal())){
 			throw new ValidacionException(EValidacionException.FACTURA_NO_ES_LA_ULTIMA.getInfoValidacion());
 		}
@@ -165,7 +165,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return f;
 	}
 	
-	public Factura actualizarFactura(Factura factura) throws CLException{
+	public Factura actualizarFactura(Factura factura) throws FWException{
 		 return facturaDao.save(factura);
 	}
 
@@ -189,7 +189,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		return facturaDao.getFacturaAnteriorYPosterior(nroFactura,tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
 
-	public void anularFactura(Factura factura, boolean anularRemitoSalida, String usuario) throws ValidacionException, CLException {
+	public void anularFactura(Factura factura, boolean anularRemitoSalida, String usuario) throws ValidacionException, FWException {
 		docContableFacade.checkAutorizacionAFIP(factura);		
 		if(facturaDao.facturaYaTieneRecibo(factura)){
 			throw new ValidacionException(EValidacionException.FACTURA_YA_TIENE_RECIBO.getInfoValidacion());

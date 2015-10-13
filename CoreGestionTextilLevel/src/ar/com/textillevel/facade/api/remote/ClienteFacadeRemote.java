@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ClienteDeudaTO;
 

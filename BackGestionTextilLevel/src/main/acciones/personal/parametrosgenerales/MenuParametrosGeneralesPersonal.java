@@ -4,10 +4,10 @@ import java.awt.Frame;
 
 import javax.swing.JMenuItem;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
 
-public class MenuParametrosGeneralesPersonal extends CLJMenu {
+public class MenuParametrosGeneralesPersonal extends FWJMenu {
 
 	private static final long serialVersionUID = -7385942711273234287L;
 	private JMenuItem menuParametrosGenerales;

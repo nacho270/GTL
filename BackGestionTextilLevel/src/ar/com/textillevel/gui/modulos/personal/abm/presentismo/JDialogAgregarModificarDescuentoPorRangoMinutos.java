@@ -19,10 +19,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.presentismo.DescuentoPresentismoRangoMinutos;
 
@@ -30,9 +30,9 @@ public class JDialogAgregarModificarDescuentoPorRangoMinutos extends JDialog {
 
 	private static final long serialVersionUID = -819445810048405624L;
 
-	private CLJNumericTextField txtMinutosDesde;
-	private CLJNumericTextField txtMinutosHasta;
-	private CLJTextField txtPorcentajeDescuento;
+	private FWJNumericTextField txtMinutosDesde;
+	private FWJNumericTextField txtMinutosHasta;
+	private FWJTextField txtPorcentajeDescuento;
 	private JButton btnAceptar;
 	private JButton btnSalir;
 
@@ -88,17 +88,17 @@ public class JDialogAgregarModificarDescuentoPorRangoMinutos extends JDialog {
 		add(getPanelSur(), BorderLayout.SOUTH);
 	}
 
-	public CLJNumericTextField getTxtMinutosDesde() {
+	public FWJNumericTextField getTxtMinutosDesde() {
 		if (txtMinutosDesde == null) {
-			txtMinutosDesde = new CLJNumericTextField();
+			txtMinutosDesde = new FWJNumericTextField();
 			txtMinutosDesde.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtMinutosDesde;
 	}
 
-	public CLJTextField getTxtPorcentajeDescuento() {
+	public FWJTextField getTxtPorcentajeDescuento() {
 		if (txtPorcentajeDescuento == null) {
-			txtPorcentajeDescuento = new CLJTextField();
+			txtPorcentajeDescuento = new FWJTextField();
 			txtPorcentajeDescuento.setPreferredSize(new Dimension(120, 20));
 		}
 		return txtPorcentajeDescuento;
@@ -125,29 +125,29 @@ public class JDialogAgregarModificarDescuentoPorRangoMinutos extends JDialog {
 
 	private boolean validar() {
 		if (getTxtMinutosDesde().getValueWithNull() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de faltas", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la cantidad de faltas", "Error");
 			getTxtMinutosDesde().requestFocus();
 			return false;
 		}
 		if (getTxtPorcentajeDescuento().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje de descuento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el porcentaje de descuento", "Error");
 			getTxtPorcentajeDescuento().requestFocus();
 			return false;
 		}
 		if (!GenericUtils.esNumerico(getTxtPorcentajeDescuento().getText())) {
-			CLJOptionPane.showErrorMessage(this, "El valor del porcentaje de descuento debe ser numérico", "Error");
+			FWJOptionPane.showErrorMessage(this, "El valor del porcentaje de descuento debe ser numérico", "Error");
 			getTxtPorcentajeDescuento().requestFocus();
 			return false;
 		}
 		if(getTxtMinutosDesde().getValue()>getTxtMinutosHasta().getValue()){
-			CLJOptionPane.showErrorMessage(this, "Los minutos 'desde' deben ser menores que los minutos 'hasta'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Los minutos 'desde' deben ser menores que los minutos 'hasta'", "Error");
 			getTxtMinutosDesde().requestFocus();
 			return false;
 		}
 		if (getDescuentosExistentes() != null && !getDescuentosExistentes().isEmpty()) {
 			for (DescuentoPresentismoRangoMinutos d : getDescuentosExistentes()) {
 				if (d.seSolapa(getTxtMinutosDesde().getValue(), getTxtMinutosHasta().getValue()) && !d.equals(getDescuentoActual())) {
-					CLJOptionPane.showErrorMessage(this, "El rango ingresado se solapa con un rango existente", "Error");
+					FWJOptionPane.showErrorMessage(this, "El rango ingresado se solapa con un rango existente", "Error");
 					getTxtMinutosDesde().requestFocus();
 					return false;
 				}
@@ -216,9 +216,9 @@ public class JDialogAgregarModificarDescuentoPorRangoMinutos extends JDialog {
 		this.descuentoActual = descuentoActual;
 	}
 
-	public CLJNumericTextField getTxtMinutosHasta() {
+	public FWJNumericTextField getTxtMinutosHasta() {
 		if(txtMinutosHasta == null){
-			txtMinutosHasta = new CLJNumericTextField();
+			txtMinutosHasta = new FWJNumericTextField();
 		}
 		return txtMinutosHasta;
 	}

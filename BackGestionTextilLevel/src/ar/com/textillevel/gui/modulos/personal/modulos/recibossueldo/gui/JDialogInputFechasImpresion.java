@@ -12,8 +12,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 
 public class JDialogInputFechasImpresion extends JDialog {
@@ -84,11 +84,11 @@ public class JDialogInputFechasImpresion extends JDialog {
 
 	private boolean validar() {
 		if(getPanFechaPago().getDate() == null) {
-			CLJOptionPane.showErrorMessage(JDialogInputFechasImpresion.this, "Debe ingresar una fecha de pago.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogInputFechasImpresion.this, "Debe ingresar una fecha de pago.", "Error");
 			return false;
 		}
 		if(getPanFechaUltDeposito().getDate() == null) {
-			CLJOptionPane.showErrorMessage(JDialogInputFechasImpresion.this, "Debe ingresar una fecha de último depósito.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogInputFechasImpresion.this, "Debe ingresar una fecha de último depósito.", "Error");
 			return false;
 		}
 		return true;

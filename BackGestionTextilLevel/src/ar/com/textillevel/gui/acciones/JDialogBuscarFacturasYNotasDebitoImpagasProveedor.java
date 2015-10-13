@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
 import ar.com.textillevel.entidades.gente.Proveedor;
@@ -33,8 +33,8 @@ public class JDialogBuscarFacturasYNotasDebitoImpagasProveedor extends JDialog {
 	private List<NotaDebitoProveedor> notasDebitoSeleccionadas;
 
 	private JTabbedPane panelTabs;
-	private CLCheckBoxList<FacturaProveedor> listaCheckFactura;
-	private CLCheckBoxList<NotaDebitoProveedor> listaCheckNotaDebito;
+	private FWCheckBoxList<FacturaProveedor> listaCheckFactura;
+	private FWCheckBoxList<NotaDebitoProveedor> listaCheckNotaDebito;
 	private JPanel panelSur;
 	private JPanel panelTabCentralFacturas;
 	private JPanel panelTabCentralNotasDebito;
@@ -130,9 +130,9 @@ public class JDialogBuscarFacturasYNotasDebitoImpagasProveedor extends JDialog {
 		return panelTabs;
 	}
 
-	public CLCheckBoxList<FacturaProveedor> getListaCheckFactura() {
+	public FWCheckBoxList<FacturaProveedor> getListaCheckFactura() {
 		if (listaCheckFactura == null) {
-			listaCheckFactura = new CLCheckBoxList<FacturaProveedor>(){
+			listaCheckFactura = new FWCheckBoxList<FacturaProveedor>(){
 
 				private static final long serialVersionUID = 4501839806754196510L;
 
@@ -152,9 +152,9 @@ public class JDialogBuscarFacturasYNotasDebitoImpagasProveedor extends JDialog {
 		return listaCheckFactura;
 	}
 
-	public CLCheckBoxList<NotaDebitoProveedor> getListaCheckNotaDebito() {
+	public FWCheckBoxList<NotaDebitoProveedor> getListaCheckNotaDebito() {
 		if (listaCheckNotaDebito == null) {
-			listaCheckNotaDebito = new CLCheckBoxList<NotaDebitoProveedor>(){
+			listaCheckNotaDebito = new FWCheckBoxList<NotaDebitoProveedor>(){
 
 				private static final long serialVersionUID = -4016361015164714193L;
 
@@ -181,7 +181,7 @@ public class JDialogBuscarFacturasYNotasDebitoImpagasProveedor extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if(getFacturasSeleccionadas().size()==0 && getNotasDebitoSeleccionadas().size() == 0){
-						CLJOptionPane.showErrorMessage(JDialogBuscarFacturasYNotasDebitoImpagasProveedor.this, "Debe elegir al menos una factura o nota de débito", "Error");
+						FWJOptionPane.showErrorMessage(JDialogBuscarFacturasYNotasDebitoImpagasProveedor.this, "Debe elegir al menos una factura o nota de débito", "Error");
 						return;
 					}else{
 						setAcepto(true);

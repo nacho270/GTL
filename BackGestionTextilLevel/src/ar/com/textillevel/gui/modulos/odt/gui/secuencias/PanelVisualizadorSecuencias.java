@@ -17,10 +17,10 @@ import javax.swing.JToggleButton.ToggleButtonModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.modulos.odt.gui.secuencias.event.DobleClickPasoSecuenciaEventListener;
 import ar.com.textillevel.gui.modulos.odt.gui.secuencias.event.SecuenciaBloqueadaEventData;
@@ -122,13 +122,13 @@ public class PanelVisualizadorSecuencias extends JPanel{
 		}
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_CLIENTE, "Cliente", 200, 200, true);
 			tabla.setStringColumn(COL_NOMBRE_SECUENCIA,"Secuencia",200, 200, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
-			tabla.setHeaderAlignment(COL_CLIENTE, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NOMBRE_SECUENCIA, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CLIENTE, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NOMBRE_SECUENCIA, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);

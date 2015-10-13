@@ -16,10 +16,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.antiguedad.ValorAntiguedad;
 
@@ -30,8 +30,8 @@ public class JDialogAgregarModificarValorAntiguedad extends JDialog {
 	private ValorAntiguedad valorAntiguedadActual;
 	private boolean acepto;
 
-	private CLJNumericTextField txtAnios;
-	private CLJTextField txtValor;
+	private FWJNumericTextField txtAnios;
+	private FWJTextField txtValor;
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -112,16 +112,16 @@ public class JDialogAgregarModificarValorAntiguedad extends JDialog {
 		this.acepto = acepto;
 	}
 
-	public CLJNumericTextField getTxtAnios() {
+	public FWJNumericTextField getTxtAnios() {
 		if(txtAnios == null){
-			txtAnios = new CLJNumericTextField();
+			txtAnios = new FWJNumericTextField();
 		}
 		return txtAnios;
 	}
 
-	public CLJTextField getTxtValor() {
+	public FWJTextField getTxtValor() {
 		if(txtValor == null){
-			txtValor = new CLJTextField();
+			txtValor = new FWJTextField();
 		}
 		return txtValor;
 	}
@@ -145,17 +145,17 @@ public class JDialogAgregarModificarValorAntiguedad extends JDialog {
 
 	private boolean validar() {
 		if(getTxtAnios().getValueWithNull()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar los años", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar los años", "Error");
 			getTxtAnios().requestFocus();
 			return false;
 		}
 		if(getTxtValor().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el valor", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el valor", "Error");
 			getTxtValor().requestFocus();
 			return false;
 		}
 		if(!isEdicion() && hayAnioRepetido()){
-			CLJOptionPane.showErrorMessage(this, "Ya se existe un valor para el año ingresado.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Ya se existe un valor para el año ingresado.", "Error");
 			getTxtValor().requestFocus();
 			return false;
 		}

@@ -3,9 +3,9 @@ package ar.com.textillevel.gui.modulos.cheques;
 import java.sql.Date;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.gui.modulos.cheques.builders.BuilderAccionesCheque;
@@ -21,7 +21,7 @@ public class ModuloChequesModel extends ModuloModel<Cheque, ModeloCabeceraCheque
 		super();
 	}
 
-	public ModuloChequesModel(Integer id) throws CLException {
+	public ModuloChequesModel(Integer id) throws FWException {
 		super(id, BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance());
 		setTitulo("Administrar cheques");
 	}

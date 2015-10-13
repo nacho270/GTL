@@ -14,12 +14,12 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Categoria;
@@ -123,7 +123,7 @@ public class GuiABMConfigValorHoraCategoria extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Configuración seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la Configuración seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getConfigFacade().remove(getConfigActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -136,7 +136,7 @@ public class GuiABMConfigValorHoraCategoria extends GuiABMListaTemplate {
 			setModoEdicion(true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una Configuración", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una Configuración", "Error");
 			return false;
 		}
 	}
@@ -160,26 +160,26 @@ public class GuiABMConfigValorHoraCategoria extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getPanFechaDesde().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha desde.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha desde.", "Error");
 			return false;
 		}
 		if(getPanFechaHasta().getDate() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha hasta.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha hasta.", "Error");
 			return false;
 		}
 		if(getPanTablaCategoriaValorPuesto().getElementos().isEmpty()) {
-			CLJOptionPane.showErrorMessage(this, "Debe definir al menos un valor de hora para un puesto.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe definir al menos un valor de hora para un puesto.", "Error");
 			return false;
 		}
 		Sindicato s = (Sindicato)getItemComboMaestroSeleccionado();
 		ConfiguracionValorHoraCategoria config = getConfigFacade().getConfigByFechaAndSindicato(new Date(getPanFechaDesde().getDate().getTime()), s.getId());
 		if(config!= null && !config.getId().equals(configActual.getId())) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap("Ya existe una configuración que se solapa con la fecha desde ingresada."), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap("Ya existe una configuración que se solapa con la fecha desde ingresada."), "Error");
 			return false;
 		}
 		config = getConfigFacade().getConfigByFechaAndSindicato(new Date(getPanFechaHasta().getDate().getTime()), s.getId());
 		if(config!= null && !config.getId().equals(configActual.getId())) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap("Ya existe una configuración que se solapa con la fecha hasta ingresada."), "Error");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap("Ya existe una configuración que se solapa con la fecha hasta ingresada."), "Error");
 			return false;
 		}
 		return true;
@@ -279,8 +279,8 @@ public class GuiABMConfigValorHoraCategoria extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_CATEGORIA, "CATEGORIA", 100, 100, true);
 			tabla.setMultilineColumn(COL_DETALLE_VALOR_POR_PUESTO, "VALOR HORA POR PUESTOS", 200, true);
 			tabla.setStringColumn(COL_VALOR_HORA_X_DEFECTO, "VALOR HORA POR DEFECTO", 150, 150, true);

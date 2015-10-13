@@ -10,10 +10,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.Servicio;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
@@ -29,7 +29,7 @@ public class GuiABMServicios extends GuiABMListaTemplate{
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	
-	private CLJTextField txtNombreServicio;
+	private FWJTextField txtNombreServicio;
 	private JComboBox cmbProveedor;
 	
 	private ServicioFacadeRemote servicioFacade;
@@ -108,7 +108,7 @@ public class GuiABMServicios extends GuiABMListaTemplate{
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el servicio seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el servicio seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getServicioFacade().remove(getServicioActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -129,13 +129,13 @@ public class GuiABMServicios extends GuiABMListaTemplate{
 	
 	private boolean validar() {
 		if(getTxtNombreServicio().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del servicio.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del servicio.", "Advertencia");
 			getTxtNombreServicio().requestFocus();
 			return false;
 		}
 		Proveedor proveedor = (Proveedor)getCmbProveedor().getSelectedItem();
 		if(getServicioFacade().existeServicio(getTxtNombreServicio().getText().trim(),proveedor,getServicioActual().getId())){
-			CLJOptionPane.showErrorMessage(this, "Ya existe un servicio llamado '"+getTxtNombreServicio().getText().trim()+"' para el proveedor '"+proveedor.getRazonSocial()+"'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Ya existe un servicio llamado '"+getTxtNombreServicio().getText().trim()+"' para el proveedor '"+proveedor.getRazonSocial()+"'.", "Advertencia");
 			getTxtNombreServicio().requestFocus();
 			return false;
 		}
@@ -154,7 +154,7 @@ public class GuiABMServicios extends GuiABMListaTemplate{
 			getTxtNombreServicio().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un servicio", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un servicio", "Error");
 			return false;
 		}
 	}
@@ -202,9 +202,9 @@ public class GuiABMServicios extends GuiABMListaTemplate{
 		this.servicioActual = servicioActual;
 	}
 
-	public CLJTextField getTxtNombreServicio() {
+	public FWJTextField getTxtNombreServicio() {
 		if(txtNombreServicio == null){
-			txtNombreServicio = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreServicio = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreServicio;
 	}

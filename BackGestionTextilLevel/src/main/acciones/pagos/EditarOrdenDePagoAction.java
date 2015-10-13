@@ -7,9 +7,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDePago;
@@ -59,11 +59,11 @@ public class EditarOrdenDePagoAction implements Action{
 					break;
 				}
 				if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-					CLJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
+					FWJOptionPane.showErrorMessage(padre, "Ingreso incorrecto", "error");
 				} else {
 					orden = opfr.getOrdenDePagoByNroOrdenEager(Integer.valueOf(input.trim()));
 					if(orden == null){
-						CLJOptionPane.showErrorMessage(padre, "Orden de pago no encontrada", "Error");
+						FWJOptionPane.showErrorMessage(padre, "Orden de pago no encontrada", "Error");
 					}else{
 						ok = true;
 						JDialogCargaOrdenDePago dialog = new JDialogCargaOrdenDePago(padre, orden,false);
@@ -72,7 +72,7 @@ public class EditarOrdenDePagoAction implements Action{
 				}
 			} while (!ok);
 
-		} catch (CLException e1) {
+		} catch (FWException e1) {
 			BossError.gestionarError(e1);
 		}
 	}

@@ -16,10 +16,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import main.acciones.facturacion.OperacionSobreRemitoEntradaHandler;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
@@ -114,8 +114,8 @@ public class JDialogSeleccionarPiezasGrupoDetalleStock extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setCheckColumn(COL_CHECK, "");
 			tabla.setIntColumn(COL_NRO_PIEZA, "Nº pieza", 50, true);
 			tabla.setFloatColumn(COL_METROS_PIEZA, "Metros", 55, true);
@@ -127,12 +127,12 @@ public class JDialogSeleccionarPiezasGrupoDetalleStock extends JDialog {
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setHeaderAlignment(COL_NRO_PIEZA, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_METROS_PIEZA, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROVEEDOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NRO_REMITO, CLJTable.CENTER_ALIGN);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setHeaderAlignment(COL_NRO_PIEZA, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_METROS_PIEZA, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROVEEDOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NRO_REMITO, FWJTable.CENTER_ALIGN);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			tabla.addMouseListener(new MouseAdapter() {
 
 				@Override

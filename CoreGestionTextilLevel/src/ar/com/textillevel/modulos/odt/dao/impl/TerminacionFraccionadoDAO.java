@@ -3,7 +3,7 @@ package ar.com.textillevel.modulos.odt.dao.impl;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.modulos.odt.dao.api.local.TerminacionFraccionadoDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TerminacionFraccionado;
 

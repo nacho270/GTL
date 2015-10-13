@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJTable;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJTable;
 
 public class PanelBotonesAgregarQuitarSubirBajarModificar extends JPanel {
 
@@ -24,7 +24,7 @@ public class PanelBotonesAgregarQuitarSubirBajarModificar extends JPanel {
 	private JButton btnAgregar;
 	private JButton btnEliminar;
 
-	private final CLJTable tabla;
+	private final FWJTable tabla;
 	private boolean modoEdicion;
 
 	public static String iconoBtnAgregar = null;
@@ -38,25 +38,25 @@ public class PanelBotonesAgregarQuitarSubirBajarModificar extends JPanel {
 	public static String iconoBtnModificar = null;
 	public static String iconoBtnModificarDeshab = null;
 
-	private static final String DEFAULT_ICON_BTN_AGREGAR = "ar/clarin/fwjava/imagenes/b_agregar_fila.png";
-	private static final String DEFAULT_ICON_BTN_AGREGAR_DESHAB = "ar/clarin/fwjava/imagenes/b_agregar_fila_des.png";
-	private static final String DEFAULT_ICON_BTN_ELIMINAR = "ar/clarin/fwjava/imagenes/b_sacar_fila.png";
-	private static final String DEFAULT_ICON_BTN_ELIMINAR_DESHAB = "ar/clarin/fwjava/imagenes/b_sacar_fila_des.png";
-	private static final String DEFAULT_ICON_BTN_SUBIR = "ar/clarin/fwjava/imagenes/b_subir.png";
-	private static final String DEFAULT_ICON_BTN_SUBIR_DESHAB = "ar/clarin/fwjava/imagenes/b_subir_des.png";
-	private static final String DEFAULT_ICON_BTN_BAJAR = "ar/clarin/fwjava/imagenes/b_bajar.png";
-	private static final String DEFAULT_ICON_BTN_BAJAR_DESHAB = "ar/clarin/fwjava/imagenes/b_bajar_des.png";
-	private static final String DEFAULT_ICON_BTN_MODIFICAR = "ar/clarin/fwjava/imagenes/b_modificar_fila.png";
-	private static final String DEFAULT_ICON_BTN_MODIFICAR_DESHAB = "ar/clarin/fwjava/imagenes/b_modificar_fila_des.png";
+	private static final String DEFAULT_ICON_BTN_AGREGAR = "ar/com/fwcommon/imagenes/b_agregar_fila.png";
+	private static final String DEFAULT_ICON_BTN_AGREGAR_DESHAB = "ar/com/fwcommon/imagenes/b_agregar_fila_des.png";
+	private static final String DEFAULT_ICON_BTN_ELIMINAR = "ar/com/fwcommon/imagenes/b_sacar_fila.png";
+	private static final String DEFAULT_ICON_BTN_ELIMINAR_DESHAB = "ar/com/fwcommon/imagenes/b_sacar_fila_des.png";
+	private static final String DEFAULT_ICON_BTN_SUBIR = "ar/com/fwcommon/imagenes/b_subir.png";
+	private static final String DEFAULT_ICON_BTN_SUBIR_DESHAB = "ar/com/fwcommon/imagenes/b_subir_des.png";
+	private static final String DEFAULT_ICON_BTN_BAJAR = "ar/com/fwcommon/imagenes/b_bajar.png";
+	private static final String DEFAULT_ICON_BTN_BAJAR_DESHAB = "ar/com/fwcommon/imagenes/b_bajar_des.png";
+	private static final String DEFAULT_ICON_BTN_MODIFICAR = "ar/com/fwcommon/imagenes/b_modificar_fila.png";
+	private static final String DEFAULT_ICON_BTN_MODIFICAR_DESHAB = "ar/com/fwcommon/imagenes/b_modificar_fila_des.png";
 
 	public static final int DEFAULT_WIDTH = 20;
 	public static final int DEFAULT_HEIGHT = 50;
 
-	public PanelBotonesAgregarQuitarSubirBajarModificar(CLJTable tabla) {
+	public PanelBotonesAgregarQuitarSubirBajarModificar(FWJTable tabla) {
 		this(tabla, true);
 	}
 
-	public PanelBotonesAgregarQuitarSubirBajarModificar(CLJTable tabla, boolean modoEdicion) {
+	public PanelBotonesAgregarQuitarSubirBajarModificar(FWJTable tabla, boolean modoEdicion) {
 		this.tabla = tabla;
 		construct();
 		setModoEdicion(modoEdicion);
@@ -153,7 +153,7 @@ public class PanelBotonesAgregarQuitarSubirBajarModificar extends JPanel {
 		btnEliminar.setEnabled(modoEdicion ? (tabla.getSelectedRow() != -1) : false);
 	}
 
-	public CLJTable getTabla() {
+	public FWJTable getTabla() {
 		return tabla;
 	}
 

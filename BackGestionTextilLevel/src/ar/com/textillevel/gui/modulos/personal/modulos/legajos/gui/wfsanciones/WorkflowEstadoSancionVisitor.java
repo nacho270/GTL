@@ -5,9 +5,9 @@ import java.sql.Timestamp;
 
 import javax.swing.JOptionPane;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.AccionCartaDocumento;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.CartaDocumento;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.wf.IEstadoSancionVisitor;
@@ -66,7 +66,7 @@ public class WorkflowEstadoSancionVisitor implements IEstadoSancionVisitor {
 		Timestamp fechaHora = dialogo.getFechaHora();
 		if(fechaHora != null) {
 			if(!DateUtil.getAhora().after(fechaHora)) {
-				CLJOptionPane.showErrorMessage(padre, "La fecha y hora de recepción debe ser menor a la fecha y hora actual.", "Error");
+				FWJOptionPane.showErrorMessage(padre, "La fecha y hora de recepción debe ser menor a la fecha y hora actual.", "Error");
 				return;
 			}
 			cartaDocumento.setEstadoCD(see.getEnumEstado());

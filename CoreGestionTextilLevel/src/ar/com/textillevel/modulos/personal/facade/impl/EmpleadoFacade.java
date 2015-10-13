@@ -7,7 +7,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.dao.api.EmpleadoDAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.configuracion.DatosAlarmaFinContrato;
 import ar.com.textillevel.modulos.personal.entidades.contratos.ETipoContrato;

@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.personal.modulos.vales;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.builders.BuilderAccionesValesAnticipo;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.cabecera.ModeloCabeceraValesAnticipo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.vale.ValeAnticipo;
@@ -16,7 +16,7 @@ public class ModuloValesAnticipoModel extends ModuloModel<ValeAnticipo, ModeloCa
 		super();
 	}
 
-	public ModuloValesAnticipoModel(Integer id) throws CLException {
+	public ModuloValesAnticipoModel(Integer id) throws FWException {
 		super(id, BuilderAccionesValesAnticipo.getInstance(), BuilderAccionesValesAnticipo.getInstance(),BuilderAccionesValesAnticipo.getInstance());
 		setTitulo("Administrar vales");
 	}

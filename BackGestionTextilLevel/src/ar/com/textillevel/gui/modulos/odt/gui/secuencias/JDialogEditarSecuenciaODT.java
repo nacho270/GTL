@@ -19,11 +19,11 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarPasosSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.gui.PanCabeceraDatosODT;
 import ar.com.textillevel.gui.modulos.odt.impresion.ImprimirODTHandler;
@@ -109,8 +109,8 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -123,14 +123,14 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 			tabla.setStringColumn(COL_SUBPROCESO, "Subproceso", 150, 150, true);
 			tabla.setStringColumn(COL_OBS, "Observaciones", 170, 170, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
-			tabla.setHeaderAlignment(COL_SECTOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_SUBPROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_OBS, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_SECTOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_SUBPROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_OBS, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
-			tabla.setSelectionMode(CLJTable.MULTIPLE_INTERVAL_SELECTION);
+			tabla.setSelectionMode(FWJTable.MULTIPLE_INTERVAL_SELECTION);
 			return tabla;
 		}
 
@@ -245,7 +245,7 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar, esta seguro?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}

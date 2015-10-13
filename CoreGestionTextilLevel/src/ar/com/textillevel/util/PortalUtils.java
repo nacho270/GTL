@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 
 public class PortalUtils {
@@ -55,9 +55,9 @@ public class PortalUtils {
 			byte[] res = sha1.digest(pwd.getBytes("UTF-8"));
 			return new sun.misc.BASE64Encoder().encode(res);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CLRuntimeException(e);
+			throw new FWRuntimeException(e);
 		} catch (UnsupportedEncodingException e) {
-			throw new CLRuntimeException(e);
+			throw new FWRuntimeException(e);
 		}
 	}
 

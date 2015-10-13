@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.stock.columnas.telas;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaFloat;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaFloat;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTelaTO;
 

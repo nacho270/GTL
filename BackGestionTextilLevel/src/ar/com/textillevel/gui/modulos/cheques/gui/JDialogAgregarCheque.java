@@ -34,14 +34,14 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.CLTxtComboBoxBusqueda;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.NumUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.FWTxtComboBoxBusqueda;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.NumUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
@@ -69,10 +69,10 @@ public class JDialogAgregarCheque extends JDialog {
 	private JTextField txtBanco;
 	private PanelDatePicker fechaDeposito;
 	private PanelDatePicker fechaEntrada;
-	private CLJTextField txtImporteCheque;
-	private CLJTextField txtNroCliente;
-	private CLJTextField txtNroCheque;
-	private CLJTextField txtNumeracionCheque;
+	private FWJTextField txtImporteCheque;
+	private FWJTextField txtNroCliente;
+	private FWJTextField txtNroCheque;
+	private FWJTextField txtNumeracionCheque;
 	private JComboBox cmbCapitalOInterior;
 	
 	private LinkableLabel lblElegirCliente;
@@ -392,9 +392,9 @@ public class JDialogAgregarCheque extends JDialog {
 		return fechaDeposito;
 	}
 
-	private CLJTextField getTxtImporteCheque() {
+	private FWJTextField getTxtImporteCheque() {
 		if (txtImporteCheque == null) {
-			txtImporteCheque = new CLJTextField();
+			txtImporteCheque = new FWJTextField();
 			if(getCheque() != null){
 				txtImporteCheque.setText(String.valueOf(getCheque().getImporte().doubleValue()));
 			}
@@ -471,9 +471,9 @@ public class JDialogAgregarCheque extends JDialog {
 		this.padre = padre;
 	}
 
-	private CLJTextField getTxtNroCliente() {
+	private FWJTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJTextField();
+			txtNroCliente = new FWJTextField();
 			txtNroCliente.setEditable(false);
 			txtNroCliente.setPreferredSize(new Dimension(160, 20));
 			if(getCheque()!=null){
@@ -580,31 +580,31 @@ public class JDialogAgregarCheque extends JDialog {
 
 	private boolean validar() {
 		if(getTxtNroCheque().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el número de cheque", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el número de cheque", "Error");
 			getTxtNroCheque().requestFocus();
 			return false;
 		}
 
 		if(getTxtImporteCheque().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el importe", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el importe", "Error");
 			getTxtImporteCheque().requestFocus();
 			return false;
 		}
 		
 		if(getCliente() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar a un cliente", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar a un cliente", "Error");
 			getLblelegirCliente().requestFocus();
 			return false;
 		}
 
 		if(getFechaDeposito().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de deposito", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de deposito", "Error");
 			getFechaDeposito().requestFocus();
 			return false;
 		}
 		
 		if(getFechaEntrada().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de entrada", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de entrada", "Error");
 			getFechaEntrada().requestFocus();
 			return false;
 		}
@@ -612,36 +612,36 @@ public class JDialogAgregarCheque extends JDialog {
 		Date fEntrada = getFechaEntrada().getDate();
 		Date fDeposito = getFechaDeposito().getDate();
 		if(!fEntrada.before(DateUtil.sumarDias(fDeposito, 30))){
-			CLJOptionPane.showErrorMessage(this, "La fecha de entrada debe ser menor al menos en 30 días a la fecha de deposito", "Error");
+			FWJOptionPane.showErrorMessage(this, "La fecha de entrada debe ser menor al menos en 30 días a la fecha de deposito", "Error");
 			getFechaEntrada().requestFocus();
 			return false;
 		}
 		
 		if(getTxtCUIT().getText().trim().length() < 13) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el CUIT.","Error");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el CUIT.","Error");
 			getTxtCUIT().requestFocus();
 			return false;
 		}
 		
 		if(!GenericUtils.esNumerico(getTxtNroCheque().getText())){
-			CLJOptionPane.showErrorMessage(this, "El número de cheque no puede tener letras.","Error");
+			FWJOptionPane.showErrorMessage(this, "El número de cheque no puede tener letras.","Error");
 			getTxtNroCheque().requestFocus();
 			return false;
 		}
 
 		if(!GenericUtils.esNumerico(getTxtImporteCheque().getText())){
-			CLJOptionPane.showErrorMessage(this, "El importe de cheque no puede tener letras.","Error");
+			FWJOptionPane.showErrorMessage(this, "El importe de cheque no puede tener letras.","Error");
 			getTxtImporteCheque().requestFocus();
 			return false;
 		}
 		
 		if(isModificacion() == false && getChequeFacade().getChequeByNumero(getTxtNroCheque().getText().trim())!=null){
-			CLJOptionPane.showErrorMessage(this, "Ya existe un cheque con el número ingresado", "Error");
+			FWJOptionPane.showErrorMessage(this, "Ya existe un cheque con el número ingresado", "Error");
 			getTxtNroCheque().requestFocus();
 			return false;
 		}
 		if(banco == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe elegir un Banco.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir un Banco.", "Error");
 			return false;
 		}
 		return true;
@@ -674,8 +674,8 @@ public class JDialogAgregarCheque extends JDialog {
 
 	private void salir() {
 		if(!isConsulta()){
-			int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Alta de cheque");
-			if (ret == CLJOptionPane.YES_OPTION) {
+			int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Alta de cheque");
+			if (ret == FWJOptionPane.YES_OPTION) {
 				setAcepto(false);
 				dispose();
 			}
@@ -684,9 +684,9 @@ public class JDialogAgregarCheque extends JDialog {
 		}
 	}
 
-	private CLJTextField getTxtNroCheque() {
+	private FWJTextField getTxtNroCheque() {
 		if (txtNroCheque == null) {
-			txtNroCheque = new CLJTextField();
+			txtNroCheque = new FWJTextField();
 			if(getCheque()!=null){
 				txtNroCheque.setText(getCheque().getNumero());
 			}
@@ -701,9 +701,9 @@ public class JDialogAgregarCheque extends JDialog {
 		return chequeFacade;
 	}
 
-	private CLJTextField getTxtNumeracionCheque() {
+	private FWJTextField getTxtNumeracionCheque() {
 		if (txtNumeracionCheque == null) {
-			txtNumeracionCheque = new CLJTextField();
+			txtNumeracionCheque = new FWJTextField();
 			txtNumeracionCheque.setEditable(false);
 			txtNumeracionCheque.setPreferredSize(new Dimension(100, 20));
 			if(getCheque()!=null){
@@ -741,7 +741,7 @@ public class JDialogAgregarCheque extends JDialog {
 		NumeracionCheque nc = new NumeracionCheque();
 		ParametrosGenerales parametrosGenerales = pgr.getParametrosGenerales();
 		if(parametrosGenerales==null){
-			CLJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
+			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
 			dispose();
 		}
 		Character letra = parametrosGenerales.getNumeracionCheque().getLetra();
@@ -783,7 +783,7 @@ public class JDialogAgregarCheque extends JDialog {
 		return btnAceptarAgregar;
 	}
 	
-	private class ComboBusquedaClienteByCodigo extends CLTxtComboBoxBusqueda<Cliente> {
+	private class ComboBusquedaClienteByCodigo extends FWTxtComboBoxBusqueda<Cliente> {
 
 		private static final long serialVersionUID = -8069636605971687535L;
 
@@ -809,7 +809,7 @@ public class JDialogAgregarCheque extends JDialog {
 				return false;
 			}
 			if (!NumUtil.esNumerico(text)) {
-				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
+				FWJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
 				return false;
 			}
 			return true;
@@ -817,18 +817,18 @@ public class JDialogAgregarCheque extends JDialog {
 
 		@Override
 		public void noHayResultado() {
-			CLJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
+			FWJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
 			setCliente(null);
 			getTxtNroCliente().setText("");
 		}
 	}
 
-	private class ComboBusquedaBanco extends CLTxtComboBoxBusqueda<Banco> {
+	private class ComboBusquedaBanco extends FWTxtComboBoxBusqueda<Banco> {
 
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected List<Banco> buscar(String text) throws CLException {
+		protected List<Banco> buscar(String text) throws FWException {
 			List<Banco> bancos = new ArrayList<Banco>();
 			Banco banco = getBancoFacade().getBancoByCodigo(Integer.valueOf(text));
 			if(banco!=null){
@@ -845,7 +845,7 @@ public class JDialogAgregarCheque extends JDialog {
 				return false;
 			}
 			if (!NumUtil.esNumerico(text)) {
-				CLJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
+				FWJOptionPane.showWarningMessage(this, StringW.wordWrap("Debe ingresar sólo números"), "Error");
 				return false;
 			}
 			return true;
@@ -853,7 +853,7 @@ public class JDialogAgregarCheque extends JDialog {
 
 		@Override
 		public void noHayResultado() {
-			CLJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
+			FWJOptionPane.showInformationMessage(this, "No se encontraron resultados para la búsqueda.", "Información");
 			getTxtBanco().setText("");
 			JDialogAgregarCheque.this.banco = null;			
 		}

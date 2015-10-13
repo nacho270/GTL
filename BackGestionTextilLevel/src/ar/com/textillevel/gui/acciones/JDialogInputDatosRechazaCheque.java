@@ -20,11 +20,11 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionExceptionSinRollback;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
@@ -37,8 +37,8 @@ public class JDialogInputDatosRechazaCheque extends JDialog {
 	private static final long serialVersionUID = 5082948710608602282L;
 
 	private PanelDatePicker panelFecha;
-	private CLJTextField txtMotivo;
-	private CLJTextField txtGastos;
+	private FWJTextField txtMotivo;
+	private FWJTextField txtGastos;
 
 	private JButton btnAceptar;
 	private JButton btnSalir;
@@ -88,16 +88,16 @@ public class JDialogInputDatosRechazaCheque extends JDialog {
 		return panelFecha;
 	}
 
-	public CLJTextField getTxtMotivo() {
+	public FWJTextField getTxtMotivo() {
 		if (txtMotivo == null) {
-			txtMotivo = new CLJTextField(500);
+			txtMotivo = new FWJTextField(500);
 		}
 		return txtMotivo;
 	}
 
-	public CLJTextField getTxtGastos() {
+	public FWJTextField getTxtGastos() {
 		if (txtGastos == null) {
-			txtGastos = new CLJTextField();
+			txtGastos = new FWJTextField();
 		}
 		return txtGastos;
 	}
@@ -140,15 +140,15 @@ public class JDialogInputDatosRechazaCheque extends JDialog {
 							}
 							java.sql.Date fecha = new java.sql.Date(getPanelFecha().getDate().getTime());
 							CorreccionFactura correccionFactura = cfr.rechazarCheque(getCheque(), fecha, getTxtMotivo().getText(),gastos, getUsrAdmin(), !GenericUtils.isSistemaTest());
-							CLJOptionPane.showInformationMessage(JDialogInputDatosRechazaCheque.this, "El cheque ha sido rechazado correctamente.\n\nSe generó la nota de débito " + correccionFactura.getNroFactura(), "Información");
+							FWJOptionPane.showInformationMessage(JDialogInputDatosRechazaCheque.this, "El cheque ha sido rechazado correctamente.\n\nSe generó la nota de débito " + correccionFactura.getNroFactura(), "Información");
 							setAcepto(true);
 							dispose();
 						}
 					}catch(ValidacionException cle) {
-						CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, StringW.wordWrap("Se ha producido un error al rechazar el cheque: " + cle.getMensajeError()), "Error");
+						FWJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, StringW.wordWrap("Se ha producido un error al rechazar el cheque: " + cle.getMensajeError()), "Error");
 					}
 					catch(ValidacionExceptionSinRollback cle) {
-						CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, StringW.wordWrap("Se ha producido un error al rechazar el cheque: " + cle.getMensajeError()), "Error");
+						FWJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, StringW.wordWrap("Se ha producido un error al rechazar el cheque: " + cle.getMensajeError()), "Error");
 					}
 				}
 			});
@@ -158,13 +158,13 @@ public class JDialogInputDatosRechazaCheque extends JDialog {
 
 	private boolean validar(){
 		if(getTxtMotivo().getText().trim().length()==0){
-			CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, "Debe elegir un motivo", "Error");
+			FWJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, "Debe elegir un motivo", "Error");
 			getTxtMotivo().requestFocus();
 			return false;
 		}
 		
 		if(getTxtGastos().getText().trim().length()>0 && !GenericUtils.esNumerico(getTxtGastos().getText())){
-			CLJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, "Solo puede ingresar números", "Error");
+			FWJOptionPane.showErrorMessage(JDialogInputDatosRechazaCheque.this, "Solo puede ingresar números", "Error");
 			getTxtGastos().requestFocus();
 			return false;
 		}

@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 
 public class JDialogIntellisense extends JDialog {
 

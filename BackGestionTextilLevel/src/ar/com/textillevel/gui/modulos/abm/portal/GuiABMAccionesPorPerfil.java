@@ -10,13 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLDobleLista;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWDobleLista;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.portal.Modulo;
 import ar.com.textillevel.entidades.portal.Perfil;
 import ar.com.textillevel.facade.api.remote.ModuloFacadeRemote;
@@ -32,9 +32,9 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 
 	private JPanel tabDetalle;
 
-	private CLJTextField txtNombrePerfil;
-	private CLDobleLista listasModulos;
-	private CLJTable tablaModulos;
+	private FWJTextField txtNombrePerfil;
+	private FWDobleLista listasModulos;
+	private FWJTable tablaModulos;
 
 	private PerfilFacadeRemote perfilFacade;
 	private ModuloFacadeRemote moduloFacade;
@@ -72,9 +72,9 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 		return sp;
 	}
 
-	private CLJTable getTablaModulos() {
+	private FWJTable getTablaModulos() {
 		if(tablaModulos == null) {
-			tablaModulos = new CLJTable(0, 2);
+			tablaModulos = new FWJTable(0, 2);
 			tablaModulos.setStringColumn(0, "MODULO", 600);
 			tablaModulos.setStringColumn(1, "", 0);
 		}
@@ -111,7 +111,7 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this,"¿Está seguro que desea eliminar el perfil seleccionado?","Confirmación") == CLJOptionPane.YES_OPTION){
+			if (FWJOptionPane.showQuestionMessage(this,"¿Está seguro que desea eliminar el perfil seleccionado?","Confirmación") == FWJOptionPane.YES_OPTION){
 				getPerfilFacade().remove(getPerfilActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -128,7 +128,7 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 				cargarLista();
 				return true;
 			}catch(ValidacionException vle){
-				CLJOptionPane.showErrorMessage(this, vle.getMensajeError(), "Error");
+				FWJOptionPane.showErrorMessage(this, vle.getMensajeError(), "Error");
 			}
 		}
 		return false;
@@ -136,13 +136,13 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 	
 	private boolean validar() {
 		if(getTxtNombrePerfil().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del perfil.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del perfil.", "Advertencia");
 			getTxtNombrePerfil().requestFocus();
 			return false;
 		}
 		
 		if(getListasModulos().getListaDestino().getModel().getSize()==0){
-			CLJOptionPane.showErrorMessage(this, "Debe elegir módulos para asignar al perfil.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe elegir módulos para asignar al perfil.", "Advertencia");
 			return false;
 		}
 		return true;
@@ -164,7 +164,7 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 			getTxtNombrePerfil().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un perfil", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un perfil", "Error");
 			return false;
 		}
 	}
@@ -218,9 +218,9 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 		GuiUtil.setEstadoPanel(getPanDetalle(), estado);
 	}
 
-	private CLJTextField getTxtNombrePerfil() {
+	private FWJTextField getTxtNombrePerfil() {
 		if(txtNombrePerfil == null){
-			txtNombrePerfil = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombrePerfil = new FWJTextField(MAX_LONGITUD_NOMBRE);
 			txtNombrePerfil.setEditable(false);
 		}
 		return txtNombrePerfil;
@@ -241,9 +241,9 @@ public class GuiABMAccionesPorPerfil extends GuiABMListaTemplate {
 		this.perfilActual = perfilActual;
 	}
 
-	private CLDobleLista getListasModulos() {
+	private FWDobleLista getListasModulos() {
 		if(listasModulos == null){
-			listasModulos = new CLDobleLista("Acciones disponibles", "Acciones agregadas",CLDobleLista.VERTICAL_LAYOUT);
+			listasModulos = new FWDobleLista("Acciones disponibles", "Acciones agregadas",FWDobleLista.VERTICAL_LAYOUT);
 		}
 		return listasModulos;
 	}

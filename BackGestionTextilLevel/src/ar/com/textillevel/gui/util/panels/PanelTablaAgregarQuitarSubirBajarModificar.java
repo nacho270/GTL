@@ -21,14 +21,14 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
 
 public abstract class PanelTablaAgregarQuitarSubirBajarModificar<T> extends JPanel {
 
 	private static final long serialVersionUID = 9211193882251973131L;
 
-	private CLJTable tabla;
+	private FWJTable tabla;
 	private PanelBotonesAgregarQuitarSubirBajarModificar botonesTabla;
 	private JPanel panBotonesExtra;
 	protected boolean modoConsulta;
@@ -38,7 +38,7 @@ public abstract class PanelTablaAgregarQuitarSubirBajarModificar<T> extends JPan
 		rebuildTable(construirTabla());
 	}
 
-	protected void rebuildTable(CLJTable nuevaTabla) {
+	protected void rebuildTable(FWJTable nuevaTabla) {
 		removeAll();
 		tabla = nuevaTabla;
 		tabla.getSelectionModel().addListSelectionListener(new TablaSelectionListener());
@@ -118,7 +118,7 @@ public abstract class PanelTablaAgregarQuitarSubirBajarModificar<T> extends JPan
 		add(panBotonesExtra, constraints);
 	}
 
-	protected abstract CLJTable construirTabla();
+	protected abstract FWJTable construirTabla();
 
 	protected abstract T getElemento(int fila);
 
@@ -144,7 +144,7 @@ public abstract class PanelTablaAgregarQuitarSubirBajarModificar<T> extends JPan
 		return true;
 	}
 
-	public CLJTable getTabla() {
+	public FWJTable getTabla() {
 		return tabla;
 	}
 

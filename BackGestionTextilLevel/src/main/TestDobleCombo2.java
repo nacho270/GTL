@@ -18,9 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.ToStringComparator;
 
 @SuppressWarnings("unused")
@@ -73,9 +73,9 @@ public class TestDobleCombo2 extends JFrame {
 		private static final int COL_OBJ = 2;
 
 		
-		protected CLJTable construirTabla() {
+		protected FWJTable construirTabla() {
 			final MaquinasCellEditor maquinaCellEditor = new MaquinasCellEditor();
-			CLJTable tabla = new CLJTable(0, CANT_COLS){
+			FWJTable tabla = new FWJTable(0, CANT_COLS){
 				private static final long serialVersionUID = -4298540110741639756L;
 				
 				public TableCellEditor getCellEditor(int row, int column) {

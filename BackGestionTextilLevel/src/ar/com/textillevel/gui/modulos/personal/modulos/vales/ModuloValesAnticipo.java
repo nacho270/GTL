@@ -3,10 +3,10 @@ package ar.com.textillevel.gui.modulos.personal.modulos.vales;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.ModuloTemplate;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.ModuloTemplate;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.cabecera.CabeceraValesAnticipo;
 import ar.com.textillevel.gui.modulos.personal.modulos.vales.cabecera.ModeloCabeceraValesAnticipo;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.vale.ValeAnticipo;
@@ -15,7 +15,7 @@ public class ModuloValesAnticipo extends ModuloTemplate<ValeAnticipo, ModeloCabe
 
 	private static final long serialVersionUID = 1234062409180895905L;
 
-	public ModuloValesAnticipo(Integer idModulo) throws CLException {
+	public ModuloValesAnticipo(Integer idModulo) throws FWException {
 		super(idModulo);
 		actualizar();
 		pack();
@@ -27,7 +27,7 @@ public class ModuloValesAnticipo extends ModuloTemplate<ValeAnticipo, ModeloCabe
 	}
 
 	@Override
-	protected List<ModuloModel<ValeAnticipo, ModeloCabeceraValesAnticipo>> createModulosModel() throws CLException {
+	protected List<ModuloModel<ValeAnticipo, ModeloCabeceraValesAnticipo>> createModulosModel() throws FWException {
 		List<ModuloModel<ValeAnticipo,ModeloCabeceraValesAnticipo>> modulosModel = new ArrayList<ModuloModel<ValeAnticipo,ModeloCabeceraValesAnticipo>>();
 		modulosModel.add(new ModuloValesAnticipoModel(getIdModulo()));
 		return modulosModel;	

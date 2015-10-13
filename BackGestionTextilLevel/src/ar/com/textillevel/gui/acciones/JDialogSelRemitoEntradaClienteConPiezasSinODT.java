@@ -21,10 +21,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -38,7 +38,7 @@ public class JDialogSelRemitoEntradaClienteConPiezasSinODT extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaRemitosEntrada;
+	private FWJTable tablaRemitosEntrada;
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
 	private Cliente cliente;
 	private RemitoEntrada remitoEntrada;
@@ -86,9 +86,9 @@ public class JDialogSelRemitoEntradaClienteConPiezasSinODT extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaRemitoEntrada() {
+	private FWJTable getTablaRemitoEntrada() {
 		if(tablaRemitosEntrada == null) {
-			tablaRemitosEntrada = new CLJTable(0, 3) {
+			tablaRemitosEntrada = new FWJTable(0, 3) {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
@@ -103,7 +103,7 @@ public class JDialogSelRemitoEntradaClienteConPiezasSinODT extends JDialog {
 			tablaRemitosEntrada.setStringColumn(1, "PIEZAS SIN ODT", 250, 250, true);
 
 			tablaRemitosEntrada.setStringColumn(2, "", 0, 0, true);
-			tablaRemitosEntrada.setAlignment(0, CLJTable.CENTER_ALIGN);
+			tablaRemitosEntrada.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaRemitosEntrada.addMouseListener(new MouseAdapter () {
 
 				@Override
@@ -155,7 +155,7 @@ public class JDialogSelRemitoEntradaClienteConPiezasSinODT extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					int selectedRow = getTablaRemitoEntrada().getSelectedRow();
 					if(selectedRow == -1) {
-						CLJOptionPane.showErrorMessage(owner, "Debe seleccionar un remito", "Error");
+						FWJOptionPane.showErrorMessage(owner, "Debe seleccionar un remito", "Error");
 					} else {
 						remitoEntrada = (RemitoEntrada)getTablaRemitoEntrada().getValueAt(selectedRow, 2);
 					}

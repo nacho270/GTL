@@ -22,13 +22,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.ConfigFormaPagoSindicato;
@@ -50,7 +50,7 @@ public class JDialogCargarFeriado extends JDialog {
 
 	private PanelDatePicker panFechaDesde;
 	private PanelDatePicker panFechaHasta;
-	private CLJTextField txtDescripcion;
+	private FWJTextField txtDescripcion;
 	private PanDatosConfigSindicatoFeriado panDatosConfigSindicatoFeriado;
 	private JCheckBox chkRedefinirHorasPorSindicato;
 
@@ -161,37 +161,37 @@ public class JDialogCargarFeriado extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtDescripcion().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "Debe completar la descripción del feriado.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "Debe completar la descripción del feriado.", "Error");
 			getTxtDescripcion().requestFocus();
 			return false;
 		}
 		java.util.Date desde = getPanelFechaDesde().getDate();
 		if(desde == null) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "Debe ingresar una fecha desde.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "Debe ingresar una fecha desde.", "Error");
 			return false;
 		}
 		int anioDesde = DateUtil.getAnio(new Date(getPanelFechaDesde().getDate().getTime()));
 		if(anioDesde != anio) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "El año de la fecha desde es diferente a " + anio + " .", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "El año de la fecha desde es diferente a " + anio + " .", "Error");
 			return false;
 		}
 		java.util.Date hasta = getPanelFechaHasta().getDate();
 		if(hasta == null) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "Debe ingresar una fecha hasta.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "Debe ingresar una fecha hasta.", "Error");
 			return false;
 		}
 		int anioHasta = DateUtil.getAnio(new Date(getPanelFechaHasta().getDate().getTime()));
 		if(anioHasta != anio) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "El año de la fecha hasta es diferente a " + anio + " .", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "El año de la fecha hasta es diferente a " + anio + " .", "Error");
 			return false;
 		}
 		if(desde.after(hasta)) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "La fecha desde debe ser menor o igual a la fecha hasta.", "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, "La fecha desde debe ser menor o igual a la fecha hasta.", "Error");
 			return false;
 		}
 		String txtValidar = getPanDatosConfigSindicatoFeriado().validarElementos();
 		if(getChkRedefinirHorasPorSindicato().isSelected() && !StringUtil.isNullOrEmpty(txtValidar)) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFeriado.this, txtValidar, "Error");
+			FWJOptionPane.showErrorMessage(JDialogCargarFeriado.this, txtValidar, "Error");
 			return false;
 		}
 		return true;
@@ -211,9 +211,9 @@ public class JDialogCargarFeriado extends JDialog {
 		return btnSalir;
 	}
 
-	private CLJTextField getTxtDescripcion() {
+	private FWJTextField getTxtDescripcion() {
 		if(txtDescripcion == null) {
-			txtDescripcion = new CLJTextField();
+			txtDescripcion = new FWJTextField();
 		}
 		return txtDescripcion;
 	}
@@ -304,8 +304,8 @@ public class JDialogCargarFeriado extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_SINDICATO, "SINDICATO", 100, 100, true);
 			tabla.setIntColumn(COL_CANT_HORAS, "CANTIDAD DE HORAS A PAGAR", 170, false);
 			tabla.setCheckColumn(COL_DISCRIMINA_RS, "DISCRIMINA EN EL REC. SUELDO", 170, false);

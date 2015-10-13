@@ -20,7 +20,7 @@ import javax.swing.ImageIcon;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.util.ImageUtil;
 
 @Entity
 @Table(name="T_VARIANTE")

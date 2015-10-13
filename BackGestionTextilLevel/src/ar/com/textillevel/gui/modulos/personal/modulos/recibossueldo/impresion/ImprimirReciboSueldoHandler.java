@@ -3,11 +3,13 @@ package ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.impresion;
 import java.awt.Frame;
 import java.sql.Date;
 import java.util.Collections;
+
 import javax.swing.JOptionPane;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.gui.JDialogInputFechasImpresion;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
@@ -34,7 +36,7 @@ public class ImprimirReciboSueldoHandler {
 				break;
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
-				CLJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;
 				ReciboSueldoTO recibo = null;

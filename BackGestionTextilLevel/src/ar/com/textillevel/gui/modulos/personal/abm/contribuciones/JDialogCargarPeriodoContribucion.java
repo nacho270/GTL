@@ -21,9 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.contribuciones.PeriodoContribucion;
@@ -145,50 +145,50 @@ public class JDialogCargarPeriodoContribucion extends JDialog {
 
 	private boolean validar() {
 		if(getPanFechaDesde().getDate() == null) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar una fecha desde.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar una fecha desde.", "Error");
 			return false;
 		}
 		if(getPanFechaHasta().getDate() == null) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar una fecha hasta.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar una fecha hasta.", "Error");
 			return false;
 		}
 		if(getPanFechaDesde().getDate().after(getPanFechaHasta().getDate())) {
-			CLJOptionPane.showErrorMessage(owner, "La fecha desde debe ser menor o igual a la fecha hasta.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "La fecha desde debe ser menor o igual a la fecha hasta.", "Error");
 			return false;
 		}
 		if(getChkEsPorcentaje().isSelected()) {
 			String valorPorcentajeStr = getTxtPorcentaje().getText().trim();
 			if(StringUtil.isNullOrEmpty(valorPorcentajeStr)) {
-				CLJOptionPane.showErrorMessage(owner, "Debe ingresar un porcentaje.", "Error");
+				FWJOptionPane.showErrorMessage(owner, "Debe ingresar un porcentaje.", "Error");
 				getTxtPorcentaje().requestFocus();
 				return false;
 			}
 			if(!GenericUtils.esNumerico(valorPorcentajeStr)) {
-				CLJOptionPane.showErrorMessage(owner, "El porcentaje debe ser numérico.", "Error");
+				FWJOptionPane.showErrorMessage(owner, "El porcentaje debe ser numérico.", "Error");
 				getTxtPorcentaje().requestFocus();
 				return false;
 			}
 			double valorPorcentaje = GenericUtils.getDoubleValueInJTextField(getTxtPorcentaje());
 			if(valorPorcentaje <= 0 || valorPorcentaje > 100) {
-				CLJOptionPane.showErrorMessage(owner, "El porcentaje debe ser mayor a cero y menor o igual que 100.", "Error");
+				FWJOptionPane.showErrorMessage(owner, "El porcentaje debe ser mayor a cero y menor o igual que 100.", "Error");
 				getTxtPorcentaje().requestFocus();
 				return false;
 			}
 		} else {
 			String valorImporteFijoStr = getTxtImporteFijo().getText().trim();
 			if(StringUtil.isNullOrEmpty(valorImporteFijoStr)) {
-				CLJOptionPane.showErrorMessage(owner, "Debe ingresar un importe fijo.", "Error");
+				FWJOptionPane.showErrorMessage(owner, "Debe ingresar un importe fijo.", "Error");
 				getTxtImporteFijo().requestFocus();
 				return false;
 			}
 			if(!GenericUtils.esNumerico(valorImporteFijoStr)) {
-				CLJOptionPane.showErrorMessage(owner, "El importe fijo debe ser numérico.", "Error");
+				FWJOptionPane.showErrorMessage(owner, "El importe fijo debe ser numérico.", "Error");
 				getTxtImporteFijo().requestFocus();
 				return false;
 			}
 			double valorImporteFijo = GenericUtils.getDoubleValueInJTextField(getTxtImporteFijo());
 			if(valorImporteFijo <= 0) {
-				CLJOptionPane.showErrorMessage(owner, "El importe fijo debe ser mayor a cero.", "Error");
+				FWJOptionPane.showErrorMessage(owner, "El importe fijo debe ser mayor a cero.", "Error");
 				getTxtImporteFijo().requestFocus();
 				return false;
 			}

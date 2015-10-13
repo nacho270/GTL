@@ -3,7 +3,7 @@ package ar.com.textillevel.dao.impl;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.TipoArticuloDAOLocal;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 

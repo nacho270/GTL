@@ -47,14 +47,14 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxListDialog;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxListDialog;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemFacturaProveedor;
@@ -84,7 +84,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 	private JTextField txtTotal;
 	private JTextField txtTotalConFactor;
 	private JTextField txtDescuento;
-	private CLJTable tablaImpuestos;
+	private FWJTable tablaImpuestos;
 	private Frame padre;
 	private boolean modoConsulta;
 	
@@ -93,8 +93,8 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 
 	private JTextField txtUsuarioCreador;
 
-	private CLJTextField txtImpVarios;
-	private CLJTextField txtPercepIVA;
+	private FWJTextField txtImpVarios;
+	private FWJTextField txtPercepIVA;
 
 	private static final int COL_NOMBRE_IMPUESTO = 0;
 	private static final int COL_VALOR_IMPUESTO = 1;
@@ -228,9 +228,9 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		}
 	}
 
-	private CLJTextField getTxtPercepIVA() {
+	private FWJTextField getTxtPercepIVA() {
 		if (txtPercepIVA == null) {
-			txtPercepIVA = new CLJTextField();
+			txtPercepIVA = new FWJTextField();
 			txtPercepIVA.addFocusListener(new FocusAdapter() {
 
 				@Override
@@ -269,9 +269,9 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 	}
 
 	
-	private CLJTextField getTxtImpVarios() {
+	private FWJTextField getTxtImpVarios() {
 		if (txtImpVarios == null) {
-			txtImpVarios = new CLJTextField();
+			txtImpVarios = new FWJTextField();
 			txtImpVarios.addFocusListener(new FocusAdapter() {
 
 				@Override
@@ -454,7 +454,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 					if(validar()) {
 						capturarSetearDatos();
 						getFacturaProveedorFacade().ingresarFactura(factura, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-						CLJOptionPane.showInformationMessage(JDialogCargarFacturaServicioProveedor.this, "La factura ha sido grabada con éxito.", "Alta de Factura de Proveedor");
+						FWJOptionPane.showInformationMessage(JDialogCargarFacturaServicioProveedor.this, "La factura ha sido grabada con éxito.", "Alta de Factura de Proveedor");
 						dispose();
 					}
 				}
@@ -477,11 +477,11 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 
 	private boolean validar() {
 		if(getPanelFecha().getDate() == null) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, "Debe ingresar una fecha válida", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, "Debe ingresar una fecha válida", getTitle());
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtNroFactura().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, "Debe ingresar el número de factura.", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, "Debe ingresar el número de factura.", getTitle());
 			getTxtNroFactura().requestFocus();
 			return false;
 		}
@@ -489,28 +489,28 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		Pattern p = Pattern.compile(regExpNroFactura);
 		Matcher matcher = p.matcher(getTxtNroFactura().getText().trim());
 		if(!matcher.matches()) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, "Debe ingresar un número de factura válido.", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, "Debe ingresar un número de factura válido.", getTitle());
 			getTxtNroFactura().requestFocus();
 			return false;
 		}
 		String txtValidacion = getPanTablaItemFactura().validarElementos();
 		if(!StringUtil.isNullOrEmpty(txtValidacion)) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
 			return false;
 		}
 		txtValidacion = getPanTablaItemFactura().validarFactorConversion();
 		if(!StringUtil.isNullOrEmpty(txtValidacion)) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap(txtValidacion), getTitle());
 			return false;
 		}
 		boolean existeNroFactura = getFacturaProveedorFacade().existeNroFacturaByProveedor(factura.getId(), getTxtNroFactura().getText().trim(), factura.getProveedor().getId());
 		if(existeNroFactura) {
 			getTxtNroFactura().requestFocus();
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El número de factura ya existe para el mismo proveedor."), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El número de factura ya existe para el mismo proveedor."), getTitle());
 			return false;
 		}
 		if(getPanTablaItemFactura().getElementos().isEmpty()) {
-			CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("Debe agregar al menos un servicio."), getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("Debe agregar al menos un servicio."), getTitle());
 			return false;
 		}
 		return true;
@@ -716,8 +716,8 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS) {
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS) {
 
 				private static final long serialVersionUID = 6653836690455151776L;
 
@@ -897,7 +897,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		private boolean impuestosPorPciaOK(List<ImpuestoItemProveedor> impuestosSelectedResult) {
 			for(ImpuestoItemProveedor iip : impuestosSelectedResult) {
 				if(iip.getTipoImpuesto() == ETipoImpuesto.INGRESOS_BRUTOS && !iip.getProvincia().getId().equals(proveedor.getProvincia().getId())) {
-					CLJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El impuesto " + iip.toString() + " no puede elegirse porque no aplica en la provincia de origen del proveedor."), "Atención");
+					FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El impuesto " + iip.toString() + " no puede elegirse porque no aplica en la provincia de origen del proveedor."), "Atención");
 					return false;
 				}
 			}
@@ -908,7 +908,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		@Override
 		@SuppressWarnings("unchecked")
 		public boolean validarAgregar() {
-			CLCheckBoxListDialog chkDialogServicios = new CLCheckBoxListDialog(JDialogCargarFacturaServicioProveedor.this, servicioFacade.getServiciosByProveedor(proveedor.getId())); 
+			FWCheckBoxListDialog chkDialogServicios = new FWCheckBoxListDialog(JDialogCargarFacturaServicioProveedor.this, servicioFacade.getServiciosByProveedor(proveedor.getId())); 
 			chkDialogServicios.setVisible(true);
 			List<Servicio> servicioList = chkDialogServicios.getValoresSeleccionados();
 			for(Servicio s : servicioList) {
@@ -984,9 +984,9 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		updateTotales(getPanTablaItemFactura().getElementos());
 	}
 
-	private CLJTable getTablaImpuestos() {
+	private FWJTable getTablaImpuestos() {
 		if(tablaImpuestos == null) {
-			tablaImpuestos = new CLJTable(0, 3);
+			tablaImpuestos = new FWJTable(0, 3);
 			tablaImpuestos.setStringColumn(COL_NOMBRE_IMPUESTO, "IMPUESTO", 100);
 			tablaImpuestos.setStringColumn(COL_VALOR_IMPUESTO, "IMPORTE PESOS", 90);
 			tablaImpuestos.setStringColumn(COL_VALOR_IMPUESTO_CON_FACTOR, "IMPORTE DOLARES", 90);

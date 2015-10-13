@@ -9,11 +9,11 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
@@ -33,8 +33,8 @@ public class GuiABMBancos extends GuiABMListaTemplate{
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	
-	private CLJTextField txtNombreBanco;
-	private CLJNumericTextField txtCodBanco;
+	private FWJTextField txtNombreBanco;
+	private FWJNumericTextField txtCodBanco;
 	private PanDatosDireccion panDatosDireccion;
 	private PanDatosTelefono panTelefono;
 
@@ -119,7 +119,7 @@ public class GuiABMBancos extends GuiABMListaTemplate{
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el banco seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el banco seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getBancoFacade().remove(getBancoActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -139,19 +139,19 @@ public class GuiABMBancos extends GuiABMListaTemplate{
 
 	private boolean validar() {
 		if(getTxtNombreBanco().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre del banco.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre del banco.", "Advertencia");
 			getTxtNombreBanco().requestFocus();
 			return false;
 		}
 		
 		if(getTxtCodBanco().getValueWithNull() == null){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el código del banco.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el código del banco.", "Advertencia");
 			getTxtCodBanco().requestFocus();
 			return false;
 		}
 		
 		if(getBancoFacade().existeBanco(getTxtCodBanco().getValue())){
-			CLJOptionPane.showErrorMessage(this, "El código de banco que ha ingresado, ya se esta utilizando. Por favor, ingrese un código distinto.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "El código de banco que ha ingresado, ya se esta utilizando. Por favor, ingrese un código distinto.", "Advertencia");
 			getTxtCodBanco().requestFocus();
 			return false;
 		}
@@ -172,7 +172,7 @@ public class GuiABMBancos extends GuiABMListaTemplate{
 			getTxtNombreBanco().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un banco", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un banco", "Error");
 			return false;
 		}
 	}
@@ -233,9 +233,9 @@ public class GuiABMBancos extends GuiABMListaTemplate{
 		return bancoFacade;
 	}
 
-	public CLJTextField getTxtNombreBanco() {
+	public FWJTextField getTxtNombreBanco() {
 		if(txtNombreBanco == null){
-			txtNombreBanco = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreBanco = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreBanco;
 	}
@@ -293,9 +293,9 @@ public class GuiABMBancos extends GuiABMListaTemplate{
 	}
 
 	
-	public CLJNumericTextField getTxtCodBanco() {
+	public FWJNumericTextField getTxtCodBanco() {
 		if(txtCodBanco == null ){
-			txtCodBanco = new CLJNumericTextField();
+			txtCodBanco = new FWJNumericTextField();
 		}
 		return txtCodBanco;
 	}

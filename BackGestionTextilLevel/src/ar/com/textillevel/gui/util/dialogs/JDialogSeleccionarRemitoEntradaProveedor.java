@@ -19,9 +19,9 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 import ar.com.textillevel.entidades.gente.Proveedor;
 
@@ -32,7 +32,7 @@ public class JDialogSeleccionarRemitoEntradaProveedor extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLCheckBoxList<RemitoEntradaProveedor> checkBoxList;
+	private FWCheckBoxList<RemitoEntradaProveedor> checkBoxList;
 	private Proveedor proveedor;
 	private List<RemitoEntradaProveedor> remitoEntradaList = new ArrayList<RemitoEntradaProveedor>();
 	
@@ -116,7 +116,7 @@ public class JDialogSeleccionarRemitoEntradaProveedor extends JDialog {
 	private void handleRemitoSeleccionado() {
 		int[] selectedIndices = getCheckBoxList().getSelectedIndices();
 		if(selectedIndices.length == 0) {
-			CLJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntradaProveedor.this, "Debe seleccionar al menos un remito.", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntradaProveedor.this, "Debe seleccionar al menos un remito.", getTitle());
 			return;
 		}
 		for(int index : selectedIndices) {
@@ -133,9 +133,9 @@ public class JDialogSeleccionarRemitoEntradaProveedor extends JDialog {
 		return remitoEntradaList;
 	}
 
-	private CLCheckBoxList<RemitoEntradaProveedor> getCheckBoxList() {
+	private FWCheckBoxList<RemitoEntradaProveedor> getCheckBoxList() {
 		if(checkBoxList == null) {
-			checkBoxList = new CLCheckBoxList<RemitoEntradaProveedor>();
+			checkBoxList = new FWCheckBoxList<RemitoEntradaProveedor>();
 		}
 		return checkBoxList;
 	}

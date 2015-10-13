@@ -30,14 +30,14 @@ import javax.swing.text.MaskFormatter;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoRubro;
@@ -70,7 +70,7 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 	private static final int MAX_LONGITUD_SITIO_WEB = 100;
 
 	private JPanel tabDetalle, panDetalle;
-	private CLJTextField txtRazonSocial, txtNombreCorto, txtContacto, txtIngBrutos;
+	private FWJTextField txtRazonSocial, txtNombreCorto, txtContacto, txtIngBrutos;
 	private JFormattedTextField txtCuit;
 	private PanDatosTelefono panTelefonoFijo;
 	private PanDatosTelefono panCelular;
@@ -78,10 +78,10 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 	private PanDatosDireccion panDatosDireccionFiscal;
 	private PanDatosDireccion panDatosDireccionReal;
 	private JTextArea txtObservaciones;
-	private CLJTextField txtEmail;
-	private CLJTextField txtSkype;
+	private FWJTextField txtEmail;
+	private FWJTextField txtSkype;
 	private JComboBox cmbRubro;
-	private CLJTextField txtSitioWeb;
+	private FWJTextField txtSitioWeb;
 	private JComboBox cmbPosicionIva;
 	private JComboBox cmbCondicionVenta;
 	private JComboBox cmbProvincia;
@@ -201,9 +201,9 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 		return panTelefonos;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if (txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 		}
 		return txtRazonSocial;
 	}
@@ -256,7 +256,7 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "Se eliminar\u00E1 al proveedor. Desea continuar?", "Administrar proveedores") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "Se eliminar\u00E1 al proveedor. Desea continuar?", "Administrar proveedores") == FWJOptionPane.YES_OPTION) {
 				try {
 					getProveedorFacade().eliminarProveedor(getProveedorActual().getId());
 					lista.removeSelectedItem();
@@ -266,7 +266,7 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 				}
 			}
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un item de la lista.", "Administrar provedores");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un item de la lista.", "Administrar provedores");
 		}
 	}
 
@@ -299,7 +299,7 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 			// return false;
 			// }else{
 			getProveedorFacade().guardarProveedor(getProveedorActual());
-			CLJOptionPane.showInformationMessage(this, "Los datos del proveedor se han guardado con exito", "Administrar proveedores");
+			FWJOptionPane.showInformationMessage(this, "Los datos del proveedor se han guardado con exito", "Administrar proveedores");
 			return true;
 			// }
 		}
@@ -309,74 +309,74 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 	private boolean validar() {
 		String textoRazonSocial = getTxtRazonSocial().getText().trim();
 		if (StringUtil.isNullOrEmpty(textoRazonSocial)) {
-			CLJOptionPane.showErrorMessage(this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Falta completar el campo 'RAZON SOCIAL'", "Advertencia");
 			getTxtRazonSocial().requestFocus();
 			return false;
 		}
 
 		if (getTxtCuit().getText().trim().length() < 13) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el campo 'CUIT'.", "Advertencia");
 			getTxtCuit().requestFocus();
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtNombreCorto().getText())) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el 'NOMBRE CORTO'", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el 'NOMBRE CORTO'", "Advertencia");
 			getTxtNombreCorto().requestFocus();
 			return false;
 		}
 		if (getTxtIngBrutos().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el campo 'ING. BRUTOS'.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el campo 'ING. BRUTOS'.", "Advertencia");
 			getTxtIngBrutos().requestFocus();
 			return false;
 		}
 		
 		if(getCmbPosicionIva().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE IVA'.","Advertencia");
 			return false;
 		}
 		
 		if(getCmbCondicionVenta().getSelectedItem() == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE VENTA'.","Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar el campo 'CONDICION DE VENTA'.","Advertencia");
 			return false;
 		}
 
 		if (StringUtil.isNullOrEmpty(getPanCelular().getDatos()) && StringUtil.isNullOrEmpty(getPanTelefonoFijo().getDatos()) && StringUtil.isNullOrEmpty(getPanFax().getDatos())) {
-			CLJOptionPane.showErrorMessage(GuiABMProveedor.this, "Debe ingresar al menos un telefono", "Administrar proveedores");
+			FWJOptionPane.showErrorMessage(GuiABMProveedor.this, "Debe ingresar al menos un telefono", "Administrar proveedores");
 			return false;
 		}
 		String textoErrorTelefono = getPanTelefonoFijo().validar();
 		if (textoErrorTelefono != null) {
-			CLJOptionPane.showErrorMessage(GuiABMProveedor.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMProveedor.this, StringW.wordWrap(textoErrorTelefono), "Advertencia");
 			return false;
 		}
 
 		String textoErrorCelular = getPanCelular().validar();
 		if (textoErrorCelular != null) {
-			CLJOptionPane.showErrorMessage(GuiABMProveedor.this, StringW.wordWrap(textoErrorCelular), "Advertencia");
+			FWJOptionPane.showErrorMessage(GuiABMProveedor.this, StringW.wordWrap(textoErrorCelular), "Advertencia");
 			return false;
 		}
 
 		String textoErrorFax = getPanFax().validar();
 		if (textoErrorFax != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorFax), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorFax), "Advertencia");
 			return false;
 		}
 
 		String textoErrorDirFiscal = getPanDatosDireccionFiscal().validar();
 		if (textoErrorDirFiscal != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirFiscal), "Advertencia");
 			return false;
 		}
 
 		String textoErrorDirReal = getPanDatosDireccionReal().validar();
 		if (textoErrorDirReal != null) {
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(textoErrorDirReal), "Advertencia");
 			return false;
 		}
 
 		String strMail = getTxtEmail().getText();
 		if (!StringUtil.isNullOrEmpty(strMail) && !EmailValidator.getInstance().isValid(strMail.trim())) {
-			CLJOptionPane.showErrorMessage(this, "El EMAIL ingresado no es válido", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "El EMAIL ingresado no es válido", "Advertencia");
 			getTxtEmail().requestFocus();
 			return false;
 		}
@@ -391,7 +391,7 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 			getTxtRazonSocial().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un item de la lista.", "Administrar provedores");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un item de la lista.", "Administrar provedores");
 			return false;
 		}
 	}
@@ -468,16 +468,16 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 		return gbc;
 	}
 
-	private CLJTextField getTxtNombreCorto() {
+	private FWJTextField getTxtNombreCorto() {
 		if (txtNombreCorto == null) {
-			txtNombreCorto = new CLJTextField(MAX_LONGITUD_NOMBRE_CORTO);
+			txtNombreCorto = new FWJTextField(MAX_LONGITUD_NOMBRE_CORTO);
 		}
 		return txtNombreCorto;
 	}
 
 	private JTextArea getTxtObservaciones() {
 		if (txtObservaciones == null) {
-			txtObservaciones = new CLJTextArea(MAX_LONGITUD_OBSERVACIONES);
+			txtObservaciones = new FWJTextArea(MAX_LONGITUD_OBSERVACIONES);
 			txtObservaciones.setLineWrap(true);
 			txtObservaciones.setBorder(BorderFactory.createLineBorder(Color.BLUE.darker()));
 			txtObservaciones.addKeyListener(new KeyAdapter() {
@@ -492,9 +492,9 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 		return txtObservaciones;
 	}
 
-	private CLJTextField getTxtContacto() {
+	private FWJTextField getTxtContacto() {
 		if (txtContacto == null) {
-			txtContacto = new CLJTextField(MAX_LONGITUD_CONTACTO);
+			txtContacto = new FWJTextField(MAX_LONGITUD_CONTACTO);
 			txtContacto.setPreferredSize(new Dimension(150, 20));
 		}
 		return txtContacto;
@@ -621,25 +621,25 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 		return panFax;
 	}
 
-	private CLJTextField getTxtEmail() {
+	private FWJTextField getTxtEmail() {
 		if (txtEmail == null) {
-			txtEmail = new CLJTextField(MAX_LONGITUD_EMAIL);
+			txtEmail = new FWJTextField(MAX_LONGITUD_EMAIL);
 			txtEmail.setPreferredSize(new Dimension(240, 20));
 		}
 		return txtEmail;
 	}
 
-	private CLJTextField getTxtSkype() {
+	private FWJTextField getTxtSkype() {
 		if (txtSkype == null) {
-			txtSkype = new CLJTextField(MAX_LONGITUD_SKYPE);
+			txtSkype = new FWJTextField(MAX_LONGITUD_SKYPE);
 			txtSkype.setPreferredSize(new Dimension(240, 20));
 		}
 		return txtSkype;
 	}
 
-	private CLJTextField getTxtSitioWeb() {
+	private FWJTextField getTxtSitioWeb() {
 		if (txtSitioWeb == null) {
-			txtSitioWeb = new CLJTextField(MAX_LONGITUD_SITIO_WEB);
+			txtSitioWeb = new FWJTextField(MAX_LONGITUD_SITIO_WEB);
 		}
 		return txtSitioWeb;
 	}
@@ -725,9 +725,9 @@ public class GuiABMProveedor extends GuiABMListaTemplate {
 		return panDatos;
 	}
 
-	private CLJTextField getTxtIngBrutos() {
+	private FWJTextField getTxtIngBrutos() {
 		if (txtIngBrutos == null) {
-			txtIngBrutos = new CLJTextField();
+			txtIngBrutos = new FWJTextField();
 		}
 		return txtIngBrutos;
 	}

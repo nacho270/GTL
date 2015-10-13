@@ -26,10 +26,10 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
@@ -46,10 +46,10 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 	
 	public static final String EDITADA = " - EDITADA";
 
-	private CLJList listaGamas;
+	private FWJList listaGamas;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	private CLCheckBoxList<Color> listaColores;
+	private FWCheckBoxList<Color> listaColores;
 	private JLabel lblAdvertencias;
 	
 	private Cliente cliente;
@@ -153,9 +153,9 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 		return gamasActuales;
 	}
 
-	public CLJList getListaGamas() {
+	public FWJList getListaGamas() {
 		if (listaGamas == null) {
-			listaGamas = new CLJList();
+			listaGamas = new FWJList();
 			for(GamaColorCliente gcc : getGamasActuales()) {
 				listaGamas.addItem(gcc);
 			}
@@ -197,7 +197,7 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 					if (!gcc.equals(gcc2)) {
 						for (Color c2 : gcc2.getColores()) {
 							if (c2.equals(c)){
-								CLJOptionPane.showErrorMessage(JDialogAgregarModificarGamaColorCliente.this, StringW.wordWrap("El color '" + c.getNombre() + "' existe en las gamas: \n- " + gcc.getNombre() + "\n-" + gcc2.getNombre() + "\n\nPor favor, eliminelo de una."), "Error");
+								FWJOptionPane.showErrorMessage(JDialogAgregarModificarGamaColorCliente.this, StringW.wordWrap("El color '" + c.getNombre() + "' existe en las gamas: \n- " + gcc.getNombre() + "\n-" + gcc2.getNombre() + "\n\nPor favor, eliminelo de una."), "Error");
 								return false;
 							}
 						}
@@ -215,7 +215,7 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (validar()) {
 						getGamaClienteFacade().save(getGamasActuales());
-						CLJOptionPane.showInformationMessage(JDialogAgregarModificarGamaColorCliente.this, "Las gamas del cliente se han guardado exitosamente", "Información");
+						FWJOptionPane.showInformationMessage(JDialogAgregarModificarGamaColorCliente.this, "Las gamas del cliente se han guardado exitosamente", "Información");
 						setAcepto(true);
 						dispose();
 					}
@@ -237,9 +237,9 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 		return btnCancelar;
 	}
 
-	public CLCheckBoxList<Color> getListaColores() {
+	public FWCheckBoxList<Color> getListaColores() {
 		if (listaColores == null) {
-			listaColores = new CLCheckBoxList<Color>() {
+			listaColores = new FWCheckBoxList<Color>() {
 
 				private static final long serialVersionUID = 393647970475448036L;
 
@@ -300,8 +300,8 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 	}
 	
 	private void salir() {
-		int ret = CLJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar gamas");
-		if (ret == CLJOptionPane.YES_OPTION) {
+		int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar gamas");
+		if (ret == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}

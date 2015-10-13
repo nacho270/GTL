@@ -12,8 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 
 public class JDialogInputFechaDesdeHasta extends JDialog {
@@ -101,15 +101,15 @@ public class JDialogInputFechaDesdeHasta extends JDialog {
 
 	private boolean validar() {
 		if (getPanelFechaDesde().getDate() == null) {
-			CLJOptionPane.showErrorMessage(this, "La 'fecha desde' ingresada es nula o inválida", "Error");
+			FWJOptionPane.showErrorMessage(this, "La 'fecha desde' ingresada es nula o inválida", "Error");
 			return false;
 		}
 		if (getPanelFechaHasta().getDate() == null) {
-			CLJOptionPane.showErrorMessage(this, "La 'fecha hasta' ingresada es nula o inválida", "Error");
+			FWJOptionPane.showErrorMessage(this, "La 'fecha hasta' ingresada es nula o inválida", "Error");
 			return false;
 		}
 		if (getPanelFechaDesde().getDate().after(getPanelFechaHasta().getDate())) {
-			CLJOptionPane.showErrorMessage(this, "La 'fecha hasta' debe ser posterior a la 'Fecha desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "La 'fecha hasta' debe ser posterior a la 'Fecha desde'", "Error");
 			return false;
 		}
 		return true;

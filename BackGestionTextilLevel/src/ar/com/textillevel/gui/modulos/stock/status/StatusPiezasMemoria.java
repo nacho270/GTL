@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.stock.status;
 
 import java.util.Set;
 
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
-import ar.clarin.fwjava.templates.modulo.model.status.Status;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.templates.modulo.model.status.Status;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;

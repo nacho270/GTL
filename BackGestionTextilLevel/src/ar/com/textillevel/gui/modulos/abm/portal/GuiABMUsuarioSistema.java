@@ -13,11 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.portal.Perfil;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.facade.api.remote.PerfilFacadeRemote;
@@ -40,7 +40,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	
-	private CLJTextField txtUserName;
+	private FWJTextField txtUserName;
 	private JPasswordField txtPassword;
 	private JComboBox cmbPerfiles;
 	private JLabel lblPassStrength;
@@ -116,7 +116,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this,"¿Está seguro que desea eliminar el usuario seleccionado?","Confirmación") == CLJOptionPane.YES_OPTION){
+			if (FWJOptionPane.showQuestionMessage(this,"¿Está seguro que desea eliminar el usuario seleccionado?","Confirmación") == FWJOptionPane.YES_OPTION){
 				getUsuarioFacade().remove(getUsuarioActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -127,7 +127,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	public boolean botonGrabarPresionado(int nivelNodoSeleccionado) {
 		if(validar()) {
 			if(!isEditando() && existeUsuario(getTxtUserName().getText())){
-				CLJOptionPane.showErrorMessage(this, "El nombre usuario elegido ya existe. Por favor, elija otro.", "Error");
+				FWJOptionPane.showErrorMessage(this, "El nombre usuario elegido ya existe. Por favor, elija otro.", "Error");
 				return false;
 			}
 			capturarSetearDatos();
@@ -138,7 +138,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 				cargarLista();
 				return true;
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(this, e.getMensajeError(), "Error");
+				FWJOptionPane.showErrorMessage(this, e.getMensajeError(), "Error");
 				return false;
 			}
 		}
@@ -157,13 +157,13 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 
 	private boolean validar() {
 		if(getTxtUserName().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre de usuario.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre de usuario.", "Advertencia");
 			getTxtUserName().requestFocus();
 			return false;
 		}
 		
 		if(getTxtPassword().getPassword().length==0){
-			CLJOptionPane.showErrorMessage(this, "Debe completar la contraseña.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar la contraseña.", "Advertencia");
 			getTxtPassword().requestFocus();
 			return false;
 		}
@@ -178,7 +178,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 			setEditando(true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un perfil", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un perfil", "Error");
 			setEditando(false);
 			return false;
 		}
@@ -223,9 +223,9 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 		GuiUtil.setEstadoPanel(getTabDetalle(), estado);
 	}
 
-	private CLJTextField getTxtUserName() {
+	private FWJTextField getTxtUserName() {
 		if(txtUserName == null){
-			txtUserName = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtUserName = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtUserName;
 	}

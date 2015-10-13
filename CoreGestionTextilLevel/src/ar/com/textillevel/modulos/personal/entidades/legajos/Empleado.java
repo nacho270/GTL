@@ -23,7 +23,7 @@ import javax.swing.ImageIcon;
 
 import org.hibernate.annotations.Type;
 
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.domicilio.Domicilio;
 import ar.com.textillevel.modulos.personal.entidades.legajos.domicilio.InfoDomicilio;
 import ar.com.textillevel.modulos.personal.entidades.legajos.estadocivil.InfoEstadoCivil;

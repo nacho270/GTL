@@ -28,14 +28,14 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -62,10 +62,10 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 	private JButton btnAceptar;
 	private JRadioButton rbtBuscarRemitoPorCliente;
 	private JRadioButton rbtBuscarRemitoPorNro;
-	private CLJNumericTextField txtNroRemito;
+	private FWJNumericTextField txtNroRemito;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJTextField txtNroCliente;
+	private FWJTextField txtNroCliente;
 	private LinkableLabel lblElegirCliente;
 	private PanTablaRemitosEntrada panTablaRemitosEntrada;
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
@@ -191,7 +191,7 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 						setAcepto(true);
 						dispose();
 					}else{
-						CLJOptionPane.showErrorMessage(JDialogConsultarRemitosEntrada.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
+						FWJOptionPane.showErrorMessage(JDialogConsultarRemitosEntrada.this, "La 'fecha desde' debe ser mayor que la 'fecha hasta'", "Error");
 					}
 				}
 			});
@@ -281,9 +281,9 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 		getPanelFechaHasta().setEnabled(enabled);
 	}
 
-	private CLJNumericTextField getTxtNroRemito() {
+	private FWJNumericTextField getTxtNroRemito() {
 		if(txtNroRemito == null) {
-			txtNroRemito = new CLJNumericTextField(0, Long.MAX_VALUE);
+			txtNroRemito = new FWJNumericTextField(0, Long.MAX_VALUE);
 			
 			txtNroRemito.addKeyListener(new KeyListener() {
 				
@@ -294,7 +294,7 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 						Integer value = getTxtNroRemito().getValue();
 						if(value == null) {
-							CLJOptionPane.showErrorMessage(JDialogConsultarRemitosEntrada.this, "Debe ingresar el número de remito", "Error");
+							FWJOptionPane.showErrorMessage(JDialogConsultarRemitosEntrada.this, "Debe ingresar el número de remito", "Error");
 							getTxtNroRemito().requestFocus();
 						} else {
 							buscarRemitos();
@@ -323,9 +323,9 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 		return panCliente;
 	}
 
-	private CLJTextField getTxtNroCliente() {
+	private FWJTextField getTxtNroCliente() {
 		if (txtNroCliente == null) {
-			txtNroCliente = new CLJTextField();
+			txtNroCliente = new FWJTextField();
 			txtNroCliente.setEditable(false);
 			txtNroCliente.setPreferredSize(new Dimension(50, 20));
 		}
@@ -414,11 +414,11 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_REMITO, "REMITO", 580, 580, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_REMITO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_REMITO, FWJTable.CENTER_ALIGN);
 			tabla.addMouseListener(new MouseAdapter () {
 
 				@Override
@@ -465,13 +465,13 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 				OperacionSobreRemitoEntradaHandler consultaREHandler = new OperacionSobreRemitoEntradaHandler(frame, remitoEntrada, false);
 				consultaREHandler.showRemitoEntradaDialog();
 			} catch (ValidacionException e) {
-				CLJOptionPane.showInformationMessage(frame, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
+				FWJOptionPane.showInformationMessage(frame, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
 			}
 		}
 
 		@Override
 		public boolean validarQuitar() {
-			if(CLJOptionPane.showQuestionMessage(frame, "¿Está seguro que desea eliminar el remito?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(frame, "¿Está seguro que desea eliminar el remito?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				RemitoEntrada remitoEntrada = getElemento(getTabla().getSelectedRow());
 				try {
 					if(remitoEntrada.getArticuloStock() != null || remitoEntrada.getPrecioMatPrima() != null) {
@@ -480,9 +480,9 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 						getRemitoEntradaFacade().checkEliminacionRemitoEntrada(remitoEntrada.getId(), new ArrayList<OrdenDeTrabajo>());
 						getRemitoEntradaFacade().eliminarRemitoEntrada(remitoEntrada.getId());
 					}
-					CLJOptionPane.showInformationMessage(frame, "Remito borrado éxitosamente.", "Información");				
+					FWJOptionPane.showInformationMessage(frame, "Remito borrado éxitosamente.", "Información");				
 				} catch (ValidacionException e) {
-					CLJOptionPane.showErrorMessage(JDialogConsultarRemitosEntrada.this, StringW.wordWrap(e.getMensajeError()), "Imposible Eliminar");
+					FWJOptionPane.showErrorMessage(JDialogConsultarRemitosEntrada.this, StringW.wordWrap(e.getMensajeError()), "Imposible Eliminar");
 					return false;
 				}
 				return true;

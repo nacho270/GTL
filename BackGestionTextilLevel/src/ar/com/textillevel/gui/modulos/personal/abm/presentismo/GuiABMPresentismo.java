@@ -13,13 +13,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
@@ -41,7 +41,7 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 	private PanelDatePicker panelFechaDesde;
 	private PanelTablaDescuentoPresentismoAusencia tablaDescuentoAusencia;
 	private PanelTablaDescuentoPresentismoRangoMinutos tablaDescuentoMinutos;
-	private CLJTextField txtPorcentajePremio;
+	private FWJTextField txtPorcentajePremio;
 
 	private ConfiguracionPresentismo configuracionPresentismoActual;
 	private List<DescuentoPresentismoRangoMinutos> descuentosPorMinutosCargados;
@@ -122,7 +122,7 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la configuración para el sindicato seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la configuración para el sindicato seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getConfPresentismoFacade().remove(getConfiguracionPresentismoActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -136,7 +136,7 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 			getPanelFechaDesde().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
 			return false;
 		}
 	}
@@ -152,7 +152,7 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 		if (validar()) {
 			capturarDatos();
 			ConfiguracionPresentismo conf = getConfPresentismoFacade().save(getConfiguracionPresentismoActual());
-			CLJOptionPane.showInformationMessage(getFrame(), "La configuración se ha grabado con éxito", "Información");
+			FWJOptionPane.showInformationMessage(getFrame(), "La configuración se ha grabado con éxito", "Información");
 			lista.setSelectedValue(conf, true);
 			return true;
 		}
@@ -169,24 +169,24 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if(getTxtPorcentajePremio().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(getFrame(), "Debe ingresar el porcentaje de premio por defecto", "Error");
+			FWJOptionPane.showErrorMessage(getFrame(), "Debe ingresar el porcentaje de premio por defecto", "Error");
 			getTxtPorcentajePremio().requestFocus();
 			return false;
 		}
 		if (getDescuentosPorAusenciaCargados().isEmpty()) {
-			if (CLJOptionPane.showQuestionMessage(getFrame(), "Advertencia: No ha cargado descuentos por ausencia. Desea continuar", "Pregunta") == CLJOptionPane.NO_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(getFrame(), "Advertencia: No ha cargado descuentos por ausencia. Desea continuar", "Pregunta") == FWJOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
 		if (getDescuentosPorMinutosCargados().isEmpty()) {
-			if (CLJOptionPane.showQuestionMessage(getFrame(), "Advertencia: No ha cargado descuentos por rango de minutos. Desea continuar", "Pregunta") == CLJOptionPane.NO_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(getFrame(), "Advertencia: No ha cargado descuentos por rango de minutos. Desea continuar", "Pregunta") == FWJOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
 		if(getConfiguracionPresentismoActual().getId()!=null && !getConfiguracionPresentismoActual().getFecha().equals(new java.sql.Date(getPanelFechaDesde().getDate().getTime()))){
 			ConfiguracionPresentismo confPost = getConfPresentismoFacade().getConfiguracionPosteriorBySindicato(getConfiguracionPresentismoActual().getSindicato(), new java.sql.Date(getPanelFechaDesde().getDate().getTime()));
 			if (confPost != null) {
-				CLJOptionPane.showErrorMessage(getFrame(), "Existe una configuración con la fecha " + DateUtil.dateToString(confPost.getFecha()) + ". Por favor, elija una fecha posterior.", "Error");
+				FWJOptionPane.showErrorMessage(getFrame(), "Existe una configuración con la fecha " + DateUtil.dateToString(confPost.getFecha()) + ". Por favor, elija una fecha posterior.", "Error");
 				return false;
 			}
 		}
@@ -277,8 +277,8 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setIntColumn(COL_CANT_FALTAS, "Faltas", 100, true);
 			tabla.setStringColumn(COL_PORC_DESCUENTO, "Descuento", 100, 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -370,8 +370,8 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_RANGO_MINUTOS, "Rango", 250, 250, true);
 			tabla.setStringColumn(COL_PORC_DESCUENTO, "Descuento", 100, 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -463,9 +463,9 @@ public class GuiABMPresentismo extends GuiABMListaTemplate {
 		this.descuentosPorAusenciaCargados = descuentosPorAusenciaCargados;
 	}
 
-	public CLJTextField getTxtPorcentajePremio() {
+	public FWJTextField getTxtPorcentajePremio() {
 		if(txtPorcentajePremio == null){
-			txtPorcentajePremio = new CLJTextField();
+			txtPorcentajePremio = new FWJTextField();
 		}
 		return txtPorcentajePremio;
 	}

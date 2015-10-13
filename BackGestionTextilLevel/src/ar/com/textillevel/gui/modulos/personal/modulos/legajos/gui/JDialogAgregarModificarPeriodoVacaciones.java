@@ -29,11 +29,11 @@ import javax.swing.JSeparator;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.util.AntiguedadHelper;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
@@ -54,10 +54,10 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
 	private JComboBox cmbAnioCorrespondiente;
-	private CLJNumericTextField txtTotalDias;
-	private CLJNumericTextField txtTotalDiasRemanentes;
-	private CLJTextField txtPeriodoCorrespondiente;
-	private CLJTextField txtAntiguedad;
+	private FWJNumericTextField txtTotalDias;
+	private FWJNumericTextField txtTotalDiasRemanentes;
+	private FWJTextField txtPeriodoCorrespondiente;
+	private FWJTextField txtAntiguedad;
 	private JButton btnAceptar;
 	private JButton btnSalir;
 	private JLabel lblNotas;
@@ -230,13 +230,13 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 						getTxtTotalDias().setValue(cantidadDiasTomados.longValue());
 						getLblNotas().setText("Para el año " + getCmbAnioCorrespondiente().getSelectedItem() + " hay " + (diasDisponibles -cantidadDias) + " días");
 					}else{
-						CLJOptionPane.showErrorMessage(this, "El empleado solo puede tomarse " + diasDisponibles + " días", "Error");
+						FWJOptionPane.showErrorMessage(this, "El empleado solo puede tomarse " + diasDisponibles + " días", "Error");
 					}
 				}else{
-					CLJOptionPane.showErrorMessage(this, "Las fechas elegidas se solapan con otro periodo elegido", "Error");
+					FWJOptionPane.showErrorMessage(this, "Las fechas elegidas se solapan con otro periodo elegido", "Error");
 				}
 			}else{
-				CLJOptionPane.showErrorMessage(this, "La 'Fecha desde' debe ser anterior a la 'Fecha hasta'", "Error");
+				FWJOptionPane.showErrorMessage(this, "La 'Fecha desde' debe ser anterior a la 'Fecha hasta'", "Error");
 			}
 		}
 	}
@@ -279,24 +279,24 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 		this.acepto = acepto;
 	}
 
-	public CLJNumericTextField getTxtTotalDias() {
+	public FWJNumericTextField getTxtTotalDias() {
 		if (txtTotalDias == null) {
-			txtTotalDias = new CLJNumericTextField();
+			txtTotalDias = new FWJNumericTextField();
 			txtTotalDias.setEditable(false);
 		}
 		return txtTotalDias;
 	}
 
-	public CLJNumericTextField getTxtTotalDiasRemanentes() {
+	public FWJNumericTextField getTxtTotalDiasRemanentes() {
 		if (txtTotalDiasRemanentes == null) {
-			txtTotalDiasRemanentes = new CLJNumericTextField();
+			txtTotalDiasRemanentes = new FWJNumericTextField();
 			txtTotalDiasRemanentes.setEditable(false);
 		}
 		return txtTotalDiasRemanentes;
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Va a salir sin guardar cambios, desea continuar?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Va a salir sin guardar cambios, desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -321,26 +321,26 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 		Date fechaDesde = getPanelFechaDesde().getDate();
 		Date fechaHasta = getPanelFechaHasta().getDate();
 		if (fechaDesde == null) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha desde'", "Error");
 			return false;
 		}
 		if(fechaHasta == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha hasta'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha hasta'", "Error");
 			return false;
 		}
 		java.sql.Date fechaDesdeSql = new java.sql.Date(getPanelFechaDesde().getDate().getTime());
 		java.sql.Date fechaHastaSql = new java.sql.Date(getPanelFechaHasta().getDate().getTime());
 		if(!fechaDesdeSql.before(fechaHastaSql)){
-			CLJOptionPane.showErrorMessage(this, "La 'Fecha desde' debe ser anterior a la 'Fecha hasta'", "Error");
+			FWJOptionPane.showErrorMessage(this, "La 'Fecha desde' debe ser anterior a la 'Fecha hasta'", "Error");
 			return false;
 		}
 		if(seSolapanFechas(fechaDesdeSql, fechaHastaSql)){
-			CLJOptionPane.showErrorMessage(this, "Las fechas elegidas se solapan con otro periodo elegido", "Error");
+			FWJOptionPane.showErrorMessage(this, "Las fechas elegidas se solapan con otro periodo elegido", "Error");
 		}
 		Integer cantidadDias = DateUtil.contarDias(fechaDesdeSql, fechaHastaSql);
 		Integer diasDisponibles = getDiasDisponiblesAnioCombo();
 		if(cantidadDias > diasDisponibles){
-			CLJOptionPane.showErrorMessage(this, "El empleado solo puede tomarse " + getPeriodoCorrespondiente().getCantidadDias() + " días", "Error");
+			FWJOptionPane.showErrorMessage(this, "El empleado solo puede tomarse " + getPeriodoCorrespondiente().getCantidadDias() + " días", "Error");
 			return false;
 		}
 		
@@ -351,7 +351,7 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 					getRegistroActual().setFechaHasta(fechaHastaSql);
 				}
 				if(getRegistroActual().seSolapa(reg.getFechaDesde(), reg.getFechaHasta())){
-					CLJOptionPane.showErrorMessage(this, "El periodo se solpa con otro agregado previamente", "Error");
+					FWJOptionPane.showErrorMessage(this, "El periodo se solpa con otro agregado previamente", "Error");
 					return false;
 				}
 			}
@@ -388,18 +388,18 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 		this.periodoCorrespondiente = periodoCorrespondiente;
 	}
 
-	public CLJTextField getTxtPeriodoCorrespondiente() {
+	public FWJTextField getTxtPeriodoCorrespondiente() {
 		if (txtPeriodoCorrespondiente == null) {
-			txtPeriodoCorrespondiente = new CLJTextField();
+			txtPeriodoCorrespondiente = new FWJTextField();
 			txtPeriodoCorrespondiente.setEditable(false);
 			txtPeriodoCorrespondiente.setText(getPeriodoCorrespondiente().toString());
 		}
 		return txtPeriodoCorrespondiente;
 	}
 
-	public CLJTextField getTxtAntiguedad() {
+	public FWJTextField getTxtAntiguedad() {
 		if(txtAntiguedad == null){
-			txtAntiguedad = new CLJTextField();
+			txtAntiguedad = new FWJTextField();
 			txtAntiguedad.setEditable(false);
 			java.sql.Date anioAl31_12 = DateUtil.getFecha(DateUtil.getAnio(DateUtil.getHoy()), 12, 31);
 			Integer antiguedadAnios = AntiguedadHelper.getInstance().calcularAntiguedad(anioAl31_12, getLegajo());
@@ -437,7 +437,7 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 						VigenciaEmpleado ultimaVigencia = historialVigencias.get(historialVigencias.size()-1);
 						for(Integer an = DateUtil.getAnio(ultimaVigencia.getFechaAlta());an<anio;an++){
 							if(getMapaAniosVacaciones().get(an)==null){
-								CLJOptionPane.showErrorMessage(JDialogAgregarModificarPeriodoVacaciones.this, StringW.wordWrap("No pueden asignarse vacaciones para el " + anio + " debido a que aun no se han asignado para el " + an), "Error");
+								FWJOptionPane.showErrorMessage(JDialogAgregarModificarPeriodoVacaciones.this, StringW.wordWrap("No pueden asignarse vacaciones para el " + anio + " debido a que aun no se han asignado para el " + an), "Error");
 								GenericUtils.setValorComboSinListeners(getCmbAnioCorrespondiente(), _anioComboElegido);
 								return;
 							}else{
@@ -448,7 +448,7 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 									}
 								});
 								if(list.get(0).getDiasRemanentes()>0){
-									CLJOptionPane.showErrorMessage(JDialogAgregarModificarPeriodoVacaciones.this, StringW.wordWrap("Aun tiene días disponibles en el año " + an), "Error");
+									FWJOptionPane.showErrorMessage(JDialogAgregarModificarPeriodoVacaciones.this, StringW.wordWrap("Aun tiene días disponibles en el año " + an), "Error");
 									GenericUtils.setValorComboSinListeners(getCmbAnioCorrespondiente(), _anioComboElegido);
 									return;
 								}
@@ -456,7 +456,7 @@ public class JDialogAgregarModificarPeriodoVacaciones extends JDialog {
 						}
 						Integer diasDisponiblesParaAnio = VacacionesHelper.getDiasDisponiblesParaAnio(getLegajo().getHistorialVacaciones(), anio,conf,ultimaVigencia.getFechaAlta());
 						if(diasDisponiblesParaAnio==0){
-							CLJOptionPane.showErrorMessage(JDialogAgregarModificarPeriodoVacaciones.this, "No quedan días disponibles para el año seleccionado", "Error");
+							FWJOptionPane.showErrorMessage(JDialogAgregarModificarPeriodoVacaciones.this, "No quedan días disponibles para el año seleccionado", "Error");
 							GenericUtils.setValorComboSinListeners(getCmbAnioCorrespondiente(), _anioComboElegido);
 							return;
 						}else{

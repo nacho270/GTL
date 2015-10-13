@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.antifichadas.AntiFichada;
 import ar.com.textillevel.modulos.personal.entidades.legajos.AccionHistorica;
 import ar.com.textillevel.modulos.personal.entidades.legajos.LegajoEmpleado;

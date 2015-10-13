@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.stock.columnas.anilinas;
 
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaString;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
 import ar.com.textillevel.entidades.ventas.materiaprima.ItemMateriaPrimaTO;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 

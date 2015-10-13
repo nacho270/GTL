@@ -3,8 +3,8 @@ package main.triggers;
 import main.triggers.validacion.numeracionfactura.ValidadorNumeracionFactura;
 import main.triggers.validacion.numeracionfactura.exceptions.VencimientoNumeracionPorFechaException;
 import main.triggers.validacion.numeracionfactura.exceptions.VencimientoNumeracionPorNumerosException;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.templates.main.AbstractMainTemplate;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.templates.main.AbstractMainTemplate;
 import ar.com.textillevel.entidades.config.ConfiguracionNumeracionFactura;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
@@ -22,17 +22,17 @@ public class TriggerVencimientoNumeracionFactura extends Trigger {
 		try {
 			ValidadorNumeracionFactura.verificarValidezConfiguracionFactura(configuracionFacturaA);
 		} catch (VencimientoNumeracionPorNumerosException v) {
-			CLJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v.getMessage(), "Advertencia");
+			FWJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v.getMessage(), "Advertencia");
 		} catch (VencimientoNumeracionPorFechaException v2) {
-			CLJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v2.getMessage(), "Advertencia");
+			FWJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v2.getMessage(), "Advertencia");
 		}
 		
 		try {
 			ValidadorNumeracionFactura.verificarValidezConfiguracionFactura(configuracionFacturaB);
 		} catch (VencimientoNumeracionPorNumerosException v) {
-			CLJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v.getMessage(), "Advertencia");
+			FWJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v.getMessage(), "Advertencia");
 		} catch (VencimientoNumeracionPorFechaException v2) {
-			CLJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v2.getMessage(), "Advertencia");
+			FWJOptionPane.showWarningMessage(AbstractMainTemplate.getFrameInstance(), v2.getMessage(), "Advertencia");
 		}
 	}
 

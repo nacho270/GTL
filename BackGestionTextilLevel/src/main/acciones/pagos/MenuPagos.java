@@ -4,9 +4,9 @@ import java.awt.Frame;
 
 import javax.swing.JMenuItem;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
-public class MenuPagos extends CLJMenu{
+public class MenuPagos extends FWJMenu{
 
 	private static final long serialVersionUID = 7893157749927984476L;
 
@@ -17,7 +17,7 @@ public class MenuPagos extends CLJMenu{
 	private JMenuItem itemAgregarOrdenDeDeposito;
 	private JMenuItem itemConsultarOrdenDeDeposito;
 	private JMenuItem itemAgregarFacturaPersona;
-	private CLJMenu menuConsultas;
+	private FWJMenu menuConsultas;
 
 	public MenuPagos(Frame frame) {
 		super("Pagos", 'P');
@@ -52,9 +52,9 @@ public class MenuPagos extends CLJMenu{
 	}
 
 	
-	public CLJMenu getMenuConsultas() {
+	public FWJMenu getMenuConsultas() {
 		if(menuConsultas == null){
-			menuConsultas = new CLJMenu("Consultas");
+			menuConsultas = new FWJMenu("Consultas");
 			menuConsultas.add(getItemConsultarOrdenDePago());
 			menuConsultas.add(getItemConsultarOrdenDeDeposito());
 		}

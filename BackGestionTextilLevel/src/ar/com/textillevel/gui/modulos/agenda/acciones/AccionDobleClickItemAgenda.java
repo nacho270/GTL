@@ -1,7 +1,7 @@
 package ar.com.textillevel.gui.modulos.agenda.acciones;
 
-import ar.clarin.fwjava.templates.modulo.model.accionesmouse.AccionAdicional;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionAdicional;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.gente.IAgendable;
 import ar.com.textillevel.gui.modulos.agenda.gui.JDialogDetalleContacto;
 

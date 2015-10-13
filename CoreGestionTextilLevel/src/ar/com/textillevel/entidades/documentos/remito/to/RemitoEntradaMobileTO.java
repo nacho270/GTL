@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import ar.clarin.fwjava.componentes.error.CLRuntimeException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.CuentaOwnerTO;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
@@ -90,7 +90,7 @@ public class RemitoEntradaMobileTO implements Serializable {
 			for(PiezaODT podt : odt.getPiezas()) {
 				PiezaRemito pr = getPiezaRemito(remito.getPiezas(), podt.getPiezaRemito());
 				if(pr == null) {
-					throw new CLRuntimeException("Estado inconsistente!!!");
+					throw new FWRuntimeException("Estado inconsistente!!!");
 				}
 				podt.setPiezaRemito(pr);
 			}

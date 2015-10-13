@@ -27,9 +27,9 @@ import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.legajos.valesdeatencion.ValePreocupacional;
@@ -153,7 +153,7 @@ public class JDialogValePreocupacional extends JDialog {
 				ValePreocupacional valePreSaved = getValeAtencionFacade().ingresarValePreocupacional(getValePreocupacional(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				setValePreocupacional(valePreSaved);
 			} catch (ValidacionException e) {
-				CLJOptionPane.showErrorMessage(JDialogValePreocupacional.this, e.getMensajeError(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogValePreocupacional.this, e.getMensajeError(), "Error");
 				setValePreocupacional(null);
 				setAcepto(false);
 				dispose();
@@ -173,7 +173,7 @@ public class JDialogValePreocupacional extends JDialog {
 
 	private boolean validar() {
 		if(getFechaVale().getDate()==null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la fecha del vale.", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha del vale.", "Error");
 			getFechaVale().requestFocus();
 			return false;
 		}

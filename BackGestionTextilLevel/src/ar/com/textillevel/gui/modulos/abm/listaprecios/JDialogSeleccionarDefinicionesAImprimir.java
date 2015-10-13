@@ -20,16 +20,16 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import ar.clarin.fwjava.componentes.CLCheckBoxList;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWCheckBoxList;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 
 public class JDialogSeleccionarDefinicionesAImprimir extends JDialog {
 
 	private static final long serialVersionUID = -2280735973919993515L;
 
-	private CLCheckBoxList<DefinicionPrecio> chkListDefiniciones;
+	private FWCheckBoxList<DefinicionPrecio> chkListDefiniciones;
 	private JCheckBox chkSeleccionarTodos;
 	private JButton btnAceptar;
 	private JButton btnSalir;
@@ -112,9 +112,9 @@ public class JDialogSeleccionarDefinicionesAImprimir extends JDialog {
 		setFocusTraversalPolicy(policy);
 	}
 
-	private CLCheckBoxList<DefinicionPrecio> getChkListDefiniciones() {
+	private FWCheckBoxList<DefinicionPrecio> getChkListDefiniciones() {
 		if (chkListDefiniciones == null) {
-			chkListDefiniciones = new CLCheckBoxList<DefinicionPrecio>(){
+			chkListDefiniciones = new FWCheckBoxList<DefinicionPrecio>(){
 
 				private static final long serialVersionUID = -3864123866954080421L;
 
@@ -159,7 +159,7 @@ public class JDialogSeleccionarDefinicionesAImprimir extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (getDefinicionesAImprimir().isEmpty()) {
-						CLJOptionPane.showErrorMessage(JDialogSeleccionarDefinicionesAImprimir.this, "Debe elegir al menos un tipo de producto a imprimir", "Error");
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarDefinicionesAImprimir.this, "Debe elegir al menos un tipo de producto a imprimir", "Error");
 						return;
 					}
 					setAcepto(true);

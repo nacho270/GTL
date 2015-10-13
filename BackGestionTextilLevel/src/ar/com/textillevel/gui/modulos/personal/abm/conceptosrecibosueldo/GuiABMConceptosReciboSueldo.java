@@ -15,12 +15,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.conceptos.ConceptoReciboSueldo;
@@ -38,7 +38,7 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 	private JPanel panDetalle;
 
 	private JComboBox cmbTipoConcepto;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private PanelTablaValoresConcepto panelTabla;
 
 	private ConceptoReciboSueldoFacadeRemote conceptoFacade;
@@ -120,7 +120,7 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el concepto para el sindicato seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el concepto para el sindicato seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getConceptoFacade().remove(getConceptoActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -135,7 +135,7 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 			setEdicion(true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un sindicato", "Error");
 			return false;
 		}
 	}
@@ -151,7 +151,7 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 		if (validar()) {
 			capturarDatos();
 			ConceptoReciboSueldo conc = getConceptoFacade().save(getConceptoActual(),isEdicion());
-			CLJOptionPane.showInformationMessage(getFrame(), "El concepto se ha grabado con éxito", "Información");
+			FWJOptionPane.showInformationMessage(getFrame(), "El concepto se ha grabado con éxito", "Información");
 			lista.setSelectedValue(conc, true);
 			return true;
 		}
@@ -169,12 +169,12 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if (getTxtNombre().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del concepto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del concepto", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if (getValoresElegidos().isEmpty()) {
-			CLJOptionPane.showErrorMessage(this, "Debe al menos un valor para el concepto", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe al menos un valor para el concepto", "Error");
 			return false;
 		}
 		return true;
@@ -239,9 +239,9 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 		return cmbTipoConcepto;
 	}
 
-	public CLJTextField getTxtNombre() {
+	public FWJTextField getTxtNombre() {
 		if (txtNombre == null) {
-			txtNombre = new CLJTextField();
+			txtNombre = new FWJTextField();
 		}
 		return txtNombre;
 	}
@@ -273,8 +273,8 @@ public class GuiABMConceptosReciboSueldo extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setDateColumn(COL_FECHA, "Válido desde", 120, true);
 			tabla.setStringColumn(COL_VALOR, "Valor", 100, 100, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);

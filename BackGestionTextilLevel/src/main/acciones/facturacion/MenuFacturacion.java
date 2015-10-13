@@ -5,9 +5,9 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 
-import ar.clarin.fwjava.templates.main.menu.CLJMenu;
+import ar.com.fwcommon.templates.main.menu.FWJMenu;
 
-public class MenuFacturacion extends CLJMenu {
+public class MenuFacturacion extends FWJMenu {
 
 	private static final long serialVersionUID = 3657289797505567141L;
 
@@ -17,7 +17,7 @@ public class MenuFacturacion extends CLJMenu {
 	private JMenuItem menuItemAgregarFacturaSinRemito;
 	private JMenuItem menuItemAgregarCorreccion;
 	private JMenuItem menuItemAgregarRecibo;
-	private CLJMenu menuConsultas;
+	private FWJMenu menuConsultas;
 	private final Frame frame;
 
 	public MenuFacturacion(Frame frame) {
@@ -81,9 +81,9 @@ public class MenuFacturacion extends CLJMenu {
 		return menuItemAgregarRecibo;
 	}
 
-	public CLJMenu getMenuConsultas(){
+	public FWJMenu getMenuConsultas(){
 		if(menuConsultas == null){
-			menuConsultas = new CLJMenu("Consultas");
+			menuConsultas = new FWJMenu("Consultas");
 			JMenuItem menuConsultarFactura = new JMenuItem(new ConsultarFacturaAction(frame));
 			menuConsultarFactura.setText("Consultar factura");
 			JMenuItem menuConsultarCorrecciones = new JMenuItem(new ConsultarCorreccionesAction(frame));

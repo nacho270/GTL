@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.gui.modulos.odt.gui.secuencias.event.DobleClickPasoSecuenciaEventData;
 import ar.com.textillevel.gui.modulos.odt.gui.secuencias.event.DobleClickPasoSecuenciaEventListener;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -35,7 +35,7 @@ public class PanelPasosSecuencia extends JPanel{
 	private final EventListenerList listeners = new EventListenerList();
 	
 	private static final int MAX_LONGITUD_NOMBRE = 50;
-	private CLJTextField txtNombre;
+	private FWJTextField txtNombre;
 	private PanelTablaPasosSecuencia panelTabla;
 	
 	private boolean edicion;
@@ -114,8 +114,8 @@ public class PanelPasosSecuencia extends JPanel{
 		}
 		
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -129,10 +129,10 @@ public class PanelPasosSecuencia extends JPanel{
 			tabla.setStringColumn(COL_SUBPROCESO,"Subproceso",150, 150, true);
 			tabla.setStringColumn(COL_OBS,"Observaciones",170, 170, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
-			tabla.setHeaderAlignment(COL_SECTOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_PROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_SUBPROCESO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_OBS, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_SECTOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_SUBPROCESO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_OBS, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
@@ -222,9 +222,9 @@ public class PanelPasosSecuencia extends JPanel{
 		}
 	}
 
-	public CLJTextField getTxtNombre() {
+	public FWJTextField getTxtNombre() {
 		if(txtNombre == null){
-			txtNombre = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombre = new FWJTextField(MAX_LONGITUD_NOMBRE);
 			txtNombre.setEditable(edicion);
 			txtNombre.addKeyListener(new KeyAdapter() {
 				@Override
@@ -263,12 +263,12 @@ public class PanelPasosSecuencia extends JPanel{
 	
 	public boolean validar(){
 		if(StringUtil.isNullOrEmpty(getTxtNombre().getText())){
-			CLJOptionPane.showErrorMessage(dialogPadre==null?framePadre:dialogPadre,"Debe ingresar el nombre de la secuencia", "Error");
+			FWJOptionPane.showErrorMessage(dialogPadre==null?framePadre:dialogPadre,"Debe ingresar el nombre de la secuencia", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}
 		if(getSecuenciaActual().getPasos().size()==0){
-			CLJOptionPane.showErrorMessage(dialogPadre==null?framePadre:dialogPadre,"Debe ingresar al menos un paso para la secuencia", "Error");
+			FWJOptionPane.showErrorMessage(dialogPadre==null?framePadre:dialogPadre,"Debe ingresar al menos un paso para la secuencia", "Error");
 			getTxtNombre().requestFocus();
 			return false;
 		}

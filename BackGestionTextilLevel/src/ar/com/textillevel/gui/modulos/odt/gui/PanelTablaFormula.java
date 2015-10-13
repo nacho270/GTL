@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.odt.gui;
 
-import ar.clarin.fwjava.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.gui.modulos.odt.gui.tenido.PersisterFormulaHandler;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;

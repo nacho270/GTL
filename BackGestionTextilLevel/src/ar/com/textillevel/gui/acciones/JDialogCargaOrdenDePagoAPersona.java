@@ -30,17 +30,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextArea;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextArea;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
@@ -65,12 +65,12 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 	private final Frame owner;
 	private PanelTablaCheque panelTablaCheques;
 	private PanelDatePicker panelFecha;
-	private CLJTextField txtPersona;
-	private CLJTextArea txtDetalle;
-	private CLJTextField txtTotal;
-	private CLJTextField txtTotalCheques;
-	private CLJTextField txtEfectivo;
-	private CLJTextField txtNroOrden;
+	private FWJTextField txtPersona;
+	private FWJTextArea txtDetalle;
+	private FWJTextField txtTotal;
+	private FWJTextField txtTotalCheques;
+	private FWJTextField txtEfectivo;
+	private FWJTextField txtNroOrden;
 	private JButton btnGuardar;
 	private JButton btnImprimir;
 	private JButton btnSalir;
@@ -299,7 +299,7 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 						} while (agregaOtro && acepto);
 					}
 					return false;
-				} catch (CLException cle) {
+				} catch (FWException cle) {
 					BossError.gestionarError(cle);
 					return false;
 				}
@@ -363,8 +363,8 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tablaCheques = new CLJTable(0, CANT_COLS_TBL_CHEQUE);
+		protected FWJTable construirTabla() {
+			FWJTable tablaCheques = new FWJTable(0, CANT_COLS_TBL_CHEQUE);
 			tablaCheques.setComboColumn(COL_BANCO, "Banco", getCmbBanco(), 100, true);
 			tablaCheques.setStringColumn(COL_NRO, "Nº", 50, 100, true);
 			tablaCheques.setStringColumn(COL_CUIT, "C.U.I.T", 80, 80, true);
@@ -456,53 +456,53 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 		return panelFecha;
 	}
 
-	private CLJTextField getTxtPersona() {
+	private FWJTextField getTxtPersona() {
 		if (txtPersona == null) {
-			txtPersona = new CLJTextField();
+			txtPersona = new FWJTextField();
 			txtPersona.setEditable(false);
 			txtPersona.setPreferredSize(new Dimension(120,20));
 		}
 		return txtPersona;
 	}
 	
-	private CLJTextField getTxtNroOrden() {
+	private FWJTextField getTxtNroOrden() {
 		if (txtNroOrden == null) {
-			txtNroOrden = new CLJTextField();
+			txtNroOrden = new FWJTextField();
 			txtNroOrden.setEditable(false);
 			txtNroOrden.setPreferredSize(new Dimension(120,20));
 		}
 		return txtNroOrden;
 	}
 
-	private CLJTextArea getTxtDetalle() {
+	private FWJTextArea getTxtDetalle() {
 		if (txtDetalle == null) {
-			txtDetalle = new CLJTextArea(650);
+			txtDetalle = new FWJTextArea(650);
 			txtDetalle.setLineWrap(true);
 			txtDetalle.setPreferredSize(new Dimension(300, 170));
 		}
 		return txtDetalle;
 	}
 
-	private CLJTextField getTxtTotal() {
+	private FWJTextField getTxtTotal() {
 		if (txtTotal == null) {
-			txtTotal = new CLJTextField();
+			txtTotal = new FWJTextField();
 			txtTotal.setEditable(false);
 		}
 		return txtTotal;
 	}
 
-	private CLJTextField getTxtTotalCheques() {
+	private FWJTextField getTxtTotalCheques() {
 		if (txtTotalCheques == null) {
-			txtTotalCheques = new CLJTextField();
+			txtTotalCheques = new FWJTextField();
 			txtTotalCheques.setEditable(false);
 			txtTotalCheques.setPreferredSize(new Dimension(120,20));
 		}
 		return txtTotalCheques;
 	}
 	
-	private CLJTextField getTxtEfectivo() {
+	private FWJTextField getTxtEfectivo() {
 		if (txtEfectivo == null) {
-			txtEfectivo = new CLJTextField();
+			txtEfectivo = new FWJTextField();
 			txtEfectivo.setPreferredSize(new Dimension(100, 20));
 			txtEfectivo.addFocusListener(new FocusAdapter() {
 				@Override
@@ -579,7 +579,7 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 				fpope.setImportePagoSimple(new BigDecimal(modelo.getTotalEfectivo()));
 				modelo.getFormasDePago().add(fpope);
 			} else {
-				CLJOptionPane.showErrorMessage(this, "El campo es numérico", "Error");
+				FWJOptionPane.showErrorMessage(this, "El campo es numérico", "Error");
 				getTxtEfectivo().requestFocus();
 				setEstadoPantalla(EEstadoPantalla.ESTADO_INVALIDO);
 				return;
@@ -620,31 +620,31 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 							orden.setUsuarioCreador(usuario);
 						}
 						setOrdenDePago(isEdicion()?getOrdenFacade().editarOrden(orden,usuario):getOrdenFacade().guardarOrden(orden,usuario));
-						CLJOptionPane.showInformationMessage(this, "Se ha guardado correctamente la órden de pago", "Información");
-						if(CLJOptionPane.showQuestionMessage(this, "¿Desea imprimir la Orden?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+						FWJOptionPane.showInformationMessage(this, "Se ha guardado correctamente la órden de pago", "Información");
+						if(FWJOptionPane.showQuestionMessage(this, "¿Desea imprimir la Orden?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 							imprimirOrden();
 						}
 						dispose();
-					}catch(CLException cle){
+					}catch(FWException cle){
 						BossError.gestionarError(cle);
 					}
 				}else{
-					CLJOptionPane.showErrorMessage(this, "Debe especificar los detalles del pago", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe especificar los detalles del pago", "Error");
 					getTxtDetalle().requestFocus();
 					return;
 				}
 			}else{
-				CLJOptionPane.showErrorMessage(this, "Debe elegir las formas de pago", "Error");
+				FWJOptionPane.showErrorMessage(this, "Debe elegir las formas de pago", "Error");
 				return;
 			}
 		}else{
-			CLJOptionPane.showErrorMessage(this, "Los datos ingresados son inválidos", "Error");
+			FWJOptionPane.showErrorMessage(this, "Los datos ingresados son inválidos", "Error");
 			return;
 		}
 	}
 	
 	private void salir(){
-		if(CLJOptionPane.showQuestionMessage(this, "Desea salir?", "Pregunta") == CLJOptionPane.YES_OPTION){
+		if(FWJOptionPane.showQuestionMessage(this, "Desea salir?", "Pregunta") == FWJOptionPane.YES_OPTION){
 			dispose();
 		}
 	}

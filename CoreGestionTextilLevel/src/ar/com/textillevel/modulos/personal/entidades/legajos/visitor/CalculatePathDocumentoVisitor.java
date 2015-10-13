@@ -2,7 +2,7 @@ package ar.com.textillevel.modulos.personal.entidades.legajos.visitor;
 
 import java.io.File;
 
-import ar.clarin.fwjava.util.FileUtil;
+import ar.com.fwcommon.util.FileUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 import ar.com.textillevel.modulos.personal.entidades.legajos.sanciones.AccionSancion;
 import ar.com.textillevel.modulos.personal.entidades.legajos.valesdeatencion.AccionValeAtencion;

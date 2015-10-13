@@ -5,8 +5,8 @@ import java.sql.Date;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.dao.api.local.OrdenDePagoDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
@@ -70,13 +70,13 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 		}
 	}
 
-	public OrdenDePago guardarOrdenDePago(OrdenDePago orden, String usuario) throws CLException{
+	public OrdenDePago guardarOrdenDePago(OrdenDePago orden, String usuario) throws FWException{
 		orden = guardarOrdenDePagoInterno(orden, usuario);
 		auditoriaFacade.auditar(usuario, "Creacion de Orden de Pago Nº: " + orden.getNroOrden(), EnumTipoEvento.ALTA, orden);
 		return orden;
 	}
 
-	private OrdenDePago guardarOrdenDePagoInterno(OrdenDePago orden, String usuario) throws CLException {
+	private OrdenDePago guardarOrdenDePagoInterno(OrdenDePago orden, String usuario) throws FWException {
 		ActualizadorPagoOrdenDePagoVisitor actualizador = new ActualizadorPagoOrdenDePagoVisitor();
 		for(PagoOrdenDePago p : orden.getPagos()){
 			p.accept(actualizador);
@@ -131,7 +131,7 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 		return orden;
 	}
 	
-	public OrdenDePago editarOrdenDePago(OrdenDePago orden, String usrName) throws CLException{
+	public OrdenDePago editarOrdenDePago(OrdenDePago orden, String usrName) throws FWException{
 		borrarOrdenDePagoInterno(orden, usrName);
 		orden = guardarOrdenDePagoInterno(orden, usrName);
 		auditoriaFacade.auditar(usrName, "Edición de Orden de pago Nº: " + orden.getNroOrden(), EnumTipoEvento.MODIFICACION, orden);
@@ -144,12 +144,12 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 		actualizarOrden(orden, usrName);
 	}
 	
-	public void borrarOrdenDePago(OrdenDePago orden, String usuario) throws CLException{
+	public void borrarOrdenDePago(OrdenDePago orden, String usuario) throws FWException{
 		orden = borrarOrdenDePagoInterno(orden, usuario);
 		auditoriaFacade.auditar(usuario, "Eliminación de órden de pago  Nº: " + orden.getNroOrden(),EnumTipoEvento.BAJA,orden);
 	}
 
-	private OrdenDePago borrarOrdenDePagoInterno(OrdenDePago orden, String usuario) throws CLException {
+	private OrdenDePago borrarOrdenDePagoInterno(OrdenDePago orden, String usuario) throws FWException {
 		orden = getOrdenDePagoByNroOrdenEager(orden.getNroOrden());
 		for(FormaPagoOrdenDePago fp : orden.getFormasDePago()){
 			if(fp instanceof FormaPagoOrdenDePagoCheque){//pongo cheques en cartera

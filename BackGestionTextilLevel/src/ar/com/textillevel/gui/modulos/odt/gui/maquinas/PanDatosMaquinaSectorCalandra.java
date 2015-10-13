@@ -7,7 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidacionCompletitud;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidacionMayorQueCero;
@@ -31,9 +31,9 @@ public class PanDatosMaquinaSectorCalandra extends PanDatosMaquinaCommon {
 	private static final String LABEL_TEMP_PROM = "TEMP. PROM. (ºC)";
 	private static final String LABEL_PRESION_TRAB_MAX = "PRESIÓN TRABAJO MÁX. (TN)";
 	
-	private CLJNumericTextField txtCantRodillos;
-	private CLJNumericTextField txtCantPasadasMin;
-	private CLJNumericTextField txtCantPasadasMax;
+	private FWJNumericTextField txtCantRodillos;
+	private FWJNumericTextField txtCantPasadasMin;
+	private FWJNumericTextField txtCantPasadasMax;
 	private DecimalNumericTextField txtPresionTrabajoMax;
 	private DecimalNumericTextField txtTempMin;
 	private DecimalNumericTextField txtTempMax;
@@ -140,23 +140,23 @@ public class PanDatosMaquinaSectorCalandra extends PanDatosMaquinaCommon {
 		return txtTempProm;
 	}
 
-	private CLJNumericTextField getTxtCantRodillos() {
+	private FWJNumericTextField getTxtCantRodillos() {
 		if(txtCantRodillos == null) {
-			txtCantRodillos = new CLJNumericTextField();
+			txtCantRodillos = new FWJNumericTextField();
 		}
 		return txtCantRodillos;
 	}
 
-	private CLJNumericTextField getTxtCantPasadasMin() {
+	private FWJNumericTextField getTxtCantPasadasMin() {
 		if(txtCantPasadasMin == null) {
-			txtCantPasadasMin = new CLJNumericTextField();
+			txtCantPasadasMin = new FWJNumericTextField();
 		}
 		return txtCantPasadasMin;
 	}
 
-	private CLJNumericTextField getTxtCantPasadasMax() {
+	private FWJNumericTextField getTxtCantPasadasMax() {
 		if(txtCantPasadasMax == null) {
-			txtCantPasadasMax = new CLJNumericTextField();
+			txtCantPasadasMax = new FWJNumericTextField();
 		}
 		return txtCantPasadasMax;
 	}

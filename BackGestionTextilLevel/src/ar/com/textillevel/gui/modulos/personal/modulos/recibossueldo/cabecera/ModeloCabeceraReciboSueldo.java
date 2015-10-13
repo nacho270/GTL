@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.recibossueldo.cabecera;
 
-import ar.clarin.fwjava.entidades.Mes;
+import ar.com.fwcommon.entidades.Mes;
 import ar.com.textillevel.modulos.personal.entidades.legajos.tareas.Sindicato;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EQuincena;
 

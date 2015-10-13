@@ -3,7 +3,7 @@ package ar.com.textillevel.facade.impl;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.textillevel.dao.api.local.FacturaPersonaDAOLocal;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
 import ar.com.textillevel.entidades.gente.Persona;

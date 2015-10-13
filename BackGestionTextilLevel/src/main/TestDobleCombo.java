@@ -18,10 +18,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.ToStringComparator;
 
 @SuppressWarnings("unused")
@@ -204,9 +204,9 @@ public class TestDobleCombo extends JFrame {
 		private static final int COL_OBJ = 2;
 		
 		
-		protected CLJTable construirTabla() {
+		protected FWJTable construirTabla() {
 			final MaquinasCellEditor maquinaCellEditor = new MaquinasCellEditor();
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setComboColumn(COL_MAQUINA, "Maquinas", new JComboBox(),100,false);
 			tabla.setComboColumn(COL_PROCESO, "Proceso", new JComboBox(),100,false);
 			tabla.setStringColumn(COL_OBJ, "", 0);

@@ -9,11 +9,11 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.InfoLocalidad;
 import ar.com.textillevel.facade.api.remote.InfoLocalidadFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -28,9 +28,9 @@ public class GuiABMInfoLocalidad extends GuiABMListaTemplate{
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 	
-	private CLJTextField txtNombreLocalidad;
-	private CLJNumericTextField txtCodArea;
-	private CLJNumericTextField txtCodigoPostal;
+	private FWJTextField txtNombreLocalidad;
+	private FWJNumericTextField txtCodArea;
+	private FWJNumericTextField txtCodigoPostal;
 	
 	private InfoLocalidadFacadeRemote infoLocalidadFacade;
 	private InfoLocalidad infolocalidadActual;
@@ -84,23 +84,23 @@ public class GuiABMInfoLocalidad extends GuiABMListaTemplate{
 		return gbc;
 	}
 	
-	private CLJTextField getTxtNombreLocalidad() {
+	private FWJTextField getTxtNombreLocalidad() {
 		if(txtNombreLocalidad == null){
-			txtNombreLocalidad = new CLJTextField(MAX_LONGITUD_LOCALIDAD);
+			txtNombreLocalidad = new FWJTextField(MAX_LONGITUD_LOCALIDAD);
 		}
 		return txtNombreLocalidad;
 	}
 
-	private CLJNumericTextField getTxtCodArea() {
+	private FWJNumericTextField getTxtCodArea() {
 		if(txtCodArea == null){
-			txtCodArea = new CLJNumericTextField();
+			txtCodArea = new FWJNumericTextField();
 		}
 		return txtCodArea;
 	}
 
-	private CLJNumericTextField getTxtCodigoPostal() {
+	private FWJNumericTextField getTxtCodigoPostal() {
 		if(txtCodigoPostal == null){
-			txtCodigoPostal = new CLJNumericTextField();
+			txtCodigoPostal = new FWJNumericTextField();
 		}
 		return txtCodigoPostal;
 	}
@@ -130,7 +130,7 @@ public class GuiABMInfoLocalidad extends GuiABMListaTemplate{
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el cliente seleccionado?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el cliente seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getInfoLocalidadFacade().remove(getInfolocalidadActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -150,22 +150,22 @@ public class GuiABMInfoLocalidad extends GuiABMListaTemplate{
 	
 	private boolean validar() {
 		if(getTxtNombreLocalidad().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la localidad", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la localidad", this.getTitle());
 			return false;
 		}
 		
 		if(getTxtCodigoPostal().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el código postal", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el código postal", this.getTitle());
 			return false;
 		}
 		
 		if(getTxtCodArea().getText().trim().length() == 0){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el código de área", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el código de área", this.getTitle());
 			return false;
 		}
 		
 		if(getTxtCodArea().getText().equalsIgnoreCase(getTxtCodigoPostal().getText())){
-			CLJOptionPane.showErrorMessage(this, "El código postal no puede conincidir con el código de área", this.getTitle());
+			FWJOptionPane.showErrorMessage(this, "El código postal no puede conincidir con el código de área", this.getTitle());
 			return false;
 		}
 		
@@ -186,7 +186,7 @@ public class GuiABMInfoLocalidad extends GuiABMListaTemplate{
 			getTxtNombreLocalidad().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
 			return false;
 		}
 	}

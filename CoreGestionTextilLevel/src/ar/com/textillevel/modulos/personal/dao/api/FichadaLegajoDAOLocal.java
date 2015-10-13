@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.FichadaLegajo;
 
 @Local

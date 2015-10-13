@@ -20,15 +20,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLFileSelector;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWFileSelector;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.stock.MovimientoStock;
 import ar.com.textillevel.entidades.stock.MovimientoStockSuma;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
@@ -65,7 +65,7 @@ public class JDialogVerMovimientosStock extends JDialog {
 	private JPanel panelCabecera;
 	private JPanel panelBotones;
 
-	private CLJTextField txtStockActual;
+	private FWJTextField txtStockActual;
 	
 	private MovimientoStockFacadeRemote movimientoStockFacade;
 
@@ -133,18 +133,18 @@ public class JDialogVerMovimientosStock extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_PROVEEDOR, "Proveedor", 120, 120, true);
 			tabla.setStringColumn(COL_DOCUMENTO, "Documento", 200, 200, true);
 			tabla.setFloatColumn(COL_CANT_CANT, "Stock nuevo", 100, true);
 			tabla.setDateColumn(COL_FECHA_MOV, "Fecha", 80, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
 
-			tabla.setHeaderAlignment(COL_PROVEEDOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CANT_CANT, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_FECHA_MOV, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_DOCUMENTO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_PROVEEDOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CANT_CANT, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_MOV, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DOCUMENTO, FWJTable.CENTER_ALIGN);
 
 			tabla.setReorderingAllowed(false);
 			tabla.setAllowHidingColumns(false);
@@ -217,7 +217,7 @@ public class JDialogVerMovimientosStock extends JDialog {
 	
 	private void buscar() {
 		if (getPanelFechaHasta().getDate().before(getPanelFechaDesde().getDate())) {
-			CLJOptionPane.showErrorMessage(JDialogVerMovimientosStock.this, "La fecha 'Hasta' debe ser mayor o igual que la fecha 'Desde'", "Validación de fechas");
+			FWJOptionPane.showErrorMessage(JDialogVerMovimientosStock.this, "La fecha 'Hasta' debe ser mayor o igual que la fecha 'Desde'", "Validación de fechas");
 			return;
 		}
 		getPanelPaginador().setPageIndex(1);
@@ -261,15 +261,15 @@ public class JDialogVerMovimientosStock extends JDialog {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/clarin/fwjava/imagenes/b_exportar_excel.png", "ar/clarin/fwjava/imagenes/b_exportar_excel_des.png");
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 			btnExportarAExcel.setEnabled(false);
 			btnExportarAExcel.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaMovimientos().getTabla();
+						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - " + getPrecioMateriaPrima().getMateriaPrima().getDescripcion() + " - " + getPrecioMateriaPrima().getAlias(), EXTENSION_EXCEL);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosExcel(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_EXCEL)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_EXCEL));
@@ -311,9 +311,9 @@ public class JDialogVerMovimientosStock extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						CLJTable tabla = getPanelTablaMovimientos().getTabla();
+						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - " + getPrecioMateriaPrima().getMateriaPrima().getDescripcion() + " - " + getPrecioMateriaPrima().getAlias(), EXTENSION_PDF);
-						File archivoIngresado = CLFileSelector.obtenerArchivo(CLFileSelector.SAVE, CLFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
@@ -330,7 +330,7 @@ public class JDialogVerMovimientosStock extends JDialog {
 	}
 
 	private void mostrarFileChooser(String nombreArchivo, String extension) {
-		File directorioCorriente = CLFileSelector.getLastSelectedFile();
+		File directorioCorriente = FWFileSelector.getLastSelectedFile();
 		if (directorioCorriente != null) {
 			String nombreSugerido = null;
 			try {
@@ -340,11 +340,11 @@ public class JDialogVerMovimientosStock extends JDialog {
 					nombreSugerido = directorioCorriente.getCanonicalPath() + File.separator + nombreArchivo;
 				}
 			} catch (IOException e1) {
-				CLJOptionPane.showErrorMessage(JDialogVerMovimientosStock.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
+				FWJOptionPane.showErrorMessage(JDialogVerMovimientosStock.this, "Se ha producido un error al guardar el archivo.\n" + e1.getMessage(), "Error");
 				return;
 			}
 			File archivoSugerido = new File(nombreSugerido.endsWith(extension) ? nombreSugerido : nombreSugerido.concat(extension));
-			CLFileSelector.setLastSelectedFile(archivoSugerido);
+			FWFileSelector.setLastSelectedFile(archivoSugerido);
 		}
 	}
 
@@ -436,7 +436,7 @@ public class JDialogVerMovimientosStock extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(this, "Está seguro que desea salir?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(this, "Está seguro que desea salir?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			dispose();
 		}
 	}
@@ -468,9 +468,9 @@ public class JDialogVerMovimientosStock extends JDialog {
 		return btnConsultarDocumento;
 	}
 	
-	private CLJTextField getTxtStockActual() {
+	private FWJTextField getTxtStockActual() {
 		if(txtStockActual == null){
-			txtStockActual = new CLJTextField();
+			txtStockActual = new FWJTextField();
 			txtStockActual.setEditable(false);
 			txtStockActual.setPreferredSize(new Dimension(120, 20));
 		}

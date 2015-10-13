@@ -3,10 +3,10 @@ package ar.com.textillevel.facade.impl;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.ejb.BossEventoLocal;
-import ar.clarin.fwjava.auditoria.ejb.Evento;
-import ar.clarin.fwjava.auditoria.ejb.TipoEventoDAOLocal;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.auditoria.ejb.BossEventoLocal;
+import ar.com.fwcommon.auditoria.ejb.Evento;
+import ar.com.fwcommon.auditoria.ejb.TipoEventoDAOLocal;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 
 @Stateless

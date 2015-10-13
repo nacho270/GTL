@@ -20,9 +20,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.config.NumeracionFactura;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
@@ -33,8 +33,8 @@ public class JDialogInputNumeracionFactura extends JDialog {
 
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJNumericTextField txtNroDesde;
-	private CLJNumericTextField txtNroHasta;
+	private FWJNumericTextField txtNroDesde;
+	private FWJNumericTextField txtNroHasta;
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -137,9 +137,9 @@ public class JDialogInputNumeracionFactura extends JDialog {
 		return panelFechaHasta;
 	}
 
-	public CLJNumericTextField getTxtNroDesde() {
+	public FWJNumericTextField getTxtNroDesde() {
 		if(txtNroDesde == null){
-			txtNroDesde = new CLJNumericTextField(0l, Integer.MAX_VALUE);
+			txtNroDesde = new FWJNumericTextField(0l, Integer.MAX_VALUE);
 			txtNroDesde.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -153,9 +153,9 @@ public class JDialogInputNumeracionFactura extends JDialog {
 		return txtNroDesde;
 	}
 
-	public CLJNumericTextField getTxtNroHasta() {
+	public FWJNumericTextField getTxtNroHasta() {
 		if(txtNroHasta == null){
-			txtNroHasta = new CLJNumericTextField(0l, Integer.MAX_VALUE);
+			txtNroHasta = new FWJNumericTextField(0l, Integer.MAX_VALUE);
 			txtNroHasta.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -181,33 +181,33 @@ public class JDialogInputNumeracionFactura extends JDialog {
 		java.util.Date fechaDesde = getPanelFechaDesde().getDate();
 		java.util.Date fechaHasta = getPanelFechaHasta().getDate();
 		if(fechaDesde == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha desde'", "Error");
 			return false;
 		}
 		if(fechaHasta == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha hasta'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la 'Fecha hasta'", "Error");
 			return false;
 		}
 		Date fechaDesdeSql = new Date(fechaDesde.getTime());
 		Date fechaHastaSql = new Date(fechaHasta.getTime());
 		if(!fechaHastaSql.after(fechaDesdeSql)){
-			CLJOptionPane.showErrorMessage(this, "La 'Fecha hasta' debe ser posterior a la 'Fecha desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "La 'Fecha hasta' debe ser posterior a la 'Fecha desde'", "Error");
 			return false;
 		}
 		Integer nroFacturaDesde = getTxtNroDesde().getValueWithNull();
 		Integer nroFacturaHasta = getTxtNroHasta().getValueWithNull();
 		if(nroFacturaDesde == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el 'Número desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el 'Número desde'", "Error");
 			getTxtNroDesde().requestFocus();
 			return false;
 		}
 		if(nroFacturaHasta == null){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el 'Número hasta'", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el 'Número hasta'", "Error");
 			getTxtNroHasta().requestFocus();
 			return false;
 		}
 		if(nroFacturaDesde>=nroFacturaHasta){
-			CLJOptionPane.showErrorMessage(this, "El 'Número hasta' debe ser mayor al 'Número desde'", "Error");
+			FWJOptionPane.showErrorMessage(this, "El 'Número hasta' debe ser mayor al 'Número desde'", "Error");
 			return false;
 		}
 		return validarAdicional(getNumeracionActual());

@@ -23,11 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.text.MaskFormatter;
 
 import main.GTLGlobalCache;
-import ar.clarin.fwjava.componentes.CLBotonCalendario;
-import ar.clarin.fwjava.componentes.CLDateField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWBotonCalendario;
+import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.facade.api.remote.CorreccionFacturaProveedorFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -37,8 +37,8 @@ public class JDialogCompletarDatosCorreccionFacturaProveedor extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private CLDateField txtFecha;
-	private CLBotonCalendario btnFecha;
+	private FWDateField txtFecha;
+	private FWBotonCalendario btnFecha;
 	private JFormattedTextField txtNroCorreccion;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -74,9 +74,9 @@ public class JDialogCompletarDatosCorreccionFacturaProveedor extends JDialog {
 		add(getPanelBotones(), gc);
 	}
 
-	private CLBotonCalendario getBtnFecha() {
+	private FWBotonCalendario getBtnFecha() {
 		if(btnFecha == null) {
-			btnFecha = new CLBotonCalendario(DateUtil.getHoy()) {
+			btnFecha = new FWBotonCalendario(DateUtil.getHoy()) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -115,9 +115,9 @@ public class JDialogCompletarDatosCorreccionFacturaProveedor extends JDialog {
 		return txtNroCorreccion;
 	}
 
-	private CLDateField getTxtFecha() {
+	private FWDateField getTxtFecha() {
 		if(txtFecha == null) {
-			txtFecha = new CLDateField();
+			txtFecha = new FWDateField();
 			txtFecha.setFecha(DateUtil.getHoy());
 		}
 		return txtFecha;
@@ -153,7 +153,7 @@ public class JDialogCompletarDatosCorreccionFacturaProveedor extends JDialog {
 					if(validar()) {
 						capturarSetearDatos();
 						getCorreccionFacade().completarDatosCorreccion(correccionFactura, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-						CLJOptionPane.showInformationMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Los datos de la " + tipoCorreccionFactura + " han sido grabados con éxito.", getTitle());
+						FWJOptionPane.showInformationMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Los datos de la " + tipoCorreccionFactura + " han sido grabados con éxito.", getTitle());
 						dispose();
 					}
 				}
@@ -169,11 +169,11 @@ public class JDialogCompletarDatosCorreccionFacturaProveedor extends JDialog {
 
 	private boolean validar() {
 		if(getTxtFecha().getFecha() == null) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Debe ingresar una fecha válida para la " + tipoCorreccionFactura + ".", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Debe ingresar una fecha válida para la " + tipoCorreccionFactura + ".", getTitle());
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtNroCorreccion().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Debe ingresar el número de " + tipoCorreccionFactura + ".", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Debe ingresar el número de " + tipoCorreccionFactura + ".", getTitle());
 			getTxtNroCorreccion().requestFocus();
 			return false;
 		}
@@ -181,7 +181,7 @@ public class JDialogCompletarDatosCorreccionFacturaProveedor extends JDialog {
 		Pattern p = Pattern.compile(regExpNroFactura);
 		Matcher matcher = p.matcher(getTxtNroCorreccion().getText().trim());
 		if(!matcher.matches()) {
-			CLJOptionPane.showErrorMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Debe ingresar un número de " + tipoCorreccionFactura + " válido.", getTitle());
+			FWJOptionPane.showErrorMessage(JDialogCompletarDatosCorreccionFacturaProveedor.this, "Debe ingresar un número de " + tipoCorreccionFactura + " válido.", getTitle());
 			getTxtNroCorreccion().requestFocus();
 			return false;
 		}

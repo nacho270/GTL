@@ -2,8 +2,8 @@ package ar.com.textillevel.gui.modulos.odt;
 
 import java.util.List;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.ModuloModel;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.gui.modulos.odt.builder.BuilderAccionesODT;
 import ar.com.textillevel.gui.modulos.odt.cabecera.ModeloCabeceraODT;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -16,7 +16,7 @@ public class ModuloODTModel extends ModuloModel<OrdenDeTrabajo, ModeloCabeceraOD
 		super();
 	}
 
-	public ModuloODTModel(Integer id) throws CLException {
+	public ModuloODTModel(Integer id) throws FWException {
 		super(id, BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance());
 		setTitulo("Administrar Ordenes de trabajo");
 	}

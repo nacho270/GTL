@@ -19,10 +19,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
@@ -34,7 +34,7 @@ public class JDialogAgregarModificarProcedimientos extends JDialog {
 
 	private static final long serialVersionUID = -2335567081797221849L;
 
-	private CLJTextField txtNombreProcedimiento;
+	private FWJTextField txtNombreProcedimiento;
 	private PanelTablaInstruccionesConAcciones panelTabla;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -182,9 +182,9 @@ public class JDialogAgregarModificarProcedimientos extends JDialog {
 
 	}
 
-	public CLJTextField getTxtNombreProcedimiento() {
+	public FWJTextField getTxtNombreProcedimiento() {
 		if (txtNombreProcedimiento == null) {
-			txtNombreProcedimiento = new CLJTextField(50);
+			txtNombreProcedimiento = new FWJTextField(50);
 		}
 		return txtNombreProcedimiento;
 	}
@@ -227,12 +227,12 @@ public class JDialogAgregarModificarProcedimientos extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNombreProcedimiento().getText())){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del procedimiento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del procedimiento", "Error");
 			getTxtNombreProcedimiento().requestFocus();
 			return false;
 		}
 		if(getProcedimientoActual().getPasos().isEmpty()){
-			CLJOptionPane.showErrorMessage(this, "Debe ingresar los pasos del procedimiento", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar los pasos del procedimiento", "Error");
 			return false;
 		}
 		return true;
@@ -261,7 +261,7 @@ public class JDialogAgregarModificarProcedimientos extends JDialog {
 	}
 
 	private void salir() {
-		if (CLJOptionPane.showQuestionMessage(JDialogAgregarModificarProcedimientos.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == CLJOptionPane.YES_OPTION) {
+		if (FWJOptionPane.showQuestionMessage(JDialogAgregarModificarProcedimientos.this, "Va a salir sin grabar los cambios. Esta seguro?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 			setAcepto(false);
 			dispose();
 		}

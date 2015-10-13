@@ -20,7 +20,7 @@ import javax.persistence.Transient;
 
 import org.apache.commons.collections.iterators.ReverseListIterator;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 
 @Entity

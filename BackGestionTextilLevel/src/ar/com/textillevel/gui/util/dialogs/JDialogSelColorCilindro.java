@@ -15,10 +15,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.NumUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.NumUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.ColorCilindro;
 import ar.com.textillevel.facade.api.remote.ColorFacadeRemote;
@@ -130,12 +130,12 @@ public class JDialogSelColorCilindro extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtMetrosColor().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogSelColorCilindro.this, "Debe ingresar los metros por color.", JDialogSelColorCilindro.this.getTitle());
+			FWJOptionPane.showErrorMessage(JDialogSelColorCilindro.this, "Debe ingresar los metros por color.", JDialogSelColorCilindro.this.getTitle());
 			getTxtMetrosColor().requestFocus();
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtKilosColor().getText())) {
-			CLJOptionPane.showErrorMessage(JDialogSelColorCilindro.this, "Debe ingresar los kilos por color.", JDialogSelColorCilindro.this.getTitle());
+			FWJOptionPane.showErrorMessage(JDialogSelColorCilindro.this, "Debe ingresar los kilos por color.", JDialogSelColorCilindro.this.getTitle());
 			getTxtKilosColor().requestFocus();
 			return false;
 		}

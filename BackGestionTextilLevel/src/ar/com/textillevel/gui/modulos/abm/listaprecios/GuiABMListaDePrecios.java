@@ -24,13 +24,13 @@ import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -141,7 +141,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int arg0) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, "¿Está seguro que desea eliminar la lista de precios seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, "¿Está seguro que desea eliminar la lista de precios seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getListaDePreciosFacade().remove(getListaActual());
 				cargarLista();
 				itemSelectorSeleccionado(-1);
@@ -152,12 +152,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public boolean botonGrabarPresionado(int arg0) {
 		if (getListaActual().getVersiones().isEmpty()) {
-			CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe agregar al menos una version", "Error");
+			FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe agregar al menos una version", "Error");
 			return false;
 		}
 		for(VersionListaDePrecios v : getListaActual().getVersiones()) {
 			if (v.getPrecios().isEmpty()) {
-				CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe definir los precios para version con validez a partir de " + DateUtil.dateToString(v.getInicioValidez(), DateUtil.SHORT_DATE), "Error");
+				FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe definir los precios para version con validez a partir de " + DateUtil.dateToString(v.getInicioValidez(), DateUtil.SHORT_DATE), "Error");
 				return false;
 			}
 		}
@@ -194,7 +194,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un cliente", "Error");
 			return false;
 		}
 	}
@@ -320,19 +320,19 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_FECHA_INICIO_VALIDEZ, "VALIDA A PARTIR DE FECHA", 200, 200, true);
 			tabla.setStringColumn(COL_ULT_COTIZACION, "ULTIMA COTIZACIÓN", 300, 300, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_FECHA_INICIO_VALIDEZ, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_ULT_COTIZACION, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_ULT_COTIZACION, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_FECHA_INICIO_VALIDEZ, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_FECHA_INICIO_VALIDEZ, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ULT_COTIZACION, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_ULT_COTIZACION, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -378,7 +378,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			if(existenVersionesAnteriores) {
 				VersionListaDePrecios ultVersion = getElemento(0);
 				if(ultVersion.getId() == null) {
-					CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede agregar otra versión porque no se ha grabado la última agregada. Por favor, elimine esta última o bien grabe los cambios y reintente la operación."), "Error");
+					FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede agregar otra versión porque no se ha grabado la última agregada. Por favor, elimine esta última o bien grabe los cambios y reintente la operación."), "Error");
 					return false;
 				}
 			}
@@ -435,7 +435,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 						int selectedRow = getTabla().getSelectedRow();
 						VersionListaDePrecios version = getTablaVersiones().getElemento(selectedRow);
 						if(version.getId() == null) {//i.e es una versión no persistida se avisa que primero grabe y después imprima
-							CLJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("La versión seleccionada no ha sido grabada y no se puede generar la cotización. Por favor, grabe los cambios y después reintente."), "Error");
+							FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("La versión seleccionada no ha sido grabada y no se puede generar la cotización. Por favor, grabe los cambios y después reintente."), "Error");
 							return;
 						}
 						new ImprimirListaDePreciosHandler(GuiABMListaDePrecios.this.getFrame(), getListaActual().getCliente(), version).imprimir();
@@ -517,18 +517,18 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_TIPO_PRODUCTO, "TIPO DE PRODUCTO", 200, 200, true);
 			tabla.setMultilineColumn(COL_RESUMEN, "RESUMEN", 350, true, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
-			tabla.setHeaderAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_RESUMEN, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_TIPO_PRODUCTO, CLJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_TIPO_PRODUCTO, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_RESUMEN, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_TIPO_PRODUCTO, FWJTable.CENTER_ALIGN);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
 			tabla.setReorderingAllowed(false);
-			tabla.setSelectionMode(CLJTable.SINGLE_SELECTION);
+			tabla.setSelectionMode(FWJTable.SINGLE_SELECTION);
 			tabla.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -709,8 +709,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		if(versionParaEditar.getId() != null) {
 			Cotizacion ultimaCotizacion = getListaDePreciosFacade().getUltimaCotizacionVigente(versionParaEditar);
 			if(ultimaCotizacion != null) {
-				int res = CLJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede editar la lista de precios porque la cotización NRO. '" + ultimaCotizacion.getNumero() + "' aún está vigente. ¿Desea crear una nueva versión?."), "Advertencia");
-				if(CLJOptionPane.YES_OPTION == res) {
+				int res = FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede editar la lista de precios porque la cotización NRO. '" + ultimaCotizacion.getNumero() + "' aún está vigente. ¿Desea crear una nueva versión?."), "Advertencia");
+				if(FWJOptionPane.YES_OPTION == res) {
 					JDialogInputFechaWithCheckbox dialogoFecha = new JDialogInputFechaWithCheckbox(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez", "Copiar última versión", existenVersionesAnteriores, existenVersionesAnteriores);
 					dialogoFecha.setVisible(true);
 					Date fechaInicioValidez = dialogoFecha.getFecha();

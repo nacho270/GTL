@@ -7,10 +7,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+
 import javax.swing.JDialog;
+
 import org.apache.taglibs.string.util.StringW;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.visores.VisorJAI;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.visores.VisorJAI;
 import ar.com.textillevel.gui.util.RemoteFileUtil;
 import ar.com.textillevel.modulos.personal.entidades.legajos.AccionHistorica;
 import edu.umd.cs.piccolo.nodes.PImage;
@@ -67,7 +70,7 @@ public class JDialogVisualizarDocumento extends JDialog {
 			canvas.getLayer().addChild(image);
 		} catch(Exception e) {
 			e.printStackTrace();
-			CLJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMessage()), "Error en la transferencia");
+			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMessage()), "Error en la transferencia");
 		}
 	}
 

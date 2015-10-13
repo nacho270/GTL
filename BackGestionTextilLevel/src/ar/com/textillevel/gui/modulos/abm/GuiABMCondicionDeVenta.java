@@ -9,11 +9,11 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVentaDiferida;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
@@ -27,9 +27,9 @@ public class GuiABMCondicionDeVenta extends GuiABMListaTemplate {
 
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
-	private CLJTextField txtNombreCondicion;
-	private CLJNumericTextField txtDiasIniciales;
-	private CLJNumericTextField txtDiasFinales;
+	private FWJTextField txtNombreCondicion;
+	private FWJNumericTextField txtDiasIniciales;
+	private FWJNumericTextField txtDiasFinales;
 
 	private CondicionDeVenta condicionDeVentaActual;
 	private CondicionDeVentaFacadeRemote condicionFacade;
@@ -108,7 +108,7 @@ public class GuiABMCondicionDeVenta extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if (lista.getSelectedIndex() >= 0) {
-			if (CLJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la condición de venta seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la condición de venta seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getCondicionFacade().remove(getCondicionDeVentaActual());
 				itemSelectorSeleccionado(-1);
 			}
@@ -128,14 +128,14 @@ public class GuiABMCondicionDeVenta extends GuiABMListaTemplate {
 
 	private boolean validar() {
 		if (getTxtNombreCondicion().getText().trim().length() == 0) {
-			CLJOptionPane.showErrorMessage(this, "Debe completar el nombre de la condición.", "Advertencia");
+			FWJOptionPane.showErrorMessage(this, "Debe completar el nombre de la condición.", "Advertencia");
 			getTxtNombreCondicion().requestFocus();
 			return false;
 		}
 
 		if (getTxtDiasIniciales().getValueWithNull() != null) {
 			if (getTxtDiasFinales().getValueWithNull() == null) {
-				CLJOptionPane.showErrorMessage(this, "Debe completar los días finales.", "Advertencia");
+				FWJOptionPane.showErrorMessage(this, "Debe completar los días finales.", "Advertencia");
 				getTxtDiasFinales().requestFocus();
 				return false;
 			}
@@ -166,7 +166,7 @@ public class GuiABMCondicionDeVenta extends GuiABMListaTemplate {
 			getTxtNombreCondicion().requestFocus();
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar una condición", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar una condición", "Error");
 			return false;
 		}
 	}
@@ -225,23 +225,23 @@ public class GuiABMCondicionDeVenta extends GuiABMListaTemplate {
 		return condicionFacade;
 	}
 
-	public CLJTextField getTxtNombreCondicion() {
+	public FWJTextField getTxtNombreCondicion() {
 		if (txtNombreCondicion == null) {
-			txtNombreCondicion = new CLJTextField(MAX_LONGITUD_NOMBRE);
+			txtNombreCondicion = new FWJTextField(MAX_LONGITUD_NOMBRE);
 		}
 		return txtNombreCondicion;
 	}
 
-	public CLJNumericTextField getTxtDiasIniciales() {
+	public FWJNumericTextField getTxtDiasIniciales() {
 		if (txtDiasIniciales == null) {
-			txtDiasIniciales = new CLJNumericTextField();
+			txtDiasIniciales = new FWJNumericTextField();
 		}
 		return txtDiasIniciales;
 	}
 
-	public CLJNumericTextField getTxtDiasFinales() {
+	public FWJNumericTextField getTxtDiasFinales() {
 		if (txtDiasFinales == null) {
-			txtDiasFinales = new CLJNumericTextField();
+			txtDiasFinales = new FWJNumericTextField();
 		}
 		return txtDiasFinales;
 	}

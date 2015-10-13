@@ -5,7 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.RubroPersonaDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoRubro;
 import ar.com.textillevel.entidades.gente.Rubro;

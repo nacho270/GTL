@@ -6,7 +6,7 @@ import java.util.Locale;
 
 import org.hibernate.exception.ConstraintViolationException;
 
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.util.StringUtil;
 
 public class Utils {
 

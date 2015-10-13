@@ -5,8 +5,9 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.StringUtil;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.modulos.odt.gui.validacion.ValidadorCamposMaquinaHandler;
@@ -138,7 +139,7 @@ public abstract class PanDatosMaquinaCommon extends JPanel {
 	protected boolean validarTextField(DecimalNumericTextField txt, String campo) {
 		String texto = txt.getText();
 		if(StringUtil.isNullOrEmpty(texto)) {
-			CLJOptionPane.showErrorMessage(this.getParent(), "Falta completar el campo '" + campo + "'", "Error");
+			FWJOptionPane.showErrorMessage(this.getParent(), "Falta completar el campo '" + campo + "'", "Error");
 			txt.requestFocus();
 			return false;
 		}

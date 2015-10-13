@@ -1,7 +1,7 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.legajos.columnas;
 
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.templates.modulo.model.tabla.ColumnaInt;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaInt;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
 
 public class ColumnaNumeroLegajo extends ColumnaInt<Empleado>{
@@ -9,7 +9,7 @@ public class ColumnaNumeroLegajo extends ColumnaInt<Empleado>{
 	public ColumnaNumeroLegajo() {
 		super("Nº de legajo");
 		setAncho(100);
-		setAlineacion(CLJTable.CENTER_ALIGN);
+		setAlineacion(FWJTable.CENTER_ALIGN);
 	}
 
 	@Override

@@ -23,13 +23,13 @@ import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.enums.ETipoMoneda;
 import ar.com.textillevel.entidades.gente.Proveedor;
@@ -50,8 +50,8 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 
 	private JPanel tabDetalle;
 	private JPanel panDetalle; 
-	private CLJTextField txtRazonSocial;
-	private CLJTable tablaMateriaPrimaPrecios;
+	private FWJTextField txtRazonSocial;
+	private FWJTable tablaMateriaPrimaPrecios;
 
 	private JTextField txtMateriasPrimas;
 	private PanelTablaMatPrimaPrecio panelTablaMatPrimaPrecio;
@@ -105,9 +105,9 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 		return panDetalle;
 	}
 
-	private CLJTextField getTxtRazonSocial() {
+	private FWJTextField getTxtRazonSocial() {
 		if(txtRazonSocial == null) {
-			txtRazonSocial = new CLJTextField(MAX_LONGITUD_RAZ_SOCIAL);
+			txtRazonSocial = new FWJTextField(MAX_LONGITUD_RAZ_SOCIAL);
 			txtRazonSocial.setEditable(false);
 		}
 		return txtRazonSocial;
@@ -143,7 +143,7 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
-			if(CLJOptionPane.showQuestionMessage(GuiABMListaDePreciosProveedor.this, "¿Está seguro que desea eliminar la lista de precios seleccionada?", "Confirmación") == CLJOptionPane.YES_OPTION) {
+			if(FWJOptionPane.showQuestionMessage(GuiABMListaDePreciosProveedor.this, "¿Está seguro que desea eliminar la lista de precios seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getListaDePreciosFacade().remove(listaDePrecios);
 				itemSelectorSeleccionado(-1);
 			}
@@ -155,7 +155,7 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 		if(validar()) {
 			capturarSetearDatos();
 			getListaDePreciosFacade().save(listaDePrecios, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-			CLJOptionPane.showInformationMessage(this, "Los datos de la lista se han guardado con éxito", "Administrar Lista de Precios");
+			FWJOptionPane.showInformationMessage(this, "Los datos de la lista se han guardado con éxito", "Administrar Lista de Precios");
 			lista.setSelectedValue(lista.getSelectedValue(), true);
 			return true;
 		}
@@ -223,7 +223,7 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 		if(textoValidacion == null) {
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(GuiABMListaDePreciosProveedor.this, StringW.wordWrap(textoValidacion), "Error");
+			FWJOptionPane.showErrorMessage(GuiABMListaDePreciosProveedor.this, StringW.wordWrap(textoValidacion), "Error");
 			return false;
 		}
 	}
@@ -238,7 +238,7 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 			setModoEdicion(true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un proveedor", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un proveedor", "Error");
 			return false;
 		}
 	}
@@ -436,9 +436,9 @@ public class GuiABMListaDePreciosProveedor extends GuiABMListaTemplate {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
+		protected FWJTable construirTabla() {
 			if(tablaMateriaPrimaPrecios == null) {
-				tablaMateriaPrimaPrecios = new CLJTable(0, CANT_COLS);
+				tablaMateriaPrimaPrecios = new FWJTable(0, CANT_COLS);
 				tablaMateriaPrimaPrecios.setStringColumn(COL_MAT_PRIMA, "Materia Prima", 130, 130, true);
 				tablaMateriaPrimaPrecios.setStringColumn(COL_FECHA_ULT_MODIF, "F. Últ. Modif.", 90, 90, true);
 				tablaMateriaPrimaPrecios.setFloatColumn(COL_PRECIO, "Precio", 0, Float.MAX_VALUE, 50, false);

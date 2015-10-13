@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.dao.impl.GenericDAO;
+import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.DocumentoContableDAOLocal;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 

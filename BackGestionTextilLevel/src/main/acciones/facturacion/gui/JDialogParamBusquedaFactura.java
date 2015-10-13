@@ -16,10 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
@@ -36,8 +36,8 @@ public class JDialogParamBusquedaFactura extends JDialog {
 
 	private JPanel panelCentral;
 	private JPanel panelBotones;
-	private CLJNumericTextField txtNroSucursal;
-	private CLJNumericTextField txtNroFactura;
+	private FWJNumericTextField txtNroSucursal;
+	private FWJNumericTextField txtNroFactura;
 	private Factura factura;
 	private ParametrosGeneralesFacadeRemote paramGenerales;
 	private FacturaFacadeRemote ffr;
@@ -96,7 +96,7 @@ public class JDialogParamBusquedaFactura extends JDialog {
 					if(validar()) {
 						factura = ffr.getByNroFacturaConItems(Integer.valueOf(getTxtNroFactura().getText()), Integer.valueOf(getTxtNroSucursal().getText()));
 						if(factura == null) {
-							CLJOptionPane.showErrorMessage(owner, "Factura no encontrada.", "Error");
+							FWJOptionPane.showErrorMessage(owner, "Factura no encontrada.", "Error");
 						} else {
 							dispose();
 						}
@@ -109,12 +109,12 @@ public class JDialogParamBusquedaFactura extends JDialog {
 
 	private boolean validar() {
 		if(StringUtil.isNullOrEmpty(getTxtNroSucursal().getText())) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar el número de sucursal.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar el número de sucursal.", "Error");
 			getTxtNroSucursal().requestFocus();
 			return false;
 		}
 		if(StringUtil.isNullOrEmpty(getTxtNroFactura().getText())) {
-			CLJOptionPane.showErrorMessage(owner, "Debe ingresar el número de factura.", "Error");
+			FWJOptionPane.showErrorMessage(owner, "Debe ingresar el número de factura.", "Error");
 			getTxtNroFactura().requestFocus();
 			return false;
 		}
@@ -136,7 +136,7 @@ public class JDialogParamBusquedaFactura extends JDialog {
 
 	private JTextField getTxtNroSucursal() {
 		if(txtNroSucursal == null) {
-			txtNroSucursal = new CLJNumericTextField();
+			txtNroSucursal = new FWJNumericTextField();
 			txtNroSucursal.setValue(new Long(paramGenerales.getParametrosGenerales().getNroSucursal()));
 		}
 		return txtNroSucursal;
@@ -144,7 +144,7 @@ public class JDialogParamBusquedaFactura extends JDialog {
 
 	private JTextField getTxtNroFactura() {
 		if(txtNroFactura == null) {
-			txtNroFactura = new CLJNumericTextField();
+			txtNroFactura = new FWJNumericTextField();
 		}
 		return txtNroFactura;
 	}

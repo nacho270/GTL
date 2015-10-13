@@ -1,6 +1,6 @@
 package main;
 
-import ar.clarin.fwjava.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.facade.api.remote.CorrectorCuentasClientesFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 

@@ -18,11 +18,11 @@ import javax.swing.JPanel;
 
 import org.apache.taglibs.string.util.StringW;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.util.StringUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -31,7 +31,7 @@ public class JDialogIngresoPesoTotalMultipleRemitos extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private CLJTextField txtPesoTotal;
+	private FWJTextField txtPesoTotal;
 	private JButton btnCalcular;
 	private JButton btnAceptar;
 	private JPanel pnlBotones;
@@ -98,9 +98,9 @@ public class JDialogIngresoPesoTotalMultipleRemitos extends JDialog {
 		return pnlDatos;
 	}
 
-	private CLJTextField getTxtPesoTotal() {
+	private FWJTextField getTxtPesoTotal() {
 		if(txtPesoTotal == null) {
-			txtPesoTotal = new CLJTextField();
+			txtPesoTotal = new FWJTextField();
 		}
 		return txtPesoTotal;
 	}
@@ -119,7 +119,7 @@ public class JDialogIngresoPesoTotalMultipleRemitos extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					String mensaje = getPanTabla().validar();
 					if(getPanTabla().validar() != null) {
-						CLJOptionPane.showErrorMessage(JDialogIngresoPesoTotalMultipleRemitos.this, StringW.wordWrap(mensaje), "Error");
+						FWJOptionPane.showErrorMessage(JDialogIngresoPesoTotalMultipleRemitos.this, StringW.wordWrap(mensaje), "Error");
 						return;
 					}
 					capturarSetearDatos();
@@ -147,7 +147,7 @@ public class JDialogIngresoPesoTotalMultipleRemitos extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					String pesoTotalStr = getTxtPesoTotal().getText();
 					if(StringUtil.isNullOrEmpty(pesoTotalStr) || !GenericUtils.esNumerico(pesoTotalStr)) {
-						CLJOptionPane.showErrorMessage(JDialogIngresoPesoTotalMultipleRemitos.this, "Debe ingresar un peso total válido.", "Error");
+						FWJOptionPane.showErrorMessage(JDialogIngresoPesoTotalMultipleRemitos.this, "Debe ingresar un peso total válido.", "Error");
 						getTxtPesoTotal().requestFocus();
 						return;
 					}
@@ -224,8 +224,8 @@ public class JDialogIngresoPesoTotalMultipleRemitos extends JDialog {
 			}
 		}
 
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_NRO_REMITO, "NRO. DE REMITO", 100);
 			tabla.setFloatColumn(COL_PESO_TOTAL, "PESO", 0f, Float.MAX_VALUE, 90, false);
 			tabla.setStringColumn(COL_OBJ, "", 0);

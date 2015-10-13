@@ -7,9 +7,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.templates.GuiABMListaTemplate;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.templates.GuiABMListaTemplate;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.generica.SecuenciaTipoProducto;
@@ -83,7 +83,7 @@ public class GuiABMSecuencias extends GuiABMListaTemplate{
 			GuiUtil.setEstadoPanel(getTabDetalle(), true);
 			return true;
 		} else {
-			CLJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de máquina", "Error");
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un tipo de máquina", "Error");
 			return false;
 		}
 	}
@@ -98,7 +98,7 @@ public class GuiABMSecuencias extends GuiABMListaTemplate{
 	@Override
 	public boolean botonGrabarPresionado(int nivelNodoSeleccionado) {
 		getSecuenciaFacade().persistModel(getModel());
-		CLJOptionPane.showInformationMessage(this, "Las secuencias se han grabado", "Informacion");
+		FWJOptionPane.showInformationMessage(this, "Las secuencias se han grabado", "Informacion");
 		getPanelVisualizador().limpiarFiltro();
 		return true;
 	}

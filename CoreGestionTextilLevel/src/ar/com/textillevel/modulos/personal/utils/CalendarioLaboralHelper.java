@@ -3,7 +3,7 @@ package ar.com.textillevel.modulos.personal.utils;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.CalendarioAnualFeriado;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.ConfigFormaPagoSindicato;
 import ar.com.textillevel.modulos.personal.entidades.calenlaboral.RangoDiasFeriado;

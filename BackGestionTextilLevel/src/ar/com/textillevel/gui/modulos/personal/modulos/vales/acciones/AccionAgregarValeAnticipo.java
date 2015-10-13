@@ -1,10 +1,10 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.vales.acciones;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.personal.gui.util.JDialogSeleccionarEmpleado;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.gui.JDialogAgregarValeAnticipo;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.valeanticipo.ImpresionValeAnticipoHandler;
@@ -24,7 +24,7 @@ public class AccionAgregarValeAnticipo extends Accion<ValeAnticipo>{
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<ValeAnticipo> e) throws CLException {
+	public boolean ejecutar(AccionEvent<ValeAnticipo> e) throws FWException {
 		JDialogSeleccionarEmpleado dialogoSeleccionarEmpleado = new JDialogSeleccionarEmpleado(e.getSource().getFrame());
 		GuiUtil.centrar(dialogoSeleccionarEmpleado);
 		dialogoSeleccionarEmpleado.setVisible(true);
@@ -35,8 +35,8 @@ public class AccionAgregarValeAnticipo extends Accion<ValeAnticipo>{
 			if(dialog.isAcepto()){
 				ValeAnticipo valeAnticipo = dialog.getValeAnticipo();
 				GTLPersonalBeanFactory.getInstance().getBean2(ValeAnticipoFacadeRemote.class).save(valeAnticipo,empleado);
-				CLJOptionPane.showInformationMessage(e.getSource().getFrame(), "El vale se ha creado satisfactoriamente", "Información");
-				if(CLJOptionPane.showQuestionMessage(e.getSource().getFrame(), "Desea imprimir el vale?", "Pregunta")==CLJOptionPane.YES_OPTION){
+				FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "El vale se ha creado satisfactoriamente", "Información");
+				if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "Desea imprimir el vale?", "Pregunta")==FWJOptionPane.YES_OPTION){
 					ImpresionValeAnticipoHandler handler = new ImpresionValeAnticipoHandler(valeAnticipo,e.getSource().getFrame());
 					handler.imprimir();
 				}

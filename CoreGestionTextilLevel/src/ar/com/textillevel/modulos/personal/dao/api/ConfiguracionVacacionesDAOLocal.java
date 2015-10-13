@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import javax.ejb.Local;
 
-import ar.clarin.fwjava.dao.api.local.DAOLocal;
+import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.modulos.personal.entidades.vacaciones.ConfiguracionVacaciones;
 
 @Local

@@ -17,16 +17,16 @@ import main.statusbar.CompoTest;
 import main.statusbar.ConfiguracionComponenteStatusBar;
 import main.statusbar.StatusBar;
 import main.triggers.Trigger;
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.main.CLMainTemplate;
-import ar.clarin.fwjava.templates.main.config.IConfigClienteManager;
-import ar.clarin.fwjava.templates.main.menu.MenuAyuda;
-import ar.clarin.fwjava.templates.main.menu.MenuImpresion;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.MiscUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.main.FWMainTemplate;
+import ar.com.fwcommon.templates.main.config.IConfigClienteManager;
+import ar.com.fwcommon.templates.main.menu.MenuAyuda;
+import ar.com.fwcommon.templates.main.menu.MenuImpresion;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.MiscUtil;
 import ar.com.textillevel.entidades.portal.Modulo;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.gui.modulos.chat.client.ChatClient;
@@ -34,7 +34,7 @@ import ar.com.textillevel.gui.util.ESkin;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.skin.SkinModerno;
 
-public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigClienteManager> {
+public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigClienteManager> {
 
 	private static final long serialVersionUID = -7589061723941536496L;
 	protected MenuImpresion menuImpresion;
@@ -46,7 +46,7 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 		initSkin();
 	}
 
-	protected GTLMainTemplate(int idAplicacion, String version) throws CLException {
+	protected GTLMainTemplate(int idAplicacion, String version) throws FWException {
 		super(idAplicacion, version);
 		construirMenues();		
 	}
@@ -126,12 +126,12 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 					initSkintModerno(ESkin.ROJO);
 				}
 			}
-		} catch (CLException e) {
+		} catch (FWException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void cambiarSkin(ESkin eskin) throws CLException{
+	public void cambiarSkin(ESkin eskin) throws FWException{
 		SkinModerno skinModerno = new SkinModerno(eskin);
 		BossEstilos.setDefaultSkin(skinModerno);
 		BossEstilos.setDefaultFont(skinModerno.getDecorator().getDefaultFont());
@@ -146,7 +146,7 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 		}
 	}
 
-	private static void initSkintModerno(ESkin eskin) throws CLException {
+	private static void initSkintModerno(ESkin eskin) throws FWException {
 		SkinModerno skinModerno = new SkinModerno(eskin);
 		BossEstilos.setDefaultSkin(skinModerno);
 		BossEstilos.setDefaultFont(skinModerno.getDecorator().getDefaultFont());
@@ -158,7 +158,7 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 	}
 	
 	@Override
-	protected void postConstruccion() throws CLException {
+	protected void postConstruccion() throws FWException {
 		crearTitulo();
 	}
 
@@ -170,7 +170,7 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 	}
 
 	@Override
-	protected final void postLogin() throws CLException {
+	protected final void postLogin() throws FWException {
 		super.postLogin();
 		UsuarioSistema usuarioSistema = GTLGlobalCache.getInstance().getUsuarioSistema();
 		if(usuarioSistema!=null){
@@ -188,7 +188,7 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
-			BossError.gestionarError(new CLException(ex.getMessage()));
+			BossError.gestionarError(new FWException(ex.getMessage()));
 		}
 		
 		List<Modulo> servicios = GTLGlobalCache.getInstance().getServiciosUsuarioLogueado();
@@ -199,18 +199,18 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
-			BossError.gestionarError(new CLException(ex.getMessage()));
+			BossError.gestionarError(new FWException(ex.getMessage()));
 		}
 		
 		//NotificationHelper.showNotification("Usuario conectado", "dfs",EnumNotificaciones.CONNECTED);
 		try {
 			ChatClient.getInstance().conectar();
 		} catch (UnknownHostException e) {
-			CLJOptionPane.showErrorMessage(this, "No se ha podido conectar a " + System.getProperty("textillevel.chat.server.ip") +":" +System.getProperty("textillevel.chat.server.port")+". Host desconocido", "Error");
+			FWJOptionPane.showErrorMessage(this, "No se ha podido conectar a " + System.getProperty("textillevel.chat.server.ip") +":" +System.getProperty("textillevel.chat.server.port")+". Host desconocido", "Error");
 		} catch (IOException e) {
-			CLJOptionPane.showErrorMessage(this, "Ha ocurrido un error al intentar conectarse : " + System.getProperty("textillevel.chat.server.ip") +":" +System.getProperty("textillevel.chat.server.port")+".", "Error");
+			FWJOptionPane.showErrorMessage(this, "Ha ocurrido un error al intentar conectarse : " + System.getProperty("textillevel.chat.server.ip") +":" +System.getProperty("textillevel.chat.server.port")+".", "Error");
 		} catch (Exception e){
-			CLJOptionPane.showErrorMessage(this,"Error desconocido al iniciar el cliente de Chat.","Error");
+			FWJOptionPane.showErrorMessage(this,"Error desconocido al iniciar el cliente de Chat.","Error");
 			e.printStackTrace();
 		}
 	}
@@ -235,7 +235,7 @@ public class GTLMainTemplate extends CLMainTemplate<GTLLoginManager, GTLConfigCl
 		return triggers;
 	}
 
-	private void crearTitulo() throws CLException {
+	private void crearTitulo() throws FWException {
 		StringBuffer sb = new StringBuffer("Textil Level - Sistema de Gestión");
 		if(version != null) {
 			sb.append(" v").append(version);

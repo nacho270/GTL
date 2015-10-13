@@ -2,7 +2,7 @@ package main.acciones.facturacion;
 
 import java.awt.Frame;
 
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;

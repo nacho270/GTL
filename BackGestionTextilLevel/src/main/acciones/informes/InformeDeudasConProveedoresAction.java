@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.to.ClienteDeudaTO;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogInformeClientesMorosos;
@@ -60,7 +60,7 @@ public class InformeDeudasConProveedoresAction implements Action{
 			}
 			new JDialogInformeClientesMorosos(frame, clientes, suma, ETipoInformeDeuda.PROVEEDOR).setVisible(true);
 		}else{
-			CLJOptionPane.showInformationMessage(frame, "No se han encontrado deudas con proveedores", "Información");
+			FWJOptionPane.showInformationMessage(frame, "No se han encontrado deudas con proveedores", "Información");
 		}
 	}
 }

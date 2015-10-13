@@ -3,7 +3,7 @@ package ar.com.textillevel.web.spring.cuenta;
 import java.util.Collections;
 import java.util.List;
 
-import ar.clarin.fwjava.util.NumUtil;
+import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.entidades.cuenta.to.ContactoTO;
 import ar.com.textillevel.entidades.cuenta.to.CuentaTO;
 import ar.com.textillevel.entidades.gente.IAgendable;

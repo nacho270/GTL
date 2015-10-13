@@ -17,12 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.PanelTabla;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.util.GuiUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.facade.api.remote.MovimientoStockFacadeRemote;
@@ -119,7 +119,7 @@ public class JDialogRealizarBajaStock extends JDialog {
 					}
 				}
 			}
-			CLJOptionPane.showInformationMessage(this, "La operación fue realizada con éxito", "Información");
+			FWJOptionPane.showInformationMessage(this, "La operación fue realizada con éxito", "Información");
 		}
 		getPanelTablaBajaStock().getTabla().removeAllRows();
 		getPreciosMateriaPrimaBuscados().clear();
@@ -135,7 +135,7 @@ public class JDialogRealizarBajaStock extends JDialog {
 					Double cantBaja = Double.valueOf(strValor.replace(',', '.'));
 					Double stockActual = (Double)getPanelTablaBajaStock().getTabla().getValueAt(i, COL_STOCK_ACTUAL);
 					if(cantBaja>stockActual){
-						CLJOptionPane.showErrorMessage(this, "La cantidad a bajar mayor al stock en la fila " + (i+1), "Error");
+						FWJOptionPane.showErrorMessage(this, "La cantidad a bajar mayor al stock en la fila " + (i+1), "Error");
 						return false;
 					}
 				}
@@ -175,7 +175,7 @@ public class JDialogRealizarBajaStock extends JDialog {
 	}
 	
 	private void salir(){
-		if(CLJOptionPane.showQuestionMessage(this, "Desea salir?", "Pregunta") == CLJOptionPane.YES_OPTION){
+		if(FWJOptionPane.showQuestionMessage(this, "Desea salir?", "Pregunta") == FWJOptionPane.YES_OPTION){
 			dispose();
 		}
 	}
@@ -200,20 +200,20 @@ public class JDialogRealizarBajaStock extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TABLA_PRECIO_MATERIA_PRIMA);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TABLA_PRECIO_MATERIA_PRIMA);
 			tabla.setStringColumn(COL_DESCRIPCION, "Descripción", 330, 330, true);
 			tabla.setFloatColumn(COL_STOCK_ACTUAL, "Stock actual", 90, true);
 			tabla.setFloatColumn(COL_CANTIDAD_BAJA, "Cantidad a descontar", 120, false);
 			tabla.setStringColumn(COL_OBJ, "", 0);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setAlignment(COL_DESCRIPCION, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_STOCK_ACTUAL, CLJTable.CENTER_ALIGN);
-			tabla.setAlignment(COL_CANTIDAD_BAJA, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_DESCRIPCION, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_STOCK_ACTUAL, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_CANTIDAD_BAJA, CLJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_DESCRIPCION, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_STOCK_ACTUAL, FWJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_CANTIDAD_BAJA, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_DESCRIPCION, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_STOCK_ACTUAL, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_CANTIDAD_BAJA, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 
@@ -245,8 +245,8 @@ public class JDialogRealizarBajaStock extends JDialog {
 		}
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS_TABLA_PROVEEDORES){
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS_TABLA_PROVEEDORES){
 
 				private static final long serialVersionUID = 2174629054586617241L;
 				
@@ -259,8 +259,8 @@ public class JDialogRealizarBajaStock extends JDialog {
 			tabla.setStringColumn(COL_OBJ_PROVEEDOR, "", 0);
 			tabla.setAllowHidingColumns(false);
 			tabla.setAllowSorting(false);
-			tabla.setAlignment(COL_NOMBRE_PROVEEDOR, CLJTable.CENTER_ALIGN);
-			tabla.setHeaderAlignment(COL_NOMBRE_PROVEEDOR, CLJTable.CENTER_ALIGN);
+			tabla.setAlignment(COL_NOMBRE_PROVEEDOR, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_NOMBRE_PROVEEDOR, FWJTable.CENTER_ALIGN);
 			return tabla;
 		}
 

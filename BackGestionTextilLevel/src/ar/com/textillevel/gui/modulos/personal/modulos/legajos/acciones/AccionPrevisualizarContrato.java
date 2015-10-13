@@ -1,8 +1,8 @@
 package ar.com.textillevel.gui.modulos.personal.modulos.legajos.acciones;
 
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.templates.modulo.model.acciones.Accion;
-import ar.clarin.fwjava.templates.modulo.model.listeners.AccionEvent;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
+import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.personal.modulos.legajos.impresion.contratos.ImpresionContratoHandler;
 import ar.com.textillevel.modulos.personal.entidades.contratos.ETipoContrato;
 import ar.com.textillevel.modulos.personal.entidades.legajos.Empleado;
@@ -18,7 +18,7 @@ public class AccionPrevisualizarContrato extends Accion<Empleado> {
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<Empleado> e) throws CLException {
+	public boolean ejecutar(AccionEvent<Empleado> e) throws FWException {
 		new ImpresionContratoHandler(e.getSelectedElements().get(0),e.getSource().getFrame()).previsualizarContrato();
 		return false;
 	}

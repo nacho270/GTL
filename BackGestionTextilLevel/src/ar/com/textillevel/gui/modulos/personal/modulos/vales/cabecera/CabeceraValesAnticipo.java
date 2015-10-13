@@ -9,10 +9,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.templates.modulo.cabecera.Cabecera;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.recibosueldo.enums.EEstadoValeAnticipo;
 
@@ -23,7 +23,7 @@ public class CabeceraValesAnticipo extends Cabecera<ModeloCabeceraValesAnticipo>
 	private PanelDatePicker txtFechaDesde;
 	private PanelDatePicker txtFechaHasta;
 	private JComboBox cmbEstadoVale;
-	private CLJTextField txtApellidoEmpleado;
+	private FWJTextField txtApellidoEmpleado;
 	private JButton btnBuscar;
 
 	private ModeloCabeceraValesAnticipo modelo;
@@ -69,9 +69,9 @@ public class CabeceraValesAnticipo extends Cabecera<ModeloCabeceraValesAnticipo>
 		return txtFechaHasta;
 	}
 
-	public CLJTextField getTxtApellidoEmpleado() {
+	public FWJTextField getTxtApellidoEmpleado() {
 		if (txtApellidoEmpleado == null) {
-			txtApellidoEmpleado = new CLJTextField();
+			txtApellidoEmpleado = new FWJTextField();
 			txtApellidoEmpleado.setPreferredSize(new Dimension(150, 20));
 		}
 		return txtApellidoEmpleado;

@@ -21,9 +21,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -36,7 +36,7 @@ public class JDialogSeleccionarFactura extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
-	private CLJTable tablaFactura;
+	private FWJTable tablaFactura;
 	private Cliente cliente;
 	private Factura factura;
 	private List<Factura> facturaList;
@@ -93,9 +93,9 @@ public class JDialogSeleccionarFactura extends JDialog {
 		return panDetalle;
 	}
 
-	private CLJTable getTablaFactura() {
+	private FWJTable getTablaFactura() {
 		if(tablaFactura == null) {
-			tablaFactura = new CLJTable(0, CANT_COLS_TBL_FACTURA) {
+			tablaFactura = new FWJTable(0, CANT_COLS_TBL_FACTURA) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -190,7 +190,7 @@ public class JDialogSeleccionarFactura extends JDialog {
 			factura = (Factura)getTablaFactura().getValueAt(selectedRow, COL_OBJ_FACTURA);
 			dispose();
 		} else {
-			CLJOptionPane.showErrorMessage(JDialogSeleccionarFactura.this, "Debe seleccionar la factura más antigua.", "Atención");
+			FWJOptionPane.showErrorMessage(JDialogSeleccionarFactura.this, "Debe seleccionar la factura más antigua.", "Atención");
 			return;
 		}
 	}

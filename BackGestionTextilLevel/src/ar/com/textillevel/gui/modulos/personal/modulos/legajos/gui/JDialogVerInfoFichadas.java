@@ -28,18 +28,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import ar.clarin.fwjava.boss.BossError;
-import ar.clarin.fwjava.boss.BossEstilos;
-import ar.clarin.fwjava.componentes.CLJNumericTextField;
-import ar.clarin.fwjava.componentes.CLJOptionPane;
-import ar.clarin.fwjava.componentes.CLJTable;
-import ar.clarin.fwjava.componentes.CLJTextField;
-import ar.clarin.fwjava.componentes.PanelTablaSinBotones;
-import ar.clarin.fwjava.componentes.VerticalFlowLayout;
-import ar.clarin.fwjava.componentes.error.CLException;
-import ar.clarin.fwjava.util.DateUtil;
-import ar.clarin.fwjava.util.GuiUtil;
-import ar.clarin.fwjava.util.ImageUtil;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJNumericTextField;
+import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.FWJTextField;
+import ar.com.fwcommon.componentes.PanelTablaSinBotones;
+import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.modulos.personal.entidades.fichadas.enums.EEstadoDiaFichada;
@@ -57,8 +57,8 @@ public class JDialogVerInfoFichadas extends JDialog {
 
 	private static final int CANT_MAX_PANEL_LINEA = 6;
 
-	private static final String ICONO_BOTON_MODIF = "ar/clarin/fwjava/imagenes/b_modificar_fila.png";
-	private static final String ICONO_BOTON_MODIF_DES = "ar/clarin/fwjava/imagenes/b_modificar_fila_des.png";
+	private static final String ICONO_BOTON_MODIF = "ar/com/fwcommon/imagenes/b_modificar_fila.png";
+	private static final String ICONO_BOTON_MODIF_DES = "ar/com/fwcommon/imagenes/b_modificar_fila_des.png";
 	public int CANT_COLS;
 	public int COL_COLOR;
 	public int COL_FECHA;
@@ -74,9 +74,9 @@ public class JDialogVerInfoFichadas extends JDialog {
 	private PanelTablaHorarios panelTablaHorarios;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
-	private CLJTextField txtNroLegajo;
-	private CLJTextField txtNombreYApellido;
-	private CLJTextField txtSindicato;
+	private FWJTextField txtNroLegajo;
+	private FWJTextField txtNombreYApellido;
+	private FWJTextField txtSindicato;
 	private JButton btnBuscar;
 	private JLabel lblLoading;
 
@@ -84,7 +84,7 @@ public class JDialogVerInfoFichadas extends JDialog {
 
 	private JPanel panelTablaFichadas;
 	private JButton btnModificar;
-	private CLJTable tablaFichadas;
+	private FWJTable tablaFichadas;
 
 	private LegajoEmpleado legajo;
 
@@ -166,7 +166,7 @@ public class JDialogVerInfoFichadas extends JDialog {
 
 		private static final long serialVersionUID = 2984759166362339902L;
 
-		private CLJNumericTextField txtCantidad;
+		private FWJNumericTextField txtCantidad;
 		private Integer cantidad;
 
 		public PanelReferenciaYCantidad(EEstadoDiaFichada estadoDia) {
@@ -187,11 +187,11 @@ public class JDialogVerInfoFichadas extends JDialog {
 			add(getTxtCantidad(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
 		}
 
-		public CLJNumericTextField getTxtCantidad() {
+		public FWJNumericTextField getTxtCantidad() {
 			if (txtCantidad == null) {
-				txtCantidad = new CLJNumericTextField();
+				txtCantidad = new FWJNumericTextField();
 				txtCantidad.setEditable(false);
-				txtCantidad.setHorizontalAlignment(CLJNumericTextField.CENTER);
+				txtCantidad.setHorizontalAlignment(FWJNumericTextField.CENTER);
 				txtCantidad.setPreferredSize(new Dimension(120, 20));
 			}
 			return txtCantidad;
@@ -224,8 +224,8 @@ public class JDialogVerInfoFichadas extends JDialog {
 		private static final int COL_OBJ = 2;
 
 		@Override
-		protected CLJTable construirTabla() {
-			CLJTable tabla = new CLJTable(0, CANT_COLS);
+		protected FWJTable construirTabla() {
+			FWJTable tabla = new FWJTable(0, CANT_COLS);
 			tabla.setStringColumn(COL_RANGO_DIAS, "Días", 150, 150, true);
 			tabla.setStringColumn(COL_RANGO_HORAS, "Horario", 150, 150, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
@@ -314,28 +314,28 @@ public class JDialogVerInfoFichadas extends JDialog {
 		return panelFechaHasta;
 	}
 
-	public CLJTextField getTxtNroLegajo() {
+	public FWJTextField getTxtNroLegajo() {
 		if (txtNroLegajo == null) {
-			txtNroLegajo = new CLJTextField();
+			txtNroLegajo = new FWJTextField();
 			txtNroLegajo.setPreferredSize(new Dimension(40, 20));
 			txtNroLegajo.setEditable(false);
-			txtNroLegajo.setHorizontalAlignment(CLJTextField.CENTER);
+			txtNroLegajo.setHorizontalAlignment(FWJTextField.CENTER);
 		}
 		return txtNroLegajo;
 	}
 
-	public CLJTextField getTxtNombreYApellido() {
+	public FWJTextField getTxtNombreYApellido() {
 		if (txtNombreYApellido == null) {
-			txtNombreYApellido = new CLJTextField();
+			txtNombreYApellido = new FWJTextField();
 			txtNombreYApellido.setPreferredSize(new Dimension(200, 20));
 			txtNombreYApellido.setEditable(false);
 		}
 		return txtNombreYApellido;
 	}
 
-	public CLJTextField getTxtSindicato() {
+	public FWJTextField getTxtSindicato() {
 		if (txtSindicato == null) {
-			txtSindicato = new CLJTextField();
+			txtSindicato = new FWJTextField();
 			txtSindicato.setPreferredSize(new Dimension(160, 20));
 			txtSindicato.setEditable(false);
 		}
@@ -376,14 +376,14 @@ public class JDialogVerInfoFichadas extends JDialog {
 			Date fechaHasta = getPanelFechaHasta().getDate();
 			if (fechaDesde != null && fechaHasta != null) {
 				if (fechaDesde.after(fechaHasta)) {
-					CLJOptionPane.showErrorMessage(JDialogVerInfoFichadas.this, "La 'fecha desde' debe ser igual o anterior a la 'fecha hasta'", "Error");
+					FWJOptionPane.showErrorMessage(JDialogVerInfoFichadas.this, "La 'fecha desde' debe ser igual o anterior a la 'fecha hasta'", "Error");
 					return;
 				}
 			}
 			List<VigenciaEmpleado> historialVigencias = getLegajo().getHistorialVigencias();
 			VigenciaEmpleado ultima = historialVigencias.get(historialVigencias.size() - 1);
 			if (fechaDesde.before(ultima.getFechaAlta())) {
-				CLJOptionPane.showErrorMessage(JDialogVerInfoFichadas.this, "La 'fecha desde' debe ser igual o posterior a la fecha de alta del empleado: " + DateUtil.dateToString(ultima.getFechaAlta()), "Error");
+				FWJOptionPane.showErrorMessage(JDialogVerInfoFichadas.this, "La 'fecha desde' debe ser igual o posterior a la fecha de alta del empleado: " + DateUtil.dateToString(ultima.getFechaAlta()), "Error");
 				return;
 			}
 			java.sql.Date fechaDesdeSql = fechaDesde != null ? new java.sql.Date(fechaDesde.getTime()) : null;
@@ -407,7 +407,7 @@ public class JDialogVerInfoFichadas extends JDialog {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				BossError.gestionarError(new CLException(e.getMessage()));
+				BossError.gestionarError(new FWException(e.getMessage()));
 			} finally {
 				habilitarControles(true);
 			}
@@ -424,7 +424,7 @@ public class JDialogVerInfoFichadas extends JDialog {
 			int columnasParaGrupos = 2 * maximaCantidadDeGrupos;
 			CANT_COLS = 8 + columnasParaGrupos; // 8 es la cantidad de columnas fijas + 2 por cada entrada-salida
 
-			tablaFichadas = new CLJTable(0, CANT_COLS);
+			tablaFichadas = new FWJTable(0, CANT_COLS);
 
 			COL_COLOR = 0;
 			COL_FECHA = 1;
@@ -592,9 +592,9 @@ public class JDialogVerInfoFichadas extends JDialog {
 		return btnModificar;
 	}
 
-	public CLJTable getTablaFichadas() {
+	public FWJTable getTablaFichadas() {
 		if (tablaFichadas == null) {
-			tablaFichadas = new CLJTable(0, 0);
+			tablaFichadas = new FWJTable(0, 0);
 			tablaFichadas.setAllowHidingColumns(false);
 			tablaFichadas.setAllowSorting(false);
 			tablaFichadas.setReorderingAllowed(false);

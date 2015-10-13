@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import ar.clarin.fwjava.auditoria.evento.enumeradores.EnumTipoEvento;
-import ar.clarin.fwjava.util.DateUtil;
+import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ListaDePreciosProveedorDAOLocal;
 import ar.com.textillevel.entidades.ventas.materiaprima.ListaDePreciosProveedor;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
