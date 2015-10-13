@@ -39,6 +39,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoCoberturaEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
+import ar.com.textillevel.gui.modulos.abm.listaprecios.tenido.JDialogAgregarModificarGamaColorCliente;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -185,7 +186,7 @@ public class ImprimirListaDePreciosHandler {
 							dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
 							dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase());
-							dTO.setDescripcion(pg.getGamaCliente().getNombre());
+							dTO.setDescripcion(pg.getGamaCliente().getNombre().replace(JDialogAgregarModificarGamaColorCliente.EDITADA, ""));
 							dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 							definicionesTO.add(dTO);
 						}

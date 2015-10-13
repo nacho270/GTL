@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -334,6 +336,11 @@ public class JDialogSeleccionarProducto extends JDialog {
 			return productoResultList;
 		}
 		if(articuloFilterList == null) {
+			Collections.sort(allOrderByName, new Comparator<Producto>() {
+				public int compare(Producto o1, Producto o2) {
+					return o1.getDescripcion().compareTo(o2.getDescripcion());
+				}
+			});
 			return allOrderByName;
 		} else {
 			for(Producto p : allOrderByName) {
@@ -342,6 +349,11 @@ public class JDialogSeleccionarProducto extends JDialog {
 				}
 			}
 		}
+		Collections.sort(productoResultList, new Comparator<Producto>() {
+			public int compare(Producto o1, Producto o2) {
+				return o1.getDescripcion().compareTo(o2.getDescripcion());
+			}
+		});
 		return productoResultList;
 	}
 

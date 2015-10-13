@@ -43,6 +43,8 @@ import ar.com.textillevel.util.GTLBeanFactory;
 public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 
 	private static final long serialVersionUID = 3326067841037313062L;
+	
+	public static final String EDITADA = " - EDITADA";
 
 	private CLJList listaGamas;
 	private JButton btnAceptar;
@@ -260,7 +262,7 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 								if (found) {
 									gcc.getColores().remove(indiceARemover);
 									if(gcc.getNombre().indexOf(" - ") == -1){
-										gcc.setNombre(gcc.getNombre() + " - EDITADA");
+										gcc.setNombre(gcc.getNombre() + EDITADA);
 									}
 									getLblAdvertencias().setText("Se quita el color " + color.getNombre() + " de la gama: " + gcc.getNombre());
 									break;
@@ -268,13 +270,13 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 							}
 						}
 						if(gamaSeleccionada.getNombre().indexOf(" - ") == -1){
-							gamaSeleccionada.setNombre(gamaSeleccionada.getNombre() + " - EDITADA");
+							gamaSeleccionada.setNombre(gamaSeleccionada.getNombre() + EDITADA);
 						}
 						gamaSeleccionada.getColores().add(color);
 					} else {
 						gamaSeleccionada.getColores().remove(color);
 						if(gamaSeleccionada.getNombre().indexOf(" - ") == -1){
-							gamaSeleccionada.setNombre(gamaSeleccionada.getNombre() + " - EDITADA");
+							gamaSeleccionada.setNombre(gamaSeleccionada.getNombre() + EDITADA);
 						}
 					}
 				}
