@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 
-import ar.clarin.fwjava.componentes.error.CLException;
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.textillevel.gui.util.EventQueueProxy;
 import ar.com.textillevel.gui.util.GenericUtils;
 
@@ -13,7 +13,7 @@ public class GuiBackTextilLevel extends GTLMainTemplate {
 	private static final long serialVersionUID = -2538191821904835236L;
 	private static final String VERSION = "4.0";
 
-	protected GuiBackTextilLevel(int idAplicacion, String version) throws CLException {
+	protected GuiBackTextilLevel(int idAplicacion, String version) throws FWException {
 		super(idAplicacion, version);
 		getDesktop().setBackground(new Color(255,255,255));
 		if(!GenericUtils.isSistemaTest()){
