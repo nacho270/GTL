@@ -857,6 +857,7 @@ public class JFrameVerMovimientos extends JFrame {
 									GenericUtils.enviarCotizacionPorEmail(getClienteBuscado(), jasperPrintCotizacion);
 									FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotización por correo a " + getClienteBuscado().getEmail(), "Información");
 								}catch(Exception ex){
+									FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 									ex.printStackTrace();
 								}
 							}
@@ -883,6 +884,7 @@ public class JFrameVerMovimientos extends JFrame {
 									GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), createJasperResumenCuenta(cliente));
 									FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
 								}catch(Exception ex){
+									FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 									ex.printStackTrace();
 								}
 							}

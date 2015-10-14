@@ -504,6 +504,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 									GenericUtils.enviarCotizacionPorEmail(c, new ImprimirListaDePreciosHandler(c, cotizacionActual.getVersionListaPrecio())
 										.createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero()));
 								} catch (Exception ex) {
+									FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
 									ex.printStackTrace();
 								}
 							}

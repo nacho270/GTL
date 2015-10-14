@@ -456,7 +456,8 @@ public class GenericUtils {
 			try {
 				mailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipent));
 			} catch (AddressException ae) {
-				continue; // evito el email erroneo
+				System.err.println("Email erroneo: " + recipent);
+				throw ae;
 			}
 		}
 		mailMessage.setSubject(asunto);

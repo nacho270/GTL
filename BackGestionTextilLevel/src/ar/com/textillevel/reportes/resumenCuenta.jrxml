@@ -184,7 +184,7 @@
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="258" height="20"/>
-				<box topPadding="3" bottomPadding="3">
+				<box topPadding="3" leftPadding="5" bottomPadding="3">
 					<pen lineWidth="1.0" lineColor="#FA0006"/>
 					<topPen lineWidth="1.0" lineColor="#FA0006"/>
 					<leftPen lineWidth="1.0" lineColor="#FA0006"/>
