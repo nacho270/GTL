@@ -20,9 +20,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.apache.taglibs.string.util.StringW;
 
-import net.sf.jasperreports.engine.JRException;
 import ar.com.fwcommon.boss.BossError;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
@@ -244,6 +245,8 @@ public class JDialogAutorizarFacturas extends JDialog {
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
 				FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Ingreso incorrecto", "error");
+			} else if(Integer.valueOf(input) > 3) {
+				FWJOptionPane.showErrorMessage(JDialogAutorizarFacturas.this, "Solo se pueden imprimir hasta 3 copias.", "error");
 			} else {
 				ok = true;
 				try{

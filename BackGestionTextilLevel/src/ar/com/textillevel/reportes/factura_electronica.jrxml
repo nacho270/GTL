@@ -23,6 +23,7 @@
 	<parameter name="BAR_CODE" class="java.lang.String"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<parameter name="COD_DOC" class="java.lang.String"/>
+	<parameter name="TIPO_COPIA" class="java.lang.String"/>
 	<field name="articulo" class="java.lang.String"/>
 	<field name="unidad" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.String"/>
@@ -508,6 +509,19 @@ Inicio de Actividades: 03/2005 ]]></text>
 				</textElement>
 				<text><![CDATA[COMPROBANTE AUTORIZADO]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="433" y="91" width="148" height="20"/>
+				<box>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TIPO_COPIA}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 </jasperReport>

@@ -83,16 +83,22 @@ public class ImpresionFacturaHandler {
 	public void imprimir() throws JRException, FWException, ValidacionException, IOException {
 		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
 		FacturaTO factura = armarFacturaTO();
-		Map parameters = getParametros(factura);
 		JasperReport reporte;
 		if (GenericUtils.isSistemaTest()) {
 			reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/facturab_v2.jasper");
 		} else {
 			reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura_electronica.jasper");
 		}
-		JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, factura.getItems());
 		Integer cantidadAImprimir = Integer.valueOf(cantidadCopias);
-		Integer cantidadImpresa = JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
+		Integer cantidadImpresa = 0;
+		for (int i = 1; i <= cantidadAImprimir; i++) {
+			Map parameters = getParametros(factura, i);
+			JasperPrint jasperPrint = JasperHelper.fillReport(reporte, parameters, factura.getItems());
+			Integer copiasImpresas = JasperHelper.imprimirReporte(jasperPrint, true, true, 1);
+			if (copiasImpresas != null) {
+				cantidadImpresa = copiasImpresas.intValue() + 1;
+			}
+		}
 		if (getCorreccionFactura() == null) {
 			if (cantidadImpresa.equals(cantidadAImprimir)) {
 				getFactura().setEstadoImpresion(EEstadoImpresionDocumento.IMPRESO);
@@ -111,7 +117,7 @@ public class ImpresionFacturaHandler {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Map getParametros(FacturaTO factura) throws IOException {
+	private Map getParametros(FacturaTO factura, int numeroCopia) throws IOException {
 		Map parameters = new HashMap();
 		parameters.put("NRO_FACTURA", factura.getNroFactura());
 		parameters.put("TIPO_FACTURA", factura.getTipoFactura());
@@ -138,6 +144,13 @@ public class ImpresionFacturaHandler {
 		parameters.put("FECHA_FACT", DateUtil.dateToString(DateUtil.stringToDate(factura.getFecha()), DateUtil.SHORT_DATE));
 		parameters.put("TIPO_DOC", factura.getTipoDocumento());
 		parameters.put("COD_DOC", "COD. " + factura.getCodigoDocumento());
+		if(numeroCopia == 1) {
+			parameters.put("TIPO_COPIA", "ORIGINAL");
+		} else if (numeroCopia == 2) {
+			parameters.put("TIPO_COPIA", "DUPLICADO");
+		} else if (numeroCopia == 3) {
+			parameters.put("TIPO_COPIA", "TRIPLICADO");
+		}
 		return parameters;
 	}
 

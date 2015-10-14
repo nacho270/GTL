@@ -1997,6 +1997,8 @@ public class JDialogCargaFactura extends JDialog {
 			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
 				FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ingreso incorrecto", "error");
+			} else if(Integer.valueOf(input) > 3) {
+				FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Solo se pueden imprimir hasta 3 copias.", "error");
 			} else {
 				ok = true;
 				try{
