@@ -65,6 +65,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	
 	private static String TEXT_BTN_NUEVO = "Nuevo";
 	private static String TEXT_BTN_CANCELAR = "Cancelar";
+	private static final float ANCHO_MAXIMO_DEFAULT = 3.5f;
 	
 	protected E elemSiendoEditado;
 
@@ -428,18 +429,20 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 
 	private Float getAnchoMaximo() {
-		List<Maquina> maquinas = getMaquinaFacade().getBySector(getTipoProducto().getSector());
-		Float anchoMaximo = Float.MIN_VALUE;
-		if(maquinas != null && !maquinas.isEmpty()) {
-			for(Maquina m : maquinas) {
-				if(m.getAnchoMax().floatValue() > anchoMaximo) {
-					anchoMaximo = m.getAnchoMax();
-				}
-			}
-			return anchoMaximo;
-		} else {
-			return 3.5f;
+		if (getTipoProducto().getSector() == null) {
+			return ANCHO_MAXIMO_DEFAULT;
 		}
+		List<Maquina> maquinas = getMaquinaFacade().getBySector(getTipoProducto().getSector());
+		if (maquinas == null || maquinas.isEmpty()) {
+			return ANCHO_MAXIMO_DEFAULT;
+		}
+		Float anchoMaximo = Float.MIN_VALUE;
+		for(Maquina m : maquinas) {
+			if(m.getAnchoMax().floatValue() > anchoMaximo) {
+				anchoMaximo = m.getAnchoMax();
+			}
+		}
+		return anchoMaximo;
 	}
 
 	protected Float getAnchoExacto() {
