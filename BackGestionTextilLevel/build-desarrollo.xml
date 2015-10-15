@@ -21,11 +21,11 @@
 	<target name="sign" depends="create-client-jar-A" description="Firma ${client.jar.name}">
 		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
 	</target>
-	
+
 	<target name="sign-B" depends="create-client-jar-B" description="Firma ${client.jar.name}">
 		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
 	</target>
-	
+
 	<target name="create-client-jar-B" description="Crea ${client.jar.name} en la raíz del proyecto" >
 		<jar jarfile="${client.jar.name}" duplicate="preserve">
 			<fileset dir="bin">
@@ -70,7 +70,7 @@
 			</fileset>
 		</jar>
 	</target>
-	
+
 	<target name="create-client-jar-A" description="Crea ${client.jar.name} en la raíz del proyecto" >
 		<jar jarfile="${client.jar.name}" duplicate="preserve">
 			<fileset dir="bin">
@@ -115,7 +115,7 @@
 			</fileset>
 		</jar>
 	</target>
-	
+
 	<target name="deploy-ambiente-comun">
 		<mkdir dir="${ear.dir}" />
 			<mkdir dir="${ear.dir}/META-INF" />
@@ -124,6 +124,7 @@
 				<fileset refid="fwLibJee"/>
 			</copy>
 			
+			<antcall target="deploy-jar"></antcall>
 			<antcall target="COPY-WAR-FILES"></antcall>
 			
 			<copy todir="${ear.dir}/META-INF" overwrite="true">
@@ -135,14 +136,36 @@
 			</copy>
 			
 	</target>	
-	
 
 	<target name="make-client" depends="sign">
     	<mkdir dir="${directories.build}/${project.name}"/>
     	<mkdir dir="${directories.build}/${project.name}/bin"/> 
     	<mkdir dir="${directories.build}/${project.name}/lib"/>
 	</target>
-	
+
+	<target name="deploy-jar">
+		<antcall target="deploy-jar-cerrado"></antcall>
+	</target>
+
+	<target name="deploy-jar-cerrado" if="deploy-cerrado" >
+		<mkdir dir="${basedir}/tmp"/>
+		<delete file="${basedir}/tmp/gtlback-server.jar" />
+		<jar jarfile="${basedir}/tmp/gtlback-server.jar" update="true">
+			<fileset refid="fs-jar-resources"/>
+			<fileset refid="fs-jar-clases-fwcommon"/>
+			<fileset refid="fs-jar-clases-gtlcore"/>
+			<fileset refid="fs-ejb-jar.xml"/>
+		</jar>
+		<copy file="${basedir}/tmp/gtlback-server.jar" todir="${ear.dir}" />
+	</target>	
+
+	<fileset dir="${resources-server}" id="fs-jar-resources">
+		<include name="META-INF/persistence.xml" />
+		<!--
+		<include name="META-INF/jboss.xml" />
+		-->
+	</fileset>	
+
 	<fileset dir="../FWCommon/bin" id="fs-jar-clases-fwcommon">
 		<include name="ar/**" />
 		<include name="fwcommon.properties" />
@@ -165,12 +188,12 @@
 	<fileset dir="../CoreGestionTextilLevel/bin" id="fs-jar-clases-gtlcore">
 		<include name="ar/**" />
 	</fileset>	 		
-	
+
 	<fileset dir="../WebGestionTextilLevel/webapp/WEB-INF/classes" id="fs-web-classes">
 		<include name="ar/**" />
 		<include name="*"/>
 	</fileset>
-	
+
 	<target name="COPY-WAR-FILES">
 		<mkdir dir="${ear.dir}/GTL-Web.war/WEB-INF/classes"/>
 		<delete>
@@ -216,5 +239,5 @@
             </fileset>
 		</copy>
 	</target>
-	
+
 </project>
