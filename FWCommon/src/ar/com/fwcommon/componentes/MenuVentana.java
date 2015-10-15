@@ -110,6 +110,9 @@ public class MenuVentana extends FWJMenu {
 	}
 
 	class ChildMenuItem extends JCheckBoxMenuItem {
+
+		private static final long serialVersionUID = 5974471532453909291L;
+		
 		JInternalFrame frame;
 
 		public ChildMenuItem(JInternalFrame frame) {

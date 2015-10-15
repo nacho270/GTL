@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
@@ -20,7 +19,6 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.templates.modulo.ModuloTemplate;
 import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
 import ar.com.fwcommon.templates.modulo.model.filtros.FiltroRangoFechas;
-import ar.com.fwcommon.templates.modulo.model.filtros.FiltroRenderingInformation;
 import ar.com.fwcommon.util.DateUtil;
 
 /**
@@ -31,8 +29,9 @@ import ar.com.fwcommon.util.DateUtil;
  * @param <E> Elementos que se colocarán en el combo
  */
 public class GuiFiltroRangoFechas<T, E> extends GuiFiltro<T, RangoFechas> {
-	@SuppressWarnings("unused")
-	private FiltroRenderingInformation renderInfo;
+
+	private static final long serialVersionUID = -2563776654360244873L;
+	
 	private JLabel jLabelNameDesde;
 	private JLabel jLabelNameHasta;
 	private JCheckBox jCheckBoxFechasHabilitadas;
@@ -42,10 +41,8 @@ public class GuiFiltroRangoFechas<T, E> extends GuiFiltro<T, RangoFechas> {
 	private BotonCalendarioHasta btnCalendarioHasta = null;
 	private RangoFechas rangoSeleccionado = null;
 
-    @SuppressWarnings("unchecked")
-	public GuiFiltroRangoFechas(ModuloTemplate<T, ? extends Cabecera> owner, FiltroRangoFechas<T, RangoFechas> filtro) {
+	public GuiFiltroRangoFechas(ModuloTemplate<T, ? extends Cabecera<?>> owner, FiltroRangoFechas<T, RangoFechas> filtro) {
         super(owner, filtro);
-        this.renderInfo = filtro.getRenderingInformation();
         final RangoFechas value = getFiltro().getValoresSeleccionables();
         construct(filtro);
         setValue(value);
@@ -181,7 +178,6 @@ public class GuiFiltroRangoFechas<T, E> extends GuiFiltro<T, RangoFechas> {
 	 * @param value Valor que toma el filtro
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void fireFilterChangeListener(RangoFechas value) {
 		if (getFiltro().getValoresSeleccionables().getFechaDesde()  != null 
 				&& getFiltro().getValoresSeleccionables().getFechaDesde().equals(getTxtFechaDesde().getValue())) {
@@ -207,6 +203,9 @@ public class GuiFiltroRangoFechas<T, E> extends GuiFiltro<T, RangoFechas> {
 	}
 	
 	protected class BotonCalendarioDesde extends FWBtnCalendarioBF {
+
+		private static final long serialVersionUID = 8265920102175945350L;
+
 		public BotonCalendarioDesde() {
 			super();
 		}
@@ -247,6 +246,9 @@ public class GuiFiltroRangoFechas<T, E> extends GuiFiltro<T, RangoFechas> {
 	
 	
 	protected class BotonCalendarioHasta extends FWBtnCalendarioBF {
+
+		private static final long serialVersionUID = 775922804567351142L;
+		
 		public BotonCalendarioHasta() {
 			super();
 		}

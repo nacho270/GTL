@@ -30,6 +30,7 @@ import ar.com.fwcommon.componentes.FWFileSelector;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTable.DateColumn;
 
+@SuppressWarnings("unchecked")
 public class MiscUtilExcel {
 
 	private static MiscUtilExcel instance = new MiscUtilExcel();

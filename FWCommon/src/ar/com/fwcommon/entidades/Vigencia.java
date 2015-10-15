@@ -172,12 +172,6 @@ public class Vigencia implements Serializable, CloneableAuditoria, Comparable<Vi
 	public boolean equals(Object obj) {
 		if(!(obj instanceof Vigencia))
 			return false;
-		else if(obj == null)
-			return false;
-		/*
-		 * else if(fechaDesde.equals(((Vigencia)obj).getFechaDesde()) &&
-		 * fechaHasta.equals(((Vigencia)obj).getFechaHasta())) return true;
-		 */
 		else if(fechaDesde.equals(((Vigencia)obj).getFechaDesde())) {
 			if(fechaHasta == null && ((Vigencia)obj).getFechaHasta() == null)
 				return true;

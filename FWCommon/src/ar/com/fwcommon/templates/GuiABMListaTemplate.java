@@ -28,9 +28,12 @@ import ar.com.fwcommon.util.GuiUtil;
  * y <b>Grabar</b> esos datos.
  * ar.com.fwcommon.templates.GuiABMArbolTemplate
  */
+@SuppressWarnings("rawtypes")
 public abstract class GuiABMListaTemplate extends GuiABMTemplate {
 
-    protected FWJList lista;
+	private static final long serialVersionUID = -8493061778109345245L;
+
+	protected FWJList lista;
     protected JTabbedPane panTabs;
 
     /** Método constructor */

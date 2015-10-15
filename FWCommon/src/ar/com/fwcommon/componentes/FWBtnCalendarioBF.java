@@ -221,13 +221,19 @@ public class FWBtnCalendarioBF extends JPanel {
         	if (getLimiteFechaDesde() != null && getLimiteFechaHasta() != null) {
         		if (getOwner() == null) {
 		            botonCalendario = new FWBotonCalendario(getLimiteFechaDesde(), getLimiteFechaHasta()) {
-		                public void botonCalendarioPresionado() {
+
+		            	private static final long serialVersionUID = 708870943983848092L;
+
+						public void botonCalendarioPresionado() {
 		                    FWBtnCalendarioBF.this.botonCalendarioPresionado();
 		                }
 		            };
         		} else {
 		            botonCalendario = new FWBotonCalendario(getOwner(), getLimiteFechaDesde(), getLimiteFechaHasta()) {
-		                public void botonCalendarioPresionado() {
+
+		            	private static final long serialVersionUID = 2541702138680557742L;
+
+						public void botonCalendarioPresionado() {
 		                    FWBtnCalendarioBF.this.botonCalendarioPresionado();
 		                }
 		            };        			
@@ -235,13 +241,19 @@ public class FWBtnCalendarioBF extends JPanel {
         	} else {
         		if (getOwner() == null) {
 		            botonCalendario = new FWBotonCalendario() {
-		                public void botonCalendarioPresionado() {
+
+		            	private static final long serialVersionUID = -3812682456553743914L;
+
+						public void botonCalendarioPresionado() {
 		                    FWBtnCalendarioBF.this.botonCalendarioPresionado();
 		                }
 		            };
         		} else {
 		            botonCalendario = new FWBotonCalendario(getOwner()) {
-		                public void botonCalendarioPresionado() {
+
+		            	private static final long serialVersionUID = -3500768785413264559L;
+
+						public void botonCalendarioPresionado() {
 		                    FWBtnCalendarioBF.this.botonCalendarioPresionado();
 		                }
 		            };

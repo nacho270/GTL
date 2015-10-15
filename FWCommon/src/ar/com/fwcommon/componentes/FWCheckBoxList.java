@@ -348,7 +348,7 @@ public class FWCheckBoxList<T> extends JList {
      * @return La lista de objetos que se muestran en la lista
      *         para seleccionar.   
 	 */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public List getItemList() {
         List items = new ArrayList();  
         ListModel listModel = getModel();

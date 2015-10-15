@@ -33,6 +33,8 @@ import ar.com.fwcommon.util.ImageUtil;
  */
 public abstract class FWTxtComboBoxBusqueda<T> extends JPanel {
 
+	private static final long serialVersionUID = -2754318851722685377L;
+
 	protected JComboBox cmbResultados;
 
 	protected JTextField searchField;

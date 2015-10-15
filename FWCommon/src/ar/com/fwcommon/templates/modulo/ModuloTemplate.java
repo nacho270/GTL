@@ -76,6 +76,8 @@ import ar.com.fwcommon.templates.modulo.resources.InterModuleMediator;
  */
 public abstract class ModuloTemplate<T, MC> extends GuiForm {
 
+	private static final long serialVersionUID = 1354904513506892999L;
+
 	private static final int TIEMPO_REFRESCO_DEFAULT = 240;
 	private static final InterModuleMediator interModuleMediator = InterModuleMediator.getInstance();
 	private int idModulo;
@@ -343,7 +345,7 @@ public abstract class ModuloTemplate<T, MC> extends GuiForm {
 			// Coloco el combo en el encabezado
 			getEncabezadoTabla().add(getCmbModelos());
 			// Agrego todos los modelos al combo
-			for(ModuloModel moduloModel : getModulosModel()) {
+			for(ModuloModel<?,?> moduloModel : getModulosModel()) {
 				getCmbModelos().addItem(moduloModel);
 			}
 			getCmbModelos().setVisible(true);

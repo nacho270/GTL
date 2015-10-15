@@ -85,19 +85,17 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.apache.log4j.Logger;
-
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.Diccionario;
 
 /**
  * Componente que simplifica el uso del componente JTable de Java.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class FWJTable extends JTable implements ListSelectionListener, FWJTableEventListener, TableColumnModelListener {
 
 	private static final long serialVersionUID = 3622735924123481329L;
 
-	private static Logger logger = Logger.getLogger(FWJTable.class);
 	
 	public static final int COLUMN_DEFAULT_WIDTH = 100;
 	public static final int STRING_COLUMN_DEFAULT_WIDTH = 150;
@@ -173,7 +171,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param rows La cantidad de filas.
 	 * @param cols La cantidad de columnas.
 	 */
-	@SuppressWarnings("unchecked")
 	public FWJTable(int rows, int cols) {
 //		setSurrendersFocusOnKeystroke(true);
 //		getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "selectNextColumnCell");     
@@ -479,7 +476,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * Elimina la fila indicada con row.
 	 * @param row
 	 */
-	@SuppressWarnings("unchecked")
 	public void removeRow(int row) {
 		if(row == lastEditedRow) {
 			cellOldValue = null;
@@ -1844,6 +1840,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	}
 
 	public class FWJTableModel extends DefaultTableModel {
+
+		private static final long serialVersionUID = -5168963059143510624L;
+
 		public FWJTableModel() {
 			super();
 		}
@@ -1863,7 +1862,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		 * @param row
 		 * @param col
 		 */
-		@SuppressWarnings("unchecked")
 		public void setValueAt(Object value, int row, int col) {
 			if(row >= 0 && row < ((Vector)dataVector).size()) {
 				Vector<Object> rowVector = (Vector)dataVector.elementAt(row);
@@ -1884,7 +1882,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		 * @param row
 		 * @param col
 		 */
-		@SuppressWarnings("unchecked")
 		public void setValueAtSinNotificaciones(Object value, int row, int col) {
 			if(row >= 0 && row < ((Vector)dataVector).size()) {
 				Vector<Object> rowVector = (Vector)dataVector.elementAt(row);
@@ -1976,6 +1973,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase StringEditor */
 	private class StringEditor extends KeyEditor {
+
+		private static final long serialVersionUID = -4208008871386822789L;
+		
 		FWJFormattedTextField ftf;
 		StringListener stringListener;
 
@@ -1994,6 +1994,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase MultilineStringEditor */
 	protected class MultilineStringEditor extends AbstractCellEditor implements TableCellEditor {
+
+		private static final long serialVersionUID = -8150989174818838083L;
+		
 		JTextArea textArea;
 
 		public MultilineStringEditor() {
@@ -2012,6 +2015,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase IntegerEditor */
 	protected class IntegerEditor extends KeyEditor {
+
+		private static final long serialVersionUID = 350010276376908251L;
+		
 		protected FWJFormattedTextField ftf;
 		NumberListener numberListener;
 		boolean nulleable = false;
@@ -2055,6 +2061,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase IntegerEditor Float*/
 	private class FloatEditor extends KeyEditor {
+
+		private static final long serialVersionUID = -9161925427235498769L;
+		
 		FWJFormattedTextField ftf;
 		FloatListener numberListener;
 
@@ -2091,6 +2100,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	
 	/** Clase DateEditor */
 	private class DateEditor extends KeyEditor {
+
+		private static final long serialVersionUID = 865400740362069920L;
+		
 		FWJFormattedTextField ftf;
 		DateListener dateListener;
 
@@ -2100,6 +2112,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 			dateListener = new DateListener(ftf);
 			ftf.addKeyListener(dateListener);
 			delegate = new EditorDelegate() {
+
+				private static final long serialVersionUID = 761529081782922551L;
+
 				public void setValue(Object valor) {
 					if(valor instanceof Date) {
 						Date fecha = (Date)valor;
@@ -2158,6 +2173,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase TimeEditor */
 	private class TimeEditor extends KeyEditor {
+
+		private static final long serialVersionUID = -1735804176930511963L;
+		
 		FWJFormattedTextField ftf;
 		TimeListener timeListener;
 
@@ -2429,10 +2447,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 			this.row = row;
 		}
 
-		public void setColumn(int column) {
-			this.column = column;
-		}
-
 		public String getKey() {
 			return row + "," + column;
 		}
@@ -2534,6 +2548,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	}
 
 	private class ComboBoxEditor extends DefaultCellEditor {
+
+		private static final long serialVersionUID = -629931188090237519L;
+
 		public ComboBoxEditor(JComboBox combo) {
             super(combo);
             combo.addKeyListener(new KeyAdapter() {
@@ -2560,6 +2577,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase editor que se habilita al presionar una tecla */
 	private abstract class KeyEditor extends DefaultCellEditor {
+
+		private static final long serialVersionUID = -4838591306261080769L;
+		
 		int row;
 		int col;
 
@@ -3266,6 +3286,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Renderer de la tabla */
 	protected class FWJTableRenderer extends DefaultTableCellRenderer {
+
+		private static final long serialVersionUID = 4583715882923853449L;
+
 		//Para mostrar las filas alteradas de distinto color. No funciona en modo edición
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 			Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
@@ -3547,6 +3570,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Renderer de las celdas de tipo 'Imágen' */
 	private class ImageCellRenderer extends JLabel implements TableCellRenderer {
+
+		private static final long serialVersionUID = 3930104811798435300L;
+
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component component = (Component)value;
 			Color cellColor = getBackgroundCell(row, column);
@@ -3580,6 +3606,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	
 	/** Renderer de las celdas de tipo 'Check' */
 	public class CheckRenderer extends DefaultTableCellRenderer {
+		
+		private static final long serialVersionUID = -2191956886915511130L;
+
 		private JCheckBox check = new JCheckBox();
 
 		public CheckRenderer() {
@@ -3612,6 +3641,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Renderer de las celdas de tipo 'Multiline' */
 	public class MultiLineCellRenderer extends JTextArea implements TableCellRenderer {
+
+		private static final long serialVersionUID = -6309349000939429711L;
+		
 		private final DefaultTableCellRenderer adaptee = new DefaultTableCellRenderer();
 		public MultiLineCellRenderer() {
 			setLineWrap(true);
@@ -3658,6 +3690,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Renderer de las celdas de tipo 'Multiline' con el flag isHtml en true */
 	public class HtmlCellRenderer extends JLabel implements TableCellRenderer {
+
+		private static final long serialVersionUID = -2775972260682378252L;
+
 		public HtmlCellRenderer() {
 			setOpaque(true);
 		}
@@ -3737,7 +3772,7 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		columnChooser.setVisible(true);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unused")
 	public void sortAllRowsBy(int col, boolean ascending, Comparator comparator) {
 		int filas = this.getRowCount(); //Cantidad de filas de la tabla
 		int columnas = this.getColumnCount(); //Cantidad de columnas de la
@@ -3834,12 +3869,10 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param col
 	 * @param ascending
 	 */
-	@SuppressWarnings("unchecked")
 	public void sortAllRowsBy(int col, boolean ascending) {
 		sortAllRowsBy(col, ascending, new ColumnSorter(col, ascending));
 	}
 
-	@SuppressWarnings("unchecked")
 	private Hashtable ordenarHash(Vector data, Hashtable hashtable) {
 		int filas = getRowCount();
 		int columnas = getColumnCount();
@@ -3870,7 +3903,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 			this.ascending = ascending;
 		}
 
-		@SuppressWarnings("unchecked")
 		public int compare(Object a, Object b) {
 			Vector v1 = (Vector)a;
 			Vector v2 = (Vector)b;
@@ -3994,6 +4026,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	}
 
 	public class FWColumnChooser extends JDialog implements ActionListener {
+
+		private static final long serialVersionUID = -5628397858164488995L;
+		
 		private JButton btnAceptar = new JButton("Aceptar");
 		private JButton btnCancelar = new JButton("Cancelar");
 		private FWCheckBoxList listaHeader = new FWCheckBoxList();
@@ -4075,7 +4110,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		 * Obtiene los nombres del header de la tabla y devuelve un String[] con
 		 * los datos.
 		 */
-		@SuppressWarnings("unchecked")
 		public String[] obtenerColumnas() {
 			java.util.List headers = new ArrayList();
 			for(int i = 0; i < getColumnCount(); i++) {
@@ -4696,6 +4730,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase para el manejo de los distintos tipos de celdas */
 	public class FWJFormattedTextField extends JFormattedTextField {
+
+		private static final long serialVersionUID = -8162345284083385160L;
+		
 		private int col;
 		private int row;
 		private final FWJTable tabla;
@@ -4774,7 +4811,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		HashMap tooltips = new HashMap();
 		TableColumn columnaActual;
 
-		@SuppressWarnings("unchecked")
 		public void setColumnHeaderTooltip(int col, String tooltipText) {
 			TableColumn columna = getColumnModel().getColumn(col);
 			if(tooltipText != null)
@@ -4915,7 +4951,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	/**
 	 * Elimina la columna recbida como parámetro.
 	 */
-	@SuppressWarnings("unchecked")
 	public void removeColumn(TableColumn col) {
 		super.removeColumn(col);
 		FWColumn[] cols = new FWColumn[tiposColumnas.length - 1];
@@ -4992,7 +5027,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param alto
 	 * @param ancho
 	 */
-	@SuppressWarnings("unchecked")
 	public void agruparCeldas(int fila, int col, int alto, int ancho) {
 		GrupoCeldas grupo = new GrupoCeldas(fila, col, alto, ancho);
 		gruposCeldas.add(grupo);
@@ -5012,7 +5046,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param col
 	 * @param ancho
 	 */
-	@SuppressWarnings("unchecked")
 	public void agruparHeaders(int col, int ancho) {
 		GrupoHeaders grupo = new GrupoHeaders(col, ancho);
 		gruposHeaders.add(grupo);
@@ -5371,7 +5404,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param colHasta
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public int[] agruparHastaCol(int colHasta, int cantFilas) {
 		gruposCeldas.clear();
 		setRowSelectionAllowed(false);
@@ -5448,7 +5480,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param colHasta
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	private Vector getValoresFila(int fila, int colHasta) {
 		Vector valores = new Vector();
 		for(int i = 0; i <= colHasta; i++) {
@@ -5507,7 +5538,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * celdas.
 	 * @param row
 	 */
-	@SuppressWarnings("unchecked")
 	private void actualizarHash(int row) {
 		Hashtable backgroundColorRowsTemp = new Hashtable();
 		lockCells = insertarFilaHash(row, lockCells);
@@ -5528,7 +5558,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		backgroundColorRows = backgroundColorRowsTemp;
 	}
 
-	@SuppressWarnings("unchecked")
 	private Hashtable insertarFilaHash(int row, Hashtable hashtable) {
 		Hashtable hashtableTemp = new Hashtable();
 		for(Iterator i = hashtable.values().iterator(); i.hasNext();) {
@@ -5998,6 +6027,8 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 */
 	public class FWJTableHeaderRenderer extends JLabel implements TableCellRenderer {
 
+		private static final long serialVersionUID = 5482001411717806913L;
+
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
 			JLabel header = (JLabel)this;
 			header.setBorder(BorderFactory.createLineBorder(getGridColor()));
@@ -6023,7 +6054,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param colData
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public Vector getDataPieChart(int filaDesde, int filaHasta, int colCategoria, int colData) {
 		Vector categorias = new Vector();
 		Vector categoriasTemp = new Vector();
@@ -6067,7 +6097,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * @param colData
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public Vector getDataBarChart(int filaDesde, int filaHasta, int colCategorias, int colSeries, int colData) {
 		Vector dataCategorias = new Vector();
 		Vector dataChart = new Vector();
@@ -6330,6 +6359,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** Clase para el menú emergente de la tabla */
 	protected class PopupMenu extends JPopupMenu {
+
+		private static final long serialVersionUID = -2758787575684421486L;
+
 		public PopupMenu() {
 			if(permiteCopiar) {
 				JMenuItem copiarTodo = new JMenuItem("Copiar todo");
@@ -6362,7 +6394,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		return indicesFilas;
 	}
 
-	@SuppressWarnings("unchecked")
 	public int[] getIndicesColumnasVisibles() {
 		List columnas = new ArrayList();
 		for(int i = 0; i < getColumnCount(); i++) {
@@ -6444,6 +6475,9 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		public GrupoColumnas(TableCellRenderer renderer, String nombre) {
 			if(renderer == null) {
 				this.renderer = new DefaultTableCellRenderer() {
+
+					private static final long serialVersionUID = -7717747676329330517L;
+
 					public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 						JTableHeader header = table.getTableHeader();
 						if(header != null) {
@@ -6463,14 +6497,12 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 			columnas = new Vector();
 		}
 
-		@SuppressWarnings("unchecked")
 		public void add(Object obj) {
 			if(obj != null) {
 				columnas.addElement(obj);
 			}
 		}
 
-		@SuppressWarnings("unchecked")
 		public Vector getColumnGroups(TableColumn columna, Vector columnasTemp) {
 			columnasTemp.addElement(this);
 			if(columnas.contains(columna)) {
@@ -6524,8 +6556,12 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 
 	/** JTableHeader adaptado para soportar headers múltiples */
 	public class FWJTableHeader extends JTableHeader {
+
+		private static final long serialVersionUID = 4977850647801590833L;
+		
 		@SuppressWarnings("unused")
 		private static final String uiClassID = "GroupableTableHeaderUI";
+		
 		protected Vector gruposColumnas = null;
 
 		public FWJTableHeader(TableColumnModel model) {
@@ -6549,7 +6585,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 			return reorderingAllowed;
 		}
 
-		@SuppressWarnings("unchecked")
 		public void agregarGrupoColumnas(GrupoColumnas grupoColumnas) {
 			setReorderingAllowed(false);
 			if(gruposColumnas == null) {
@@ -6601,7 +6636,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		/**
 		 * Método adaptado para soportar headers múltiples.
 		 */
-		@SuppressWarnings("unchecked")
 		public void paint(Graphics g, JComponent c) {
 			if(((FWJTable)header.getTable()).permiteHeaderMultiple) {
 				Rectangle clipBounds = g.getClipBounds();
@@ -6889,7 +6923,6 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public int[] getIndicesColumnasOcultas() {
 		List columnas = new ArrayList();
 		for(int i = 0; i < getColumnCount(); i++) {

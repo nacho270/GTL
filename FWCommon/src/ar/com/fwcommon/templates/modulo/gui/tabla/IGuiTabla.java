@@ -52,7 +52,6 @@ public interface IGuiTabla<T> {
 	 * @param fila Fila en la que se encuentra el objeto
 	 * @return Objeto correspondiente a dicha fila
 	 */
-	@SuppressWarnings("unchecked")
 	public T getObjeto(int fila);
 
 	/**

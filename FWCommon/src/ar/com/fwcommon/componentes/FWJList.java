@@ -78,7 +78,7 @@ public class FWJList extends JList {
 	 * Devuelve una lista (java.util.List) de los ítems de la lista.
 	 * @return items
 	 */
-	public List getItemList() {
+	public List<Object> getItemList() {
 		List<Object> items = new ArrayList<Object>();
 		for(int i = 0; i < getItemCount(); i++) {
             items.add(getItem(i));

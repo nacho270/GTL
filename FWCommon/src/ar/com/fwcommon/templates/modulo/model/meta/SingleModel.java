@@ -42,7 +42,7 @@ public final class SingleModel<T> extends Model<T> {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof SingleModel) {
-			return model.equals(((SingleModel)obj).getModel());
+			return model.equals(((SingleModel<?>)obj).getModel());
 		}
 		return false;
 	}

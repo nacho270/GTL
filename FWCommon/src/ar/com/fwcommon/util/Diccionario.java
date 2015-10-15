@@ -7,7 +7,9 @@ import java.util.List;
 
 public class Diccionario<C, V> implements Serializable {
 
-    private Hashtable<C, List<V>> hashtable;
+	private static final long serialVersionUID = -4532162015355363078L;
+	
+	private Hashtable<C, List<V>> hashtable;
 
     public Diccionario() {
         hashtable = new Hashtable<C, List<V>>();

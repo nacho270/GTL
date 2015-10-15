@@ -17,6 +17,7 @@ import ar.com.fwcommon.IndexItem;
 /**
  * Clase con funciones útiles para la utilización del componente javax.swing.JTree.
  */
+@SuppressWarnings("rawtypes")
 public class TreeUtil {
 
 	private static Vector<Vector<Integer>> nodos = new Vector<Vector<Integer>>();

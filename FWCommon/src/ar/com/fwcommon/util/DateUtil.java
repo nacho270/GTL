@@ -951,7 +951,7 @@ public class DateUtil {
 		return getAmericaArgentinaBuenos_Aires();
 	}
 
-	private static TimeZone getUTC() {
+	public static TimeZone getUTC() {
 		return TimeZone.getTimeZone("UTC");
 	}
 
@@ -961,10 +961,6 @@ public class DateUtil {
 
 	private static TimeZone getAmericaArgentinaBuenos_Aires() {
 		return TimeZone.getTimeZone("America/Argentina/Buenos_Aires");
-	}
-
-	private static TimeZone getAmericaBuenos_Aires() {
-		return TimeZone.getTimeZone("America/Buenos_Aires");
 	}
 
 	public static GregorianCalendar getGregorianCalendar() {

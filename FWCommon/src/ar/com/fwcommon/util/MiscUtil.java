@@ -107,7 +107,7 @@ public class MiscUtil {
 	 *            la clase.
 	 * @return el path donde se encuentra la clase.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static String getClassPath(Class theClass) {
 		return theClass.getPackage().getName().replace('.', '/');
 	}

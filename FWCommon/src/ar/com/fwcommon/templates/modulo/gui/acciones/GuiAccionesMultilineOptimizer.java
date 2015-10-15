@@ -43,14 +43,12 @@ import ar.com.fwcommon.templates.modulo.model.listeners.AccionExecutedListener;
  * la fila superior del mismo (usando la regla anterior) se procurará que el
  * grupo ocupe la mayor cantidad de filas posibles que respeten todas las reglas anteriores
  * </ol>
- * 
- * 
- * 
- * 
  * @param <T> Tipo de datos que van a recibir las acciones
  */
-@SuppressWarnings("serial")
 public class GuiAccionesMultilineOptimizer<T> extends GuiSet<T, Accion<T>> implements IGuiAcciones<T> {
+
+	private static final long serialVersionUID = -2893181818139689423L;
+	
 	private DiagonalGridLayout layout = new DiagonalGridLayout(1);
 	private Map<String, JPanelGroup> groupComponents;
 	
@@ -140,7 +138,7 @@ public class GuiAccionesMultilineOptimizer<T> extends GuiSet<T, Accion<T>> imple
 		Component[] components = getComponents();
 		for (int i = 0; i < components.length; i++) {
 			if (components[i] instanceof GuiAccion) {
-				if (accion.equals(((GuiAccion)components[i]).getAccion())) {
+				if (accion.equals(((GuiAccion<?>)components[i]).getAccion())) {
 					remove(components[i]);
 					this.validate();
 					return;
@@ -195,7 +193,6 @@ public class GuiAccionesMultilineOptimizer<T> extends GuiSet<T, Accion<T>> imple
 	protected void fireActionExecutedListener(final AccionExecutedEvent e) {
 		final AccionExecutedListener[] l = listenerList.getListeners(AccionExecutedListener.class);
 		SwingUtilities.invokeLater(new Runnable() {
-			@SuppressWarnings("unchecked")
 			public void run() {
 				for (int i = 0; i < l.length; i++) {
 					l[i].accionExcecuted(e);

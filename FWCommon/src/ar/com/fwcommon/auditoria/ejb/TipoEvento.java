@@ -1,6 +1,7 @@
 package ar.com.fwcommon.auditoria.ejb;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +10,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "T_TipoEvento")
-public class TipoEvento implements Comparable, Serializable {
+public class TipoEvento implements Comparable<TipoEvento>, Serializable {
 
+	private static final long serialVersionUID = -7355843639382289170L;
+	
 	private int idTipoEvento;
 	private String nombre;
 	private int tipo;
@@ -80,13 +83,8 @@ public class TipoEvento implements Comparable, Serializable {
 		return getNombre();
 	}
 
-	/* (non-Javadoc)
-	 * java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(Object o) {
-		if(o instanceof TipoEvento)
-			return this.getTipo() - ((TipoEvento)o).getTipo();
-		return -1;
+	public int compareTo(TipoEvento o) {
+		return this.getTipo() - ((TipoEvento)o).getTipo();
 	}
 
 	/* (non-Javadoc)

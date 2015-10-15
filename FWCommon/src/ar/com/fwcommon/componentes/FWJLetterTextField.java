@@ -3,6 +3,7 @@ package ar.com.fwcommon.componentes;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -10,6 +11,8 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 public class FWJLetterTextField extends JTextField {
+
+	private static final long serialVersionUID = -3662329002889170579L;
 
 	private FWJLetterDocument letterDocument;
 	private Toolkit toolkit;
@@ -31,7 +34,10 @@ public class FWJLetterTextField extends JTextField {
     }
 
     private class FWJLetterDocument extends PlainDocument {
-		private String textoComponente = "";
+
+    	private static final long serialVersionUID = 413774251744583632L;
+		
+    	private String textoComponente = "";
 
 		public void setTextoComponente(String textoComponente) {
 			this.textoComponente = textoComponente;

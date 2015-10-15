@@ -1,6 +1,5 @@
 package ar.com.fwcommon.templates.modulo.gui.filtros;
 
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -23,7 +22,7 @@ public class GuiFiltroChk<T> extends GuiFiltro<T, Boolean> {
 
 	private JCheckBox jCheckBox = null;
 
-	public GuiFiltroChk(ModuloTemplate<T, ? extends Cabecera> owner, FiltroOpcion<T> filtro) {
+	public GuiFiltroChk(ModuloTemplate<T, ? extends Cabecera<?>> owner, FiltroOpcion<T> filtro) {
 		super(owner, filtro);
 		this.getJCheckBox().setText(filtro.getNombre());
 		this.add(getJCheckBox());

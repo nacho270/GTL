@@ -15,6 +15,8 @@ import javax.swing.SwingUtilities;
  */
 public class IndicadorProgreso implements Serializable{
 
+	private static final long serialVersionUID = -1792669575375096584L;
+
 	private long valorActual;
 	private String comentario;
 	private boolean ready;

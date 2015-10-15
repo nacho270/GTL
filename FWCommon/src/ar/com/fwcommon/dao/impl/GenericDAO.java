@@ -38,6 +38,7 @@ import ar.com.fwcommon.dao.api.local.DAOLocal;
  *            Tipo de Primary key de la Entidad de negocio. Actualmente
  *            trabajamos con Integer y String
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 
 	private static Logger log = Logger.getLogger(GenericDAO.class);
@@ -45,7 +46,6 @@ public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 	@PersistenceContext(name="GTLDS", unitName="GTLDS")
 	protected EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")
 	protected Class<E> getType() {
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass()
 				.getGenericSuperclass();
@@ -60,7 +60,6 @@ public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> getByIds(List<PK> ids){
 		if (ids.isEmpty())
 			return new ArrayList<E>();
@@ -85,7 +84,6 @@ public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 		*/
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> getAll() {
 		Class<E> type = this.getType();
 		return getEntityManager()
@@ -104,7 +102,6 @@ public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 	
 	
 
-	@SuppressWarnings("unchecked")
 	public List<E> getAllOrderBy(String nameAttribute) {
 		Class<E> type = this.getType();
 		return getEntityManager().createQuery(
@@ -213,7 +210,6 @@ public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 		return query.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> executeListResultQuery(Query query) throws FWException {
 		List<E> lista = null;
 		try {
@@ -224,7 +220,6 @@ public abstract class GenericDAO<E, PK> implements DAOLocal<E, PK> {
 		return lista;
 	}
 
-	@SuppressWarnings("unchecked")
 	public E executeSingleResultQuery(Query query) throws FWException {
 		E e = null;
 		try {

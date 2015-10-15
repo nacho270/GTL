@@ -21,6 +21,9 @@ import ar.com.fwcommon.templates.modulo.model.listeners.ModelChangeListener;
  * @param <U> Elementos que va a utilizar el filtro
  */
 public abstract class GuiFiltro<T, U> extends JPanel {
+
+	private static final long serialVersionUID = -3980610008006542606L;
+	
 	private final ModuloTemplate<T, ?> owner;
 	private Filtro<T, U> filtro;
 

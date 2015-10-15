@@ -523,6 +523,9 @@ public class FWCalendar extends JPanel implements MouseListener, KeyListener, Fo
 	}
 
 	static class FocusablePanel extends JPanel {
+
+		private static final long serialVersionUID = -8920737027100816940L;
+
 		public FocusablePanel(LayoutManager layout) {
 			super(layout);
 		}

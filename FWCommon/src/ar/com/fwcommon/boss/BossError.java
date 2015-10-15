@@ -5,7 +5,6 @@ import ar.com.fwcommon.componentes.error.FWErrorDialog;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.notificadores.INotificadorErrores;
 import ar.com.fwcommon.componentes.error.notificadores.NotificadorErroresConsola;
-import ar.com.fwcommon.componentes.error.notificadores.NotificadorErroresEmailWS;
 import ar.com.fwcommon.excepciones.InterpreteExcepciones;
 
 /**
@@ -23,12 +22,7 @@ public class BossError {
 	public static final int ERR_INDETERMINADO = 3;
 
 	static {
-		try {
-			//if (true) throw new CLRuntimeException("df");
-			notificadorErrores = NotificadorErroresEmailWS.getInstance();
-		} catch(Throwable e) {
-			notificadorErrores = NotificadorErroresConsola.getInstance();
-		}
+		notificadorErrores = NotificadorErroresConsola.getInstance();
 	}
 
 	/**

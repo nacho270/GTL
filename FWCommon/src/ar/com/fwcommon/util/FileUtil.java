@@ -23,6 +23,7 @@ import ar.com.fwcommon.componentes.error.FWException;
 /**
  * Clase con funciones útiles relacionadas con archivos y carpetas.
  */
+@SuppressWarnings("rawtypes")
 public class FileUtil {
 
 	public static final long MEGABYTE = 1024 * 1024;
@@ -74,7 +75,8 @@ public class FileUtil {
      * @return  checksum un long con el CRC-32 Checksum del archivo
      * @throws Exception
      */
-    public static long getChecksum(File file) throws Exception {
+    @SuppressWarnings("resource")
+	public static long getChecksum(File file) throws Exception {
         long checksum = -1;
         CheckedInputStream cis = null;
         //Computa el CRC-32 checksum
@@ -449,6 +451,7 @@ public class FileUtil {
      * Returns the contents of the file in a byte array
      * 
      */
+	@SuppressWarnings("resource" )
 	public static byte[] getBytesFromFile(File file) throws FWException {
 		InputStream is;
 		try {

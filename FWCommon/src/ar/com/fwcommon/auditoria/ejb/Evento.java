@@ -11,11 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import ar.com.fwcommon.boss.BossUsuarioVerificado;
-
 @Entity
 @Table(name = "T_Evento")
 public class Evento implements Serializable {
+
+	private static final long serialVersionUID = 5012643907282588139L;
 
 	private int idEvento;
 	private Timestamp fechaHora;
@@ -28,12 +28,6 @@ public class Evento implements Serializable {
 
 	/** Método constructor */
 	public Evento() {
-	}
-
-	/** Método Constructor */
-	public Evento(String clase) {
-		setUsuario(BossUsuarioVerificado.getUsuarioVerificado().getNombre());
-		setClase(clase);
 	}
 
 	public Evento(String clase, String nombreUsuario) {

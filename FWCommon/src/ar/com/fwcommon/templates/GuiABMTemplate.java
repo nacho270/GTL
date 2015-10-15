@@ -33,7 +33,9 @@ import ar.com.fwcommon.util.TreeUtil;
  */
 public abstract class GuiABMTemplate extends GuiForm {
 
-    private JLabel lblComboMaestro;
+	private static final long serialVersionUID = 5252710794418215135L;
+
+	private JLabel lblComboMaestro;
     private JComboBox cmbMaestro;
     private JButton btnAgregar;
     private JButton btnEliminar;

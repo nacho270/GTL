@@ -104,12 +104,18 @@ public class FWPopupCalendar extends JDialog implements ActionListener {
 		getContentPane().setLayout(new BorderLayout());
 		if(getFechaMinima() != null && getFechaMaxima() != null) {
 			calendar = new FWCalendar(date, getFechaMinima(), getFechaMaxima()) {
+
+				private static final long serialVersionUID = 2235607158521250250L;
+
 				public void dateSelected() {
 					fechaSeleccionada();
 				}
 			};
 		} else {
 			calendar = new FWCalendar(date) {
+
+				private static final long serialVersionUID = -5032824490908122523L;
+
 				public void dateSelected() {
 					fechaSeleccionada();
 				}

@@ -17,8 +17,6 @@ public class JasperPanel extends FWJRViewer {
 	private static final long serialVersionUID = -8973260357104451437L;
 
 	protected JButton printButton = new JButton();
-    private boolean esRecibo;
-    private JRPrintServiceExporter exporter;
 
     /**
      * Método constructor.
@@ -29,7 +27,6 @@ public class JasperPanel extends FWJRViewer {
      */
     public JasperPanel(final JRPrintServiceExporter exporter, final JasperPrint jrPrint) throws JRException {
         super(jrPrint);
-        this.exporter = exporter;
         tlbToolBar.remove(btnPrint);
         printButton = new javax.swing.JButton();
         printButton.setToolTipText(btnPrint.getToolTipText());

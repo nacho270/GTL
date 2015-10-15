@@ -1,14 +1,8 @@
 package ar.com.fwcommon.util;
 
 import ar.com.fwcommon.componentes.error.FWException;
-import ar.com.fwcommon.entidades.enumeradores.EnumAplicacionJEE;
 
 public class BeanFactoryLocalAbstract extends BeanFactoryAbstract {
-
-	protected BeanFactoryLocalAbstract() throws FWException {
-		setApplicationName(EnumAplicacionJEE.getBaseJndiName()) ;
-		System.out.println("Asumiendo " + getApplicationName() + " para los lookups locales.");
-	}
 
 	public BeanFactoryLocalAbstract(String appName) {
 		setApplicationName(appName);

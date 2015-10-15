@@ -6,6 +6,7 @@ import java.util.Map;
  * Clase útil para la configuración de JasperWrapper.
  * ar.com.fwcommon.util.jasper.JasperWrapper
  */
+@SuppressWarnings("rawtypes")
 public class JasperWrapperProperties {
 
     private String xmlReport;

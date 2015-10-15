@@ -62,8 +62,6 @@ import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.filechooser.FileFilter;
 
-import ar.com.fwcommon.boss.BossError;
-import ar.com.fwcommon.componentes.error.FWException;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRPrintAnchorIndex;
@@ -78,12 +76,13 @@ import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
 import net.sf.jasperreports.view.JRHyperlinkListener;
 import net.sf.jasperreports.view.JRSaveContributor;
+import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.error.FWException;
 
-/**
- * 
- * @version $Id: JRViewer.java,v 1.33 2005/11/28 09:20:45 teodord Exp $
- */
+@SuppressWarnings("rawtypes")
 public class FWJRViewer extends javax.swing.JPanel implements JRHyperlinkListener {
+
+	private static final long serialVersionUID = 5235842708107604108L;
 
 	private static final int TYPE_FILE_NAME = 1;
 	private static final int TYPE_INPUT_STREAM = 2;

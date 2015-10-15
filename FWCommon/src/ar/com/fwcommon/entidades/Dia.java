@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "T_Dia")
-public class Dia implements Serializable, Comparable {
+public class Dia implements Serializable, Comparable<Dia> {
 
 	private static final long serialVersionUID = 7738572070089606247L;
 
@@ -102,8 +102,7 @@ public class Dia implements Serializable, Comparable {
 		return nombre;
 	}
 
-	/** Sobreescritura del método compareTo de Object */
-	public int compareTo(Object aThat) {
+	public int compareTo(Dia aThat) {
 		final int BEFORE = -1;
 		final int EQUAL = 0;
 		final int AFTER = 1;
@@ -123,8 +122,6 @@ public class Dia implements Serializable, Comparable {
 	public boolean equals(Object dia) {
 		boolean resultado = false;
 		if(!(dia instanceof Dia))
-			return resultado;
-		if(dia == null)
 			return resultado;
 		else
 			return resultado = ((nombre.equals(((Dia)dia).getNombre())) && (nroDia == ((Dia)dia).nroDia));

@@ -118,8 +118,6 @@ public class IndexItem implements Serializable {
 	public boolean equals(Object obj) {
 		if(!(obj instanceof IndexItem))
 			return false;
-		else if(obj == null)
-			return false;
 		else {
 			return (((IndexItem)obj).getId() == id) &&
 					(((IndexItem)obj).getNombre().equals(nombre)) &&

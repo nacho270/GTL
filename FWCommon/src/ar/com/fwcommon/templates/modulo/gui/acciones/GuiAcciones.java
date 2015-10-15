@@ -18,19 +18,15 @@ import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionExecutedEvent;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionExecutedListener;
-import ar.com.fwcommon.util.log.FWLogger;
 
 /**
  * GUI que contiene todas las acciones
- * 
- * 
- * 
- *
  * @param <T> Tipo de datos que van a recibir las acciones
  */
-@SuppressWarnings("serial")
 public class GuiAcciones<T> extends GuiSet<T, Accion<T>> implements IGuiAcciones<T> {
-	private static final FWLogger logger = new FWLogger(GuiAcciones.class); 
+
+	private static final long serialVersionUID = -2513130581540416811L;
+	
 	private Map<String, List<JComponent>> groupComponents;
 
 	public GuiAcciones(ModuloTemplate<T, ?> owner, Acciones<T> acciones) {
@@ -50,7 +46,6 @@ public class GuiAcciones<T> extends GuiSet<T, Accion<T>> implements IGuiAcciones
 	 */
 	public void setModel(Acciones<T> acciones) { 
 		if (this.model != acciones) {
-			if (acciones.getCantidadFilas() != 1) logger.warn("Las acciones pueden mostrarse en una única fila utilizando esta vista");
 			removeAll();
 			if (this.model != null) this.model.removeListChangeListener(getElementListChangeListener());
 			this.model = acciones;
@@ -120,7 +115,7 @@ public class GuiAcciones<T> extends GuiSet<T, Accion<T>> implements IGuiAcciones
 		Component[] components = getComponents();
 		for (int i = 0; i < components.length; i++) {
 			if (components[i] instanceof GuiAccion) {
-				if (accion.equals(((GuiAccion)components[i]).getAccion())) {
+				if (accion.equals(((GuiAccion<?>)components[i]).getAccion())) {
 					remove(components[i]);
 					this.validate();
 					return;
@@ -173,7 +168,6 @@ public class GuiAcciones<T> extends GuiSet<T, Accion<T>> implements IGuiAcciones
 	protected void fireActionExecutedListener(final AccionExecutedEvent e) {
 		final AccionExecutedListener[] l = listenerList.getListeners(AccionExecutedListener.class);
 		SwingUtilities.invokeLater(new Runnable() {
-			@SuppressWarnings("unchecked")
 			public void run() {
 				for (int i = 0; i < l.length; i++) {
 					l[i].accionExcecuted(e);

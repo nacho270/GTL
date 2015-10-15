@@ -34,6 +34,8 @@ import ar.com.fwcommon.util.ImageUtil;
  */
 public class FWErrorDialog extends JDialog {
 
+	private static final long serialVersionUID = -4927863654897402169L;
+
 	public static Font fuente;
 	private int X = 700;
 	private int Y_1 = 160;

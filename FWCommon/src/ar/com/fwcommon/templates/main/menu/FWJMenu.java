@@ -10,6 +10,8 @@ import ar.com.fwcommon.util.GuiUtil;
 
 public class FWJMenu extends JMenu {
 
+	private static final long serialVersionUID = -1356978843873806271L;
+
 	private MenuDecorator decorator;
 
 	public FWJMenu() {

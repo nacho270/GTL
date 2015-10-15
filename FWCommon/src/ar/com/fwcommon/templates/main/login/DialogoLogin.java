@@ -22,6 +22,8 @@ import ar.com.fwcommon.util.ImageUtil;
 
 public class DialogoLogin extends JDialog {
 
+	private static final long serialVersionUID = -2192496184157996714L;
+
 	private String usuario;
 	private String password;
 	private JLabel lblLogo;

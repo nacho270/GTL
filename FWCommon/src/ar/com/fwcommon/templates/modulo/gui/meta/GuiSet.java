@@ -21,6 +21,9 @@ import ar.com.fwcommon.templates.modulo.model.meta.SingleModel;
  * @param <E> Tipo de Item que se maneja (Accion, Filtro, etc...)
  */
 public abstract class GuiSet<T, E>  extends GuiPanelObservable implements IGuiSet<T, E> {
+
+	private static final long serialVersionUID = 126488689309218466L;
+	
 	private final ModuloTemplate<T, ?> owner;
 	private ListChangeListener elementListChangeListener;
 	protected ModelSet<E> model;

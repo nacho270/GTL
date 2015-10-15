@@ -117,7 +117,7 @@ public class GuiUtil {
 	 * @param item El item a saber si está contenido en la lista.
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static boolean existeItemLista(List lista, Object item) {
 		for(int i = 0; i < lista.size(); i++)
 			if(lista.get(i).equals(item))
@@ -132,7 +132,7 @@ public class GuiUtil {
 	 * @param disable Flag que determina si se deshabilitará el combobox antes de llenarlo
 	 *          para impedir que lance el evento 'itemStateChanged'.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static void llenarCombo(JComboBox c, List l, boolean disable) {
 		Object elementoActual;
 		int predeterminado = -1;

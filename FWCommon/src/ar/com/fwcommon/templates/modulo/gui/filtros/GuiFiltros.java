@@ -33,8 +33,10 @@ import ar.com.fwcommon.templates.modulo.resources.ModuleSettingsManager;
  * 
  * @param <T> Tipo de datos que va a filtrar (datos de la tabla)
  */
-@SuppressWarnings("serial")
 public class GuiFiltros<T> extends GuiSet<T, Filtro<T, ?>> implements IGuiFiltros<T> {
+
+	private static final long serialVersionUID = -2739467467312538102L;
+	
 	private static final int MAX_FILTERS_PER_LINE = 500;
 	private Map<String, JPanel> filterGroups;
 	private List<JPanel> panelesFilas;
@@ -164,8 +166,8 @@ public class GuiFiltros<T> extends GuiSet<T, Filtro<T, ?>> implements IGuiFiltro
 		Component[] components = getPanelesFilas().get(filtro.getRenderingInformation().getFila()).getComponents();
 		for (int i = 0; i < components.length; i++) {
 			if (components[i] instanceof GuiFiltro) {
-				if (filtro.equals(((GuiFiltro)components[i]).getFiltro())) {
-					((GuiFiltro)components[i]).removeFilterChangeListener(getFilterChangeListener());
+				if (filtro.equals(((GuiFiltro<?,?>)components[i]).getFiltro())) {
+					((GuiFiltro<?,?>)components[i]).removeFilterChangeListener(getFilterChangeListener());
 					remove(components[i]);
 					this.validate();
 					return;

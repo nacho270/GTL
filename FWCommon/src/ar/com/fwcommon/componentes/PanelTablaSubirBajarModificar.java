@@ -23,6 +23,8 @@ import javax.swing.event.ListSelectionListener;
 
 public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 
+	private static final long serialVersionUID = 6074447076211920439L;
+
 	private FWJTable tabla;
 	private FWSoloBotonesSubirBajarModificar botonesTabla;
 	private JPanel panBotonesExtra;
@@ -48,6 +50,8 @@ public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 		// Botones tabla
 		botonesTabla = new FWSoloBotonesSubirBajarModificar(tabla) {
 
+			private static final long serialVersionUID = -4282523848077400301L;
+			
 			@Override
 			public boolean validarSubir() {
 				return PanelTablaSubirBajarModificar.this.validarSubir();
@@ -115,6 +119,8 @@ public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 		// Botones tabla
 		botonesTabla = new FWSoloBotonesSubirBajarModificar(tabla) {
 
+			private static final long serialVersionUID = 5117044769030341882L;
+			
 			@Override
 			public boolean validarSubir() {
 				return PanelTablaSubirBajarModificar.this.validarSubir();

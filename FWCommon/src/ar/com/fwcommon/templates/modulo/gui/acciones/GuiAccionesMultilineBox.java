@@ -23,12 +23,12 @@ import ar.com.fwcommon.templates.modulo.model.listeners.AccionExecutedListener;
  * GUI que contiene todas las acciones. Las acciones se encuentran agrupadas en
  * frames que ocupan todas las filas
  * 
- * 
- * 
  * @param <T> Tipo de datos que van a recibir las acciones
  */
-@SuppressWarnings("serial")
 public class GuiAccionesMultilineBox<T> extends GuiSet<T, Accion<T>> implements IGuiAcciones<T> {
+
+	private static final long serialVersionUID = 3081316271387044842L;
+	
 	private Map<String, JPanel> groupComponents;
 	
 	public GuiAccionesMultilineBox(ModuloTemplate<T, ?> owner, Acciones<T> acciones) {
@@ -112,7 +112,7 @@ public class GuiAccionesMultilineBox<T> extends GuiSet<T, Accion<T>> implements 
 		Component[] components = getComponents();
 		for (int i = 0; i < components.length; i++) {
 			if (components[i] instanceof GuiAccion) {
-				if (accion.equals(((GuiAccion)components[i]).getAccion())) {
+				if (accion.equals(((GuiAccion<?>)components[i]).getAccion())) {
 					remove(components[i]);
 					this.validate();
 					return;
@@ -167,7 +167,6 @@ public class GuiAccionesMultilineBox<T> extends GuiSet<T, Accion<T>> implements 
 	protected void fireActionExecutedListener(final AccionExecutedEvent e) {
 		final AccionExecutedListener[] l = listenerList.getListeners(AccionExecutedListener.class);
 		SwingUtilities.invokeLater(new Runnable() {
-			@SuppressWarnings("unchecked")
 			public void run() {
 				for (int i = 0; i < l.length; i++) {
 					l[i].accionExcecuted(e);

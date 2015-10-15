@@ -36,6 +36,7 @@ import ar.com.fwcommon.templates.main.FWMainTemplate;
  * Hay otros menues que no (Ayuda/Ventana/Impresion...)
  *   
  */
+@SuppressWarnings("rawtypes")
 public class ManejadorMenues {
 
 	static Logger logger = Logger.getLogger(ManejadorMenues.class);
@@ -58,7 +59,6 @@ public class ManejadorMenues {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	public synchronized static ManejadorMenues getManejadorMenues (FWMainTemplate mainTemplate) {
 		if (_instance != null)
 			return _instance;
@@ -83,7 +83,7 @@ public class ManejadorMenues {
 		MenuModulosPrincipal menuModulosDefault = new MenuModulosPrincipal();
 		menuModulosDefault.setText(grupoDefault.getNombre());
 		menuModulosDefault.getMenuItemCambiarUsuario().addActionListener(mainTemplate.new CambiarUsuarioListener());
-		menuModulosDefault.getMenuItemSalir().addActionListener( mainTemplate.new SalirListener());
+		menuModulosDefault.getMenuItemSalir().addActionListener(mainTemplate.new SalirListener());
 		this.mainTemplate.agregarMenu(menuModulosDefault, 0);
 		Set<GrupoModulos> yaprocesados  = new HashSet<GrupoModulos>();
 		yaprocesados.add(grupoDefault);
@@ -152,7 +152,6 @@ public class ManejadorMenues {
 	 * 
 	 * @param modulo
 	 */
-	@SuppressWarnings("unchecked")
 	public void agregarModulo(Modulo modulo) {
 		
 		if(modulo.isSeparador()) {

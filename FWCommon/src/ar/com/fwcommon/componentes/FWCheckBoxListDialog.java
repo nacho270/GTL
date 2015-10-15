@@ -35,6 +35,7 @@ import ar.com.fwcommon.util.StringUtil;
  * Componente que muestra un cuadro de diálogo con una lista de checkbox.
  * ar.com.fwcommon.componentes.CLCheckBoxList
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class FWCheckBoxListDialog extends JDialog {
 
 	private static final long serialVersionUID = 2516088591238560066L;
@@ -164,10 +165,12 @@ public class FWCheckBoxListDialog extends JDialog {
      * Devuelve el componente CLCheckBoxList asociado.
      * @return checkBoxList El componente CLCheckBoxList asociado.
      */
-    @SuppressWarnings("unchecked")
 	public FWCheckBoxList getCheckBoxList() {
         if(checkBoxList == null) {
             checkBoxList = new FWCheckBoxList() {
+
+            	private static final long serialVersionUID = 6426896695529160785L;
+				
             	@Override
             	public void itemListaSeleccionado(Object item, boolean seleccionado) {
             		FWCheckBoxListDialog.this.itemListaSeleccionado(item, seleccionado) ;
@@ -244,7 +247,6 @@ public class FWCheckBoxListDialog extends JDialog {
      * Devuelve una lista con los valores seleccionados en la CLCheckBoxList.
      * @return La lista de valores seleccionados en la CLCheckBoxList.
      */
-    @SuppressWarnings("unchecked")
 	public List getValoresSeleccionados() {
         return getCheckBoxList().getListSelectedValues();
     }

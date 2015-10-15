@@ -20,8 +20,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import jj2000.j2k.entropy.encoder.ByteOutputBuffer;
-
 /**
  * Boss encargado de majenar todas las operaciones de IO del filesystem
  * 

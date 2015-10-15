@@ -199,20 +199,24 @@ public class NumUtil {
      */
     public static String formatFileSize (long size){
     	Formatter f = new Formatter();
-    	float tempFloat;
-    	if (size < MEGABYTE){
-    		if (size <KILOBYTE){
-    			return size + " bytes";
-    		}
-    		tempFloat = (float)size / KILOBYTE;
-    		return f.format("%,.0f", tempFloat).toString() + " KB";
-    	}else{
-    		if (size > GIGABYTE){
-    			tempFloat = (float)size / GIGABYTE;
-    			return f.format("%,.2f", tempFloat).toString() + " GB";	
-    		}
-    		tempFloat = (float)size / MEGABYTE;
-    		return f.format("%,.2f", tempFloat).toString() + " MB";
+    	try {
+	    	float tempFloat;
+	    	if (size < MEGABYTE){
+	    		if (size <KILOBYTE){
+	    			return size + " bytes";
+	    		}
+	    		tempFloat = (float)size / KILOBYTE;
+	    		return f.format("%,.0f", tempFloat).toString() + " KB";
+	    	}else{
+	    		if (size > GIGABYTE){
+	    			tempFloat = (float)size / GIGABYTE;
+	    			return f.format("%,.2f", tempFloat).toString() + " GB";	
+	    		}
+	    		tempFloat = (float)size / MEGABYTE;
+	    		return f.format("%,.2f", tempFloat).toString() + " MB";
+	    	}
+    	}finally{
+    		f.close();
     	}
     }
     

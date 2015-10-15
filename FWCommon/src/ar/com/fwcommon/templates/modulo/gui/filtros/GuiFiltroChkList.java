@@ -28,7 +28,7 @@ public class GuiFiltroChkList<T, E> extends GuiFiltro<T, List<E>> {
 	private FWCheckBoxListDialog checkBoxList = null;
 	private JButton jButtonMostrarChecks = null;
 
-	public GuiFiltroChkList(ModuloTemplate<T, ? extends Cabecera> owner, FiltroLista<T, E> filtro) {
+	public GuiFiltroChkList(ModuloTemplate<T, ? extends Cabecera<?>> owner, FiltroLista<T, E> filtro) {
 		super(owner, filtro);
 		add(getJButtonMostrarChecks());
 		getCheckBoxList().setValores(filtro.getValoresSeleccionables(), true/*isConservarSeleccion()*/);
@@ -82,7 +82,7 @@ public class GuiFiltroChkList<T, E> extends GuiFiltro<T, List<E>> {
 	 */
 	@Override
 	protected void refreshData() {
-		FiltroLista filtro = (FiltroLista<T,E>)getFiltro();
+		FiltroLista<?,?> filtro = (FiltroLista<T,E>)getFiltro();
 		getCheckBoxList().setValores(filtro.getValoresSeleccionables(), true/*isConservarSeleccion()*/);		
 	}
 	

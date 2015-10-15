@@ -22,13 +22,15 @@ import ar.com.fwcommon.templates.modulo.model.filtros.FiltroRenderingInformation
  * @param <T> Tipo de datos que va a filtrar
  * @param <E> Elementos que se colocarán en el combo
  */
-@SuppressWarnings("serial")
 public class GuiFiltroCmb<T, E> extends GuiFiltro<T, E> {
+
+	private static final long serialVersionUID = -6904337023014374346L;
+	
 	private FiltroRenderingInformation renderInfo;
 	private JLabel jLabelName;
     private JComboBox jComboBox = null;
 
-    public GuiFiltroCmb(ModuloTemplate<T, ? extends Cabecera> owner, FiltroListaOpciones<T, E> filtro) {
+    public GuiFiltroCmb(ModuloTemplate<T, ? extends Cabecera<?>> owner, FiltroListaOpciones<T, E> filtro) {
         super(owner, filtro);
         this.renderInfo = filtro.getRenderingInformation();
         final E value = getFiltro().getValue(); 

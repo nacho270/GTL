@@ -15,6 +15,8 @@ import ar.com.fwcommon.boss.BossEstilos;
 
 public class FWSoloBotonesSubirBajarModificar extends JPanel {
 
+	private static final long serialVersionUID = -9083274287683630520L;
+
 	private JButton btnSubir;
 	private JButton btnBajar;
 	private JButton btnModificar;

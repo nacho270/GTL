@@ -46,7 +46,10 @@ import ar.com.fwcommon.util.DecorateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.ImageUtil;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class FWJTableAnalisis extends FWJTable {
+
+	private static final long serialVersionUID = 1575612557733986294L;
 
 	public static Font fuente;
     public static final int TIPO_GRUPO = 1;
@@ -398,7 +401,6 @@ public class FWJTableAnalisis extends FWJTable {
     /**
      * Reordena las columnas y los datos de la tabla.
      */
-    @SuppressWarnings("unchecked")
 	private void distribuir() {
         Vector secciones = coleccion.getSecciones();
         Vector dataVector = ((DefaultTableModel)getModel()).getDataVector();
@@ -496,7 +498,6 @@ public class FWJTableAnalisis extends FWJTable {
     /**
      * Genera e inserta los cortes de control.
      */
-    @SuppressWarnings("unchecked")
 	private void generarCortesControl() {
         int row = 0;
         int colCorte = 0;
@@ -602,8 +603,6 @@ public class FWJTableAnalisis extends FWJTable {
 			Vector valoresAnteriores = (Vector)getDataVector().get(0);
 			while(row < getRowCount()) {
 				Vector valoresActuales = (Vector)getDataVector().get(row);
-				Object valorActual = valoresActuales.get(col);
-				Object valorAnterior = valoresAnteriores.get(col);
 				
 				// Si hay que cortar
 				if (finGrupo(valoresAnteriores, valoresActuales, col)) {
@@ -655,7 +654,6 @@ public class FWJTableAnalisis extends FWJTable {
      * @param fila
      * @return valores
      */
-    @SuppressWarnings("unchecked")
 	private Vector getValoresFila(int fila) {
         Vector valores = new Vector();
         for(int i = 0; i < coleccion.getGrupo().size(); i++) {
@@ -694,7 +692,6 @@ public class FWJTableAnalisis extends FWJTable {
      * @param colHasta
      * @return
      */
-    @SuppressWarnings("unchecked")
 	private Vector getVectorRelleno(Vector valoresAnteriores, int colHasta) {
         Vector vectorRelleno = new Vector(coleccion.getSize());
         for(int i = 0; i < colHasta; i++)
@@ -1084,7 +1081,6 @@ public class FWJTableAnalisis extends FWJTable {
      * Deja a la tabla en el mismo estado que se encontraba antes de ponerla en
      * modo de análisis.
      */
-    @SuppressWarnings("unchecked")
 	private void procesarDefault() {
         desagruparCeldas();
         analisis = false;
@@ -1147,7 +1143,6 @@ public class FWJTableAnalisis extends FWJTable {
      * @param col
      * @return cortesColS
      */
-    @SuppressWarnings("unchecked")
 	private Vector getCortesCol(Vector cortesControl, int col) {
         Vector cortesCol = new Vector();
         for(Iterator i = cortesControl.iterator(); i.hasNext();) {
@@ -1290,7 +1285,6 @@ public class FWJTableAnalisis extends FWJTable {
      * mayor prioridad.
      * @return cortesPrincipales
      */
-    @SuppressWarnings("unchecked")
 	public Vector getCortesPrincipales() {
         Vector cortesPrincipales = new Vector();
         for(Iterator i = cortesControl.iterator(); i.hasNext();) {
@@ -1306,7 +1300,6 @@ public class FWJTableAnalisis extends FWJTable {
      * de mayor prioridad.
      * @return cortesSecundarios
      */
-    @SuppressWarnings("unchecked")
 	public Vector getCortesSecundarios() {
         Vector cortesSecundarios = new Vector();
         for(Iterator i = cortesControl.iterator(); i.hasNext();) {
@@ -1531,7 +1524,6 @@ public class FWJTableAnalisis extends FWJTable {
             this.coleccion = tipoDato;
         }
 
-        @SuppressWarnings("unchecked")
 		public void add(TipoDatoAnalisis tipoDatoAnalisis) {
             coleccion.add(tipoDatoAnalisis);
         }
@@ -1553,7 +1545,6 @@ public class FWJTableAnalisis extends FWJTable {
             return null;
         }
 
-        @SuppressWarnings("unchecked")
 		public Vector getGrupo() {
             Vector grupo = new Vector();
             for(Iterator i = coleccion.iterator(); i.hasNext();) {
@@ -1564,7 +1555,6 @@ public class FWJTableAnalisis extends FWJTable {
             return grupo;
         }
 
-        @SuppressWarnings("unchecked")
 		public Vector getInfo() {
             Vector info = new Vector();
             for(Iterator i = coleccion.iterator(); i.hasNext();) {
@@ -1575,7 +1565,6 @@ public class FWJTableAnalisis extends FWJTable {
             return info;
         }
 
-        @SuppressWarnings("unchecked")
 		public Vector getDato() {
             Vector dato = new Vector();
             for(Iterator i = coleccion.iterator(); i.hasNext();) {
@@ -1586,7 +1575,6 @@ public class FWJTableAnalisis extends FWJTable {
             return dato;
         }
 
-        @SuppressWarnings("unchecked")
 		public Vector getSecciones() {
             Vector v = new Vector();
             v.addAll(getGrupo());
@@ -1606,7 +1594,10 @@ public class FWJTableAnalisis extends FWJTable {
 
     //Clase Selector
     public class SelectorAnalisis extends JDialog {
-        private FWJTable tablaGrupo;
+
+    	private static final long serialVersionUID = 8203464942551730878L;
+		
+    	private FWJTable tablaGrupo;
         private FWJTable tablaInfo;
         private FWJTable tablaDato;
         private JButton btnDerecha;
@@ -1790,7 +1781,6 @@ public class FWJTableAnalisis extends FWJTable {
          * carga la tabla 'Info.' con los headers de tabla).
          * @param cols
          */
-        @SuppressWarnings("unchecked")
 		public void inicializar() {
             Collections.sort(coleccion.getColeccion(), new ComparadorTipoDatoAnalisis());
         	for(int i = 0; i < coleccion.getSize(); i++) {
@@ -2081,7 +2071,9 @@ public class FWJTableAnalisis extends FWJTable {
     /** Renderer de la tabla */
     private class FWJTableAnalisisRenderer extends FWJTableRenderer {
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+		private static final long serialVersionUID = 3147290356966113907L;
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
             if(analisis /*&& !isSelected*/) {
                 if(isColGrupo(col)) {
@@ -2212,7 +2204,9 @@ public class FWJTableAnalisis extends FWJTable {
 
     private class MultiLineCellRendererAnalisis extends MultiLineCellRenderer {
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+		private static final long serialVersionUID = -1978497457344313850L;
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
             if(analisis) {
                 //color de fondo
@@ -2301,7 +2295,9 @@ public class FWJTableAnalisis extends FWJTable {
     /** Clase para el menú emergente de la tabla */
     private class PopupMenu extends JPopupMenu {
 
-        public PopupMenu() {
+		private static final long serialVersionUID = -1347808587070612393L;
+
+		public PopupMenu() {
             if(permiteSelector) {
                 JMenuItem modo = new JMenuItem();
                 JMenuItem redefinir = new JMenuItem("Redefinir análisis");
@@ -2362,7 +2358,6 @@ public class FWJTableAnalisis extends FWJTable {
      * @param colData
      * @return
      */
-    @SuppressWarnings("unchecked")
 	public Vector getDataPieChart(int filaDesde, int filaHasta, int colCategoria, int colData) {
         Vector categorias = new Vector();
         Vector categoriasTemp = new Vector();
@@ -2410,7 +2405,6 @@ public class FWJTableAnalisis extends FWJTable {
      * @param colData
      * @return
      */
-    @SuppressWarnings("unchecked")
 	public Vector getDataBarChart(int filaDesde, int filaHasta, int colCategorias, int colSeries, int colData) {
         Vector dataCategorias = new Vector();
         Vector dataChart = new Vector();
@@ -2497,7 +2491,6 @@ public class FWJTableAnalisis extends FWJTable {
         return dataVectorResultado;
     }
     
-    @SuppressWarnings("unchecked")
     public void ocultarColumnaInfo(int posicion, boolean ver) {
     	Vector<TipoDatoAnalisis> tiposDatoInfo = coleccion.getInfo();
     	for(TipoDatoAnalisis tipoDatoAnalisis : tiposDatoInfo) {
@@ -2543,7 +2536,6 @@ public class FWJTableAnalisis extends FWJTable {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private List<GrupoCeldas> getGruposCeldas(int fila) {
 		List<GrupoCeldas> gruposCeldasFila = new ArrayList<GrupoCeldas>();
 		if(fila != -1) {

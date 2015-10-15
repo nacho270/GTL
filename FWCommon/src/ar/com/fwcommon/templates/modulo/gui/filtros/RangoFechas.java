@@ -6,6 +6,8 @@ import java.sql.Date;
 
 public class RangoFechas implements Serializable {
 
+	private static final long serialVersionUID = 804373705775450857L;
+
 	private Date fechaDesde;
 	private Date fechaHasta;
 	

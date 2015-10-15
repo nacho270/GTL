@@ -13,6 +13,8 @@ import ar.com.fwcommon.util.StringUtil;
 
 public class FWJTextArea extends JTextArea {
 
+	private static final long serialVersionUID = -7728745107606295149L;
+
 	public FWJTextArea() {
 		super();
 		setLineWrap(true);

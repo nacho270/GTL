@@ -87,8 +87,6 @@ public class Mes implements CloneableAuditoria, Serializable {
 		boolean resultado = false;
 		if(!(mes instanceof Mes))
 			return resultado;
-		if(mes == null)
-			return resultado;
 		else {
 			resultado = (((Mes)mes).getIdMes() == idMes) 
 						&& (((Mes)mes).getNroMes() == nroMes) 

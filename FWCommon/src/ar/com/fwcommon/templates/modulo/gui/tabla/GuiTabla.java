@@ -20,7 +20,6 @@ import javax.swing.event.TableColumnModelListener;
 
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTableAnalisis;
-import ar.com.fwcommon.entidades.EqualsTabla;
 import ar.com.fwcommon.templates.modulo.ModuloTemplate;
 import ar.com.fwcommon.templates.modulo.model.listeners.TableChangeEvent;
 import ar.com.fwcommon.templates.modulo.model.listeners.TableChangeListener;

@@ -28,14 +28,16 @@ import ar.com.fwcommon.templates.modulo.model.filtros.FiltroRenderingInformation
  *
  * @param <T> Tipo de datos que va a filtrar
  */
-@SuppressWarnings("serial")
 public class GuiFiltroNumerico<T> extends GuiFiltro<T, Long> {
+
+	private static final long serialVersionUID = 3325841239668054168L;
+	
 	private static final boolean FILTRO_INCREMENTAL = false;
 	private FiltroRenderingInformation renderInfo;
 	private JLabel jLabelName;
     private JNumericTextField jNumericTextField;
 
-    public GuiFiltroNumerico(ModuloTemplate<T, ? extends Cabecera> owner, FiltroNumerico<T> filtro) {
+    public GuiFiltroNumerico(ModuloTemplate<T, ? extends Cabecera<?>> owner, FiltroNumerico<T> filtro) {
         super(owner, filtro);
         this.renderInfo = filtro.getRenderingInformation();
         construct(filtro);

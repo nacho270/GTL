@@ -15,7 +15,7 @@ public class GuiFiltroFactory {
 		super();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> GuiFiltro<T, ?> createGuiFiltro(ModuloTemplate<T, ?> owner, Filtro<T, ?> filtro) {
 		if (filtro instanceof FiltroListaOpciones){
 			return new GuiFiltroCmb(owner, (FiltroListaOpciones<T, ?>)filtro);

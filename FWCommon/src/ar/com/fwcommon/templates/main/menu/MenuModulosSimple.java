@@ -6,8 +6,6 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
-import ar.com.fwcommon.util.ImageUtil;
-
 @SuppressWarnings("serial")
 public class MenuModulosSimple extends FWJMenu {
 

@@ -2,10 +2,13 @@ package ar.com.fwcommon.componentes.error.validaciones;
 
 import java.io.Serializable;
 
-public abstract class InfoValidacionAbstract implements Serializable
-{
+public abstract class InfoValidacionAbstract implements Serializable {
+	
+	private static final long serialVersionUID = 398242078540181505L;
+	
 	private int codigo;
 	private String mensaje;
+	
 	public  InfoValidacionAbstract(int codigo, String mensaje) {
 		this.codigo = codigo;
 		this.mensaje = mensaje;

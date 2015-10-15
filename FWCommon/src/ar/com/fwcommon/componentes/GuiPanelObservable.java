@@ -1,6 +1,7 @@
 package ar.com.fwcommon.componentes;
 
 import java.util.Vector;
+
 import javax.swing.JPanel;
 
 /**
@@ -38,7 +39,9 @@ import javax.swing.JPanel;
  */
 public class GuiPanelObservable extends JPanel {
 
-    private boolean changed = false;
+	private static final long serialVersionUID = -3180396909193346110L;
+
+	private boolean changed = false;
     private Vector<GuiPanelObserver> obs;
 
     /** Construct an Observable with zero Observers. */

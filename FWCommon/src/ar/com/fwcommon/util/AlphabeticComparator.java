@@ -2,6 +2,7 @@ package ar.com.fwcommon.util;
 
 import java.util.Comparator;
 
+@SuppressWarnings("rawtypes")
 public class AlphabeticComparator implements Comparator {
 
 	/**
