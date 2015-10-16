@@ -9,7 +9,8 @@ public enum ETipoItemFactura {
 	PERCEPCION("PERCEPCION"),
 	STOCK("STOCK"),
 	TELA_CRUDA("TELA CRUDA"),
-	OTRO("OTRO");
+	OTRO("OTRO"),
+	CORRECCION_FACTURA("CORRECCION");
 
 	private ETipoItemFactura(String descripcion) {
 		this.descripcion = descripcion;

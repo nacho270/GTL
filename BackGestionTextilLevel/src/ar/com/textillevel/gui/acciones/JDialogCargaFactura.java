@@ -58,11 +58,13 @@ import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
+import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaBonificacion;
+import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaCorreccion;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaOtro;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaPercepcion;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaPrecioMateriaPrima;
@@ -197,15 +199,15 @@ public class JDialogCargaFactura extends JDialog {
 		setParametrosGenerales(parametrosGenerales2);
 		setCorrecionFactura(correccion);
 		construct();
-		getPanelBotonesFactura().setVisible(false);
+		if(consulta) {
+			getPanelBotonesFactura().setVisible(false);
+		}
 		llenarDatosCliente(correccion.getCliente());
 		if(correccion instanceof NotaCredito){
 			getTxtNrosGenericos().setText(getNrosFacturasRelacionadas( ((NotaCredito) correccion).getFacturasRelacionadas()));
 		}
-//		getCmbCondicionVenta().setSelectedItem(factura.getCondicionDeVenta());
 		getCmbCondicionVenta().setEnabled(!consulta);
 		getPanelTotales().setVisible(true);
-		// getLblTipoFactura().setVisible(false);
 		
 		if(getCorrecionFactura().getAnulada()==true){
 			setConsulta(consulta);
@@ -225,21 +227,18 @@ public class JDialogCargaFactura extends JDialog {
 			}
 			updateTotalesCorrecion();
 			
-			getTablaProductos().addRow(getFilaCorreccion(correccion,false));
-			// GuiUtil.setEstadoPanel(getPanelAcciones(), false);
-			if(consulta){
-				GuiUtil.setEstadoPanel(getPanelBotonesFactura(), false);
-			}
+			llenarTablaProductos();
 			GuiUtil.setEstadoPanel(getPanelTablaProductos(), !consulta);
+			getBtnQuitarProducto().setEnabled(false);
 			getBtnGuardar().setVisible(!consulta);
-			//getBtnImprimir().setVisible(false);
 			setConsulta(consulta);
 			getLblTipoFactura().setVisible(false);
 			setTitle("Consultar " + getTipoCorrecion().getDescripcion());
-			//getTxtFechaHoy().setText(DateUtil.dateToString(correccion.getFechaEmision(), DateUtil.SHORT_DATE));
 			getPanelFecha().setSelectedDate(correccion.getFechaEmision());
 			getPanelFecha().setEnabled(!consulta);
+			getBtnImprimir().setVisible(consulta);
 		}
+		
 		
 		setEdicion(!consulta);
 	}
@@ -271,12 +270,23 @@ public class JDialogCargaFactura extends JDialog {
 		// getCmbCondicionVenta().setSelectedItem(factura.getCondicionDeVenta());
 		getCmbCondicionVenta().setEnabled(false);
 		getPanelTotales().setVisible(true);
-		getPanelBotonesFactura().setVisible(false);
-		getTablaProductos().addRow(getFilaCorreccion(getCorrecionFactura(),true));
+
+		addItemFacturaCorreccionVacio();
+		llenarTablaProductos();
+
 		getLblTipoFactura().setVisible(false);
 		setTitle("Agregar " + getTipoCorrecion().getDescripcion());
 		getBtnImprimir().setVisible(false);
 		setEdicion(false);
+	}
+
+	private void addItemFacturaCorreccionVacio() {
+		ItemFacturaCorreccion ifo = new ItemFacturaCorreccion();
+		ifo.setCantidad(new BigDecimal(1));
+		ifo.setUnidad(EUnidad.UNIDAD);
+		ifo.setPrecioUnitario(BigDecimal.ZERO);
+		ifo.setImporte(BigDecimal.ZERO);
+		getCorrecionFactura().getItems().add(ifo);
 	}
 
 	/**
@@ -409,7 +419,6 @@ public class JDialogCargaFactura extends JDialog {
 			dispose();
 			return;
 		}
-		getFactura().setItems(new ArrayList<ItemFactura>());
 		getFactura().setCliente(getCliente());
 		construct();
 		//agregarSeguroYTubos(llevaSeguro);
@@ -510,7 +519,6 @@ public class JDialogCargaFactura extends JDialog {
 			}
 		}
 		//Por cada par <producto, total> del map genero un item factura producto y lo pongo en la tabla
-		getFactura().setItems(new ArrayList<ItemFactura>());
 		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogCargaFactura.this, getCliente());
 		for (Producto p : mapTotalPorProducto.keySet()) {
 			ItemFacturaProducto itp = new ItemFacturaProducto();
@@ -586,17 +594,16 @@ public class JDialogCargaFactura extends JDialog {
 
 	private void calcularSubTotal() {
 		double suma = 0;
-		for (ItemFactura it : getFactura().getItems()) {
+		for (ItemFactura it : getDocContable().getItems()) {
 			suma += it.getImporte().doubleValue();
 		}
-		getFactura().setMontoSubtotal(new BigDecimal(String.valueOf(suma)));
-		getTxtSubTotal().setText(getDecimalFormat().format(suma));
-		// double impuestos = (getTxtImpuestos().getText().length() > 0 &&
-		// GenericUtils.esNumerico(getTxtImpuestos().getText())) ?
-		// Double.valueOf(getTxtImpuestos().getText()) : 0;
-		// getTxtSubTotalConImpuestos().setText(String.valueOf(suma +
-		// impuestos));
-		updateTotales();
+		getDocContable().setMontoSubtotal(new BigDecimal(String.valueOf(Math.abs(suma))));
+		getTxtSubTotal().setText((getCorrecionFactura() instanceof NotaCredito && suma >0?"-":"") +  getDecimalFormat().format(suma));
+		if(isFactura()) {
+			updateTotales();
+		} else {
+			updateTotalesCorrecion();
+		}
 	}
 
 	private void llenarDatosCliente(Cliente cliente) {
@@ -611,7 +618,7 @@ public class JDialogCargaFactura extends JDialog {
 
 	private void llenarTablaProductos() {
 		getTablaProductos().removeAllRows();
-		for (ItemFactura ifactura : getFactura().getItems()) {
+		for (ItemFactura ifactura : getDocContable().getItems()) {
 			if (ifactura instanceof ItemFacturaProducto) {
 				getTablaProductos().addRow(getFilaProducto((ItemFacturaProducto) ifactura));
 				continue;
@@ -660,9 +667,24 @@ public class JDialogCargaFactura extends JDialog {
 			if(ifactura instanceof ItemFacturaOtro){
 				getTablaProductos().addRow(getFilaItemOtro((ItemFacturaOtro)ifactura));
 			}
+			if(ifactura instanceof ItemFacturaCorreccion){
+				getTablaProductos().addRow(getFilaItemCorreccion((ItemFacturaCorreccion)ifactura));
+			}
 		}
 		bloquearFilasSeguroYPercepcion();
 		calcularSubTotal();
+	}
+
+	private Object[] getFilaItemCorreccion(ItemFacturaCorreccion ifactura) {
+		Object[] fila = new Object[CANT_COLS_TBL_FACTURA];
+		fila[COL_CANTIDAD] = ifactura.getCantidad();
+		fila[COL_ARTICULO] = "";
+		fila[COL_DESCRIPCION] = ifactura.getDescripcion();
+		fila[COL_UNIDAD] = ifactura.getUnidad().getDescripcion();
+		fila[COL_PRECIO_UNITARIO] = ifactura.getPrecioUnitario();
+		fila[COL_IMPORTE] =(ifactura.getImporte().doubleValue()<1?String.valueOf(ifactura.getImporte()): getDecimalFormat().format(ifactura.getImporte().doubleValue()));
+		fila[COL_OBJ_FACTURA] = ifactura;
+		return fila;
 	}
 
 	private Object[] getFilaItemOtro(ItemFacturaOtro ifactura) {
@@ -739,35 +761,6 @@ public class JDialogCargaFactura extends JDialog {
 		fila[COL_PRECIO_UNITARIO] = ifactura.getPrecioUnitario();// getDecimalFormat().format(ifactura.getPrecioUnitario());
 		fila[COL_IMPORTE] =(ifactura.getImporte().doubleValue()<1?String.valueOf(ifactura.getImporte()): getDecimalFormat().format(ifactura.getImporte().doubleValue()));
 		fila[COL_OBJ_FACTURA] = ifactura;
-		return fila;
-	}
-	
-	private Object[] getFilaCorreccion(CorreccionFactura cf, boolean isAgregar) {
-		Object[] fila = new Object[CANT_COLS_TBL_FACTURA];
-		fila[COL_CANTIDAD] = 1;
-		if(!isAgregar){
-			fila[COL_DESCRIPCION] = cf.getDescripcion();
-		}else{
-			fila[COL_DESCRIPCION] = "";
-			/*CeldaTablaProductos celda = new CeldaTablaProductos(0, COL_DESCRIPCION);
-			getMapFilaCantidadErrores().put(celda, 1);*/
-			getTablaProductos().setBackgroundCell(0, COL_DESCRIPCION, Color.YELLOW);
-		}
-		fila[COL_CANTIDAD] = new BigDecimal(1);
-		BigDecimal montoSubtotal = cf.getMontoSubtotal();
-		if(montoSubtotal!=null){
-			montoSubtotal = montoSubtotal.multiply(new BigDecimal(getCorrecionFactura() instanceof NotaCredito?-1:1));
-			fila[COL_PRECIO_UNITARIO] = montoSubtotal;// getDecimalFormat().format(montoSubtotal);
-			fila[COL_IMPORTE] = montoSubtotal != null ? getDecimalFormat().format(montoSubtotal.doubleValue()) : null;
-		} else {
-			BigDecimal monto = cf.getMontoTotal();
-			if (monto!=null){
-				monto = monto.multiply(new BigDecimal(getCorrecionFactura() instanceof NotaCredito?-1:1));
-				fila[COL_PRECIO_UNITARIO] = monto; //getDecimalFormat().format(monto);
-				fila[COL_IMPORTE] = getDecimalFormat().format(monto);
-			}
-		}
-		fila[COL_OBJ_FACTURA] = cf;
 		return fila;
 	}
 
@@ -907,10 +900,8 @@ public class JDialogCargaFactura extends JDialog {
 
 				@Override
 				public void newRowSelected(int newRow, int oldRow) {
-					getBtnQuitarProducto().setEnabled(true);
+					getBtnQuitarProducto().setEnabled(newRow != -1);
 				}
-				
-				
 //				
 //				LO SAQUE PORQUE NO ME PINTA EL FONDO DE LAS CELDAS
 //				
@@ -952,23 +943,12 @@ public class JDialogCargaFactura extends JDialog {
 									newValue = (BigDecimal)valueAt;
 								}
 								double cantidad = newValue.doubleValue();
-								if (getCorrecionFactura() == null) {
-									ItemFactura itemModificado = (ItemFactura) getValueAt(row, COL_OBJ_FACTURA);
-									actualizarItemFactura(pu * cantidad,cantidad,pu, itemModificado);
+								ItemFactura itemModificado = (ItemFactura) getValueAt(row, COL_OBJ_FACTURA);
+								actualizarItemFactura(pu * cantidad,cantidad,pu, itemModificado);
+								if (isFactura()) {
 									actualizarSeguro();
-									calcularSubTotal();
-								} else {
-									if(getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito){
-										pu = pu *-1;
-									}
-									BigDecimal montoSubtotal = new BigDecimal(pu * cantidad);
-									getCorrecionFactura().setMontoSubtotal(montoSubtotal);
-									getTxtSubTotal().setText(String.valueOf(montoSubtotal.doubleValue()));
-									updateTotalesCorrecion();
 								}
-//								if(getCorrecionFactura()!=null && getCorrecionFactura() instanceof NotaCredito){
-//									setValueAt(getDecimalFormat().format(new BigDecimal(pu)), row, COL_PRECIO_UNITARIO);
-//								}
+								calcularSubTotal();
 								setValueAt(getDecimalFormat().format(new BigDecimal(pu * cantidad)), row, COL_IMPORTE);
 							}else{
 								setBackgroundCell(row, cell, Color.YELLOW);
@@ -999,20 +979,6 @@ public class JDialogCargaFactura extends JDialog {
 								}*/
 								setBackgroundCell(0, COL_DESCRIPCION, Color.WHITE);
 								actualizarItemFactura(descripcion, itemModificado);
-							} else if (getValueAt(row, COL_OBJ_FACTURA) instanceof CorreccionFactura) {
-								String descripcion = (String) getValueAt(row, COL_DESCRIPCION);
-								if (descripcion.trim().length() == 0) {
-									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Se debe especificar la descripción", "Error");
-									return;
-								}
-								/*CeldaTablaProductos celda = new CeldaTablaProductos(0, COL_DESCRIPCION);
-								Integer cantErrorFila = getMapFilaCantidadErrores().get(celda);
-								if(cantErrorFila != null && cantErrorFila > 0){
-									cantErrorFila--;
-									getMapFilaCantidadErrores().put(celda, cantErrorFila);
-								}*/
-								setBackgroundCell(0, COL_DESCRIPCION, Color.WHITE);
-								getCorrecionFactura().setDescripcion(descripcion);
 							}
 							return;
 						}
@@ -1035,7 +1001,7 @@ public class JDialogCargaFactura extends JDialog {
 									newValue = (BigDecimal)valueAt;
 								}
 								double pu = newValue.doubleValue();
-								if (getCorrecionFactura() == null){
+								if (isFactura()){
 									ItemFactura itemModificado = (ItemFactura) getValueAt(row, COL_OBJ_FACTURA);
 									if(itemModificado instanceof ItemFacturaPrecioMateriaPrima){
 										PrecioMateriaPrima pm = ((ItemFacturaPrecioMateriaPrima)itemModificado).getPrecioMateriaPrima();
@@ -1086,14 +1052,18 @@ public class JDialogCargaFactura extends JDialog {
 			};
 			tablaProductos.setReorderingAllowed(false);
 			tablaProductos.setStringColumn(COL_ARTICULO, "Articulo", 230, 130, true);
-			tablaProductos.setFloatColumn(COL_CANTIDAD, "Cantidad",0f,9999999999999f, 50,  getCorrecionFactura()!=null);
+			tablaProductos.setFloatColumn(COL_CANTIDAD, "Cantidad",0f,9999999999999f, 50,  !isFactura());
 			tablaProductos.setStringColumn(COL_UNIDAD, "Unidad", 150, 50, true);
 			tablaProductos.setStringColumn(COL_DESCRIPCION, "Descripcion", 150, 280, false);
-			tablaProductos.setFloatColumn(COL_PRECIO_UNITARIO, "Precio Unitario",0f,9999999999999f, 100, tipoCorrecion == null);
+			tablaProductos.setFloatColumn(COL_PRECIO_UNITARIO, "Precio Unitario",0f,9999999999999f, 100, isFactura());
 			tablaProductos.setStringColumn(COL_IMPORTE, "Importe", 150, 100, true);
 			tablaProductos.setStringColumn(COL_OBJ_FACTURA, "", 0, 0, true);
 		}
 		return tablaProductos;
+	}
+
+	private boolean isFactura() {
+		return getCorrecionFactura() == null;
 	}
 
 	private FWJTextField getTxtSubTotal() {
@@ -1317,7 +1287,7 @@ public class JDialogCargaFactura extends JDialog {
 			lblTipoDocumento.setPreferredSize(new Dimension(160, 20));
 			lblTipoDocumento.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			lblTipoDocumento.setHorizontalAlignment(JLabel.CENTER);
-			if (getCorrecionFactura() != null) {
+			if (!isFactura()) {
 				lblTipoDocumento.setText(getCorrecionFactura().getTipo().getDescripcion());
 			} else if (getFactura() != null || getRemitos() != null) {
 				lblTipoDocumento.setText("FACTURA");
@@ -1348,7 +1318,7 @@ public class JDialogCargaFactura extends JDialog {
 				label = getLblElegirFactura();
 			}
 			panelDatosFactura.add(label, GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			if ((getCorrecionFactura() != null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_DEBITO) || (getFactura()!=null && getFactura().getRemitos()!=null) ) {
+			if ((!isFactura() && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_DEBITO) || (getFactura()!=null && getFactura().getRemitos()!=null) ) {
 				panelDatosFactura.add(getPnlNroRemito(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			}else{
 				panelDatosFactura.add(getTxtNrosGenericos(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
@@ -1453,50 +1423,54 @@ public class JDialogCargaFactura extends JDialog {
 			btnAgregarProducto.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					JDialogAgregarItemFactura jdaif = new JDialogAgregarItemFactura(JDialogCargaFactura.this, getRemitos()==null?1:getCantidadPiezasRemito(), 
-																		getCliente(), getParametrosGenerales().getPrecioPorTubo(), 
-																		getParametrosGenerales().getPorcentajeSeguro());
-					jdaif.setVisible(true);
-					if (jdaif.isAcepto()) {
-						ItemFactura it = jdaif.getItemFacturaSeleccionado();
-
-						if (it instanceof ItemFacturaSeguro) {
-							if (haySeguro()) {
-								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado el seguro.", "Error");
-								return;
+					if(isFactura()) {
+						JDialogAgregarItemFactura jdaif = new JDialogAgregarItemFactura(JDialogCargaFactura.this, getRemitos()==null?1:getCantidadPiezasRemito(), 
+								getCliente(), getParametrosGenerales().getPrecioPorTubo(), 
+								getParametrosGenerales().getPorcentajeSeguro());
+						jdaif.setVisible(true);
+						if (jdaif.isAcepto()) {
+							ItemFactura it = jdaif.getItemFacturaSeleccionado();
+							
+							if (it instanceof ItemFacturaSeguro) {
+								if (haySeguro()) {
+									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado el seguro.", "Error");
+									return;
+								}
+							}
+							
+							if (it instanceof ItemFacturaTubo) {
+								if (hayTubos()) {
+									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se han cargado los tubos.", "Error");
+									return;
+								}
+							}
+							
+							if (it instanceof ItemFacturaPercepcion) {
+								if (hayPercepcion()) {
+									FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado la percepción.", "Error");
+									return;
+								}
+							}
+							
+							List<ItemFactura> items = new ArrayList<ItemFactura>(getFactura().getItems());
+							getFactura().getItems().clear();
+							ItemFacturaSeguro its = null;
+							for(ItemFactura item : items){
+								if(item instanceof ItemFacturaSeguro){
+									its = (ItemFacturaSeguro) item;
+								}else{
+									getFactura().getItems().add(item);
+								}
+							}
+							getFactura().getItems().add(it);
+							if(its!=null){
+								getFactura().getItems().add(its);
 							}
 						}
-
-						if (it instanceof ItemFacturaTubo) {
-							if (hayTubos()) {
-								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se han cargado los tubos.", "Error");
-								return;
-							}
-						}
-						
-						if (it instanceof ItemFacturaPercepcion) {
-							if (hayPercepcion()) {
-								FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "Ya se ha cargado la percepción.", "Error");
-								return;
-							}
-						}
-
-						List<ItemFactura> items = new ArrayList<ItemFactura>(getFactura().getItems());
-						getFactura().getItems().clear();
-						ItemFacturaSeguro its = null;
-						for(ItemFactura item : items){
-							if(item instanceof ItemFacturaSeguro){
-								its = (ItemFacturaSeguro) item;
-							}else{
-								getFactura().getItems().add(item);
-							}
-						}
-						getFactura().getItems().add(it);
-						if(its!=null){
-							getFactura().getItems().add(its);
-						}
-						llenarTablaProductos();
+					} else {
+						addItemFacturaCorreccionVacio();
 					}
+					llenarTablaProductos();
 				}
 			});
 		}
@@ -1539,7 +1513,7 @@ public class JDialogCargaFactura extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (getTablaProductos().getSelectedRow() > -1) {
 						ItemFactura itf = (ItemFactura) getTablaProductos().getValueAt(getTablaProductos().getSelectedRow(), COL_OBJ_FACTURA);
-						getFactura().getItems().remove(itf);
+						getDocContable().getItems().remove(itf);
 						getTablaProductos().removeRow(getTablaProductos().getSelectedRow());
 						calcularSubTotal();
 					} else {
@@ -1551,6 +1525,14 @@ public class JDialogCargaFactura extends JDialog {
 		return btnQuitarProducto;
 	}
 
+	private DocumentoContableCliente getDocContable() {
+		if(getFactura() != null) {
+			return getFactura();
+		} else {
+			return getCorrecionFactura();
+		}
+	}
+	
 	private JPanel getPanelTotales() {
 		if (panelTotales == null) {
 			panelTotales = new JPanel();
@@ -1603,7 +1585,7 @@ public class JDialogCargaFactura extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(!hayErrores()){
 						boolean okImprimir = false;
-						if (getCorrecionFactura() == null) {
+						if (isFactura()) {
 							if(validarFecha()){
 								if (getFactura().getItems().size() > 0) {
 									okImprimir = guardarFactura();
@@ -1623,7 +1605,6 @@ public class JDialogCargaFactura extends JDialog {
 								if(okImprimir){
 									FWJOptionPane.showInformationMessage(JDialogCargaFactura.this, "La " + getCorrecionFactura().getTipo().getDescripcion() + " se ha guardado con éxito", "Alta de nota de crédito y débito");
 								}else{
-									dispose();
 									return;
 								}
 							}
@@ -1666,9 +1647,19 @@ public class JDialogCargaFactura extends JDialog {
 			FWJOptionPane.showErrorMessage(this, "Debe especificar el monto", "Error");
 			return false;
 		}
-		if(getCorrecionFactura() instanceof NotaCredito && ((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().size()==0){
+		if(getCorrecionFactura() instanceof NotaCredito && ((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().isEmpty()){
 			FWJOptionPane.showErrorMessage(this, "Debe elegir las facturas relacionadas", "Error");
 			return false;
+		}
+		if(getCorrecionFactura().getItems().isEmpty()) {
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar al menos un ítem.", "Error");
+			return false;
+		}
+		for(ItemFactura i : getCorrecionFactura().getItems()) {
+			if(StringUtil.isNullOrEmpty(i.getDescripcion())) {
+				FWJOptionPane.showErrorMessage(this, "Debe completar la Descripción de todos los ítems.", "Error");
+				return false;
+			}
 		}
 		if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
 			getCorrecionFactura().setPorcentajeIVAInscripto(new BigDecimal(getTxtPorcentajeIVA().getText().replace(',', '.')));
@@ -1679,14 +1670,19 @@ public class JDialogCargaFactura extends JDialog {
 		}else{
 			((NotaCredito)getCorrecionFactura()).setMontoSobrante(new BigDecimal(getCorrecionFactura().getMontoTotal().doubleValue()));
 		}
-		getCorrecionFactura().setDescripcion((String)getTablaProductos().getValueAt(0, COL_DESCRIPCION));
+		//Seteo la descripción de la CF a partir de la de los items
+		List<String> descrItemList = new ArrayList<String>();
+		for(ItemFactura i : getCorrecionFactura().getItems()) {
+			descrItemList.add(i.getDescripcion());
+		}
+		getCorrecionFactura().setDescripcion(StringUtil.getCadena(descrItemList, " / "));
+
 		long longFecha = 0;
 		if(GenericUtils.esHoy(new java.sql.Date(getPanelFecha().getDate().getTime()))){//hoy
 			longFecha = DateUtil.getAhora().getTime();
 		}else{
 			longFecha=getPanelFecha().getDate().getTime();
 		}
-		arreglarCorreccion();
 		getCorrecionFactura().setFechaEmision(new Timestamp(longFecha));
 		getCorrecionFactura().setCliente(getCliente());
 		getCorrecionFactura().setTipoFactura(getCliente().getPosicionIva().getTipoFactura());
@@ -1702,20 +1698,6 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		
 		return true;
-	}
-
-	private void arreglarCorreccion() {
-		if(getCorrecionFactura() instanceof NotaCredito){
-			if(getCorrecionFactura().getMontoTotal() != null){
-				getCorrecionFactura().setMontoTotal(getCorrecionFactura().getMontoTotal().multiply(new BigDecimal(-1)));
-			}
-			if(getCorrecionFactura().getMontoSubtotal() != null){
-				getCorrecionFactura().setMontoSubtotal(getCorrecionFactura().getMontoSubtotal().multiply(new BigDecimal(-1)));
-			}
-			if(((NotaCredito)getCorrecionFactura()).getMontoSobrante()!=null){
-				((NotaCredito)getCorrecionFactura()).setMontoSobrante(((NotaCredito)getCorrecionFactura()).getMontoSobrante().multiply(new BigDecimal(-1)));
-			}
-		}
 	}
 
 	private boolean guardarFactura() {
@@ -1872,8 +1854,7 @@ public class JDialogCargaFactura extends JDialog {
 		double ivaInsc = getCorrecionFactura().getTotalIVA();
 		getTxtImporteIVAInscripto().setText( (getCorrecionFactura() instanceof NotaCredito && ivaInsc >0?"-":"") +  getDecimalFormat().format(ivaInsc));
 		total += ivaInsc;
-		getCorrecionFactura().setMontoTotal(new BigDecimal(total * (getCorreccionFacade() instanceof NotaCredito?-1:1)));
-		// getFactura().setMontoImpuestos(montoImpuestos)
+		getCorrecionFactura().setMontoTotal(new BigDecimal(total));
 		getTxtTotal().setText((getCorrecionFactura() instanceof NotaCredito && total > 0?"-":"") + getDecimalFormat().format(total));
 	}
 
@@ -1956,7 +1937,7 @@ public class JDialogCargaFactura extends JDialog {
 	}
 
 	private void actualizarItemFactura(double importe, double cantidad, double precioUnitario, ItemFactura itemModificado) {
-		for (ItemFactura it : getFactura().getItems()) {
+		for (ItemFactura it : getDocContable().getItems()) {
 			if (it.equals(itemModificado)) {
 				it.setImporte(new BigDecimal(importe));
 				it.setCantidad(new BigDecimal(cantidad));
@@ -1967,7 +1948,7 @@ public class JDialogCargaFactura extends JDialog {
 	}
 	
 	private void actualizarItemFactura(String descripcion, ItemFactura itemModificado) {
-		for (ItemFactura it : getFactura().getItems()) {
+		for (ItemFactura it : getDocContable().getItems()) {
 			if (it.equals(itemModificado)) {
 				it.setDescripcion(descripcion);
 				break;

@@ -30,6 +30,7 @@ public class NotaDebito extends CorreccionFactura {
 	private BigDecimal gastos;
 
 	public NotaDebito(){
+		super();
 		isParaRechazarCheque = false;
 	}
 

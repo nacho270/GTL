@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -27,10 +26,11 @@ public class NotaCredito extends CorreccionFactura {
 	private BigDecimal montoSobrante;
 
 	public NotaCredito() {
+		super();
 		facturasRelacionadas = new ArrayList<Factura>();
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "F_NOTA_CREDITO_P_ID")
 	public List<Factura> getFacturasRelacionadas() {
 		return facturasRelacionadas;

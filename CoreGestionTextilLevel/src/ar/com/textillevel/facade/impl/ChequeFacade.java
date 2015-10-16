@@ -23,11 +23,13 @@ import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
+import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaCorreccion;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionCheque;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionResumen;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.excepciones.EValidacionException;
@@ -187,6 +189,15 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		correccion.setMontoFaltantePorPagar(new BigDecimal(total));
 		correccion.setNroFactura(lastNumeroFactura);
 		correccion.setTipoFactura(cheque.getCliente().getPosicionIva().getTipoFactura());
+
+		ItemFacturaCorreccion ifCorrecc = new ItemFacturaCorreccion();
+		ifCorrecc.setCantidad(new BigDecimal(1));
+		ifCorrecc.setDescripcion(correccion.getDescripcion());
+		ifCorrecc.setImporte(correccion.getMontoSubtotal());
+		ifCorrecc.setUnidad(EUnidad.UNIDAD);
+		ifCorrecc.setPrecioUnitario(correccion.getMontoSubtotal());
+		correccion.getItems().add(ifCorrecc);
+
 		CorreccionFactura correccionNueva = correccionFacade.guardarCorreccionYGenerarMovimiento(correccion,usuario);
 		auditoriaFacade.auditar(usuario, "Rechazo del cheque N°: " + cheque.getNumeracion() + ". Motivo: " + motivoRechazo, EnumTipoEvento.ANULACION, cheque);
 		return correccionNueva;

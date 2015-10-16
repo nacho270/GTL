@@ -37,7 +37,7 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 			return null;
 		}
 		CorreccionFactura c = cors.get(0);
-		c.getCliente().getRazonSocial();
+		doEager(c);
 		if(c instanceof NotaCredito){
 			((NotaCredito)c).getFacturasRelacionadas().size();
 		}
@@ -53,7 +53,7 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 			return null;
 		}
 		CorreccionFactura c = cors.get(0);
-		c.getCliente().getRazonSocial();
+		doEager(c);
 		if(c instanceof NotaCredito){
 			((NotaCredito)c).getFacturasRelacionadas().size();
 		}
@@ -91,7 +91,9 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		q.setParameter("factura", factura);
 		List<NotaCredito> lista = q.getResultList();
 		if(lista != null && !lista.isEmpty()){
-			return lista.get(0);
+			NotaCredito notaCredito = lista.get(0);
+			doEager(notaCredito);
+			return notaCredito;
 		}
 		return null;
 	}
@@ -124,7 +126,13 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		q.setParameter("idCheque", cheque.getId());
 		NotaDebito nota = (NotaDebito) q.getSingleResult();
 		nota.getChequeRechazado().getNombreProveedorSalida();
+		nota.getItems().size();
 		return nota;
+	}
+
+	private void doEager(CorreccionFactura c) {
+		c.getCliente().getRazonSocial();
+		c.getItems().size();
 	}
 
 }

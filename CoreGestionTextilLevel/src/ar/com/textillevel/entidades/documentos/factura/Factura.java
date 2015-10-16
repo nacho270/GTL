@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -35,7 +33,6 @@ public class Factura extends DocumentoContableCliente implements Serializable {
 	private static final long serialVersionUID = 5939934134590090440L;
 
 	private List<RemitoSalida> remitos;
-	private List<ItemFactura> items;
 	private BigDecimal porcentajeIVANoInscripto;
 	private BigDecimal montoFaltantePorPagar;
 	private CondicionDeVenta condicionDeVenta;
@@ -45,23 +42,14 @@ public class Factura extends DocumentoContableCliente implements Serializable {
 	public Factura() {
 		setIdEstado(EEstadoFactura.IMPAGA.getId());
 		setIdEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE.getId());
+		this.items = new ArrayList<ItemFactura>(); 
 	}
 
 	public Factura(Timestamp fechaEmision) {
 		setIdEstado(EEstadoFactura.IMPAGA.getId());
 		setFechaEmision(fechaEmision);
 		setIdEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE.getId());
-	}
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "F_FACTURA_P_ID")
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	public List<ItemFactura> getItems() {
-		return items;
-	}
-
-	public void setItems(List<ItemFactura> items) {
-		this.items = items;
+		this.items = new ArrayList<ItemFactura>(); 
 	}
 
 	@OneToMany(fetch = FetchType.LAZY)

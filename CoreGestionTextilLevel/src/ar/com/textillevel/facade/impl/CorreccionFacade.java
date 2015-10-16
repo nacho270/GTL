@@ -183,9 +183,11 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		docContableFacade.checkAutorizacionAFIP(correccion);
 		correccion = getCorreccionById(correccion.getId()); 
 		if(correccion instanceof NotaCredito){
+			/*
 			if(((NotaCredito)correccion).getFacturasRelacionadas().size()>0){
 				throw new ValidacionException(EValidacionException.NOTA_CREDITO_TIENE_FACTURAS_RELACIONADAS.getInfoValidacion());
 			}
+			*/
 			if(correccionDao.notaCreditoSeUsaEnRecibo((NotaCredito)correccion)){
 				throw new ValidacionException(EValidacionException.NOTA_CREDITO_SE_USA_EN_RECIBO.getInfoValidacion());
 			}

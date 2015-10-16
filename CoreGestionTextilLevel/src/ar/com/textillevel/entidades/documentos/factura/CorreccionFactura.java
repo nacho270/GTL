@@ -1,11 +1,13 @@
 package ar.com.textillevel.entidades.documentos.factura;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
@@ -15,6 +17,8 @@ import ar.com.textillevel.entidades.enums.ETipoFactura;
 public abstract class CorreccionFactura extends DocumentoContableCliente implements Serializable {
 
 	private static final long serialVersionUID = -1548548866392928892L;
+	
+	private static final int LONG_DESCRIPCION = 255; 
 
 	private String descripcion;
 	private Integer idEstado;
@@ -27,6 +31,7 @@ public abstract class CorreccionFactura extends DocumentoContableCliente impleme
 		setIdEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE.getId());
 		this.verificada = false;
 		this.anulada = false;
+		this.items = new ArrayList<ItemFactura>(); 
 	}
 
 	@Column(name="A_DESCRIPCION", nullable=false)
@@ -35,9 +40,13 @@ public abstract class CorreccionFactura extends DocumentoContableCliente impleme
 	}
 
 	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+		if(descripcion != null) {
+			this.descripcion = descripcion.substring(0, Math.min(LONG_DESCRIPCION-1, descripcion.length()));
+		} else {
+			this.descripcion = descripcion;
+		}
 	}
-	
+
 	@Column(name = "A_ID_ESTADO_CORRECCION", nullable = false)
 	public Integer getIdEstado() {
 		return idEstado;

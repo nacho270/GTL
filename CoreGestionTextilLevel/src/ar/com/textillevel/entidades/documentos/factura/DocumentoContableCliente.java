@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -17,11 +18,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
+import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoImpresionDocumento;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -51,6 +56,7 @@ public abstract class DocumentoContableCliente implements Serializable {
 	private String observacionesAFIP;
 	private Integer nroSucursal;
 	private String fechaVencimientoCaeAFIP;
+	protected List<ItemFactura> items;
 
 	@Id
 	@Column(name = "P_ID")
@@ -219,7 +225,18 @@ public abstract class DocumentoContableCliente implements Serializable {
 	public void setNroSucursal(Integer nroSucursal) {
 		this.nroSucursal = nroSucursal;
 	}
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "F_FACTURA_P_ID")
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	public List<ItemFactura> getItems() {
+		return items;
+	}
+
+	public void setItems(List<ItemFactura> items) {
+		this.items = items;
+	}
+
 	@Transient
 	public abstract ETipoDocumento getTipoDocumento();
 

@@ -53,9 +53,9 @@ import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
+import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper.ResultProductosTO;
-import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAgregarItemFactura extends JDialog {
@@ -188,7 +188,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JComboBox getCmbTipoItemFactura() {
 		if (cmbTipoItemFactura == null) {
 			cmbTipoItemFactura = new JComboBox();
-			GuiUtil.llenarCombo(cmbTipoItemFactura, Arrays.asList(ETipoItemFactura.values()), true);
+			List<ETipoItemFactura> itemsList = new ArrayList<ETipoItemFactura>(Arrays.asList(ETipoItemFactura.values()));
+			itemsList.remove(ETipoItemFactura.CORRECCION_FACTURA); //No aplica a factura
+			GuiUtil.llenarCombo(cmbTipoItemFactura, itemsList, true);
 			cmbTipoItemFactura.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
