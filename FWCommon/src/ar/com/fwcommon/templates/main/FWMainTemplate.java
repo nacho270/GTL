@@ -26,7 +26,7 @@ import ar.com.fwcommon.templates.main.skin.AbstractSkin;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.MiscUtil;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings("rawtypes")
 public abstract class FWMainTemplate<T extends FWLoginManager, V extends IConfigClienteManager> extends AbstractMainTemplate<T> {
 	private static final long serialVersionUID = 1L;
 	
