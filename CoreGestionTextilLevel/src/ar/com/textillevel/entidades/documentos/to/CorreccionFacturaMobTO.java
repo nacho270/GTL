@@ -13,6 +13,7 @@ import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
+import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.to.ItemFacturaTO;
 
 public class CorreccionFacturaMobTO implements Serializable {
@@ -58,26 +59,18 @@ public class CorreccionFacturaMobTO implements Serializable {
 
 	private List<ItemFacturaTO> getItems(CorreccionFactura cf) {
 		List<ItemFacturaTO> items  = new ArrayList<ItemFacturaTO>();
-		ItemFacturaTO unicoItem = new ItemFacturaTO();
-		unicoItem.setCantidad("1");
-		unicoItem.setUnidad("");
-		unicoItem.setDescripcion(cf.getDescripcion());
-		
-		BigDecimal montoSubtotal = cf.getMontoSubtotal();
-		if(montoSubtotal!=null) {
-			montoSubtotal = montoSubtotal.multiply(new BigDecimal(cf instanceof NotaCredito?-1:1));
-			unicoItem.setPrecioUnitario(montoSubtotal.toString());
-			unicoItem.setImporte(montoSubtotal != null ? getDecimalFormat().format(montoSubtotal.doubleValue()) : null);
-		} else {
-			BigDecimal monto = cf.getMontoTotal();
-			if (monto!=null){
-				monto = monto.multiply(new BigDecimal(cf instanceof NotaCredito?-1:1));
-				unicoItem.setPrecioUnitario(monto.toString());
-				unicoItem.setImporte(getDecimalFormat().format(monto));
-			}
+		for(ItemFactura i : cf.getItems()) {
+			ItemFacturaTO itemTO = new ItemFacturaTO();
+			itemTO.setCantidad(i.getCantidad().toString());
+			itemTO.setUnidad(i.getUnidad().getDescripcion());
+			itemTO.setDescripcion(i.getDescripcion());
+			BigDecimal precioUnitario = (cf instanceof NotaCredito) ? i.getPrecioUnitario().multiply(new BigDecimal(-1)) : i.getPrecioUnitario();
+			itemTO.setPrecioUnitario(precioUnitario.toString());
+			BigDecimal importe = (cf instanceof NotaCredito) ? i.getImporte().multiply(new BigDecimal(-1)) : i.getImporte();
+			itemTO.setImporte(getDecimalFormat().format(importe.doubleValue()));
+			items.add(itemTO);
 		}
-		items.add(unicoItem);
-		return items;
+		return items;		
 	}
 
 	public String getNroCorreccion() {
