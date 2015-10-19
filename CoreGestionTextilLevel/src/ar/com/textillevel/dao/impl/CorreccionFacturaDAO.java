@@ -38,9 +38,6 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		}
 		CorreccionFactura c = cors.get(0);
 		doEager(c);
-		if(c instanceof NotaCredito){
-			((NotaCredito)c).getFacturasRelacionadas().size();
-		}
 		return c;
 	}
 
@@ -54,9 +51,6 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		}
 		CorreccionFactura c = cors.get(0);
 		doEager(c);
-		if(c instanceof NotaCredito){
-			((NotaCredito)c).getFacturasRelacionadas().size();
-		}
 		return c;
 	}
 	
@@ -133,6 +127,9 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 	private void doEager(CorreccionFactura c) {
 		c.getCliente().getRazonSocial();
 		c.getItems().size();
+		if(c instanceof NotaCredito){
+			((NotaCredito)c).getFacturasRelacionadas().size();
+		}
 	}
 
 }
