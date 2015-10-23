@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -56,7 +57,7 @@ public class SchedulerBackupDatabase implements Schedulable {
 	    java.sql.Date hoy = DateUtil.getHoy();
 
 
-	    String fileName = DateUtil.getAnio(hoy) + "-" + DateUtil.getMes(hoy) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
+	    String fileName = DateUtil.getAnio(hoy) + "-" + (DateUtil.getMes(hoy) + 1) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
 
 	    String command = "cmd.exe /c \"" +mysqldumpPath + " -u " + username  + " -p"+ pass + " " + database + " -r " + tempFile +"\"";
 	    logger.info("EJECUTANDO: " + command);
@@ -95,6 +96,7 @@ public class SchedulerBackupDatabase implements Schedulable {
 		List<String> nombresArchivosBorrados = new ArrayList<String>();
 		File dirBackupPath = new File(backupPath);
 		File[] listFiles = dirBackupPath.listFiles();
+		Arrays.sort(listFiles);
 		List<File> listFilesParaBorrar = new ArrayList<File>();
 		for(int i=0; i < listFiles.length; i++) {
 			if(listFiles.length - i > dejarUltimosN) {
