@@ -209,7 +209,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:cardBackgroundColor
         */
-        public static final int CardView_cardBackgroundColor = 0;
+        public static int CardView_cardBackgroundColor = 0;
         /**
           <p>
           @attr description
@@ -227,7 +227,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:cardCornerRadius
         */
-        public static final int CardView_cardCornerRadius = 1;
+        public static int CardView_cardCornerRadius = 1;
         /**
           <p>
           @attr description
@@ -245,7 +245,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:cardElevation
         */
-        public static final int CardView_cardElevation = 2;
+        public static int CardView_cardElevation = 2;
         /**
           <p>
           @attr description
@@ -263,7 +263,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:cardMaxElevation
         */
-        public static final int CardView_cardMaxElevation = 3;
+        public static int CardView_cardMaxElevation = 3;
         /**
           <p>
           @attr description
@@ -279,7 +279,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:cardPreventCornerOverlap
         */
-        public static final int CardView_cardPreventCornerOverlap = 5;
+        public static int CardView_cardPreventCornerOverlap = 5;
         /**
           <p>
           @attr description
@@ -295,7 +295,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:cardUseCompatPadding
         */
-        public static final int CardView_cardUseCompatPadding = 4;
+        public static int CardView_cardUseCompatPadding = 4;
         /**
           <p>
           @attr description
@@ -313,7 +313,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:contentPadding
         */
-        public static final int CardView_contentPadding = 6;
+        public static int CardView_contentPadding = 6;
         /**
           <p>
           @attr description
@@ -331,7 +331,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:contentPaddingBottom
         */
-        public static final int CardView_contentPaddingBottom = 10;
+        public static int CardView_contentPaddingBottom = 10;
         /**
           <p>
           @attr description
@@ -349,7 +349,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:contentPaddingLeft
         */
-        public static final int CardView_contentPaddingLeft = 7;
+        public static int CardView_contentPaddingLeft = 7;
         /**
           <p>
           @attr description
@@ -367,7 +367,7 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:contentPaddingRight
         */
-        public static final int CardView_contentPaddingRight = 8;
+        public static int CardView_contentPaddingRight = 8;
         /**
           <p>
           @attr description
@@ -385,6 +385,6 @@ containing a value of this type.
           <p>This is a private symbol.
           @attr name android.support.v7.cardview:contentPaddingTop
         */
-        public static final int CardView_contentPaddingTop = 9;
+        public static int CardView_contentPaddingTop = 9;
     };
 }
