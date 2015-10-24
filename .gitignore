@@ -1,0 +1,11 @@
+.metadata
+TestActivity/bin
+cardview/bin
+cardview/gen
+
+TestActivity/bin/
+cardview/bin/
+cardview/gen/
+cardview/bin/cardview.jar
+*.class
+cardview/bin/classes/android/support/v7/cardview/BuildConfig.class
