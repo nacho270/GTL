@@ -54,6 +54,7 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 
 	private void constructGui() {
 		panTabs.addTab("Información del tipo de artículo", getTabDetalle());
+		getBtnAgregar().setVisible(false);
 	}
 
 	private JPanel getTabDetalle() {
