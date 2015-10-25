@@ -202,7 +202,11 @@ public class ImprimirListaDePreciosHandler {
 									dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 									dTO.setTipoArticulo(gtabe.getTipoArticulo().getNombre().toUpperCase());
 									dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(rce.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
-									dTO.setDescripcion("BASE " + pbe.getGama().getNombre().toUpperCase() + ". " + rcc.toString().toUpperCase() + " COLORES.\n" + rce.toString() + " DE COBERTURA.");
+									if (pbe.getDibujo() == null) {
+										dTO.setDescripcion("BASE " + pbe.getGama().getNombre().toUpperCase() + ". " + rcc.toString().toUpperCase() + " COLORES.\n" + rce.toString() + " DE COBERTURA.");
+									}else{
+										dTO.setDescripcion("BASE " + pbe.getGama().getNombre().toUpperCase() + " - " + pbe.getDibujo().getNombre().toUpperCase() + ".\n" + rcc.toString().toUpperCase() + " COLORES. " + rce.toString() + " DE COBERT.");
+									}
 									definicionesTO.add(dTO);
 								}
 							}

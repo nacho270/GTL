@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
@@ -53,13 +54,29 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 	}
 	
 	@Transient
-	public PrecioBaseEstampado getPrecioBase(GamaColor base) {
-		for(PrecioBaseEstampado p : getPrecios()) {
-			if(p.getGama().equals(base)) {
-				return p;
+	public PrecioBaseEstampado getPrecioBase(GamaColor base, DibujoEstampado dibujo) {
+		if(dibujo == null) {
+			for(PrecioBaseEstampado p : getPrecios()) {
+				if(p.getGama().equals(base)) {
+					return p;
+				}
 			}
+			return null;
+		} else {
+			PrecioBaseEstampado pbeDefault = null;
+			PrecioBaseEstampado pbeConDibujo = null;
+			for(PrecioBaseEstampado p : getPrecios()) {
+				if(p.getGama().equals(base)) {
+					if(p.getDibujo() == null) {
+						pbeDefault = p;
+					}
+					if(p.getDibujo() != null && p.getDibujo().equals(dibujo)) {
+						pbeConDibujo = p;
+					}
+				}
+			}
+			return pbeConDibujo != null ? pbeConDibujo : pbeDefault;
 		}
-		return null;
 	}
 
 	@Transient
@@ -80,7 +97,7 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		VarianteEstampado variante = producto.getVariante();
 		GamaColor gama = variante.getGama();
 		if(gama != null) {
-			PrecioBaseEstampado precioBase = getPrecioBase(gama);
+			PrecioBaseEstampado precioBase = getPrecioBase(gama, producto.getDibujo());
 			if(precioBase != null) {
 				Integer cantColores = variante.getDibujo().getCantidadColores();
 				if(cantColores != null) {
@@ -110,7 +127,6 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		for(PrecioBaseEstampado pbe : getPrecios()) {
 			pbe.aumentarPrecios(porcentajeAumento);
 		}
-		
 	}
 
 }

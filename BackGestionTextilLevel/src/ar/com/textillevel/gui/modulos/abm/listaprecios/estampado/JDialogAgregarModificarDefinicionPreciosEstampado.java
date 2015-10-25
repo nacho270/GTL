@@ -15,6 +15,7 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
@@ -24,6 +25,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloEstampado;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCoberturaEstampado;
+import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.GamaColorFacadeRemote;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.JDialogAgregarModificarDefinicionPrecios;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.PanelTablaRango;
@@ -36,6 +38,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	private static final long serialVersionUID = -6851805146971694269L;
 	
 	private JComboBox cmbBase;
+	private JComboBox cmbDibujo;
 	private DecimalNumericTextField txtCantColoresDesde;
 	private DecimalNumericTextField txtCantColoresHasta;
 	private DecimalNumericTextField txtCoberturaDesde;
@@ -67,6 +70,8 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			panDatosPropios = new JPanel(new GridBagLayout());
 			panDatosPropios.add(new JLabel("Base: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getCmbBase(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panDatosPropios.add(new JLabel("Dibujo: "), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panDatosPropios.add(getCmbDibujo(), GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 			panDatosPropios.add(new JLabel("Cantidad de colores desde : "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panDatosPropios.add(getTxtCantColoresDesde(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 			panDatosPropios.add(new JLabel("Cantidad de colores Hasta : "), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
@@ -173,10 +178,12 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		
 		//Precios Base (Gama)
 		GamaColor base = (GamaColor)getCmbBase().getSelectedItem();  
-		PrecioBaseEstampado precioBase = grupo.getPrecioBase(base);
-		if(precioBase == null) {
+		DibujoEstampado dibujo = (DibujoEstampado) getCmbDibujo().getSelectedItem();
+		PrecioBaseEstampado precioBase = grupo.getPrecioBase(base, dibujo);
+		if(precioBase == null || (precioBase.getDibujo() == null && dibujo != null)) {
 			precioBase = new PrecioBaseEstampado();
 			precioBase.setGama(base);
+			precioBase.setDibujo(dibujo);
 			grupo.getPrecios().add(precioBase);
 			precioBase.setGrupoTipoArticuloBase(grupo);
 		}
@@ -260,8 +267,9 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			if(rangoAnchoArticuloExistente != null) {
 				GrupoTipoArticuloBaseEstampado grupo = ((RangoAnchoArticuloEstampado)rangoAnchoArticuloExistente).getGrupo(getTipoArticulo());
 				if(grupo != null) {
-					PrecioBaseEstampado precioBase = grupo.getPrecioBase(base);
-					if(precioBase != null) {
+					DibujoEstampado dibujo = (DibujoEstampado) getCmbDibujo().getSelectedItem();
+					PrecioBaseEstampado precioBase = grupo.getPrecioBase(base, dibujo);
+					if(precioBase != null && ( (precioBase.getDibujo() == null && dibujo == null) || (precioBase.getDibujo() != null && dibujo != null))) {
 						rangoCantColoresExistente = precioBase.getRangoSolapadoCon(minCantColores, maxCantColores);
 						if(rangoCantColoresExistente != null && (rangoCantColoresSiendoEditado != null && !rangoCantColoresSiendoEditado.equals(rangoCantColoresExistente))) {
 							FWJOptionPane.showErrorMessage(this, "Rango Cantidad de Colores Existente", "Error");
@@ -329,6 +337,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		getTxtCoberturaDesde().setText(null);
 		getTxtCoberturaHasta().setText(null);
 		getCmbBase().setSelectedIndex(-1);
+		getCmbDibujo().setSelectedIndex(-1);
 	}
 
 	@Override
@@ -347,7 +356,8 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 
 		PrecioBaseEstampado precioBase = rangoCantidadColores.getPrecioBase();
 		getCmbBase().setSelectedItem(precioBase.getGama());
-
+		getCmbDibujo().setSelectedItem(precioBase.getDibujo());
+		
 		GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase = precioBase.getGrupoTipoArticuloBase();
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
 
@@ -369,6 +379,17 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			return elemSiendoEditado.getRangoCantidadColores().getPrecioBase().getGrupoTipoArticuloBase().getRangoAnchoArticulo();
 		}
 		return null;
+	}
+
+	public JComboBox getCmbDibujo() {
+		if(cmbDibujo == null) {
+			cmbDibujo = new JComboBox();
+			List<DibujoEstampado> dibujos = new ArrayList<DibujoEstampado>();
+			dibujos.add(null);
+			dibujos.addAll(GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllOrderByNombre());
+			GuiUtil.llenarCombo(cmbDibujo, dibujos, true);
+		}
+		return cmbDibujo;
 	}
 
 }

@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.util.Utils;
 
@@ -30,6 +31,7 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 	private Integer id;
 
 	private GamaColor gama;
+	private DibujoEstampado dibujo;
 	private List<RangoCantidadColores> rangosDeColores;
 	private GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase;
 
@@ -56,6 +58,16 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 
 	public void setGama(GamaColor gama) {
 		this.gama = gama;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "F_DIBUJO_P_ID")
+	public DibujoEstampado getDibujo() {
+		return dibujo;
+	}
+
+	public void setDibujo(DibujoEstampado dibujo) {
+		this.dibujo = dibujo;
 	}
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
@@ -107,7 +119,14 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 	
 	@Transient
 	public int compareTo(PrecioBaseEstampado o) {
-		return getGama().compareTo(o.getGama());
+		if (getDibujo() == null || o.getDibujo() == null) {
+			return getGama().compareTo(o.getGama());
+		}
+		int compareGama = getGama().compareTo(o.getGama());
+		if (compareGama != 0) {
+			return compareGama;
+		}
+		return getDibujo().compareTo(o.getDibujo());
 	}
 
 	@Transient
@@ -132,6 +151,7 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((dibujo == null) ? 0 : dibujo.hashCode());
 		result = prime * result + ((gama == null) ? 0 : gama.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
@@ -151,6 +171,11 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 				return false;
 		} else if (!gama.equals(other.gama))
 			return false;
+		if (dibujo == null) {
+			if (other.dibujo != null)
+				return false;
+		} else if (!dibujo.equals(other.dibujo))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -164,6 +189,7 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 		PrecioBaseEstampado precio = new PrecioBaseEstampado();
 		precio.setGrupoTipoArticuloBase(grupo);
 		precio.setGama(getGama());
+		precio.setDibujo(getDibujo());
 		for(RangoCantidadColores rcc : getRangosDeColores()) {
 			precio.getRangosDeColores().add(rcc.deepClone(precio));
 		}
@@ -176,5 +202,4 @@ public class PrecioBaseEstampado implements Serializable, Comparable<PrecioBaseE
 			rcc.aumentarPrecios(porcentajeAumento);
 		}
 	}
-
 }

@@ -727,6 +727,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 						getTablaVersiones().limpiar();
 						getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 						getTablaVersiones().setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
+						getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
+						getTablaVersiones().handleClickTablaVersiones();
+						getTablaDefiniciones().getTabla().setRowSelectionInterval(0, 0);
 					}
 					return true;
 				} else {
@@ -770,7 +773,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					for (RangoCantidadColores rcc : pbe.getRangosDeColores()) {
 						for (RangoCoberturaEstampado rce : rcc.getRangos()) {
 							descripcion += gtabe.getTipoArticulo().getSigla() + " - "
-									+ "Base " + pbe.getGama().getNombre().toUpperCase() + " <br>"
+									+ "Base " + pbe.getGama().getNombre().toUpperCase() + (pbe.getDibujo() != null ? " (" + pbe.getDibujo().toString().toUpperCase() + ")": "" ) + " <br>"
 									+ "- " + rcc.getMinimo() + " a " + rcc.getMaximo() + " colores "
 									+ " y " + rce.getMinimo() + "&#37; a " + rce.getMaximo() + "&#37;  de cobertura "
 									+ " ==> $ <b> " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + unidad.getDescripcion().toLowerCase() + "</b><br>";

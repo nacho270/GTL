@@ -24,7 +24,7 @@ import ar.com.fwcommon.util.ImageUtil;
 
 @Entity
 @Table(name="T_DIBUJO")
-public class DibujoEstampado implements Serializable{
+public class DibujoEstampado implements Serializable, Comparable<DibujoEstampado>{
 	
 	private static final long serialVersionUID = -2130053260324494270L;
 	
@@ -153,6 +153,11 @@ public class DibujoEstampado implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Transient
+	public int compareTo(DibujoEstampado o) {
+		return getNombre().compareToIgnoreCase(o.getNombre());
 	}
 
 }
