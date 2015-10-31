@@ -244,8 +244,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	private void calcularCorrecciones(Date fechaDesde, Date fechaHasta, IVAVentasTO ivaVentas, TotalesIVAVentasTO totalRI, TotalesIVAVentasTO totalGral, Cliente cl) {
-		Integer nroSucursal = parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal();
-		List<CorreccionFactura> correcciones = correccionDao.getCorreccionesByFecha(fechaDesde, fechaHasta, cl, nroSucursal);
+		List<CorreccionFactura> correcciones = correccionDao.getCorreccionesByFecha(fechaDesde, fechaHasta, cl);
 		if(correcciones!=null && !correcciones.isEmpty()){
 			for(CorreccionFactura c : correcciones){
 				DescripcionFacturaIVAVentasTO dfiv = new DescripcionFacturaIVAVentasTO();
@@ -308,8 +307,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	}
 
 	private void calcularFacturas(Date fechaDesde, Date fechaHasta, IVAVentasTO ivaVentas, TotalesIVAVentasTO totalRI, TotalesIVAVentasTO totalGral, ETipoFactura tipoFactura, Cliente cl) {
-		Integer nroSucursal = parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal();
-		List<Factura> facturas = facturaDao.getFacturasEntreFechas(fechaDesde, fechaHasta, tipoFactura, cl, nroSucursal);
+		List<Factura> facturas = facturaDao.getFacturasEntreFechas(fechaDesde, fechaHasta, tipoFactura, cl);
 		if(facturas!=null && !facturas.isEmpty()){
 			for(Factura f : facturas){
 				DescripcionFacturaIVAVentasTO dfiv = new DescripcionFacturaIVAVentasTO();

@@ -54,13 +54,12 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		return c;
 	}
 	
-	public List<CorreccionFactura> getCorreccionesByFecha(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer nroSucursal) {
-		String hql = " SELECT c FROM CorreccionFactura c WHERE c.nroSucursal = :nroSucursal AND c.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
+	public List<CorreccionFactura> getCorreccionesByFecha(Date fechaDesde, Date fechaHasta, Cliente cliente) {
+		String hql = " SELECT c FROM CorreccionFactura c WHERE c.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
 					 (cliente !=null?" AND c.cliente.id = :idCliente ": " ");
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("fechaDesde", fechaDesde);
 		q.setParameter("fechaHasta", fechaHasta);
-		q.setParameter("nroSucursal", nroSucursal);
 		if(cliente!=null){
 			q.setParameter("idCliente", cliente.getId());
 		}

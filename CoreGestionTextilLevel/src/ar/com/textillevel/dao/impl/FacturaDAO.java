@@ -163,9 +163,9 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cliente, Integer nroSucursal) {
+	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cliente) {
 		String hql = " SELECT f FROM Factura f " +
-					 " WHERE f.nroSucursal = :nroSucursal AND f.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
+					 " WHERE f.fechaEmision BETWEEN :fechaDesde AND :fechaHasta "+
 					(tipoFactura==null?" ": " AND f.idTipoFactura = :idTipoFactura  ")+
 					(cliente !=null?" AND ( f.cliente IS NOT NULL AND f.cliente.id = :idCliente) " : " ")+
 					//" ORDER BY f.fechaEmision, f.idTipoFactura, f.id ";
@@ -173,7 +173,6 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("fechaDesde", fechaDesde);
 		q.setParameter("fechaHasta", fechaHasta);
-		q.setParameter("nroSucursal", nroSucursal);
 		if(tipoFactura != null){
 			q.setParameter("idTipoFactura", tipoFactura.getId());
 		}

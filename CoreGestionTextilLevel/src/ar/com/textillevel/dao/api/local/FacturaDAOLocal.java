@@ -29,7 +29,7 @@ public interface FacturaDAOLocal extends DAOLocal<Factura, Integer> {
 
 	public boolean facturaYaTieneRecibo(Factura factura);
 	
-	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cl, Integer nroSucursal);
+	public List<Factura> getFacturasEntreFechas(Date fechaDesde, Date fechaHasta, ETipoFactura tipoFactura, Cliente cl);
 
 	public boolean esLaUltimaFactura(Factura factura, Integer nroSucursal);
 
