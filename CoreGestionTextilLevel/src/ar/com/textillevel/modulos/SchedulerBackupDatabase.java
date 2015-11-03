@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -96,7 +97,14 @@ public class SchedulerBackupDatabase implements Schedulable {
 		List<String> nombresArchivosBorrados = new ArrayList<String>();
 		File dirBackupPath = new File(backupPath);
 		File[] listFiles = dirBackupPath.listFiles();
-		Arrays.sort(listFiles);
+		//los mas viejos deben quedar primeros
+		Arrays.sort(listFiles, new Comparator<File>() {
+
+			public int compare(File o1, File o2) {
+				return (int)(o1.lastModified() - o2.lastModified());
+			}
+
+		});
 		List<File> listFilesParaBorrar = new ArrayList<File>();
 		for(int i=0; i < listFiles.length; i++) {
 			if(listFiles.length - i > dejarUltimosN) {

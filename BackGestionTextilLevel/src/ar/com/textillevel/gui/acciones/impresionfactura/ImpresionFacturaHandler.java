@@ -298,8 +298,8 @@ public class ImpresionFacturaHandler {
 		
 	private String getArticulo(ItemFactura ifactura) {
 		if (ifactura instanceof ItemFacturaProducto) {
-			if( ((ItemFacturaProducto)ifactura).getProducto().getArticulo()!=null){
-				return ((ItemFacturaProducto)ifactura).getProducto().getArticulo().getNombre();
+			if( ((ItemFacturaProducto)ifactura).getProductoArticulo().getArticulo()!=null){
+				return ((ItemFacturaProducto)ifactura).getProductoArticulo().getArticulo().getNombre();
 			}else{
 				return " - ";
 			}

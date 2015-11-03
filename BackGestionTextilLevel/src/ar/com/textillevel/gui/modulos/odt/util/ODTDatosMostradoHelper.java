@@ -39,17 +39,17 @@ public class ODTDatosMostradoHelper {
 	}
 
 	public Color getColor() {
-		if(odt.getProducto() instanceof ProductoTenido) {
-			return ((ProductoTenido)odt.getProducto()).getColor();
-		} else if(odt.getProducto() instanceof ProductoEstampado) {
-			return ((ProductoEstampado)odt.getProducto()).getVariante().getColorFondo();
+		if(odt.getProductoArticulo().getProducto() instanceof ProductoTenido) {
+			return ((ProductoTenido)odt.getProductoArticulo().getProducto()).getColor();
+		} else if(odt.getProductoArticulo().getProducto() instanceof ProductoEstampado) {
+			return ((ProductoEstampado)odt.getProductoArticulo().getProducto()).getVariante().getColorFondo();
 		} else {
 			return null;
 		}
 	}
 
 	public String getDescArticulo() {
-		return odt.getProducto().getArticulo() != null ? odt.getProducto().getArticulo().getNombre() : odt.getProducto().getDescripcion();
+		return odt.getProductoArticulo().getArticulo() != null ? odt.getProductoArticulo().getArticulo().getNombre() : odt.getProductoArticulo().getArticulo().getDescripcion();
 	}
 
 	public String getDescGramaje() {

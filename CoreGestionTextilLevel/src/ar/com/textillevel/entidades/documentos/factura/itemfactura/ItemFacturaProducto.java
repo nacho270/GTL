@@ -7,24 +7,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.enums.ETipoItemFactura;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 
 @Entity
 @DiscriminatorValue(value="ITP")
 public class ItemFacturaProducto extends ItemFactura {
-	
+
 	private static final long serialVersionUID = -4304875269554264135L;
 
-	private Producto producto;
+	private ProductoArticulo productoArticulo;
 
 	@ManyToOne
-	@JoinColumn(name="F_PRODUCTO_P_ID")
-	public Producto getProducto() {
-		return producto;
+	@JoinColumn(name="F_PRODUCTO_ARTICULO_P_ID")
+	public ProductoArticulo getProductoArticulo() {
+		return productoArticulo;
 	}
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
+	public void setProductoArticulo(ProductoArticulo productoArticulo) {
+		this.productoArticulo = productoArticulo;
 	}
 
 	@Override
@@ -32,4 +32,5 @@ public class ItemFacturaProducto extends ItemFactura {
 	public ETipoItemFactura getTipo() {
 		return ETipoItemFactura.PRODUCTO;
 	}
+
 }

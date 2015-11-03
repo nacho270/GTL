@@ -81,9 +81,9 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
@@ -489,7 +489,7 @@ public class JDialogCargaFactura extends JDialog {
 
 	private void llenarItemsFacturaConRemito() throws ProductoSinPrecioException {
 		//Armo un map con los totales de metros por producto en base a las piezas de los remitos
-		Map<Producto, BigDecimal> mapTotalPorProducto = new HashMap<Producto, BigDecimal>();
+		Map<ProductoArticulo, BigDecimal> mapTotalPorProducto = new HashMap<ProductoArticulo, BigDecimal>();
 
 		//Armo un map con los totales de metros por tela (
 		Map<Articulo, BigDecimal> mapTotalPorTelaCruda = new HashMap<Articulo, BigDecimal>();
@@ -498,7 +498,7 @@ public class JDialogCargaFactura extends JDialog {
 		for(RemitoSalida r : remitos){
 			for(PiezaRemito pr : r.getPiezas()) {
 				if(pr.getPmpDescuentoStock() == null) { //Son piezas normales, es decir, distintas a la de stock inicial
-					Producto producto = getProducto(pr);
+					ProductoArticulo producto = getProducto(pr);
 					if(producto == null) {//Es una pieza de tela cruda (i.e. no tiene ODT/Producto)
 						Articulo articulo = getRemitoEntradaFacade().getArticuloByPiezaSalidaCruda(pr.getId());
 						if(articulo == null) {
@@ -509,7 +509,7 @@ public class JDialogCargaFactura extends JDialog {
 						incrementarCantEnMap(mapTotalPorProducto, producto, getTotalMetros(pr.getMetros(), producto));
 					}
 				} else {//Son piezas de stock inicial
-					Producto p = getProducto(pr);
+					ProductoArticulo p = getProducto(pr);
 					if(p == null) { //Es una pieza de stock inicial pero sin ODT
 						incrementarCantEnMap(mapTotalStockInicial, pr.getPmpDescuentoStock(), pr.getMetros());
 					} else { //Tiene ODT
@@ -519,18 +519,18 @@ public class JDialogCargaFactura extends JDialog {
 			}
 		}
 		//Por cada par <producto, total> del map genero un item factura producto y lo pongo en la tabla
-		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogCargaFactura.this, getCliente());
-		for (Producto p : mapTotalPorProducto.keySet()) {
+		for (ProductoArticulo p : mapTotalPorProducto.keySet()) {
+			ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogCargaFactura.this, p.getArticulo(), getCliente());
 			ItemFacturaProducto itp = new ItemFacturaProducto();
 			BigDecimal totalByProducto = mapTotalPorProducto.get(p);
 			itp.setCantidad(totalByProducto);
-			BigDecimal precio = helper.getPrecio(p);
+			BigDecimal precio = helper.getPrecio(p.getProducto());
 			if(precio == null) {
 				throw new ProductoSinPrecioException();
 			}
 			itp.setImporte(totalByProducto.multiply(precio));
-			itp.setDescripcion(p.getDescripcion());
-			itp.setProducto(p);
+			itp.setDescripcion(p.toString());
+			itp.setProductoArticulo(p);
 			itp.setUnidad(p.getTipo().getUnidad());
 			itp.setPrecioUnitario(precio);
 			getFactura().getItems().add(itp);
@@ -573,7 +573,7 @@ public class JDialogCargaFactura extends JDialog {
 		map.put(elem, total);
 	}
 	
-	private BigDecimal getTotalMetros(BigDecimal metros, Producto producto) {
+	private BigDecimal getTotalMetros(BigDecimal metros, ProductoArticulo producto) {
 		if (producto.getTipo().getUnidad() == EUnidad.KILOS) {
 			if(producto.getArticulo().getGramaje() == null) {
 				throw new IllegalArgumentException("Falta definir el gramaje para la tela " + producto.getArticulo() + ".");
@@ -584,12 +584,12 @@ public class JDialogCargaFactura extends JDialog {
 		}
 	}
 
-	private Producto getProducto(PiezaRemito pr) {
+	private ProductoArticulo getProducto(PiezaRemito pr) {
 		if(pr.getPiezasPadreODT().isEmpty()) {
 			return null;
 		}
 		PiezaODT piezaODT = pr.getPiezasPadreODT().get(0);
-		return piezaODT.getOdt().getProducto();
+		return piezaODT.getOdt().getProductoArticulo();
 	}
 
 	private void calcularSubTotal() {
@@ -791,8 +791,8 @@ public class JDialogCargaFactura extends JDialog {
 
 	private Object[] getFilaProducto(ItemFacturaProducto itf) {
 		Object[] fila = new Object[CANT_COLS_TBL_FACTURA];
-		if(itf.getProducto().getArticulo()!=null){
-			fila[COL_ARTICULO] = itf.getProducto().getArticulo().getNombre();
+		if(itf.getProductoArticulo().getArticulo()!=null){
+			fila[COL_ARTICULO] = itf.getProductoArticulo().getArticulo().getNombre();
 		}else{
 			fila[COL_ARTICULO] = " - ";
 		}

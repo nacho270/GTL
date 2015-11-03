@@ -25,7 +25,7 @@ public class ODTTO implements Serializable {
 		this.codigo = odt.getCodigo();
 		this.idRemito = odt.getRemito().getId();
 		this.nombreCliente = odt.getRemito().getCliente().getDescripcionResumida();
-		this.producto = odt.getProducto().toString();
+		this.producto = odt.getProductoArticulo().toString();
 		this.ordenEnMaquina = odt.getOrdenEnMaquina();
 		this.maquinaActual = odt.getMaquinaActual()!=null?odt.getMaquinaActual().getId():null;
 	}

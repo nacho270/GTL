@@ -55,7 +55,7 @@ import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.Tarima;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
@@ -372,13 +372,13 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			btnSelProductos.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList());
+					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoArticuloList());
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {
-						remitoEntrada.getProductoList().clear();
-						List<Producto> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
-						remitoEntrada.getProductoList().addAll(productoSelectedList);
+						remitoEntrada.getProductoArticuloList().clear();
+						List<ProductoArticulo> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
+						remitoEntrada.getProductoArticuloList().addAll(productoSelectedList);
 						getTxtProductos().setText(StringUtil.getCadena(productoSelectedList, ", "));
 					}
 				}
@@ -398,13 +398,13 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		}
 		return panSelProductos;
 	}
-	
+
 	private JTextField getTxtProductos() {
 		if(txtProductos == null) {
 			txtProductos = new JTextField();
 			txtProductos.setEditable(false);
 			if(modoConsulta || remitoEntrada.getId() != null) {
-				txtProductos.setText(StringUtil.getCadena(remitoEntrada.getProductoList(), ", "));
+				txtProductos.setText(StringUtil.getCadena(remitoEntrada.getProductoArticuloList(), ", "));
 			}
 		}
 		return txtProductos;
@@ -783,7 +783,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 				btnSelODTs.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoList(), odtList);
+						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoArticuloList(), odtList);
 						GuiUtil.centrarEnFramePadre(dialogSeleccionarCrearODT);
 						dialogSeleccionarCrearODT.setVisible(true);
 						if(dialogSeleccionarCrearODT.isAcepto()){

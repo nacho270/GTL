@@ -11,10 +11,11 @@ import javax.persistence.Query;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.Pigmento;
 import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
@@ -132,23 +133,24 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 			}
 		}
 		
-		if(odt.getProducto() != null){
-			if(odt.getProducto().getArticulo()!=null && odt.getProducto().getArticulo().getTipoArticulo() != null){
-				odt.getProducto().getArticulo().getTipoArticulo().getNombre();
-				if(odt.getProducto().getArticulo().getTipoArticulo().getTiposArticuloComponentes()!=null){
-					odt.getProducto().getArticulo().getTipoArticulo().getTiposArticuloComponentes().size();
+		if(odt.getProductoArticulo() != null){
+			Articulo articulo = odt.getProductoArticulo().getArticulo();
+			if(articulo!=null && articulo.getTipoArticulo() != null){
+				articulo.getTipoArticulo().getNombre();
+				if(articulo.getTipoArticulo().getTiposArticuloComponentes()!=null){
+					articulo.getTipoArticulo().getTiposArticuloComponentes().size();
 				}
 			}
 			if(odt.getRemito()!=null){
-				odt.getRemito().getProductoList().size();
-				for(Producto p : odt.getRemito().getProductoList()){
-					if(p instanceof ProductoEstampado){
-						ProductoEstampado pe = (ProductoEstampado)p;
+				odt.getRemito().getProductoArticuloList().size();
+				for(ProductoArticulo p : odt.getRemito().getProductoArticuloList()){
+					if(p.getProducto() instanceof ProductoEstampado){
+						ProductoEstampado pe = (ProductoEstampado)p.getProducto();
 						if(pe.getVariante()!=null && pe.getVariante().getColores()!=null){
 							pe.getVariante().getColores().size();
 						}
-					}else if(p instanceof ProductoTenido){
-						ProductoTenido pt = (ProductoTenido)p;
+					}else if(p.getProducto() instanceof ProductoTenido){
+						ProductoTenido pt = (ProductoTenido)p.getProducto();
 						if(pt.getGamaColor()!= null && pt.getGamaColor().getColores() != null){
 							pt.getGamaColor().getColores().size();
 						}

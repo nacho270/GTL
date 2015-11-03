@@ -23,7 +23,7 @@ import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRemitoSalidaProveedor;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler.PiezaRemitoTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
@@ -276,8 +276,8 @@ public class ImprimirRemitoSalidaProveedorHandler {
 		
 		private String getProceso(RemitoSalida remito) {
 			Set<String> procesos = new HashSet<String>();
-			for(Producto p : remito.getProductoList()) {
-				procesos.add(p.getDescripcion());
+			for(ProductoArticulo p : remito.getProductoList()) {
+				procesos.add(p.toString());
 			}
 			return StringUtil.getCadena(procesos, ", ");
 		}

@@ -12,6 +12,7 @@ public class ColumnaProductoODT extends ColumnaString<OrdenDeTrabajo>{
 
 	@Override
 	public String getValor(OrdenDeTrabajo item) {
-		return item.getProducto().getDescripcion();
+		return item.getProductoArticulo().toString();
 	}
+
 }

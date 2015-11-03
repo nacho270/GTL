@@ -44,9 +44,11 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaSe
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTelaCruda;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTubo;
 import ar.com.textillevel.entidades.enums.ETipoItemFactura;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.ETipoVentaStock;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
@@ -54,10 +56,12 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.ProductoArticuloHelper;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper.ResultProductosTO;
 import ar.com.textillevel.util.GTLBeanFactory;
 
+@SuppressWarnings("incomplete-switch")
 public class JDialogAgregarItemFactura extends JDialog {
 
 	private static final long serialVersionUID = -2986909559712451245L;
@@ -109,6 +113,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private FWJNumericTextField txtTubos;
 	private JComboBox cmbProductos;
 	private JComboBox cmbArticulos;
+	private JComboBox cmbArticulosProd;
 	
 	//PANEL STOCK
 	private JComboBox cmbTipoVentaStock; //tela o cilindro
@@ -224,8 +229,11 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_PRODUCTOS);
 				setItemFacturaSeleccionado(new ItemFacturaProducto());
-				BigDecimal precio = new BigDecimal(((Producto) getCmbProductos().getSelectedItem()).getPrecioCalculado());
-				getTxtPrecioUnitario().setText(String.valueOf(precio));
+				Producto prod = (Producto) getCmbProductos().getSelectedItem();
+				if(prod != null) {
+					BigDecimal precio = new BigDecimal(prod.getPrecioCalculado());
+					getTxtPrecioUnitario().setText(String.valueOf(precio));
+				}
 				this.setSize(new Dimension(400, 190));
 				break;
 			}
@@ -311,10 +319,12 @@ public class JDialogAgregarItemFactura extends JDialog {
 		if (panelProducto == null) {
 			panelProducto = new JPanel();
 			panelProducto.setLayout(new GridBagLayout());
-			panelProducto.add(new JLabel("Producto: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(getCmbProductos(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(new JLabel("Cantidad (mts): "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(getTxtCantMetros(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(getCmbArticulosProd(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(new JLabel("Producto: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(getCmbProductos(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(new JLabel("Cantidad (mts): "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(getTxtCantMetros(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		return panelProducto;
 	}
@@ -397,12 +407,20 @@ public class JDialogAgregarItemFactura extends JDialog {
 				break;
 			}
 			case PRODUCTO: {
-				((ItemFacturaProducto) getItemFacturaSeleccionado()).setProducto((Producto) getCmbProductos().getSelectedItem());
-				getItemFacturaSeleccionado().setDescripcion(((Producto) getCmbProductos().getSelectedItem()).getDescripcion());
-				getItemFacturaSeleccionado().setUnidad(((Producto) getCmbProductos().getSelectedItem()).getTipo().getUnidad());
+				//Seteo el producto articulo 
+				ProductoArticulo pa = new ProductoArticulo();
+				Producto producto = (Producto) getCmbProductos().getSelectedItem();
+				if(ETipoProducto.dependienteDeArticulo(producto.getTipo()) && getCmbArticulosProd().getSelectedIndex() > 0) {
+					pa.setArticulo((Articulo)getCmbArticulosProd().getSelectedItem());
+				}
+				pa.setProducto(producto);
+				ProductoArticuloHelper paHelper = new ProductoArticuloHelper();
+				((ItemFacturaProducto) getItemFacturaSeleccionado()).setProductoArticulo(paHelper.getPersistentInstance(pa));
+
+				getItemFacturaSeleccionado().setDescripcion(producto.getDescripcion());
+				getItemFacturaSeleccionado().setUnidad(producto.getTipo().getUnidad());
 				BigDecimal cantidad = new BigDecimal(getTxtCantMetros().getText().trim().replace(',', '.'));
-				//BigDecimal precioUnitario = new BigDecimal(getTxtPrecioUnitario().getText().trim().replace(',', '.'));
-				BigDecimal precioUnitario = new BigDecimal(((Producto) getCmbProductos().getSelectedItem()).getPrecioCalculado());
+				BigDecimal precioUnitario = new BigDecimal(producto.getPrecioCalculado());
 				getItemFacturaSeleccionado().setCantidad(cantidad);
 				getItemFacturaSeleccionado().setPrecioUnitario(precioUnitario);
 				getItemFacturaSeleccionado().setImporte(new BigDecimal(cantidad.doubleValue() * precioUnitario.doubleValue()));
@@ -715,20 +733,23 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JComboBox getCmbProductos() {
 		if (cmbProductos == null) {
 			cmbProductos = new JComboBox();
-			ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogAgregarItemFactura.this, getCliente());
-			ResultProductosTO result = helper.getInfoProductosAndListaDePrecios();
-			if(result != null) {
-				List<Producto> allOrderByName = result.productos;
-				List<Producto> allOrderByNameSinReproceso = new ArrayList<Producto>();
-				for(Producto p : allOrderByName){
-					if(!(p instanceof ProductoReprocesoSinCargo)){
-						allOrderByNameSinReproceso.add(p);
-					}
-				}
-				GuiUtil.llenarCombo(cmbProductos, allOrderByNameSinReproceso, true);
-			}
 		}
 		return cmbProductos;
+	}
+
+	private void llenarComboProductos() {
+		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogAgregarItemFactura.this, getCmbArticulosProd().getSelectedIndex() == 0 ? null : (Articulo)getCmbArticulosProd().getSelectedItem(), getCliente());
+		ResultProductosTO result = helper.getInfoProductosAndListaDePrecios();
+		if(result != null) {
+			List<Producto> allOrderByName = result.productos;
+			List<Producto> allOrderByNameSinReproceso = new ArrayList<Producto>();
+			for(Producto p : allOrderByName) {
+				if(!(p instanceof ProductoReprocesoSinCargo)){
+					allOrderByNameSinReproceso.add(p);
+				}
+			}
+			GuiUtil.llenarCombo(cmbProductos, allOrderByNameSinReproceso, true);
+		}
 	}
 
 	private void salir() {
@@ -937,6 +958,25 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return txtDescripcion;
 	}
 
+	private JComboBox getCmbArticulosProd() {
+		if(cmbArticulosProd == null){
+			cmbArticulosProd = new JComboBox();
+			GuiUtil.llenarCombo(cmbArticulosProd, getArticulosFacade().getAllOrderByName(), true);
+			
+			cmbArticulosProd.insertItemAt("",0);
+			cmbArticulosProd.setSelectedIndex(0);
+			
+			cmbArticulosProd.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						llenarComboProductos();
+					}
+				}
+			});
+		}
+		return cmbArticulosProd;
+	}
+	
 	private JComboBox getCmbArticulos() {
 		if(cmbArticulos == null){
 			cmbArticulos = new JComboBox();

@@ -241,7 +241,7 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			}else{
 				paso = getElemento(selectedRow);
 			}
-			JDialogSeleccionarInstruccion dialog = new JDialogSeleccionarInstruccion(JDialogVisualizarPasosSecuenciaODT.this, getOdt().getProducto().getArticulo().getTipoArticulo(),paso.getSector().getSectorMaquina(), paso.getProceso());
+			JDialogSeleccionarInstruccion dialog = new JDialogSeleccionarInstruccion(JDialogVisualizarPasosSecuenciaODT.this, getOdt().getProductoArticulo().getArticulo().getTipoArticulo(),paso.getSector().getSectorMaquina(), paso.getProceso());
 			dialog.setVisible(true);
 			if(dialog.isAcepto()){
 				InstruccionProcedimiento instruccion = dialog.getInstruccionFinal(); 
@@ -289,7 +289,7 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 		@Override
 		protected void botonModificarPresionado(int filaSeleccionada) {
 			PasoSecuenciaODT paso = getElemento(getTabla().getSelectedRow());
-			JDialogSeleccionarInstruccion dialog = new JDialogSeleccionarInstruccion(JDialogVisualizarPasosSecuenciaODT.this, getOdt().getProducto().getArticulo().getTipoArticulo(),getInstruccion(filaSeleccionada), paso.getSector().getSectorMaquina(), paso.getProceso());
+			JDialogSeleccionarInstruccion dialog = new JDialogSeleccionarInstruccion(JDialogVisualizarPasosSecuenciaODT.this, getOdt().getProductoArticulo().getArticulo().getTipoArticulo(),getInstruccion(filaSeleccionada), paso.getSector().getSectorMaquina(), paso.getProceso());
 			dialog.setVisible(true);
 			if(dialog.isAcepto()){
 				InstruccionProcedimiento instruccion = dialog.getInstruccionFinal(); 

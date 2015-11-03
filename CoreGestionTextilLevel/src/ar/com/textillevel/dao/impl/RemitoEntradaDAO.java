@@ -37,7 +37,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 	}
 
 	private void doEager(RemitoEntrada remito) {
-		remito.getProductoList().size();
+		remito.getProductoArticuloList().size();
 		remito.getPiezas().size();
 	}
 
@@ -53,7 +53,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		query.setParameter("idCliente", idCliente);
 		List<RemitoEntrada> lista = query.getResultList();
 		for(RemitoEntrada re : lista){
-			re.getProductoList().size();
+			re.getProductoArticuloList().size();
 		}
 		return lista;
 	}
@@ -112,7 +112,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		query.setParameter("fechaHasta", fechaHasta);
 		List<RemitoEntrada> lista = query.getResultList();
 		for (RemitoEntrada re : lista) {
-			re.getProductoList().size();
+			re.getProductoArticuloList().size();
 		}
 		return lista;
 	}
@@ -127,7 +127,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		List<RemitoEntrada> resultList = query.getResultList();
 		for(RemitoEntrada re : resultList) {
 			getEntityManager().refresh(re);//asi me trae el remito con todas sus piezas. Sin esto me traia sólo las del join
-			re.getProductoList().size();
+			re.getProductoArticuloList().size();
 		}
 		return resultList;
 	}
@@ -142,7 +142,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		List<RemitoEntrada> resultList = query.getResultList();
 		for(RemitoEntrada re : resultList) {
 			getEntityManager().refresh(re);//asi me trae el remito con todas sus piezas. Sin esto me traia sólo las del join
-			re.getProductoList().size();
+			re.getProductoArticuloList().size();
 		}
 		return resultList;
 	}
@@ -155,7 +155,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 				"ORDER BY re.fechaEmision ");
 		List<RemitoEntrada> resultList = query.getResultList();
 		for(RemitoEntrada re : resultList) {
-			re.getProductoList().size();
+			re.getProductoArticuloList().size();
 		}
 		return resultList;
 	}
@@ -191,7 +191,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		query.setParameter("nroRemito", nroRemito);
 		List<RemitoEntrada> remitoEntList = query.getResultList();
 		for(RemitoEntrada re : remitoEntList) {
-			re.getProductoList().size();
+			re.getProductoArticuloList().size();
 		}
 		return remitoEntList;
 	}
@@ -199,13 +199,15 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 	public List<DetallePiezaFisicaTO> getDetallePiezas(Articulo articuloElegido, ETipoTela tipoTelaElegida) {
 		String sql = "";
 		if(tipoTelaElegida == ETipoTela.TERMINADA){
-			sql = " SELECT pr.A_ORDEN_PIEZA, pr.A_METROS, prov.A_NOMBRE_CORTO, cl.A_RAZON_SOCIAL, rem.A_NRO_REMITO, pr.F_REMITO_P_ID, pr.P_ID, CONCAT(odt.A_CODIGO,' - ',prod.A_DESCR) " +
+			sql = " SELECT pr.A_ORDEN_PIEZA, pr.A_METROS, prov.A_NOMBRE_CORTO, cl.A_RAZON_SOCIAL, rem.A_NRO_REMITO, pr.F_REMITO_P_ID, pr.P_ID, CONCAT(odt.A_CODIGO,' - ',prod.A_DESCR, ' - ', art.A_NOMBRE) " +
 				  " FROM T_PIEZA_REMITO pr INNER JOIN T_REMITO rem ON pr.F_REMITO_P_ID = rem.P_ID " +
 				  " 				  	   LEFT JOIN T_PROVEEDORES prov ON prov.P_ID = rem.F_PROVEEDOR_P_ID " +
 				  " 				  	   LEFT JOIN T_CLIENTE cl ON cl.P_ID = rem.F_CLIENTE_P_ID " +
 				  "						   INNER JOIN T_PIEZA_ODT podt ON pr.P_ID = podt.F_PIEZA_REMITO_P_ID " +
 				  "						   INNER JOIN T_ORDEN_DE_TRABAJO odt ON odt.P_ID = podt.F_ODT_P_ID " +
-				  "						   INNER JOIN T_PRODUCTO prod ON prod.P_ID = odt.F_PRODUCTO_P_ID " +
+				  "						   INNER JOIN T_PRODUCTO_ARTICULO prodart ON prodart.P_ID = odt.F_PRODUCTO_ARTICULO_P_ID " +				  
+				  "						   INNER JOIN T_PRODUCTO prod ON prod.P_ID = prodart.F_PRODUCTO_P_ID " +
+				  "						   LEFT JOIN T_ARTICULO art ON art.P_ID = prodart.F_ARTICULO_P_ID " +				  
 				  " WHERE rem.F_ARTICULO_STOCK_P_ID = :idArticulo AND pr.A_PIEZA_SIN_ODT = 0 " +
 				  "		  AND (pr.A_EN_SALIDA is null OR pr.A_EN_SALIDA = 0) AND rem.TIPO = 'ENT'";
 		}else{

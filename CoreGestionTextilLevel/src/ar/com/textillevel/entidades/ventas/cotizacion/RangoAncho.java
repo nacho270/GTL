@@ -161,15 +161,14 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	public abstract void deepOrderBy();
 
 	@Transient
-	public Float getPrecioProducto(Producto producto) {
+	public Float getPrecioProducto(Producto producto, Articulo articulo) {
 		if(producto.getTipo() == ETipoProducto.DEVOLUCION || producto.getTipo() == ETipoProducto.REPROCESO_SIN_CARGO) {
 			return new Float(0);
 		}
-		
-		if (getAnchoExacto() != null && getAnchoExacto().floatValue() == producto.getArticulo().getAncho().floatValue()) {
-			return buscarPrecio(producto);
-		} else if (getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(producto.getArticulo().getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) {
-			return buscarPrecio(producto);
+		if (articulo != null && getAnchoExacto() != null && getAnchoExacto().floatValue() == articulo.getAncho().floatValue()) {
+			return buscarPrecio(producto, articulo);
+		} else if (articulo != null && getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(articulo.getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) {
+			return buscarPrecio(producto, articulo);
 		}
 		return null;
 	}
@@ -180,7 +179,7 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	}
 
 	@Transient
-	protected abstract Float buscarPrecio(Producto producto);
+	protected abstract Float buscarPrecio(Producto producto, Articulo articulo);
 
 	@Transient
 	public abstract boolean estaDefinido(Articulo art);

@@ -23,8 +23,9 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 				"select r.a_nro_remito, odt.a_codigo, odt.p_id, prod.A_DESCR, count(*), sum(pr.a_metros) " +
 				"from t_pieza_remito pr " + 
 				"inner join T_PIEZA_ODT podt on podt.F_PIEZA_REMITO_P_ID = pr.p_id " + 
-				"inner join T_ORDEN_DE_TRABAJO odt on odt.p_id = podt.f_odt_p_id " + 
-				"inner join T_PRODUCTO prod on prod.p_id = odt.f_producto_p_id " +				
+				"inner join T_ORDEN_DE_TRABAJO odt on odt.p_id = podt.f_odt_p_id " +
+				"inner join T_PRODUCTO_ARTICULO pa on pa.p_id = odt.f_producto_articulo_p_id " +
+				"inner join T_PRODUCTO prod on prod.p_id = pa.f_producto_p_id " +				
 				"inner join t_remito r on r.p_id = pr.f_remito_p_id " +
 				"where r.f_cliente_p_id=:idCliente AND  r.tipo='ENT' AND " +
 				"      NOT EXISTS( " + 

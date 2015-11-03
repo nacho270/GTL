@@ -175,4 +175,8 @@ public enum ETipoProducto {
 		return tiposRet;
 	}
 
+	public static boolean dependienteDeArticulo(ETipoProducto tipoProducto) {
+		return tipoProducto == TENIDO || tipoProducto == ESTAMPADO; 
+	}
+
 }

@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
@@ -22,9 +23,9 @@ public interface ListaDePreciosFacadeRemote {
 
 	public void remove(ListaDePrecios listaDePrecios);
 
-	public Float getPrecioProducto(Producto producto, Cliente cliente) throws ValidacionException;
+	public Float getPrecioProducto(Producto producto, Articulo articulo, Cliente cliente) throws ValidacionException;
 
-	public List<Producto> getProductos(Cliente cliente) throws ValidacionException;
+	public List<Producto> getProductos(Cliente cliente, Articulo articulo) throws ValidacionException;
 
 	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException;
 

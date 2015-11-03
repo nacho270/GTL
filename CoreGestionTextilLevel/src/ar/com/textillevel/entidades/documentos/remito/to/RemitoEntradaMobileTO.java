@@ -52,7 +52,7 @@ public class RemitoEntradaMobileTO implements Serializable {
 		this.anchoCrudo = Utils.getDecimalFormat().format(remito.getAnchoCrudo().doubleValue());
 		this.anchoFinal = Utils.getDecimalFormat().format(remito.getAnchoFinal().doubleValue());
 		this.totalMetros = Utils.getDecimalFormat().format(remito.getTotalMetros().doubleValue());
-		this.productos = StringUtil.getCadena(remito.getProductoList(), ", ");
+		this.productos = StringUtil.getCadena(remito.getProductoArticuloList(), ", ");
 		if(remito.getTarima()!=null){
 			this.tarima = String.valueOf(remito.getTarima().getNumero());
 		}else{

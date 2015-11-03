@@ -28,7 +28,7 @@ import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -232,8 +232,8 @@ public class ImprimirRemitoHandler {
 		
 		private String getProceso(RemitoSalida remito) {
 			Set<String> procesos = new HashSet<String>();
-			for(Producto p : remito.getProductoList()) {
-				procesos.add(p.getDescripcion());
+			for(ProductoArticulo p : remito.getProductoList()) {
+				procesos.add(p.toString());
 			}
 			return StringUtil.getCadena(procesos, ", ");
 		}
@@ -367,16 +367,16 @@ public class ImprimirRemitoHandler {
 
 		private String getProceso(RemitoSalida remito) {
 			Set<String> procesos = new HashSet<String>();
-			for(Producto p : remito.getProductoList()) {
-				procesos.add(p.getDescripcion());
+			for(ProductoArticulo p : remito.getProductoList()) {
+				procesos.add(p.toString());
 			}
 			return StringUtil.getCadena(procesos, ", ");
 		}
 
 		private String extractArticulo(RemitoSalida remito) {
 			Set<String> articulos = new HashSet<String>();
- 			List<Producto> productoList = remito.getProductoList();
-			for(Producto p : productoList) {
+ 			List<ProductoArticulo> productoList = remito.getProductoList();
+			for(ProductoArticulo p : productoList) {
 				if(p.getArticulo() != null) {
 					articulos.add(p.getArticulo().getNombre());
 				}

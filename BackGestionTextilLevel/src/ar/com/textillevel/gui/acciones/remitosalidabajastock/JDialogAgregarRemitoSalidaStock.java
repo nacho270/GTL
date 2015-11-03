@@ -50,8 +50,8 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO;
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogSeleccionarCrearODT;
@@ -104,7 +104,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 	private JButton btnSelProductos;
 	private JMenu menuODT;
 	private List<OrdenDeTrabajo> odtList;
-	private List<Producto> productoList;
+	private List<ProductoArticulo> productoList;
 	private Frame owner;
 
 	private List<RemitoEntrada> remitoEntradaList;
@@ -114,7 +114,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 		this.owner = owner; 
 		this.remitoSalida = remitoSalida;
 		this.odtList = new ArrayList<OrdenDeTrabajo>();
-		this.productoList = new ArrayList<Producto>();
+		this.productoList = new ArrayList<ProductoArticulo>();
 		this.remitoEntradaList = new ArrayList<RemitoEntrada>();
 		setSize(new Dimension(720, 750));
 		setTitle("Alta de Remito de Salida - Baja de Stock");
@@ -143,9 +143,9 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 			getTxtCondicionVenta().setText(odts.get(0).getRemito().getCondicionDeVenta().getNombre());
 		}
 		getTxtCodODT().setText(StringUtil.getCadena(extractCodigos(odts), ", "));
-		Set<Producto> productoList = new HashSet<Producto>();
+		Set<ProductoArticulo> productoList = new HashSet<ProductoArticulo>();
 		for(OrdenDeTrabajo odt : odts) {
-			productoList.add(odt.getProducto());
+			productoList.add(odt.getProductoArticulo());
 		}
 		getTxtProductos().setText(StringUtil.getCadena(productoList, ", "));
 		getTxtRemitosEntrada().setText(StringUtil.getCadena(extractRemitosEntrada(odts), ", "));
@@ -320,7 +320,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {
-						List<Producto> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
+						List<ProductoArticulo> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
 						getTxtProductos().setText(StringUtil.getCadena(productoSelectedList, ", "));
 						productoList.clear();
 						productoList.addAll(productoSelectedList);
@@ -783,7 +783,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 				return "Debe ingresar el número de pieza";
 			}
 			Articulo articulo = (Articulo)getTabla().getValueAt(fila, COL_ARTICULO);
-			if(!articulo.equals(odt.getProducto().getArticulo())) {
+			if(!articulo.equals(odt.getProductoArticulo().getArticulo())) {
 				return "La tela del proceso de la ODT asignada debe ser la misma que la de la pieza original. ";
 			}
 			return null;

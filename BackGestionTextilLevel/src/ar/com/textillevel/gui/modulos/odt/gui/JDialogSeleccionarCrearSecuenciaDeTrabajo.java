@@ -63,7 +63,7 @@ public class JDialogSeleccionarCrearSecuenciaDeTrabajo extends JDialog {
 	public JDialogSeleccionarCrearSecuenciaDeTrabajo(Frame frame, OrdenDeTrabajo odt) {
 		super(frame);
 		setOdt(odt);
-		setSecuenciasPosibles(getSecuenciaFacade().getAllByTipoProductoYCliente(getOdt().getProducto().getTipo(), odt.getRemito().getCliente(), true));
+		setSecuenciasPosibles(getSecuenciaFacade().getAllByTipoProductoYCliente(getOdt().getProductoArticulo().getTipo(), odt.getRemito().getCliente(), true));
 		setUpComponentes();
 		setUpScreen();
 		getPanelVisualizador().llenarFiltro(odt.getRemito().getCliente());

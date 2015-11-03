@@ -52,7 +52,7 @@ import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -115,8 +115,8 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 	}
 
 	private void setDatos() {
-		remitoEntrada.getProductoList().clear();
-		
+		remitoEntrada.getProductoArticuloList().clear();
+
 		Cliente cliente = remitoEntrada.getCliente();
 		getTxtRazonSocial().setText(cliente.getRazonSocial());
 		getTxtFechaEmision().setFecha(remitoEntrada.getFechaEmision());
@@ -318,16 +318,16 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					JDialogSeleccionarProducto dialogSeleccionarProducto = null;
 					if(remitoEntrada.getArticuloStock() == null) { //Es un remito de entrada normal 
-						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList());
+						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoArticuloList());
 					} else { //Es un remito de entrada 01
-						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList(), Collections.singletonList(remitoEntrada.getArticuloStock()));
+						dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogCompletarPiezasConODTRemitoEntrada.this, remitoEntrada.getCliente(), remitoEntrada.getProductoArticuloList(), Collections.singletonList(remitoEntrada.getArticuloStock()));
 					}
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {
-						remitoEntrada.getProductoList().clear();
-						List<Producto> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
-						remitoEntrada.getProductoList().addAll(productoSelectedList);
+						remitoEntrada.getProductoArticuloList().clear();
+						List<ProductoArticulo> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
+						remitoEntrada.getProductoArticuloList().addAll(productoSelectedList);
 						getTxtProductos().setText(StringUtil.getCadena(productoSelectedList, ", "));
 					}
 				}
@@ -614,7 +614,7 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 				btnSelODTs.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoList(), odtList);
+						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoArticuloList(), odtList);
 						GuiUtil.centrarEnFramePadre(dialogSeleccionarCrearODT);
 						dialogSeleccionarCrearODT.setVisible(true);
 						if(dialogSeleccionarCrearODT.isAcepto()){

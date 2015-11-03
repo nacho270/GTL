@@ -18,9 +18,9 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.gente.Proveedor;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 
 @Entity
 @DiscriminatorValue(value = "ENT")
@@ -29,7 +29,7 @@ public class RemitoEntrada extends Remito {
 	private static final long serialVersionUID = 6207878696402570129L;
 
 	private CondicionDeVenta condicionDeVenta;
-	private List<Producto> productoList;
+	private List<ProductoArticulo> productoArticuloList;
 	private Articulo articuloStock; //los que tienen seteado un articulo y proveedor=PMP=null significan que son remitos de entrada 01
 	private Proveedor proveedor; //los que tienen proveedor significan que fueron una compra de tela a ese proveedor
 	private PrecioMateriaPrima precioMatPrima; //los que tienen PMP significan que fueron una compra de tela a ese proveedor
@@ -39,7 +39,7 @@ public class RemitoEntrada extends Remito {
 	private Boolean enPalet;
 
 	public RemitoEntrada() {
-		this.productoList = new ArrayList<Producto>();
+		this.productoArticuloList = new ArrayList<ProductoArticulo>();
 	}
 
 	@ManyToOne
@@ -53,15 +53,15 @@ public class RemitoEntrada extends Remito {
 	}
 
 	@ManyToMany
-	@JoinTable(name = "T_REMITO_ENTRADA_PRODUCTO", 
+	@JoinTable(name = "T_REMITO_ENTRADA_PRODUCTO_ART_ASOC", 
 			joinColumns = { @JoinColumn(name = "F_REMITO_ENTRADA_P_ID") }, 
-			inverseJoinColumns = { @JoinColumn(name = "F_PRODUCTO_P_ID") })
-	public List<Producto> getProductoList() {
-		return productoList;
+			inverseJoinColumns = { @JoinColumn(name = "F_PRODUCTO_ARTICULO_P_ID") })
+	public List<ProductoArticulo> getProductoArticuloList() {
+		return productoArticuloList;
 	}
 
-	public void setProductoList(List<Producto> productoList) {
-		this.productoList = productoList;
+	public void setProductoArticuloList(List<ProductoArticulo> productoArticuloList) {
+		this.productoArticuloList = productoArticuloList;
 	}
 
 	@ManyToOne
@@ -152,7 +152,7 @@ public class RemitoEntrada extends Remito {
 	@Transient
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Nro.: " + getNroRemito()).append(" - Fecha: " + DateUtil.dateToString(getFechaEmision())).append(" - Productos : " + StringUtil.getCadena(getProductoList(), ", "));
+		sb.append("Nro.: " + getNroRemito()).append(" - Fecha: " + DateUtil.dateToString(getFechaEmision())).append(" - Productos : " + StringUtil.getCadena(getProductoArticuloList(), ", "));
 		return sb.toString();
 	}
 

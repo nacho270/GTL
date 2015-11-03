@@ -46,7 +46,7 @@ import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCantFilasInput;
@@ -145,9 +145,9 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			}
 		}
 		getTxtCodODT().setText(StringUtil.getCadena(extractCodigos(odts), ", "));
-		Set<Producto> productoList = new HashSet<Producto>();
+		Set<ProductoArticulo> productoList = new HashSet<ProductoArticulo>();
 		for(OrdenDeTrabajo odt : odts) {
-			productoList.add(odt.getProducto());
+			productoList.add(odt.getProductoArticulo());
 		}
 		getTxtProductos().setText(StringUtil.getCadena(productoList, ", "));
 		getTxtRemitosEntrada().setText(StringUtil.getCadena(extractRemitosEntrada(odts), ", "));

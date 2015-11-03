@@ -39,6 +39,7 @@ import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PerfilFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PersonaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ProductoArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProvinciaFacadeRemote;
@@ -131,6 +132,7 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 		addJndiName(ConfiguracionFacturaElectronicaFacadeRemote.class);
 		addJndiName(DocumentoContableFacadeRemote.class);
 		addJndiName(GamaColorClienteFacadeRemote.class);
+		addJndiName(ProductoArticuloFacadeRemote.class);
 	}
 
 	public static GTLBeanFactory getInstance() {

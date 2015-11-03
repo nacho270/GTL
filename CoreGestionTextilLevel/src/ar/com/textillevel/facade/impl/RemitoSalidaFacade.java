@@ -563,7 +563,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				if(odt == null) {
 					articulo = prto.getArticulo();
 				} else {
-					articulo = odt.getProducto().getArticulo();
+					articulo = odt.getProductoArticulo().getArticulo();
 				}
 				BigDecimal cant = articuloCantMap.get(articulo);
 				if(cant == null) {

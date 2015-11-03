@@ -24,25 +24,24 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import ar.com.fwcommon.componentes.FWCheckBoxList;
-import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.fwcommon.util.GuiUtil;
-import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
-import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
-import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
+import ar.com.textillevel.gui.util.ProductoArticuloHelper;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper.ResultProductosTO;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -53,17 +52,17 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	
+
 	private JComboBox cmbTipoArticulo;
 	private JComboBox cmbArticulo;
 	private JComboBox cmbTipoProducto;
 	private JComboBox cmbGama;
 	private FWCheckBoxList<Producto> checkBoxList;
-	private JTextArea txtProdSel;
+	private PanelTablaProductoArticulo panProdArtSel;
 
 	private boolean acepto;
-	private List<Producto> productoSelectedList;
-	private List<Producto> allProductoList;
+	private List<ProductoArticulo> productoSelectedList;
+	private List<Producto> allProductoList = new ArrayList<Producto>();
 
 	private JPanel pnlBotones;
 	private JPanel pnlDatos;
@@ -74,24 +73,21 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private List<TipoArticulo> allTipoArticuloList;
 	private List<Articulo> allArticulosList;
 	private List<Articulo> articuloFilterList;
-	private VersionListaDePrecios versionListaDePrecios;
 	private Cliente cliente;
 
-	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<Producto> productoSelectedList) {
+	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList) {
 		super(owner);
 		this.cliente = cliente;
-		this.productoSelectedList = new ArrayList<Producto>(productoSelectedList);
-		allProductoList = getProductoList();
+		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
 		setUpComponentes();
 		setUpScreen();
 		setDatos();
 	}
 
-	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<Producto> productoSelectedList, List<Articulo> articuloFilterList) {
+	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList, List<Articulo> articuloFilterList) {
 		super(owner);
 		this.cliente = cliente;
-		this.productoSelectedList = new ArrayList<Producto>(productoSelectedList);
-		allProductoList = getProductoList();		
+		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
 		this.articuloFilterList = articuloFilterList;
 		setUpComponentes();
 		setUpScreen();
@@ -99,9 +95,10 @@ public class JDialogSeleccionarProducto extends JDialog {
 	}
 
 	private void setDatos() {
-		for(Producto producto : productoSelectedList) {
-			getClCheckBoxList().setSelectedValue(producto, false);
+		for(ProductoArticulo productoArticulo : productoSelectedList) {
+			getFWCheckBoxList().setSelectedValue(productoArticulo.getProducto(), false);
 		}
+		getPanProdArtSel().agregarElementos(productoSelectedList);
 	}
 
 	private void setUpScreen(){
@@ -190,28 +187,19 @@ public class JDialogSeleccionarProducto extends JDialog {
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1;
 			gridBagConstraints.weighty = 0.7;
-			JScrollPane scrollPane = new JScrollPane(getClCheckBoxList());
+			JScrollPane scrollPane = new JScrollPane(getFWCheckBoxList());
 			scrollPane.setBorder(BorderFactory.createTitledBorder("PRODUCTOS"));
 			pnlDatos.add(scrollPane, gridBagConstraints);
-			
+
+			getPanProdArtSel().setBorder(BorderFactory.createTitledBorder("PRODUCTOS - ARTÍCULOS SELECCIONADOS:"));
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 5;
 			gridBagConstraints.gridwidth = 2;
-			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints.insets = new Insets(5,5,5,5);
-			pnlDatos.add(new JLabel("PRODUCTOS:"), gridBagConstraints);			
-
-			JScrollPane scrollPaneProdSel = new JScrollPane(getTxtProdSel());
-			scrollPane.setBorder(BorderFactory.createTitledBorder("PRODUCTOS SELECCIONADOS:"));
-			gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.gridy = 6;
-			gridBagConstraints.gridwidth = 2;
 			gridBagConstraints.weighty = 0.3;			
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.insets = new Insets(5,5,5,5);
-			pnlDatos.add(scrollPaneProdSel, gridBagConstraints);			
+			pnlDatos.add(getPanProdArtSel(), gridBagConstraints);			
 			
 		}
 		return pnlDatos;
@@ -226,15 +214,11 @@ public class JDialogSeleccionarProducto extends JDialog {
 	}
 
 	private void filtrar() {
-		TipoArticulo tipoArtSelected = getCmbTipoArticulo().getSelectedIndex() == 0 ? null : (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
-		Articulo artSelected = getCmbArticulo().getSelectedIndex() == 0 ? null : (Articulo)getCmbArticulo().getSelectedItem();
 		ETipoProducto tipoProd = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
 		GamaColor gama = getCmbGama().getSelectedIndex() == 0 ? null : (GamaColor)getCmbGama().getSelectedItem();
 		List<Producto> productoMatchedList = new ArrayList<Producto>();
-		getClCheckBoxList().setAllSelectedItems(false);
+		getFWCheckBoxList().setAllSelectedItems(false);
 		for(Producto p : allProductoList) {
-			boolean cumpleTipoArticulo = tipoArtSelected == null || (p.getArticulo() != null && p.getArticulo().getTipoArticulo().equals(tipoArtSelected));
-			boolean cumpleArticulo = artSelected == null || (p.getArticulo() != null && artSelected.equals(p.getArticulo()));
 			boolean cumpleTipoProd = tipoProd == null || tipoProd == p.getTipo();
 			boolean cumpleGama = true;
 			if(p.getTipo() == ETipoProducto.TENIDO) {
@@ -244,13 +228,13 @@ public class JDialogSeleccionarProducto extends JDialog {
 				VarianteEstampado variante = ((ProductoEstampado)p).getVariante();
 				cumpleGama = gama == null || (variante.getGama() != null && gama.equals(variante.getGama())); 
 			}
-			if(cumpleTipoArticulo && cumpleArticulo && cumpleTipoProd && cumpleGama) {
+			if(cumpleTipoProd && cumpleGama) {
 				productoMatchedList.add(p);
 			}
 		}
 		checkBoxList.setValues(productoMatchedList.toArray(new Object[productoMatchedList.size()]));
-		for(Producto p : productoSelectedList) {
-			checkBoxList.setSelectedValue(p, false);
+		for(ProductoArticulo p : productoSelectedList) {
+			checkBoxList.setSelectedValue(p.getProducto(), false);
 		}
 	}
 
@@ -259,19 +243,10 @@ public class JDialogSeleccionarProducto extends JDialog {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(validar()) {
-						acepto = true;
-						dispose();
-					}
+					acepto = true;
+					dispose();
 				}
 
-				private boolean validar() {
-					if(getClCheckBoxList().getSelectedValues().length == 0){
-						FWJOptionPane.showErrorMessage(JDialogSeleccionarProducto.this, "Debe seleccionar al menos un producto.", JDialogSeleccionarProducto.this.getTitle());
-						return false;
-					}
-					return true;
-				}
 			});
 		}
 		return btnAceptar;
@@ -289,7 +264,7 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return btnCancelar;
 	}
 
-	private FWCheckBoxList<Producto> getClCheckBoxList() {
+	private FWCheckBoxList<Producto> getFWCheckBoxList() {
 		if(checkBoxList == null) {
 			checkBoxList = new FWCheckBoxList<Producto>() {
 
@@ -297,16 +272,38 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 				@Override
 				public void itemListaSeleccionado(Object item, boolean seleccionado) {
+					Producto prod = (Producto)item;
+					Articulo articulo = (Articulo)getCmbArticulo().getSelectedItem();
 					if(seleccionado) {
-						Producto prod = (Producto)item;
-						if(!productoSelectedList.contains(prod)) {
-							productoSelectedList.add(prod);
+						if(!existeProductoEnLista(productoSelectedList, prod, articulo)) {
+							ProductoArticulo pa = new ProductoArticulo();
+							pa.setProducto(prod);
+							if(ETipoProducto.dependienteDeArticulo(prod.getTipo())) {
+								pa.setArticulo(articulo);
+							}
+							productoSelectedList.add(pa);
 						}
 					} else {
-						productoSelectedList.remove(item);
+						List<ProductoArticulo> prodsToRemove = new ArrayList<ProductoArticulo>();
+						for(ProductoArticulo pa : productoSelectedList) {
+							if(pa.getProducto().equals(item) && (pa.getArticulo() !=null &&  pa.getArticulo().equals(getCmbArticulo().getSelectedItem()))) {
+								prodsToRemove.add(pa);
+							}
+						}
+						productoSelectedList.remove(prodsToRemove);
 					}
-					
-					getTxtProdSel().setText(StringUtil.getCadena(productoSelectedList, "\n"));
+
+					getPanProdArtSel().limpiar();
+					getPanProdArtSel().agregarElementos(productoSelectedList);
+				}
+
+				private boolean existeProductoEnLista(List<ProductoArticulo> productoSelectedList, Producto prod, Articulo articulo) {
+					for(ProductoArticulo pa : productoSelectedList) {
+						if(pa.getProducto().equals(prod) && (pa.getArticulo() == null || pa.getArticulo().equals(articulo))) {
+							return true;
+						}
+					}
+					return false;
 				}
 
 			};
@@ -315,46 +312,29 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return checkBoxList;
 	}
 
-	private JTextArea getTxtProdSel() {
-		if(txtProdSel == null) {
-			txtProdSel = new JTextArea();
-			txtProdSel.setEditable(false);
+	private PanelTablaProductoArticulo getPanProdArtSel() {
+		if(panProdArtSel == null) {
+			this.panProdArtSel = new PanelTablaProductoArticulo(); 
 		}
-		return txtProdSel;
+		return panProdArtSel;
 	}
-
-	private List<Producto> getProductoList() {
-		List<Producto> allOrderByName = null;
+	
+	private void resetProductoList() {
 		List<Producto> productoResultList = new ArrayList<Producto>();
-		allArticulosList = getArticuloFacade().getAllOrderByName();
-		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogSeleccionarProducto.this, cliente);
-		ResultProductosTO result = helper.getInfoProductosAndListaDePrecios();
-		if(result != null) {
-			versionListaDePrecios = result.versionListaDePrecios;
-			allOrderByName = result.productos;
-		} else {
-			return productoResultList;
-		}
-		if(articuloFilterList == null) {
-			Collections.sort(allOrderByName, new Comparator<Producto>() {
+		if(getCmbArticulo().getSelectedIndex() != 0) {
+			ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogSeleccionarProducto.this, (Articulo)getCmbArticulo().getSelectedItem(), cliente);
+			ResultProductosTO result = helper.getInfoProductosAndListaDePrecios();
+			if(result != null) {
+				this.allProductoList = result.productos;
+			}
+			Collections.sort(productoResultList, new Comparator<Producto>() {
 				public int compare(Producto o1, Producto o2) {
 					return o1.getDescripcion().compareTo(o2.getDescripcion());
 				}
 			});
-			return allOrderByName;
 		} else {
-			for(Producto p : allOrderByName) {
-				if(articuloFilterList.contains(p.getArticulo())) {
-					productoResultList.add(p);
-				}
-			}
+			this.allProductoList = productoResultList;
 		}
-		Collections.sort(productoResultList, new Comparator<Producto>() {
-			public int compare(Producto o1, Producto o2) {
-				return o1.getDescripcion().compareTo(o2.getDescripcion());
-			}
-		});
-		return productoResultList;
 	}
 
 	private JComboBox getCmbTipoArticulo() {
@@ -367,6 +347,8 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED) {
+						recargarComboArticulos();
+						resetProductoList();
 						filtrar();
 					}
 				}
@@ -387,6 +369,9 @@ public class JDialogSeleccionarProducto extends JDialog {
 
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED) {
+						resetProductoList();
+						recargarComboTipoProducto();
+						getFWCheckBoxList().setAllSelectedItems(false);
 						filtrar();
 					}
 				}
@@ -405,47 +390,27 @@ public class JDialogSeleccionarProducto extends JDialog {
 	}
 
 	private List<Articulo> getArticuloList() {
-		if(articuloFilterList == null) {
-			return allArticulosList;
-		} else {
-			List<Articulo> articuloResultList = new ArrayList<Articulo>();
-			for(Articulo a : allArticulosList) {
-				if(articuloFilterList.contains(a)) {
-					articuloResultList.add(a);
-				}
-			}
-			return articuloResultList;
+		if(allArticulosList == null) {
+			this.allArticulosList = getArticuloFacade().getAllOrderByName();
 		}
+		List<Articulo> articuloResultList = new ArrayList<Articulo>();
+		if(articuloFilterList == null) {
+			articuloResultList.addAll(allArticulosList);
+		} else {
+			articuloResultList.addAll(articuloFilterList);
+		}
+		return articuloResultList;
 	}
 
 	private void recargarComboArticulos() {
+		TipoArticulo selectedItem = getCmbTipoArticulo().getSelectedIndex() == 0 ? null : (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
 		List<Articulo> result = new ArrayList<Articulo>();
-		Set<Integer> tpSet = new HashSet<Integer>();
-
-		ETipoProducto tpSel = getCmbTipoProducto().getSelectedIndex() == 0 ? null : (ETipoProducto)getCmbTipoProducto().getSelectedItem();
-		List<Producto> subsetProductos = new ArrayList<Producto>();
-
-		for(Producto producto : allProductoList) {
-			if(tpSel == null || producto.getTipo() == tpSel) {
-				if(producto.getArticulo() != null) {
-					tpSet.add(producto.getArticulo().getTipoArticulo().getId());
-					subsetProductos.add(producto);
-				}
-			}
-		}
-
-		if(tpSel != null) {
-			tpSet.clear();
-			tpSet.add(tpSel.getId());
-		}
-
-		//Filtro por tipo de articulo y ancho
+		//Filtro por tipo de articulo
 		for(Articulo a : getArticuloList()) {
-			if(a.getTipoArticulo()!= null && anchoValido(a, tpSet)) {
+			if(selectedItem == null || selectedItem.equals(a.getTipoArticulo())) {
 				result.add(a);
 			}
 		}
-
 		GuiUtil.llenarCombo(getCmbArticulo(), result, true);
 		getCmbArticulo().insertItemAt("", 0);
 		getCmbArticulo().setSelectedIndex(0);
@@ -472,16 +437,6 @@ public class JDialogSeleccionarProducto extends JDialog {
 		getCmbGama().setSelectedIndex(0);
 	}
 
-	private boolean anchoValido(Articulo art, Set<Integer> tpSet) {
-		for(Integer idTipoProd : tpSet) {
-			DefinicionPrecio def = versionListaDePrecios.getDefinicionPorTipoProducto(ETipoProducto.getById(idTipoProd));
-			if(def != null && def.estaDefinido(art)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public boolean isAcepto() {
 		return acepto;
 	}
@@ -502,7 +457,6 @@ public class JDialogSeleccionarProducto extends JDialog {
 						}
 						getCmbGama().setVisible(esTenidoOrEstampado);
 						getLblGama().setVisible(esTenidoOrEstampado);
-						recargarComboArticulos();
 						filtrar();
 					}
 				}
@@ -526,11 +480,18 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return cmbGama;
 	}
 	
+	private void recargarComboTipoProducto() {
+		GuiUtil.llenarCombo(getCmbTipoProducto(), getTipoProductosEnListaDePrecios(), true);
+		getCmbTipoProducto().insertItemAt("", 0);
+		getCmbTipoProducto().setSelectedIndex(0);
+	}
+	
 	private List<ETipoProducto> getTipoProductosEnListaDePrecios() {
 		Set<ETipoProducto> tpSet = new HashSet<ETipoProducto>();
 		for(Producto pr : allProductoList) {
 			tpSet.add(pr.getTipo());
 		}
+		tpSet.remove(ETipoProducto.REPROCESO_SIN_CARGO);
 		return new ArrayList<ETipoProducto>(tpSet);
 	}
 
@@ -541,8 +502,61 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return articuloFacade;
 	}
 
-	public List<Producto> getProductoSelectedList() {
-		return productoSelectedList;
+	public List<ProductoArticulo> getProductoSelectedList() {
+		ProductoArticuloHelper prodArtHelper = new ProductoArticuloHelper();
+		return prodArtHelper.getPersistentInstances(productoSelectedList);
+	}
+
+	private class PanelTablaProductoArticulo extends PanelTabla<ProductoArticulo> {
+		
+		private static final long serialVersionUID = 1L;
+		
+		private static final int CANT_COLS = 2;
+		private static final int COL_PA = 0;
+		private static final int COL_OBJ = 1;
+
+		public PanelTablaProductoArticulo() {
+			getBotonAgregar().setVisible(false);
+		}
+
+		@Override
+		protected FWJTable construirTabla() {
+			FWJTable tablaPA = new FWJTable(0, CANT_COLS);
+			tablaPA.setStringColumn(COL_PA, "PRODUCTO - ARTÍCULO", 300, 300, true);
+			tablaPA.setStringColumn(COL_OBJ, "", 0, 0, true);
+			tablaPA.setHeaderAlignment(COL_PA, FWJTable.CENTER_ALIGN);
+			return tablaPA;
+		}
+
+		@Override
+		protected void agregarElemento(ProductoArticulo elemento) {
+			Object[] row = new Object[CANT_COLS];
+			row[COL_PA] = elemento.toString();
+			row[COL_OBJ] = elemento;
+			getTabla().addRow(row);
+		}
+
+		@Override
+		protected ProductoArticulo getElemento(int fila) {
+			return (ProductoArticulo)getTabla().getValueAt(fila, COL_OBJ);
+		}
+
+		@Override
+		protected String validarElemento(int fila) {
+			return null;
+		}
+
+		@Override
+		public boolean validarQuitar() {
+			int selectedRow = getTabla().getSelectedRow();
+			if(selectedRow != -1) {
+				ProductoArticulo elemento = getElemento(selectedRow);
+				JDialogSeleccionarProducto.this.productoSelectedList.remove(elemento);
+				JDialogSeleccionarProducto.this.getFWCheckBoxList().setAllSelectedItems(false);
+			}
+			return true;
+		}
+
 	}
 
 }

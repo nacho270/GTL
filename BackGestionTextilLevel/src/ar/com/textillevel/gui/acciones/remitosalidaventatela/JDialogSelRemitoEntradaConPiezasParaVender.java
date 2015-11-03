@@ -143,10 +143,10 @@ public class JDialogSelRemitoEntradaConPiezasParaVender extends JDialog {
 							   (!piezaCruda && tipoTela.equals(ETipoTela.TERMINADA.toString()));
 				//Filtro por tela
 				cumpleTipoDeTela = articuloList.isEmpty() ||
-								  (odt != null && articuloList.contains(odt.getProducto().getArticulo()));
+								  (odt != null && articuloList.contains(odt.getProductoArticulo().getArticulo()));
 				//Filtro por producto
 				cumpleTipoDeProducto = tipoProductoList.isEmpty() ||
-				  				       (odt != null && tipoProductoList.contains(odt.getProducto().getTipo()));
+				  				       (odt != null && tipoProductoList.contains(odt.getProductoArticulo().getTipo()));
 				//Si cumple todo la agrega
 				if(cumpleCrudoOrTerminado && cumpleTipoDeTela && cumpleTipoDeProducto) {
 					piezasResult.add(pr);
@@ -373,7 +373,7 @@ public class JDialogSelRemitoEntradaConPiezasParaVender extends JDialog {
 		}
 
 		public String toString() {
-			return "[" + pr.getMetros().toString() + (odt == null ? " CRUDO]" : " " + odt.getProducto().toString() + "]");
+			return "[" + pr.getMetros().toString() + (odt == null ? " CRUDO]" : " " + odt.getProductoArticulo().toString() + "]");
 		}
 
 	}
@@ -383,7 +383,7 @@ public class JDialogSelRemitoEntradaConPiezasParaVender extends JDialog {
 		for(PiezaRemito pr : piezaRemitoList) {
 			if(re.getPiezas().contains(pr)) {
 				OrdenDeTrabajo odt = getODT(pr, odtMap.get(re));
-				strList.add("[" + pr.getMetros().toString() + (odt == null ? " CRUDO]" : " " + odt.getProducto().toString() + "]"));
+				strList.add("[" + pr.getMetros().toString() + (odt == null ? " CRUDO]" : " " + odt.getProductoArticulo().toString() + "]"));
 			}
 		}
 		String piezasListStr = StringUtil.getCadena(strList, " ");

@@ -52,8 +52,8 @@ import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO;
 import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO.EnumTipoPiezaRE;
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
@@ -108,7 +108,7 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 	private JButton btnSelProductos;
 	private JMenu menuODT;
 	private List<OrdenDeTrabajo> odtList;
-	private List<Producto> productoList;
+	private List<ProductoArticulo> productoList;
 	private Frame owner;
 
 	private List<RemitoEntrada> remitoEntradaList;
@@ -122,7 +122,7 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 		this.remitoSalida = remitoSalida;
 		this.modoConsulta = modoConsulta;
 		this.odtList = new ArrayList<OrdenDeTrabajo>();
-		this.productoList = new ArrayList<Producto>();
+		this.productoList = new ArrayList<ProductoArticulo>();
 		this.remitoEntradaList = new ArrayList<RemitoEntrada>();
 		this.piezasElegidasStock = new HashMap<Integer, PiezaRemitoSalidaTO>();
 		this.ventaTela = ventaTela;
@@ -177,7 +177,7 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 		this.remitoSalida = remitoSalida;
 		this.modoConsulta = false;
 		this.odtList = new ArrayList<OrdenDeTrabajo>();
-		this.productoList = new ArrayList<Producto>();
+		this.productoList = new ArrayList<ProductoArticulo>();
 		this.remitoEntradaList = new ArrayList<RemitoEntrada>();
 		this.piezasElegidasStock = new HashMap<Integer, PiezaRemitoSalidaTO>();
 		this.ventaTela = ventaTela;
@@ -256,9 +256,9 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 			}
 		}
 		getTxtCodODT().setText(StringUtil.getCadena(extractCodigos(odts), ", "));
-		Set<Producto> productoList = new HashSet<Producto>();
+		Set<ProductoArticulo> productoList = new HashSet<ProductoArticulo>();
 		for(OrdenDeTrabajo odt : odts) {
-			productoList.add(odt.getProducto());
+			productoList.add(odt.getProductoArticulo());
 		}
 		getTxtProductos().setText(StringUtil.getCadena(productoList, ", "));
 		getTxtRemitosEntrada().setText(StringUtil.getCadena(extractRemitosEntrada(odts), ", "));
@@ -437,7 +437,7 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {
-						List<Producto> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
+						List<ProductoArticulo> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
 						getTxtProductos().setText(StringUtil.getCadena(productoSelectedList, ", "));
 						productoList.clear();
 						productoList.addAll(productoSelectedList);

@@ -54,9 +54,9 @@ import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 import ar.com.textillevel.entidades.gente.Proveedor;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.Tela;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogSeleccionarImprimirODT;
@@ -350,13 +350,13 @@ public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					PrecioMateriaPrima selectedItem = getPMPSeleccionada();
-					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoEntradaCompraTela.this, remitoEntrada.getCliente(), remitoEntrada.getProductoList(), Collections.singletonList(((Tela)selectedItem.getMateriaPrima()).getArticulo()));
+					JDialogSeleccionarProducto dialogSeleccionarProducto = new JDialogSeleccionarProducto(JDialogAgregarRemitoEntradaCompraTela.this, remitoEntrada.getCliente(), remitoEntrada.getProductoArticuloList(), Collections.singletonList(((Tela)selectedItem.getMateriaPrima()).getArticulo()));
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {
-						remitoEntrada.getProductoList().clear();
-						List<Producto> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
-						remitoEntrada.getProductoList().addAll(productoSelectedList);
+						remitoEntrada.getProductoArticuloList().clear();
+						List<ProductoArticulo> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
+						remitoEntrada.getProductoArticuloList().addAll(productoSelectedList);
 						getTxtProductos().setText(StringUtil.getCadena(productoSelectedList, ", "));
 					}
 				}
@@ -372,7 +372,7 @@ public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 			txtProductos = new JTextField();
 			txtProductos.setEditable(false);
 			if(modoConsulta || remitoEntrada.getId() != null) {
-				txtProductos.setText(StringUtil.getCadena(remitoEntrada.getProductoList(), ", "));
+				txtProductos.setText(StringUtil.getCadena(remitoEntrada.getProductoArticuloList(), ", "));
 			}
 		}
 		return txtProductos;
@@ -837,7 +837,7 @@ public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 				btnSelODTs.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoList(), odtList);
+						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoArticuloList(), odtList);
 						GuiUtil.centrarEnFramePadre(dialogSeleccionarCrearODT);
 						dialogSeleccionarCrearODT.setVisible(true);
 						if(dialogSeleccionarCrearODT.isAcepto()){

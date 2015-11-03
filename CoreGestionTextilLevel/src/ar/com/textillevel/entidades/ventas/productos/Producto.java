@@ -11,16 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import ar.com.textillevel.entidades.enums.ETipoProducto;
-import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.productos.visitor.IProductoVisitor;
 
 @Entity
@@ -32,7 +26,6 @@ public abstract class Producto implements Serializable {
 	private static final long serialVersionUID = -311441841585244454L;
 	private Integer id;
 	private String descripcion;
-	private Articulo articulo;
 	private Float precioCalculado;
 
 	@Id
@@ -55,17 +48,6 @@ public abstract class Producto implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	@ManyToOne
-	@JoinColumn(name="F_ARTICULO_P_ID", nullable=true)//esto se puso como nulleable en true para poder poner el producto "reproceso sin cargo"
-	@Fetch(FetchMode.JOIN)
-	public Articulo getArticulo() {
-		return articulo;
-	}
-
-	public void setArticulo(Articulo articulo) {
-		this.articulo = articulo;
-	}
-	
 	@Override
 	@Transient
 	public String toString(){

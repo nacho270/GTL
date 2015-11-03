@@ -154,9 +154,9 @@ public class DefinicionPrecio implements Serializable {
 	}
 	
 	@Transient
-	public Float getPrecio(Producto producto) {
+	public Float getPrecio(Producto producto, Articulo articulo) {
 		for (RangoAncho ra : getRangosProducto(producto)) {
-			Float precio = ra.getPrecioProducto(producto);
+			Float precio = ra.getPrecioProducto(producto, articulo);
 			if (precio != null) {
 				return precio;
 			}
@@ -178,16 +178,6 @@ public class DefinicionPrecio implements Serializable {
 			}
 		}
 		return lista;
-	}
-
-	@Transient
-	public boolean estaDefinido(Articulo art) {
-		for(RangoAncho r : getRangos()) {
-			if(art.getAncho() != null && r.estaDefinido(art)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Transient

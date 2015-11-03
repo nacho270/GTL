@@ -26,8 +26,8 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.PiezaRemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaArticuloFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
@@ -226,9 +226,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	}
 
 	public RemitoEntrada completarPiezasRemitoEntrada(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtCapturedList, String usrName) {
-		Set<Producto> productoSet = new HashSet<Producto>();
+		Set<ProductoArticulo> productoArtSet = new HashSet<ProductoArticulo>();
 		RemitoEntrada rePersisted = remitoEntradaDAO.getById(remitoEntrada.getId());
-		productoSet.addAll(rePersisted.getProductoList());
+		productoArtSet.addAll(rePersisted.getProductoArticuloList());
 		//Grabo las piezas modificadas
 		for(PiezaRemito pr : rePersisted.getPiezas()) {
 			int indexOf = remitoEntrada.getPiezas().indexOf(pr);
@@ -242,10 +242,10 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		for(OrdenDeTrabajo odt : odtCapturedList) {
 			odt.setRemito(rePersisted);
 			odtDAO.save(odt);
-			productoSet.add(odt.getProducto());
+			productoArtSet.add(odt.getProductoArticulo());
 		}
-		rePersisted.getProductoList().clear();
-		rePersisted.getProductoList().addAll(productoSet);
+		rePersisted.getProductoArticuloList().clear();
+		rePersisted.getProductoArticuloList().addAll(productoArtSet);
 		auditoriaFacade.auditar(usrName, "Se completaron piezas del remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION, remitoEntrada);
 		return remitoEntradaDAO.save(rePersisted);
 	}

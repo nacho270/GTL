@@ -10,6 +10,7 @@ import org.apache.taglibs.string.util.StringW;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
@@ -26,17 +27,19 @@ public class ProductosAndPreciosHelper {
 	
 	private JDialog dialogoLlamador;
 	private Cliente cliente;
+	private Articulo articulo;
 
-	public ProductosAndPreciosHelper(JDialog dialogoLlamador, Cliente cliente) {
+	public ProductosAndPreciosHelper(JDialog dialogoLlamador, Articulo articulo, Cliente cliente) {
 		this.dialogoLlamador = dialogoLlamador;
 		this.cliente = cliente;
+		this.articulo = articulo;
 	}
 
 	public BigDecimal getPrecio(Producto producto) {
 		Float precio = null;
 		boolean precioProdClienteOK = true;
 		try {
-			precio = getListaDePreciosFacade().getPrecioProducto(producto, cliente);
+			precio = getListaDePreciosFacade().getPrecioProducto(producto, articulo, cliente);
 			precioProdClienteOK = precio != null;
 		} catch (ValidacionException e) {
 			precioProdClienteOK = false;
@@ -49,7 +52,7 @@ public class ProductosAndPreciosHelper {
 				precioProdClienteDefaultOK = clienteDefault != null;
 				if(clienteDefault != null) {
 					try {
-						precio = getListaDePreciosFacade().getPrecioProducto(producto, clienteDefault);
+						precio = getListaDePreciosFacade().getPrecioProducto(producto, articulo, clienteDefault);
 						if(precio == null) {
 							precioProdClienteDefaultOK = false;
 						} else {
@@ -60,7 +63,7 @@ public class ProductosAndPreciosHelper {
 					}
 				}
 				if(!precioProdClienteDefaultOK) {
-					FWJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + producto + "' no está definido en su lista de precios."), "Advertencia");					
+					FWJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + producto  + "-" + articulo + "' no está definido en su lista de precios."), "Advertencia");					
 				}
 			}
 		} else {
@@ -71,7 +74,7 @@ public class ProductosAndPreciosHelper {
 
 	public ResultProductosTO getInfoProductosAndListaDePrecios() {
 		try {
-			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente), getListaDePreciosFacade().getProductos(cliente));
+			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente), getListaDePreciosFacade().getProductos(cliente, articulo));
 		} catch (ValidacionException e) {
 			int resp = FWJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
 			if(resp == FWJOptionPane.YES_OPTION) {
@@ -80,7 +83,7 @@ public class ProductosAndPreciosHelper {
 					FWJOptionPane.showErrorMessage(dialogoLlamador, "No fue cargado el cliente NRO. '" + NRO_CLIENTE_DEFAULT + "'.", "Advertencia");
 				} else {
 					try {
-						return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault), getListaDePreciosFacade().getProductos(clienteDefault));
+						return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault), getListaDePreciosFacade().getProductos(clienteDefault, articulo));
 					} catch (ValidacionException e1) {
 						FWJOptionPane.showErrorMessage(dialogoLlamador, "La lista de precios por defecto tampoco fue cargada.", "Advertencia");
 					}

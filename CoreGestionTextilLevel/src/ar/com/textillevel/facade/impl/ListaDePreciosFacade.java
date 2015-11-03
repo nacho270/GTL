@@ -19,6 +19,7 @@ import ar.com.textillevel.dao.api.local.ProductoDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
@@ -83,13 +84,13 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		return cotizacion != null && !DateUtil.getHoy().after(DateUtil.sumarDias(cotizacion.getFechaInicio(), cotizacion.getValidez()));
 	}
 
-	public Float getPrecioProducto(Producto producto, Cliente cliente) throws ValidacionException {
+	public Float getPrecioProducto(Producto producto, Articulo articulo, Cliente cliente) throws ValidacionException {
 		DefinicionPrecio definicion = null;
 		VersionListaDePrecios versionCotizadaVigente = getVersionCotizadaVigente(cliente);
 		if(versionCotizadaVigente != null) {
 			definicion = versionCotizadaVigente.getDefinicionPorTipoProducto(producto.getTipo());
 			if(definicion != null) {
-				return definicion.getPrecio(producto);
+				return definicion.getPrecio(producto, articulo);
 			}
 		}
 		VersionListaDePrecios versionActual = getVersionListaPrecioActual(cliente);
@@ -97,7 +98,7 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		if(definicion == null) {
 			return null;
 		}
-		return definicion.getPrecio(producto);
+		return definicion.getPrecio(producto, articulo);
 	}
 
 	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException {
@@ -108,7 +109,7 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		return lista.getVersionActual();
 	}
 
-	public List<Producto> getProductos(Cliente cliente) throws ValidacionException {
+	public List<Producto> getProductos(Cliente cliente, Articulo articulo) throws ValidacionException {
 		List<Producto> allProductosCliente = new ArrayList<Producto>();
 		VersionListaDePrecios versionCotizadaVigente = getVersionCotizadaVigente(cliente);
 		VersionListaDePrecios versionListaPrecio = getVersionListaPrecioActual(cliente);
@@ -129,7 +130,7 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		for(Producto p : productos) {
 			DefinicionPrecio definicion = definicionMap.get(p.getTipo());
 			if(definicion != null) {
-				Float precio = definicion.getPrecio(p);
+				Float precio = definicion.getPrecio(p, articulo);
 				if(precio != null) {
 					p.setPrecioCalculado(precio);
 					allProductosCliente.add(p);

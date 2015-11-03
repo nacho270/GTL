@@ -22,7 +22,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
 
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
@@ -38,7 +38,7 @@ public class OrdenDeTrabajo implements Serializable {
 	private Integer id;
 	private RemitoEntrada remito;
 	private List<PiezaODT> piezas;
-	private Producto producto;
+	private ProductoArticulo productoArticulo;
 	private String codigo;
 	private Timestamp fechaODT;
 	private Integer idEstadoODT;
@@ -86,15 +86,15 @@ public class OrdenDeTrabajo implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name="F_PRODUCTO_P_ID", nullable=false)
-	public Producto getProducto() {
-		return producto;
+	@JoinColumn(name="F_PRODUCTO_ARTICULO_P_ID", nullable=false)
+	public ProductoArticulo getProductoArticulo() {
+		return productoArticulo;
 	}
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
+	public void setProductoArticulo(ProductoArticulo productoArticulo) {
+		this.productoArticulo = productoArticulo;
 	}
-
+	
 	@Column(name="A_CODIGO", nullable=false)
 	public String getCodigo() {
 		return codigo;
@@ -209,7 +209,7 @@ public class OrdenDeTrabajo implements Serializable {
 	@Override
 	@Transient
 	public String toString() {
-		return ODTCodigoHelper.getInstance().formatCodigo(getCodigo()) + "-" + getProducto() + (remito == null ? "" : (" - Remito : " + remito.getNroRemito()));
+		return ODTCodigoHelper.getInstance().formatCodigo(getCodigo()) + "-" + getProductoArticulo() + (remito == null ? "" : (" - Remito : " + remito.getNroRemito()));
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
