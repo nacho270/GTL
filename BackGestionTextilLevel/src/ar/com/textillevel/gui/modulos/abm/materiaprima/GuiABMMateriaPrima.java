@@ -232,8 +232,10 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	private void capturarSetearDatos() {
 		ETipoMateriaPrima tipoMateriaPrima = (ETipoMateriaPrima) getCmbTipoMateriaPrima().getSelectedItem();
 		Integer idActual = getMateriaPrimaActual().getId();
+		List<MateriaPrima> mpHijas = getMateriaPrimaActual().getMpHijas();
 		setMateriaPrimaActual(MateriaPrimaFactory.createMateriaPrima(tipoMateriaPrima));
 		getMateriaPrimaActual().setId(idActual);
+		getMateriaPrimaActual().setMpHijas(mpHijas);
 		if (getTxtConcentracion().getText().trim().length() > 0) {
 			getMateriaPrimaActual().setConcentracion(new BigDecimal(getTxtConcentracion().getText().replace(',', '.')));
 		}
