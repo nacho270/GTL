@@ -165,9 +165,8 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 		if(producto.getTipo() == ETipoProducto.DEVOLUCION || producto.getTipo() == ETipoProducto.REPROCESO_SIN_CARGO) {
 			return new Float(0);
 		}
-		if (articulo != null && getAnchoExacto() != null && getAnchoExacto().floatValue() == articulo.getAncho().floatValue()) {
-			return buscarPrecio(producto, articulo);
-		} else if (articulo != null && getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(articulo.getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) {
+		if ( (articulo != null && getAnchoExacto() != null && getAnchoExacto().floatValue() == articulo.getAncho().floatValue()) ||
+				(articulo != null && getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(articulo.getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) ) {
 			return buscarPrecio(producto, articulo);
 		}
 		return null;

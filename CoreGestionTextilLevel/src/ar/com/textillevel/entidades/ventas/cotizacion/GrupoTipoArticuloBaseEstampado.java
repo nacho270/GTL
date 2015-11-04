@@ -98,7 +98,7 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 		VarianteEstampado variante = producto.getVariante();
 		GamaColor gama = variante.getGama();
 		//Solo tiene sentido calcular el precio si el ancho del dibujo es mayor o igual al ancho del artículo (tela)
-		if(producto.getDibujo().getAnchoCilindro() != null && producto.getDibujo().getAnchoCilindro().compareTo(articulo.getAncho()) > 0) {
+		if(producto.getDibujo().getAnchoCilindro() != null && articulo.getAncho().compareTo(producto.getDibujo().getAnchoCilindro()) <= 0) {
 			if(gama != null) {
 				PrecioBaseEstampado precioBase = getPrecioBase(gama, producto.getDibujo());
 				if(precioBase != null) {

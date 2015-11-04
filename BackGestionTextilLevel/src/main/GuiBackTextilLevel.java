@@ -21,12 +21,12 @@ public class GuiBackTextilLevel extends GTLMainTemplate {
 		}else{
 			setBackgroundImage("ar/com/textillevel/imagenes/logogtl-test.jpg");
 		}
-		try{
-			crearTrayIcon("ar/com/textillevel/imagenes/logogtl-ventana.jpg", "Gestion TextilLevel");
-		}catch(Exception e){
-			// aca no paso nada
-		}
 		setIconoVentana("ar/com/textillevel/imagenes/logogtl-ventana.jpg");
+//		try{
+//			crearTrayIcon("ar/com/textillevel/imagenes/logogtl-ventana.jpg", "Gestion TextilLevel");
+//		}catch(Exception e){
+//			// aca no paso nada
+//		}
 //		crearStatusBar();
 	}
 
@@ -45,6 +45,8 @@ public class GuiBackTextilLevel extends GTLMainTemplate {
 			if(System.getProperty("textillevel.chat.server.port")==null){
 				System.getProperties().setProperty("textillevel.chat.server.port", "7777");
 			}
+//			System.getProperties().setProperty("textillevel.email.user", "administracion@textillevel.com");
+//			System.getProperties().setProperty("textillevel.email.pass", "tlevel4215");
 			GuiBackTextilLevel guiBackTextilLevel = new GuiBackTextilLevel(-1, VERSION);
 			EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 			queue.push(new EventQueueProxy(guiBackTextilLevel));

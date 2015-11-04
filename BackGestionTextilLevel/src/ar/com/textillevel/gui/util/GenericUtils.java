@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -56,6 +55,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.krysalis.barcode4j.impl.int2of5.Interleaved2Of5Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
+import ar.com.fwcommon.boss.BossIO;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.util.DateUtil;
@@ -449,7 +449,7 @@ public class GenericUtils {
 		mailServerProperties.put("mail.smtp.port", "587");
 		mailServerProperties.put("mail.smtp.auth", "true");
 		mailServerProperties.put("mail.smtp.starttls.enable", "true");
- 
+
 		Session getMailSession = Session.getDefaultInstance(mailServerProperties, null);
 		Message mailMessage = new MimeMessage(getMailSession);
 		for (String recipent : recipents) {
@@ -476,16 +476,16 @@ public class GenericUtils {
 	        mimeBodyPartFile.setFileName(file.getName());
 	        multipart.addBodyPart(mimeBodyPartFile);
 		}
-		
+
+		File emailIcon = new File(System.getProperty("java.io.tmpdir") + "tempEmailIcon.png");
 		try {
 			MimeBodyPart imagePart = new MimeBodyPart();
 			imagePart.setHeader("Content-ID", "<AbcXyz123>");
 			imagePart.setDisposition(MimeBodyPart.INLINE);
-			imagePart.attachFile(FileUtil.getResourceFile(GenericUtils.class, "ar/com/textillevel/imagenes/logo-gtl-email.png"));
+			BossIO.getInstance().writeFile(emailIcon, FileUtil.getResourceAsStream("ar/com/textillevel/imagenes/logo-gtl-email.png"));
+			imagePart.attachFile(emailIcon);
 			multipart.addBodyPart(imagePart);
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		mailMessage.setContent(multipart);
@@ -496,6 +496,7 @@ public class GenericUtils {
 				mailServerProperties.getProperty("textillevel.email.pass"));
 		transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
 		transport.close();
+		emailIcon.delete();
 	}
 	
 	public static void enviarCotizacionPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {

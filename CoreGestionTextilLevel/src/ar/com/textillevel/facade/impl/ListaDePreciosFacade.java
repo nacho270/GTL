@@ -2,6 +2,8 @@ package ar.com.textillevel.facade.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +139,12 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 				}
 			}
 		}
+		Collections.sort(allProductosCliente, new Comparator<Producto>() {
+			public int compare(Producto o1, Producto o2) {
+				int compareTipo = o1.getTipo().getDescripcion().compareTo(o2.getTipo().getDescripcion());
+				return compareTipo != 0 ? compareTipo : o1.getDescripcion().compareTo(o2.getDescripcion());
+			}
+		});
 		return allProductosCliente;
 	}
 
