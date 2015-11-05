@@ -422,7 +422,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		}
 		if(getDefinicion() != null) {
 			rangoAnchoExistente = getDefinicion().getRangoSolapadoCon(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
-			if(rangoAnchoExistente != null && (rangoAnchoSiendoEditado == null || rangoAnchoExistente!=rangoAnchoSiendoEditado)) {
+			if(rangoAnchoExistente != null && (rangoAnchoSiendoEditado == null || !rangoAnchoExistente.equals(rangoAnchoSiendoEditado))) {
 				FWJOptionPane.showErrorMessage(this, "Rango Ancho Articulo Existente", "Error");
 				return false;
 			}

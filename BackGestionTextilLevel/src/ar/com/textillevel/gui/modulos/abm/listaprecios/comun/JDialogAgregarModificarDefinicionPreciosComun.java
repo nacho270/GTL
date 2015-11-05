@@ -106,7 +106,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 				Articulo art = getArticulo();
 				PrecioTipoArticulo pta = rangoAnchoComun.getPrecioArticulo(getTipoArticulo(),art, PrecioTipoArticulo.class);
 				if(pta != null && ( (pta.getArticulo() == null && art == null) || (pta.getArticulo() != null && art != null)) 
-						&& (elemSiendoEditado == null  || elemSiendoEditado != pta)) {
+						&& (elemSiendoEditado == null  || !elemSiendoEditado.equals(pta))) {
 					FWJOptionPane.showErrorMessage(this, "Ya existe un precio para ese tipo de artículo.", "Error");
 					getTxtPrecio().requestFocus();
 					return false;

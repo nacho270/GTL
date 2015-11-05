@@ -296,7 +296,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 					} else {
 						rangoCoberturaExistente = rangosCobertura.get(0);
 					}
-					if(rangoCoberturaExistente != null && (elemSiendoEditado == null || elemSiendoEditado!=rangoCoberturaExistente)) {
+					if(rangoCoberturaExistente != null && (elemSiendoEditado == null || !elemSiendoEditado.equals(rangoCoberturaExistente))) {
 						FWJOptionPane.showErrorMessage(this, "Rango Cobertura Existente", "Error");
 						return false;
 					}
@@ -308,7 +308,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 				RangoCoberturaEstampado rce = (RangoCoberturaEstampado)getTablaRango().getTabla().getValueAt(i, getTablaRango().getColObj());
 				PrecioBaseEstampado precioBase = rce.getRangoCantidadColores().getPrecioBase();
 				boolean mismoPrecioPeroDiferenteGama = !precioBase.getGama().equals(base) && rce.getPrecio().equals(getPrecio());
-				if(mismoPrecioPeroDiferenteGama && (elemSiendoEditado == null || elemSiendoEditado != rce)) {
+				if(mismoPrecioPeroDiferenteGama && (elemSiendoEditado == null || !elemSiendoEditado.equals(rce))) {
 					GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase = precioBase.getGrupoTipoArticuloBase();
 					RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo();
 					boolean mismoArticulo = grupoTipoArticuloBase.getTipoArticulo().equals(getTipoArticulo()); 

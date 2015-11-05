@@ -256,7 +256,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			GrupoTipoArticuloGama grupo = rangoAnchoArticuloTenido.getPrecioArticulo(getTipoArticulo(),art, GrupoTipoArticuloGama.class);
 			if(grupo != null && ( (grupo.getArticulo() == null && art == null) || (grupo.getArticulo() != null && art != null)) ) {
 				PrecioGama pg = grupo.getPrecioGama(gamaColorCliente);
-				if(pg != null && (elemSiendoEditado == null  || elemSiendoEditado != pg)) {
+				if(pg != null && (elemSiendoEditado == null  || !elemSiendoEditado.equals(pg))) {
 					FWJOptionPane.showErrorMessage(this, "Ya existe un precio para la gama " + gamaColorCliente.getNombre(), "Error");
 					getTxtPrecio().requestFocus();
 					return false;
