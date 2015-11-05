@@ -28,6 +28,7 @@ import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColorCliente;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
@@ -150,6 +151,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		getCmbGama().setSelectedItem(precioGamaSiendoEditado.getGamaCliente());
 		GrupoTipoArticuloGama grupoTipoArticuloBase = precioGamaSiendoEditado.getGrupoTipoArticuloGama();
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
+		getCmbArticulo().setSelectedItem(grupoTipoArticuloBase.getArticulo());
 
 		RangoAnchoArticuloTenido rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticuloTenido();
 		getTxtAnchoInicial().setValue(rangoAnchoArticulo.getAnchoMinimo() == null ? null : rangoAnchoArticulo.getAnchoMinimo().doubleValue());
@@ -198,10 +200,12 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		
 		//Grupo
 		TipoArticulo ta = getTipoArticulo();
-		GrupoTipoArticuloGama grupo = rango.getGrupo(ta);
-		if(grupo == null) {
+		Articulo art = getArticulo();
+		GrupoTipoArticuloGama grupo = rango.getPrecioArticulo(ta, art, GrupoTipoArticuloGama.class);
+		if(grupo == null || (grupo.getArticulo() == null && art != null)) {
 			grupo = new GrupoTipoArticuloGama();
 			grupo.setTipoArticulo(ta);
+			grupo.setArticulo(art);
 			rango.getGruposGama().add(grupo);
 			grupo.setRangoAnchoArticuloTenido(rango);
 		}
@@ -248,8 +252,9 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		}
 		RangoAnchoArticuloTenido rangoAnchoArticuloTenido = (RangoAnchoArticuloTenido)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
 		if(rangoAnchoArticuloTenido != null) {
-			GrupoTipoArticuloGama grupo = rangoAnchoArticuloTenido.getGrupo(getTipoArticulo());
-			if(grupo != null) {
+			Articulo art = getArticulo();
+			GrupoTipoArticuloGama grupo = rangoAnchoArticuloTenido.getPrecioArticulo(getTipoArticulo(),art, GrupoTipoArticuloGama.class);
+			if(grupo != null && ( (grupo.getArticulo() == null && art == null) || (grupo.getArticulo() != null && art != null)) ) {
 				PrecioGama pg = grupo.getPrecioGama(gamaColorCliente);
 				if(pg != null && (elemSiendoEditado == null  || elemSiendoEditado != pg)) {
 					FWJOptionPane.showErrorMessage(this, "Ya existe un precio para la gama " + gamaColorCliente.getNombre(), "Error");

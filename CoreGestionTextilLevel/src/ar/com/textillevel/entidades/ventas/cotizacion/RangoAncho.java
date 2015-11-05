@@ -1,6 +1,7 @@
 package ar.com.textillevel.entidades.ventas.cotizacion;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -19,6 +20,7 @@ import javax.persistence.Transient;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.util.Utils;
 
@@ -176,6 +178,36 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	public boolean enRango(Float valor) {
 		return valor != null && (getAnchoExacto() != null && valor.equals(getAnchoExacto()) || Utils.dentroDelRango(valor, getAnchoMinimo(), getAnchoMaximo()));
 	}
+	
+	@Transient
+	public <G extends GrupoTipoArticulo> G getPrecioArticulo(TipoArticulo ta, Articulo articulo, Class<G> clazz) {
+		if(articulo == null) {
+			for(G pta : getGruposTipoArticulo(clazz)) {
+				if(pta.getTipoArticulo().equals(ta)) {
+					return pta;
+				}
+			}
+			return null;
+		} else {
+			G ptaDefault = null;
+			G ptaConArticulo = null;
+			for(G p : getGruposTipoArticulo(clazz)) {
+				if(p.getTipoArticulo().equals(ta)) {
+					if(p.getArticulo() == null) {
+						ptaDefault = p;
+					}
+					if(p.getArticulo() != null && p.getArticulo().equals(articulo)) {
+						ptaConArticulo = p;
+					}
+				}
+			}
+			return ptaConArticulo != null ? ptaConArticulo : ptaDefault;
+		}
+	}
+
+
+	@Transient
+	protected abstract <G extends GrupoTipoArticulo> List<G> getGruposTipoArticulo(Class<G> clazz);
 
 	@Transient
 	protected abstract Float buscarPrecio(Producto producto, Articulo articulo);

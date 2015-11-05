@@ -185,7 +185,7 @@ public class ImprimirListaDePreciosHandler {
 							DefinicionPrecioTO dTO = new DefinicionPrecioTO();
 							dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
 							dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
-							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase());
+							dTO.setTipoArticulo(gtag.getTipoArticulo().getNombre().toUpperCase()  + (gtag.getArticulo() != null ? " (" + gtag.getArticulo().getDescripcion() + ")" : ""));
 							dTO.setDescripcion(pg.getGamaCliente().getNombre().replace(JDialogAgregarModificarGamaColorCliente.EDITADA, ""));
 							dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(pg.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 							definicionesTO.add(dTO);
@@ -200,7 +200,7 @@ public class ImprimirListaDePreciosHandler {
 									DefinicionPrecioTO dTO = new DefinicionPrecioTO();
 									dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
 									dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
-									dTO.setTipoArticulo(gtabe.getTipoArticulo().getNombre().toUpperCase());
+									dTO.setTipoArticulo(gtabe.getTipoArticulo().getNombre().toUpperCase() + (gtabe.getArticulo() != null ? " (" + gtabe.getArticulo().getDescripcion() + ")" : ""));
 									dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(rce.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 									if (pbe.getDibujo() == null) {
 										dTO.setDescripcion("BASE " + pbe.getGama().getNombre().toUpperCase() + ". " + rcc.toString().toUpperCase() + " COLORES.\n" + rce.toString() + " DE COBERTURA.");
@@ -219,7 +219,7 @@ public class ImprimirListaDePreciosHandler {
 						dTO.setTipoProducto(dp.getTipoProducto().getDescripcion().toUpperCase());
 						dTO.setAncho(ra.toStringConUnidad(EUnidad.METROS));
 						dTO.setDescripcion("-");
-						dTO.setTipoArticulo(pta.getTipoArticulo().getNombre().toUpperCase());
+						dTO.setTipoArticulo(pta.getTipoArticulo().getNombre().toUpperCase() + (pta.getArticulo() != null ? " (" + pta.getArticulo().getDescripcion() + ")" : ""));
 						dTO.setPrecio("$ " + GenericUtils.getDecimalFormatListaPrecios().format(pta.getPrecio()) + " * x " + dp.getTipoProducto().getUnidad().getDescripcion().toLowerCase());
 						definicionesTO.add(dTO);
 					}

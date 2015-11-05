@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
@@ -32,9 +34,11 @@ import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAncho;
+import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -54,6 +58,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private DecimalNumericTextField txtAnchoFinal;
 	private DecimalNumericTextField txtAnchoExacto;
 	private JComboBox cmbTipoArticulo;
+	private JComboBox cmbArticulo;
 	private DecimalNumericTextField txtPrecio;
 	private PanelTablaRango<T, E> tablaRango;
 	private JButton btnNuevoOrCancelar;
@@ -89,6 +94,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		setTipoProducto(tipoProducto);
 		setUpComponentes();
 		setUpScreen();
+		llenarComboArticulos();
 	}
 
 	private void setUpScreen() {
@@ -137,15 +143,18 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			panelNorte.add(getChkAnchoExacto(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
 			panelNorte.add(new JLabel("Ancho exacto: "), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panelNorte.add(getTxtAnchoExacto(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
-			panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(6, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
-			panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(7, 2, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelNorte.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(6, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getCmbArticulo(), GenericUtils.createGridBagConstraints(7, 2, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+
+			panelNorte.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(6, 3, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
+			panelNorte.add(getTxtPrecio(), GenericUtils.createGridBagConstraints(7, 3, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 
 			JPanel panelEspecifico = createPanelDatosEspecificos();
 			if (panelEspecifico != null) {
-				panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 8,1,1,1));
+				panelNorte.add(panelEspecifico, GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 8,1,1,1));
 			}
-			panelNorte.add(getBtnNuevoOrCancelar(), GenericUtils.createGridBagConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
-			panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(4, 4, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
+			panelNorte.add(getBtnNuevoOrCancelar(), GenericUtils.createGridBagConstraints(3, 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
+			panelNorte.add(getBtnAgregar(), GenericUtils.createGridBagConstraints(4, 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 2, 1, 1, 1));
 		}
 		return panelNorte;
 	}
@@ -298,8 +307,22 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		if (cmbTipoArticulo == null) {
 			cmbTipoArticulo = new JComboBox();
 			GuiUtil.llenarCombo(cmbTipoArticulo, getTipoArticuloFacade().getAllTipoArticulos(), true);
+			cmbTipoArticulo.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						llenarComboArticulos();
+					}
+				}
+			});
 		}
 		return cmbTipoArticulo;
+	}
+	
+	public JComboBox getCmbArticulo() {
+		if(cmbArticulo == null) {
+			cmbArticulo = new JComboBox();
+		}
+		return cmbArticulo;
 	}
 
 	public DecimalNumericTextField getTxtPrecio() {
@@ -445,6 +468,17 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		return anchoMaximo;
 	}
 
+	private void llenarComboArticulos() {
+		getCmbArticulo().removeAllItems();
+		getCmbArticulo().addItem(null);
+		List<Articulo> articulos = GTLBeanFactory.getInstance().getBean2(ArticuloFacadeRemote.class).getAllByTipoArticuloOrderByName(getTipoArticulo().getId());
+		if(articulos != null && !articulos.isEmpty()) {
+			for(Articulo a : articulos) {
+				getCmbArticulo().addItem(a);
+			}
+		}
+	}
+	
 	protected Float getAnchoExacto() {
 		if(getChkAnchoExacto().isSelected()) {
 			return getTxtAnchoExacto().getValueWithNull();
@@ -472,7 +506,11 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 
 	protected TipoArticulo getTipoArticulo() {
-		return (TipoArticulo)getCmbTipoArticulo().getSelectedItem();
+		return (TipoArticulo) getCmbTipoArticulo().getSelectedItem();
+	}
+	
+	protected Articulo getArticulo() {
+		return (Articulo) getCmbArticulo().getSelectedItem();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -540,4 +578,5 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		}
 		return parametrosFacade;
 	}
+
 }

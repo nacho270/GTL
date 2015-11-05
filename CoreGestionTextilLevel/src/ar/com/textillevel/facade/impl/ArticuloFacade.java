@@ -35,4 +35,8 @@ public class ArticuloFacade implements ArticuloFacadeRemote {
 		return articuloDao.getById(idArticulo);
 	}
 
+	public List<Articulo> getAllByTipoArticuloOrderByName(Integer idTipoArticulo) {
+		return articuloDao.getAllByTipoArticuloOrderByName(idTipoArticulo);
+	}
+
 }

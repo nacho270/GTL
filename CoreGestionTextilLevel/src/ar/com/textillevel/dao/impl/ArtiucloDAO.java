@@ -33,4 +33,13 @@ public class ArtiucloDAO extends GenericDAO<Articulo, Integer> implements Articu
 		return resultQueryList;
 	}
 
+	public List<Articulo> getAllByTipoArticuloOrderByName(Integer idTipoArticulo) {
+		String hql = " SELECT art  FROM Articulo art "+
+				 " WHERE art.tipoArticulo.id = :idTipoArticulo " +
+				 " ORDER BY art.nombre ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("idTipoArticulo", idTipoArticulo);
+		return q.getResultList();
+	}
+
 }

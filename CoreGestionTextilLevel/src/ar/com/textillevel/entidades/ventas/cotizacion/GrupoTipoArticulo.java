@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 
 @MappedSuperclass
@@ -19,6 +20,7 @@ public class GrupoTipoArticulo implements Serializable {
 
 	private Integer id;
 	private TipoArticulo tipoArticulo;
+	private Articulo articulo;
 	
 	@Id
 	@Column(name = "P_ID")
@@ -41,6 +43,16 @@ public class GrupoTipoArticulo implements Serializable {
 		this.tipoArticulo = tipoArticulo;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "F_ARTICULO_P_ID", nullable = true)
+	public Articulo getArticulo() {
+		return articulo;
+	}
+
+	public void setArticulo(Articulo articulo) {
+		this.articulo = articulo;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

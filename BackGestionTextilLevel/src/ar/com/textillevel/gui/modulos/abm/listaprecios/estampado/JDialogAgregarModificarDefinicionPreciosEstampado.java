@@ -15,6 +15,7 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
@@ -168,10 +169,12 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		
 		//Grupo
 		TipoArticulo ta = getTipoArticulo();
-		GrupoTipoArticuloBaseEstampado grupo = rango.getGrupo(ta);
-		if(grupo == null) {
+		Articulo art = getArticulo();
+		GrupoTipoArticuloBaseEstampado grupo = rango.getPrecioArticulo(ta, art, GrupoTipoArticuloBaseEstampado.class);
+		if(grupo == null || (grupo.getArticulo() == null && art != null)) {
 			grupo = new GrupoTipoArticuloBaseEstampado();
 			grupo.setTipoArticulo(ta);
+			grupo.setArticulo(art);
 			rango.getGruposBase().add(grupo);
 			grupo.setRangoAnchoArticulo(rango);
 		}
@@ -265,8 +268,9 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 				rangoCantColoresSiendoEditado = elemSiendoEditado.getRangoCantidadColores();
 			}
 			if(rangoAnchoArticuloExistente != null) {
-				GrupoTipoArticuloBaseEstampado grupo = ((RangoAnchoArticuloEstampado)rangoAnchoArticuloExistente).getGrupo(getTipoArticulo());
-				if(grupo != null) {
+				Articulo art = getArticulo();
+				GrupoTipoArticuloBaseEstampado grupo = ((RangoAnchoArticuloEstampado)rangoAnchoArticuloExistente).getPrecioArticulo(getTipoArticulo(), art, GrupoTipoArticuloBaseEstampado.class);
+				if(grupo != null && ( (grupo.getArticulo() == null && art == null) || (grupo.getArticulo() != null && art != null)) ) {
 					DibujoEstampado dibujo = (DibujoEstampado) getCmbDibujo().getSelectedItem();
 					PrecioBaseEstampado precioBase = grupo.getPrecioBase(base, dibujo);
 					if(precioBase != null && ( (precioBase.getDibujo() == null && dibujo == null) || (precioBase.getDibujo() != null && dibujo != null))) {
@@ -360,6 +364,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		
 		GrupoTipoArticuloBaseEstampado grupoTipoArticuloBase = precioBase.getGrupoTipoArticuloBase();
 		getCmbTipoArticulo().setSelectedItem(grupoTipoArticuloBase.getTipoArticulo());
+		getCmbArticulo().setSelectedItem(grupoTipoArticuloBase.getArticulo());
 
 		RangoAnchoArticuloEstampado rangoAnchoArticulo = grupoTipoArticuloBase.getRangoAnchoArticulo();
 		getTxtAnchoInicial().setValue(rangoAnchoArticulo.getAnchoMinimo() == null ? null : rangoAnchoArticulo.getAnchoMinimo().doubleValue());

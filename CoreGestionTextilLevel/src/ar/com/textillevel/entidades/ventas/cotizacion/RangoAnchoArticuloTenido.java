@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 
@@ -40,16 +39,6 @@ public class RangoAnchoArticuloTenido extends RangoAncho {
 		this.gruposGama = gruposGama;
 	}
 
-	@Transient
-	public GrupoTipoArticuloGama getGrupo(TipoArticulo ta) {
-		for(GrupoTipoArticuloGama g : getGruposGama()) {
-			if(g.getTipoArticulo().equals(ta)) {
-				return g;
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public void deepOrderBy() {
 		Collections.sort(gruposGama);
@@ -61,14 +50,14 @@ public class RangoAnchoArticuloTenido extends RangoAncho {
 	@Override
 	@Transient
 	protected Float buscarPrecio(Producto producto, Articulo articulo) {
-		GrupoTipoArticuloGama grupo = getGrupo(articulo.getTipoArticulo());
+		GrupoTipoArticuloGama grupo = getPrecioArticulo(articulo.getTipoArticulo(), articulo, GrupoTipoArticuloGama.class);
 		return grupo != null ? grupo.getPrecio((ProductoTenido)producto) : null;
 	}
 
 	@Override
 	@Transient
 	public boolean estaDefinido(Articulo art) {
-		return enRango(art.getAncho().floatValue()) && getGrupo(art.getTipoArticulo()) != null;
+		return enRango(art.getAncho().floatValue()) && getPrecioArticulo(art.getTipoArticulo(), art, GrupoTipoArticuloGama.class) != null;
 	}
 
 	@Override
@@ -91,6 +80,13 @@ public class RangoAnchoArticuloTenido extends RangoAncho {
 		for(GrupoTipoArticuloGama gtag : getGruposGama()) {
 			gtag.aumentarPrecios(porcentajeAumento);
 		}
+	}
+
+	@Override
+	@Transient
+	@SuppressWarnings("unchecked")
+	protected <G extends GrupoTipoArticulo> List<G> getGruposTipoArticulo(Class<G> clazz) {
+		return (List<G>) getGruposGama();
 	}
 
 }

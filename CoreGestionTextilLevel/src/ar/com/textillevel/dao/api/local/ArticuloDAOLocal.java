@@ -13,5 +13,7 @@ public interface ArticuloDAOLocal extends DAOLocal<Articulo, Integer>{
 	public List<Articulo> getArticulosConAlgunaPMPConStockInicial();
 	
 	public List<Articulo> getArticulosConTipoArticuloFetched();
+
+	public List<Articulo> getAllByTipoArticuloOrderByName(Integer idTipoArticulo);
 	
 }

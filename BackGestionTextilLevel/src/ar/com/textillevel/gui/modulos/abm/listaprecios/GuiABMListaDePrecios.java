@@ -758,7 +758,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static String generarResumenRango(RangoAnchoComun ra, EUnidad unidad) {
 			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
 			for (PrecioTipoArticulo pta : ra.getPrecios()) {
-				descripcion += pta.getTipoArticulo().getSigla() 
+				descripcion += pta.getTipoArticulo().getSigla() + (pta.getArticulo() != null ? " (" + pta.getArticulo().getDescripcion() + ")" : "")
 							+ " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x "
 							+ unidad.getDescripcion().toLowerCase() + "</b><br>";
 				descripcion += "<br>";
@@ -772,7 +772,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				for (PrecioBaseEstampado pbe : gtabe.getPrecios()) {
 					for (RangoCantidadColores rcc : pbe.getRangosDeColores()) {
 						for (RangoCoberturaEstampado rce : rcc.getRangos()) {
-							descripcion += gtabe.getTipoArticulo().getSigla() + " - "
+							descripcion += gtabe.getTipoArticulo().getSigla() + (gtabe.getArticulo() != null ? " (" + gtabe.getArticulo().getDescripcion() + ")" : "") + " - "
 									+ "Base " + pbe.getGama().getNombre().toUpperCase() + (pbe.getDibujo() != null ? " (" + pbe.getDibujo().toString().toUpperCase() + ")": "" ) + " <br>"
 									+ "- " + rcc.getMinimo() + " a " + rcc.getMaximo() + " colores "
 									+ " y " + rce.getMinimo() + "&#37; a " + rce.getMaximo() + "&#37;  de cobertura "
@@ -789,7 +789,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
 			for (GrupoTipoArticuloGama gtag : ra.getGruposGama()) {
 				for (PrecioGama pg : gtag.getPrecios()) {
-					descripcion += gtag.getTipoArticulo().getSigla() + " - "
+					descripcion += gtag.getTipoArticulo().getSigla() + (gtag.getArticulo() != null ? " (" + gtag.getArticulo().getDescripcion() + ")" : "") + " - "
 							+ pg.getGamaCliente().getNombre() + " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x "
 							+ unidad.getDescripcion().toLowerCase() + "</b><br>";
 				}

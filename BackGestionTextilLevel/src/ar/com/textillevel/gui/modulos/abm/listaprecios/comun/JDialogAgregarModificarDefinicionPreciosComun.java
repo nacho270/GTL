@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioTipoArticulo;
@@ -70,16 +71,18 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 		//Precio Tipo Articulo
 		PrecioTipoArticulo precioTipoArticulo = null;
 		TipoArticulo ta = getTipoArticulo();
+		Articulo art = getArticulo();
 		if(elemSiendoEditado == null) {
-			precioTipoArticulo = rango.getPrecioArticulo(ta);
+			precioTipoArticulo = rango.getPrecioArticulo(ta, art, PrecioTipoArticulo.class);
 		}
-		if(precioTipoArticulo == null) {
+		if(precioTipoArticulo == null || (precioTipoArticulo.getArticulo() == null && art != null)) {
 			precioTipoArticulo = new PrecioTipoArticulo();
 			precioTipoArticulo.setRangoAncho(rango);
+			precioTipoArticulo.setArticulo(art);
+			precioTipoArticulo.setPrecio(getPrecio());
+			precioTipoArticulo.setTipoArticulo(getTipoArticulo());
 			rango.getPrecios().add(precioTipoArticulo);
 		}
-		precioTipoArticulo.setPrecio(getPrecio());
-		precioTipoArticulo.setTipoArticulo(getTipoArticulo());
 
 		getDefinicion().deepOrderBy();
 
@@ -100,8 +103,10 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 		if(validarDatosComunes(true)) {
 			RangoAnchoComun rangoAnchoComun = (RangoAnchoComun)getDefinicion().getRango(getAnchoInicial(), getAnchoFinal(), getAnchoExacto());
 			if(rangoAnchoComun != null) {
-				PrecioTipoArticulo pta = rangoAnchoComun.getPrecioArticulo(getTipoArticulo());
-				if(pta != null && (elemSiendoEditado == null  || elemSiendoEditado != pta)) {
+				Articulo art = getArticulo();
+				PrecioTipoArticulo pta = rangoAnchoComun.getPrecioArticulo(getTipoArticulo(),art, PrecioTipoArticulo.class);
+				if(pta != null && ( (pta.getArticulo() == null && art == null) || (pta.getArticulo() != null && art != null)) 
+						&& (elemSiendoEditado == null  || elemSiendoEditado != pta)) {
 					FWJOptionPane.showErrorMessage(this, "Ya existe un precio para ese tipo de artículo.", "Error");
 					getTxtPrecio().requestFocus();
 					return false;
@@ -135,6 +140,7 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 			getTxtAnchoExacto().setValue(null);
 			getChkAnchoExacto().setSelected(false);
 		}
+		getCmbArticulo().setSelectedItem(elemHoja.getArticulo());
 		getCmbTipoArticulo().setSelectedItem(elemHoja.getTipoArticulo());
 		getTxtPrecio().setValue(elemHoja.getPrecio().doubleValue());
 	}
