@@ -576,7 +576,7 @@ public class JDialogCargaFactura extends JDialog {
 	private BigDecimal getTotalMetros(BigDecimal metros, ProductoArticulo producto) {
 		if (producto.getTipo().getUnidad() == EUnidad.KILOS) {
 			if(producto.getArticulo().getGramaje() == null) {
-				throw new IllegalArgumentException("Falta definir el gramaje para la tela " + producto.getArticulo() + ".");
+				return metros;
 			}
 			return metros.multiply(producto.getArticulo().getGramaje());
 		} else  {
