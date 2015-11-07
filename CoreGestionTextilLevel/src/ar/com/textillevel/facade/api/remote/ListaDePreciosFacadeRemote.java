@@ -39,5 +39,7 @@ public interface ListaDePreciosFacadeRemote {
 
 	public List<Cliente> getClientesConListaDePrecios();
 
-	public void aumentarPrecios(Cliente cliente, Date inicioValidez, List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) throws ValidacionException;	
+	public void aumentarPrecios(Cliente cliente, Date inicioValidez, List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) throws ValidacionException;
+
+	public void borrarCotizacion(Cotizacion cotizacion);	
 }

@@ -263,4 +263,8 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		}
 		return cotizacionDAOLocal.save(cotizacion);
 	}
+
+	public void borrarCotizacion(Cotizacion cotizacion) {
+		cotizacionDAOLocal.removeById(cotizacion.getId());		
+	}
 }

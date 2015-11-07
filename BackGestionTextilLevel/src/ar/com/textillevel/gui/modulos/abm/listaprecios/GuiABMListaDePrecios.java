@@ -306,6 +306,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static final long serialVersionUID = 524085936965031187L;
 
 		private int filaVersionVigente = -1;
+		private Cotizacion cotizacionActual;
 		
 		private static final int CANT_COLS = 3;
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
@@ -313,10 +314,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static final int COL_OBJ = 2;
 		
 		private JButton btnImprimirVersion;
+		private JButton btnBorrarCotizacion;
 		
 		public PanelTablaVersionesListaDePrecio() {
 			setBorder(BorderFactory.createTitledBorder("Versiones"));
 			agregarBoton(getBtnImprimirVersion());
+			agregarBoton(getBtnBorrarCotizacion());
 		}
 
 		@Override
@@ -449,6 +452,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		private void handleClickTablaVersiones() {
 			int selectedRow = getTabla().getSelectedRow();
+			getBtnBorrarCotizacion().setEnabled(isEdicion && cotizacionActual != null);
 			if (selectedRow >= 0) {
 				VersionListaDePrecios version = getElemento(selectedRow);
 				if (version != null) {
@@ -486,17 +490,41 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					VersionListaDePrecios elemento = getElemento(i);
 					if(cotizacion.getVersionListaPrecio().getId().equals(elemento.getId())) {
 						filaVersionVigente = i;
+						cotizacionActual = cotizacion;
+						getBtnBorrarCotizacion().setEnabled(true);
 						getTabla().setValueAt("COTIZACION NRO. '" + cotizacion.getNumero() + "' VIGENTE. VENCE: " + cotizacion.getFechaVencimientoStr(), i, COL_ULT_COTIZACION);
 						return;
 					}
 				}
 			}
+			getBtnBorrarCotizacion().setEnabled(false);
 		}
 		
 		public int getFilaVersionVigente() {
 			return filaVersionVigente;
 		}
-	
+
+		private JButton getBtnBorrarCotizacion() {
+			if (btnBorrarCotizacion == null) {
+				btnBorrarCotizacion = BossEstilos.createButton("ar/com/textillevel/imagenes/b_borrar_cotizacion.png", "ar/com/textillevel/imagenes/b_borrar_cotizacion_des.png");
+				btnBorrarCotizacion.setEnabled(false);
+				btnBorrarCotizacion.setToolTipText("Borrar cotizacio vigente");
+				btnBorrarCotizacion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this.getFrame(), StringW.wordWrap("Va a borrar la cotización vigente nro. '" + cotizacionActual.getNumero() + "' que vence: " + cotizacionActual.getFechaVencimientoStr() + ".\nDesea continuar?"), "Pregunta") == FWJOptionPane.YES_OPTION) {
+							getListaDePreciosFacade().borrarCotizacion(cotizacionActual);
+							cotizacionActual = null;
+							getBtnBorrarCotizacion().setEnabled(false);
+							limpiar();
+							agregarElementos(getListaActual().getVersiones());
+							getTabla().setRowSelectionInterval(0, 0);
+							handleClickTablaVersiones();
+						}
+					}
+				});
+			}
+			return btnBorrarCotizacion;
+		}
 	}
 	
 	private class PanelTablaDefinicionesPrecio extends PanelTabla<DefinicionPrecio> {
