@@ -520,11 +520,11 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		//Por cada par <producto, total> del map genero un item factura producto y lo pongo en la tabla
 		for (ProductoArticulo p : mapTotalPorProducto.keySet()) {
-			ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogCargaFactura.this, p.getArticulo(), getCliente());
+			ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogCargaFactura.this, getCliente());
 			ItemFacturaProducto itp = new ItemFacturaProducto();
 			BigDecimal totalByProducto = mapTotalPorProducto.get(p);
 			itp.setCantidad(totalByProducto);
-			BigDecimal precio = helper.getPrecio(p.getProducto());
+			BigDecimal precio = helper.getPrecio(p);
 			if(precio == null) {
 				throw new ProductoSinPrecioException();
 			}
@@ -1430,6 +1430,7 @@ public class JDialogCargaFactura extends JDialog {
 						JDialogAgregarItemFactura jdaif = new JDialogAgregarItemFactura(JDialogCargaFactura.this, getRemitos()==null?1:getCantidadPiezasRemito(), 
 								getCliente(), getParametrosGenerales().getPrecioPorTubo(), 
 								getParametrosGenerales().getPorcentajeSeguro());
+						GuiUtil.centrar(jdaif);
 						jdaif.setVisible(true);
 						if (jdaif.isAcepto()) {
 							ItemFactura it = jdaif.getItemFacturaSeleccionado();

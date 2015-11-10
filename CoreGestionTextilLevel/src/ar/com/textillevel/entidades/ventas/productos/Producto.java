@@ -26,7 +26,6 @@ public abstract class Producto implements Serializable {
 	private static final long serialVersionUID = -311441841585244454L;
 	private Integer id;
 	private String descripcion;
-	private Float precioCalculado;
 
 	@Id
 	@Column(name = "P_ID")
@@ -54,15 +53,6 @@ public abstract class Producto implements Serializable {
 		return descripcion;
 	}
 
-	@Transient
-	public Float getPrecioCalculado() {
-		return precioCalculado;
-	}
-
-	public void setPrecioCalculado(Float precioCalculado) {
-		this.precioCalculado = precioCalculado;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

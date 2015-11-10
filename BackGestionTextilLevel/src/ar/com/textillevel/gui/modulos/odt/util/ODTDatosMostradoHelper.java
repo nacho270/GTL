@@ -2,9 +2,8 @@ package ar.com.textillevel.gui.modulos.odt.util;
 
 import java.math.BigDecimal;
 
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
-import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
-import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
@@ -39,10 +38,10 @@ public class ODTDatosMostradoHelper {
 	}
 
 	public Color getColor() {
-		if(odt.getProductoArticulo().getProducto() instanceof ProductoTenido) {
-			return ((ProductoTenido)odt.getProductoArticulo().getProducto()).getColor();
-		} else if(odt.getProductoArticulo().getProducto() instanceof ProductoEstampado) {
-			return ((ProductoEstampado)odt.getProductoArticulo().getProducto()).getVariante().getColorFondo();
+		if(odt.getProductoArticulo().getTipo() == ETipoProducto.TENIDO) {
+			return odt.getProductoArticulo().getColor();
+		} else if(odt.getProductoArticulo().getTipo() == ETipoProducto.ESTAMPADO) {
+			return odt.getProductoArticulo().getVariante().getColorFondo();
 		} else {
 			return null;
 		}

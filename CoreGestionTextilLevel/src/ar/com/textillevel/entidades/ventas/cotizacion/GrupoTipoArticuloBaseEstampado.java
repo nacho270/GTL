@@ -14,11 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
-import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 
 @Entity
 @Table(name = "T_GRUPO_TIPO_ARTICULO_BASE")
@@ -94,13 +94,14 @@ public class GrupoTipoArticuloBaseEstampado extends GrupoTipoArticulo implements
 	}
 
 	@Transient
-	public Float getPrecio(ProductoEstampado producto, Articulo articulo) {
-		VarianteEstampado variante = producto.getVariante();
+	public Float getPrecio(ProductoArticulo productoArticulo) {
+		Articulo articulo = productoArticulo.getArticulo();
+		VarianteEstampado variante = productoArticulo.getVariante();
 		GamaColor gama = variante.getGama();
 		//Solo tiene sentido calcular el precio si el ancho del dibujo es mayor o igual al ancho del artículo (tela)
-		if(producto.getDibujo().getAnchoCilindro() != null && articulo.getAncho().compareTo(producto.getDibujo().getAnchoCilindro()) <= 0) {
+		if(productoArticulo.getDibujo().getAnchoCilindro() != null && articulo.getAncho().compareTo(productoArticulo.getDibujo().getAnchoCilindro()) <= 0) {
 			if(gama != null) {
-				PrecioBaseEstampado precioBase = getPrecioBase(gama, producto.getDibujo());
+				PrecioBaseEstampado precioBase = getPrecioBase(gama, productoArticulo.getDibujo());
 				if(precioBase != null) {
 					Integer cantColores = variante.getDibujo().getCantidadColores();
 					if(cantColores != null) {

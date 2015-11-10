@@ -26,10 +26,8 @@ import ar.com.textillevel.entidades.ventas.productos.visitor.IProductoVisitor;
 public class ProductoGamaColorDetectorVisitor implements IProductoVisitor {
 
 	private boolean coincideGama = false;
-	private final List<GamaColor> gamaList;
 
 	public ProductoGamaColorDetectorVisitor(List<GamaColor> gamaList) {
-		this.gamaList = gamaList;
 	}
 
 	public void visit(ProductoCalandrado pc) {
@@ -51,7 +49,6 @@ public class ProductoGamaColorDetectorVisitor implements IProductoVisitor {
 	}
 
 	public void visit(ProductoTenido pt) {
-		coincideGama = pt.getGamaColor()!= null && gamaList.contains(pt.getGamaColor());
 	}
 
 	public void visit(ProductoTermofijado pterm) {

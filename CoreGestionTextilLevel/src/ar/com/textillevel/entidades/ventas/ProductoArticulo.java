@@ -17,6 +17,10 @@ import org.hibernate.annotations.FetchMode;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.articulos.Color;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.GamaColor;
+import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 
 @Entity
@@ -28,6 +32,11 @@ public class ProductoArticulo implements Serializable {
 	private Integer id;
 	private Producto producto;
 	private Articulo articulo;
+	private GamaColor gamaColor;
+	private Color color;
+	private DibujoEstampado dibujo;
+	private VarianteEstampado variante;
+	private Float precioCalculado;
 
 	@Id
 	@Column(name = "P_ID")
@@ -62,6 +71,59 @@ public class ProductoArticulo implements Serializable {
 		this.articulo = articulo;
 	}
 
+	@ManyToOne
+	@JoinColumn(name="F_GAMA_P_ID")
+	@Fetch(FetchMode.JOIN)
+	public GamaColor getGamaColor() {
+		return gamaColor;
+	}
+	
+	public void setGamaColor(GamaColor gamaColor) {
+		this.gamaColor = gamaColor;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="F_COLOR_P_ID")
+	@Fetch(FetchMode.JOIN)
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="F_DIBUJO_P_ID")
+	@Fetch(FetchMode.JOIN)
+	public DibujoEstampado getDibujo() {
+		return dibujo;
+	}
+	
+	public void setDibujo(DibujoEstampado dibujo) {
+		this.dibujo = dibujo;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="F_VARIANTE_P_ID")
+	@Fetch(FetchMode.JOIN)
+	public VarianteEstampado getVariante() {
+		return variante;
+	}
+	
+	public void setVariante(VarianteEstampado variante) {
+		this.variante = variante;
+	}
+
+	@Transient
+	public Float getPrecioCalculado() {
+		return precioCalculado;
+	}
+
+	public void setPrecioCalculado(Float precioCalculado) {
+		this.precioCalculado = precioCalculado;
+	}
+
 	@Transient
 	public ETipoProducto getTipo() {
 		return getProducto().getTipo();
@@ -88,27 +150,34 @@ public class ProductoArticulo implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ProductoArticulo other = (ProductoArticulo) obj;
+		if(getTipo() != other.getTipo()) {
+			return false;
+		}
 		if (articulo == null) {
 			if (other.articulo != null)
 				return false;
 		} else if (!articulo.equals(other.articulo))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (producto == null) {
-			if (other.producto != null)
-				return false;
-		} else if (!producto.equals(other.producto))
-			return false;
+		if(getTipo() == ETipoProducto.TENIDO) {
+			return getGamaColor().equals(other.getGamaColor()) && getColor().equals(other.getColor()); 
+		} else if(getTipo() == ETipoProducto.ESTAMPADO) {
+			return getDibujo().equals(other.getDibujo()) && getVariante().equals(other.getVariante());
+		}
 		return true;
 	}
 
 	@Transient
 	public String toString() {
-		return getProducto() + (getArticulo() == null ? "":  (" - " + getArticulo()));
+		StringBuilder sb = new StringBuilder("");
+		sb.append(getProducto())
+		  .append((getArticulo() == null ? "":  (" - " + getArticulo())));
+		if(getTipo() == ETipoProducto.ESTAMPADO) {
+			sb.append(" - " + getDibujo() + " - " + getVariante());
+		}
+		if(getTipo() == ETipoProducto.TENIDO) {
+			sb.append(" - " + getColor());
+		}
+		return sb.toString();
 	}
 
 }

@@ -44,21 +44,16 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaSe
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTelaCruda;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTubo;
 import ar.com.textillevel.entidades.enums.ETipoItemFactura;
-import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.ETipoVentaStock;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
-import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.gui.util.ProductoArticuloHelper;
-import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
-import ar.com.textillevel.gui.util.ProductosAndPreciosHelper.ResultProductosTO;
+import ar.com.textillevel.gui.util.panels.PanSeleccionProductoArticulo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 @SuppressWarnings("incomplete-switch")
@@ -93,13 +88,14 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private JPanel panelBotones;
 	private JPanel panelBonificacion;
 	private JPanel panelRecargo;
-	private JPanel panelProducto;
+	private PanSeleccionProductoArticulo panSeleccionarProducto;
 	private JPanel panelTubos;
 	private JPanel panelSeguro;
 	private JPanel panelPercepcion;
 	private JPanel panelStock;
 	private JPanel panelOtro;
 	private JPanel panelTelaCruda;
+	private JPanel panelProducto;
 
 	private FWJTextField txtDescripcion;
 	
@@ -111,9 +107,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private FWJTextField txtPrecioTubo;
 	private FWJTextField txtPorcentajePercepcion;
 	private FWJNumericTextField txtTubos;
-	private JComboBox cmbProductos;
 	private JComboBox cmbArticulos;
-	private JComboBox cmbArticulosProd;
 	
 	//PANEL STOCK
 	private JComboBox cmbTipoVentaStock; //tela o cilindro
@@ -160,8 +154,6 @@ public class JDialogAgregarItemFactura extends JDialog {
 	private void setUpScreen() {
 		this.setTitle("Agregar item de factura");
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(400, 190));
-		GuiUtil.centrar(this);
 		this.setResizable(false);
 		this.setModal(true);
 	}
@@ -215,47 +207,49 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_BONIFICACION);
 				setItemFacturaSeleccionado(new ItemFacturaBonificacion());
-				this.setSize(new Dimension(370, 160));
+				this.setPreferredSize(new Dimension(370, 160));
 				break;
 			}
 			case RECARGO: {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_RECARGO);
 				setItemFacturaSeleccionado(new ItemFacturaRecargo());
-				this.setSize(new Dimension(370, 160));
+				this.setPreferredSize(new Dimension(370, 160));
 				break;
 			}
 			case PRODUCTO: {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_PRODUCTOS);
 				setItemFacturaSeleccionado(new ItemFacturaProducto());
-				Producto prod = (Producto) getCmbProductos().getSelectedItem();
-				if(prod != null) {
-					BigDecimal precio = new BigDecimal(prod.getPrecioCalculado());
-					getTxtPrecioUnitario().setText(String.valueOf(precio));
+				if(getPanSeleccionProducto().getProductoSelectedList().size() == 1) {
+					ProductoArticulo prod = getPanSeleccionProducto().getProductoSelectedList().get(0);
+					if(prod != null) {
+						BigDecimal precio = new BigDecimal(prod.getPrecioCalculado());
+						getTxtPrecioUnitario().setText(String.valueOf(precio));
+					}
 				}
-				this.setSize(new Dimension(400, 190));
+				this.setPreferredSize(new Dimension(440, 550));
 				break;
 			}
 			case TUBOS: {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_TUBOS);
 				setItemFacturaSeleccionado(new ItemFacturaTubo());
-				this.setSize(new Dimension(400, 190));
+				this.setPreferredSize(new Dimension(400, 190));
 				break;
 			}
 			case SEGURO: {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_SEGURO);
 				setItemFacturaSeleccionado(new ItemFacturaSeguro());
-				this.setSize(new Dimension(370, 160));
+				this.setPreferredSize(new Dimension(370, 160));
 				break;
 			}
 			case PERCEPCION: {
 				getPanelControlesExtra().setVisible(true);
 				getCardLayout().show(getPanelControlesExtra(), PANEL_PERCEPCION);
 				setItemFacturaSeleccionado(new ItemFacturaPercepcion());
-				this.setSize(new Dimension(370, 160));
+				this.setPreferredSize(new Dimension(370, 160));
 				break;
 			}
 			case STOCK:{
@@ -263,7 +257,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getCardLayout().show(getPanelControlesExtra(), PANEL_STOCK);
 				setItemFacturaSeleccionado(new ItemFacturaPrecioMateriaPrima());
 				llenarComboPrecioMateriaPrima((ETipoVentaStock)getCmbTipoVentaStock().getSelectedItem());
-				this.setSize(new Dimension(400, 250));
+				this.setPreferredSize(new Dimension(400, 250));
 				break;
 			}
 			case TELA_CRUDA:{
@@ -271,7 +265,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getCardLayout().show(getPanelControlesExtra(), PANEL_TELA_CRUDA);
 				setItemFacturaSeleccionado(new ItemFacturaTelaCruda());
 				llenarComboPrecioMateriaPrima((ETipoVentaStock)getCmbTipoVentaStock().getSelectedItem());
-				this.setSize(new Dimension(400, 250));
+				this.setPreferredSize(new Dimension(400, 250));
 				break;
 			}
 			case OTRO:{
@@ -279,7 +273,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 				getCardLayout().show(getPanelControlesExtra(), PANEL_OTRO);
 				setItemFacturaSeleccionado(new ItemFacturaOtro());
 				getTxtPrecioUnitario().setText("");
-				this.setSize(new Dimension(400, 250));
+				this.setPreferredSize(new Dimension(400, 250));
 				break;
 			}
 		}
@@ -289,8 +283,8 @@ public class JDialogAgregarItemFactura extends JDialog {
 		if (panGeneral == null) {
 			panGeneral = new JPanel();
 			panGeneral.setLayout(new GridBagLayout());
-			panGeneral.add(getPanelCombo(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 1, 0));
-			panGeneral.add(getPanelControlesExtra(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 5), 3, 1, 1, 0));
+			panGeneral.add(getPanelCombo(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panGeneral.add(getPanelControlesExtra(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(10, 10, 0, 5), 1, 1, 1, 1));
 		}
 		return panGeneral;
 	}
@@ -315,18 +309,22 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return panelRecargo;
 	}
 
+	private PanSeleccionProductoArticulo getPanSeleccionProducto() {
+		if (panSeleccionarProducto == null) {
+			panSeleccionarProducto = new PanSeleccionProductoArticulo(this, cliente, new ArrayList<ProductoArticulo>());
+		}
+		return panSeleccionarProducto;
+	}
+	
 	private JPanel getPanelProducto() {
-		if (panelProducto == null) {
+		if(panelProducto == null) {
 			panelProducto = new JPanel();
 			panelProducto.setLayout(new GridBagLayout());
-			panelProducto.add(new JLabel("Artículo: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(getCmbArticulosProd(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(new JLabel("Producto: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(getCmbProductos(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(new JLabel("Cantidad (mts): "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelProducto.add(getTxtCantMetros(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelProducto.add(new JLabel("Cantidad (mts): "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelProducto.add(getTxtCantMetros(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelProducto.add(getPanSeleccionProducto(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(10, 10, 0, 5), 2, 1, 1, 1));
 		}
-		return panelProducto;
+		return 	panelProducto;
 	}
 
 	private JPanel getPanelTelaCruda() {
@@ -407,20 +405,13 @@ public class JDialogAgregarItemFactura extends JDialog {
 				break;
 			}
 			case PRODUCTO: {
-				//Seteo el producto articulo 
-				ProductoArticulo pa = new ProductoArticulo();
-				Producto producto = (Producto) getCmbProductos().getSelectedItem();
-				if(ETipoProducto.dependienteDeArticulo(producto.getTipo()) && getCmbArticulosProd().getSelectedIndex() > 0) {
-					pa.setArticulo((Articulo)getCmbArticulosProd().getSelectedItem());
-				}
-				pa.setProducto(producto);
-				ProductoArticuloHelper paHelper = new ProductoArticuloHelper();
-				((ItemFacturaProducto) getItemFacturaSeleccionado()).setProductoArticulo(paHelper.getPersistentInstance(pa));
-
-				getItemFacturaSeleccionado().setDescripcion(producto.getDescripcion());
-				getItemFacturaSeleccionado().setUnidad(producto.getTipo().getUnidad());
+				//Seteo el producto articulo
+				ProductoArticulo prodArticulo = getPanSeleccionProducto().getProductoSelectedList().get(0);
+				((ItemFacturaProducto)getItemFacturaSeleccionado()).setProductoArticulo(prodArticulo);				
+				getItemFacturaSeleccionado().setDescripcion(prodArticulo.toString());
+				getItemFacturaSeleccionado().setUnidad(prodArticulo.getTipo().getUnidad());
 				BigDecimal cantidad = new BigDecimal(getTxtCantMetros().getText().trim().replace(',', '.'));
-				BigDecimal precioUnitario = new BigDecimal(producto.getPrecioCalculado());
+				BigDecimal precioUnitario = new BigDecimal(prodArticulo.getPrecioCalculado());
 				getItemFacturaSeleccionado().setCantidad(cantidad);
 				getItemFacturaSeleccionado().setPrecioUnitario(precioUnitario);
 				getItemFacturaSeleccionado().setImporte(new BigDecimal(cantidad.doubleValue() * precioUnitario.doubleValue()));
@@ -516,15 +507,23 @@ public class JDialogAgregarItemFactura extends JDialog {
 			}
 			case PRODUCTO: {
 				if(StringUtil.isNullOrEmpty(getTxtCantMetros().getText())){
-					FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+					FWJOptionPane.showErrorMessage(this, "Debe completar la cantidad de metros", "Error");
 					getTxtCantMetros().requestFocus();
 					return false;
 				} else {
 					if (!GenericUtils.esNumerico((getTxtCantMetros().getText()))) {
-						FWJOptionPane.showErrorMessage(this, "El campo es numerico", "Error");
+						FWJOptionPane.showErrorMessage(this, "Los metros deben ser un número", "Error");
 						getTxtCantMetros().requestFocus();
 						return false;
 					}
+				}
+				if(getPanSeleccionProducto().getProductoSelectedList().isEmpty()) {
+					FWJOptionPane.showErrorMessage(this, "Debe seleccionar un Producto", "Error");
+					return false;
+				}
+				if(getPanSeleccionProducto().getProductoSelectedList().size() > 1) {
+					FWJOptionPane.showErrorMessage(this, "Debe seleccionar un único producto", "Error");
+					return false;
 				}
 				return true;
 			}
@@ -730,28 +729,6 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return txtTubos;
 	}
 
-	private JComboBox getCmbProductos() {
-		if (cmbProductos == null) {
-			cmbProductos = new JComboBox();
-		}
-		return cmbProductos;
-	}
-
-	private void llenarComboProductos() {
-		ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(JDialogAgregarItemFactura.this, getCmbArticulosProd().getSelectedIndex() == 0 ? null : (Articulo)getCmbArticulosProd().getSelectedItem(), getCliente());
-		ResultProductosTO result = helper.getInfoProductosAndListaDePrecios();
-		if(result != null) {
-			List<Producto> allOrderByName = result.productos;
-			List<Producto> allOrderByNameSinReproceso = new ArrayList<Producto>();
-			for(Producto p : allOrderByName) {
-				if(!(p instanceof ProductoReprocesoSinCargo)){
-					allOrderByNameSinReproceso.add(p);
-				}
-			}
-			GuiUtil.llenarCombo(cmbProductos, allOrderByNameSinReproceso, true);
-		}
-	}
-
 	private void salir() {
 		setAcepto(false);
 		dispose();
@@ -771,10 +748,6 @@ public class JDialogAgregarItemFactura extends JDialog {
 			txtPrecioUnitario.setPreferredSize(new Dimension(100, 20));
 		}
 		return txtPrecioUnitario;
-	}
-
-	private Cliente getCliente() {
-		return cliente;
 	}
 
 	private void setCliente(Cliente cliente) {
@@ -958,25 +931,6 @@ public class JDialogAgregarItemFactura extends JDialog {
 		return txtDescripcion;
 	}
 
-	private JComboBox getCmbArticulosProd() {
-		if(cmbArticulosProd == null){
-			cmbArticulosProd = new JComboBox();
-			GuiUtil.llenarCombo(cmbArticulosProd, getArticulosFacade().getAllOrderByName(), true);
-			
-			cmbArticulosProd.insertItemAt("",0);
-			cmbArticulosProd.setSelectedIndex(0);
-			
-			cmbArticulosProd.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if(e.getStateChange() == ItemEvent.SELECTED) {
-						llenarComboProductos();
-					}
-				}
-			});
-		}
-		return cmbArticulosProd;
-	}
-	
 	private JComboBox getCmbArticulos() {
 		if(cmbArticulos == null){
 			cmbArticulos = new JComboBox();

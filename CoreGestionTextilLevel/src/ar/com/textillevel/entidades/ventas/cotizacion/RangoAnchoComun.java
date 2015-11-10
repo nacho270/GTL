@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 
 @Entity
 @DiscriminatorValue(value = "RANGOCOMUN")
@@ -45,7 +45,8 @@ public class RangoAnchoComun extends RangoAncho {
 
 	@Override
 	@Transient
-	protected Float buscarPrecio(Producto producto, Articulo articulo) {
+	protected Float buscarPrecio(ProductoArticulo productoArticulo) {
+		Articulo articulo = productoArticulo.getArticulo();
 		PrecioTipoArticulo pta = getPrecioArticulo(articulo.getTipoArticulo(), articulo, PrecioTipoArticulo.class);
 		return pta != null ? pta.getPrecio() : null;
 	}

@@ -12,9 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
-import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 
 @Entity
 @DiscriminatorValue(value = "RANGOTENIDO")
@@ -49,9 +48,10 @@ public class RangoAnchoArticuloTenido extends RangoAncho {
 
 	@Override
 	@Transient
-	protected Float buscarPrecio(Producto producto, Articulo articulo) {
+	protected Float buscarPrecio(ProductoArticulo productoArticulo) {
+		Articulo articulo = productoArticulo.getArticulo();
 		GrupoTipoArticuloGama grupo = getPrecioArticulo(articulo.getTipoArticulo(), articulo, GrupoTipoArticuloGama.class);
-		return grupo != null ? grupo.getPrecio((ProductoTenido)producto) : null;
+		return grupo != null ? grupo.getPrecio(productoArticulo) : null;
 	}
 
 	@Override

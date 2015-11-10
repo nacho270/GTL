@@ -19,11 +19,14 @@ public class ProductoArticuloFacade implements ProductoArticuloFacadeRemote {
 	public List<ProductoArticulo> save(List<ProductoArticulo> paList) {
 		List<ProductoArticulo> paListPersisted = new ArrayList<ProductoArticulo>();
 		for(ProductoArticulo pa : paList) {
-			ProductoArticulo paExistente = prodArticuloDao.getProductoArticulo(pa.getProducto(), pa.getArticulo());
+			ProductoArticulo paExistente = prodArticuloDao.getProductoArticulo(pa);
 			if(paExistente == null) {
-				paListPersisted.add(prodArticuloDao.save(pa));
+				ProductoArticulo persistentPA = prodArticuloDao.save(pa);
+				paListPersisted.add(persistentPA);
+				persistentPA.setPrecioCalculado(pa.getPrecioCalculado());
 			} else {
 				paListPersisted.add(paExistente);
+				paExistente.setPrecioCalculado(pa.getPrecioCalculado());
 			}
 		}
 		return paListPersisted;
