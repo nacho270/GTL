@@ -10,14 +10,13 @@ import javax.persistence.Query;
 
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.Pigmento;
 import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
-import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
-import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
@@ -144,15 +143,13 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 			if(odt.getRemito()!=null){
 				odt.getRemito().getProductoArticuloList().size();
 				for(ProductoArticulo p : odt.getRemito().getProductoArticuloList()){
-					if(p.getProducto() instanceof ProductoEstampado){
-						ProductoEstampado pe = (ProductoEstampado)p.getProducto();
-						if(pe.getVariante()!=null && pe.getVariante().getColores()!=null){
-							pe.getVariante().getColores().size();
+					if(p.getTipo() == ETipoProducto.ESTAMPADO){
+						if(p.getVariante()!=null && p.getVariante().getColores()!=null){
+							p.getVariante().getColores().size();
 						}
-					}else if(p.getProducto() instanceof ProductoTenido){
-						ProductoTenido pt = (ProductoTenido)p.getProducto();
-						if(pt.getGamaColor()!= null && pt.getGamaColor().getColores() != null){
-							pt.getGamaColor().getColores().size();
+					}else if(p.getTipo() == ETipoProducto.TENIDO){
+						if(p.getGamaColor()!= null && p.getGamaColor().getColores() != null){
+							p.getGamaColor().getColores().size();
 						}
 					}
 				}

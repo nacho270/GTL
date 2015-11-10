@@ -1,7 +1,6 @@
 package ar.com.textillevel.gui.util;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -10,9 +9,8 @@ import org.apache.taglibs.string.util.StringW;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -27,19 +25,17 @@ public class ProductosAndPreciosHelper {
 	
 	private JDialog dialogoLlamador;
 	private Cliente cliente;
-	private Articulo articulo;
 
-	public ProductosAndPreciosHelper(JDialog dialogoLlamador, Articulo articulo, Cliente cliente) {
+	public ProductosAndPreciosHelper(JDialog dialogoLlamador, Cliente cliente) {
 		this.dialogoLlamador = dialogoLlamador;
 		this.cliente = cliente;
-		this.articulo = articulo;
 	}
 
-	public BigDecimal getPrecio(Producto producto) {
+	public BigDecimal getPrecio(ProductoArticulo productoArticulo) {
 		Float precio = null;
 		boolean precioProdClienteOK = true;
 		try {
-			precio = getListaDePreciosFacade().getPrecioProducto(producto, articulo, cliente);
+			precio = getListaDePreciosFacade().getPrecioProducto(productoArticulo, cliente);
 			precioProdClienteOK = precio != null;
 		} catch (ValidacionException e) {
 			precioProdClienteOK = false;
@@ -52,7 +48,7 @@ public class ProductosAndPreciosHelper {
 				precioProdClienteDefaultOK = clienteDefault != null;
 				if(clienteDefault != null) {
 					try {
-						precio = getListaDePreciosFacade().getPrecioProducto(producto, articulo, clienteDefault);
+						precio = getListaDePreciosFacade().getPrecioProducto(productoArticulo, clienteDefault);
 						if(precio == null) {
 							precioProdClienteDefaultOK = false;
 						} else {
@@ -63,7 +59,7 @@ public class ProductosAndPreciosHelper {
 					}
 				}
 				if(!precioProdClienteDefaultOK) {
-					FWJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + producto  + "-" + articulo + "' no está definido en su lista de precios."), "Advertencia");					
+					FWJOptionPane.showWarningMessage(dialogoLlamador, StringW.wordWrap("El cliente por defecto no fue cargado o bien el producto '" + productoArticulo + "' no está definido en su lista de precios. También puede revisar si en la lista de precios figura una cotización que no incluya el producto, si es así, borrela e intente de nuevo."), "Advertencia");					
 				}
 			}
 		} else {
@@ -74,7 +70,7 @@ public class ProductosAndPreciosHelper {
 
 	public ResultProductosTO getInfoProductosAndListaDePrecios() {
 		try {
-			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente), getListaDePreciosFacade().getProductos(cliente, articulo));
+			return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(cliente));
 		} catch (ValidacionException e) {
 			int resp = FWJOptionPane.showQuestionMessage(dialogoLlamador, StringW.wordWrap(PREGUNTA_CLIENTE_SIN_LISTA_DE_PRECIOS), "Advertencia");
 			if(resp == FWJOptionPane.YES_OPTION) {
@@ -83,7 +79,7 @@ public class ProductosAndPreciosHelper {
 					FWJOptionPane.showErrorMessage(dialogoLlamador, "No fue cargado el cliente NRO. '" + NRO_CLIENTE_DEFAULT + "'.", "Advertencia");
 				} else {
 					try {
-						return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault), getListaDePreciosFacade().getProductos(clienteDefault, articulo));
+						return new ResultProductosTO(getListaDePreciosFacade().getVersionListaPrecioActual(clienteDefault));
 					} catch (ValidacionException e1) {
 						FWJOptionPane.showErrorMessage(dialogoLlamador, "La lista de precios por defecto tampoco fue cargada.", "Advertencia");
 					}
@@ -108,13 +104,11 @@ public class ProductosAndPreciosHelper {
 	}
 
 	public static class ResultProductosTO {
-		
-		public VersionListaDePrecios versionListaDePrecios;
-		public List<Producto> productos;
 
-		public ResultProductosTO(VersionListaDePrecios versionListaDePrecios, List<Producto> productos) {
+		public VersionListaDePrecios versionListaDePrecios;
+
+		public ResultProductosTO(VersionListaDePrecios versionListaDePrecios) {
 			this.versionListaDePrecios = versionListaDePrecios;
-			this.productos = productos;
 		}
 
 	}

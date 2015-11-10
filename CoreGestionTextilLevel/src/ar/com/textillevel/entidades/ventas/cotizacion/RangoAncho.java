@@ -19,9 +19,9 @@ import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.EUnidad;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.util.Utils;
 
 @Entity
@@ -163,13 +163,14 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	public abstract void deepOrderBy();
 
 	@Transient
-	public Float getPrecioProducto(Producto producto, Articulo articulo) {
-		if(producto.getTipo() == ETipoProducto.DEVOLUCION || producto.getTipo() == ETipoProducto.REPROCESO_SIN_CARGO) {
+	public Float getPrecioProducto(ProductoArticulo productoArticulo) {
+		if(productoArticulo.getTipo() == ETipoProducto.DEVOLUCION || productoArticulo.getTipo() == ETipoProducto.REPROCESO_SIN_CARGO) {
 			return new Float(0);
 		}
+		Articulo articulo = productoArticulo.getArticulo();
 		if ( (articulo != null && getAnchoExacto() != null && getAnchoExacto().floatValue() == articulo.getAncho().floatValue()) ||
 				(articulo != null && getAnchoMinimo() != null && getAnchoMaximo() != null && Utils.dentroDelRango(articulo.getAncho().floatValue(), getAnchoMinimo(), getAnchoMaximo())) ) {
-			return buscarPrecio(producto, articulo);
+			return buscarPrecio(productoArticulo);
 		}
 		return null;
 	}
@@ -210,7 +211,7 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	protected abstract <G extends GrupoTipoArticulo> List<G> getGruposTipoArticulo(Class<G> clazz);
 
 	@Transient
-	protected abstract Float buscarPrecio(Producto producto, Articulo articulo);
+	protected abstract Float buscarPrecio(ProductoArticulo productoArticulo);
 
 	@Transient
 	public abstract boolean estaDefinido(Articulo art);

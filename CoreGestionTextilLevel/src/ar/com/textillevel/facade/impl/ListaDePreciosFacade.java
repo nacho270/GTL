@@ -1,12 +1,7 @@
 package ar.com.textillevel.facade.impl;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,10 +13,9 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.CotizacionDAOLocal;
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoDAOLocal;
-import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
-import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
 import ar.com.textillevel.entidades.ventas.cotizacion.GrupoTipoArticuloBaseEstampado;
@@ -34,7 +28,6 @@ import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoArticuloTenido;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoAnchoComun;
 import ar.com.textillevel.entidades.ventas.cotizacion.RangoCantidadColores;
 import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.ListaDePreciosFacadeLocal;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
@@ -86,21 +79,21 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		return cotizacion != null && !DateUtil.getHoy().after(DateUtil.sumarDias(cotizacion.getFechaInicio(), cotizacion.getValidez()));
 	}
 
-	public Float getPrecioProducto(Producto producto, Articulo articulo, Cliente cliente) throws ValidacionException {
+	public Float getPrecioProducto(ProductoArticulo productoArticulo, Cliente cliente) throws ValidacionException {
 		DefinicionPrecio definicion = null;
 		VersionListaDePrecios versionCotizadaVigente = getVersionCotizadaVigente(cliente);
 		if(versionCotizadaVigente != null) {
-			definicion = versionCotizadaVigente.getDefinicionPorTipoProducto(producto.getTipo());
+			definicion = versionCotizadaVigente.getDefinicionPorTipoProducto(productoArticulo.getTipo());
 			if(definicion != null) {
-				return definicion.getPrecio(producto, articulo);
+				return definicion.getPrecio(productoArticulo);
 			}
 		}
 		VersionListaDePrecios versionActual = getVersionListaPrecioActual(cliente);
-		definicion = versionActual.getDefinicionPorTipoProducto(producto.getTipo());
+		definicion = versionActual.getDefinicionPorTipoProducto(productoArticulo.getTipo());
 		if(definicion == null) {
 			return null;
 		}
-		return definicion.getPrecio(producto, articulo);
+		return definicion.getPrecio(productoArticulo);
 	}
 
 	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException {
@@ -109,43 +102,6 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 			throw new ValidacionException(EValidacionException.CLIENTE_SIN_LISTA_PRECIOS.getInfoValidacion());
 		}
 		return lista.getVersionActual();
-	}
-
-	public List<Producto> getProductos(Cliente cliente, Articulo articulo) throws ValidacionException {
-		List<Producto> allProductosCliente = new ArrayList<Producto>();
-		VersionListaDePrecios versionCotizadaVigente = getVersionCotizadaVigente(cliente);
-		VersionListaDePrecios versionListaPrecio = getVersionListaPrecioActual(cliente);
-		List<Producto> productos = productoDAOLocal.getAll();
-		Map<ETipoProducto, DefinicionPrecio> definicionMap = new HashMap<ETipoProducto, DefinicionPrecio>();
-		for(ETipoProducto tp : ETipoProducto.values()) {
-			if(versionCotizadaVigente != null) {
-				DefinicionPrecio definicionPorTipoProducto = versionCotizadaVigente.getDefinicionPorTipoProducto(tp);
-				if(definicionPorTipoProducto == null) {
-					definicionMap.put(tp, versionListaPrecio.getDefinicionPorTipoProducto(tp));
-				} else {
-					definicionMap.put(tp, definicionPorTipoProducto);
-				}
-			} else {
-				definicionMap.put(tp, versionListaPrecio.getDefinicionPorTipoProducto(tp));
-			}
-		}
-		for(Producto p : productos) {
-			DefinicionPrecio definicion = definicionMap.get(p.getTipo());
-			if(definicion != null) {
-				Float precio = definicion.getPrecio(p, articulo);
-				if(precio != null) {
-					p.setPrecioCalculado(precio);
-					allProductosCliente.add(p);
-				}
-			}
-		}
-		Collections.sort(allProductosCliente, new Comparator<Producto>() {
-			public int compare(Producto o1, Producto o2) {
-				int compareTipo = o1.getTipo().getDescripcion().compareTo(o2.getTipo().getDescripcion());
-				return compareTipo != 0 ? compareTipo : o1.getDescripcion().compareTo(o2.getDescripcion());
-			}
-		});
-		return allProductosCliente;
 	}
 
 	private void doEagerVersionListaDePrecios(VersionListaDePrecios v) {
@@ -267,4 +223,5 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 	public void borrarCotizacion(Cotizacion cotizacion) {
 		cotizacionDAOLocal.removeById(cotizacion.getId());		
 	}
+
 }

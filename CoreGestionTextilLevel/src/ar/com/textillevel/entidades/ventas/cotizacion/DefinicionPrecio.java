@@ -18,8 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.enums.ETipoProducto;
-import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.util.Utils;
 
 @Entity
@@ -154,9 +153,9 @@ public class DefinicionPrecio implements Serializable {
 	}
 	
 	@Transient
-	public Float getPrecio(Producto producto, Articulo articulo) {
-		for (RangoAncho ra : getRangosProducto(producto)) {
-			Float precio = ra.getPrecioProducto(producto, articulo);
+	public Float getPrecio(ProductoArticulo productoArticulo) {
+		for (RangoAncho ra : getRangosProducto(productoArticulo)) {
+			Float precio = ra.getPrecioProducto(productoArticulo);
 			if (precio != null) {
 				return precio;
 			}
@@ -165,14 +164,14 @@ public class DefinicionPrecio implements Serializable {
 	}
 
 	@Transient
-	private List<RangoAncho> getRangosProducto(Producto producto) {
+	private List<RangoAncho> getRangosProducto(ProductoArticulo productoArticulo) {
 		List<RangoAncho> lista = new ArrayList<RangoAncho>();
 		for(RangoAncho ra : getRangos()) {
-			if (producto.getTipo() == ETipoProducto.TENIDO && (ra instanceof RangoAnchoArticuloTenido)) {
+			if (productoArticulo.getTipo() == ETipoProducto.TENIDO && (ra instanceof RangoAnchoArticuloTenido)) {
 				lista.add(ra);
-			} else if (producto.getTipo() == ETipoProducto.ESTAMPADO && (ra instanceof RangoAnchoArticuloEstampado)) {
+			} else if (productoArticulo.getTipo() == ETipoProducto.ESTAMPADO && (ra instanceof RangoAnchoArticuloEstampado)) {
 				lista.add(ra);
-			} else if (producto.getTipo() != ETipoProducto.TENIDO && producto.getTipo() != ETipoProducto.ESTAMPADO && 
+			} else if (productoArticulo.getTipo() != ETipoProducto.TENIDO && productoArticulo.getTipo() != ETipoProducto.ESTAMPADO && 
 					!(ra instanceof RangoAnchoArticuloEstampado) && !(ra instanceof RangoAnchoArticuloTenido)){
 				lista.add(ra);
 			}
