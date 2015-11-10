@@ -357,9 +357,9 @@ public class JDialogAgregarItemFactura extends JDialog {
 		if (panelTubos == null) {
 			panelTubos = new JPanel();
 			panelTubos.setLayout(new GridBagLayout());
-			panelTubos.add(new JLabel("Tubos: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTubos.add(new JLabel("Tubos: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelTubos.add(getTxtTubos(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelTubos.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTubos.add(new JLabel("Precio: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelTubos.add(getTxtPrecioTubo(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		return panelTubos;
