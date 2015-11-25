@@ -169,14 +169,14 @@ public class ProductoArticulo implements Serializable {
 	@Transient
 	public String toString() {
 		StringBuilder sb = new StringBuilder("");
-		sb.append(getProducto())
-		  .append((getArticulo() == null ? "":  (" - " + getArticulo())));
+		sb.append(getProducto());
 		if(getTipo() == ETipoProducto.ESTAMPADO) {
 			sb.append(" - " + getDibujo() + " - " + getVariante());
 		}
 		if(getTipo() == ETipoProducto.TENIDO) {
 			sb.append(" - " + getColor());
 		}
+		sb.append((getArticulo() == null ? "":  (" - " + getArticulo())));
 		return sb.toString();
 	}
 

@@ -50,3 +50,5 @@ CREATE TABLE `t_producto_articulo` (
   `F_COLOR_P_ID` int(11) default NULL,
   PRIMARY KEY  (`P_ID`)
 ) ENGINE=FEDERATED DEFAULT CHARSET=utf8 CONNECTION='mysql://root:s4l3m@192.168.1.250:3306/gtl/t_producto_articulo';
+
+
