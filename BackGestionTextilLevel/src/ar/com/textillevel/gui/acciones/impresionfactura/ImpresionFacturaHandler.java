@@ -78,6 +78,19 @@ public class ImpresionFacturaHandler {
 			}
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public JasperPrint getJasperPrint() throws IOException, ValidacionException {
+		documentoContableFacade.checkImpresionDocumentoContable(getFactura() != null ? getFactura() : getCorreccionFactura());
+		FacturaTO factura = armarFacturaTO();
+		JasperReport reporte;
+		if (GenericUtils.isSistemaTest()) {
+			reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/facturab_v2.jasper");
+		} else {
+			reporte = JasperHelper.loadReporte("/ar/com/textillevel/reportes/factura_electronica.jasper");
+		}
+		return JasperHelper.fillReport(reporte, getParametros(factura, 1), factura.getItems());
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void imprimir() throws JRException, FWException, ValidacionException, IOException {

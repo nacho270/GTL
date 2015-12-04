@@ -70,6 +70,7 @@ import ar.com.textillevel.entidades.cuenta.CuentaCliente;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
+import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
@@ -92,9 +93,11 @@ import ar.com.textillevel.facade.api.remote.ReciboFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
+import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionAnularCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionConfirmarCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionEliminarFacturaCuentaVisitor;
+import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionEnviarDocumentoContablePorEmailCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.CellRenderer;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.ConsultaDocumentoVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.EditarDocumentoVisitor;
@@ -164,6 +167,7 @@ public class JFrameVerMovimientos extends JFrame {
 	private JButton btnVisualizarCotizacionActual;
 	private JButton btnEnviarCotizacionPorEmail;
 	private JButton btnEnviarExtractoCuentaPorEmail;
+	private JButton btnEnviarDocumentoContablePorEmail;
 
 	
 	private UsuarioSistema usuarioAdministrador;
@@ -678,6 +682,7 @@ public class JFrameVerMovimientos extends JFrame {
 			panelAcciones.add(getBtnVisualizarCotizacionActual());
 			panelAcciones.add(getBtnEnviarCotizacionPorEmail());
 			panelAcciones.add(getBtnEnviarExtractoCuentaPorEmail());
+			panelAcciones.add(getBtnEnviarDocumentoContablePorEmail());
 			panelAcciones.add(getBtnAnular());
 			panelAcciones.add(getBtnEliminarFactura());
 			panelAcciones.add(getBtnEditar());
@@ -869,6 +874,48 @@ public class JFrameVerMovimientos extends JFrame {
 		return btnEnviarCotizacionPorEmail;
 	}
 
+	public JButton getBtnEnviarDocumentoContablePorEmail() {
+		if (btnEnviarDocumentoContablePorEmail == null) {
+			btnEnviarDocumentoContablePorEmail = BossEstilos.createButton("ar/com/textillevel/imagenes/b_salida.png", "ar/com/textillevel/imagenes/b_salida_des.png");
+			btnEnviarDocumentoContablePorEmail.setToolTipText("Enviar documento por email");
+			btnEnviarDocumentoContablePorEmail.setEnabled(false);
+			btnEnviarDocumentoContablePorEmail.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (getPanelTablaMovimientos().getTabla().getSelectedRow() > -1) {
+						AccionEnviarDocumentoContablePorEmailCuentaVisitor racv = new AccionEnviarDocumentoContablePorEmailCuentaVisitor(JFrameVerMovimientos.this);
+						((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
+					}
+				}
+			});
+		}
+		return btnEnviarDocumentoContablePorEmail;
+	}
+	
+	public void enviarDocumentoContablePorEmail(final DocumentoContableCliente documentoContable) {
+		final Cliente clienteBuscado = getClienteBuscado();
+		if (clienteBuscado != null){
+			GenericUtils.realizarOperacionConDialogoDeEspera("Enviando " + documentoContable.getTipoDocumento().toString().toLowerCase().replaceAll("_", " ") + " a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
+				public void perform() {
+					try {
+						DocumentoContableCliente documentoContable2 = null;
+						if (documentoContable instanceof Factura) {
+							FacturaFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
+							documentoContable2 = ffr.getByIdEager(documentoContable.getId());
+						} else if (documentoContable instanceof CorreccionFactura) {
+							CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
+							documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
+						}
+						JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
+						GenericUtils.enviarDocumentoContablePorEmail(clienteBuscado, documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), jasperPrint);
+					}catch(Exception ex) {
+						FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
+						ex.printStackTrace();
+					}
+				}
+			});
+		}
+	}
+	
 	private JButton getBtnEnviarExtractoCuentaPorEmail() {
 		if (btnEnviarExtractoCuentaPorEmail == null) {
 			btnEnviarExtractoCuentaPorEmail = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_subir.png", "ar/com/fwcommon/imagenes/b_subir_des.png");
@@ -1895,7 +1942,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return cliente;
 	}
-	
+
 //	private JComboBox getCmbOrdenMovimientos() {
 //		if(cmbOrdenMovimientos == null){
 //			cmbOrdenMovimientos = new JComboBox();

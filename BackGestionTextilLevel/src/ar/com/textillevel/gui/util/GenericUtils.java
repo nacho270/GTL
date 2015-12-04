@@ -62,6 +62,7 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.FileUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.fwcommon.util.SwingWorker;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
 import ar.com.textillevel.gui.util.dialogs.WaitDialog;
@@ -308,6 +309,9 @@ public class GenericUtils {
 	public static void main(String[] args) {
 		String nn = "234";
 		System.out.println(esNumerico(nn));
+		System.out.println(StringUtil.ponerMayuscula(ETipoDocumento.FACTURA.toString().toLowerCase().replaceAll("_", " de ").replaceAll("debito", "débito").replaceAll("credito", "crédito")));
+		System.out.println(StringUtil.ponerMayuscula(ETipoDocumento.NOTA_DEBITO.toString().toLowerCase().replaceAll("_", " de ").replaceAll("debito", "débito").replaceAll("credito", "crédito")));
+		System.out.println(StringUtil.ponerMayuscula(ETipoDocumento.NOTA_CREDITO.toString().toLowerCase().replaceAll("_", " de ").replaceAll("debito", "débito").replaceAll("credito", "crédito")));
 	}
 
 	public static boolean esCero(Double numero){
@@ -510,6 +514,18 @@ public class GenericUtils {
 		GenericUtils.enviarEmail("Cotización",
 				"<html><b>Estimado cliente:<br><br>" + 
 				"En esta oportunidad, nos dirigimos a Ud. a fin de comunicarle los nuevos precios sobre nuestros servicios.<br><br>"+
+				firma(), file, c.getEmail());
+		file.delete();
+	}
+	
+	public static void enviarDocumentoContablePorEmail(Cliente c, ETipoDocumento tipoDocContable, Integer nroDoc, JasperPrint jasperDocumento) throws JRException, FileNotFoundException, AddressException, MessagingException {
+		String strDocumento = tipoDocContable.toString().toLowerCase().replaceAll("_", " de ").replaceAll("debito", "débito").replaceAll("credito", "crédito");
+		File file = new File(System.getProperty("java.io.tmpdir") + tipoDocContable.toString().toLowerCase() + "_" + nroDoc + ".pdf");
+		JasperHelper.exportarAPDF(jasperDocumento, file);
+		String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + nroDoc;
+		GenericUtils.enviarEmail(asunto,
+				"<html><b>Estimado cliente:<br><br>" + 
+				"Por medio de la presente, adjuntamos la " + asunto + ".<br><br>" +
 				firma(), file, c.getEmail());
 		file.delete();
 	}
