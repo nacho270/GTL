@@ -273,7 +273,9 @@
 				<text><![CDATA[Saldo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="17" width="160" height="13"/>
+				<reportElement x="105" y="17" width="160" height="13">
+					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
@@ -282,7 +284,9 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="30" width="160" height="16"/>
+				<reportElement x="105" y="30" width="160" height="16">
+					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
+				</reportElement>
 				<textElement/>
 				<text><![CDATA[Tel/Fax: (5411) 4454-2279/2395]]></text>
 			</staticText>
@@ -293,7 +297,9 @@
 				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="105" y="0" width="160" height="15"/>
+				<reportElement x="105" y="0" width="160" height="15">
+					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="11" isBold="true" isItalic="true" isUnderline="false"/>
 				</textElement>
@@ -301,7 +307,9 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="46" width="160" height="20" forecolor="#0033FF"/>
+				<reportElement x="105" y="46" width="160" height="20" forecolor="#0033FF">
+					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>

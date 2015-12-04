@@ -477,16 +477,19 @@ public class GenericUtils {
 	        multipart.addBodyPart(mimeBodyPartFile);
 		}
 
-		File emailIcon = new File(System.getProperty("java.io.tmpdir") + "tempEmailIcon.png");
-		try {
-			MimeBodyPart imagePart = new MimeBodyPart();
-			imagePart.setHeader("Content-ID", "<AbcXyz123>");
-			imagePart.setDisposition(MimeBodyPart.INLINE);
-			BossIO.getInstance().writeFile(emailIcon, FileUtil.getResourceAsStream("ar/com/textillevel/imagenes/logo-gtl-email.png"));
-			imagePart.attachFile(emailIcon);
-			multipart.addBodyPart(imagePart);
-		} catch (IOException e) {
-			e.printStackTrace();
+		File emailIcon = null;
+		if (!isSistemaTest()) {
+			emailIcon = new File(System.getProperty("java.io.tmpdir") + "tempEmailIcon.png");
+			try {
+				MimeBodyPart imagePart = new MimeBodyPart();
+				imagePart.setHeader("Content-ID", "<AbcXyz123>");
+				imagePart.setDisposition(MimeBodyPart.INLINE);
+				BossIO.getInstance().writeFile(emailIcon, FileUtil.getResourceAsStream("ar/com/textillevel/imagenes/logo-gtl-email.png"));
+				imagePart.attachFile(emailIcon);
+				multipart.addBodyPart(imagePart);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		mailMessage.setContent(multipart);
 		mailMessage.saveChanges();
@@ -496,7 +499,9 @@ public class GenericUtils {
 				mailServerProperties.getProperty("textillevel.email.pass"));
 		transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
 		transport.close();
-		emailIcon.delete();
+		if (emailIcon != null) {
+			emailIcon.delete();
+		}
 	}
 	
 	public static void enviarCotizacionPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
@@ -510,13 +515,17 @@ public class GenericUtils {
 	}
 	
 	private static String firma() {
-		return "Sin otro particular, lo saludamos muy atentamente.</b><br><br>" +
+		String firma = "Sin otro particular, lo saludamos muy atentamente.</b><br><br>";
+		if (!isSistemaTest()) {
+			return firma +
 			   "<img src=\"cid:AbcXyz123\"><br>" +
 			   "<font style=\"font-size:12.8px;text-align:center\" color=\"#999999\">" + 
 			   		"<b>Administraci&oacute;n Textil Level S.A<br>"
 			   		+ "Tel: (+54) 11 4454-2395 / 2279<br>"
 			   		+ "Av. San Martin 4215 Lomas Del Mirador</b>" +
 			   "</font></html>";
+		}
+		return firma;
 	}
 	
 	public static void enviarResumenCuentaPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
