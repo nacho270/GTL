@@ -48,7 +48,7 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor{
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaCredito().getAnulada()==false && !(movimiento.getNotaCredito().getVerificada()!=null && movimiento.getNotaCredito().getVerificada() == true));
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(movimiento.getNotaCredito().getCaeAFIP() == null);
 			getFrameMovimientos().getBtnEditar().setEnabled(true);
-			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(movimiento.getNotaCredito().getCaeAFIP() != null);
+			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(GenericUtils.isSistemaTest() || movimiento.getNotaCredito().getCaeAFIP() != null);
 		}
 //		getFrameMovimientos().getBtnEliminarFactura().setEnabled(false);
 		getFrameMovimientos().getBtnAgregarObservaciones().setEnabled(true);
@@ -70,14 +70,14 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor{
 				getFrameMovimientos().getBtnEditar().setEnabled(false);
 			}
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(movimiento.getFactura().getCaeAFIP() == null);
-			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(movimiento.getFactura().getCaeAFIP() != null);
+			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(GenericUtils.isSistemaTest() || movimiento.getFactura().getCaeAFIP() != null);
 
 		}else{
 			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaDebito().getAnulada()==false && GenericUtils.isSistemaTest());
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaDebito().getAnulada()==false && !(movimiento.getNotaDebito().getVerificada()!=null && movimiento.getNotaDebito().getVerificada() == true));
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(movimiento.getNotaDebito().getCaeAFIP() == null);
 			getFrameMovimientos().getBtnEditar().setEnabled(true);
-			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(movimiento.getNotaDebito().getCaeAFIP() != null);
+			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(GenericUtils.isSistemaTest() || movimiento.getNotaDebito().getCaeAFIP() != null);
 		}
 		getFrameMovimientos().getBtnAgregarObservaciones().setEnabled(true);
 //		getFrameMovimientos().getBtnEliminarRecibo().setEnabled(false);
