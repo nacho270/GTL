@@ -63,7 +63,6 @@ import ar.com.fwcommon.util.FileUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.fwcommon.util.SwingWorker;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
-import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
 import ar.com.textillevel.gui.util.dialogs.WaitDialog;
 import ar.com.textillevel.gui.util.num2text.Num2Text;
@@ -448,22 +447,18 @@ public class GenericUtils {
 		return provider.getBufferedImage();
 	}
 
-	public static void enviarEmail(String asunto, String cuerpo, File file, String... recipents) throws AddressException, MessagingException {
+	public static void enviarEmail(String asunto, String cuerpo, File file, List<String> to, List<String> cc) throws AddressException, MessagingException {
 		Properties mailServerProperties = System.getProperties();
 		mailServerProperties.put("mail.smtp.port", "587");
 		mailServerProperties.put("mail.smtp.auth", "true");
 		mailServerProperties.put("mail.smtp.starttls.enable", "true");
 
-		Session getMailSession = Session.getDefaultInstance(mailServerProperties, null);
-		Message mailMessage = new MimeMessage(getMailSession);
-		for (String recipent : recipents) {
-			try {
-				mailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipent));
-			} catch (AddressException ae) {
-				System.err.println("Email erroneo: " + recipent);
-				throw ae;
-			}
-		}
+		Session gmailSession = Session.getDefaultInstance(mailServerProperties, null);
+		Message mailMessage = new MimeMessage(gmailSession);
+
+		addRecipents(to, mailMessage, Message.RecipientType.TO);
+		addRecipents(cc, mailMessage, Message.RecipientType.CC);
+
 		mailMessage.setSubject(asunto);
 		mailMessage.setSentDate(new java.util.Date());
 		
@@ -498,7 +493,7 @@ public class GenericUtils {
 		mailMessage.setContent(multipart);
 		mailMessage.saveChanges();
 
-		Transport transport = getMailSession.getTransport("smtp");
+		Transport transport = gmailSession.getTransport("smtp");
 		transport.connect("smtp.gmail.com", mailServerProperties.getProperty("textillevel.email.user"),
 				mailServerProperties.getProperty("textillevel.email.pass"));
 		transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
@@ -507,18 +502,31 @@ public class GenericUtils {
 			emailIcon.delete();
 		}
 	}
+
+	private static void addRecipents(List<String> to, Message mailMessage, Message.RecipientType type) throws MessagingException, AddressException {
+		for (String recipent : to) {
+			try {
+				InternetAddress internetAddress = new InternetAddress(recipent);
+				internetAddress.validate();
+				mailMessage.addRecipient(type, internetAddress);
+			} catch (AddressException ae) {
+				System.err.println("Email erroneo: " + recipent);
+				throw ae;
+			}
+		}
+	}
 	
-	public static void enviarCotizacionPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
+	public static void enviarCotizacionPorEmail(JasperPrint jasperPrintCotizacion, List<String> to, List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
 		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
 		GenericUtils.enviarEmail("Cotización",
 				"<html><b>Estimado cliente:<br><br>" + 
 				"En esta oportunidad, nos dirigimos a Ud. a fin de comunicarle los nuevos precios sobre nuestros servicios.<br><br>"+
-				firma(), file, c.getEmail());
+				firma(), file, to, cc);
 		file.delete();
 	}
 	
-	public static void enviarDocumentoContablePorEmail(Cliente c, ETipoDocumento tipoDocContable, Integer nroDoc, JasperPrint jasperDocumento) throws JRException, FileNotFoundException, AddressException, MessagingException {
+	public static void enviarDocumentoContablePorEmail(ETipoDocumento tipoDocContable, Integer nroDoc, JasperPrint jasperDocumento, List<String> to, List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		String strDocumento = tipoDocContable.toString().toLowerCase().replaceAll("_", " de ").replaceAll("debito", "débito").replaceAll("credito", "crédito");
 		File file = new File(System.getProperty("java.io.tmpdir") + tipoDocContable.toString().toLowerCase() + "_" + nroDoc + ".pdf");
 		JasperHelper.exportarAPDF(jasperDocumento, file);
@@ -526,7 +534,7 @@ public class GenericUtils {
 		GenericUtils.enviarEmail(asunto,
 				"<html><b>Estimado cliente:<br><br>" + 
 				"Por medio de la presente, adjuntamos la " + asunto + ".<br><br>" +
-				firma(), file, c.getEmail());
+				firma(), file, to, cc);
 		file.delete();
 	}
 	
@@ -544,13 +552,13 @@ public class GenericUtils {
 		return firma;
 	}
 	
-	public static void enviarResumenCuentaPorEmail(Cliente c, JasperPrint jasperPrintCotizacion) throws JRException, FileNotFoundException, AddressException, MessagingException {
+	public static void enviarResumenCuentaPorEmail(JasperPrint jasperPrintCotizacion, List<String> to, List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "resumen.pdf");
 		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
 		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE),
 				"<html><b>Estimado cliente:<br><br>" + 
 				"Por medio de la presente, adjuntamos resumen de cuenta.<br><br>" +
-				firma(), file, c.getEmail());
+				firma(), file, to, cc);
 		file.delete();
 	}
 	
@@ -582,5 +590,14 @@ public class GenericUtils {
 		JDialogSiNoNoVolverAPreguntar d = new JDialogSiNoNoVolverAPreguntar(padre, pregunta, titulo);
 		d.setVisible(true);
 		return new SiNoResponse(d.getResponse(), d.noVolverAPreguntar());
+	}
+
+	public static boolean isEmailValido(String email) {
+		try {
+			new InternetAddress(email).validate();
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 }

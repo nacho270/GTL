@@ -49,8 +49,11 @@ import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
 import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
+import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail;
+import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail.PerformEnvioEmailHandler;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -61,12 +64,12 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	private static final int CANT_COLS = 2;
 	private static final int COL_CLIENTE = 0;
 	private static final int COL_RESULTADO = 1;
-	
+
 	private List<Cliente> allClientesConListaDePrecios;
 	private List<Cliente> clientesSeleccionados;
-	
+
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
-	
+
 	private PanelDatePicker fechaInicioValidez;
 	private FWCheckBoxList<Cliente> chkListClientes;
 	private JButton btnSeleccionarTodos;
@@ -79,7 +82,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	private JLabel lblWorking;
 	private FWJTable tablaAvance;
 	private JScrollPane jsp;
-	
+
 	public JDialogAumentadorDePrecios(Frame padre) {
 		super(padre);
 		this.allClientesConListaDePrecios = getListaDePreciosFacade().getClientesConListaDePrecios();
@@ -89,18 +92,18 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		setUpComponentes();
 		setUpScreen();
 	}
-	
+
 	private void setUpComponentes() {
 		JPanel panelNorte = new JPanel(new GridBagLayout());
 		panelNorte.add(getPanelTablaAumentos(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 3, 1, 1, 1));
-		
+
 		JScrollPane jsp = new JScrollPane(getChkListClientes(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		jsp.setPreferredSize(new Dimension(300, 100));
-		
+
 		panelNorte.add(jsp, GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 2, 2, 1, 0));
 		panelNorte.add(getBtnSeleccionarTodos(), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 		panelNorte.add(getBtnSeleccionarNinguno(), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
-		
+
 		panelNorte.add(getFechaInicioValidez(), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
 		panelNorte.add(getBtnAumentar(), GenericUtils.createGridBagConstraints(2, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 
@@ -111,13 +114,12 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		panelNorte.add(new JLabel("Avance: "), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 		panelNorte.add(getProgreso(), GenericUtils.createGridBagConstraints(1, 5, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 3, 1, 0, 0));
 
-		
 		JPanel panelCentro = new JPanel(new GridBagLayout());
 		panelCentro.add(getJsp(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 1, 1));
-		
+
 		JPanel panelSur = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panelSur.add(getBtnAceptar());
-		
+
 		add(panelNorte, BorderLayout.NORTH);
 		add(panelCentro, BorderLayout.CENTER);
 		add(panelSur, BorderLayout.SOUTH);
@@ -131,7 +133,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		setSize(500, 650);
 		GuiUtil.centrar(this);
 	}
-	
+
 	private PanelDatePicker getFechaInicioValidez() {
 		if (fechaInicioValidez == null) {
 			fechaInicioValidez = new PanelDatePicker();
@@ -139,9 +141,9 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return fechaInicioValidez;
 	}
-	
+
 	private JButton getBtnSeleccionarTodos() {
-		if(btnSeleccionarTodos == null) {
+		if (btnSeleccionarTodos == null) {
 			btnSeleccionarTodos = new JButton("Seleccionar todos");
 			btnSeleccionarTodos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -152,9 +154,9 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return btnSeleccionarTodos;
 	}
-	
+
 	private JButton getBtnSeleccionarNinguno() {
-		if(btnSeleccionarNinguno == null) {
+		if (btnSeleccionarNinguno == null) {
 			btnSeleccionarNinguno = new JButton("Quitar todos");
 			btnSeleccionarNinguno.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -165,10 +167,10 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return btnSeleccionarNinguno;
 	}
-	
+
 	private FWCheckBoxList<Cliente> getChkListClientes() {
-		if(chkListClientes == null) {
-			chkListClientes = new FWCheckBoxList<Cliente>(){
+		if (chkListClientes == null) {
+			chkListClientes = new FWCheckBoxList<Cliente>() {
 
 				private static final long serialVersionUID = 5492341746189605276L;
 
@@ -176,16 +178,16 @@ public class JDialogAumentadorDePrecios extends JDialog {
 				public void itemListaSeleccionado(Object item, boolean seleccionado) {
 					if (seleccionado) {
 						Cliente cliente = (Cliente) item;
-						if(getClientesSeleccionados()== null) {
+						if (getClientesSeleccionados() == null) {
 							clientesSeleccionados = new ArrayList<Cliente>();
 						}
 						if (!getClientesSeleccionados().contains(cliente)) {
 							getClientesSeleccionados().add(cliente);
 						}
 					} else {
-						if (getClientesSeleccionados()!= null ) {
+						if (getClientesSeleccionados() != null) {
 							getClientesSeleccionados().remove(item);
-							if(getClientesSeleccionados().isEmpty()) {
+							if (getClientesSeleccionados().isEmpty()) {
 								clientesSeleccionados = null;
 							}
 						}
@@ -197,7 +199,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	}
 
 	private JButton getBtnAumentar() {
-		if(btnAumentar ==  null) {
+		if (btnAumentar == null) {
 			btnAumentar = new JButton("Aumentar", ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_dinero.png"));
 			btnAumentar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -205,18 +207,18 @@ public class JDialogAumentadorDePrecios extends JDialog {
 						FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Debe elegir un producto a aumentar", "Error");
 						return;
 					}
-					if(getClientesSeleccionados() == null){
+					if (getClientesSeleccionados() == null) {
 						FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Debe elegir al menos un cliente", "Error");
 						return;
 					}
-					for(int i = 0; i<getPanelTablaAumentos().getTabla().getRowCount(); i++) {
-						if(getPanelTablaAumentos().getElemento(i).getPorcentajeAumento() == 0f){
+					for (int i = 0; i < getPanelTablaAumentos().getTabla().getRowCount(); i++) {
+						if (getPanelTablaAumentos().getElemento(i).getPorcentajeAumento() == 0f) {
 							FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "El valor a aumentar es incorrecto", "Error");
 							getPanelTablaAumentos().getTabla().setRowSelectionInterval(i, i);
 							return;
 						}
 					}
-					if(getFechaInicioValidez().getDate().before(DateUtil.getHoy())) {
+					if (getFechaInicioValidez().getDate().before(DateUtil.getHoy())) {
 						FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La fecha de inicio de validez debe ser igual o posterior a hoy.", "Error");
 						return;
 					}
@@ -238,7 +240,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return btnAumentar;
 	}
-	
+
 	public FWJTable getTablaAvance() {
 		if (tablaAvance == null) {
 			tablaAvance = new FWJTable(0, CANT_COLS);
@@ -271,11 +273,11 @@ public class JDialogAumentadorDePrecios extends JDialog {
 			return this;
 		}
 	}
-	
+
 	private enum EEstadoAumentoPrecioCliente {
 		OK, PROCESANDO, EMAIL, ERROR;
 	}
-	
+
 	private JLabel getLblWorking() {
 		if (lblWorking == null) {
 			lblWorking = new JLabel(ImageUtil.loadIcon("ar/com/textillevel/imagenes/loading-chiquito.gif"));
@@ -283,7 +285,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return lblWorking;
 	}
-	
+
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel();
@@ -298,7 +300,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return progreso;
 	}
-	
+
 	public JScrollPane getJsp() {
 		if (jsp == null) {
 			jsp = new JScrollPane(getTablaAvance(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -306,9 +308,9 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return jsp;
 	}
-	
+
 	private JButton getBtnAceptar() {
-		if(btnAceptar == null) {
+		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -319,7 +321,6 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		return btnAceptar;
 	}
 
-	
 	private PanelTablaAumentosTipoProducto getPanelTablaAumentos() {
 		if (panelTablaAumentos == null) {
 			panelTablaAumentos = new PanelTablaAumentosTipoProducto();
@@ -328,7 +329,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		}
 		return panelTablaAumentos;
 	}
-	
+
 	private class PanelTablaAumentosTipoProducto extends PanelTabla<DatosAumentoTO> {
 
 		private static final long serialVersionUID = -8242619349477884825L;
@@ -337,7 +338,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		private static final int COL_TIPO_PRODUCTO = 0;
 		private static final int COL_AUMENTO = 1;
 		private static final int COL_OBJ = 2;
-		
+
 		@Override
 		protected FWJTable construirTabla() {
 			FWJTable tabla = new FWJTable(0, CANT_COLS);
@@ -361,19 +362,19 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		@Override
 		protected DatosAumentoTO getElemento(int fila) {
 			DatosAumentoTO datos = new DatosAumentoTO();
-			datos.setTipoProducto((ETipoProducto)getTabla().getValueAt(fila, COL_TIPO_PRODUCTO));
+			datos.setTipoProducto((ETipoProducto) getTabla().getValueAt(fila, COL_TIPO_PRODUCTO));
 			Object value = getTabla().getValueAt(fila, COL_AUMENTO);
-			if(value == null) {
+			if (value == null) {
 				datos.setPorcentajeAumento(0f);
 			} else {
-				datos.setPorcentajeAumento(Float.valueOf((String)value));
+				datos.setPorcentajeAumento(Float.valueOf((String) value));
 			}
 			return datos;
 		}
 
 		public List<DatosAumentoTO> getDatosAumento() {
 			List<DatosAumentoTO> datos = new ArrayList<DatosAumentoTO>();
-			for(int i = 0; i<getTabla().getRowCount();i++) {
+			for (int i = 0; i < getTabla().getRowCount(); i++) {
 				datos.add(getElemento(i));
 			}
 			return datos;
@@ -421,7 +422,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 	}
 
 	public ListaDePreciosFacadeRemote getListaDePreciosFacade() {
-		if(listaDePreciosFacade == null) {
+		if (listaDePreciosFacade == null) {
 			listaDePreciosFacade = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class);
 		}
 		return listaDePreciosFacade;
@@ -465,7 +466,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 				}
 			}
 			
-			for (Cliente c : getListaClientes()) {
+			for (final Cliente c : getListaClientes()) {
 				try {
 					agregarFila(c.getRazonSocial());
 					getLblEstado().setText((contador++) + " de " + getListaClientes().size() + " - " + "aumentando a " + c.getRazonSocial());
@@ -499,10 +500,25 @@ public class JDialogAumentadorDePrecios extends JDialog {
 							if (enviarEmail) {
 								// actualizo la configuracion actual que ahora deberia ser nueva
 								cotizacionActual = getListaDePreciosFacade().getCotizacionVigente(c);
+								final Cotizacion cotizacionEmail = cotizacionActual;
 								actualizarUltimaFila(EEstadoAumentoPrecioCliente.EMAIL);
 								try {
-									GenericUtils.enviarCotizacionPorEmail(c, new ImprimirListaDePreciosHandler(c, cotizacionActual.getVersionListaPrecio())
-										.createJasperPrint(cotizacionActual.getValidez() + "", cotizacionActual.getNumero()));
+									new JDialogDestinatariosEmail(JDialogAumentadorDePrecios.this, c.getEmail(), new PerformEnvioEmailHandler() {
+										@Override
+										public void performEnvio(final List<String> to, final List<String> cc) {
+											GenericUtils.realizarOperacionConDialogoDeEspera("Enviando lista a: " + c.getRazonSocial(), new BackgroundTask() {
+												public void perform() {
+													try{
+														GenericUtils.enviarCotizacionPorEmail(new ImprimirListaDePreciosHandler(c, cotizacionEmail.getVersionListaPrecio())
+														.createJasperPrint(cotizacionEmail.getValidez() + "", cotizacionEmail.getNumero()), to, cc);
+													} catch (Exception ex) {
+														FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
+														ex.printStackTrace();
+													}
+												}
+											});
+										}
+									}).setVisible(true);
 								} catch (Exception ex) {
 									FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
 									ex.printStackTrace();

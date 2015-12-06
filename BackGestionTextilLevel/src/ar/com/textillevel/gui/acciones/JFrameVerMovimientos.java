@@ -110,6 +110,8 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
+import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail;
+import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail.PerformEnvioEmailHandler;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -139,11 +141,11 @@ public class JFrameVerMovimientos extends JFrame {
 	private JLabel lblTelefono;
 	private JLabel lblCondicionVenta;
 	private JCheckBox chkUltimosMovimientos;
-//	private JComboBox cmbOrdenMovimientos;
+	// private JComboBox cmbOrdenMovimientos;
 
 	private GenerarFilaMovimientoVisitor filaMovimientoVisitor;
 	private IFilaMovimientoVisitor consultaDocumentoMovimientoVisitor;
-	
+
 	private CuentaFacadeRemote cuentaFacade;
 	private FacturaFacadeRemote facturaFacade;
 	private ReciboFacadeRemote reciboFacade;
@@ -162,20 +164,19 @@ public class JFrameVerMovimientos extends JFrame {
 	private JButton btnListadoPDF;
 	private JButton btnEliminarFactura;
 	private JButton btnAgregarRecibo;
-//	private JButton btnEliminarRecibo;
+	// private JButton btnEliminarRecibo;
 	private JButton btnAgregarObservaciones;
 	private JButton btnVisualizarCotizacionActual;
 	private JButton btnEnviarCotizacionPorEmail;
 	private JButton btnEnviarExtractoCuentaPorEmail;
 	private JButton btnEnviarDocumentoContablePorEmail;
 
-	
 	private UsuarioSistema usuarioAdministrador;
 	private Cliente clienteBuscado;
 	private VersionListaDePrecios versionListaDePreciosCotizada;
 	private Cotizacion cotizacionActual;
 	JasperPrint jasperPrintCotizacion = null;
-	
+
 	public JFrameVerMovimientos(Frame padre) {
 		setUpComponentes();
 		setUpScreen();
@@ -196,7 +197,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 	private void llenarTablaMovimientos(List<MovimientoCuenta> movimientos, BigDecimal transporteCuenta) {
 		getPanelTablaMovimientos().getTabla().removeAllRows();
-		if(transporteCuenta.doubleValue()!=0){
+		if (transporteCuenta.doubleValue() != 0) {
 			getPanelTablaMovimientos().agregarTransporte(transporteCuenta);
 		}
 		if (movimientos != null) {
@@ -264,7 +265,7 @@ public class JFrameVerMovimientos extends JFrame {
 			row[COL_VERIFICADO] = false;
 			row[COL_USUARIO_VERIFICADOR] = "";
 			getTabla().addRow(row);
-			getTabla().setForegroundCell(getTabla().getRowCount() - 1, COL_SALDO, transporteCuenta.doubleValue() > 0?Color.GREEN.darker():transporteCuenta.doubleValue()<0?Color.RED:Color.BLACK);
+			getTabla().setForegroundCell(getTabla().getRowCount() - 1, COL_SALDO, transporteCuenta.doubleValue() > 0 ? Color.GREEN.darker() : transporteCuenta.doubleValue() < 0 ? Color.RED : Color.BLACK);
 		}
 
 		@Override
@@ -295,8 +296,8 @@ public class JFrameVerMovimientos extends JFrame {
 
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					if(getTabla().getSelectedRow()>-1){
-						if(getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ) instanceof MovimientoCuenta){
+					if (getTabla().getSelectedRow() > -1) {
+						if (getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ) instanceof MovimientoCuenta) {
 							if (e.getClickCount() == 2 && getTabla().getSelectedRow() > -1) {
 								((MovimientoCuenta) getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ)).aceptarVisitor(consultaDocumentoMovimientoVisitor);
 							} else if (e.getClickCount() == 1 && getTabla().getSelectedRow() > -1) {
@@ -310,21 +311,21 @@ public class JFrameVerMovimientos extends JFrame {
 					}
 				}
 			});
-			
+
 			tabla.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					int selectedRow = getTabla().getSelectedRow();
-					if(selectedRow>-1){
-						if(getTabla().getValueAt(selectedRow, COL_OBJ) instanceof MovimientoCuenta){
+					if (selectedRow > -1) {
+						if (getTabla().getValueAt(selectedRow, COL_OBJ) instanceof MovimientoCuenta) {
 							if (e.getKeyCode() == KeyEvent.VK_ENTER && selectedRow > -1) {
-								if(selectedRow-1<0){
-									selectedRow = getTabla().getRowCount() -1;
-								}else{
+								if (selectedRow - 1 < 0) {
+									selectedRow = getTabla().getRowCount() - 1;
+								} else {
 									selectedRow--;
 								}
 								getTabla().setRowSelectionInterval(selectedRow, selectedRow);
-								((MovimientoCuenta) getTabla().getValueAt(selectedRow, COL_OBJ)).aceptarVisitor(consultaDocumentoMovimientoVisitor);							
+								((MovimientoCuenta) getTabla().getValueAt(selectedRow, COL_OBJ)).aceptarVisitor(consultaDocumentoMovimientoVisitor);
 							} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN && getTabla().getSelectedRow() > -1) {
 								HabilitarBotonesCuentaVisitor hbcv = new HabilitarBotonesCuentaVisitor(JFrameVerMovimientos.this);
 								((MovimientoCuenta) getTabla().getValueAt(getTabla().getSelectedRow(), COL_OBJ)).aceptarVisitor(hbcv);
@@ -336,7 +337,7 @@ public class JFrameVerMovimientos extends JFrame {
 					}
 				}
 			});
-			
+
 			return tabla;
 		}
 
@@ -361,7 +362,7 @@ public class JFrameVerMovimientos extends JFrame {
 		public List<MovimientoTO> createListaMovimientosTO() {
 			List<MovimientoTO> lista = new ArrayList<JFrameVerMovimientos.MovimientoTO>();
 			FWJTable tabla = getTabla();
-			for(int i = 0; i < tabla.getRowCount(); i++) {
+			for (int i = 0; i < tabla.getRowCount(); i++) {
 				MovimientoTO mto = new MovimientoTO();
 				mto.setDescripcion((String) tabla.getValueAt(i, COL_DESCR));
 				mto.setDebe((String) tabla.getValueAt(i, COL_DEBE));
@@ -426,12 +427,12 @@ public class JFrameVerMovimientos extends JFrame {
 			panelFechas.setLayout(new FlowLayout());
 			panelFechas.add(getDPFechaDesde());
 			panelFechas.add(getDPFechaHasta());
-			
+
 			JPanel panelFiltros = new JPanel();
 			panelFiltros.setLayout(new FlowLayout());
 			panelFiltros.add(getChkUltimosMovimientos());
-			//panelFiltros.add(getCmbOrdenMovimientos());
-			
+			// panelFiltros.add(getCmbOrdenMovimientos());
+
 			panel.add(panelCliente);
 			panel.add(panelFechas);
 			panel.add(panelFiltros);
@@ -448,11 +449,11 @@ public class JFrameVerMovimientos extends JFrame {
 			btnBuscar.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent evt) {
-					if(getDPFechaDesde().getDate()==null){
+					if (getDPFechaDesde().getDate() == null) {
 						FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La 'fecha desde' ingresada no es válida", "Error");
 						return;
 					}
-					if(getDPFechaHasta().getDate()==null){
+					if (getDPFechaHasta().getDate() == null) {
 						FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La 'fecha hasta' ingresada no es válida", "Error");
 						return;
 					}
@@ -549,24 +550,25 @@ public class JFrameVerMovimientos extends JFrame {
 				}
 			}
 		});
+
 	}
 
-	private BigDecimal calcularTransporte(List<MovimientoCuenta> movsTransporte, List<MovimientoCuenta> allMovs){
+	private BigDecimal calcularTransporte(List<MovimientoCuenta> movsTransporte, List<MovimientoCuenta> allMovs) {
 		BigDecimal transporteCuenta = new BigDecimal(0d);
-		for(MovimientoCuenta movT : movsTransporte){
-			if(!allMovs.contains(movT)){
+		for (MovimientoCuenta movT : movsTransporte) {
+			if (!allMovs.contains(movT)) {
 				transporteCuenta = transporteCuenta.add(movT.getMonto());
 			}
 		}
 		return transporteCuenta.negate();
 	}
-	
+
 	private void pintarRecibosSecondPass(List<InfoSecondPass> rowsPagosSaldoAFavor) {
 		FWJTable tablaMov = getPanelTablaMovimientos().getTabla();
 		CellRenderer cellRenderer = (CellRenderer) tablaMov.getColumnModel().getColumn(0).getCellRenderer();
 		for (InfoSecondPass isp : rowsPagosSaldoAFavor) {
 			for (int i = isp.getFila() + 1; i < tablaMov.getRowCount(); i++) {
-				if( tablaMov.getValueAt(i, 5) instanceof MovimientoCuenta){
+				if (tablaMov.getValueAt(i, 5) instanceof MovimientoCuenta) {
 					PintarRecibosSecondPassVisitor prspv = new PintarRecibosSecondPassVisitor(isp, i, cellRenderer);
 					((MovimientoCuenta) tablaMov.getValueAt(i, 5)).aceptarVisitor(prspv);
 				}
@@ -579,7 +581,7 @@ public class JFrameVerMovimientos extends JFrame {
 		CellRenderer cellRenderer = (CellRenderer) getPanelTablaMovimientos().getTabla().getColumnModel().getColumn(0).getCellRenderer();
 		PintarFilaReciboVisitor pfrv = new PintarFilaReciboVisitor(tabla, mapaColores, cellRenderer, infoCuentaTO);
 		for (int i = 0; i < tabla.getRowCount(); i++) {
-			if( tabla.getValueAt(i, 5) instanceof MovimientoCuenta){
+			if (tabla.getValueAt(i, 5) instanceof MovimientoCuenta) {
 				pfrv.setFilaActual(i);
 				((MovimientoCuenta) tabla.getValueAt(i, 5)).aceptarVisitor(pfrv);
 			}
@@ -592,7 +594,7 @@ public class JFrameVerMovimientos extends JFrame {
 		cellRenderer.clear();
 		PintarFilaReciboVisitor pfrv = new PintarFilaReciboVisitor(tabla, mapaColores, cellRenderer);
 		for (int i = 0; i < tabla.getRowCount(); i++) {
-			if( tabla.getValueAt(i, 5) instanceof MovimientoCuenta){
+			if (tabla.getValueAt(i, 5) instanceof MovimientoCuenta) {
 				pfrv.setFilaActual(i);
 				((MovimientoCuenta) tabla.getValueAt(i, 5)).aceptarVisitor(pfrv);
 			}
@@ -665,12 +667,12 @@ public class JFrameVerMovimientos extends JFrame {
 		if (panelSur == null) {
 			panelSur = new JPanel();
 			panelSur.setLayout(new GridBagLayout());
-			panelSur.add(getPanelAcciones(),GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelSur.add(getPanelAcciones(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1, 1, 1));
 			JPanel panelTotal = new JPanel();
 			panelTotal.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 			panelTotal.add(new JLabel("Total: "));
 			panelTotal.add(getTxtTotalCuenta());
-			panelSur.add(panelTotal, GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelSur.add(panelTotal, GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1, 1, 1));
 		}
 		return panelSur;
 	}
@@ -699,7 +701,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
-			btnSalir = BossEstilos.createButton("ar/com/textillevel/imagenes/b_exit.png", "ar/com/textillevel/imagenes/b_exit.png"); 
+			btnSalir = BossEstilos.createButton("ar/com/textillevel/imagenes/b_exit.png", "ar/com/textillevel/imagenes/b_exit.png");
 			btnSalir.setMnemonic(KeyEvent.VK_S);
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -739,8 +741,8 @@ public class JFrameVerMovimientos extends JFrame {
 			getLblCondicionVenta().setText("COND. PAGO: " + cliente.getCondicionVenta().getNombre());
 			BigDecimal saldo = new BigDecimal(filaMovimientoVisitor.getSaldo());
 			String format = getDecimalFormat().format(saldo);
-			if(saldo.doubleValue()<1&&saldo.doubleValue()>0){
-				format = "0"+format;
+			if (saldo.doubleValue() < 1 && saldo.doubleValue() > 0) {
+				format = "0" + format;
 			}
 			getTxtTotalCuenta().setText(format);
 			if (saldo.doubleValue() > 0) {
@@ -752,22 +754,22 @@ public class JFrameVerMovimientos extends JFrame {
 			}
 		}
 	}
-	
+
 	public JButton getBtnEditar() {
-		if(btnEditar == null){
+		if (btnEditar == null) {
 			btnEditar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_modificar_fila.png", "ar/com/textillevel/imagenes/b_modificar_fila_des.png");
 			btnEditar.setEnabled(false);
 			btnEditar.setToolTipText("Editar");
 			btnEditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (getPanelTablaMovimientos().getTabla().getSelectedRow() > -1) {
-						if(!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()){
-							JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this,"Editar documento");
+						if (!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()) {
+							JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this, "Editar documento");
 							if (jDialogPasswordInput.isAcepto()) {
 								String pass = new String(jDialogPasswordInput.getPassword());
 								UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
 								if (usrAdmin != null) {
-									if(getUsuarioAdministrador()==null){
+									if (getUsuarioAdministrador() == null) {
 										setUsuarioAdministrador(usrAdmin);
 									}
 									EditarDocumentoVisitor racv = new EditarDocumentoVisitor(JFrameVerMovimientos.this);
@@ -776,7 +778,7 @@ public class JFrameVerMovimientos extends JFrame {
 									FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 								}
 							}
-						}else{
+						} else {
 							setUsuarioAdministrador(GTLGlobalCache.getInstance().getUsuarioSistema());
 							EditarDocumentoVisitor racv = new EditarDocumentoVisitor(JFrameVerMovimientos.this);
 							((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
@@ -788,10 +790,10 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return btnEditar;
 	}
-	
+
 	public JButton getBtnEliminarFactura() {
 		if (btnEliminarFactura == null) {
-			btnEliminarFactura = BossEstilos.createButton("ar/com/textillevel/imagenes/b_eliminar.png", "ar/com/textillevel/imagenes/b_eliminar_des.png"); 
+			btnEliminarFactura = BossEstilos.createButton("ar/com/textillevel/imagenes/b_eliminar.png", "ar/com/textillevel/imagenes/b_eliminar_des.png");
 			btnEliminarFactura.setToolTipText("Eliminar");
 			btnEliminarFactura.setEnabled(false);
 			btnEliminarFactura.addActionListener(new ActionListener() {
@@ -805,9 +807,9 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return btnEliminarFactura;
 	}
-	
+
 	public JButton getBtnAgregarObservaciones() {
-		if(btnAgregarObservaciones == null){
+		if (btnAgregarObservaciones == null) {
 			btnAgregarObservaciones = BossEstilos.createButton("ar/com/textillevel/imagenes/b_obs.png", "ar/com/textillevel/imagenes/b_obs_des.png");
 			btnAgregarObservaciones.setEnabled(false);
 			btnAgregarObservaciones.setToolTipText("Agregar observaciones");
@@ -817,7 +819,7 @@ public class JFrameVerMovimientos extends JFrame {
 					if (fila > -1) {
 						MovimientoCuenta mov = getPanelTablaMovimientos().getElemento(fila);
 						String observaciones = JOptionPane.showInputDialog(JFrameVerMovimientos.this, "Observaciones", mov.getObservaciones());
-						if(observaciones!=null){
+						if (observaciones != null) {
 							mov.setObservaciones(observaciones);
 							cuentaFacade.actualizarMovimiento(mov);
 							btnAgregarObservaciones.setEnabled(false);
@@ -829,7 +831,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return btnAgregarObservaciones;
 	}
-	
+
 	private JButton getBtnVisualizarCotizacionActual() {
 		if (btnVisualizarCotizacionActual == null) {
 			btnVisualizarCotizacionActual = BossEstilos.createButton("ar/com/textillevel/imagenes/b_venta.png", "ar/com/textillevel/imagenes/b_venta_des.png");
@@ -846,7 +848,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return btnVisualizarCotizacionActual;
 	}
-	
+
 	private JButton getBtnEnviarCotizacionPorEmail() {
 		if (btnEnviarCotizacionPorEmail == null) {
 			btnEnviarCotizacionPorEmail = BossEstilos.createButton("ar/com/textillevel/imagenes/b_cotizacion_email.png", "ar/com/textillevel/imagenes/b_cotizacion_email_des.png");
@@ -856,17 +858,22 @@ public class JFrameVerMovimientos extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					createJasperPrintCotizacion();
 					if (jasperPrintCotizacion != null) {
-						GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
-							public void perform() {
-								try {
-									GenericUtils.enviarCotizacionPorEmail(getClienteBuscado(), jasperPrintCotizacion);
-									FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotización por correo a " + getClienteBuscado().getEmail(), "Información");
-								}catch(Exception ex){
-									FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
-									ex.printStackTrace();
-								}
+						new JDialogDestinatariosEmail(JFrameVerMovimientos.this, getClienteBuscado().getEmail(), new PerformEnvioEmailHandler() {
+							@Override
+							public void performEnvio(final List<String> to, final List<String> cc) {
+								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+									public void perform() {
+										try {
+											GenericUtils.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc);
+											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotización por correo a " + getClienteBuscado().getEmail(), "Información");
+										} catch (Exception ex) {
+											FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
+											ex.printStackTrace();
+										}
+									}
+								});
 							}
-						});
+						}).setVisible(true);
 					}
 				}
 			});
@@ -890,32 +897,37 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return btnEnviarDocumentoContablePorEmail;
 	}
-	
+
 	public void enviarDocumentoContablePorEmail(final DocumentoContableCliente documentoContable) {
 		final Cliente clienteBuscado = getClienteBuscado();
-		if (clienteBuscado != null){
-			GenericUtils.realizarOperacionConDialogoDeEspera("Enviando " + documentoContable.getTipoDocumento().toString().toLowerCase().replaceAll("_", " ") + " a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
-				public void perform() {
-					try {
-						DocumentoContableCliente documentoContable2 = null;
-						if (documentoContable instanceof Factura) {
-							FacturaFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
-							documentoContable2 = ffr.getByIdEager(documentoContable.getId());
-						} else if (documentoContable instanceof CorreccionFactura) {
-							CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
-							documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
+		if (clienteBuscado != null) {
+			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
+				@Override
+				public void performEnvio(final List<String> to, final List<String> cc) {
+					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando " + documentoContable.getTipoDocumento().toString().toLowerCase().replaceAll("_", " ") + " a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+						public void perform() {
+							try {
+								DocumentoContableCliente documentoContable2 = null;
+								if (documentoContable instanceof Factura) {
+									FacturaFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
+									documentoContable2 = ffr.getByIdEager(documentoContable.getId());
+								} else if (documentoContable instanceof CorreccionFactura) {
+									CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
+									documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
+								}
+								JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
+								GenericUtils.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), jasperPrint, to, cc);
+							} catch (Exception ex) {
+								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
+								ex.printStackTrace();
+							}
 						}
-						JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
-						GenericUtils.enviarDocumentoContablePorEmail(clienteBuscado, documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), jasperPrint);
-					}catch(Exception ex) {
-						FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
-						ex.printStackTrace();
-					}
+					});
 				}
-			});
+			}).setVisible(true);
 		}
 	}
-	
+
 	private JButton getBtnEnviarExtractoCuentaPorEmail() {
 		if (btnEnviarExtractoCuentaPorEmail == null) {
 			btnEnviarExtractoCuentaPorEmail = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_subir.png", "ar/com/fwcommon/imagenes/b_subir_des.png");
@@ -924,18 +936,23 @@ public class JFrameVerMovimientos extends JFrame {
 			btnEnviarExtractoCuentaPorEmail.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					final Cliente cliente = loadClienteBuscado();
-					if(cliente != null) {
-						GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getEmail(), new BackgroundTask() {
-							public void perform() {
-								try {
-									GenericUtils.enviarResumenCuentaPorEmail(getClienteBuscado(), createJasperResumenCuenta(cliente));
-									FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
-								}catch(Exception ex){
-									FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
-									ex.printStackTrace();
-								}
+					if (cliente != null) {
+						new JDialogDestinatariosEmail(JFrameVerMovimientos.this, cliente.getEmail(), new PerformEnvioEmailHandler() {
+							@Override
+							public void performEnvio(final List<String> to, final List<String> cc) {
+								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+									public void perform() {
+										try {
+											GenericUtils.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc);
+											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
+										} catch (Exception ex) {
+											FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
+											ex.printStackTrace();
+										}
+									}
+								});
 							}
-						});
+						}).setVisible(true);
 					}
 				}
 			});
@@ -944,15 +961,15 @@ public class JFrameVerMovimientos extends JFrame {
 	}
 
 	private static final String ARCHIVO_JASPER_RESUMEN_CUENTA = "/ar/com/textillevel/reportes/resumenCuenta.jasper";
-	
+
 	public JasperPrint createJasperResumenCuenta(Cliente cliente) {
 		JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_CUENTA);
 		return JasperHelper.fillReport(reporte, getParametersResumenCuenta(cliente), getPanelTablaMovimientos().createListaMovimientosTO());
 	}
-	
+
 	private Map<String, Object> getParametersResumenCuenta(Cliente cliente) {
 		Map<String, Object> mapa = new HashMap<String, Object>();
-		if(getChkUltimosMovimientos().isSelected()){
+		if (getChkUltimosMovimientos().isSelected()) {
 			mapa.put("FECHA", "DETALLE DE ULTIMOS 20 MOVIMIENTOS");
 		} else {
 			java.sql.Date fechaDesde = new java.sql.Date(getDPFechaDesde().getDate().getTime());
@@ -968,7 +985,7 @@ public class JFrameVerMovimientos extends JFrame {
 		mapa.put("IS_TEST", GenericUtils.isSistemaTest());
 		return mapa;
 	}
-	
+
 	public static class MovimientoTO implements Serializable {
 
 		private static final long serialVersionUID = 1L;
@@ -1010,27 +1027,27 @@ public class JFrameVerMovimientos extends JFrame {
 			this.saldo = saldo;
 		}
 	}
-	
+
 //	public JButton getBtnEliminarRecibo() {
-//		if (btnEliminarRecibo == null) {
-//			btnEliminarRecibo = new JButton("   Eliminar recibo/NC",ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_eliminar.png"));
-//			btnEliminarRecibo.setDisabledIcon(ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_eliminar_des.png"));
-//			btnEliminarRecibo.setToolTipText("Eliminar recibo");
-//			btnEliminarRecibo.setEnabled(false);
-//			btnEliminarRecibo.addActionListener(new ActionListener() {
+//	if (btnEliminarRecibo == null) {
+//		btnEliminarRecibo = new JButton("   Eliminar recibo/NC",ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_eliminar.png"));
+//		btnEliminarRecibo.setDisabledIcon(ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_eliminar_des.png"));
+//		btnEliminarRecibo.setToolTipText("Eliminar recibo");
+//		btnEliminarRecibo.setEnabled(false);
+//		btnEliminarRecibo.addActionListener(new ActionListener() {
 //
-//				public void actionPerformed(ActionEvent e) {
-//					if (getPanelTablaMovimientos().getTabla().getSelectedRow() > -1) {
-//						realizarAccionEliminarRecibo();
-//					}
+//			public void actionPerformed(ActionEvent e) {
+//				if (getPanelTablaMovimientos().getTabla().getSelectedRow() > -1) {
+//					realizarAccionEliminarRecibo();
 //				}
-//			});
-//		}
-//		return btnEliminarRecibo;
+//			}
+//		});
 //	}
+//	return btnEliminarRecibo;
+//}
 
 	private JButton getBtnAgregarRecibo() {
-		if(btnAgregarRecibo == null){
+		if (btnAgregarRecibo == null) {
 			btnAgregarRecibo = BossEstilos.createButton("ar/com/textillevel/imagenes/b_rechazar_cheque.png", "ar/com/textillevel/imagenes/b_rechazar_cheque_des.png");
 			btnAgregarRecibo.setEnabled(false);
 			btnAgregarRecibo.addActionListener(new ActionListener() {
@@ -1039,18 +1056,18 @@ public class JFrameVerMovimientos extends JFrame {
 					recibo.setCliente(getClienteBuscado());
 					recibo.setNroRecibo(getProximoNroRecibo());
 					JDialogCargaRecibo dialogCargarRecibo = new JDialogCargaRecibo(JFrameVerMovimientos.this, recibo, false);
-					GuiUtil.centrar(dialogCargarRecibo);		
+					GuiUtil.centrar(dialogCargarRecibo);
 					dialogCargarRecibo.setVisible(true);
 					buscarMovimientos();
 				}
-				
+
 				private Integer getProximoNroRecibo() {
 					ReciboFacadeRemote reciboFacade = GTLBeanFactory.getInstance().getBean2(ReciboFacadeRemote.class);
 					Integer lastNroRecibo = reciboFacade.getLastNroRecibo();
-					if(lastNroRecibo == null) {
+					if (lastNroRecibo == null) {
 						ParametrosGeneralesFacadeRemote paramGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 						Integer nroComienzoRecibo = paramGeneralesFacade.getParametrosGenerales().getNroComienzoRecibo();
-						if(nroComienzoRecibo == null) {
+						if (nroComienzoRecibo == null) {
 							throw new RuntimeException("Falta configurar el número de comienzo de recibo en los parámetros generales");
 						}
 						lastNroRecibo = nroComienzoRecibo;
@@ -1063,10 +1080,10 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return btnAgregarRecibo;
 	}
-	
+
 	public JButton getBtnAnular() {
 		if (btnAnular == null) {
-			btnAnular = BossEstilos.createButton("ar/com/textillevel/imagenes/b_anular_recibo.png", "ar/com/textillevel/imagenes/b_anular_recibo_des.png"); 
+			btnAnular = BossEstilos.createButton("ar/com/textillevel/imagenes/b_anular_recibo.png", "ar/com/textillevel/imagenes/b_anular_recibo_des.png");
 			btnAnular.setToolTipText("Anular");
 			btnAnular.setEnabled(false);
 			btnAnular.addActionListener(new ActionListener() {
@@ -1083,7 +1100,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 	public JButton getBtnConfirmar() {
 		if (btnConfirmar == null) {
-			btnConfirmar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_cancelar_anulacion_recibo.png", "ar/com/textillevel/imagenes/b_cancelar_anulacion_recibo_des.png"); 
+			btnConfirmar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_cancelar_anulacion_recibo.png", "ar/com/textillevel/imagenes/b_cancelar_anulacion_recibo_des.png");
 			btnConfirmar.setToolTipText("Confirmar");
 			btnConfirmar.setEnabled(false);
 			btnConfirmar.addActionListener(new ActionListener() {
@@ -1099,13 +1116,13 @@ public class JFrameVerMovimientos extends JFrame {
 	}
 
 	private void realizarAccionConfirmar() {
-		if(!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()){
-			JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this,"Confirmar movimiento");
+		if (!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()) {
+			JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this, "Confirmar movimiento");
 			if (jDialogPasswordInput.isAcepto()) {
 				String pass = new String(jDialogPasswordInput.getPassword());
 				UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
 				if (usrAdmin != null) {
-					if(getUsuarioAdministrador()==null){
+					if (getUsuarioAdministrador() == null) {
 						setUsuarioAdministrador(usrAdmin);
 					}
 					AccionConfirmarCuentaVisitor racv = new AccionConfirmarCuentaVisitor(JFrameVerMovimientos.this);
@@ -1114,7 +1131,7 @@ public class JFrameVerMovimientos extends JFrame {
 					FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 				}
 			}
-		}else{
+		} else {
 			setUsuarioAdministrador(GTLGlobalCache.getInstance().getUsuarioSistema());
 			AccionConfirmarCuentaVisitor racv = new AccionConfirmarCuentaVisitor(JFrameVerMovimientos.this);
 			((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
@@ -1122,13 +1139,13 @@ public class JFrameVerMovimientos extends JFrame {
 	}
 
 	private void realizarAccionAnular() {
-		if(!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()){
-			JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this,"Anular movimiento");
+		if (!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()) {
+			JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this, "Anular movimiento");
 			if (jDialogPasswordInput.isAcepto()) {
 				String pass = new String(jDialogPasswordInput.getPassword());
 				UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
 				if (usrAdmin != null) {
-					if(getUsuarioAdministrador()==null){
+					if (getUsuarioAdministrador() == null) {
 						setUsuarioAdministrador(usrAdmin);
 					}
 					AccionAnularCuentaVisitor racv = new AccionAnularCuentaVisitor(JFrameVerMovimientos.this);
@@ -1137,21 +1154,21 @@ public class JFrameVerMovimientos extends JFrame {
 					FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 				}
 			}
-		}else{
+		} else {
 			setUsuarioAdministrador(GTLGlobalCache.getInstance().getUsuarioSistema());
 			AccionAnularCuentaVisitor racv = new AccionAnularCuentaVisitor(JFrameVerMovimientos.this);
 			((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
 		}
 	}
-	
+
 	private void realizarAccionEliminarFactura() {
-		if(!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()){
-			JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this,"Eliminar movimiento");
+		if (!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()) {
+			JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this, "Eliminar movimiento");
 			if (jDialogPasswordInput.isAcepto()) {
 				String pass = new String(jDialogPasswordInput.getPassword());
 				UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
 				if (usrAdmin != null) {
-					if(getUsuarioAdministrador()==null){
+					if (getUsuarioAdministrador() == null) {
 						setUsuarioAdministrador(usrAdmin);
 					}
 					AccionEliminarFacturaCuentaVisitor racv = new AccionEliminarFacturaCuentaVisitor(JFrameVerMovimientos.this);
@@ -1160,37 +1177,37 @@ public class JFrameVerMovimientos extends JFrame {
 					FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 				}
 			}
-		}else{
+		} else {
 			setUsuarioAdministrador(GTLGlobalCache.getInstance().getUsuarioSistema());
 			AccionEliminarFacturaCuentaVisitor racv = new AccionEliminarFacturaCuentaVisitor(JFrameVerMovimientos.this);
 			((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
 		}
 	}
-	
+
 //	private void realizarAccionEliminarRecibo() {
-//		JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this);
-//		if (jDialogPasswordInput.isAcepto()) {
-//			String pass = new String(jDialogPasswordInput.getPassword());
-//			UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
-//			if (usrAdmin != null) {
-//				if(getUsuarioAdministrador()==null){
-//					setUsuarioAdministrador(usrAdmin);
-//				}
-//				AccionEliminarReciboCuentaVisitor racv = new AccionEliminarReciboCuentaVisitor(JFrameVerMovimientos.this);
-//				((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
-//			} else {
-//				CLJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+//	JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JFrameVerMovimientos.this);
+//	if (jDialogPasswordInput.isAcepto()) {
+//		String pass = new String(jDialogPasswordInput.getPassword());
+//		UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
+//		if (usrAdmin != null) {
+//			if(getUsuarioAdministrador()==null){
+//				setUsuarioAdministrador(usrAdmin);
 //			}
+//			AccionEliminarReciboCuentaVisitor racv = new AccionEliminarReciboCuentaVisitor(JFrameVerMovimientos.this);
+//			((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
+//		} else {
+//			CLJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "La clave ingresada no peternece a un usuario administrador", "Error");
 //		}
 //	}
+//}
 	
-	public void eliminarCorreccion(CorreccionFactura correccion){
-		try{
-			if(FWJOptionPane.showQuestionMessage(this, "Está seguro que desea eliminar la " + correccion.getTipo().getDescripcion()+"?", "Pregunta") == FWJOptionPane.YES_OPTION){
-				if(correccion instanceof NotaDebito){
-					NotaDebito nd = (NotaDebito)correccion;
-					if(nd.getChequeRechazado()!=null){
-						if(FWJOptionPane.showQuestionMessage(this, StringW.wordWrap("Esta es una nota de débito por rechazo de cheque. Se volverá el cheque implicado al estado anterior y se eliminará la nota de débito del proveedor. Desea continuar?"), "Pregunta") == FWJOptionPane.NO_OPTION){
+	public void eliminarCorreccion(CorreccionFactura correccion) {
+		try {
+			if (FWJOptionPane.showQuestionMessage(this, "Está seguro que desea eliminar la " + correccion.getTipo().getDescripcion() + "?", "Pregunta") == FWJOptionPane.YES_OPTION) {
+				if (correccion instanceof NotaDebito) {
+					NotaDebito nd = (NotaDebito) correccion;
+					if (nd.getChequeRechazado() != null) {
+						if (FWJOptionPane.showQuestionMessage(this, StringW.wordWrap("Esta es una nota de débito por rechazo de cheque. Se volverá el cheque implicado al estado anterior y se eliminará la nota de débito del proveedor. Desea continuar?"), "Pregunta") == FWJOptionPane.NO_OPTION) {
 							return;
 						}
 					}
@@ -1198,50 +1215,50 @@ public class JFrameVerMovimientos extends JFrame {
 				getCorreccionFacade().eliminarCorreccion(correccion, getUsuarioAdministrador().getUsrName());
 				buscarMovimientos();
 			}
-		}catch(ValidacionException vle){
+		} catch (ValidacionException vle) {
 			FWJOptionPane.showErrorMessage(this, vle.getMensajeError(), "Error");
-		}catch(FWException cle){
+		} catch (FWException cle) {
 			BossError.gestionarError(cle);
 		}
 	}
-	
-	public void eliminarFactura(Factura factura){
+
+	public void eliminarFactura(Factura factura) {
 //		if(factura.getEstadoImpresion()==EEstadoImpresionDocumento.IMPRESO){
-//			if(CLJOptionPane.showQuestionMessage(this, "No se puede eliminar la factura debido a que ya ha sido impresa. Desea anularla?", "Pregunta") == CLJOptionPane.YES_OPTION){
-//				anularFactura(factura);
-//			}
-//		}else{
-			try {
-				
-				JDialogSeleccionarDocumentoABorrar jds = new JDialogSeleccionarDocumentoABorrar(this);
-				jds.setVisible(true);
-				if(jds.isAcepto()){
-					if(jds.isBorrarFactura()){
-						getFacturaFacade().eliminarFactura(factura, getUsuarioAdministrador().getUsrName());
-					}
-					if(jds.isBorrarRemitoSalida() && factura.getRemitos()!=null){
-					//	getRemitoSalidaFacade().borrarRemito(factura.getRemito(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-					}
-					if(jds.isBorrarRemitoEntrada()){
-						//TODO: no se como llegar a este
-					}
-					FWJOptionPane.showInformationMessage(this, "La operación ha finalizado con éxito", "Información");
-					buscarMovimientos();
-				}
-			} catch (ValidacionException e) {
-				FWJOptionPane.showErrorMessage(this, e.getMensajeError(), "Error");
-			} catch (FWException e) {
-				BossError.gestionarError(e);
-			}
+//		if(CLJOptionPane.showQuestionMessage(this, "No se puede eliminar la factura debido a que ya ha sido impresa. Desea anularla?", "Pregunta") == CLJOptionPane.YES_OPTION){
+//			anularFactura(factura);
 //		}
+//	}else{
+		try {
+
+			JDialogSeleccionarDocumentoABorrar jds = new JDialogSeleccionarDocumentoABorrar(this);
+			jds.setVisible(true);
+			if (jds.isAcepto()) {
+				if (jds.isBorrarFactura()) {
+					getFacturaFacade().eliminarFactura(factura, getUsuarioAdministrador().getUsrName());
+				}
+				if (jds.isBorrarRemitoSalida() && factura.getRemitos() != null) {
+					//	getRemitoSalidaFacade().borrarRemito(factura.getRemito(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+				}
+				if (jds.isBorrarRemitoEntrada()) {
+					// TODO: no se como llegar a este
+				}
+				FWJOptionPane.showInformationMessage(this, "La operación ha finalizado con éxito", "Información");
+				buscarMovimientos();
+			}
+		} catch (ValidacionException e) {
+			FWJOptionPane.showErrorMessage(this, e.getMensajeError(), "Error");
+		} catch (FWException e) {
+			BossError.gestionarError(e);
+		}
+		// }
 	}
 
 	public void eliminarRecibo(Recibo recibo) {
 		JDialogTratarOperacionRecibo dialogo = new JDialogTratarOperacionRecibo(this);
 		dialogo.setVisible(true);
-		if(dialogo.isAcepto()) {
-			if(dialogo.isEliminarRecibo()) {
-				if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+		if (dialogo.isAcepto()) {
+			if (dialogo.isEliminarRecibo()) {
+				if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar el recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 					try {
 						getReciboFacade().checkEliminacionRecibo(recibo.getId());
 						getReciboFacade().borrarRecibo(recibo, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
@@ -1252,14 +1269,14 @@ public class JFrameVerMovimientos extends JFrame {
 					}
 				}
 			} else {
-				if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea editar el recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+				if (FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea editar el recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 					editarRecibo(recibo);
 				}
 			}
 		}
 	}
 
-	public void anularCorreccion(CorreccionFactura correccion){
+	public void anularCorreccion(CorreccionFactura correccion) {
 		try {
 			getCorreccionFacade().anularCorreccion(correccion, getUsuarioAdministrador().getUsrName());
 			FWJOptionPane.showInformationMessage(this, StringW.wordWrap("La " + correccion.getTipo().getDescripcion()) + " se ha anulado correctamente", "Información");
@@ -1270,17 +1287,17 @@ public class JFrameVerMovimientos extends JFrame {
 			BossError.gestionarError(e);
 		}
 	}
-	
+
 	public void anularFactura(Factura factura) {
 		try {
 			boolean anularRemitoSalida = false;
-			if(factura.getRemitos() != null) {
+			if (factura.getRemitos() != null) {
 				int respuesta = -1;
 				respuesta = FWJOptionPane.showQuestionMessageWithCancelOption(this, StringW.wordWrap("¿Desea anular el Remito de Salida también? Si presiona 'Cancelar' se cancela la operación completa."), "Confirmación");
-				if(respuesta == FWJOptionPane.CANCEL_OPTION) {
+				if (respuesta == FWJOptionPane.CANCEL_OPTION) {
 					return;
 				} else {
-					anularRemitoSalida = respuesta == FWJOptionPane.YES_OPTION; 
+					anularRemitoSalida = respuesta == FWJOptionPane.YES_OPTION;
 				}
 			}
 			getFacturaFacade().anularFactura(factura, anularRemitoSalida, getUsuarioAdministrador().getUsrName());
@@ -1298,14 +1315,14 @@ public class JFrameVerMovimientos extends JFrame {
 		getFacturaFacade().cambiarEstadoFactura(factura, EEstadoFactura.VERIFICADA, getUsuarioAdministrador().getUsrName());
 		buscarMovimientos();
 	}
-	
+
 	public void confirmarNotaDebito(NotaDebito nd) {
 		getCorreccionFacade().cambiarVerificacionCorreccion(nd, true, getUsuarioAdministrador().getUsrName());
 		buscarMovimientos();
 	}
-	
+
 	public void confirmarCredito(NotaCredito nc) {
-		getCorreccionFacade().cambiarVerificacionCorreccion(nc, true,getUsuarioAdministrador().getUsrName());
+		getCorreccionFacade().cambiarVerificacionCorreccion(nc, true, getUsuarioAdministrador().getUsrName());
 		buscarMovimientos();
 	}
 
@@ -1320,7 +1337,7 @@ public class JFrameVerMovimientos extends JFrame {
 	}
 
 	public void confirmarRecibo(Recibo r) {
-		getReciboFacade().cambiarEstadoRecibo(r, EEstadoRecibo.ACEPTADO,getUsuarioAdministrador().getUsrName());
+		getReciboFacade().cambiarEstadoRecibo(r, EEstadoRecibo.ACEPTADO, getUsuarioAdministrador().getUsrName());
 		buscarMovimientos();
 	}
 
@@ -1337,14 +1354,14 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return reciboFacade;
 	}
-	
+
 	public RemitoSalidaFacadeRemote getRemitoSalidaFacade() {
 		if (remitoSalidaFacade == null) {
 			remitoSalidaFacade = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class);
 		}
 		return remitoSalidaFacade;
 	}
-	
+
 	public RemitoEntradaFacadeRemote getRemitoEntradaFacade() {
 		if (remitoEntradaFacade == null) {
 			remitoEntradaFacade = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class);
@@ -1361,7 +1378,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 	private JButton getBtnExportarAExcel() {
 		if (btnExportarAExcel == null) {
-			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png"); 
+			btnExportarAExcel = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_exportar_excel.png", "ar/com/fwcommon/imagenes/b_exportar_excel_des.png");
 			btnExportarAExcel.setToolTipText("Exportar a Excel");
 			btnExportarAExcel.setEnabled(false);
 			btnExportarAExcel.addActionListener(new ActionListener() {
@@ -1414,11 +1431,11 @@ public class JFrameVerMovimientos extends JFrame {
 
 	private JButton getBtnImprimirListado() {
 		if (btnImprimirListado == null) {
-			btnImprimirListado = BossEstilos.createButton("ar/com/textillevel/imagenes/b_imp_listado.png", "ar/com/textillevel/imagenes/b_imp_listado_des.png"); 
-			btnImprimirListado.setToolTipText("Imprimir listado");	
+			btnImprimirListado = BossEstilos.createButton("ar/com/textillevel/imagenes/b_imp_listado.png", "ar/com/textillevel/imagenes/b_imp_listado_des.png");
+			btnImprimirListado.setToolTipText("Imprimir listado");
 			btnImprimirListado.setEnabled(false);
 			btnImprimirListado.addActionListener(new ActionListener() {
-				
+
 				public void actionPerformed(ActionEvent e) {
 					// boolean preview =
 					// CLJOptionPane.showQuestionMessage(JFrameVerMovimientos.this,
@@ -1507,7 +1524,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return lblDireccion;
 	}
-	
+
 	private JLabel getLblCondicionVenta() {
 		if (lblCondicionVenta == null) {
 			lblCondicionVenta = new JLabel();
@@ -1534,9 +1551,9 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return lblTelefono;
 	}
-	
+
 	private JCheckBox getChkUltimosMovimientos() {
-		if(chkUltimosMovimientos == null){
+		if (chkUltimosMovimientos == null) {
 			chkUltimosMovimientos = new JCheckBox("Ver solo últimos movimientos");
 			chkUltimosMovimientos.setSelected(true);
 			chkUltimosMovimientos.addActionListener(new ActionListener() {
@@ -1548,14 +1565,14 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 		return chkUltimosMovimientos;
 	}
-	
-	public CorreccionFacadeRemote getCorreccionFacade(){
-		if(correccionFacade==null){
+
+	public CorreccionFacadeRemote getCorreccionFacade() {
+		if (correccionFacade == null) {
 			correccionFacade = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
 		}
 		return correccionFacade;
 	}
-	
+
 	private class JDialogSeleccionarDocumentoABorrar extends JDialog {
 
 		private static final long serialVersionUID = -8979845617144032895L;
@@ -1571,10 +1588,10 @@ public class JFrameVerMovimientos extends JFrame {
 		private JCheckBox chkBorrarFactura;
 		private JCheckBox chkBorrarRemitoSalida;
 		private JCheckBox chkBorrarRemitoEntrada;
-		
+
 		private JPanel panelBotones;
 		private JPanel panelCentral;
-		
+
 		public JDialogSeleccionarDocumentoABorrar(Frame padre) {
 			super(padre);
 			this.setUpComponentes();
@@ -1591,8 +1608,8 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 
 		private void setUpComponentes() {
-			this.add(getPanelCentral(),BorderLayout.CENTER);
-			this.add(getPanelBotones(),BorderLayout.SOUTH);
+			this.add(getPanelCentral(), BorderLayout.CENTER);
+			this.add(getPanelBotones(), BorderLayout.SOUTH);
 		}
 
 		public boolean isAcepto() {
@@ -1628,7 +1645,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 
 		public JButton getBtnAceptar() {
-			if(btnAceptar == null){
+			if (btnAceptar == null) {
 				btnAceptar = new JButton("Aceptar");
 				btnAceptar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1648,7 +1665,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 
 		public JButton getBtnSalir() {
-			if(this.btnSalir == null){
+			if (this.btnSalir == null) {
 				this.btnSalir = new JButton("Cancelar");
 				this.btnSalir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1659,16 +1676,16 @@ public class JFrameVerMovimientos extends JFrame {
 			}
 			return this.btnSalir;
 		}
-		
+
 		public JCheckBox getChkBorrarFactura() {
-			if(chkBorrarFactura == null){
+			if (chkBorrarFactura == null) {
 				chkBorrarFactura = new JCheckBox("Borrar factura");
 			}
 			return chkBorrarFactura;
 		}
-		
+
 		public JCheckBox getChkBorrarRemitoSalida() {
-			if(chkBorrarRemitoSalida == null){
+			if (chkBorrarRemitoSalida == null) {
 				chkBorrarRemitoSalida = new JCheckBox("Borrar remito de salida");
 				chkBorrarRemitoSalida.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1679,9 +1696,8 @@ public class JFrameVerMovimientos extends JFrame {
 			return chkBorrarRemitoSalida;
 		}
 
-		
 		public JCheckBox getChkBorrarRemitoEntrada() {
-			if(chkBorrarRemitoEntrada == null){
+			if (chkBorrarRemitoEntrada == null) {
 				chkBorrarRemitoEntrada = new JCheckBox("Borrar remito de entrada");
 				chkBorrarRemitoEntrada.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1692,9 +1708,9 @@ public class JFrameVerMovimientos extends JFrame {
 			}
 			return chkBorrarRemitoEntrada;
 		}
-		
+
 		public JPanel getPanelBotones() {
-			if(panelBotones == null){
+			if (panelBotones == null) {
 				panelBotones = new JPanel();
 				panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 				panelBotones.add(getBtnAceptar());
@@ -1702,9 +1718,9 @@ public class JFrameVerMovimientos extends JFrame {
 			}
 			return panelBotones;
 		}
-		
+
 		public JPanel getPanelCentral() {
-			if(panelCentral == null){
+			if (panelCentral == null) {
 				panelCentral = new JPanel();
 				panelCentral.setLayout(new GridLayout(3, 1));
 				panelCentral.add(getChkBorrarFactura());
@@ -1749,8 +1765,8 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 
 		private void setUpComponentes() {
-			this.add(getPanelCentral(),BorderLayout.CENTER);
-			this.add(getPanelBotones(),BorderLayout.SOUTH);
+			this.add(getPanelCentral(), BorderLayout.CENTER);
+			this.add(getPanelBotones(), BorderLayout.SOUTH);
 		}
 
 		public boolean isAcepto() {
@@ -1779,7 +1795,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 
 		public JButton getBtnAceptar() {
-			if(btnAceptar == null){
+			if (btnAceptar == null) {
 				btnAceptar = new JButton("Aceptar");
 				btnAceptar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1798,7 +1814,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 
 		public JButton getBtnSalir() {
-			if(this.btnSalir == null){
+			if (this.btnSalir == null) {
 				this.btnSalir = new JButton("Cancelar");
 				this.btnSalir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -1810,9 +1826,8 @@ public class JFrameVerMovimientos extends JFrame {
 			return this.btnSalir;
 		}
 
-		
 		public JPanel getPanelBotones() {
-			if(panelBotones == null){
+			if (panelBotones == null) {
 				panelBotones = new JPanel();
 				panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 				panelBotones.add(getBtnAceptar());
@@ -1820,9 +1835,9 @@ public class JFrameVerMovimientos extends JFrame {
 			}
 			return panelBotones;
 		}
-		
+
 		public JPanel getPanelCentral() {
-			if(panelCentral == null){
+			if (panelCentral == null) {
 				panelCentral = new JPanel();
 				panelCentral.setLayout(new GridLayout(2, 1));
 				panelCentral.add(getRbtEditarRecibo());
@@ -1851,23 +1866,18 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 	}
 
-	
-	
 	public UsuarioSistema getUsuarioAdministrador() {
 		return usuarioAdministrador;
 	}
 
-	
 	public void setUsuarioAdministrador(UsuarioSistema usuarioAdministrador) {
 		this.usuarioAdministrador = usuarioAdministrador;
 	}
 
-	
 	public Cliente getClienteBuscado() {
 		return clienteBuscado;
 	}
 
-	
 	public void setClienteBuscado(Cliente clienteBuscado) {
 		this.clienteBuscado = clienteBuscado;
 	}
@@ -1876,13 +1886,13 @@ public class JFrameVerMovimientos extends JFrame {
 		try {
 			getReciboFacade().checkEdicionRecibo(recibo.getId());
 		} catch (ValidacionException e) {
-			//si falló otra validación diferente a la esperada
-			if(e.getCodigoError() != EValidacionException.RECIBO_IMPOSIBLE_EDITAR_NO_ES_EL_ULTIMO_BY_CLIENTE.getCodigo()) {
+			// si falló otra validación diferente a la esperada
+			if (e.getCodigoError() != EValidacionException.RECIBO_IMPOSIBLE_EDITAR_NO_ES_EL_ULTIMO_BY_CLIENTE.getCodigo()) {
 				FWJOptionPane.showInformationMessage(this, StringW.wordWrap(e.getMensajeError()), "Información");
 				return;
 			}
 		}
-		//edito el recibo
+		// edito el recibo
 		recibo = getReciboFacade().getByIdEager(recibo.getId());
 		JDialogCargaRecibo dialogoCargaRecibo = new JDialogCargaRecibo(this, recibo, false);
 		GuiUtil.centrar(dialogoCargaRecibo);
@@ -1894,7 +1904,7 @@ public class JFrameVerMovimientos extends JFrame {
 		try {
 			FacturaFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
 			Factura f = ffr.getByIdEager(factura.getId());
-			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this,f,false);
+			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this, f, false);
 			dialogCargaFactura.setVisible(true);
 			buscarMovimientos();
 		} catch (FWException e) {
@@ -1905,7 +1915,7 @@ public class JFrameVerMovimientos extends JFrame {
 	public void editarCorreccion(CorreccionFactura correccion) {
 		CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
 		correccion = cfr.getCorreccionById(correccion.getId());
-		JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this,correccion, false);
+		JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(this, correccion, false);
 		dialogCargaFactura.setVisible(true);
 		buscarMovimientos();
 	}
@@ -1943,12 +1953,12 @@ public class JFrameVerMovimientos extends JFrame {
 		return cliente;
 	}
 
-//	private JComboBox getCmbOrdenMovimientos() {
-//		if(cmbOrdenMovimientos == null){
-//			cmbOrdenMovimientos = new JComboBox();
-//			cmbOrdenMovimientos.addItem("MAS ANTIGUO PRIMERO");
-//			cmbOrdenMovimientos.addItem("MAS ANTIGUO ULTIMO");
-//		}
-//		return cmbOrdenMovimientos;
-//	}
+	// private JComboBox getCmbOrdenMovimientos() {
+	// if(cmbOrdenMovimientos == null){
+	// cmbOrdenMovimientos = new JComboBox();
+	// cmbOrdenMovimientos.addItem("MAS ANTIGUO PRIMERO");
+	// cmbOrdenMovimientos.addItem("MAS ANTIGUO ULTIMO");
+	// }
+	// return cmbOrdenMovimientos;
+	// }
 }
