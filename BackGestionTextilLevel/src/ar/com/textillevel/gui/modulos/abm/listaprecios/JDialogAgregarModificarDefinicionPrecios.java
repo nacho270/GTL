@@ -78,17 +78,19 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	private ETipoProducto tipoProducto;
 	private boolean acepto;
 	private DefinicionPrecio definicion;
+	private boolean consulta;
 	
 	private ParametrosGeneralesFacadeRemote parametrosFacade;
 	private TipoArticuloFacadeRemote tipoArticuloFacade;
 	private MaquinaFacadeRemote maquinaFacade;
 
 	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
-		this(padre, cliente, tipoProducto, new DefinicionPrecio());
+		this(padre, cliente, tipoProducto, new DefinicionPrecio(), false);
 	}
 
-	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
+	public JDialogAgregarModificarDefinicionPrecios(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar, boolean consulta) {
 		super(padre);
+		this.consulta = consulta;
 		setCliente(cliente);
 		setDefinicion(definicionAModificar);
 		setTipoProducto(tipoProducto);
@@ -191,8 +193,13 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	}
 
 	private void salir() {
-		int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar definición de precios");
-		if (ret == FWJOptionPane.YES_OPTION) {
+		if(!consulta){
+			int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Agregar/modificar definición de precios");
+			if (ret == FWJOptionPane.YES_OPTION) {
+				setAcepto(false);
+				dispose();
+			}
+		} else {
 			setAcepto(false);
 			dispose();
 		}
@@ -231,14 +238,19 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 	protected void setModoEdicion(boolean modoEdicion) {
 		GuiUtil.setEstadoPanel(getPanelNorte(), modoEdicion);
 		setModoEdicionExtended(modoEdicion);
-		getBtnNuevoOrCancelar().setEnabled(true);
+		getBtnNuevoOrCancelar().setEnabled(!consulta);
 		if(modoEdicion) {
 			getBtnNuevoOrCancelar().setText(TEXT_BTN_CANCELAR);
 		} else {
 			getBtnNuevoOrCancelar().setText(TEXT_BTN_NUEVO);
 		}
-		getBtnAceptar().setEnabled(!modoEdicion);
-		getBtnCancelar().setEnabled(!modoEdicion);
+		if(!consulta) {
+			getBtnAceptar().setEnabled(!modoEdicion);
+			getBtnCancelar().setEnabled(!modoEdicion);
+		} else {
+			getBtnAceptar().setEnabled(!consulta);
+			getBtnCancelar().setEnabled(consulta);
+		}
 	}
 
 	protected void limpiarDatos() {
@@ -372,6 +384,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		if (tablaRango == null) {
 			tablaRango = createPanelTabla(JDialogAgregarModificarDefinicionPrecios.this);
 			tablaRango.agregarElementos((Collection<T>) getDefinicion().getRangos());
+			GuiUtil.setEstadoPanel(tablaRango, !consulta);
 		}
 		return tablaRango;
 	}

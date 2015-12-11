@@ -51,14 +51,14 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 	private JPanel panDatosPropios;
 
 	public JDialogAgregarModificarDefinicionPreciosEstampado(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
-		this(padre, cliente, tipoProducto, new DefinicionPrecio());
+		this(padre, cliente, tipoProducto, new DefinicionPrecio(), false);
 	}
 
-	public JDialogAgregarModificarDefinicionPreciosEstampado(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
-		super(padre, cliente, tipoProducto, definicionAModificar);
+	public JDialogAgregarModificarDefinicionPreciosEstampado(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar, boolean consulta) {
+		super(padre, cliente, tipoProducto, definicionAModificar, consulta);
 		bases = getGamaFacade().getAllOrderByName();
 		GuiUtil.llenarCombo(cmbBase, bases, true);
-		setModoEdicion(true);
+		setModoEdicion(!consulta);
 	}
 
 	@Override

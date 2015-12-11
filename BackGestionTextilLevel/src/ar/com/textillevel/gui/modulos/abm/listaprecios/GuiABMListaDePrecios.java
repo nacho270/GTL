@@ -254,12 +254,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		this.isEdicion = false;
 		GuiUtil.setEstadoPanel(getTabDetalle(), true);
 		getTablaVersiones().getBotonAgregar().setEnabled(false);
-//		getTablaVersiones().getBotonModificar().setEnabled(false);
 		getTablaVersiones().getBotonEliminar().setEnabled(false);
 		getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
 		getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		getTablaDefiniciones().getBotonModificar().setEnabled(false);
 		getTablaDefiniciones().getBotonEliminar().setEnabled(false);
+		getTablaDefiniciones().getBtnConsultar().setEnabled(false);
 	}
 
 	@Override
@@ -273,6 +273,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
 			GuiUtil.setEstadoPanel(getTablaDefiniciones(), estado);
 			getTablaDefiniciones().getBotonModificar().setEnabled(false);
+			getTablaDefiniciones().getBtnConsultar().setEnabled(false);
 			getTablaDefiniciones().getBotonEliminar().setEnabled(false);
 			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		}
@@ -458,6 +459,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				if (version != null) {
 					getTablaDefiniciones().getBotonAgregar().setEnabled(isEdicion);
 					getTablaDefiniciones().getBotonModificar().setEnabled(getTablaDefiniciones().getTabla().getSelectedRow() > -1 && isEdicion);
+					getTablaDefiniciones().getBtnConsultar().setEnabled(getTablaDefiniciones().getTabla().getSelectedRow() > -1 && isEdicion);
 					getTablaDefiniciones().limpiar();
 					getTablaDefiniciones().agregarElementos(version.getPrecios());
 					//sólo se habilita con la última versión de lista de precios y si hay precios configurados o bien una que nos la última pero q tiene una cotización vigente
@@ -471,6 +473,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}else{
 				getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 				getTablaDefiniciones().getBotonModificar().setEnabled(false);
+				getTablaDefiniciones().getBtnConsultar().setEnabled(false);
 				getBtnImprimirVersion().setEnabled(false);
 				getTablaDefiniciones().limpiar();
 			}
@@ -536,12 +539,16 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static final int COL_RESUMEN = 1;
 		private static final int COL_OBJ = 2;
 		
+		private JButton btnConsultar;
+		
 		public PanelTablaDefinicionesPrecio() {
 			setBorder(BorderFactory.createTitledBorder("Precios por tipo de producto"));
 			agregarBotonModificar();
+			agregarBoton(getBtnConsultar());
 			getBotonAgregar().setEnabled(false);
 			getBotonEliminar().setEnabled(false);
 			getBotonModificar().setEnabled(false);
+			getBtnConsultar().setEnabled(false);
 		}
 
 		@Override
@@ -580,10 +587,14 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					getBotonAgregar().setEnabled(false);
 					getBotonModificar().setEnabled(false);
 					getBotonEliminar().setEnabled(false);
+					getBtnConsultar().setEnabled(false);
 				} else {
+					getBtnConsultar().setEnabled(isEdicion);
 					getBotonModificar().setEnabled(isEdicion);
 					getBotonEliminar().setEnabled(isEdicion);
 				}
+			} else {
+				getBtnConsultar().setEnabled(false);
 			}
 		}
 
@@ -610,7 +621,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarAgregar() {
 			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
 			if (tipoProductoSeleccionado != null) {
-				JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(tipoProductoSeleccionado, false);
+				JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(tipoProductoSeleccionado, false, false);
 				if (tipoProductoSeleccionado == ETipoProducto.TENIDO && !d.isAcepto()) {
 					return false;
 				}
@@ -625,7 +636,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 		
 		@SuppressWarnings("unchecked")
-		private <T extends RangoAncho, D extends JDialogAgregarModificarDefinicionPrecios<T, ?>> D createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar) {
+		private <T extends RangoAncho, D extends JDialogAgregarModificarDefinicionPrecios<T, ?>> D createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar, boolean consulta) {
 			DefinicionPrecio defincionAModificar = null;
 			Cliente cliente = (Cliente) lista.getSelectedValue();
 			if (isModificar) {
@@ -637,18 +648,18 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			if (tipoProductoSeleccionado == ETipoProducto.TENIDO) {
 				if (isModificar) {
-					return (D) new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
+					return (D) new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar, consulta);
 				}
 				return (D) new JDialogAgregarModificarDefinicionPreciosTenido(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 			}
 			if (tipoProductoSeleccionado == ETipoProducto.ESTAMPADO) {
 				if (isModificar) {
-					return (D) new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
+					return (D) new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar, consulta);
 				}
 				return (D) new JDialogAgregarModificarDefinicionPreciosEstampado(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 			}
 			if (isModificar) {
-				return (D) new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar);
+				return (D) new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado, defincionAModificar, consulta);
 			}
 			return (D) new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 		}
@@ -680,7 +691,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				return;
 			}
 			DefinicionPrecio definicionSeleccionada = getElemento(getTabla().getSelectedRow());
-			JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true);
+			JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true, false);
 			d.setVisible(true);
 			if (d.isAcepto()) {
 				versionSeleccionada.getPrecios().set(getTabla().getSelectedRow(), d.getDefinicion());
@@ -707,6 +718,22 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				return ETipoProducto.getByDescripcion((String)opcion);
 			}
 			return null;
+		}
+
+		private JButton getBtnConsultar() {
+			if (btnConsultar == null) {
+				btnConsultar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_consultar_cheque.png", "ar/com/textillevel/imagenes/b_consultar_cheque_des.png");
+				btnConsultar.setToolTipText("Consultar");
+				btnConsultar.setEnabled(false);
+				btnConsultar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						DefinicionPrecio definicionSeleccionada = getElemento(getTabla().getSelectedRow());
+						JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true, true);
+						d.setVisible(true);
+					}
+				});
+			}
+			return btnConsultar;
 		}
 	}
 

@@ -58,11 +58,11 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	private boolean editable = true;
 	
 	public JDialogAgregarModificarDefinicionPreciosTenido(Frame padre, Cliente cliente, ETipoProducto tipoProducto) {
-		this(padre, cliente, tipoProducto, new DefinicionPrecio());
+		this(padre, cliente, tipoProducto, new DefinicionPrecio(), false);
 	}
 
-	public JDialogAgregarModificarDefinicionPreciosTenido(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar) {
-		super(padre, cliente, tipoProducto, definicionAModificar);
+	public JDialogAgregarModificarDefinicionPreciosTenido(Frame padre, Cliente cliente, ETipoProducto tipoProducto, DefinicionPrecio definicionAModificar, boolean consulta) {
+		super(padre, cliente, tipoProducto, definicionAModificar, consulta);
 		gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
 		if (definicionAModificar.getId() == null) {
 			if (gamas == null || gamas.isEmpty()) {
@@ -80,7 +80,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			setAcepto(true);
 		}
 		GuiUtil.llenarCombo(getCmbGama(), getGamas(), true);
-		setModoEdicion(true);
+		setModoEdicion(!consulta);
 	}
 	
 	@Override
