@@ -280,7 +280,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		if(shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0) {
 			int filaVersionVigente = getTablaVersiones().getFilaVersionVigente();
 			if (filaVersionVigente > -1) {
-				getTablaVersiones().getTabla().setRowSelectionInterval(filaVersionVigente, filaVersionVigente);
+				if(filaVersionVigente + 1 <= getTablaVersiones().getTabla().getRowCount()) {
+					getTablaVersiones().getTabla().setRowSelectionInterval(filaVersionVigente, filaVersionVigente);
+				}
 			}else if (getTablaVersiones().getTabla().getRowCount() > 0) {
 				getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
 			}
