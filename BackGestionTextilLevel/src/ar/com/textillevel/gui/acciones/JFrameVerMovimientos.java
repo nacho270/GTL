@@ -639,6 +639,7 @@ public class JFrameVerMovimientos extends JFrame {
 								getLblCuit().setText(clienteElegido.getCuit());
 								getLblTelefono().setText(clienteElegido.getTelefono());
 								getLblCondicionVenta().setText("COND. PAGO: " + clienteElegido.getCondicionVenta().getNombre());
+								getBtnBuscar().doClick();
 							}
 							getCmbTipoBusquedaCliente().setSelectedIndex(0);
 						}
