@@ -2,6 +2,7 @@ package ar.com.textillevel.facade.impl;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -58,7 +59,12 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 		return listaByIdCliente;
 	}
 
-	public ListaDePrecios save(ListaDePrecios listaDePreciosActual) {
+	public ListaDePrecios save(ListaDePrecios listaDePreciosActual, Set<Integer> idVersionesABorrar) {
+		if (idVersionesABorrar != null && !idVersionesABorrar.isEmpty()) {
+			for(Integer idVersion : idVersionesABorrar) {
+				cotizacionDAOLocal.removeByVersion(idVersion);
+			}
+		}
 		return listaDePreciosDAOLocal.save(listaDePreciosActual);
 	}
 

@@ -54,4 +54,11 @@ public class CotizacionDAO extends GenericDAO<Cotizacion, Integer> implements Co
 		}
 	}
 
+	public void removeByVersion(Integer idVersion) {
+		getEntityManager().createQuery(
+				" DELETE FROM Cotizacion AS cot "
+			  + " WHERE cot.versionListaPrecio.id = :idVersion ")
+			  .setParameter("idVersion", idVersion).executeUpdate();
+	}
+
 }

@@ -2,6 +2,7 @@ package ar.com.textillevel.facade.api.remote;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Remote;
 
@@ -18,7 +19,7 @@ public interface ListaDePreciosFacadeRemote {
 
 	public ListaDePrecios getListaByIdCliente(Integer idCliente);
 
-	public ListaDePrecios save(ListaDePrecios listaDePrecios);
+	public ListaDePrecios save(ListaDePrecios listaDePrecios, Set<Integer> idVersionesABorrar);
 
 	public void remove(ListaDePrecios listaDePrecios);
 
@@ -39,5 +40,6 @@ public interface ListaDePreciosFacadeRemote {
 	public void aumentarPrecios(Cliente cliente, Date inicioValidez, List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) throws ValidacionException;
 	
 	public void borrarCotizacion(Cotizacion cotizacion);
+
 }
 

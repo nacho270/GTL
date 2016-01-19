@@ -629,9 +629,9 @@ public class JDialogCargaFactura extends JDialog {
 			if (ifactura instanceof ItemFacturaSeguro) {
 				double valorAntesSeguro = getValorParaSeguro();
 				ItemFacturaSeguro itemSeguro = (ItemFacturaSeguro) ifactura;
-//				if(itemSeguro.getImporte() == null) {
-				itemSeguro.setImporte(new BigDecimal(valorAntesSeguro * getParametrosGenerales().getPorcentajeSeguro().doubleValue() / 100));
-//				}
+				if(itemSeguro.getImporte() == null) {
+					itemSeguro.setImporte(new BigDecimal(valorAntesSeguro * getParametrosGenerales().getPorcentajeSeguro().doubleValue() / 100));
+				}
 				getTablaProductos().addRow(getFilaSeguro(itemSeguro));
 				continue;
 			}

@@ -13,7 +13,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -71,7 +73,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	
 	private PanelTablaVersionesListaDePrecio tablaVersiones;
 	private PanelTablaDefinicionesPrecio tablaDefiniciones;
-	
+
+	private Set<Integer> idVersionesABorrar;
 	private boolean shortCutAgregar = false;
 	private boolean isEdicion;
 	private ClienteFacadeRemote clienteFacade;
@@ -180,7 +183,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			definicionReprocesoSinCargo.getRangos().add(rangoAnchoComun);
 			getListaActual().getVersionActual().getPrecios().add(definicionReprocesoSinCargo);
 		}
-		getListaDePreciosFacade().save(getListaActual());
+		getListaDePreciosFacade().save(getListaActual(), this.idVersionesABorrar);
 		return true;
 	}
 
@@ -188,6 +191,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	public boolean botonModificarPresionado(int nivelNodoSeleccionado) {
 		if(nivelNodoSeleccionado >= 0) {
 			setModoEdicion(true);
+			this.idVersionesABorrar = new HashSet<Integer>();
 			if(getListaActual()==null) {
 				getTablaVersiones().validarAgregar();
 				shortCutAgregar = true;
@@ -373,6 +377,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			if(existeCotizacion) {
 				return false;
 			} else {
+				GuiABMListaDePrecios.this.idVersionesABorrar.add(versionActual.getId());
 				getListaActual().getVersiones().remove(versionActual);
 				return true;
 			}

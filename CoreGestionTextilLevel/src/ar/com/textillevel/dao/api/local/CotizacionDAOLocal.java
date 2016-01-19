@@ -16,4 +16,6 @@ public interface CotizacionDAOLocal extends DAOLocal<Cotizacion, Integer> {
 
 	public Cotizacion getUltimaCotizacionParaVersion(VersionListaDePrecios version);
 
+	public void removeByVersion(Integer idVersion);
+
 }
