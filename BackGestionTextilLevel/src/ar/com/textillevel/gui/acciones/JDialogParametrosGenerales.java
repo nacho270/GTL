@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import org.apache.taglibs.string.util.StringW;
@@ -76,6 +77,8 @@ public class JDialogParametrosGenerales extends JDialog {
 	private FWJTextField txtMinimoDeuda;
 	private JButton btnConfigurarNumeracionA;
 	private JButton btnConfigurarNumeracionB;
+	private FWJTextField txtUsuarioCuentaMail;
+	private FWJTextField txtPassCuentaMail;
 	
 	private boolean acepto;
 	
@@ -162,6 +165,8 @@ public class JDialogParametrosGenerales extends JDialog {
 			getParametrosGenerales().setCargaMinimaEstampado(new BigDecimal(Double.valueOf(getTxtCargaMinimaEstampado().getText().trim().replace(',', '.'))));
 			getParametrosGenerales().setMontoMinimoValidacionPrecio(new BigDecimal(getTxtMontoMinimoValidacionPrecio().getValue()));
 			getParametrosGenerales().setMontoMaximoValidacionPrecio(new BigDecimal(getTxtMontoMaximoValidacionPrecio().getValue()));
+			getParametrosGenerales().setUsernameCuentaMail(getTxtUsuarioCuentaMail().getText());
+			getParametrosGenerales().setPasswordCuentaMail(getTxtPassCuentaMail().getText());
 			try {
 				getParametrosFacade().save(getParametrosGenerales());
 				setAcepto(true);
@@ -509,7 +514,24 @@ public class JDialogParametrosGenerales extends JDialog {
 			getTxtMontoMaximoValidacionPrecio().requestFocus();
 			return false;
 		}
+
+		if (StringUtil.isNullOrEmpty(getTxtUsuarioCuentaMail().getText())) {
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtUsuarioCuentaMail().requestFocus();
+			return false;
+		}
+		if (GenericUtils.isEmailValido(getTxtUsuarioCuentaMail().getText())) {
+			FWJOptionPane.showErrorMessage(this, "La dirección de Mail debe ser válida", "Error");
+			getTxtUsuarioCuentaMail().requestFocus();
+			return false;
+		}
 		
+		if (StringUtil.isNullOrEmpty(getTxtPassCuentaMail().getText())) {
+			FWJOptionPane.showErrorMessage(this, "Debe completar todos los campos", "Error");
+			getTxtPassCuentaMail().requestFocus();
+			return false;
+		}
+
 		return true;
 	}
 
@@ -624,7 +646,7 @@ public class JDialogParametrosGenerales extends JDialog {
 			panelDetalles = new JTabbedPane();
 			panelDetalles.addTab("Facturación", getPanelTabFacturacion());
 			panelDetalles.addTab("Cheques", getPanelTabCheques());
-			panelDetalles.addTab("Varios", getPanelTabVarios());
+			panelDetalles.addTab("Varios", new JScrollPane(getPanelTabVarios()));
 		}
 		return panelDetalles;
 	}
@@ -875,6 +897,10 @@ public class JDialogParametrosGenerales extends JDialog {
 			panelTabVarios.add(getTxtMontoMinimoValidacionPrecio(), createGridBagConstraints(1, 10, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelTabVarios.add(new JLabel("Monto máximo validacion precio: "), createGridBagConstraints(0, 11, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelTabVarios.add(getTxtMontoMaximoValidacionPrecio(), createGridBagConstraints(1, 11, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTabVarios.add(new JLabel("Usuario Cuenta de Mail: "), createGridBagConstraints(0, 12, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtUsuarioCuentaMail(), createGridBagConstraints(1, 12, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelTabVarios.add(new JLabel("Password Cuenta de Mail: "), createGridBagConstraints(0, 13, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelTabVarios.add(getTxtPassCuentaMail(), createGridBagConstraints(1, 13, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		
 		return panelTabVarios;
@@ -989,4 +1015,25 @@ public class JDialogParametrosGenerales extends JDialog {
 		}
 		return txtMontoMaximoValidacionPrecio;
 	}
+
+	private FWJTextField getTxtUsuarioCuentaMail() {
+		if(txtUsuarioCuentaMail == null) {
+			txtUsuarioCuentaMail = new FWJTextField();
+			if(getParametrosGenerales() != null) {
+				txtUsuarioCuentaMail.setText(getParametrosGenerales().getUsernameCuentaMail());
+			}
+		}
+		return txtUsuarioCuentaMail;
+	}
+	
+	private FWJTextField getTxtPassCuentaMail() {
+		if(txtPassCuentaMail == null) {
+			txtPassCuentaMail = new FWJTextField();
+			if(getParametrosGenerales() != null) {
+				txtPassCuentaMail.setText(getParametrosGenerales().getPasswordCuentaMail());
+			}
+		}
+		return txtPassCuentaMail;
+	}
+
 }

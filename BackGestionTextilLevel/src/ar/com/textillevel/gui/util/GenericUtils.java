@@ -62,10 +62,13 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.FileUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.fwcommon.util.SwingWorker;
+import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
+import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
 import ar.com.textillevel.gui.util.dialogs.WaitDialog;
 import ar.com.textillevel.gui.util.num2text.Num2Text;
+import ar.com.textillevel.util.GTLBeanFactory;
 
 public class GenericUtils {
 
@@ -91,6 +94,8 @@ public class GenericUtils {
 	public static final int DIA_JUEVES = 5;
 	public static final int DIA_VIERNES = 6;
 	public static final int DIA_SABADO = 7;
+	
+	private static ParametrosGeneralesFacadeRemote paramGenFacade;
 	
 	static{
 		df = DecimalFormat.getNumberInstance(new Locale("es_AR"));
@@ -494,8 +499,14 @@ public class GenericUtils {
 		mailMessage.saveChanges();
 
 		Transport transport = gmailSession.getTransport("smtp");
-		transport.connect("smtp.gmail.com", mailServerProperties.getProperty("textillevel.email.user"),
-				mailServerProperties.getProperty("textillevel.email.pass"));
+		
+		ParametrosGenerales paramGen = getParamGenFacade().getParametrosGenerales();
+		String user = paramGen.getUsernameCuentaMail();
+		String pass = paramGen.getPasswordCuentaMail();
+		if(StringUtil.isNullOrEmpty(user) || StringUtil.isNullOrEmpty(pass)) {
+			throw new RuntimeException("Falta configurar el usaurio y password de la cuenta de envio de Mail.");
+		}
+		transport.connect("smtp.gmail.com", user, pass);
 		transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
 		transport.close();
 		if (emailIcon != null) {
@@ -600,4 +611,12 @@ public class GenericUtils {
 			return false;
 		}
 	}
+
+	private static ParametrosGeneralesFacadeRemote getParamGenFacade() {
+		if(paramGenFacade == null) {
+			paramGenFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
+		}
+		return paramGenFacade;
+	}
+
 }

@@ -54,6 +54,8 @@ public class ParametrosGenerales implements Serializable {
 	private BigDecimal montoMaximoValidacionPrecio;
 	private ConfiguracionNumeracionFactura configuracionFacturaA;
 	private ConfiguracionNumeracionFactura configuracionFacturaB;
+	private String usernameCuentaMail;
+	private String passwordCuentaMail;
 	
 	@Id
 	@Column(name = "P_ID")
@@ -313,7 +315,25 @@ public class ParametrosGenerales implements Serializable {
 	public void setMontoMaximoValidacionPrecio(BigDecimal montoMaximoValidacionPrecio) {
 		this.montoMaximoValidacionPrecio = montoMaximoValidacionPrecio;
 	}
-	
+
+	@Column(name="A_CTA_MAIL_USER",nullable=true)
+	public String getUsernameCuentaMail() {
+		return usernameCuentaMail;
+	}
+
+	public void setUsernameCuentaMail(String usernameCuentaMail) {
+		this.usernameCuentaMail = usernameCuentaMail;
+	}
+
+	@Column(name="A_CTA_MAIL_PASS",nullable=true)
+	public String getPasswordCuentaMail() {
+		return passwordCuentaMail;
+	}
+
+	public void setPasswordCuentaMail(String passwordCuentaMail) {
+		this.passwordCuentaMail = passwordCuentaMail;
+	}
+
 	@Transient
 	public ConfiguracionNumeracionFactura getConfiguracionFacturaByTipoFactura(ETipoFactura tipo){
 		switch(tipo){
@@ -328,14 +348,14 @@ public class ParametrosGenerales implements Serializable {
 			}
 		}
 	}
-	
+
 	@Transient
 	public Boolean hayAlgunParametroVacio(boolean isB) {
 		return     nroComienzoRemito == null || nroComienzoFactura == null || nroComienzoRecibo == null || porcentajeIVAInscripto == null || porcentajeIVANoInscripto == null || porcentajeSeguro == null
 				|| porcentajeToleranciaMermaNegativa == null || precioPorTubo == null || numeracionCheque == null || nroSucursal == null || diasAvisoVencimientoDeCheque == null
 				|| diasVenceCheque == null || nroComienzoODT == null || nroComienzoFacturaB == null || nroIGJ == null || nroComienzoOrdenDePago == null || nroComienzoOrdenDeDeposito == null
 				|| cargaMinimaColor == null || cargaMinimaEstampado == null  || bancoDefault == null || umbralDeuda == null || nroComienzoOrdenDePagoPersona == null || validezCotizaciones == null
-				|| montoMinimoValidacionPrecio == null || montoMaximoValidacionPrecio == null || (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null);
+				|| montoMinimoValidacionPrecio == null || montoMaximoValidacionPrecio == null || (!isB && configuracionFacturaA == null) || (isB && configuracionFacturaB == null) || (usernameCuentaMail == null) || (passwordCuentaMail == null);
 	}
 
 }
