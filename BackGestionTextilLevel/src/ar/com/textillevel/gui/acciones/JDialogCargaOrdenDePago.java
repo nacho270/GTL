@@ -532,7 +532,7 @@ public class JDialogCargaOrdenDePago extends JDialog {
 				}
 			};
 			tablaFacturas.setDateColumn(COL_FECHA, "Fecha", 90, true);
-			tablaFacturas.setStringColumn(COL_DOCUMENTO, "Documento", 280, 280, true);
+			tablaFacturas.setMultilineColumn(COL_DOCUMENTO, "Documento", 280, true, true);
 			tablaFacturas.setFloatColumn(COL_IMPORTE, "Importe", 90, true);
 			tablaFacturas.setStringColumn(COL_OBJ, "", 0);
 			tablaFacturas.setHeaderAlignment(COL_FECHA, FWJTable.CENTER_ALIGN);
@@ -1844,11 +1844,11 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_FECHA] =  DateUtil.dateToString(fact.getFechaIngreso(), DateUtil.SHORT_DATE);
 			if(isConsulta()){
-				row[COL_DOCUMENTO] = "<html>Factura - Nro.: " + fact.getNroFactura() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoTotal().doubleValue()) +
-									 "<br><center>Faltante: " +fact.getMontoFaltantePorPagar() + getDescrPago(popf) + "<center></html>";
+				row[COL_DOCUMENTO] = "<html><b>Factura - Nro.:</b> " + fact.getNroFactura() + "<br><b>Monto total:</b> " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoTotal().doubleValue()) +
+									 "<br><b>Faltante:</b> " +fact.getMontoFaltantePorPagar() + getDescrPago(popf) + "</html>";
 			}else{
-				row[COL_DOCUMENTO] = "<html>Factura - Nro.: " + fact.getNroFactura() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoTotal().doubleValue()) +
-									 "<br><center>Faltante: " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoFaltantePorPagar().subtract(popf.getMontoPagado())) + getDescrPago(popf) + "<center></html>";
+				row[COL_DOCUMENTO] = "<html><b>Factura - Nro.:</b> " + fact.getNroFactura() + "<br><b>Monto total:</b> " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoTotal().doubleValue()) +
+									 "<br><b>Faltante:</b> " + GenericUtils.getDecimalFormatTablaMovimientos().format(fact.getMontoFaltantePorPagar().subtract(popf.getMontoPagado())) + getDescrPago(popf) + "</html>";
 			}
 			row[COL_IMPORTE] = GenericUtils.getDecimalFormatTablaMovimientos().format(popf.getMontoPagado());
 			row[COL_OBJ] = popf;
@@ -1860,11 +1860,11 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_FECHA] =  DateUtil.dateToString(nd.getFechaIngreso(), DateUtil.SHORT_DATE);
 			if(isConsulta()){
-				row[COL_DOCUMENTO] = "<html>Nota de débito - Nro.: " + nd.getNroCorreccion() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoTotal().doubleValue()) +
-									 "<br><center>Faltante: " +nd.getMontoFaltantePorPagar() + getDescrPago(popnd) + "<center></html>";
+				row[COL_DOCUMENTO] = "<html><b>Nota de débito - Nro.:</b> " + nd.getNroCorreccion() + "<br><b>Monto total:</b> " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoTotal().doubleValue()) +
+									 "<br><b>Faltante:</b> " +nd.getMontoFaltantePorPagar() + getDescrPago(popnd) + "</html>";
 			}else{
-				row[COL_DOCUMENTO] = "<html>Nota de débito - Nro.: " + nd.getNroCorreccion() + " - Monto total: " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoTotal().doubleValue()) +
-									 "<br><center>Faltante: " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoFaltantePorPagar().subtract(popnd.getMontoPagado())) + getDescrPago(popnd) + "<center></html>";
+				row[COL_DOCUMENTO] = "<html><b>Nota de débito - Nro.:</b> " + nd.getNroCorreccion() + "<br><b>Monto total:</b> " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoTotal().doubleValue()) +
+									 "<br><b>Faltante:</b> " + GenericUtils.getDecimalFormatTablaMovimientos().format(nd.getMontoFaltantePorPagar().subtract(popnd.getMontoPagado())) + getDescrPago(popnd) + "</html>";
 			}
 			row[COL_IMPORTE] = GenericUtils.getDecimalFormatTablaMovimientos().format(popnd.getMontoPagado());
 			row[COL_OBJ] = popnd;
@@ -1882,7 +1882,7 @@ public class JDialogCargaOrdenDePago extends JDialog {
 			if (descrPagoFactura == EDescripcionPagoFactura.FACTURA) {
 				return "";
 			} else {
-				return " (" + descrPagoFactura.getDescripcion() + ") ";
+				return " <b>(" + descrPagoFactura.getDescripcion() + ")</b> ";
 			}
 		}
 
