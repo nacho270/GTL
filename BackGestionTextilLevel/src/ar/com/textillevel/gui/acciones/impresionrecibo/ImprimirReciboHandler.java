@@ -269,6 +269,8 @@ public class ImprimirReciboHandler {
 			parameterMap.put("IVA", iva);
 			parameterMap.put("CUIT", cuit);
 			parameterMap.put("CANT_PESOS", txtTotalPesos.toUpperCase());
+			parameterMap.put("DESCR_RECIBO", GenericUtils.isSistemaTest() ?
+					"RECIBO PROVISORIO" : "RECIBO AUTORIZADO");
 			parameterMap.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
 			parameterMap.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 			parameterMap.put("IS_TEST", GenericUtils.isSistemaTest());
