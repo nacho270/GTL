@@ -5009,13 +5009,17 @@ public class FWJTable extends JTable implements ListSelectionListener, FWJTableE
 	 * Devuelve el compenente con su tooltip.
 	 */
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
-		Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-		if(c instanceof JComponent) {
-			JComponent jc = (JComponent)c;
-			String tooltip = getTooltipCell(rowIndex, vColIndex);
-			jc.setToolTipText(tooltip);
+		try {
+			Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+			if(c instanceof JComponent) {
+				JComponent jc = (JComponent)c;
+				String tooltip = getTooltipCell(rowIndex, vColIndex);
+				jc.setToolTipText(tooltip);
+			}
+			return c;
+		}catch(Exception e) {
+			return null;
 		}
-		return c;
 	}
 
 	/**
