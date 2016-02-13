@@ -48,6 +48,7 @@ import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileFilter;
 
 import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
@@ -1436,14 +1437,16 @@ public class JFrameVerMovimientos extends JFrame {
 			btnImprimirListado.setToolTipText("Imprimir listado");
 			btnImprimirListado.setEnabled(false);
 			btnImprimirListado.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
-					// boolean preview =
-					// CLJOptionPane.showQuestionMessage(JFrameVerMovimientos.this,
-					// "Desea previsualizar la impresión?",
-					// "Pregunta")==CLJOptionPane.YES_OPTION;
-					JasperHelper.imprimirListado(getPanelTablaMovimientos().getTabla(), "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - "
-							+ getLblDireccion().getText() + " - " + getLblCuit().getText() + " - " + getLblTelefono().getText()+ " " + getLblCondicionVenta().getText(), null, false);
+					try {
+						JasperHelper.imprimirReporte(createJasperResumenCuenta(loadClienteBuscado()), true, false, 1);
+					} catch (JRException e1) {
+						e1.printStackTrace();
+						if (FWJOptionPane.showQuestionMessage(JFrameVerMovimientos.this, StringW.wordWrap("Ha ocurrido un error al imprimir el nuevo extracto de cuenta. Desea imprimir de la forma anterior ?"), "Pregunta") == FWJOptionPane.YES_OPTION) {
+							JasperHelper.imprimirListado(getPanelTablaMovimientos().getTabla(), "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - "
+									+ getLblDireccion().getText() + " - " + getLblCuit().getText() + " - " + getLblTelefono().getText()+ " " + getLblCondicionVenta().getText(), null, false);
+						}
+					}
 				}
 			});
 		}
