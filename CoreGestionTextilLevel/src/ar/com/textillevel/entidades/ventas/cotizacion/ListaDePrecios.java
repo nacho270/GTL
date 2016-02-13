@@ -85,7 +85,6 @@ public class ListaDePrecios implements Serializable {
 			VersionListaDePrecios v = (VersionListaDePrecios) iterator.next();
 			if (!v.getInicioValidez().after(fecha)) {
 				versionADevolver = v;
-			}else{
 				break;
 			}
 		}

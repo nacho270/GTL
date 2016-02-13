@@ -155,7 +155,7 @@ public class JDialogInformeIVAVentas extends JDialog {
 					}
 					if(!getPanelFechaDesde().getDate().after(getPanelFechaHasta().getDate())){
 						setFechaDesde(new java.sql.Date(getPanelFechaDesde().getDate().getTime()));
-						setFechaHasta(new java.sql.Date(getPanelFechaHasta().getDate().getTime()));
+						setFechaHasta(DateUtil.getManiana(new java.sql.Date(getPanelFechaHasta().getDate().getTime())));
 						if(getCmbTipoFactura().getSelectedItem().equals("TODAS")){
 							setTipoFactura(null);
 						}else{
