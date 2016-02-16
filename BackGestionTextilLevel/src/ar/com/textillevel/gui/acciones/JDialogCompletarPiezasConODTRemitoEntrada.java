@@ -553,7 +553,7 @@ public class JDialogCompletarPiezasConODTRemitoEntrada extends JDialog {
 		private static final int COL_OBJ = 4;
 
 		private static final int CANT_PIEZAS_INICIALES = 30;
-		private static final int CANT_FILAS_MAX = 53;
+		private final int CANT_FILAS_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
 
 		private JButton btnSelODTs;
 		

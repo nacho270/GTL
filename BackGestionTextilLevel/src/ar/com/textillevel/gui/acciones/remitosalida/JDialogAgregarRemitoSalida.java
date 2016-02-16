@@ -98,7 +98,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private RemitoSalidaFacadeRemote remitoSalidaFacade;
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 
-	private static final int CANT_PIEZAS_POR_REMITO_MAX = 53;
+	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;;
 
 	public JDialogAgregarRemitoSalida(Frame owner, RemitoSalida remitoSalida, boolean modoConsulta) {
 		super(owner);
@@ -628,7 +628,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		private static final int COL_OBJ = 4;
 
 		private static final int CANT_PIEZAS_INICIALES = 15;
-		private static final int CANT_FILAS_MAX = 53;
+		private final int CANT_FILAS_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
 
 		private JButton btnAgregarSubPiezas;
 		private JButton btnCombinarPiezas;
