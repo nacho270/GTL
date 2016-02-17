@@ -84,7 +84,7 @@ public class PanTablaQuimicos extends PanTablaVisualizacionFormulaCliente {
 			tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTÍCULO", 120, 120, true);
 			tabla.setStringColumn(COL_TIPO_FORMULABLE, "TIPO DE MATERIA PRIMA", 150, 150, true);
 			tabla.setStringColumn(COL_NOMBRE_FORMULABLE, "NOMBRE", 200, 200, true);
-			tabla.setFloatColumn(COL_PROPORCION, "PROPORCION (%)", 100, true);
+			tabla.setStringColumn(COL_PROPORCION, "PROPORCION (%)", 100, 100, true);
 			return tabla;
 		}
 
@@ -104,7 +104,7 @@ public class PanTablaQuimicos extends PanTablaVisualizacionFormulaCliente {
 				row[COL_TIPO_ARTICULO] = elemento.getTipoArticulo().getNombre();
 				row[COL_TIPO_FORMULABLE] = "ANILINA";
 				row[COL_NOMBRE_FORMULABLE] = ac.getMateriaPrima().getDescripcion();
-				row[COL_PROPORCION] = ac.getCantidad();
+				row[COL_PROPORCION] = GenericUtils.getDecimalFormat2().format(ac.getCantidad());
 				getTabla().addRow(row);
 			}
 			for(ReactivoCantidad rc : elemento.getReactivosCantidad()) {
