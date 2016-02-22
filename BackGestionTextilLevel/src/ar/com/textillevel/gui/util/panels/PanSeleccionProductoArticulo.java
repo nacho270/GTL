@@ -465,13 +465,12 @@ public class PanSeleccionProductoArticulo extends JPanel {
 		}
 		return cmbGama;
 	}
-	
+
 	private List<ETipoProducto> getTipoProductos() {
 		Set<ETipoProducto> tpSet = new HashSet<ETipoProducto>();
 		for(ETipoProducto tp : ETipoProducto.values()) {
 			tpSet.add(tp);
 		}
-		tpSet.remove(ETipoProducto.REPROCESO_SIN_CARGO);
 		return new ArrayList<ETipoProducto>(tpSet);
 	}
 
