@@ -82,7 +82,6 @@ public class ListaDePrecios implements Serializable {
 			return null;
 		}
 		Collections.sort(getVersiones(), new Comparator<VersionListaDePrecios>() {
-			@Override
 			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
 				return o1.getInicioValidez().compareTo(o2.getInicioValidez());
 			}
