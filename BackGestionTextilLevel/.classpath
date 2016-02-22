@@ -23,7 +23,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/CoreGestionTextilLevel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWLibJEE"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_45"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FWCommon"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
