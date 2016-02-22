@@ -3,6 +3,7 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,7 +24,6 @@ import org.apache.commons.collections.iterators.ReverseListIterator;
 
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 @Entity
 @Table(name = "T_LISTA_DE_PRECIOS")
