@@ -3,6 +3,7 @@ package ar.com.textillevel.entidades.ventas.cotizacion;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,6 +23,7 @@ import org.apache.commons.collections.iterators.ReverseListIterator;
 
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
+import edu.emory.mathcs.backport.java.util.Collections;
 
 @Entity
 @Table(name = "T_LISTA_DE_PRECIOS")
@@ -79,6 +81,12 @@ public class ListaDePrecios implements Serializable {
 		if (getVersiones() == null || getVersiones().isEmpty()) {
 			return null;
 		}
+		Collections.sort(getVersiones(), new Comparator<VersionListaDePrecios>() {
+			@Override
+			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
+				return o1.getInicioValidez().compareTo(o2.getInicioValidez());
+			}
+		});
 		ReverseListIterator iterator = new ReverseListIterator(getVersiones());
 		VersionListaDePrecios versionADevolver = null;
 		while(iterator.hasNext()) {
