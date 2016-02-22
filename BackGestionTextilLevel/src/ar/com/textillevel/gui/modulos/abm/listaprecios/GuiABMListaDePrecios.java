@@ -65,12 +65,12 @@ import ar.com.textillevel.util.GTLBeanFactory;
 public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	private static final long serialVersionUID = 8012369007737291095L;
-	
+
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
 	private ListaDePrecios listaActual;
-	
+
 	private PanelTablaVersionesListaDePrecio tablaVersiones;
 	private PanelTablaDefinicionesPrecio tablaDefiniciones;
 
@@ -79,7 +79,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	private boolean isEdicion;
 	private ClienteFacadeRemote clienteFacade;
 	private ListaDePreciosFacadeRemote listaDePreciosFacade;
-	
+
+	private List<ETipoProducto> tipoProductosAutomaticos = Arrays.asList(ETipoProducto.REPROCESO_SIN_CARGO, ETipoProducto.DEVOLUCION);
+
 	public GuiABMListaDePrecios(Integer idModulo) {
 		super();
 		setHijoCreado(true);
@@ -95,7 +97,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	}
 
 	private JPanel getTabDetalle() {
-		if(tabDetalle == null) {
+		if (tabDetalle == null) {
 			tabDetalle = new JPanel();
 			tabDetalle.setLayout(new GridBagLayout());
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -110,7 +112,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	}
 
 	private JPanel getPanDetalle() {
-		if(panDetalle == null) {
+		if (panDetalle == null) {
 			panDetalle = new JPanel();
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(getTablaVersiones(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1, 1, 0.5));
@@ -118,13 +120,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 		return panDetalle;
 	}
-	
 
 	@Override
 	public void cargarLista() {
 		List<Cliente> clientes = getClienteFacade().getAllOrderByName();
 		lista.removeAll();
-		for(Cliente c : clientes){
+		for (Cliente c : clientes) {
 			lista.addItem(c);
 		}
 	}
@@ -143,8 +144,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	@Override
 	public void botonEliminarPresionado(int arg0) {
-		if(lista.getSelectedIndex() >= 0) {
-			if(FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, "¿Está seguro que desea eliminar la lista de precios seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+		if (lista.getSelectedIndex() >= 0) {
+			if (FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, "¿Está seguro que desea eliminar la lista de precios seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				getListaDePreciosFacade().remove(getListaActual());
 				cargarLista();
 				itemSelectorSeleccionado(-1);
@@ -158,41 +159,47 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe agregar al menos una version", "Error");
 			return false;
 		}
-		for(VersionListaDePrecios v : getListaActual().getVersiones()) {
+		for (VersionListaDePrecios v : getListaActual().getVersiones()) {
 			if (v.getPrecios().isEmpty()) {
 				FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this.getFrame(), "Debe definir los precios para version con validez a partir de " + DateUtil.dateToString(v.getInicioValidez(), DateUtil.SHORT_DATE), "Error");
 				return false;
 			}
 		}
-		if(getListaActual().getVersionActual().getDefinicionPorTipoProducto(ETipoProducto.REPROCESO_SIN_CARGO) == null) {
-			// agrego automaticamente el reproceso sin cargo con precio 0
-			DefinicionPrecio definicionReprocesoSinCargo = new DefinicionPrecio();
-			definicionReprocesoSinCargo.setTipoProducto(ETipoProducto.REPROCESO_SIN_CARGO);
-			RangoAnchoComun rangoAnchoComun = new RangoAnchoComun();
-			rangoAnchoComun.setAnchoMinimo(0f);
-			rangoAnchoComun.setAnchoMaximo(50f);
-			rangoAnchoComun.setDefinicionPrecio(definicionReprocesoSinCargo);
-			List<TipoArticulo> tiposArticulo = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class).getAllTipoArticulos();
-			for(TipoArticulo ta : tiposArticulo){
-				PrecioTipoArticulo pta = new PrecioTipoArticulo();
-				pta.setPrecio(0f);
-				pta.setRangoAncho(rangoAnchoComun);
-				pta.setTipoArticulo(ta);
-				rangoAnchoComun.getPrecios().add(pta);
-			}
-			definicionReprocesoSinCargo.getRangos().add(rangoAnchoComun);
-			getListaActual().getVersionActual().getPrecios().add(definicionReprocesoSinCargo);
-		}
+		// agrego automaticamente los tipoProductosAutomaticos con precio 0
+		agregarTiposProductosAutomaticos();
 		getListaDePreciosFacade().save(getListaActual(), this.idVersionesABorrar);
 		return true;
 	}
 
+	private void agregarTiposProductosAutomaticos() {
+		for (ETipoProducto tp : tipoProductosAutomaticos) {
+			if (getListaActual().getVersionActual().getDefinicionPorTipoProducto(tp) == null) {
+				DefinicionPrecio definicionReprocesoSinCargo = new DefinicionPrecio();
+				definicionReprocesoSinCargo.setTipoProducto(tp);
+				RangoAnchoComun rangoAnchoComun = new RangoAnchoComun();
+				rangoAnchoComun.setAnchoMinimo(0f);
+				rangoAnchoComun.setAnchoMaximo(50f);
+				rangoAnchoComun.setDefinicionPrecio(definicionReprocesoSinCargo);
+				List<TipoArticulo> tiposArticulo = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class).getAllTipoArticulos();
+				for (TipoArticulo ta : tiposArticulo) {
+					PrecioTipoArticulo pta = new PrecioTipoArticulo();
+					pta.setPrecio(0f);
+					pta.setRangoAncho(rangoAnchoComun);
+					pta.setTipoArticulo(ta);
+					rangoAnchoComun.getPrecios().add(pta);
+				}
+				definicionReprocesoSinCargo.getRangos().add(rangoAnchoComun);
+				getListaActual().getVersionActual().getPrecios().add(definicionReprocesoSinCargo);
+			}
+		}
+	}
+
 	@Override
 	public boolean botonModificarPresionado(int nivelNodoSeleccionado) {
-		if(nivelNodoSeleccionado >= 0) {
+		if (nivelNodoSeleccionado >= 0) {
 			setModoEdicion(true);
 			this.idVersionesABorrar = new HashSet<Integer>();
-			if(getListaActual()==null) {
+			if (getListaActual() == null) {
 				getTablaVersiones().validarAgregar();
 				shortCutAgregar = true;
 			}
@@ -209,12 +216,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	@Override
 	public void itemSelectorSeleccionado(int nivelItemSelector) {
-		if(nivelItemSelector >= 0) {
+		if (nivelItemSelector >= 0) {
 			limpiarDatos();
 			Cliente cliente = (Cliente) lista.getSelectedValue();
 			setListaActual(getListaDePreciosFacade().getListaByIdCliente(cliente.getId()));
-			
-			if(getListaActual() != null) {
+
+			if (getListaActual() != null) {
 				ordenarVersiones();
 				getTablaVersiones().agregarElementos(getListaActual().getVersiones());
 				getBtnModificar().setText("Modificar >>");
@@ -227,11 +234,11 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	}
 
 	private void ordenarVersiones() {
-		//ordeno en forma descendente
+		// ordeno en forma descendente
 		Collections.sort(getListaActual().getVersiones(), new Comparator<VersionListaDePrecios>() {
 
 			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
-				return o1.getInicioValidez().compareTo(o2.getInicioValidez())*(-1);
+				return o1.getInicioValidez().compareTo(o2.getInicioValidez()) * (-1);
 			}
 
 		});
@@ -245,10 +252,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	@Override
 	public void setEstadoInicial() {
-		//setModoEdicion(false);
+		// setModoEdicion(false);
 		habilitacionSinEdicion();
 		cargarLista();
-		if(lista.getModel().getSize() > 0) {
+		if (lista.getModel().getSize() > 0) {
 			lista.setSelectedIndex(0);
 			itemSelectorSeleccionado(0);
 		}
@@ -269,9 +276,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	@Override
 	public void setModoEdicion(boolean estado) {
 		this.isEdicion = estado;
-		if(estado == false){
+		if (estado == false) {
 			habilitacionSinEdicion();
-		}else{
+		} else {
 			GuiUtil.setEstadoPanel(getTabDetalle(), estado);
 			getTablaVersiones().getBotonEliminar().setEnabled(false);
 			getTablaVersiones().getBtnImprimirVersion().setEnabled(false);
@@ -281,13 +288,13 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			getTablaDefiniciones().getBotonEliminar().setEnabled(false);
 			getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 		}
-		if(shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0) {
+		if (shortCutAgregar || getTablaVersiones().getTabla().getRowCount() > 0) {
 			int filaVersionVigente = getTablaVersiones().getFilaVersionVigente();
 			if (filaVersionVigente > -1) {
-				if(filaVersionVigente + 1 <= getTablaVersiones().getTabla().getRowCount()) {
+				if (filaVersionVigente + 1 <= getTablaVersiones().getTabla().getRowCount()) {
 					getTablaVersiones().getTabla().setRowSelectionInterval(filaVersionVigente, filaVersionVigente);
 				}
-			}else if (getTablaVersiones().getTabla().getRowCount() > 0) {
+			} else if (getTablaVersiones().getTabla().getRowCount() > 0) {
 				getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
 			}
 			getTablaVersiones().handleClickTablaVersiones();
@@ -314,15 +321,15 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 		private int filaVersionVigente = -1;
 		private Cotizacion cotizacionActual;
-		
+
 		private static final int CANT_COLS = 3;
 		private static final int COL_FECHA_INICIO_VALIDEZ = 0;
 		public static final int COL_ULT_COTIZACION = 1;
 		private static final int COL_OBJ = 2;
-		
+
 		private JButton btnImprimirVersion;
 		private JButton btnBorrarCotizacion;
-		
+
 		public PanelTablaVersionesListaDePrecio() {
 			setBorder(BorderFactory.createTitledBorder("Versiones"));
 			agregarBoton(getBtnImprimirVersion());
@@ -369,12 +376,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		protected String validarElemento(int fila) {
 			return null;
 		}
-		
+
 		@Override
 		public boolean validarQuitar() {
 			VersionListaDePrecios versionActual = getElemento(getTabla().getSelectedRow());
 			boolean existeCotizacion = checkCotizacionVigente(versionActual);
-			if(existeCotizacion) {
+			if (existeCotizacion) {
 				return false;
 			} else {
 				GuiABMListaDePrecios.this.idVersionesABorrar.add(versionActual.getId());
@@ -386,27 +393,27 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		@Override
 		public boolean validarAgregar() {
 			boolean existenVersionesAnteriores = getTablaVersiones().getTabla().getRowCount() > 0;
-			if(existenVersionesAnteriores) {
+			if (existenVersionesAnteriores) {
 				VersionListaDePrecios ultVersion = getElemento(0);
-				if(ultVersion.getId() == null) {
+				if (ultVersion.getId() == null) {
 					FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede agregar otra versión porque no se ha grabado la última agregada. Por favor, elimine esta última o bien grabe los cambios y reintente la operación."), "Error");
 					return false;
 				}
 			}
-			
-			if(getListaActual() == null) {
+
+			if (getListaActual() == null) {
 				setListaActual(new ListaDePrecios());
 				getListaActual().setCliente((Cliente) lista.getSelectedValue());
 			}
 			JDialogInputFechaWithCheckbox dialogoFecha = new JDialogInputFechaWithCheckbox(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez", "Copiar última versión", existenVersionesAnteriores, existenVersionesAnteriores);
 			dialogoFecha.setVisible(true);
 			Date fechaInicioValidez = dialogoFecha.getFecha();
-			if(fechaInicioValidez != null) {
+			if (fechaInicioValidez != null) {
 				boolean hayVersionesMasViejas = hayVersionesMasViejas(fechaInicioValidez);
 				if (getListaActual().getVersiones().isEmpty() || !hayVersionesMasViejas) {
 					VersionListaDePrecios nuevaVersion = null;
-					//Clono la última versión
-					if(existenVersionesAnteriores && dialogoFecha.isChkSelected()) {
+					// Clono la última versión
+					if (existenVersionesAnteriores && dialogoFecha.isChkSelected()) {
 						nuevaVersion = getTablaVersiones().getElemento(0).deepClone();
 						nuevaVersion.setInicioValidez(fechaInicioValidez);
 					} else {
@@ -414,12 +421,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					}
 					getListaActual().getVersiones().add(nuevaVersion);
 					ordenarVersiones();
-					
+
 					getTablaVersiones().limpiar();
 					getTablaVersiones().agregarElementos(getListaActual().getVersiones());
-					
+
 					setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
-					
+
 					getTablaVersiones().getTabla().setRowSelectionInterval(0, 0);
 					handleClickTablaVersiones();
 					getTablaDefiniciones().getBotonAgregar().doClick();
@@ -429,8 +436,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 
 		private boolean hayVersionesMasViejas(Date fechaInicioValidez) {
-			for(VersionListaDePrecios v : getListaActual().getVersiones()) {
-				if(!v.getInicioValidez().before(fechaInicioValidez)) {
+			for (VersionListaDePrecios v : getListaActual().getVersiones()) {
+				if (!v.getInicioValidez().before(fechaInicioValidez)) {
 					return true;
 				}
 			}
@@ -445,12 +452,15 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					public void actionPerformed(ActionEvent e) {
 						int selectedRow = getTabla().getSelectedRow();
 						VersionListaDePrecios version = getTablaVersiones().getElemento(selectedRow);
-						if(version.getId() == null) {//i.e es una versión no persistida se avisa que primero grabe y después imprima
+						if (version.getId() == null) {// i.e es una versión no
+														// persistida se avisa
+														// que primero grabe y
+														// después imprima
 							FWJOptionPane.showErrorMessage(GuiABMListaDePrecios.this, StringW.wordWrap("La versión seleccionada no ha sido grabada y no se puede generar la cotización. Por favor, grabe los cambios y después reintente."), "Error");
 							return;
 						}
 						new ImprimirListaDePreciosHandler(GuiABMListaDePrecios.this.getFrame(), getListaActual().getCliente(), version).imprimir();
-						
+
 						getTablaVersiones().setCotizacionVigente(getListaDePreciosFacade().getCotizacionVigente(getListaActual().getCliente()));
 					}
 				});
@@ -469,7 +479,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					getTablaDefiniciones().getBtnConsultar().setEnabled(getTablaDefiniciones().getTabla().getSelectedRow() > -1 && isEdicion);
 					getTablaDefiniciones().limpiar();
 					getTablaDefiniciones().agregarElementos(version.getPrecios());
-					//sólo se habilita con la última versión de lista de precios y si hay precios configurados o bien una que nos la última pero q tiene una cotización vigente
+					// sólo se habilita con la última versión de lista de
+					// precios y si hay precios configurados o bien una que nos
+					// la última pero q tiene una cotización vigente
 					getBtnImprimirVersion().setEnabled((getTablaVersiones().getTabla().getValueAt(selectedRow, PanelTablaVersionesListaDePrecio.COL_ULT_COTIZACION) != null || selectedRow == 0) && version.getPrecios().size() > 0 && isEdicion);
 					getTablaVersiones().getBotonEliminar().setEnabled(isEdicion);
 				} else {
@@ -477,7 +489,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 					getBtnImprimirVersion().setEnabled(false);
 					getTablaVersiones().getBotonEliminar().setEnabled(false);
 				}
-			}else{
+			} else {
 				getTablaDefiniciones().getBotonAgregar().setEnabled(false);
 				getTablaDefiniciones().getBotonModificar().setEnabled(false);
 				getTablaDefiniciones().getBtnConsultar().setEnabled(false);
@@ -487,7 +499,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 
 		public VersionListaDePrecios getVersionSeleccionada() {
-			if(getTabla().getSelectedRow() != -1) {
+			if (getTabla().getSelectedRow() != -1) {
 				return getTablaVersiones().getElemento(getTabla().getSelectedRow());
 			} else {
 				return null;
@@ -495,10 +507,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 
 		public void setCotizacionVigente(Cotizacion cotizacion) {
-			if(cotizacion != null) {
-				for(int i=0; i < getTabla().getRowCount(); i++) {
+			if (cotizacion != null) {
+				for (int i = 0; i < getTabla().getRowCount(); i++) {
 					VersionListaDePrecios elemento = getElemento(i);
-					if(cotizacion.getVersionListaPrecio().getId().equals(elemento.getId())) {
+					if (cotizacion.getVersionListaPrecio().getId().equals(elemento.getId())) {
 						filaVersionVigente = i;
 						cotizacionActual = cotizacion;
 						getBtnBorrarCotizacion().setEnabled(true);
@@ -509,7 +521,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			getBtnBorrarCotizacion().setEnabled(false);
 		}
-		
+
 		public int getFilaVersionVigente() {
 			return filaVersionVigente;
 		}
@@ -521,7 +533,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				btnBorrarCotizacion.setToolTipText("Borrar cotizacio vigente");
 				btnBorrarCotizacion.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if(FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this.getFrame(), StringW.wordWrap("Va a borrar la cotización vigente nro. '" + cotizacionActual.getNumero() + "' que vence: " + cotizacionActual.getFechaVencimientoStr() + ".\nDesea continuar?"), "Pregunta") == FWJOptionPane.YES_OPTION) {
+						if (FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this.getFrame(), StringW.wordWrap("Va a borrar la cotización vigente nro. '" + cotizacionActual.getNumero() + "' que vence: " + cotizacionActual.getFechaVencimientoStr() + ".\nDesea continuar?"), "Pregunta") == FWJOptionPane.YES_OPTION) {
 							getListaDePreciosFacade().borrarCotizacion(cotizacionActual);
 							cotizacionActual = null;
 							getBtnBorrarCotizacion().setEnabled(false);
@@ -536,7 +548,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			return btnBorrarCotizacion;
 		}
 	}
-	
+
 	private class PanelTablaDefinicionesPrecio extends PanelTabla<DefinicionPrecio> {
 
 		private static final long serialVersionUID = -5833558544844113513L;
@@ -545,9 +557,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static final int COL_TIPO_PRODUCTO = 0;
 		private static final int COL_RESUMEN = 1;
 		private static final int COL_OBJ = 2;
-		
+
 		private JButton btnConsultar;
-		
+
 		public PanelTablaDefinicionesPrecio() {
 			setBorder(BorderFactory.createTitledBorder("Precios por tipo de producto"));
 			agregarBotonModificar();
@@ -576,7 +588,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				public void mouseClicked(MouseEvent e) {
 					int selectedRow = getTabla().getSelectedRow();
 					if (selectedRow >= 0) {
-						if(isEdicion && e.getClickCount() == 2){
+						if (isEdicion && e.getClickCount() == 2) {
 							botonModificarPresionado(selectedRow);
 						}
 					}
@@ -584,13 +596,13 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			});
 			return tabla;
 		}
-		
+
 		@Override
 		protected void filaTablaSeleccionada() {
 			int selectedRow = getTabla().getSelectedRow();
-			if(selectedRow > -1) {
+			if (selectedRow > -1) {
 				DefinicionPrecio definicionPrecio = getElemento(selectedRow);
-				if (definicionPrecio.getTipoProducto()==ETipoProducto.REPROCESO_SIN_CARGO) {
+				if (definicionPrecio.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
 					getBotonAgregar().setEnabled(false);
 					getBotonModificar().setEnabled(false);
 					getBotonEliminar().setEnabled(false);
@@ -611,7 +623,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			row[COL_TIPO_PRODUCTO] = elemento.getTipoProducto();
 			row[COL_RESUMEN] = GeneradorResumen.generarResumen(elemento);
 			row[COL_OBJ] = elemento;
-			getTabla().addRow(row);			
+			getTabla().addRow(row);
 		}
 
 		@Override
@@ -622,8 +634,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		@Override
 		protected String validarElemento(int fila) {
 			return null;
-		} 
-		
+		}
+
 		@Override
 		public boolean validarAgregar() {
 			ETipoProducto tipoProductoSeleccionado = seleccionarTipoProducto();
@@ -641,7 +653,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			return false;
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		private <T extends RangoAncho, D extends JDialogAgregarModificarDefinicionPrecios<T, ?>> D createDialogForTipoArticulo(ETipoProducto tipoProductoSeleccionado, boolean isModificar, boolean consulta) {
 			DefinicionPrecio defincionAModificar = null;
@@ -671,8 +683,6 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			return (D) new JDialogAgregarModificarDefinicionPreciosComun(GuiABMListaDePrecios.this.getFrame(), cliente, tipoProductoSeleccionado);
 		}
 
-		
-		
 		private void refrescarTabla() {
 			getTabla().removeAllRows();
 			agregarElementos(getTablaVersiones().getVersionSeleccionada().getPrecios());
@@ -682,7 +692,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		public boolean validarQuitar() {
 			VersionListaDePrecios versionSeleccionada = getTablaVersiones().getVersionSeleccionada();
 			boolean existeCotizacionVigente = checkCotizacionVigente(versionSeleccionada);
-			if(existeCotizacionVigente) {
+			if (existeCotizacionVigente) {
 				return false;
 			} else {
 				versionSeleccionada.getPrecios().remove(getElemento(getTablaDefiniciones().getTabla().getSelectedRow()));
@@ -694,7 +704,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		protected void botonModificarPresionado(int filaSeleccionada) {
 			VersionListaDePrecios versionSeleccionada = getTablaVersiones().getVersionSeleccionada();
 			boolean existeCotizacion = checkCotizacionVigente(versionSeleccionada);
-			if(existeCotizacion) {
+			if (existeCotizacion) {
 				return;
 			}
 			DefinicionPrecio definicionSeleccionada = getElemento(getTabla().getSelectedRow());
@@ -710,19 +720,19 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			final List<ETipoProducto> tiposUsados = new ArrayList<ETipoProducto>();
 			CollectionUtils.forAllDo(getElementos(), new Closure() {
 				public void execute(Object arg0) {
-					tiposUsados.add( ((DefinicionPrecio) arg0).getTipoProducto());
+					tiposUsados.add(((DefinicionPrecio) arg0).getTipoProducto());
 				}
 			});
 			Collection<ETipoProducto> disjuncion = GenericUtils.restaConjuntosOrdenada(Arrays.asList(ETipoProducto.values()), tiposUsados);
 			disjuncion.remove(ETipoProducto.REPROCESO_SIN_CARGO);
 			Object[] disjuncionArray = disjuncion.toArray();
-			String[] tiposProducto= new String[disjuncionArray.length];
-			for(int i = 0 ; i < disjuncionArray.length;i++){
-				tiposProducto[i] = ((ETipoProducto)disjuncionArray[i]).getDescripcion();
+			String[] tiposProducto = new String[disjuncionArray.length];
+			for (int i = 0; i < disjuncionArray.length; i++) {
+				tiposProducto[i] = ((ETipoProducto) disjuncionArray[i]).getDescripcion();
 			}
-			Object opcion = JOptionPane.showInputDialog(null, "Seleccione el tipo de producto:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, tiposProducto,tiposProducto[0]);
-			if(opcion!=null){
-				return ETipoProducto.getByDescripcion((String)opcion);
+			Object opcion = JOptionPane.showInputDialog(null, "Seleccione el tipo de producto:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, tiposProducto, tiposProducto[0]);
+			if (opcion != null) {
+				return ETipoProducto.getByDescripcion((String) opcion);
 			}
 			return null;
 		}
@@ -768,21 +778,21 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 
 	private boolean checkCotizacionVigente(VersionListaDePrecios versionParaEditar) {
 		boolean existenVersionesAnteriores = getTablaVersiones().getTabla().getRowCount() > 0;
-		if(versionParaEditar.getId() != null) {
+		if (versionParaEditar.getId() != null) {
 			Cotizacion ultimaCotizacion = getListaDePreciosFacade().getUltimaCotizacionVigente(versionParaEditar);
-			if(ultimaCotizacion != null) {
+			if (ultimaCotizacion != null) {
 				int res = FWJOptionPane.showQuestionMessage(GuiABMListaDePrecios.this, StringW.wordWrap("No se puede editar la lista de precios porque la cotización NRO. '" + ultimaCotizacion.getNumero() + "' aún está vigente. ¿Desea crear una nueva versión?."), "Advertencia");
-				if(FWJOptionPane.YES_OPTION == res) {
+				if (FWJOptionPane.YES_OPTION == res) {
 					JDialogInputFechaWithCheckbox dialogoFecha = new JDialogInputFechaWithCheckbox(GuiABMListaDePrecios.this.getFrame(), "Fecha de inicio de validez", "Copiar última versión", existenVersionesAnteriores, existenVersionesAnteriores);
 					dialogoFecha.setVisible(true);
 					Date fechaInicioValidez = dialogoFecha.getFecha();
-					if(fechaInicioValidez != null) {
+					if (fechaInicioValidez != null) {
 						VersionListaDePrecios nuevaVersion = null;
-						if(dialogoFecha.isChkSelected()) {
+						if (dialogoFecha.isChkSelected()) {
 							nuevaVersion = getTablaVersiones().getElemento(0).deepClone();
 							nuevaVersion.setInicioValidez(fechaInicioValidez);
 						} else {
-							nuevaVersion = new VersionListaDePrecios(fechaInicioValidez); 
+							nuevaVersion = new VersionListaDePrecios(fechaInicioValidez);
 						}
 						getListaActual().getVersiones().add(nuevaVersion);
 						ordenarVersiones();
@@ -801,14 +811,14 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		}
 		return false;
 	}
-	
+
 	private static class GeneradorResumen {
 		public static String generarResumen(DefinicionPrecio definicion) {
 			String descripcion = "";
-			for(RangoAncho ra : definicion.getRangos()) {
-				if(ra instanceof RangoAnchoArticuloEstampado) {
+			for (RangoAncho ra : definicion.getRangos()) {
+				if (ra instanceof RangoAnchoArticuloEstampado) {
 					descripcion += generarResumenRango((RangoAnchoArticuloEstampado) ra, definicion.getTipoProducto().getUnidad());
-				} else if (ra instanceof RangoAnchoArticuloTenido){
+				} else if (ra instanceof RangoAnchoArticuloTenido) {
 					descripcion += generarResumenRango((RangoAnchoArticuloTenido) ra, definicion.getTipoProducto().getUnidad());
 				} else {
 					descripcion += generarResumenRango((RangoAnchoComun) ra, definicion.getTipoProducto().getUnidad());
@@ -820,25 +830,19 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		private static String generarResumenRango(RangoAnchoComun ra, EUnidad unidad) {
 			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
 			for (PrecioTipoArticulo pta : ra.getPrecios()) {
-				descripcion += pta.getTipoArticulo().getSigla() + (pta.getArticulo() != null ? " (" + pta.getArticulo().getDescripcion() + ")" : "")
-							+ " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x "
-							+ unidad.getDescripcion().toLowerCase() + "</b><br>";
+				descripcion += pta.getTipoArticulo().getSigla() + (pta.getArticulo() != null ? " (" + pta.getArticulo().getDescripcion() + ")" : "") + " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pta.getPrecio()) + " * x " + unidad.getDescripcion().toLowerCase() + "</b><br>";
 				descripcion += "<br>";
 			}
 			return descripcion;
 		}
-		
+
 		private static String generarResumenRango(RangoAnchoArticuloEstampado ra, EUnidad unidad) {
 			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
 			for (GrupoTipoArticuloBaseEstampado gtabe : ra.getGruposBase()) {
 				for (PrecioBaseEstampado pbe : gtabe.getPrecios()) {
 					for (RangoCantidadColores rcc : pbe.getRangosDeColores()) {
 						for (RangoCoberturaEstampado rce : rcc.getRangos()) {
-							descripcion += gtabe.getTipoArticulo().getSigla() + (gtabe.getArticulo() != null ? " (" + gtabe.getArticulo().getDescripcion() + ")" : "") + " - "
-									+ "Base " + pbe.getGama().getNombre().toUpperCase() + (pbe.getDibujo() != null ? " (" + pbe.getDibujo().toString().toUpperCase() + ")": "" ) + " <br>"
-									+ "- " + rcc.getMinimo() + " a " + rcc.getMaximo() + " colores "
-									+ " y " + rce.getMinimo() + "&#37; a " + rce.getMaximo() + "&#37;  de cobertura "
-									+ " ==> $ <b> " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + unidad.getDescripcion().toLowerCase() + "</b><br>";
+							descripcion += gtabe.getTipoArticulo().getSigla() + (gtabe.getArticulo() != null ? " (" + gtabe.getArticulo().getDescripcion() + ")" : "") + " - " + "Base " + pbe.getGama().getNombre().toUpperCase() + (pbe.getDibujo() != null ? " (" + pbe.getDibujo().toString().toUpperCase() + ")" : "") + " <br>" + "- " + rcc.getMinimo() + " a " + rcc.getMaximo() + " colores " + " y " + rce.getMinimo() + "&#37; a " + rce.getMaximo() + "&#37;  de cobertura " + " ==> $ <b> " + GenericUtils.getDecimalFormat().format(rce.getPrecio()) + " * x " + unidad.getDescripcion().toLowerCase() + "</b><br>";
 						}
 					}
 				}
@@ -846,14 +850,12 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			}
 			return descripcion;
 		}
-		
+
 		private static String generarResumenRango(RangoAnchoArticuloTenido ra, EUnidad unidad) {
 			String descripcion = "<b>" + ra.toStringConUnidad(EUnidad.METROS) + "</b><br>";
 			for (GrupoTipoArticuloGama gtag : ra.getGruposGama()) {
 				for (PrecioGama pg : gtag.getPrecios()) {
-					descripcion += gtag.getTipoArticulo().getSigla() + (gtag.getArticulo() != null ? " (" + gtag.getArticulo().getDescripcion() + ")" : "") + " - "
-							+ pg.getGamaCliente().getNombre() + " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x "
-							+ unidad.getDescripcion().toLowerCase() + "</b><br>";
+					descripcion += gtag.getTipoArticulo().getSigla() + (gtag.getArticulo() != null ? " (" + gtag.getArticulo().getDescripcion() + ")" : "") + " - " + pg.getGamaCliente().getNombre() + " ==> $ <b>" + GenericUtils.getDecimalFormat().format(pg.getPrecio()) + " * x " + unidad.getDescripcion().toLowerCase() + "</b><br>";
 				}
 				descripcion += "<br>";
 			}
