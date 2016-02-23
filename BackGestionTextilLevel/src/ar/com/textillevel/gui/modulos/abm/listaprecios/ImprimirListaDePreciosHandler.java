@@ -63,7 +63,8 @@ public class ImprimirListaDePreciosHandler {
 		this.definiciones = new ArrayList<DefinicionPrecio>(versionListaDePrecios.getPrecios());
 		for(Iterator<DefinicionPrecio> it = this.definiciones.iterator(); it.hasNext(); ){
 			DefinicionPrecio dp = it.next();
-			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO
+					|| dp.getTipoProducto() == ETipoProducto.DEVOLUCION) {
 				it.remove();
 			}
 		}
@@ -77,7 +78,8 @@ public class ImprimirListaDePreciosHandler {
 		this.definiciones = new ArrayList<DefinicionPrecio>(versionListaDePrecios.getPrecios());
 		for(Iterator<DefinicionPrecio> it = this.definiciones.iterator(); it.hasNext(); ){
 			DefinicionPrecio dp = it.next();
-			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+			if(dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO
+					|| dp.getTipoProducto() == ETipoProducto.DEVOLUCION) {
 				it.remove();
 			}
 		}
@@ -174,7 +176,8 @@ public class ImprimirListaDePreciosHandler {
 		
 		for(int i = 0; i < this.definiciones.size(); i++) {
 			DefinicionPrecio dp = this.definiciones.get(i);
-			if (dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+			if (dp.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO
+					|| dp.getTipoProducto() == ETipoProducto.DEVOLUCION) {
 				continue;
 			}
 			for (RangoAncho ra : dp.getRangos()) {

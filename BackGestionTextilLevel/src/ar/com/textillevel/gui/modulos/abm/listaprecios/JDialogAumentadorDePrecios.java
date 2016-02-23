@@ -342,7 +342,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 		@Override
 		protected FWJTable construirTabla() {
 			FWJTable tabla = new FWJTable(0, CANT_COLS);
-			ETipoProducto[] productosFiltrados = ETipoProducto.valuesSinReprocesoSinTipo(ETipoProducto.REPROCESO_SIN_CARGO);
+			ETipoProducto[] productosFiltrados = ETipoProducto.valuesSinReprocesoSinTipo(ETipoProducto.REPROCESO_SIN_CARGO, ETipoProducto.DEVOLUCION);
 			tabla.setComboColumn(COL_TIPO_PRODUCTO, "PRODUCTO", new JComboBox(productosFiltrados), 270, false);
 			ComboBoxTableCellEditor editor = new ComboBoxTableCellEditor(Arrays.asList(productosFiltrados));
 			tabla.getColumnModel().getColumn(COL_TIPO_PRODUCTO).setCellEditor(editor);

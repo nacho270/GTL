@@ -236,11 +236,10 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 	private void ordenarVersiones() {
 		// ordeno en forma descendente
 		Collections.sort(getListaActual().getVersiones(), new Comparator<VersionListaDePrecios>() {
-
 			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
-				return o1.getInicioValidez().compareTo(o2.getInicioValidez()) * (-1);
+				int compFecha = o1.getInicioValidez().compareTo(o2.getInicioValidez());
+				return -1 * (compFecha == 0 ? o1.getId().compareTo(o2.getId()) : compFecha);
 			}
-
 		});
 	}
 
@@ -602,7 +601,8 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 			int selectedRow = getTabla().getSelectedRow();
 			if (selectedRow > -1) {
 				DefinicionPrecio definicionPrecio = getElemento(selectedRow);
-				if (definicionPrecio.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO) {
+				if (definicionPrecio.getTipoProducto() == ETipoProducto.REPROCESO_SIN_CARGO
+						|| definicionPrecio.getTipoProducto() == ETipoProducto.DEVOLUCION) {
 					getBotonAgregar().setEnabled(false);
 					getBotonModificar().setEnabled(false);
 					getBotonEliminar().setEnabled(false);
@@ -724,7 +724,9 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				}
 			});
 			Collection<ETipoProducto> disjuncion = GenericUtils.restaConjuntosOrdenada(Arrays.asList(ETipoProducto.values()), tiposUsados);
-			disjuncion.remove(ETipoProducto.REPROCESO_SIN_CARGO);
+			for(ETipoProducto tp : tipoProductosAutomaticos) {
+				disjuncion.remove(tp);
+			}
 			Object[] disjuncionArray = disjuncion.toArray();
 			String[] tiposProducto = new String[disjuncionArray.length];
 			for (int i = 0; i < disjuncionArray.length; i++) {

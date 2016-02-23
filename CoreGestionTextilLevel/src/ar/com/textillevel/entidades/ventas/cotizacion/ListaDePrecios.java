@@ -83,7 +83,8 @@ public class ListaDePrecios implements Serializable {
 		}
 		Collections.sort(getVersiones(), new Comparator<VersionListaDePrecios>() {
 			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
-				return o1.getInicioValidez().compareTo(o2.getInicioValidez());
+				int compFecha = o1.getInicioValidez().compareTo(o2.getInicioValidez());
+				return compFecha == 0 ? o1.getId().compareTo(o2.getId()) : compFecha;
 			}
 		});
 		ReverseListIterator iterator = new ReverseListIterator(getVersiones());
