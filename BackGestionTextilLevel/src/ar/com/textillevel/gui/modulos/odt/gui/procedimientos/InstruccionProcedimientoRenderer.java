@@ -23,6 +23,7 @@ import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionPro
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTexto;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.QuimicoCantidad;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 
@@ -225,15 +226,17 @@ public class InstruccionProcedimientoRenderer {
 			if (!instruccion.getQuimicos().isEmpty()) {
 				descrQuimicos += "con ";
 				if (instruccion.getQuimicos().size() == 1) {
-					descrQuimicos += instruccion.getQuimicos().get(0).getMateriaPrima().getDescripcion();
+					QuimicoCantidad quimicoCantidad = instruccion.getQuimicos().get(0);
+					descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion();
 				} else {
 					for (int i = 0; i < instruccion.getQuimicos().size(); i++) {
+						QuimicoCantidad quimicoCantidad = instruccion.getQuimicos().get(i);
 						if (i != 0 && i == instruccion.getQuimicos().size() - 1) {
 							descrQuimicos = descrQuimicos.substring(0, descrQuimicos.length() - 2);
 							descrQuimicos += " y ";
-							descrQuimicos += instruccion.getQuimicos().get(i).getMateriaPrima().getDescripcion();
+							descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion();
 						} else {
-							descrQuimicos += instruccion.getQuimicos().get(i).getMateriaPrima().getDescripcion() + ", ";
+							descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion() + ", ";
 						}
 					}
 				}
@@ -257,8 +260,8 @@ public class InstruccionProcedimientoRenderer {
 			if(p.getSector().getSectorMaquina() != sector){
 				continue;
 			}
-			ResumenHTMLProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLProductosInstruccionVisitor();
 			for(InstruccionProcedimiento ip : p.getSubProceso().getPasos()){
+				ResumenHTMLProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLProductosInstruccionVisitor();
 				ip.accept(v);
 				html += v.getResumenHTML();
 			}
@@ -270,14 +273,13 @@ public class InstruccionProcedimientoRenderer {
 	public static String getResumenQuimicos(List<PasoSecuenciaODT> pasos) {
 		String html = "";
 		for (PasoSecuenciaODT p : pasos) {
-			ResumenHTMLQuimicosVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLQuimicosVisitor();
 			for (InstruccionProcedimiento ip : p.getSubProceso().getPasos()) {
+				ResumenHTMLQuimicosVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLQuimicosVisitor();
 				ip.accept(v);
 				html += v.getResumenHTML();
 			}
 		}
-	
-	return "<html>"+html+"</html>";
+		return "<html>"+html+"</html>";
 	}
 	
 	public static String getResumenAlgodon(List<PasoSecuenciaODT> pasos) {
@@ -291,8 +293,8 @@ public class InstruccionProcedimientoRenderer {
 	private static String getResumenTipoArituclo(String sigla, List<PasoSecuenciaODT> pasos) {
 		String html = "";
 		for(PasoSecuenciaODT p : pasos){
-			ResumenHTMLTipoProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLTipoProductosInstruccionVisitor(sigla);
 			for(InstruccionProcedimiento ip : p.getSubProceso().getPasos()){
+				ResumenHTMLTipoProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLTipoProductosInstruccionVisitor(sigla);
 				ip.accept(v);
 				html += v.getResumenHTML();
 			}
@@ -408,10 +410,11 @@ public class InstruccionProcedimientoRenderer {
 		String html = "";
 		for(MateriaPrimaCantidadExplotada<T> mp : materiasPrimasExplotadas){
 			if (siglaAFiltrar == null || (siglaAFiltrar != null && mp.getTipoArticulo().getSigla().startsWith(siglaAFiltrar))){
+				String proporcion = mp.getMateriaPrimaCantidadDesencadenante().getCantidad() + " " + mp.getMateriaPrimaCantidadDesencadenante().getUnidad();
 				if(mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima() instanceof Anilina){
-					html += "* " + mp.getTipoArticulo().getSigla() + ": " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+					html += "* " + proporcion + " - " + mp.getTipoArticulo().getSigla() + ": " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
 				}else{
-					html += "* " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+					html += "* " + proporcion + " - " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
 				}
 			}
 		}

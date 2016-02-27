@@ -105,8 +105,8 @@ public class GenericUtils {
 		df.setGroupingUsed(true);
 		
 		df2 = DecimalFormat.getNumberInstance(new Locale("es_AR"));
-		df2.setMaximumFractionDigits(6);
-		df2.setMinimumFractionDigits(6);
+		df2.setMaximumFractionDigits(4);
+		df2.setMinimumFractionDigits(4);
 		df2.setMinimumIntegerDigits(1);
 		df2.setGroupingUsed(false);
 		

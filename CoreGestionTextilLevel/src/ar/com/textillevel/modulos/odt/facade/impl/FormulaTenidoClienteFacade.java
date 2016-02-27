@@ -96,7 +96,7 @@ public class FormulaTenidoClienteFacade implements FormulaTenidoClienteFacadeRem
 			}
 		}
 		if(!nombresFormulasAud.isEmpty()) {
-			auditoriaFacade.auditar(usuario, "Grabado de fórmulas [Cliente Nro.  " +  cliente.getNroCliente() + "]: " + StringUtil.getCadena(nombresFormulasAud, ", "), EnumTipoEvento.ALTA, formulaSave);
+			auditoriaFacade.auditar(usuario, "Grabado de fórmulas [Cliente Nro.  " +  (cliente == null ? "01" : cliente.getNroCliente()) + "]: " + StringUtil.getCadena(nombresFormulasAud, ", "), EnumTipoEvento.ALTA, formulaSave);
 		}
 		if(!nombresFormulasDefault.isEmpty()) {
 			auditoriaFacade.auditar(usuario, "Grabado de fórmulas [Cliente Nro. 01 ]: " + StringUtil.getCadena(nombresFormulasDefault, ", "), EnumTipoEvento.ALTA, formulaSave);

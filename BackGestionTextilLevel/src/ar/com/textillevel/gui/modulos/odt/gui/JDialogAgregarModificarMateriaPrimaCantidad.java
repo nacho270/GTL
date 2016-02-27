@@ -65,7 +65,7 @@ public class JDialogAgregarModificarMateriaPrimaCantidad<F extends Formulable, T
 	private void loadData() {
 		getCmbMateriasPrimas().setSelectedItem(getMatPrimaCantidadActual().getMateriaPrima());
 		getTxtCantidad().setText(GenericUtils.getDecimalFormat2().format(getMatPrimaCantidadActual().getCantidad()));
-		getCmbUnidad().setSelectedItem(getMatPrimaCantidadActual().getUnidad());
+		getCmbUnidad().setSelectedItem(getMatPrimaCantidadActual().getUnidad() == null ? EUnidad.PORCENTAJE : getMatPrimaCantidadActual().getUnidad());
 	}
 	
 	private void setUpComponentes() {

@@ -96,7 +96,9 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 	@Override
 	protected void botonModificarPresionado(int filaSeleccionada) {
 		T mpc = getElemento(filaSeleccionada);
-		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, allFormulablesPosibles, formulablesAgregados(), mpc, modoConsulta);
+		List<F> formulablesAgregados = formulablesAgregados();
+		formulablesAgregados.remove(mpc.getMateriaPrima());
+		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, allFormulablesPosibles, formulablesAgregados, mpc, modoConsulta);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			T matPrimaCantidadActual = dialog.getMatPrimaCantidadActual();
