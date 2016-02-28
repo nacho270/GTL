@@ -80,7 +80,7 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 
 	@Override
 	public boolean validarAgregar() {
-		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, allFormulablesPosibles, formulablesAgregados(), createMateriaPrimaCantidad(), modoConsulta);
+		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, new ArrayList<F>(allFormulablesPosibles), formulablesAgregados(), createMateriaPrimaCantidad(), modoConsulta);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			agregarElemento(dialog.getMatPrimaCantidadActual());
@@ -98,7 +98,7 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 		T mpc = getElemento(filaSeleccionada);
 		List<F> formulablesAgregados = formulablesAgregados();
 		formulablesAgregados.remove(mpc.getMateriaPrima());
-		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, allFormulablesPosibles, formulablesAgregados, mpc, modoConsulta);
+		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, new ArrayList<F>(allFormulablesPosibles), formulablesAgregados, mpc, modoConsulta);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			T matPrimaCantidadActual = dialog.getMatPrimaCantidadActual();
