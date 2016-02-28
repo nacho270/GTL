@@ -837,6 +837,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			AccionConfirmarCuentaVisitor racv = new AccionConfirmarCuentaVisitor(JFrameVerMovimientosProveedor.this);
 			((MovimientoCuenta) getPanelTablaMovimientos().getTabla().getValueAt(getPanelTablaMovimientos().getTabla().getSelectedRow(), PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(racv);
 		}
+		buscarMovimientos();
 	}
 	
 	private void realizarAccionEliminar() {
@@ -880,6 +881,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			getFacturaFacade().checkEliminacionOrEdicionFacturaProveedor(fp);
 			OperacionSobreFacturaProveedorHandler operacionHandler = new OperacionSobreFacturaProveedorHandler(JFrameVerMovimientosProveedor.this, fp, false); 
 			operacionHandler.showFacturaProveedorDialog();
+			buscarMovimientos();
 		} catch (ValidacionException e) {
 			FWJOptionPane.showErrorMessage(JFrameVerMovimientosProveedor.this, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
 			return;
@@ -1298,6 +1300,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 								break;
 							}
 						}
+						buscarMovimientos();
 					}
 				}
 				
@@ -1361,6 +1364,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 								break;
 							}
 						}
+						buscarMovimientos();
 					}
 				}
 			});
@@ -1537,6 +1541,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 					remitoSalidaProveedor.setProveedor(proveedorElegido);
 					JDialogAgregarRemitoSalidaProveedor jdarsp = new JDialogAgregarRemitoSalidaProveedor(JFrameVerMovimientosProveedor.this, false, remitoSalidaProveedor);
 					jdarsp.setVisible(true);
+					buscarMovimientos();
 				}
 			});
 		}
