@@ -489,6 +489,16 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 							pintarFacturasPagadas(mapaColores, infoCuentaTO);
 							pintarOrdenesDePagoSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
 						} else {
+							getBtnAnular().setEnabled(false);
+							getBtnCompletarDatosNotaDebitoCredito().setEnabled(false);
+							getBtnConfirmar().setEnabled(false);
+							getBtnEditar().setEnabled(false);
+							getBtnEliminarFactura().setEnabled(false);
+							getBtnExportarAExcel().setEnabled(false);
+							getBtnImprimirListado().setEnabled(false);
+							getBtnListadoPDF().setEnabled(false);
+							getPanelTablaMovimientos().getTabla().removeAllRows();
+							getTxtTotalCuenta().setText("");
 							getBtnAgregarRemitoCompraTela().setEnabled(false);
 							FWJOptionPane.showWarningMessage(JFrameVerMovimientosProveedor.this, "No se han encontrado resultados. Revise el criterio de búsqueda.", "Error");
 						}

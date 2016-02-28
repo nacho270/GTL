@@ -523,6 +523,12 @@ public class JFrameVerMovimientos extends JFrame {
 						pintarRecibosSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
 						getBtnEnviarExtractoCuentaPorEmail().setEnabled(true);
 					} else {
+						getBtnAgregarRecibo().setEnabled(false);
+						getBtnExportarAExcel().setEnabled(false);
+						getBtnImprimirListado().setEnabled(false);
+						getBtnListadoPDF().setEnabled(false);
+						getPanelTablaMovimientos().getTabla().removeAllRows();
+						getTxtTotalCuenta().setText("");
 						FWJOptionPane.showWarningMessage(JFrameVerMovimientos.this, "El cliente no registra movimientos", "Error");
 						getBtnEnviarExtractoCuentaPorEmail().setEnabled(false);
 					}
@@ -1052,6 +1058,7 @@ public class JFrameVerMovimientos extends JFrame {
 		if (btnAgregarRecibo == null) {
 			btnAgregarRecibo = BossEstilos.createButton("ar/com/textillevel/imagenes/b_rechazar_cheque.png", "ar/com/textillevel/imagenes/b_rechazar_cheque_des.png");
 			btnAgregarRecibo.setEnabled(false);
+			btnAgregarRecibo.setToolTipText("Agregar recibo");
 			btnAgregarRecibo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Recibo recibo = new Recibo();
