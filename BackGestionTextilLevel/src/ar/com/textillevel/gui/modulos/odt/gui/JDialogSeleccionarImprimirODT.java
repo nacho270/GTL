@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +103,12 @@ public class JDialogSeleccionarImprimirODT extends JDialog {
 					}
 					for(OrdenDeTrabajo odt : selectedODTs) {
 						ImprimirODTHandler handler = new ImprimirODTHandler(odt, JDialogSeleccionarImprimirODT.this);
-						handler.imprimir();
+						try {
+							handler.imprimir();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+							FWJOptionPane.showErrorMessage(JDialogSeleccionarImprimirODT.this, "Ha ocurrido un error al imprimir", "Error");
+						}
 					}
 					dispose();
 					setAcepto(true);

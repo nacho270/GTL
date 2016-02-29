@@ -3,6 +3,7 @@ package ar.com.textillevel.gui.modulos.odt.impresion;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class ImprimirODTHandler {
 		EFormaImpresionODT forma = null;
 		boolean valida = false;
 		do{
-			forma = (EFormaImpresionODT) JOptionPane.showInputDialog(parent, "Que desea imprimir?", "Pregunta", JOptionPane.QUESTION_MESSAGE, null, EFormaImpresionODT.values(), EFormaImpresionODT.ENCABEZADO);
+			forma = (EFormaImpresionODT) JOptionPane.showInputDialog(parent, "Que desea imprimir?", "Pregunta", JOptionPane.QUESTION_MESSAGE, null, EFormaImpresionODT.values(), EFormaImpresionODT.RESUMEN_ARTIULOS);
 			if(forma == null){
 				valida = true;
 			}else{
@@ -100,7 +101,7 @@ public class ImprimirODTHandler {
 		formaImpresion = seleccionarFormaImpresion(dialogOwner);
 	}
 
-	public void imprimir() {
+	public void imprimir() throws IOException {
 //		COMENTO EL DIALOGO DE INPUT DE CANTIDAD, QUEDA 1 HARDCODETTI
 		
 //		boolean ok = false;
@@ -126,7 +127,7 @@ public class ImprimirODTHandler {
 		}
 	}
 
-	private void internalImprimir(Integer cantidad) {
+	private void internalImprimir(Integer cantidad) throws IOException {
 		JasperReport reporte = null;
 		if(formaImpresion != EFormaImpresionODT.AMBOS){
 			if(formaImpresion == EFormaImpresionODT.ENCABEZADO){
@@ -378,9 +379,10 @@ public class ImprimirODTHandler {
 			}
 		}
 
-		public Map<String, Object> getMapaParametros() {
+		public Map<String, Object> getMapaParametros() throws IOException {
 			Map<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("BAR_CODE", this.codigo);
+			mapa.put("IMAGEN", GenericUtils.createBarCode(this.codigo));
 			mapa.put("ANIO_ODT", Integer.valueOf(String.valueOf(ODTCodigoHelper.getInstance().getAnioFromCodigo(this.codigo)).substring(2, 4)));
 			mapa.put("MES_ODT", ODTCodigoHelper.getInstance().getMesFromCodigo(this.codigo));
 			mapa.put("NRO_ODT", ODTCodigoHelper.getInstance().getNroODTFromCodigo(this.codigo));
@@ -401,9 +403,10 @@ public class ImprimirODTHandler {
 			return mapa;
 		}
 		
-		public Map<String, Object> getMapaParametrosSecuencia(List<PasoSecuenciaODT> pasos) {
+		public Map<String, Object> getMapaParametrosSecuencia(List<PasoSecuenciaODT> pasos) throws IOException {
 			Map<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("BAR_CODE", this.codigo);
+			mapa.put("IMAGEN", GenericUtils.createBarCode(this.codigo));
 			mapa.put("METROS", GenericUtils.getDecimalFormat().format(this.metros.doubleValue()));
 			mapa.put("KILOS", GenericUtils.getDecimalFormat().format(this.kilos.doubleValue()));
 			mapa.put("GRAMAJE", this.gramaje);

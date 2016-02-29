@@ -24,8 +24,9 @@
 	<parameter name="RESUMEN_SECTOR_ESTAMPADO" class="java.lang.String"/>
 	<parameter name="RESUMEN_SECTOR_HUMEDO" class="java.lang.String"/>
 	<parameter name="RESUMEN_SECTOR_SECO" class="java.lang.String"/>
+	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<pageHeader>
-		<band height="193" splitType="Stretch">
+		<band height="205" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement x="67" y="54" width="85" height="20"/>
 				<textElement>
@@ -181,7 +182,7 @@
 				<reportElement x="1" y="124" width="570" height="1"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement x="0" y="78" width="1" height="111"/>
+				<reportElement x="0" y="78" width="1" height="126"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement x="138" y="77" width="1" height="47"/>
@@ -193,7 +194,7 @@
 				<reportElement x="398" y="78" width="1" height="47"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement x="571" y="78" width="1" height="111"/>
+				<reportElement x="571" y="78" width="1" height="125"/>
 			</line>
 			<staticText>
 				<reportElement x="3" y="128" width="57" height="20"/>
@@ -251,18 +252,6 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{ANCHO_FINAL}]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="131" y="156" width="151" height="32"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$P{BAR_CODE}]]></jr:codeExpression>
-				</jr:Code128>
-			</componentElement>
-			<componentElement>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="363" y="156" width="151" height="32"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$P{BAR_CODE}]]></jr:codeExpression>
-				</jr:Code128>
-			</componentElement>
 			<line>
 				<reportElement x="0" y="150" width="572" height="1"/>
 			</line>
@@ -276,8 +265,16 @@
 				<reportElement x="475" y="125" width="1" height="25"/>
 			</line>
 			<line>
-				<reportElement x="1" y="188" width="572" height="1"/>
+				<reportElement x="1" y="203" width="572" height="1"/>
 			</line>
+			<image>
+				<reportElement x="117" y="154" width="105" height="43"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="335" y="155" width="105" height="42"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<detail>

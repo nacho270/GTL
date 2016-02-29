@@ -1,6 +1,7 @@
 package ar.com.textillevel.gui.modulos.odt.columnas;
 
 import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 public class ColumnaProductoODT extends ColumnaString<OrdenDeTrabajo>{
@@ -12,7 +13,8 @@ public class ColumnaProductoODT extends ColumnaString<OrdenDeTrabajo>{
 
 	@Override
 	public String getValor(OrdenDeTrabajo item) {
-		return item.getProductoArticulo().toString();
+		ProductoArticulo productoArticulo = item.getProductoArticulo();
+		return productoArticulo != null? productoArticulo.toString() : "";
 	}
 
 }

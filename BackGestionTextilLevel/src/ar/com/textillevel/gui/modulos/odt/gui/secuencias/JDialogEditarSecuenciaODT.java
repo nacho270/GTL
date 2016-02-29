@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,7 +191,12 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 					odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).grabarODT(odt,GTLGlobalCache.getInstance().getUsuarioSistema());
 					odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odt.getId());
 					ImprimirODTHandler handler = new ImprimirODTHandler(odt,JDialogEditarSecuenciaODT.this);
-					handler.imprimir();	
+					try {
+						handler.imprimir();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						FWJOptionPane.showErrorMessage(JDialogEditarSecuenciaODT.this, "Ha ocurrido un error al imprimir", "Error");
+					}
 				}
 			});
 		}

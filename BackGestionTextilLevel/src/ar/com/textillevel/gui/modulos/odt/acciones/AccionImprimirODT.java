@@ -1,5 +1,8 @@
 package ar.com.textillevel.gui.modulos.odt.acciones;
 
+import java.io.IOException;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
@@ -23,8 +26,13 @@ public class AccionImprimirODT extends Accion<OrdenDeTrabajo> {
 		OrdenDeTrabajo odt = e.getSelectedElements().get(0);
 		odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odt.getId());
 		ImprimirODTHandler handler = new ImprimirODTHandler(odt,e.getSource().getFrame());
-		handler.imprimir();
-		return false;
+		try {
+			handler.imprimir();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			FWJOptionPane.showErrorMessage(e.getSource().getFrame(), "Ha ocurrido un error al imprimir", "Error");
+		}
+		return true;
 	}
 
 	@Override
