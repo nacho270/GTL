@@ -20,7 +20,7 @@
 	<parameter name="pasosDS" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<pageHeader>
-		<band height="212">
+		<band height="211">
 			<textField isBlankWhenNull="true">
 				<reportElement x="67" y="54" width="85" height="20"/>
 				<textElement>
@@ -96,7 +96,7 @@
 				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
 			</image>
 			<line>
-				<reportElement x="0" y="48" width="572" height="1"/>
+				<reportElement x="0" y="48" width="573" height="1"/>
 			</line>
 			<staticText>
 				<reportElement x="3" y="54" width="60" height="20"/>
@@ -142,7 +142,7 @@
 				<reportElement x="0" y="49" width="1" height="29"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement x="571" y="49" width="1" height="29"/>
+				<reportElement x="572" y="49" width="1" height="29"/>
 			</line>
 			<staticText>
 				<reportElement x="3" y="81" width="60" height="20"/>
@@ -173,7 +173,7 @@
 				<text><![CDATA[COLOR:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="1" y="124" width="570" height="1"/>
+				<reportElement x="1" y="124" width="571" height="1"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement x="0" y="78" width="1" height="133"/>
@@ -188,7 +188,7 @@
 				<reportElement x="398" y="78" width="1" height="47"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement x="571" y="78" width="1" height="132"/>
+				<reportElement x="572" y="78" width="1" height="132"/>
 			</line>
 			<staticText>
 				<reportElement x="3" y="128" width="57" height="20"/>
@@ -259,7 +259,7 @@
 				<reportElement x="475" y="125" width="1" height="25"/>
 			</line>
 			<line>
-				<reportElement x="0" y="210" width="572" height="1"/>
+				<reportElement x="0" y="210" width="573" height="1"/>
 			</line>
 			<image>
 				<reportElement x="317" y="155" width="105" height="51"/>
@@ -272,9 +272,9 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="50" splitType="Stretch">
+		<band height="41" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="4" width="571" height="40"/>
+				<reportElement x="0" y="0" width="575" height="40"/>
 				<dataSourceExpression><![CDATA[$P{pasosDS}]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-secuencia_pasos.jasper"]]></subreportExpression>
 			</subreport>
@@ -364,7 +364,7 @@
 	<lastPageFooter>
 		<band height="213" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="1" width="555" height="181" forecolor="#8C8C8C"/>
+				<reportElement x="0" y="1" width="572" height="181" forecolor="#8C8C8C"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="399" y="191" width="22" height="20"/>
@@ -437,7 +437,7 @@
 				<text><![CDATA[RTO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="86" y="62" width="379" height="41" forecolor="#8C8C8C"/>
+				<reportElement x="107" y="62" width="337" height="41" forecolor="#8C8C8C"/>
 				<textElement>
 					<font size="30"/>
 				</textElement>

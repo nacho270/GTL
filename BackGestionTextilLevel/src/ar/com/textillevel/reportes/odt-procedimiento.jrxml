@@ -26,7 +26,7 @@
 	<parameter name="RESUMEN_SECTOR_SECO" class="java.lang.String"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<pageHeader>
-		<band height="205" splitType="Stretch">
+		<band height="204" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement x="67" y="54" width="85" height="20"/>
 				<textElement>
@@ -278,9 +278,9 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="42" splitType="Stretch">
+		<band height="39" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="0" width="565" height="40"/>
+				<reportElement x="0" y="-1" width="572" height="40"/>
 				<dataSourceExpression><![CDATA[$P{pasosDS}]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_pasos.jasper"]]></subreportExpression>
 			</subreport>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odt-procedimiento_pasos" pageWidth="612" pageHeight="802" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odt-procedimiento_pasos" pageWidth="570" pageHeight="802" columnWidth="570" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<field name="sector" class="java.lang.String"/>
 	<field name="procSubproc" class="java.lang.String"/>
 	<field name="observacionesGenerales" class="java.lang.String"/>
