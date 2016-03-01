@@ -332,6 +332,12 @@ CREATE TABLE `t_proceso_tipo_maquina` (
   PRIMARY KEY (`P_ID`)
 ) ENGINE=FEDERATED CONNECTION='mysql://root:s4l3m@IP_SERVER_A:3306/gtl/t_proceso_tipo_maquina';
 
+CREATE TABLE `t_terminacion_fraccionado` (
+  `P_ID` int(11) NOT NULL,
+  `A_NOMBRE` varchar(255) NOT NULL,
+  PRIMARY KEY (`P_ID`)
+) ENGINE=FEDERATED CONNECTION='mysql://root:s4l3m@IP_SERVER_A:3306/gtl/t_terminacion_fraccionado';
+
 CREATE TABLE `t_procedimiento_tipo_articulo` (
   `P_ID` int(11) NOT NULL,
   `A_NOMBRE` varchar(255) NOT NULL,
@@ -559,3 +565,6 @@ CREATE TABLE `t_map_prima_explotada` (
   `F_MAT_PRIM_EXPL_QUIMICOS` int(11) DEFAULT NULL,
   PRIMARY KEY (`P_ID`)
   ) ENGINE=FEDERATED CONNECTION='mysql://root:s4l3m@IP_SERVER_A:3306/gtl/t_map_prima_explotada';
+  
+  
+  
