@@ -89,28 +89,28 @@ public class PanDatosMaquinaSectorHumedo extends PanDatosMaquinaCommon {
 
 	private DecimalNumericTextField getTxtCargaMin() {
 		if(txtCargaMin == null) {
-			txtCargaMin = new DecimalNumericTextField();
+			txtCargaMin = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtCargaMin;
 	}
 
 	private DecimalNumericTextField getTxtCargaMax() {
 		if(txtCargaMax == null) {
-			txtCargaMax = new DecimalNumericTextField();
+			txtCargaMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtCargaMax;
 	}
 
 	private DecimalNumericTextField getTxtDiamTejidoMax() {
 		if(txtDiamTejidoMax == null) {
-			txtDiamTejidoMax = new DecimalNumericTextField();
+			txtDiamTejidoMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtDiamTejidoMax;
 	}
 
 	private DecimalNumericTextField getTxtDiamCilindroMax() {
 		if(txtDiamCilindroMax == null) {
-			txtDiamCilindroMax = new DecimalNumericTextField();
+			txtDiamCilindroMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtDiamCilindroMax;
 	}

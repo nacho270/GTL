@@ -6,7 +6,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -23,16 +22,16 @@ public class DecimalNumericTextField extends JTextField {
 
 	private static final long serialVersionUID = 1333323126147248188L;
 
-	private CLJNumberDocument numberDocument;
+	private FWJNumberDocument numberDocument;
 	private Double maximo = null;
 	private Double minimo = null;
-	private NumberFormat decimalFormat;
+	private DecimalFormat decimalFormat;
 	private Toolkit toolkit;
 
 	public DecimalNumericTextField() {
 		super();
 		toolkit = Toolkit.getDefaultToolkit();
-		decimalFormat = DecimalFormat.getNumberInstance(new Locale("es_AR"));
+		decimalFormat = (DecimalFormat) DecimalFormat.getNumberInstance(new Locale("es_AR"));
 		decimalFormat.setMaximumFractionDigits(3);
 		decimalFormat.setMinimumFractionDigits(3);
 		decimalFormat.setMinimumIntegerDigits(1);
@@ -42,10 +41,11 @@ public class DecimalNumericTextField extends JTextField {
 	public DecimalNumericTextField(Integer maximumFractionDigits, Integer minimumFractionDigits) {
 		super();
 		toolkit = Toolkit.getDefaultToolkit();
-		decimalFormat = DecimalFormat.getNumberInstance(new Locale("es_AR"));
+		decimalFormat = (DecimalFormat) DecimalFormat.getNumberInstance(new Locale("es_AR"));
 		decimalFormat.setMaximumFractionDigits(maximumFractionDigits);
 		decimalFormat.setMinimumFractionDigits(minimumFractionDigits);
 		decimalFormat.setMinimumIntegerDigits(1);
+		decimalFormat.setGroupingUsed(false);
 		super.addFocusListener(new NumericFocusListener());
 	}
 
@@ -158,12 +158,12 @@ public class DecimalNumericTextField extends JTextField {
 	}
 
 	protected Document createDefaultModel() {
-		numberDocument = new CLJNumberDocument();
+		numberDocument = new FWJNumberDocument();
 		addKeyListener(new ListenerDecimalNumericTextField(numberDocument));
 		return numberDocument;
 	}
 
-	private class CLJNumberDocument extends PlainDocument {
+	private class FWJNumberDocument extends PlainDocument {
 
 		private static final long serialVersionUID = -7162184430057542069L;
 
@@ -182,6 +182,7 @@ public class DecimalNumericTextField extends JTextField {
 			char[] charsInsercion = insercion.toCharArray();
 			char[] resultado = new char[charsInsercion.length];
 			Number valor = null;
+			char ultimoSeparador = '1';
 			boolean ingresoSeparador = DecimalNumericTextField.this.getText().indexOf(",") != -1 || DecimalNumericTextField.this.getText().indexOf(".") != -1;
 			int j = 0;
 			for (int i = 0; i < resultado.length; i++) {
@@ -192,7 +193,13 @@ public class DecimalNumericTextField extends JTextField {
 						if (charsInsercion[i] == '.' || charsInsercion[i] == ',') {
 							resultado[j++] = charsInsercion[i];
 							ingresoSeparador = true;
+							ultimoSeparador = charsInsercion[i];
 						}
+					} else if(decimalFormat.isGroupingUsed() && ultimoSeparador != '1'
+							&& ultimoSeparador != charsInsercion[i]) {
+						resultado[j++] = charsInsercion[i];
+						ingresoSeparador = true;
+						ultimoSeparador = charsInsercion[i];
 					} else {
 						insercionValida = false;
 						break;
@@ -257,9 +264,9 @@ public class DecimalNumericTextField extends JTextField {
 	}
 
 	private class ListenerDecimalNumericTextField implements KeyListener {
-		CLJNumberDocument numberDocument;
+		FWJNumberDocument numberDocument;
 
-		public ListenerDecimalNumericTextField(CLJNumberDocument numberDocument) {
+		public ListenerDecimalNumericTextField(FWJNumberDocument numberDocument) {
 			this.numberDocument = numberDocument;
 		}
 

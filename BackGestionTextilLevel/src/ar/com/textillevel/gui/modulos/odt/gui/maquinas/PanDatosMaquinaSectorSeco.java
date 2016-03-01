@@ -91,21 +91,21 @@ public class PanDatosMaquinaSectorSeco extends PanDatosMaquinaCommon {
 
 	private DecimalNumericTextField getTxtTempMin() {
 		if(txtTempMin == null) {
-			txtTempMin = new DecimalNumericTextField();
+			txtTempMin = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtTempMin;
 	}
 
 	private DecimalNumericTextField getTxtTempMax() {
 		if(txtTempMax == null) {
-			txtTempMax = new DecimalNumericTextField();
+			txtTempMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtTempMax;
 	}
 
 	private DecimalNumericTextField getTxtTempProm() {
 		if(txtTempProm == null) {
-			txtTempProm = new DecimalNumericTextField();
+			txtTempProm = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtTempProm;
 	}

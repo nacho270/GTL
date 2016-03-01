@@ -51,63 +51,63 @@ public abstract class PanDatosMaquinaCommon extends JPanel {
 
 	protected DecimalNumericTextField getTxtAnchoMin() {
 		if(txtAnchoMin == null) {
-			txtAnchoMin = new DecimalNumericTextField();
+			txtAnchoMin = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtAnchoMin;
 	}
 
 	protected DecimalNumericTextField getTxtAnchoMax() {
 		if(txtAnchoMax == null) {
-			txtAnchoMax = new DecimalNumericTextField();
+			txtAnchoMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtAnchoMax;
 	}
 
 	protected DecimalNumericTextField getTxtPotencia() {
 		if(txtPotencia == null) {
-			txtPotencia = new DecimalNumericTextField();
+			txtPotencia = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtPotencia;
 	}
 
 	protected DecimalNumericTextField getTxtCantLitrosMin() {
 		if(txtCantLitrosMin == null) {
-			txtCantLitrosMin = new DecimalNumericTextField();
+			txtCantLitrosMin = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtCantLitrosMin;
 	}
 
 	protected DecimalNumericTextField getTxtCantLitrosMax() {
 		if(txtCantLitrosMax == null) {
-			txtCantLitrosMax = new DecimalNumericTextField();
+			txtCantLitrosMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtCantLitrosMax;
 	}
 
 	protected DecimalNumericTextField getTxtCantLitrosProm() {
 		if(txtCantLitrosProm == null) {
-			txtCantLitrosProm = new DecimalNumericTextField();
+			txtCantLitrosProm = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtCantLitrosProm;
 	}
 
 	protected DecimalNumericTextField getTxtVelMin() {
 		if(txtVelMin == null) {
-			txtVelMin = new DecimalNumericTextField();
+			txtVelMin = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtVelMin;
 	}
 
 	protected DecimalNumericTextField getTxtVelMax() {
 		if(txtVelMax == null) {
-			txtVelMax = new DecimalNumericTextField();
+			txtVelMax = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtVelMax;
 	}
 
 	protected DecimalNumericTextField getTxtVelProm() {
 		if(txtVelProm == null) {
-			txtVelProm = new DecimalNumericTextField();
+			txtVelProm = new DecimalNumericTextField(new Integer(2), new Integer(2));
 		}
 		return txtVelProm;
 	}
