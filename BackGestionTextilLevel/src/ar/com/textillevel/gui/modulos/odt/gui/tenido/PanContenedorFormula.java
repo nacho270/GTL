@@ -33,13 +33,13 @@ public abstract class PanContenedorFormula<T extends FormulaCliente> extends JPa
 		setLayout(new GridBagLayout());
 		int y = 0;
 		if(getPanFiltros() != null) {
-			add(getPanFiltros(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0, 0.5));
+			add(getPanFiltros(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0, 0.1));
 			y++;
 		}
-		add(getPanFormulas(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 1, 0.5));
+		add(getPanFormulas(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 1, 0.6));
 		y++;
 		if(getPanMateriaPrima() != null) {
-			add(getPanMateriaPrima(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0, 0.5));
+			add(getPanMateriaPrima(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0, 0.3));
 		}
 	}
 
@@ -77,10 +77,13 @@ public abstract class PanContenedorFormula<T extends FormulaCliente> extends JPa
 
 
 	public void limpiar() {
+		limpiarFiltros();
 		getPanFormulas().limpiar();
 //		getPanMateriaPrima().limpiar();
 		//TODO:
 	}
+
+	protected abstract void limpiarFiltros();
 
 	public void setModoConsulta(boolean modoConsulta) {
 		this.modoConsulta = modoConsulta;

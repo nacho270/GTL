@@ -141,6 +141,10 @@ public class JDialogSeleccionarFormula extends JDialog {
 					return null;
 				}
 
+				@Override
+				protected void limpiarFiltros() {
+				}
+
 			};
 
 			((PanTablaFormulasTenido)panelFormulas.getPanFormulas()).setPanQuimicos((PanTablaQuimicos)panelFormulas.getPanMateriaPrima());

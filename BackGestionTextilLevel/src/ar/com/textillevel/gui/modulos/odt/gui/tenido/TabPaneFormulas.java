@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -70,16 +71,23 @@ public class TabPaneFormulas extends JTabbedPane {
 				return null;
 			}
 
+			@Override
+			protected void limpiarFiltros() {
+			}
+
 		};
 
 		((PanTablaFormulasEstampado)panFormulaEstampado.getPanFormulas()).setPanVisualizacionQuimicosPigmentos((PanTablaQuimicosPigmentosVisualizacion)panFormulaEstampado.getPanMateriaPrima());
 
 		this.panFormulaTenido = new PanContenedorFormula<FormulaTenidoCliente>(owner, modoConsulta) {
+			
+			
 
 			private static final long serialVersionUID = 179866514948151333L;
 			
 			private JComboBox cmbTipoArticulo;
 			private JPanel panFiltros;
+			private List<FormulaTenidoCliente> formulasCopy = new ArrayList<FormulaTenidoCliente>(); //para filtrar en el combo 
 
 			@Override
 			protected PanTablaVisualizacionFormulaCliente createPanMateriaPrimaCantidad() {
@@ -110,6 +118,7 @@ public class TabPaneFormulas extends JTabbedPane {
 				});
 				getPanFormulas().limpiar();
 				getPanFormulas().agregarElementos(formulas);
+				this.formulasCopy = new ArrayList<FormulaTenidoCliente>(formulas);
 			}
 
 			@Override
@@ -117,8 +126,8 @@ public class TabPaneFormulas extends JTabbedPane {
 				if(panFiltros == null) {
 					panFiltros = new JPanel();
 					panFiltros.setLayout(new GridBagLayout());
-					panFiltros.add(new JLabel("Tipo de Artículo"), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0), 1, 1, 1, 0.5));
-					panFiltros.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,0,0,0), 1, 1, 1, 0.5));
+					panFiltros.add(new JLabel("Tipo de Artículo:"), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0,0,0,0), 1, 1, 1, 0.5));
+					panFiltros.add(getCmbTipoArticulo(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0,0,0,0), 1, 1, 1, 0.5));
 				}
 				return panFiltros;
 			}
@@ -129,20 +138,34 @@ public class TabPaneFormulas extends JTabbedPane {
 					GuiUtil.llenarCombo(cmbTipoArticulo, GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class).getAllTipoArticulos(), true);
 					cmbTipoArticulo.insertItemAt("TODOS", 0);
 					cmbTipoArticulo.setSelectedIndex(0);
-					
+
 					cmbTipoArticulo.addItemListener(new ItemListener() {
+						
 						public void itemStateChanged(ItemEvent e) {
 							if(e.getStateChange() == ItemEvent.SELECTED) {
-								if(getSelectedIndex() == 0) {
-									
+								getPanFormulas().limpiar();
+								if(cmbTipoArticulo.getSelectedIndex() == 0) {
+									getPanFormulas().agregarElementos(formulasCopy);
 								} else {
 									TipoArticulo tp = (TipoArticulo)cmbTipoArticulo.getSelectedItem();
+									List<FormulaTenidoCliente> formulasTipoArticulo = new ArrayList<FormulaTenidoCliente>();
+									for(FormulaTenidoCliente f : formulasCopy) {
+										if(f.getTipoArticulo().equals(tp)) {
+											formulasTipoArticulo.add(f);
+										}
+									}
+									getPanFormulas().agregarElementos(formulasTipoArticulo);
 								}
 							}
 						}
 					});
 				}
 				return cmbTipoArticulo;
+			}
+
+			@Override
+			protected void limpiarFiltros() {
+				cmbTipoArticulo.setSelectedIndex(0);
 			}
 		
 		};
@@ -172,6 +195,10 @@ public class TabPaneFormulas extends JTabbedPane {
 				return null;
 			}
 
+			@Override
+			protected void limpiarFiltros() {
+			}
+
 		};
 		((PanTablaFormulasAprestado)panFormulaAprestado.getPanFormulas()).setPanVisualizacionQuimicosPigmentos((PanTablaQuimicosPigmentosVisualizacion)panFormulaAprestado.getPanMateriaPrima());
 
@@ -196,8 +223,8 @@ public class TabPaneFormulas extends JTabbedPane {
 			fc.accept(formulaDivisorVisitor);
 		}
 		panFormulaEstampado.sort();
-		panFormulaTenido.sort();
 		panFormulaAprestado.sort();
+		panFormulaTenido.sort();
 	}
 
 	public void setModoConsulta(boolean modoConsulta) {
