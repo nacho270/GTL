@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -111,6 +113,32 @@ public class JDialogSeleccionarFormula extends JDialog {
 				@Override
 				protected PanTablaVisualizacionFormulaCliente createPanMateriaPrimaCantidad() {
 					return new PanTablaQuimicos();
+				}
+
+				@Override
+				public void sort() {
+					List<FormulaTenidoCliente> formulas = getPanFormulas().getElementos();
+					Collections.sort(formulas, new Comparator<FormulaTenidoCliente>() {
+
+						public int compare(FormulaTenidoCliente o1, FormulaTenidoCliente o2) {
+							int compResult = o1.getColor().getNombre().compareTo(o2.getColor().getNombre());
+							if(compResult == 0) {
+								compResult = o1.getTipoArticulo().getNombre().compareTo(o2.getTipoArticulo().getNombre());
+								if(compResult == 0) {
+									return (o1.getNombre() == null ? "":o1.getNombre()).compareTo(o2.getNombre() == null ? "":o2.getNombre());
+								}
+							}
+							return compResult;
+						}
+
+					});
+					getPanFormulas().limpiar();
+					getPanFormulas().agregarElementos(formulas);
+				}
+
+				@Override
+				protected JPanel getPanFiltros() {
+					return null;
 				}
 
 			};

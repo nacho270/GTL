@@ -89,7 +89,7 @@ public class JDialogEditarFormulaAprestado extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(validar()) {
 						formula = getTabPaneQuimico().setearDatosEnFormula();
-						formula.setNombre(getTxtNombre().getText().trim());
+						formula.setNombre(getTxtNombre().getText().trim().toUpperCase());
 						acepto = true;
 						dispose();
 					}

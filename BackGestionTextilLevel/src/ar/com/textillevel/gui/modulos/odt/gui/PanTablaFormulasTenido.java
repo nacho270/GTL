@@ -19,9 +19,9 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 	private static final long serialVersionUID = 1L;
 
 	private static final Integer CANT_COLS = 5;
-	private static final Integer COL_NOMBRE = 0;
+	private static final Integer COL_COLOR = 0;
 	private static final Integer COL_TIPO_ARTICULO = 1;
-	private static final Integer COL_COLOR = 2;
+	private static final Integer COL_NOMBRE = 2;
 	private static final Integer COL_CODIGO = 3;
 	private static final Integer COL_OBJ = 4;
 
@@ -52,10 +52,10 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 	@Override
 	protected FWJTable construirTabla() {
 		FWJTable tabla = new FWJTable(0, CANT_COLS);
-		tabla.setStringColumn(COL_NOMBRE, "NOMBRE DE LA FÓRMULA", 200, 200, true);
-		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTÍCULO", 180, 180, true);
 		tabla.setStringColumn(COL_COLOR, "COLOR", 180, 180, true);
-		tabla.setStringColumn(COL_CODIGO, "CÓDIGO", 200, 200, true);
+		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTÍCULO", 180, 180, true);
+		tabla.setStringColumn(COL_NOMBRE, "NOMBRE DE LA FÓRMULA", 150, 150, true);
+		tabla.setStringColumn(COL_CODIGO, "CÓDIGO", 110, 110, true);
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 		return tabla;
 	}

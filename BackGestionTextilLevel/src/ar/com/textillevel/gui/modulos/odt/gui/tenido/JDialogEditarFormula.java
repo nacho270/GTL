@@ -122,7 +122,7 @@ public class JDialogEditarFormula extends JDialog {
 							}
 						}
 
-						formula.setNombre(getTxtNombre().getText().trim());
+						formula.setNombre(getTxtNombre().getText().trim().toUpperCase());
 						formula.setTipoArticulo((TipoArticulo)getCmbTipoArticulo().getSelectedItem());
 						formula.setColor((Color)getCmbColor().getSelectedItem());
 						

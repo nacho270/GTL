@@ -31,9 +31,15 @@ public abstract class PanContenedorFormula<T extends FormulaCliente> extends JPa
 
 	private void construct() {
 		setLayout(new GridBagLayout());
-		add(getPanFormulas(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0.5, 0.5));
+		int y = 0;
+		if(getPanFiltros() != null) {
+			add(getPanFiltros(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0, 0.5));
+			y++;
+		}
+		add(getPanFormulas(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 1, 0.5));
+		y++;
 		if(getPanMateriaPrima() != null) {
-			add(getPanMateriaPrima(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0.5, 0.5));
+			add(getPanMateriaPrima(), GenericUtils.createGridBagConstraints(0, y, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,0,0,0), 1, 1, 0, 0.5));
 		}
 	}
 
@@ -55,9 +61,14 @@ public abstract class PanContenedorFormula<T extends FormulaCliente> extends JPa
 	}
 
 	protected abstract PanTablaVisualizacionFormulaCliente createPanMateriaPrimaCantidad();
+	
+	protected abstract JPanel getPanFiltros();
+
+	public abstract void sort();
 
 	public void setFormulas(List<T> formulasTenidoCliente) {
 		getPanFormulas().agregarElementos(formulasTenidoCliente);
+		sort();
 	}
 	
 	public Frame getOwner() {

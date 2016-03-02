@@ -29,6 +29,7 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 
 	private ClienteFacadeRemote clienteFacade;
 	
+	private static final Integer NRO_CLIENTE_01 = 1;
 	private static final String TEXTO_DEFAULT_CLIENTE_01 = "<html><b style='color:red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXTIL LEVEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></html>";
 
 	public PanelBusquedaClienteMinimal() {
@@ -68,7 +69,11 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 					if (cliente == null) {
 						clienteNoEncontrado(nroCliente);
 					} else {
-						getLblResultado().setText("<html><b style='color:red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+cliente.getDescripcionResumida()+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></html>");
+						if(cliente.getNroCliente().equals(NRO_CLIENTE_01)) {
+							getLblResultado().setText(TEXTO_DEFAULT_CLIENTE_01);
+						} else {
+							getLblResultado().setText("<html><b style='color:red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+cliente.getDescripcionResumida()+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></html>");
+						}
 						clienteEncontrado(cliente);
 					}
 				}
@@ -87,7 +92,7 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 			btnClear.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					getLblResultado().setText(TEXTO_DEFAULT_CLIENTE_01);
+					getLblResultado().setText("");
 					getTxtNroCliente().setText("");
 					botonLimpiarPresionado();
 				}
@@ -105,7 +110,7 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 	
 	public JLabel getLblResultado() {
 		if(lblResultado == null){
-			lblResultado = new JLabel(TEXTO_DEFAULT_CLIENTE_01);
+			lblResultado = new JLabel("");
 			lblResultado.setBorder(BorderFactory.createLineBorder(Color.RED.darker()));
 		}
 		return lblResultado;
@@ -114,13 +119,17 @@ public abstract class PanelBusquedaClienteMinimal extends JPanel {
 	public void setCliente(Cliente cl){
 		if(cl!=null){
 			getTxtNroCliente().setValue(cl.getNroCliente().longValue());
-			getLblResultado().setText("<html><b style='color:red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+cl.getDescripcionResumida()+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></html>");
+			if(cl.getNroCliente().equals(NRO_CLIENTE_01)) {
+				getLblResultado().setText(TEXTO_DEFAULT_CLIENTE_01);
+			} else {
+				getLblResultado().setText("<html><b style='color:red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+cl.getDescripcionResumida()+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></html>");
+			}
 		}
 	}
 	
 	public void limpiar(){
 		setCliente(null);
-		getLblResultado().setText(TEXTO_DEFAULT_CLIENTE_01);
+		getLblResultado().setText("");
 		getTxtNroCliente().setText("");
 	}
 	

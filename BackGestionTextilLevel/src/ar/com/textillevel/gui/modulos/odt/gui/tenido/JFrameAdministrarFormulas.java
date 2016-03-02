@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 
 	private static final long serialVersionUID = -1338412573256810225L;
 
-//	private JButton btnSalir;
+	private JButton btnSalir;
 	private JButton btnGrabar;
 	private JButton btnModificarCancelar;
 
@@ -48,12 +49,12 @@ public class JFrameAdministrarFormulas extends JFrame {
 
 	private static final String LABEL_MODIFICAR = "Modificar";
 	private static final String LABEL_CANCELAR = "Cancelar";
+	private static final Integer NRO_CLIENTE_01 = 1;
 
 	public JFrameAdministrarFormulas(Frame padre) {
 		setUpComponentes();
 		setUpScreen();
 		this.idsFormulasDeleteDetect = new ArrayList<Integer>();
-		cargarFormulas();
 	}
 
 	private void setUpScreen() {
@@ -82,6 +83,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 			panBotones.setLayout(new FlowLayout(FlowLayout.CENTER));
 			panBotones.add(getBtnGrabar());
 			panBotones.add(getBtnModificarCancelar());
+			panBotones.add(getBtnSalir());
 		}
 		return panBotones;
 	}
@@ -100,18 +102,18 @@ public class JFrameAdministrarFormulas extends JFrame {
 		}
 	}
 
-//	private JButton getBtnSalir() {
-//		if (btnSalir == null) {
-//			btnSalir = BossEstilos.createButton("ar/com/textillevel/imagenes/b_exit.png", "ar/com/textillevel/imagenes/b_exit.png"); 
-//			btnSalir.setMnemonic(KeyEvent.VK_S);
-//			btnSalir.addActionListener(new ActionListener() {
-//				public void actionPerformed(ActionEvent e) {
-//					salir();
-//				}
-//			});
-//		}
-//		return btnSalir;
-//	}
+	private JButton getBtnSalir() {
+		if (btnSalir == null) {
+			btnSalir = new JButton("Salir"); 
+			btnSalir.setMnemonic(KeyEvent.VK_S);
+			btnSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					salir();
+				}
+			});
+		}
+		return btnSalir;
+	}
 
 	public JButton getBtnGrabar() {
 		if(btnGrabar == null) {
@@ -140,7 +142,11 @@ public class JFrameAdministrarFormulas extends JFrame {
 	private void capturarSetearDatos() {
 		List<FormulaCliente> formulas = getTabPaneFormulas().getFormulas();
 		for(FormulaCliente f : formulas) {
-			f.setCliente(cliente);
+			if(cliente.getNroCliente().equals(NRO_CLIENTE_01)) {
+				f.setCliente(null);
+			} else {
+				f.setCliente(cliente);
+			}
 		}
 	}
 
@@ -164,7 +170,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 	}
 
 	private void cargarFormulas() {
-		List<FormulaCliente> formulas = getFormulaFacade().getAllDefaultOrByCliente(cliente);
+		List<FormulaCliente> formulas = getFormulaFacade().getAllDefaultOrByCliente(cliente == null || cliente.getNroCliente().equals(NRO_CLIENTE_01) ? null : cliente);
 		getTabPaneFormulas().llenarTabs(formulas);
 		idsFormulasDeleteDetect.clear();
 		for(FormulaCliente f : formulas) {
@@ -197,7 +203,6 @@ public class JFrameAdministrarFormulas extends JFrame {
 					getTabPaneFormulas().llenarTabs(new ArrayList<FormulaCliente>());
 					getBtnGrabar().setEnabled(false);
 					JFrameAdministrarFormulas.this.cliente = null;
-					cargarFormulas();
 				}
 
 			};

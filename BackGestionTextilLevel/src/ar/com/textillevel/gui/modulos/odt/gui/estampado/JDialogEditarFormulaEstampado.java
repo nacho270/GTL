@@ -100,7 +100,7 @@ public class JDialogEditarFormulaEstampado extends JDialog {
 
 						formula = getTabPaneAnilinaPigmento().setearDatosEnFormula();
 
-						formula.setNombre(getTxtNombre().getText().trim());
+						formula.setNombre(getTxtNombre().getText().trim().toUpperCase());
 						formula.setColor((Color)getCmbColor().getSelectedItem());
 
 						acepto = true;
