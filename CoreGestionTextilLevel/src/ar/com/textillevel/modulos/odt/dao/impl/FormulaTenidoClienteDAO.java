@@ -33,10 +33,10 @@ public class FormulaTenidoClienteDAO extends GenericDAO<FormulaCliente, Integer>
 	}
 
 	public boolean existeFormulaByClienteOrDefault(FormulaCliente formula) {
-		String hql = "FROM FormulaCliente f where (:id IS NULL OR f.id != :id) AND f.nombre=:nombre " + (formula.getCliente() == null ? " AND f.cliente IS NULL " :  " AND f.cliente.id = :idCliente");
+		String hql = "FROM FormulaCliente f where (:id IS NULL OR f.id != :id) AND f.codigoFormula=:codigoFormula " + (formula.getCliente() == null ? " AND f.cliente IS NULL " :  " AND f.cliente.id = :idCliente");
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("id", formula.getId());
-		q.setParameter("nombre", formula.getNombre());
+		q.setParameter("codigoFormula", formula.getCodigoFormula());
 		if(formula.getCliente() != null) {
 			q.setParameter("idCliente", formula.getCliente().getId());
 		}

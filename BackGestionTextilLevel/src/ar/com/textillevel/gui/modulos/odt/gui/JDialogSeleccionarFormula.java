@@ -192,7 +192,7 @@ public class JDialogSeleccionarFormula extends JDialog {
 						
 						FormulaTenidoCliente formulaElegida = null;
 						for(FormulaCliente fc : formulasGrabadas) {
-							if(fc.getNombre().compareToIgnoreCase(formulaSeleccionada.getNombre()) == 0 && fc.getCliente() != null) {
+							if(fc.getCodigoFormula().compareToIgnoreCase(formulaSeleccionada.getCodigoFormula()) == 0 && fc.getCliente() != null) {
 								formulaElegida = (FormulaTenidoCliente)fc;
 							}
 						}

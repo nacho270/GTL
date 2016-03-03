@@ -44,7 +44,7 @@ public abstract class FormulaCliente implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "A_NOMBRE", nullable=false)
+	@Column(name = "A_NOMBRE", nullable=true)
 	public String getNombre() {
 		return nombre;
 	}
@@ -121,7 +121,7 @@ public abstract class FormulaCliente implements Serializable {
 
 	@Override
 	public String toString() {
-		return getNombre();
+		return getCodigoFormula() + (getNombre() != null? " - " + getNombre() : "");
 	}
 
 	@Transient

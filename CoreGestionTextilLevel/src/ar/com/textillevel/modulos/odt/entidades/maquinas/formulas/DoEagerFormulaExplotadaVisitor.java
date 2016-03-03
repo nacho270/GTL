@@ -11,7 +11,7 @@ import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.
 public class DoEagerFormulaExplotadaVisitor implements IFormulaClienteExplotadaVisitor{
 
 	public void visit(FormulaEstampadoClienteExplotada fece) {
-		fece.getFormulaDesencadenante().getNombre();
+		fece.getFormulaDesencadenante().getCodigoFormula();
 		fece.getPigmentos().size();
 		for(MateriaPrimaCantidadExplotada<Pigmento> mp : fece.getPigmentos()){
 			mp.getMateriaPrimaCantidadDesencadenante().getDescripcion();
@@ -25,7 +25,7 @@ public class DoEagerFormulaExplotadaVisitor implements IFormulaClienteExplotadaV
 	}
 
 	public void visit(FormulaTenidoClienteExplotada ftce) {
-		ftce.getFormulaDesencadenante().getNombre();
+		ftce.getFormulaDesencadenante().getCodigoFormula();
 		ftce.getMateriasPrimas().size();
 		for(MateriaPrimaCantidadExplotada<Anilina> mp : ftce.getMateriasPrimas()){
 			mp.getMateriaPrimaCantidadDesencadenante().getDescripcion();

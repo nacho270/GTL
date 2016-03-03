@@ -7,11 +7,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 
 public class VerAdministrarFormulasAction implements Action {
-
-	private Frame frame;
 	
 	public VerAdministrarFormulasAction(Frame frame){
-		this.frame = frame;
+
 	}
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -39,6 +37,6 @@ public class VerAdministrarFormulasAction implements Action {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		new JFrameAdministrarFormulas(frame).setVisible(true);
+		JFrameAdministrarFormulas.getInstance().mostrarVentana();
 	}
 }

@@ -88,6 +88,7 @@ public abstract class PanContenedorFormula<T extends FormulaCliente> extends JPa
 	public void setModoConsulta(boolean modoConsulta) {
 		this.modoConsulta = modoConsulta;
 		getPanFormulas().setModoConsulta(modoConsulta);
+		getPanFormulas().getBtnCopiar().setEnabled(!modoConsulta && getPanFormulas().getTabla().getSelectedRow() != -1);
 	}
 
 	public void ocultarBotonesTabla(){

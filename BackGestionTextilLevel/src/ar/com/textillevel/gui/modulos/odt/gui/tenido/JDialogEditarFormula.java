@@ -121,8 +121,9 @@ public class JDialogEditarFormula extends JDialog {
 								}
 							}
 						}
-
-						formula.setNombre(getTxtNombre().getText().trim().toUpperCase());
+						if(!StringUtil.isNullOrEmpty(getTxtNombre().getText())) {
+							formula.setNombre(getTxtNombre().getText().trim().toUpperCase());
+						}
 						formula.setTipoArticulo((TipoArticulo)getCmbTipoArticulo().getSelectedItem());
 						formula.setColor((Color)getCmbColor().getSelectedItem());
 						
@@ -139,11 +140,6 @@ public class JDialogEditarFormula extends JDialog {
 	}
 
 	private boolean validar() {
-		if(StringUtil.isNullOrEmpty(getTxtNombre().getText().trim())) {
-			FWJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta ingresar el nombre.", "Error");
-			getTxtNombre().requestFocus();
-			return false;
-		}
 		if(getCmbTipoArticulo().getSelectedIndex() == -1) {
 			FWJOptionPane.showErrorMessage(JDialogEditarFormula.this, "Falta seleccionar el tipo de artículo.", "Error");
 			return false;

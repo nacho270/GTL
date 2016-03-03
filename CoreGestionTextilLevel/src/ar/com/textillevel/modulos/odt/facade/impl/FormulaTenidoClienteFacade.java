@@ -1,6 +1,7 @@
 package ar.com.textillevel.modulos.odt.facade.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -55,7 +56,7 @@ public class FormulaTenidoClienteFacade implements FormulaTenidoClienteFacadeRem
 		for(Integer idFormula : idsFormulasParaBorrar) {
 			formulaEliminar = formulaTenidoClienteDAO.getById(idFormula);
 			cliente = formulaEliminar.getCliente();
-			nombresFormulasAud.add(formulaEliminar.getNombre());
+			nombresFormulasAud.add(formulaEliminar.getCodigoFormula());
 			formulaTenidoClienteDAO.removeById(idFormula);
 		}
 		if(!idsFormulasParaBorrar.isEmpty()) {
@@ -81,18 +82,18 @@ public class FormulaTenidoClienteFacade implements FormulaTenidoClienteFacadeRem
 					fc.accept(visitor);
 					FormulaCliente formulaDefault = visitor.getFormulaClonada();
 					if(formulaTenidoClienteDAO.existeFormulaByClienteOrDefault(formulaDefault)) {
-						throw new ValidacionException(-1, "Existen nombres de fórmulas (cliente 01) repetidas: " + formulaDefault.getNombre());
+						throw new ValidacionException(-1, "Existen codigos de fórmulas (cliente 01) repetidas: " + formulaDefault.getCodigoFormula());
 					} else {
 						formulaDefault.accept(visitorFormula);
 						formulaDefault.setCodigoFormula(visitorFormula.getCodigoFormula());
 						formulaDefault.setNroFormula(visitorFormula.getNroFormula());
 						formulaTenidoClienteDAO.save(formulaDefault);
 					}
-					nombresFormulasDefault.add(formulaDefault.getNombre());
+					nombresFormulasDefault.add(formulaDefault.getCodigoFormula());
 				}
 			} else {
 				result.add(formulaTenidoClienteDAO.save(fc));
-				nombresFormulasAud.add(fc.getNombre());
+				nombresFormulasAud.add(fc.getCodigoFormula());
 			}
 		}
 		if(!nombresFormulasAud.isEmpty()) {
@@ -209,7 +210,18 @@ public class FormulaTenidoClienteFacade implements FormulaTenidoClienteFacadeRem
 		public FormulaCliente getFormulaClonada() {
 			return formulaClonada;
 		}
-
 	}
 
+	@Override
+	public void copiarFormulas(List<FormulaCliente> formulasParaCopiar, Cliente cliente, String usuario) throws ValidacionException {
+		CloneFormulaVisitor cloneVisitor = new CloneFormulaVisitor();
+		List<FormulaCliente> formulasClonandas = new ArrayList<FormulaCliente>();
+		for(FormulaCliente formula : formulasParaCopiar) {
+			formula.accept(cloneVisitor);
+			FormulaCliente formulaClonada = cloneVisitor.getFormulaClonada();
+			formulaClonada.setCliente(cliente);
+			formulasClonandas.add(formulaClonada);
+		}
+		saveFormulas(formulasClonandas, Collections.emptyList(), false, usuario);
+	}
 }

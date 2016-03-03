@@ -57,7 +57,7 @@ public class FormulaTenidoCliente extends FormulaCliente implements Serializable
 
 	@Override
 	public String toString() {
-		return getNombre();
+		return getCodigoFormula() + (getNombre() != null? " - " + getNombre() : "");
 	}
 
 	@Transient
@@ -79,5 +79,4 @@ public class FormulaTenidoCliente extends FormulaCliente implements Serializable
 	public void accept(IFormulaClienteVisitor visitor) {
 		visitor.visit(this);
 	}
-
 }

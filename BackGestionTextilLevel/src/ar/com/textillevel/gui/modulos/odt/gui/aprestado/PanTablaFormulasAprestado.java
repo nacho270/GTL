@@ -23,12 +23,10 @@ public class PanTablaFormulasAprestado extends PanelTablaFormula<FormulaAprestad
 	private static final Integer COL_OBJ = 2;
 
 	private PanTablaQuimicosPigmentosVisualizacion panVisualizacionQuimicosPigmentos;
-	private Frame owner;
+	
 
 	public PanTablaFormulasAprestado(Frame owner, PersisterFormulaHandler persisterFormulaHandler) {
-		super(ETipoProducto.APRESTADO, persisterFormulaHandler);
-		this.owner = owner;
-		agregarBotonModificar();
+		super(owner, ETipoProducto.APRESTADO, persisterFormulaHandler);
 	}
 
 	public void ocultarBotones() {

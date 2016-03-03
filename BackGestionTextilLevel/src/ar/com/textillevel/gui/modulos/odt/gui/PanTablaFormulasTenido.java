@@ -26,15 +26,12 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 	private static final Integer COL_OBJ = 4;
 
 	private PanTablaQuimicos panQuimicos;
-	private Frame owner;
 	
 	private Color colorFixed;
 	private TipoArticulo tipoArticuloFixed;
 
 	public PanTablaFormulasTenido(Frame owner, PersisterFormulaHandler persisterFormulaHandler) {
-		super(ETipoProducto.TENIDO, persisterFormulaHandler);
-		this.owner = owner;
-		agregarBotonModificar();
+		super(owner, ETipoProducto.TENIDO, persisterFormulaHandler);
 	}
 
 	public void ocultarBotones() {

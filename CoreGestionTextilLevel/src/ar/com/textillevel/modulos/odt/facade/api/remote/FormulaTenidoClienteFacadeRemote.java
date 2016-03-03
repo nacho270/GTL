@@ -20,4 +20,6 @@ public interface FormulaTenidoClienteFacadeRemote {
 
 	public List<FormulaCliente> saveFormulas(List<FormulaCliente> formulasParaGrabar, List<Integer> idsFormulasParaBorrar, boolean grabarTambienComoDefault , String usuario) throws ValidacionException;
 
+	void copiarFormulas(List<FormulaCliente> formulasParaCopiar, Cliente cliente, String usuario) throws ValidacionException;
+
 }

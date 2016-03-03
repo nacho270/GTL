@@ -24,12 +24,9 @@ public class PanTablaFormulasEstampado extends PanelTablaFormula<FormulaEstampad
 
 
 	private PanTablaQuimicosPigmentosVisualizacion panVisualizacionQuimicosPigmentos;
-	private Frame owner;
 
 	public PanTablaFormulasEstampado(Frame owner, PersisterFormulaHandler persisterFormulaHandler) {
-		super(ETipoProducto.ESTAMPADO, persisterFormulaHandler);
-		this.owner = owner;
-		agregarBotonModificar();
+		super(owner, ETipoProducto.ESTAMPADO, persisterFormulaHandler);
 	}
 
 	public void ocultarBotones() {

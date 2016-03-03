@@ -70,5 +70,4 @@ public class FormulaEstampadoCliente extends FormulaCliente implements Serializa
 	public void accept(IFormulaClienteVisitor visitor) {
 		visitor.visit(this);
 	}
-
 }

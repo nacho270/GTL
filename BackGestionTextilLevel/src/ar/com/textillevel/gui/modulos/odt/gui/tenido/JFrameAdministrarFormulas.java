@@ -3,7 +3,6 @@ package ar.com.textillevel.gui.modulos.odt.gui.tenido;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -24,7 +23,6 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.gui.util.controles.PanelBusquedaClienteMinimal;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
 import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaTenidoClienteFacadeRemote;
@@ -51,7 +49,16 @@ public class JFrameAdministrarFormulas extends JFrame {
 	private static final String LABEL_CANCELAR = "Cancelar";
 	private static final Integer NRO_CLIENTE_01 = 1;
 
-	public JFrameAdministrarFormulas(Frame padre) {
+	private static JFrameAdministrarFormulas instance;
+
+	public static JFrameAdministrarFormulas getInstance() {
+		if (instance == null) {
+			instance = new JFrameAdministrarFormulas();
+		}
+		return instance;
+	}
+	
+	private JFrameAdministrarFormulas() {
 		setUpComponentes();
 		setUpScreen();
 		this.idsFormulasDeleteDetect = new ArrayList<Integer>();
@@ -98,7 +105,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 	private void salir() {
 		int ret = FWJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, esta seguro?", "Administrar Fórmulas");
 		if (ret == FWJOptionPane.YES_OPTION) {
-			dispose();
+			this.setVisible(false);
 		}
 	}
 
@@ -142,7 +149,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 	private void capturarSetearDatos() {
 		List<FormulaCliente> formulas = getTabPaneFormulas().getFormulas();
 		for(FormulaCliente f : formulas) {
-			if(cliente.getNroCliente().equals(NRO_CLIENTE_01)) {
+			if(cliente != null && cliente.getNroCliente().equals(NRO_CLIENTE_01)) {
 				f.setCliente(null);
 			} else {
 				f.setCliente(cliente);
@@ -217,21 +224,17 @@ public class JFrameAdministrarFormulas extends JFrame {
 		return formulaFacade;
 	}
 
-	public static void main(String[] args) {
-		System.getProperties().setProperty("applicationName", "GTL");
-		System.getProperties().setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
-		System.getProperties().setProperty("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
-		System.getProperties().setProperty("cltimezone","GMT-3");
-		if(System.getProperty("java.naming.provider.url")==null){
-			System.getProperties().setProperty("java.naming.provider.url", "localhost:1099");
+	public void mostrarVentana() {
+		if(!isVisible()){
+			setVisible(true);
 		}
-		
-		UsuarioSistema usuarioSistema = new UsuarioSistema();
-		usuarioSistema.setUsrName("admin");
-		GTLGlobalCache.getInstance().setUsuarioSistema(usuarioSistema);
-		
-		JFrameAdministrarFormulas frame = new JFrameAdministrarFormulas(null);
-		frame.setVisible(true);
-	}
+		java.awt.EventQueue.invokeLater(new Runnable() {
+		    @Override
+		    public void run() {
+		        instance.toFront();
+		        instance.repaint();
+		    }
+		});
 
+	}
 }

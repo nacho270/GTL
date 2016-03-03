@@ -2,6 +2,7 @@ package ar.com.textillevel.gui.modulos.odt.gui;
 
 import java.awt.Dialog;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ar.com.fwcommon.componentes.FWJTable;
@@ -14,6 +15,8 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 
 	private static final long serialVersionUID = -6495780340286054397L;
 
+	private static final int CANTIDAD_A_CARGAR = 3;
+	
 	private static final int CANT_COLS = 4;
 	private static final int COL_MATERIA_PRIMA = 0;
 	private static final int COL_CANTIDAD = 1;
@@ -80,10 +83,16 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 
 	@Override
 	public boolean validarAgregar() {
-		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, new ArrayList<F>(allFormulablesPosibles), formulablesAgregados(), createMateriaPrimaCantidad(), modoConsulta);
+		List<T> mpcACargar = new ArrayList<T>();
+		for(int i = 0; i < CANTIDAD_A_CARGAR; i++) {
+			mpcACargar.add(createMateriaPrimaCantidad());
+		}
+		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, new ArrayList<F>(allFormulablesPosibles), formulablesAgregados(), mpcACargar, modoConsulta);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
-			agregarElemento(dialog.getMatPrimaCantidadActual());
+			for(T m : dialog.getMateriasPrimasCantidadActuales()) {
+				agregarElemento(m);
+			}
 		}
 		return false;
 	}
@@ -98,10 +107,10 @@ public abstract class PanelTablaMateriaPrimaCantidad<F extends Formulable, T ext
 		T mpc = getElemento(filaSeleccionada);
 		List<F> formulablesAgregados = formulablesAgregados();
 		formulablesAgregados.remove(mpc.getMateriaPrima());
-		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, new ArrayList<F>(allFormulablesPosibles), formulablesAgregados, mpc, modoConsulta);
+		JDialogAgregarModificarMateriaPrimaCantidad<F, T> dialog = new JDialogAgregarModificarMateriaPrimaCantidad<F, T>(owner, descripcionTipoMateriaPrima, new ArrayList<F>(allFormulablesPosibles), formulablesAgregados, Arrays.asList(mpc), modoConsulta);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
-			T matPrimaCantidadActual = dialog.getMatPrimaCantidadActual();
+			T matPrimaCantidadActual = dialog.getMateriasPrimasCantidadActuales().get(0);
 			getTabla().setValueAt(GenericUtils.getDecimalFormat2().format(matPrimaCantidadActual.getCantidad()), filaSeleccionada, COL_CANTIDAD);
 			getTabla().setValueAt(matPrimaCantidadActual.getDescripcion(), filaSeleccionada, COL_MATERIA_PRIMA);
 			getTabla().setValueAt(matPrimaCantidadActual, filaSeleccionada, COL_OBJ);
