@@ -3,6 +3,7 @@ package ar.com.textillevel.gui.modulos.odt;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.ModuloTemplate;
 import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
@@ -35,10 +36,16 @@ public class ModuloODT extends ModuloTemplate<OrdenDeTrabajo, ModeloCabeceraODT>
 	}
 	
 	@Override
+	protected void setModuloModelActivo(ModuloModel<OrdenDeTrabajo, ModeloCabeceraODT> moduloModelActivo) {
+		super.setModuloModelActivo(moduloModelActivo);
+		FWJTable tabla = getGuiTabla().getJTable();
+		tabla.getColumnModel().getColumn(3).setCellRenderer(tabla.createCheckRenderer());
+	}
+	
+	@Override
 	protected Class<?> [] listenUpdateFor(){
 		Class<?> [] clases = new Class<?>[2];
 		clases[0] = OrdenDeTrabajo.class;
 		return clases;
 	}
-
 }
