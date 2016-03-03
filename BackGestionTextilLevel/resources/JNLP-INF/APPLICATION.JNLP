@@ -107,6 +107,7 @@
 	
 	<jar href="javax.mail-api-1.5.4.jar"/>
 	<jar href="mail-1.4.7.jar"/>
+	<jar href="guava-19.0.jar"/>
 	
     <property name="applicationName" value="GTL"/>
 	<property name="textillevel.chat.server.ip" value="192.168.1.250"/>
