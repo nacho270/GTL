@@ -144,7 +144,7 @@ public class InstruccionProcedimientoPasadasODT extends InstruccionProcedimiento
 		ipp.setVelocidad(getVelocidad());
 		for (MateriaPrimaCantidadExplotada<Quimico> qc : getQuimicosExplotados()) {
 			QuimicoCantidad quimicoCantidad = new QuimicoCantidad();
-			quimicoCantidad.setCantidad(qc.getCantidadExplotada());
+			quimicoCantidad.setCantidad(qc.getMateriaPrimaCantidadDesencadenante().getCantidad());
 			quimicoCantidad.setMateriaPrima(qc.getMateriaPrimaCantidadDesencadenante().getMateriaPrima());
 			quimicoCantidad.setUnidad(qc.getMateriaPrimaCantidadDesencadenante().getUnidad());
 			ipp.getQuimicos().add(quimicoCantidad);

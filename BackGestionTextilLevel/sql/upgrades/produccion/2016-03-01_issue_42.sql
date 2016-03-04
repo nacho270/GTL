@@ -26,3 +26,16 @@ CREATE TABLE `t_terminacion_fraccionado` (
   PRIMARY KEY (`P_ID`)
 ) ENGINE=FEDERATED CONNECTION='mysql://root:s4l3m@192.168.1.250:3306/gtl/t_terminacion_fraccionado';
 
+
+-- los anteriores ya se ejecutaron en PROD, ejecutar desde acá...
+
+ALTER TABLE `gtl`.`t_map_prima_explotada` DROP FOREIGN KEY `FKB775F9987382370D`;
+ALTER TABLE `gtl`.`t_instruccion_procedimiento` DROP FOREIGN KEY `FK3DA937A940906E2F`;
+
+EJECUTAR JBOSS CON LA NUEVA VERSION
+
+INSTALAR migrar_instr_a_instr_odt_issue_42.sql
+
+CALL MIG_INSTR_TO_INSTR_ODT();
+
+ALTER TABLE `gtl`.`t_instruccion_procedimiento` DROP COLUMN `F_PROC_ODT_P_ID`;
