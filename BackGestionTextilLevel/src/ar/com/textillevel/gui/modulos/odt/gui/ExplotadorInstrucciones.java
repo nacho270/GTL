@@ -16,15 +16,18 @@ import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.IFormulaClienteExplotadaVisitor;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.MateriaPrimaCantidadExplotada;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.IInstruccionProcedimientoVisitor;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTexto;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.QuimicoCantidad;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoPasadasODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTextoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 
 public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor {
 
-	private InstruccionProcedimiento instruccionExplotada;
+	private InstruccionProcedimientoODT instruccionExplotada;
 	private final OrdenDeTrabajo odt;
 	
 	private final Map<MateriaPrima, Float> mapaStock;
@@ -35,7 +38,7 @@ public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor
 	}
 
 	public void visit(InstruccionProcedimientoPasadas instruccion) {
-		InstruccionProcedimientoPasadas nuevo = new InstruccionProcedimientoPasadas();
+		InstruccionProcedimientoPasadasODT nuevo = new InstruccionProcedimientoPasadasODT();
 		nuevo.setAccion(instruccion.getAccion());
 		nuevo.setCantidadPasadas(instruccion.getCantidadPasadas());
 		nuevo.setTemperatura(instruccion.getTemperatura());
@@ -53,14 +56,14 @@ public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor
 	}
 
 	public void visit(InstruccionProcedimientoTexto instruccion) {
-		InstruccionProcedimientoTexto ipt = new InstruccionProcedimientoTexto();
+		InstruccionProcedimientoTextoODT ipt = new InstruccionProcedimientoTextoODT();
 		ipt.setEspecificacion(instruccion.getEspecificacion());
 		ipt.setSectorMaquina(instruccion.getSectorMaquina());
 		setInstruccionExplotada(ipt);
 	}
 
 	public void visit(InstruccionProcedimientoTipoProducto instruccion) {
-		InstruccionProcedimientoTipoProducto itpExplotada = new InstruccionProcedimientoTipoProducto();
+		InstruccionProcedimientoTipoProductoODT itpExplotada = new InstruccionProcedimientoTipoProductoODT();
 		itpExplotada.setTipoArticulo(instruccion.getTipoArticulo());
 		itpExplotada.setTipoProducto(instruccion.getTipoProducto());
 		itpExplotada.setSectorMaquina(instruccion.getSectorMaquina());
@@ -78,11 +81,11 @@ public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor
 		formulaExplotada.accept(stockChecker);
 	}
 
-	public InstruccionProcedimiento getInstruccionExplotada() {
+	public InstruccionProcedimientoODT getInstruccionExplotada() {
 		return instruccionExplotada;
 	}
 
-	public void setInstruccionExplotada(InstruccionProcedimiento instruccionExplotada) {
+	public void setInstruccionExplotada(InstruccionProcedimientoODT instruccionExplotada) {
 		this.instruccionExplotada = instruccionExplotada;
 	}
 	

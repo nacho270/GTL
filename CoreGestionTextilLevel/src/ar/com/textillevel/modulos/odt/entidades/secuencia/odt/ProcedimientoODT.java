@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.ProcedimientoTipoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.fw.ProcedimientoAbstract;
 
@@ -21,35 +22,41 @@ public class ProcedimientoODT extends ProcedimientoAbstract implements Serializa
 
 	private static final long serialVersionUID = 5323182578948508912L;
 	
-	private List<InstruccionProcedimiento> pasos;
+	private List<InstruccionProcedimientoODT> pasos;
 	
 	public ProcedimientoODT() {
-		pasos = new ArrayList<InstruccionProcedimiento>();
+		pasos = new ArrayList<InstruccionProcedimientoODT>();
 	}
 
 	public ProcedimientoODT(ProcedimientoTipoArticulo subProceso) {
 		this.setNombre(subProceso.getNombre());
-		this.setPasos(new ArrayList<InstruccionProcedimiento>(subProceso.getPasos()));
+		this.setPasos(convertToPasosODT(subProceso.getPasos()));
 		this.setTipoArticulo(subProceso.getTipoArticulo());
 	}
 
-//	@ManyToMany(fetch = FetchType.EAGER,cascade={CascadeType.ALL})
-//	@JoinTable(name = "T_PROCEDIMIENTO_ODT_INSTRUCCION_ASOC", 
-//		joinColumns = { 
-//			@JoinColumn(name = "F_PROCEDIMIENTO_P_ID") 
-//		}, 
-//		inverseJoinColumns = { 
-//			@JoinColumn(name = "F_INSTRUCCION_P_ID") 
-//		}
-//	)
 	@OneToMany(fetch=FetchType.EAGER,cascade={CascadeType.ALL})
 	@JoinColumn(name="F_PROC_ODT_P_ID",nullable=true)
 	@org.hibernate.annotations.Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	public List<InstruccionProcedimiento> getPasos() {
+	public List<InstruccionProcedimientoODT> getPasos() {
 		return pasos;
 	}
 	
-	public void setPasos(List<InstruccionProcedimiento> pasos) {
+	public void setPasos(List<InstruccionProcedimientoODT> pasos) {
 		this.pasos = pasos;
 	}
+
+	private List<InstruccionProcedimientoODT> convertToPasosODT(List<InstruccionProcedimiento> pasos) {
+		List<InstruccionProcedimientoODT> pasosTmp = new ArrayList<InstruccionProcedimientoODT>();
+		for(InstruccionProcedimiento ip : pasos) {
+			if(ip instanceof InstruccionProcedimientoPasadas) {
+				InstruccionProcedimientoPasadasODT ippodt = new InstruccionProcedimientoPasadasODT();
+				ippodt.setAccion(((InstruccionProcedimientoPasadas) ip).getAccion());
+				ippodt.setCantidadPasadas(((InstruccionProcedimientoPasadas) ip).getCantidadPasadas());
+				//TODO:
+				
+			}
+		}
+		return pasosTmp;
+	}
+
 }

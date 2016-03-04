@@ -26,8 +26,8 @@ import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
@@ -83,10 +83,10 @@ public class ImprimirODTHandler {
 
 	private boolean tieneFormula(ETipoProducto tipoProducto){
 		for(PasoSecuenciaODT paso : odt.getSecuenciaDeTrabajo().getPasos()){
-			for(InstruccionProcedimiento ins : paso.getSubProceso().getPasos()){
-				if(ins instanceof InstruccionProcedimientoTipoProducto){
-					InstruccionProcedimientoTipoProducto itp = (InstruccionProcedimientoTipoProducto)ins;
-					if(itp.getTipoProducto() == tipoProducto && itp.getFormula() == null){
+			for(IInstruccionProcedimiento ins : paso.getSubProceso().getPasos()){
+				if(ins instanceof InstruccionProcedimientoTipoProductoODT){
+					InstruccionProcedimientoTipoProductoODT itp = (InstruccionProcedimientoTipoProductoODT)ins;
+					if(itp.getTipoProducto() == tipoProducto && itp.getFormula()== null){
 						return false;
 					}
 				}

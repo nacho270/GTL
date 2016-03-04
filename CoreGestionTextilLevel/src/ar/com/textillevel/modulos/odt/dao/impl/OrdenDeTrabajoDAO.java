@@ -28,6 +28,9 @@ import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoPasadasODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
@@ -120,9 +123,11 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 			odt.getSecuenciaDeTrabajo().getPasos().size();
 			for(PasoSecuenciaODT ps : odt.getSecuenciaDeTrabajo().getPasos()){
 				ps.getSubProceso().getPasos().size();
-				doEagerIntrucciones(ps.getSubProceso().getPasos());
-				
+
+				doEagerIntruccionesODT(ps.getSubProceso().getPasos());
+
 				ps.getProceso().getInstrucciones().size();
+
 				doEagerIntrucciones(ps.getProceso().getInstrucciones());
 				
 				ps.getProceso().getNombre();
@@ -157,14 +162,13 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		}
 		return odt;
 	}
-	
-	private void doEagerIntrucciones(List<InstruccionProcedimiento> instrucciones){
-		for(InstruccionProcedimiento i : instrucciones){
-			if(i instanceof InstruccionProcedimientoPasadas){
-				((InstruccionProcedimientoPasadas)i).getQuimicos().size();
-				((InstruccionProcedimientoPasadas)i).getQuimicosExplotados().size();
-			}else if(i instanceof InstruccionProcedimientoTipoProducto){
-				InstruccionProcedimientoTipoProducto itp = (InstruccionProcedimientoTipoProducto)i;
+
+	private void doEagerIntruccionesODT(List<InstruccionProcedimientoODT> instrucciones) {
+		for(InstruccionProcedimientoODT i : instrucciones){
+			if(i instanceof InstruccionProcedimientoPasadasODT){
+				((InstruccionProcedimientoPasadasODT)i).getQuimicosExplotados().size();
+			}else if(i instanceof InstruccionProcedimientoTipoProductoODT){
+				InstruccionProcedimientoTipoProductoODT itp = (InstruccionProcedimientoTipoProductoODT)i;
 				if(itp.getFormula()!=null){
 					DoEagerFormulaExplotadaVisitor visitor = new DoEagerFormulaExplotadaVisitor(); 
 					itp.getFormula().accept(visitor);
@@ -174,6 +178,19 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 			}
 		}		
 	}
+
+	private void doEagerIntrucciones(List<InstruccionProcedimiento> instrucciones){
+		for(InstruccionProcedimiento i : instrucciones){
+			if(i instanceof InstruccionProcedimientoPasadas){
+				((InstruccionProcedimientoPasadas)i).getQuimicos().size();
+			}else if(i instanceof InstruccionProcedimientoTipoProducto){
+				InstruccionProcedimientoTipoProducto itp = (InstruccionProcedimientoTipoProducto)i;
+				itp.getTipoArticulo().getNombre();
+				itp.getTipoArticulo().getTiposArticuloComponentes().size();
+			}
+		}		
+	}	
+	
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta, Cliente cliente) {
 		String hql = " SELECT odt FROM OrdenDeTrabajo odt WHERE 1=1 "+
 					 (estado!=null?" AND odt.idEstadoODT = :idEstadoODT ":" ")+
@@ -273,10 +290,10 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		for(PasoSecuenciaODT ps : sec.getPasos()){
 			idsPasos.add(ps.getId());
 			idsProcesos.add(ps.getSubProceso().getId());
-			for(InstruccionProcedimiento ip : ps.getSubProceso().getPasos()){
+			for(InstruccionProcedimientoODT ip : ps.getSubProceso().getPasos()){
 				idsInstrucciones.add(ip.getId());
-				if(ip instanceof InstruccionProcedimientoTipoProducto){
-					InstruccionProcedimientoTipoProducto ipta = (InstruccionProcedimientoTipoProducto)ip;
+				if(ip instanceof InstruccionProcedimientoTipoProductoODT){
+					InstruccionProcedimientoTipoProductoODT ipta = (InstruccionProcedimientoTipoProductoODT)ip;
 					if(ipta.getFormula()!=null){
 						if(ipta.getFormula() instanceof FormulaEstampadoClienteExplotada){
 							FormulaEstampadoClienteExplotada fee = (FormulaEstampadoClienteExplotada)ipta.getFormula();
@@ -294,8 +311,8 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 						}
 						idsFormEx.add(ipta.getFormula().getId());
 					}
-				}else if(ip instanceof InstruccionProcedimientoPasadas){
-					InstruccionProcedimientoPasadas ipp = (InstruccionProcedimientoPasadas)ip;
+				}else if(ip instanceof InstruccionProcedimientoPasadasODT){
+					InstruccionProcedimientoPasadasODT ipp = (InstruccionProcedimientoPasadasODT)ip;
 					if(ipp.getQuimicosExplotados()!=null && !ipp.getQuimicosExplotados().isEmpty()){
 						for(MateriaPrimaCantidadExplotada<Quimico> mp : ipp.getQuimicosExplotados()){
 							idsMatPrimEx.add(mp.getId());
@@ -304,6 +321,7 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 				}
 			}
 		}
+		
 		/*
 		 * delete from t_paso_seceuncia_odt;
 update t_orden_de_trabajo set f_secuencia_p_id = null;

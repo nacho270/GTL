@@ -1,10 +1,8 @@
 package ar.com.textillevel.modulos.odt.entidades.maquinas.procesos;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -25,7 +23,6 @@ public class InstruccionProcedimientoTipoProducto extends InstruccionProcedimien
 
 	private TipoArticulo tipoArticulo;
 	private Integer idTipoProducto;
-	private FormulaClienteExplotada formula;
 	private FormulaCliente formulaTransient;
 
 	@ManyToOne
@@ -47,17 +44,6 @@ public class InstruccionProcedimientoTipoProducto extends InstruccionProcedimien
 		this.idTipoProducto = idTipoProducto;
 	}
 	
-	@ManyToOne(fetch=FetchType.EAGER,cascade={CascadeType.ALL})
-	@JoinColumn(name="F_FORMULA_CLIENTE_P_ID")
-	@org.hibernate.annotations.Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	public FormulaClienteExplotada getFormula() {
-		return formula;
-	}
-
-	public void setFormula(FormulaClienteExplotada formula) {
-		this.formula = formula;
-	}
-
 	@Transient
 	public ETipoProducto getTipoProducto() {
 		return ETipoProducto.getById(getIdTipoProducto());
@@ -79,24 +65,9 @@ public class InstruccionProcedimientoTipoProducto extends InstruccionProcedimien
 		visitor.visit(this);
 	}
 
-	public void explotarFormula(OrdenDeTrabajo odt, FormulaCliente formula){
-//		FormulaTenidoClienteExplotada ftcExplotada = new FormulaTenidoClienteExplotada();
-//		ftcExplotada.setFormulaDesencadenante(formula);
-//		for(TenidoTipoArticulo tta : ((FormulaTenidoCliente)formula).getTenidosComponentes()){
-//			TenidoTipoArticulo ttaNuevo = new TenidoTipoArticulo();
-//			ttaNuevo.setTipoArticulo(tta.getTipoArticulo());
-//			for(AnilinaCantidad ac : tta.getAnilinasCantidad()){
-//				MateriaPrimaCantidadExplotada<Anilina> acNuevo = new MateriaPrimaCantidadExplotada<Anilina>();
-//				acNuevo.setMateriaPrimaCantidadDesencadenante(ac);
-//				acNuevo.setCantidadExplotada(ac.getCantidad()*odt.getRemito().getPesoTotal().floatValue()/100);
-//				acNuevo.setTipoArticulo(tta.getTipoArticulo());
-//				ftcExplotada.getMateriasPrimas().add(acNuevo);
-//			}
-//		}
-//		setFormula(ftcExplotada);
-		CreadorFormulasVisitor creadorFormula = new CreadorFormulasVisitor(odt);
-		formula.accept(creadorFormula);
-		setFormula(creadorFormula.getFormulaExplotada());
+	@Transient
+	public String getDescrSimple() {
+		return getTipoProducto().getDescripcion().toLowerCase() + " " + getTipoArticulo().getNombre();
 	}
 
 	@Transient
@@ -107,4 +78,17 @@ public class InstruccionProcedimientoTipoProducto extends InstruccionProcedimien
 	public void setFormulaTransient(FormulaCliente formulaTransient) {
 		this.formulaTransient = formulaTransient;
 	}
+
+	@Transient
+	public FormulaClienteExplotada explotarFormula(OrdenDeTrabajo odt, FormulaCliente formula){
+		CreadorFormulasVisitor creadorFormula = new CreadorFormulasVisitor(odt);
+		formula.accept(creadorFormula);
+		return creadorFormula.getFormulaExplotada();
+	}
+
+	@Transient
+	public String getDescrDetallada() {
+		return "[NO IMPLEMENTADO]";
+	}
+
 }

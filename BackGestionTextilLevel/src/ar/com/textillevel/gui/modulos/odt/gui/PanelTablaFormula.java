@@ -73,7 +73,7 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 			btnCopiar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_copiar_moderno.png", "ar/com/textillevel/imagenes/b_copiar_moderno_des.png");
 			btnCopiar.setEnabled(false);
 			btnCopiar.addActionListener(new ActionListener() {
-				@Override
+
 				public void actionPerformed(ActionEvent e) {
 					JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null);
 					GuiUtil.centrar(dialogSeleccionarCliente);

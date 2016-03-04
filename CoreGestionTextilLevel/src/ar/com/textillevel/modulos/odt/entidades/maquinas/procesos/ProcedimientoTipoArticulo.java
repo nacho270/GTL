@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import ar.com.textillevel.modulos.odt.entidades.secuencia.fw.ProcedimientoAbstract;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.ProcedimientoODT;
 
 @Entity
@@ -29,7 +30,7 @@ public class ProcedimientoTipoArticulo extends ProcedimientoAbstract implements 
 	
 	public ProcedimientoTipoArticulo(ProcedimientoODT procODT){
 		this.setNombre(procODT.getNombre());
-		this.setPasos(new ArrayList<InstruccionProcedimiento>(procODT.getPasos()));
+		this.setPasos(toInstruccionesFromInstruccionesODT(procODT.getPasos()));
 		this.setTipoArticulo(procODT.getTipoArticulo());
 	}
 
@@ -50,4 +51,13 @@ public class ProcedimientoTipoArticulo extends ProcedimientoAbstract implements 
 	public void setPasos(List<InstruccionProcedimiento> pasos) {
 		this.pasos = pasos;
 	}
+
+	private List<InstruccionProcedimiento> toInstruccionesFromInstruccionesODT(List<InstruccionProcedimientoODT> instruccionesODT) {
+		List<InstruccionProcedimiento> instruccionList = new ArrayList<InstruccionProcedimiento>();
+		for(InstruccionProcedimientoODT iodt : instruccionesODT) {
+			instruccionList.add(iodt.toInstruccionProcedimiento());
+		}
+		return instruccionList;
+	}
+
 }

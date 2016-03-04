@@ -1,7 +1,6 @@
 package ar.com.textillevel.modulos.odt.facade.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -212,7 +211,6 @@ public class FormulaTenidoClienteFacade implements FormulaTenidoClienteFacadeRem
 		}
 	}
 
-	@Override
 	public void copiarFormulas(List<FormulaCliente> formulasParaCopiar, Cliente cliente, String usuario) throws ValidacionException {
 		CloneFormulaVisitor cloneVisitor = new CloneFormulaVisitor();
 		List<FormulaCliente> formulasClonandas = new ArrayList<FormulaCliente>();
@@ -222,6 +220,6 @@ public class FormulaTenidoClienteFacade implements FormulaTenidoClienteFacadeRem
 			formulaClonada.setCliente(cliente);
 			formulasClonandas.add(formulaClonada);
 		}
-		saveFormulas(formulasClonandas, Collections.emptyList(), false, usuario);
+		saveFormulas(formulasClonandas, new ArrayList<Integer>(0), false, usuario);
 	}
 }

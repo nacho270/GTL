@@ -15,8 +15,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
-import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.MateriaPrimaCantidadExplotada;
 import ar.com.textillevel.modulos.odt.enums.ETipoInstruccionProcedimiento;
 
 @Entity
@@ -29,12 +27,10 @@ public class InstruccionProcedimientoPasadas extends InstruccionProcedimiento {
 	private Float temperatura;
 	private Float velocidad;
 	private List<QuimicoCantidad> quimicos;
-	private List<MateriaPrimaCantidadExplotada<Quimico>> quimicosExplotados;
 	private AccionProcedimiento accion;
 
 	public InstruccionProcedimientoPasadas() {
 		quimicos = new ArrayList<QuimicoCantidad>();
-		quimicosExplotados = new ArrayList<MateriaPrimaCantidadExplotada<Quimico>>();
 	}
 
 	@Column(name="A_CANT_PASADAS",nullable=true)
@@ -97,13 +93,33 @@ public class InstruccionProcedimientoPasadas extends InstruccionProcedimiento {
 		visitor.visit(this);
 	}
 
-	@OneToMany(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
-	@JoinColumn(name="F_MAT_PRIM_EXP_P_ID",nullable=true)
-	public List<MateriaPrimaCantidadExplotada<Quimico>> getQuimicosExplotados() {
-		return quimicosExplotados;
+	@Transient
+	public String getDescrSimple() {
+		String descrQuimicos = "";
+		if (!getQuimicos().isEmpty()) {
+			descrQuimicos += "con ";
+			if (getQuimicos().size() == 1) {
+				QuimicoCantidad quimicoCantidad = getQuimicos().get(0);
+				descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion();
+			} else {
+				for (int i = 0; i < getQuimicos().size(); i++) {
+					QuimicoCantidad quimicoCantidad = getQuimicos().get(i);
+					if (i != 0 && i == getQuimicos().size() - 1) {
+						descrQuimicos = descrQuimicos.substring(0, descrQuimicos.length() - 2);
+						descrQuimicos += " y ";
+						descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion();
+					} else {
+						descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion() + ", ";
+					}
+				}
+			}
+		}
+		return getCantidadPasadas() + " vuelta(s)/pasada(s) a " + getTemperatura() + "ºC " + " y " + getVelocidad() + " M/S " + descrQuimicos;
 	}
 
-	public void setQuimicosExplotados(List<MateriaPrimaCantidadExplotada<Quimico>> quimicosExplotados) {
-		this.quimicosExplotados = quimicosExplotados;
+	@Transient
+	public String getDescrDetallada() {
+		return "[NO SE DEBERIA VER EN NINGUN LADO]";
 	}
+
 }

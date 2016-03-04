@@ -27,7 +27,9 @@ import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
 import ar.com.textillevel.gui.util.panels.PanelTablaAgregarQuitarSubirBajarModificar;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 
 public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
@@ -120,7 +122,7 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 					getBotonSubir().setEnabled(rowSelected>0 && getElemento(rowSelected - 1) != null &&  getElemento(rowSelected) != null);
 					getBotonBajar().setEnabled(rowSelected<getTabla().getRowCount()-2 && getElemento(rowSelected + 1) != null &&  getElemento(rowSelected) != null);
 					habilitarBotones(rowSelected);
-					boolean enable = getInstruccion(rowSelected)!=null && getInstruccion(rowSelected) instanceof InstruccionProcedimientoTipoProducto;
+					boolean enable = getInstruccion(rowSelected)!=null && getInstruccion(rowSelected) instanceof InstruccionProcedimientoTipoProductoODT;
 					if(rowSelected!=-1 && e.getClickCount() == 2 && enable){
 						getBtnAsignarFormula().doClick();
 					}
@@ -149,7 +151,7 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 		private void habilitarBotones(int rowSelected) {
 			getBotonSubir().setEnabled(!modoConsulta && rowSelected>0 && getElemento(rowSelected - 1) != null &&  getElemento(rowSelected) != null);
 			getBotonBajar().setEnabled(!modoConsulta && rowSelected<getTabla().getRowCount()-2 && getElemento(rowSelected + 1) != null &&  getElemento(rowSelected) != null);
-			boolean enable = !modoConsulta && getInstruccion(rowSelected)!=null && getInstruccion(rowSelected) instanceof InstruccionProcedimientoTipoProducto;
+			boolean enable = !modoConsulta && getInstruccion(rowSelected)!=null && getInstruccion(rowSelected) instanceof InstruccionProcedimientoTipoProductoODT;
 			getBtnAsignarFormula().setEnabled(enable);
 			getBotonAgregar().setEnabled(!modoConsulta && getInstruccion(rowSelected)!=null);
 			getBotonQuitar().setEnabled(!modoConsulta && getInstruccion(rowSelected)!=null);
@@ -162,12 +164,12 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_SECTOR] = "<html><b>" + elemento.getSector().getNombre().toUpperCase().replace("SECTOR ", "")+ "</b></html>";
 			row[COL_PROCESO] = elemento.getProceso().getNombre() + " / " + elemento.getSubProceso().getNombre();
-			Iterator<InstruccionProcedimiento> iteratorInstrucciones = elemento.getSubProceso().getPasos().iterator();
+			Iterator<InstruccionProcedimientoODT> iteratorInstrucciones = elemento.getSubProceso().getPasos().iterator();
 			if(iteratorInstrucciones.hasNext()){
 				int startIndex = getTabla().getRowCount() + 1;
 				int ordenInstruccion = 0;
 				do {
-					InstruccionProcedimiento instruccion = iteratorInstrucciones.next();
+					InstruccionProcedimientoODT instruccion = iteratorInstrucciones.next();
 					row[COL_PASO] = InstruccionProcedimientoRenderer.renderInstruccionASHTML(instruccion,true);
 					row[COL_OBS] = instruccion.getObservaciones();
 					row[COL_OBJ] = elemento;
@@ -204,10 +206,10 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			return null;
 		}
 		
-		protected InstruccionProcedimiento getInstruccion(int fila){
+		protected InstruccionProcedimientoODT getInstruccion(int fila){
 			if(fila!=-1){
 				if(getTabla().getValueAt(fila, COL_OBJ_INST)!=null){
-					return (InstruccionProcedimiento)getTabla().getValueAt(fila, COL_OBJ_INST);
+					return (InstruccionProcedimientoODT)getTabla().getValueAt(fila, COL_OBJ_INST);
 				}
 			}
 			return null;
@@ -285,29 +287,31 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			}
 			return false;
 		}
-		
+
 		@Override
 		protected void botonModificarPresionado(int filaSeleccionada) {
 			PasoSecuenciaODT paso = getElemento(getTabla().getSelectedRow());
-			JDialogSeleccionarInstruccion dialog = new JDialogSeleccionarInstruccion(JDialogVisualizarPasosSecuenciaODT.this, getOdt().getProductoArticulo().getArticulo().getTipoArticulo(),getInstruccion(filaSeleccionada), paso.getSector().getSectorMaquina(), paso.getProceso());
+			InstruccionProcedimientoODT instruccionODT = getInstruccion(filaSeleccionada);
+			InstruccionProcedimiento instruccionProcedimiento = instruccionODT.toInstruccionProcedimiento();
+			JDialogSeleccionarInstruccion dialog = new JDialogSeleccionarInstruccion(JDialogVisualizarPasosSecuenciaODT.this, getOdt().getProductoArticulo().getArticulo().getTipoArticulo(),instruccionProcedimiento, paso.getSector().getSectorMaquina(), paso.getProceso());
 			dialog.setVisible(true);
 			if(dialog.isAcepto()){
-				InstruccionProcedimiento instruccion = dialog.getInstruccionFinal(); 
+				IInstruccionProcedimiento instruccion = dialog.getInstruccionFinal(); 
 				ExplotadorInstrucciones explotador = new ExplotadorInstrucciones(getOdt());
-				instruccion.accept(explotador);
+				((InstruccionProcedimiento)instruccion).accept(explotador);
 				PasoSecuenciaODT pasoAAgregarleInstruccion = getPasos().get(getOrdenPaso(getTabla().getSelectedRow()));
 				pasoAAgregarleInstruccion.getSubProceso().getPasos().set(getOrdenInstruccion(filaSeleccionada),explotador.getInstruccionExplotada());
 				refreshTable();
 			}
 		}
-		
+
 		@Override
 		protected void botonSubirPresionado() {
 			int selectedRow = getTabla().getSelectedRow();
 			if(selectedRow > 0 && selectedRow<getTabla().getRowCount()){
 				PasoSecuenciaODT pasoAAgregarleInstruccion = getPasos().get(getOrdenPaso(selectedRow));
-				InstruccionProcedimiento instruccionABajar = getInstruccion(selectedRow-1);
-				InstruccionProcedimiento instruccionASubir = getInstruccion(selectedRow);
+				InstruccionProcedimientoODT instruccionABajar = pasoAAgregarleInstruccion.getSubProceso().getPasos().get(selectedRow-1);
+				InstruccionProcedimientoODT instruccionASubir = pasoAAgregarleInstruccion.getSubProceso().getPasos().get(selectedRow);
 				pasoAAgregarleInstruccion.getSubProceso().getPasos().set(getOrdenInstruccion(selectedRow),instruccionABajar);
 				pasoAAgregarleInstruccion.getSubProceso().getPasos().set(getOrdenInstruccion(selectedRow)-1, instruccionASubir);
 				refreshTable();
@@ -322,8 +326,8 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			int selectedRow = getTabla().getSelectedRow();
 			if(selectedRow<getTabla().getRowCount()){
 				PasoSecuenciaODT pasoAAgregarleInstruccion = getPasos().get(getOrdenPaso(selectedRow));
-				InstruccionProcedimiento instruccionABajar = getInstruccion(selectedRow);
-				InstruccionProcedimiento instruccionASubir = getInstruccion(selectedRow+1);
+				InstruccionProcedimientoODT instruccionABajar = pasoAAgregarleInstruccion.getSubProceso().getPasos().get(selectedRow);
+				InstruccionProcedimientoODT instruccionASubir = pasoAAgregarleInstruccion.getSubProceso().getPasos().get(selectedRow+1);
 				pasoAAgregarleInstruccion.getSubProceso().getPasos().set(getOrdenInstruccion(selectedRow),instruccionASubir);
 				pasoAAgregarleInstruccion.getSubProceso().getPasos().set(getOrdenInstruccion(selectedRow)+1, instruccionABajar);
 				refreshTable();
@@ -339,17 +343,18 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 				btnAsignarFormula.setEnabled(false);
 				btnAsignarFormula.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						TipoArticulo tipoArticulo = ((InstruccionProcedimientoTipoProducto)getInstruccion(getTabla().getSelectedRow())).getTipoArticulo();
+						InstruccionProcedimientoTipoProductoODT instruccionProcedimientoTipoProductoODT = (InstruccionProcedimientoTipoProductoODT)getInstruccion(getTabla().getSelectedRow());
+						TipoArticulo tipoArticulo = instruccionProcedimientoTipoProductoODT.getTipoArticulo();
 						ODTDatosMostradoHelper odtHelper = new ODTDatosMostradoHelper(odt);
 						JDialogSeleccionarFormula d = new JDialogSeleccionarFormula(JDialogVisualizarPasosSecuenciaODT.this.padre, getOdt().getRemito().getCliente(), odtHelper.getColor(), tipoArticulo);
 						d.setVisible(true);
 						if(d.isAcepto()){
 							//seteo la formula en la instruccion seleccionada
-							InstruccionProcedimientoTipoProducto instruccionElegida = (InstruccionProcedimientoTipoProducto)getInstruccion(getTabla().getSelectedRow());
-//							instruccionElegida.setFormula(d.getFormulaElegida());
-							instruccionElegida.explotarFormula(getOdt(), d.getFormulaElegida());
+							instruccionProcedimientoTipoProductoODT.explotarFormula(getOdt(), d.getFormulaElegida());
 							PasoSecuenciaODT pasoAModificar = getPasos().get(getOrdenPaso(getTabla().getSelectedRow()));
-							pasoAModificar.getSubProceso().getPasos().set(getOrdenInstruccion(getTabla().getSelectedRow()), instruccionElegida);
+							InstruccionProcedimientoTipoProductoODT instruccionProcedimientoODT = (InstruccionProcedimientoTipoProductoODT)pasoAModificar.getSubProceso().getPasos().get(getOrdenInstruccion(getTabla().getSelectedRow()));
+							instruccionProcedimientoODT.setFormula(instruccionProcedimientoTipoProductoODT.getFormula());
+							pasoAModificar.getSubProceso().getPasos().set(getOrdenInstruccion(getTabla().getSelectedRow()), instruccionProcedimientoODT);
 							refreshTable();
 						}
 					}
@@ -357,14 +362,14 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			}
 			return btnAsignarFormula;
 		}
-		
+
 		public JButton getBtnObservaciones() {
 			if(btnObservaciones == null){
 				btnObservaciones = BossEstilos.createButton("ar/com/textillevel/imagenes/b_nota.png", "ar/com/textillevel/imagenes/b_nota_des.png");
 				btnObservaciones.setEnabled(false);
 				btnObservaciones.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						InstruccionProcedimiento instruccion = getInstruccion(getTabla().getSelectedRow());
+						InstruccionProcedimientoODT instruccion = getInstruccion(getTabla().getSelectedRow());
 						String observaciones = JOptionPane.showInputDialog(JDialogVisualizarPasosSecuenciaODT.this, "Observaciones", instruccion.getObservaciones());
 						if(observaciones!=null){
 							instruccion.setObservaciones(observaciones);
@@ -375,6 +380,7 @@ public class JDialogVisualizarPasosSecuenciaODT  extends JDialog {
 			}
 			return btnObservaciones;
 		}
+
 	}
 
 	public boolean isAcepto() {

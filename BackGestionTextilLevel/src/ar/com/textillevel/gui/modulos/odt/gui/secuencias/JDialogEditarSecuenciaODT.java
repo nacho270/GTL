@@ -30,8 +30,8 @@ import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarPasosSecuenciaODT
 import ar.com.textillevel.gui.modulos.odt.gui.PanCabeceraDatosODT;
 import ar.com.textillevel.gui.modulos.odt.impresion.ImprimirODTHandler;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -170,18 +170,18 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 
 	private boolean tieneFormula(ETipoProducto tipoProducto){
 		for(PasoSecuenciaODT paso : odt.getSecuenciaDeTrabajo().getPasos()){
-			for(InstruccionProcedimiento ins : paso.getSubProceso().getPasos()){
-				if(ins instanceof InstruccionProcedimientoTipoProducto){
-					InstruccionProcedimientoTipoProducto itp = (InstruccionProcedimientoTipoProducto)ins;
-					if(itp.getTipoProducto() == tipoProducto && itp.getFormula() == null){
+			for(InstruccionProcedimientoODT ins : paso.getSubProceso().getPasos()){
+				if(ins instanceof InstruccionProcedimientoTipoProductoODT){
+					InstruccionProcedimientoTipoProductoODT itp = (InstruccionProcedimientoTipoProductoODT)ins;
+					if(itp.getTipoProducto() == tipoProducto && itp.getFormula() == null) {
 						return false;
 					}
 				}
 			}
 		}
 		return true;
-	}
-
+	}	
+	
 	public PanelTablaPasosSecuencia getPanelTablaPasos() {
 		if(panelTablaPasos == null){
 			panelTablaPasos = new PanelTablaPasosSecuencia();

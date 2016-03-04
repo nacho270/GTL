@@ -1,4 +1,4 @@
-package ar.com.textillevel.modulos.odt.entidades.maquinas.procesos;
+package ar.com.textillevel.modulos.odt.entidades.secuencia.odt;
 
 import java.io.Serializable;
 
@@ -6,30 +6,34 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.enums.ETipoInstruccionProcedimiento;
 
 
 @Entity
-@Table(name = "T_INSTRUCCION_PROCEDIMIENTO")
+@Table(name = "T_INSTRUCCION_PROCEDIMIENTO_ODT")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING,name="DISC")
-public abstract class InstruccionProcedimiento implements Serializable, IInstruccionProcedimiento {
+public abstract class InstruccionProcedimientoODT implements Serializable, IInstruccionProcedimiento {
 
 	private static final long serialVersionUID = 7241841347552170556L;
 
 	private Integer id;
 	private Byte idTipoSector;
 	private String observaciones;
+	private ProcedimientoODT procedimiento;
 
 	@Id
 	@Column(name="P_ID")
@@ -51,6 +55,9 @@ public abstract class InstruccionProcedimiento implements Serializable, IInstruc
 		this.idTipoSector = idTipoSector;
 	}
 
+	/* (non-Javadoc)
+	 * @see ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento#getObservaciones()
+	 */
 	@Column(name="A_OBSERVACIONES",nullable=true)
 	public String getObservaciones() {
 		return observaciones;
@@ -60,6 +67,22 @@ public abstract class InstruccionProcedimiento implements Serializable, IInstruc
 		this.observaciones = observaciones;
 	}
 	
+	/* (non-Javadoc)
+	 * @see ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento#getProcedimiento()
+	 */
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="F_PROC_ODT_P_ID",nullable=true,insertable=false, updatable=false)
+	public ProcedimientoODT getProcedimiento() {
+		return procedimiento;
+	}
+	
+	public void setProcedimiento(ProcedimientoODT procedimiento) {
+		this.procedimiento = procedimiento;
+	}
+
+	/* (non-Javadoc)
+	 * @see ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento#getSectorMaquina()
+	 */
 	@Transient
 	public ESectorMaquina getSectorMaquina(){
 		return ESectorMaquina.getById(getIdTipoSector());
@@ -69,11 +92,11 @@ public abstract class InstruccionProcedimiento implements Serializable, IInstruc
 		setIdTipoSector(sector.getId());
 	}
 
+	/* (non-Javadoc)
+	 * @see ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento#getTipo()
+	 */
 	@Transient
 	public abstract ETipoInstruccionProcedimiento getTipo();
-
-	@Transient
-	public abstract void accept(IInstruccionProcedimientoVisitor visitor);
 
 	@Override
 	public int hashCode() {
@@ -91,7 +114,7 @@ public abstract class InstruccionProcedimiento implements Serializable, IInstruc
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		InstruccionProcedimiento other = (InstruccionProcedimiento) obj;
+		InstruccionProcedimientoODT other = (InstruccionProcedimientoODT) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -99,5 +122,11 @@ public abstract class InstruccionProcedimiento implements Serializable, IInstruc
 			return false;
 		return true;
 	}
+
+	@Transient
+	public abstract void accept(IInstruccionProcedimientoODTVisitor visitor);
+
+	@Transient
+	public abstract InstruccionProcedimiento toInstruccionProcedimiento();
 
 }

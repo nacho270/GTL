@@ -34,6 +34,7 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.generica.PasoSecuencia;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.generica.SecuenciaTipoProducto;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.SecuenciaTipoProductoFacadeRemote;
@@ -50,7 +51,7 @@ public class JDialogSeleccionarCrearSecuenciaDeTrabajo extends JDialog {
 	private OrdenDeTrabajo odt;
 	private PanelVisualizadorSecuencias panelVisualizador;
 	
-	private final Map<PasoSecuenciaODT, List<InstruccionProcedimiento>> mapaPasosOdt = new LinkedHashMap<PasoSecuenciaODT, List<InstruccionProcedimiento>>();
+	private final Map<PasoSecuenciaODT, List<InstruccionProcedimientoODT>> mapaPasosOdt = new LinkedHashMap<PasoSecuenciaODT, List<InstruccionProcedimientoODT>>();
 
 	private boolean acepto;
 	private SecuenciaTipoProducto secuenciaElegida;
@@ -154,12 +155,17 @@ public class JDialogSeleccionarCrearSecuenciaDeTrabajo extends JDialog {
 						Map<MateriaPrima, Float> mapaStock = new HashMap<MateriaPrima, Float>();
 						for(PasoSecuencia paso : getSecuenciaElegida().getPasos()){
 							PasoSecuenciaODT pasoODT = paso.toPasoODT();
-							List<InstruccionProcedimiento> instrucciones = pasoODT.getSubProceso().getPasos();
+							List<InstruccionProcedimiento> instrucciones = paso.getSubProceso().getPasos();
+							List<InstruccionProcedimientoODT> instruccionesODT = new ArrayList<InstruccionProcedimientoODT>(instrucciones.size());
 							ExplotadorInstrucciones explotador = new ExplotadorInstrucciones(getOdt());
 							for(int i = 0; i< instrucciones.size();i++){
 								InstruccionProcedimiento inst = instrucciones.get(i);
 								inst.accept(explotador);
-								instrucciones.set(i, explotador.getInstruccionExplotada());
+								if(instruccionesODT.size() == i) {
+									instruccionesODT.add(explotador.getInstruccionExplotada());
+								} else {
+									instruccionesODT.set(i, explotador.getInstruccionExplotada());
+								}
 								for(MateriaPrima mp : explotador.getMapaStock().keySet()){
 									if(mapaStock.get(mp) == null){
 										mapaStock.put(mp, 0f);
@@ -167,8 +173,12 @@ public class JDialogSeleccionarCrearSecuenciaDeTrabajo extends JDialog {
 									mapaStock.put(mp, mapaStock.get(mp) + explotador.getMapaStock().get(mp));
 								}
 							}
-							mapaPasosOdt.put(pasoODT, instrucciones);
+							mapaPasosOdt.put(pasoODT, instruccionesODT);
+							
+							pasoODT.getSubProceso().getPasos().addAll(instruccionesODT);
 						}
+						
+						
 						tratarStock(precioMPFacade, mapaStock);
 					}else{
 						FWJOptionPane.showErrorMessage(JDialogSeleccionarCrearSecuenciaDeTrabajo.this, "Debe elegir una secuencia", "Error");

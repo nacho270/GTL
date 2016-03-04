@@ -7,10 +7,7 @@ import java.util.regex.Pattern;
 
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
-import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
-import ar.com.textillevel.entidades.ventas.materiaprima.Pigmento;
-import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaEstampadoClienteExplotada;
@@ -18,32 +15,32 @@ import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.IFormulaClienteExplotadaVisitor;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.MateriaPrimaCantidadExplotada;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.FormulaTenidoCliente;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.IInstruccionProcedimientoVisitor;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTexto;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoTipoProducto;
-import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.QuimicoCantidad;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimientoODTVisitor;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoPasadasODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTextoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 
 public class InstruccionProcedimientoRenderer {
 
 	public static interface FiltroInstrucciones{
-		public boolean esValida(InstruccionProcedimiento instruccion);
+		public boolean esValida(IInstruccionProcedimiento instruccion);
 	}
-	
-	public static String renderInstruccionASHTML(InstruccionProcedimiento elemento) {
+
+	public static String renderInstruccionASHTML(IInstruccionProcedimiento elemento) {
 		return renderInstruccionASHTML(elemento, false);
 	}
 
-	public static String renderInstruccionesASHTML(List<InstruccionProcedimiento> instrucciones, boolean explotadas, FiltroInstrucciones filtro) {
+	public static String renderInstruccionesASHTML(List<InstruccionProcedimientoODT> instrucciones, boolean explotadas, FiltroInstrucciones filtro) {
 		String html = "";
-		for(InstruccionProcedimiento ins : instrucciones){
+		for(InstruccionProcedimientoODT ins : instrucciones){
 			if(filtro == null || filtro.esValida(ins)){
 				String htmlInstruccion = renderInstruccionASHTML(ins, explotadas).replaceAll("<html>", "");
-				if(ins instanceof InstruccionProcedimientoTipoProducto && ((InstruccionProcedimientoTipoProducto)ins).getTipoProducto() == ETipoProducto.ESTAMPADO && ((InstruccionProcedimientoTipoProducto)ins).getFormula() == null){
-					InstruccionProcedimientoTipoProducto itp = (InstruccionProcedimientoTipoProducto) ins;
+				if(ins instanceof InstruccionProcedimientoTipoProductoODT && ((InstruccionProcedimientoTipoProductoODT)ins).getTipoProducto() == ETipoProducto.ESTAMPADO && ((InstruccionProcedimientoTipoProductoODT)ins).getFormula() == null){
+					InstruccionProcedimientoTipoProductoODT itp = (InstruccionProcedimientoTipoProductoODT) ins;
 					String descripcion = "<b>"+itp.getTipoProducto().getDescripcion().toUpperCase()+"</b>" + " " + itp.getTipoArticulo().getNombre().toUpperCase();
 					htmlInstruccion = htmlInstruccion.replace(descripcion, "VER HOJA ESTAMPADO");
 				}
@@ -58,9 +55,9 @@ public class InstruccionProcedimientoRenderer {
 		return "<html>" + html + "</html>";
 	}
 	
-	public static String renderObservacionesInstruccionesASHTML(List<InstruccionProcedimiento> instrucciones, FiltroInstrucciones filtroInstrucciones) {
+	public static String renderObservacionesInstruccionesASHTML(List<InstruccionProcedimientoODT> instrucciones, FiltroInstrucciones filtroInstrucciones) {
 		String html = "";
-		for(InstruccionProcedimiento ins : instrucciones){
+		for(IInstruccionProcedimiento ins : instrucciones){
 			if(!StringUtil.isNullOrEmpty(ins.getObservaciones()) && (filtroInstrucciones == null || filtroInstrucciones.esValida(ins))){
 				html += "* " + ins.getObservaciones() + "<br>";
 			}
@@ -71,23 +68,19 @@ public class InstruccionProcedimientoRenderer {
 		return "<html>" + html + "</html>";
 	}
 	
-	public static String getDescripcionInstruccion(InstruccionProcedimiento instruccion) {
-		DescripcionNormalInstruccionVisitor visitor = new InstruccionProcedimientoRenderer.DescripcionNormalInstruccionVisitor();
-		instruccion.accept(visitor);
-		return visitor.getDescripcion();
+	public static String getDescripcionInstruccion(IInstruccionProcedimiento instruccion) {
+		return instruccion.getDescrSimple();
 	}
 
-	public static String getDescripcionDetalladaInstruccion(InstruccionProcedimiento instruccion) {
-		DescripcionDetalladaInstruccionVisitor visitor = new InstruccionProcedimientoRenderer.DescripcionDetalladaInstruccionVisitor();
-		instruccion.accept(visitor);
-		return visitor.getDescripcion();
+	public static String getDescripcionDetalladaInstruccion(IInstruccionProcedimiento instruccion) {
+		return instruccion.getDescrDetallada();
 	}
 
-	public static String renderInstruccionASHTML(InstruccionProcedimiento elemento, boolean explotada) {
+	public static String renderInstruccionASHTML(IInstruccionProcedimiento elemento, boolean explotada) {
 		String descripcion = "";
-		if (elemento instanceof InstruccionProcedimientoPasadas) {
-			if (((InstruccionProcedimientoPasadas) elemento).getAccion() != null) {
-				descripcion += "<b>" + ((InstruccionProcedimientoPasadas) elemento).getAccion().getNombre() + "</b><br>";
+		if (elemento instanceof InstruccionProcedimientoPasadasODT) {
+			if (((InstruccionProcedimientoPasadasODT) elemento).getAccion() != null) {
+				descripcion += "<b>" + ((InstruccionProcedimientoPasadasODT) elemento).getAccion().getNombre() + "</b><br>";
 			}
 		}
 		if (explotada) {
@@ -111,148 +104,6 @@ public class InstruccionProcedimientoRenderer {
 		return "<html>" + descripcion + "</html>";
 	}
 
-	private static abstract class DescripcionInstruccionVisitor implements IInstruccionProcedimientoVisitor {
-
-		private String descripcion;
-
-		public String getDescripcion() {
-			return descripcion;
-		}
-
-		public void setDescripcion(String descripcion) {
-			this.descripcion = descripcion;
-		}
-	}
-
-	private static class DescripcionDetalladaInstruccionVisitor extends DescripcionInstruccionVisitor {
-
-		public void visit(InstruccionProcedimientoPasadas instruccion) {
-			String descrQuimicos = "";
-			if (!instruccion.getQuimicosExplotados().isEmpty()) {
-				descrQuimicos += "con ";
-				descrQuimicos += generarDescripcion(instruccion.getQuimicosExplotados(),null);
-			}
-			setDescripcion(instruccion.getCantidadPasadas() + " vuelta(s)/pasada(s) a " + instruccion.getTemperatura() + " ºC " + ". Velocidad: " + instruccion.getVelocidad() + " M/S " + descrQuimicos);
-		}
-
-		public void visit(InstruccionProcedimientoTexto instruccion) {
-			setDescripcion(instruccion.getEspecificacion());
-		}
-
-		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
-			String descripcion = instruccion.getTipoProducto().getDescripcion().toLowerCase() + " " + instruccion.getTipoArticulo().getNombre();
-			String descripcionFormula = "";
-			if(instruccion.getFormula()!=null){
-				DescripcionDetalladaInstruccionTipoProductoVisitor visitor = new DescripcionDetalladaInstruccionTipoProductoVisitor();
-				instruccion.getFormula().accept(visitor);
-				descripcionFormula = visitor.getDescripcion();
-			}
-			setDescripcion(descripcion + descripcionFormula);
-		}
-	}
-	
-	private static <T extends Formulable> String generarDescripcion(List<MateriaPrimaCantidadExplotada<T>> materiasPrimasExplotadas, EUnidad unidad){
-		String descripcion = "";
-		if(materiasPrimasExplotadas.size() == 1){
-			MateriaPrimaCantidadExplotada<T> mpCantidad  = materiasPrimasExplotadas.get(0);
-			String descripcionUnidad = (unidad!=null&& unidad == EUnidad.PORCENTAJE?unidad.getDescripcion().replace(" (KG)", ""):mpCantidad.getMateriaPrimaCantidadDesencadenante().getUnidad().getDescripcion());
-			descripcion += GenericUtils.getDecimalFormat3().format(mpCantidad.getMateriaPrimaCantidadDesencadenante().getCantidad()) + " " + descripcionUnidad + " - " + mpCantidad.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mpCantidad.getCantidadExplotada()) + " " + mpCantidad.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion();
-		}else {
-			for (int i = 0; i < materiasPrimasExplotadas.size(); i++) {
-				MateriaPrimaCantidadExplotada<T> mpCantidad  = materiasPrimasExplotadas.get(i);
-				String descripcionUnidad = (unidad!=null&& unidad == EUnidad.PORCENTAJE?unidad.getDescripcion().replace(" (KG)", ""):mpCantidad.getMateriaPrimaCantidadDesencadenante().getUnidad().getDescripcion());
-				if (i != 0 && i == materiasPrimasExplotadas.size() - 1) {
-					descripcion = descripcion.substring(0, descripcion.length() - 2);
-					descripcion += " y ";
-					descripcion += GenericUtils.getDecimalFormat3().format(mpCantidad.getMateriaPrimaCantidadDesencadenante().getCantidad()) + " " + descripcionUnidad + " - " + mpCantidad.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mpCantidad.getCantidadExplotada()) + " " + mpCantidad.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion();
-				} else {
-					descripcion += GenericUtils.getDecimalFormat3().format(mpCantidad.getMateriaPrimaCantidadDesencadenante().getCantidad()) + " " + descripcionUnidad + " - " + mpCantidad.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mpCantidad.getCantidadExplotada()) + " " + mpCantidad.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + ", ";
-				}
-			}
-		}
-		return descripcion;
-	}
-
-	
-	private static class DescripcionDetalladaInstruccionTipoProductoVisitor implements IFormulaClienteExplotadaVisitor{
-
-		private String descripcion;
-		
-		public void visit(FormulaEstampadoClienteExplotada fece) {
-			if( (fece.getPigmentos()==null || fece.getPigmentos().isEmpty()) && ((fece.getQuimicos()==null || fece.getQuimicos().isEmpty())) ){
-				return;
-			}
-			String descripcion ="con ";
-			String descripcionPigmentos = "";
-			String descripcionQuimicos = "";
-			if(fece.getPigmentos()!=null && fece.getPigmentos().isEmpty()){
-				List<MateriaPrimaCantidadExplotada<Pigmento>> pigmentos = fece.getPigmentos();
-				descripcionPigmentos = generarDescripcion(pigmentos,null);
-			}
-			
-			if(fece.getQuimicos()!=null && fece.getQuimicos().isEmpty()){
-				List<MateriaPrimaCantidadExplotada<Quimico>> quimicos = fece.getQuimicos();
-				descripcionQuimicos = generarDescripcion(quimicos,null);
-			}
-			if(!descripcionPigmentos.equals("")){
-				descripcion += descripcionPigmentos;
-			}
-			if(!descripcionQuimicos.equals("")){
-				descripcion +="Y con " + descripcionPigmentos;
-			}
-			setDescripcion(descripcion);
-		}
-		
-		public void visit(FormulaTenidoClienteExplotada ftce) {
-			String descripcionAnilinas ="con ";
-			List<MateriaPrimaCantidadExplotada<Anilina>> materiasPrimasExplotadas = ftce.getMateriasPrimas();
-			descripcionAnilinas += generarDescripcion(materiasPrimasExplotadas,EUnidad.PORCENTAJE);
-			setDescripcion(descripcionAnilinas);
-		}
-		
-		public String getDescripcion() {
-			return descripcion;
-		}
-
-		public void setDescripcion(String descripcion) {
-			this.descripcion = descripcion;
-		}
-	}
-
-	private static class DescripcionNormalInstruccionVisitor extends DescripcionInstruccionVisitor {
-
-		public void visit(InstruccionProcedimientoPasadas instruccion) {
-			String descrQuimicos = "";
-			if (!instruccion.getQuimicos().isEmpty()) {
-				descrQuimicos += "con ";
-				if (instruccion.getQuimicos().size() == 1) {
-					QuimicoCantidad quimicoCantidad = instruccion.getQuimicos().get(0);
-					descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion();
-				} else {
-					for (int i = 0; i < instruccion.getQuimicos().size(); i++) {
-						QuimicoCantidad quimicoCantidad = instruccion.getQuimicos().get(i);
-						if (i != 0 && i == instruccion.getQuimicos().size() - 1) {
-							descrQuimicos = descrQuimicos.substring(0, descrQuimicos.length() - 2);
-							descrQuimicos += " y ";
-							descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion();
-						} else {
-							descrQuimicos += quimicoCantidad.getCantidad() + " " + quimicoCantidad.getUnidad() + " de " + quimicoCantidad.getMateriaPrima().getDescripcion() + ", ";
-						}
-					}
-				}
-			}
-			setDescripcion(instruccion.getCantidadPasadas() + " vuelta(s)/pasada(s) a " + instruccion.getTemperatura() + "ºC " + " y " + instruccion.getVelocidad() + " M/S " + descrQuimicos);
-		}
-
-		public void visit(InstruccionProcedimientoTexto instruccion) {
-			setDescripcion(instruccion.getEspecificacion());
-		}
-
-		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
-			setDescripcion(instruccion.getTipoProducto().getDescripcion().toLowerCase() + " " + instruccion.getTipoArticulo().getNombre());
-		}
-	}
-
 	public static String getResumenSectorHTML(ESectorMaquina sector, List<PasoSecuenciaODT> pasos) {
 		String html = "";
 		
@@ -260,7 +111,7 @@ public class InstruccionProcedimientoRenderer {
 			if(p.getSector().getSectorMaquina() != sector){
 				continue;
 			}
-			for(InstruccionProcedimiento ip : p.getSubProceso().getPasos()){
+			for(InstruccionProcedimientoODT ip : p.getSubProceso().getPasos()){
 				ResumenHTMLProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLProductosInstruccionVisitor();
 				ip.accept(v);
 				html += v.getResumenHTML();
@@ -273,7 +124,7 @@ public class InstruccionProcedimientoRenderer {
 	public static String getResumenQuimicos(List<PasoSecuenciaODT> pasos) {
 		String html = "";
 		for (PasoSecuenciaODT p : pasos) {
-			for (InstruccionProcedimiento ip : p.getSubProceso().getPasos()) {
+			for (InstruccionProcedimientoODT ip : p.getSubProceso().getPasos()) {
 				ResumenHTMLQuimicosVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLQuimicosVisitor();
 				ip.accept(v);
 				html += v.getResumenHTML();
@@ -293,7 +144,7 @@ public class InstruccionProcedimientoRenderer {
 	private static String getResumenTipoArituclo(String sigla, List<PasoSecuenciaODT> pasos) {
 		String html = "";
 		for(PasoSecuenciaODT p : pasos){
-			for(InstruccionProcedimiento ip : p.getSubProceso().getPasos()){
+			for(InstruccionProcedimientoODT ip : p.getSubProceso().getPasos()){
 				ResumenHTMLTipoProductosInstruccionVisitor v = new InstruccionProcedimientoRenderer.ResumenHTMLTipoProductosInstruccionVisitor(sigla);
 				ip.accept(v);
 				html += v.getResumenHTML();
@@ -303,11 +154,11 @@ public class InstruccionProcedimientoRenderer {
 		return "<html>"+html+"</html>";
 	}
 	
-	private static class ResumenHTMLQuimicosVisitor implements IInstruccionProcedimientoVisitor{
+	private static class ResumenHTMLQuimicosVisitor implements IInstruccionProcedimientoODTVisitor {
 
 		private String resumenHTML = "";
 		
-		public void visit(InstruccionProcedimientoPasadas instruccion) {
+		public void visit(InstruccionProcedimientoPasadasODT instruccion) {
 			if(instruccion.getQuimicosExplotados() != null && !instruccion.getQuimicosExplotados().isEmpty()){
 				setResumenHTML(generarDescripcionProductosHTML(instruccion.getQuimicosExplotados(), null));
 				return;
@@ -315,10 +166,10 @@ public class InstruccionProcedimientoRenderer {
 			setResumenHTML("");
 		}
 
-		public void visit(InstruccionProcedimientoTexto instruccion) {
+		public void visit(InstruccionProcedimientoTextoODT instruccion) {
 		}
 
-		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
+		public void visit(InstruccionProcedimientoTipoProductoODT instruccion) {
 			if(instruccion.getFormula() == null){
 				setResumenHTML("");
 				return;
@@ -337,7 +188,7 @@ public class InstruccionProcedimientoRenderer {
 		}
 	}
 	
-	private static class ResumenHTMLTipoProductosInstruccionVisitor implements IInstruccionProcedimientoVisitor{
+	private static class ResumenHTMLTipoProductosInstruccionVisitor implements IInstruccionProcedimientoODTVisitor {
 
 		private String resumenHTML = "";
 		private String sigla;
@@ -346,13 +197,13 @@ public class InstruccionProcedimientoRenderer {
 			this.sigla = sigla;
 		}
 
-		public void visit(InstruccionProcedimientoPasadas instruccion) {
+		public void visit(InstruccionProcedimientoPasadasODT instruccion) {
 		}
 
-		public void visit(InstruccionProcedimientoTexto instruccion) {
+		public void visit(InstruccionProcedimientoTextoODT instruccion) {
 		}
 
-		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
+		public void visit(InstruccionProcedimientoTipoProductoODT instruccion) {
 			if(instruccion.getFormula() == null){
 				setResumenHTML("");
 				return;
@@ -371,11 +222,11 @@ public class InstruccionProcedimientoRenderer {
 		}
 	}
 	
-	private static class ResumenHTMLProductosInstruccionVisitor implements IInstruccionProcedimientoVisitor{
+	private static class ResumenHTMLProductosInstruccionVisitor implements IInstruccionProcedimientoODTVisitor {
 
 		private String resumenHTML;
 		
-		public void visit(InstruccionProcedimientoPasadas instruccion) {
+		public void visit(InstruccionProcedimientoPasadasODT instruccion) {
 			if(instruccion.getQuimicosExplotados() != null && !instruccion.getQuimicosExplotados().isEmpty()){
 				setResumenHTML(generarDescripcionProductosHTML(instruccion.getQuimicosExplotados(), null));
 				return;
@@ -383,11 +234,11 @@ public class InstruccionProcedimientoRenderer {
 			setResumenHTML("");
 		}
 
-		public void visit(InstruccionProcedimientoTexto instruccion) {
+		public void visit(InstruccionProcedimientoTextoODT instruccion) {
 			setResumenHTML("");
 		}
 
-		public void visit(InstruccionProcedimientoTipoProducto instruccion) {
+		public void visit(InstruccionProcedimientoTipoProductoODT instruccion) {
 			if(instruccion.getFormula() == null){
 				setResumenHTML("");
 				return;

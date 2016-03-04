@@ -229,7 +229,6 @@ public class JFrameAdministrarFormulas extends JFrame {
 			setVisible(true);
 		}
 		java.awt.EventQueue.invokeLater(new Runnable() {
-		    @Override
 		    public void run() {
 		        instance.toFront();
 		        instance.repaint();

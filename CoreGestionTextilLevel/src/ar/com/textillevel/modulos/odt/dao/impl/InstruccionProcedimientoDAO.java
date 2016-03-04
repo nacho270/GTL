@@ -40,7 +40,6 @@ public class InstruccionProcedimientoDAO extends GenericDAO<InstruccionProcedimi
 	private void doEager(InstruccionProcedimiento i) {
 		if(i instanceof InstruccionProcedimientoPasadas) {
 			((InstruccionProcedimientoPasadas)i).getQuimicos().size();
-			((InstruccionProcedimientoPasadas)i).getQuimicosExplotados().size();
 		}
 	}
 
