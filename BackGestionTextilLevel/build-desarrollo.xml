@@ -57,6 +57,7 @@
 				
 				<include name="ar/com/textillevel/modulos/odt/entidades/**" />
 				<include name="ar/com/textillevel/modulos/odt/to/**" />
+				<include name="ar/com/textillevel/modulos/odt/util/**" />
 				<include name="ar/com/textillevel/modulos/odt/enums/**" />
 				<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
 				
@@ -103,6 +104,7 @@
 				<include name="ar/com/textillevel/modulos/odt/entidades/**" />
 				<include name="ar/com/textillevel/modulos/odt/to/**" />
 				<include name="ar/com/textillevel/modulos/odt/enums/**" />
+				<include name="ar/com/textillevel/modulos/odt/util/**" />
 				<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
 				
 				<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
