@@ -21,7 +21,7 @@
 		<band height="62" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="155" y="37" width="163" height="20"/>
-				<box leftPadding="2">
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -35,7 +35,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="37" width="144" height="20"/>
-				<box leftPadding="2">
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -49,7 +49,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="336" y="37" width="151" height="20"/>
-				<box leftPadding="2">
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
@@ -266,11 +268,10 @@ public class InstruccionProcedimientoRenderer {
 //					html += "* " + proporcion + " - " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
 //				}else{
 				Float cantidadExplotada = mp.getCantidadExplotada();
-				String prefijo = "*&nbsp;" + proporcion + "&nbsp;&nbsp;||&nbsp;&nbsp;";
-				String pad = "";
-				for (int i = 0; i<prefijo.length()/2;i++){
-					pad += "&nbsp;";
-				}
+				String prefijo = "*&nbsp;" + proporcion + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+				String pad = String.join("", IntStream.range(0, prefijo.length()/2)
+														.mapToObj(i -> "&nbsp;")
+														.collect(Collectors.toList()));
 				html += prefijo + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion()
 					+ "<br>" + pad + "<b><u>\""
 					+ (cantidadExplotada < 1f ? GenericUtils.getDecimalFormat3().format(cantidadExplotada) : cantidadExplotada) + " "
@@ -362,5 +363,11 @@ public class InstruccionProcedimientoRenderer {
 		public void setResumenHTML(String resumenHTML) {
 			this.resumenHTML = resumenHTML;
 		}
+	}
+
+	public static void main(String[] args) {
+		String prefijo = "123456";
+		String pad = String.join("", IntStream.range(0, prefijo.length()/2).mapToObj(i -> "&nbsp;").collect(Collectors.toList()));
+		System.out.println(pad);
 	}
 }
