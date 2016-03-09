@@ -11,7 +11,7 @@ public enum EUnidad {
 	LITROS(4,"LTS"),
 	GRAMOS_POR_KILOS(5,"GR/KG"),
 	GRAMOS_POR_LITROS(6,"GR/LTS"),
-	PORCENTAJE(7,"% (KG)")
+	PORCENTAJE(7,"%")
 	;
 
 	private EUnidad(Integer id, String descripcion) {

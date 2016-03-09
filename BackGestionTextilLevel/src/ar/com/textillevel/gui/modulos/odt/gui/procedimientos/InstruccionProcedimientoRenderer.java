@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
-import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaEstampadoClienteExplotada;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaTenidoClienteExplotada;
@@ -261,12 +260,23 @@ public class InstruccionProcedimientoRenderer {
 		String html = "";
 		for(MateriaPrimaCantidadExplotada<T> mp : materiasPrimasExplotadas){
 			if (siglaAFiltrar == null || (siglaAFiltrar != null && mp.getTipoArticulo().getSigla().startsWith(siglaAFiltrar))){
-				String proporcion = mp.getMateriaPrimaCantidadDesencadenante().getCantidad() + " " + mp.getMateriaPrimaCantidadDesencadenante().getUnidad();
-				if(mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima() instanceof Anilina){
-					html += "* " + proporcion + " - " + mp.getTipoArticulo().getSigla() + ": " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
-				}else{
-					html += "* " + proporcion + " - " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+				Float cantidad = mp.getMateriaPrimaCantidadDesencadenante().getCantidad();
+				String proporcion = (cantidad < 1f ? GenericUtils.getDecimalFormat2().format(cantidad) : cantidad) + " " + mp.getMateriaPrimaCantidadDesencadenante().getUnidad().getDescripcion();
+//				if(mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima() instanceof Anilina){
+//					html += "* " + proporcion + " - " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
+//				}else{
+				Float cantidadExplotada = mp.getCantidadExplotada();
+				String prefijo = "*&nbsp;" + proporcion + "&nbsp;&nbsp;||&nbsp;&nbsp;";
+				String pad = "";
+				for (int i = 0; i<prefijo.length()/2;i++){
+					pad += "&nbsp;";
 				}
+				html += prefijo + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion()
+					+ "<br>" + pad + "<b><u>\""
+					+ (cantidadExplotada < 1f ? GenericUtils.getDecimalFormat3().format(cantidadExplotada) : cantidadExplotada) + " "
+					+ mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion()
+					+ "\"</b></u><br><br>";
+//				}
 			}
 		}
 		return html;

@@ -9,7 +9,7 @@
 	<title>
 		<band height="50">
 			<staticText>
-				<reportElement x="224" y="12" width="112" height="29"/>
+				<reportElement x="187" y="11" width="112" height="29"/>
 				<textElement>
 					<font size="20" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -20,7 +20,7 @@
 	<detail>
 		<band height="62" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="173" y="37" width="173" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="155" y="37" width="163" height="20"/>
 				<box leftPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -28,11 +28,13 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement markup="html"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_POLIESTER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="37" width="160" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="37" width="144" height="20"/>
 				<box leftPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -40,11 +42,13 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement markup="html"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="357" y="37" width="158" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="336" y="37" width="151" height="20"/>
 				<box leftPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -52,11 +56,13 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement markup="html"/>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_ALGODON}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="173" y="10" width="173" height="20"/>
+				<reportElement x="155" y="10" width="163" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -70,7 +76,7 @@
 				<text><![CDATA[POLIESTER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="10" width="160" height="20"/>
+				<reportElement x="0" y="10" width="144" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -84,7 +90,7 @@
 				<text><![CDATA[QUIMICOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="357" y="10" width="158" height="20"/>
+				<reportElement x="336" y="10" width="151" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>

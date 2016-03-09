@@ -63,7 +63,7 @@ public class AccionCargarSecuenciaDeTrabajoODT extends Accion<OrdenDeTrabajo>{
 				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
