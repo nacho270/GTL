@@ -261,7 +261,7 @@ public class InstruccionProcedimientoRenderer {
 		for(MateriaPrimaCantidadExplotada<T> mp : materiasPrimasExplotadas){
 			if (siglaAFiltrar == null || (siglaAFiltrar != null && mp.getTipoArticulo().getSigla().startsWith(siglaAFiltrar))){
 				Float cantidad = mp.getMateriaPrimaCantidadDesencadenante().getCantidad();
-				String proporcion = (cantidad < 1f ? GenericUtils.getDecimalFormat2().format(cantidad) : cantidad) + " " + mp.getMateriaPrimaCantidadDesencadenante().getUnidad().getDescripcion();
+				String proporcion = (cantidad < 1f ? GenericUtils.getDecimalFormat2().format(cantidad) : cantidad) + " " + (siglaAFiltrar != null ? mp.getMateriaPrimaCantidadDesencadenante().getUnidad().getDescripcion():"");
 //				if(mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima() instanceof Anilina){
 //					html += "* " + proporcion + " - " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
 //				}else{
@@ -271,11 +271,13 @@ public class InstruccionProcedimientoRenderer {
 				for (int i = 0; i<prefijo.length()/2;i++){
 					pad += "&nbsp;";
 				}
+				String cantidadExplotadaFormateada = "<span style='font-size:17px;'>" + GenericUtils.getDecimalFormat3().format(cantidadExplotada).replace(",", "</span>,<span style='font-size:15px; vertical-align: super;'>") + "</span>";
+				// formato: <span style='font-size:17px;'>PARTE ENTERA</span>,<sup style='font-size:15px;'>PARTE DECIMAL</sup>
 				html += prefijo + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion()
-					+ "<br>" + pad + "<b><u>\""
-					+ (cantidadExplotada < 1f ? GenericUtils.getDecimalFormat3().format(cantidadExplotada) : cantidadExplotada) + " "
-					+ mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion()
-					+ "\"</b></u><br><br>";
+					+ "<br>" + pad + "<b>"
+					+ cantidadExplotadaFormateada + " "
+					+ mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion().replace("KG", "GR")
+					+ "</b><br><br>";
 //				}
 			}
 		}
