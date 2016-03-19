@@ -21,6 +21,7 @@ import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWCheckBoxList;
 import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
@@ -155,7 +156,11 @@ public class JDialogBuscarChequesPorNumeroInterno extends JDialog {
 		List<Cheque> lista2 = new ArrayList<Cheque>();
 		for(Cheque cheque : cheques ){
 			if(cheque.getEstadoCheque() == EEstadoCheque.EN_CARTERA){
-				lista2.add(cheque);
+				if(!cheque.getFechaDeposito().after(DateUtil.getHoy())) {
+					lista2.add(cheque);
+				} else {
+					FWJOptionPane.showWarningMessage(this, StringW.wordWrap("El cheque "  + cheque.getNumeracion() + " no se puede utilizar debido a que tiene fecha de depósito posterior a hoy: " + DateUtil.dateToString(cheque.getFechaDeposito())), "Búsqueda de cheques");
+				}
 			}else{
 				FWJOptionPane.showWarningMessage(this, StringW.wordWrap("El cheque " + cheque.getNumeracion() + " no se puede utilizar debido a que tiene estado: " + cheque.getEstadoCheque()), "Búsqueda de cheques");
 			}

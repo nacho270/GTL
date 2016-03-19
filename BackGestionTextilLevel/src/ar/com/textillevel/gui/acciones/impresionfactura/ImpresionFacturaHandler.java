@@ -327,7 +327,7 @@ public class ImpresionFacturaHandler {
 			return "RECARGO";
 		}
 		if (ifactura instanceof ItemFacturaBonificacion) {
-			return "BONIFICACION";
+			return "BONIF.";
 		}
 		if (ifactura instanceof ItemFacturaPercepcion) {
 			return "PERCEP.";

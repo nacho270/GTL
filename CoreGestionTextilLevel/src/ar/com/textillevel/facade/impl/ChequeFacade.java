@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -18,17 +19,20 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRoll
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
+import ar.com.textillevel.dao.api.local.ImpuestoItemDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaCorreccion;
+import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionCheque;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionResumen;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
+import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 import ar.com.textillevel.entidades.gente.Proveedor;
@@ -61,6 +65,8 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	@EJB
 	private AuditoriaFacadeLocal<Cheque> auditoriaFacade;
 
+	@EJB
+	private ImpuestoItemDAOLocal impuestoItemDAO; 
 	
 	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
 		return chequeDAO.getChequesPorFechaYPaginado(nroCliente, eEstadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows, tipoFecha);
@@ -140,7 +146,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		}
 		
 		if(cheque.getEstadoCheque() == EEstadoCheque.SALIDA_PROVEEDOR) {
-			generarNotaDebitoProveedor(cheque, usuario, gastos);
+			generarNotaDebitoProveedor(cheque, usuario, gastos, debeDiscriminarIVA);
 		}
 		EEstadoCheque estadoAnterior = cheque.getEstadoCheque();
 		cheque.setEstadoCheque(EEstadoCheque.RECHAZADO);
@@ -212,7 +218,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	}
 
 	
-	private void generarNotaDebitoProveedor(Cheque cheque, String usuario, BigDecimal gastos) {
+	private void generarNotaDebitoProveedor(Cheque cheque, String usuario, BigDecimal gastos, boolean debeDiscriminarIVA) {
 		Proveedor proveedorSalida = cheque.getProveedorSalida();
 		
 		if(gastos==null){
@@ -240,6 +246,13 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		ItemCorreccionFacturaProveedor itr = new ItemCorreccionResumen();
 		itr.setImporte(gastos);
 		itr.setPrecioUnitario(gastos);
+		
+		if (debeDiscriminarIVA) {
+			ImpuestoItemProveedor impuestoIVA21 = impuestoItemDAO.getByTipoYPorcentaje(ETipoImpuesto.IVA, 21d);
+			if (impuestoIVA21 != null) {
+				itr.setImpuestos(Collections.singletonList(impuestoIVA21));
+			}
+		}
 		
 		NumberFormat df = DecimalFormat.getNumberInstance(new Locale("es_AR"));
 		df.setMaximumFractionDigits(2);

@@ -12,4 +12,6 @@ public interface ImpuestoItemDAOLocal extends DAOLocal<ImpuestoItemProveedor , I
 
 	boolean existsOtroImpuestoWithParams(Integer idImpuesto, double porcDescuento, ETipoImpuesto tipoImpuesto, Provincia provincia);
 
+	public ImpuestoItemProveedor getByTipoYPorcentaje(ETipoImpuesto tipoImpuesto, Double porcentaje);
+
 }

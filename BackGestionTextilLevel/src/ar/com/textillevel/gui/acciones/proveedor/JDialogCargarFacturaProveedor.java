@@ -649,7 +649,13 @@ public class JDialogCargarFacturaProveedor extends JDialog {
 
 	private PanTablaItemFactura getPanTablaItemFactura() {
 		if(panTablaItemFactura == null) {
-			panTablaItemFactura = new PanTablaItemFactura(isFacturaSinRemito(), factura.getProveedor(), new ArrayList<PrecioMateriaPrima>(mapPrecioMatPrima.values()));
+			List<PrecioMateriaPrima> allMateriaPrimaList = new ArrayList<PrecioMateriaPrima>(mapPrecioMatPrima.values());
+			Collections.sort(allMateriaPrimaList, new Comparator<PrecioMateriaPrima>() {
+				public int compare(PrecioMateriaPrima o1, PrecioMateriaPrima o2) {
+					return o1.toString().compareTo(o2.toString());
+				}
+			});
+			panTablaItemFactura = new PanTablaItemFactura(isFacturaSinRemito(), factura.getProveedor(), allMateriaPrimaList);
 			panTablaItemFactura.addItemFacturaProveedorListener(new ItemFacturaProveedorEventListener() {
 
 				public void changeItemFactura(ItemFacturaProveedorEvent evt) {

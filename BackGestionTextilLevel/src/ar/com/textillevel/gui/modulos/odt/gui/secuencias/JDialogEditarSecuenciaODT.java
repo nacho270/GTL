@@ -33,6 +33,7 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.ProcedimientoODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -129,7 +130,7 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 			tabla.setStringColumn(COL_PROCESO, "Proceso", 100, 100, true);
 			tabla.setStringColumn(COL_SUBPROCESO, "Subproceso", 150, 150, true);
 			tabla.setStringColumn(COL_OBS, "Observaciones", 170, 170, true);
-			tabla.setCheckColumn(COL_TIENE_FORMULA, "Tiene formula", 80, true);
+			tabla.setCheckColumn(COL_TIENE_FORMULA, "Tiene fórmula", 80, true);
 			tabla.setStringColumn(COL_OBJ, "", 0);
 			tabla.setHeaderAlignment(COL_SECTOR, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_PROCESO, FWJTable.CENTER_ALIGN);
@@ -155,7 +156,7 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 
 		@Override
 		protected void agregarElemento(PasoSecuenciaODT elemento) {
-			getTabla().addRow(new Object[] { elemento.getSector().getNombre(), elemento.getProceso().getNombre(), elemento.getSubProceso().getNombre(), elemento.getObservaciones(), tieneFormula(getOdt().getSecuenciaDeTrabajo().getTipoProducto()) ,elemento });
+			getTabla().addRow(new Object[] { elemento.getSector().getNombre(), elemento.getProceso().getNombre(), elemento.getSubProceso().getNombre(), elemento.getObservaciones(), tieneFormula(elemento.getSubProceso(), getOdt().getSecuenciaDeTrabajo().getTipoProducto()) ,elemento });
 		}
 
 		@Override
@@ -168,18 +169,16 @@ public class JDialogEditarSecuenciaODT extends JDialog {
 		}
 	}
 
-	private boolean tieneFormula(ETipoProducto tipoProducto){
-		for(PasoSecuenciaODT paso : odt.getSecuenciaDeTrabajo().getPasos()){
-			for(InstruccionProcedimientoODT ins : paso.getSubProceso().getPasos()){
-				if(ins instanceof InstruccionProcedimientoTipoProductoODT){
-					InstruccionProcedimientoTipoProductoODT itp = (InstruccionProcedimientoTipoProductoODT)ins;
-					if(itp.getTipoProducto() == tipoProducto && itp.getFormula() == null) {
-						return false;
-					}
+	private boolean tieneFormula(ProcedimientoODT procedimientoODT, ETipoProducto tipoProducto){
+		for(InstruccionProcedimientoODT ins : procedimientoODT.getPasos()) {
+			if(ins instanceof InstruccionProcedimientoTipoProductoODT){
+				InstruccionProcedimientoTipoProductoODT itp = (InstruccionProcedimientoTipoProductoODT)ins;
+				if(itp.getTipoProducto() == tipoProducto && itp.getFormula() != null) {
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
 	}	
 	
 	public PanelTablaPasosSecuencia getPanelTablaPasos() {

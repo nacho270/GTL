@@ -28,4 +28,13 @@ public class ImpuestoItemDAO extends GenericDAO<ImpuestoItemProveedor, Integer> 
 		return !query.getResultList().isEmpty();
 	}
 
+	public ImpuestoItemProveedor getByTipoYPorcentaje(ETipoImpuesto tipoImpuesto, Double porcentaje) {
+		Query query = getEntityManager().createQuery(" SELECT imp FROM ImpuestoItemProveedor imp " +
+				 									 " WHERE imp.porcDescuento = :porcDescuento AND" +
+				 									 " 		 imp.idTipoImpuesto = :idTipoImpuesto ");
+		query.setParameter("porcDescuento", porcentaje);
+		query.setParameter("idTipoImpuesto", tipoImpuesto.getId());
+		return (ImpuestoItemProveedor) query.getSingleResult();
+	}
+
 }

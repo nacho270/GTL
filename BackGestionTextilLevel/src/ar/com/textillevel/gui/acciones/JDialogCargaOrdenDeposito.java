@@ -161,11 +161,11 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 		private static final int COL_IMPORTE = 3;
 		private static final int COL_OBJ = 4;
 
-		private JButton botonBuscarCheques;
+//		private JButton botonBuscarCheques;
 		
 		public PanelTablaCheques() {
 			getBotonAgregar().setVisible(false);
-			agregarBoton(getBotonBuscarCheques());
+//			agregarBoton(getBotonBuscarCheques());
 			setPreferredSize(new Dimension(550, 300));
 		}
 
@@ -219,17 +219,17 @@ public class JDialogCargaOrdenDeposito extends JDialog {
 			return false;
 		}
 		
-		public JButton getBotonBuscarCheques() {
-			if(botonBuscarCheques==null){
-				botonBuscarCheques = new JButton("Cheques");
-				botonBuscarCheques.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						
-					}
-				});
-			}
-			return botonBuscarCheques;
-		}
+//		public JButton getBotonBuscarCheques() {
+//			if(botonBuscarCheques==null){
+//				botonBuscarCheques = new JButton("Cheques");
+//				botonBuscarCheques.addActionListener(new ActionListener() {
+//					public void actionPerformed(ActionEvent e) {
+//						
+//					}
+//				});
+//			}
+//			return botonBuscarCheques;
+//		}
 	}
 
 	private void actualizar(){
