@@ -278,7 +278,20 @@ public class JDialogSeleccionarInstruccion extends JDialog {
 		private ETipoInstruccionProcedimiento tipoInstruccion;
 
 		public PanComboTipoInstruccion(String lblCombo, List<InstruccionProcedimientoWrapper> items, InstruccionProcedimientoWrapper itemOtro) {
-			super(lblCombo, items, itemOtro);
+			super(lblCombo, items, itemOtro, true);
+			addBotonModificarEventListener(new BotonModificarEventListener<InstruccionProcedimientoWrapper>() {
+
+				@Override
+				public void botonModificarPresionado(BotonModificarData<InstruccionProcedimientoWrapper> data) {
+					JDialogAltaInstruccionProcedimiento dialogo = new JDialogAltaInstruccionProcedimiento(JDialogSeleccionarInstruccion.this, data.getItemAModificar().instruccion, getTipoArticulo());
+					dialogo.setVisible(true);
+					if(dialogo.isAcepto()) {
+						InstruccionProcedimiento instruccion = dialogo.getInstruccion();
+						proceso.getInstrucciones().set(data.getComboIndex(), instruccion);
+						itemDistintoOtroSelected(new InstruccionProcedimientoWrapper(instruccion));
+					}
+				}
+			});
 		}
 
 		@Override

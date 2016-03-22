@@ -61,6 +61,7 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 	private final ESectorMaquina sectorMaquina;
 	private ETipoInstruccionProcedimiento tipoInstruccion;
 	private TipoArticulo tipoArticulo;
+	private InstruccionProcedimiento instruccionAModificar;
 
 	public JDialogAltaInstruccionProcedimiento(Dialog padre, ESectorMaquina sectorMaquina, ETipoInstruccionProcedimiento tipoInstruccion, TipoArticulo tipoArticulo) {
 		super(padre);
@@ -71,6 +72,17 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 		setUpComponentes();
 	}
 
+	public JDialogAltaInstruccionProcedimiento(Dialog padre, InstruccionProcedimiento instruccionAModificar, TipoArticulo tipoArticulo) {
+		super(padre);
+		this.instruccionAModificar = instruccionAModificar;
+		this.sectorMaquina = instruccionAModificar.getSectorMaquina();
+		this.tipoInstruccion = instruccionAModificar.getTipo();
+		this.tipoArticulo = tipoArticulo;
+		setUpScreen();
+		setUpComponentes();
+		getPanelInstruccion().loadData();
+	}
+	
 	private void setUpComponentes() {
 		addWindowListener(new WindowAdapter() {
 
@@ -163,11 +175,23 @@ public class JDialogAltaInstruccionProcedimiento extends JDialog {
 	private PanelInstruccion<?> getPanelInstruccion() {
 		if(panelInstruccion == null) {
 			if(tipoInstruccion == ETipoInstruccionProcedimiento.PASADA) {
-				panelInstruccion = new PanelInstruccionPasada();
+				if (instruccionAModificar == null) {
+					panelInstruccion = new PanelInstruccionPasada();
+				} else {
+					panelInstruccion = new PanelInstruccionPasada((InstruccionProcedimientoPasadas) instruccionAModificar);
+				}
 			} else if(tipoInstruccion == ETipoInstruccionProcedimiento.TEXTO) {
-				panelInstruccion = new PanelInstruccionTexto();
+				if (instruccionAModificar == null) {
+					panelInstruccion = new PanelInstruccionTexto();
+				} else {
+					panelInstruccion = new PanelInstruccionTexto((InstruccionProcedimientoTexto) instruccionAModificar);
+				}
 			} else {
-				panelInstruccion = new PanelInstruccionTipoProducto(sectorMaquina);
+				if (instruccionAModificar == null) {
+					panelInstruccion = new PanelInstruccionTipoProducto(sectorMaquina);
+				} else {
+					panelInstruccion = new PanelInstruccionTipoProducto((InstruccionProcedimientoTipoProducto) instruccionAModificar, sectorMaquina);
+				}
 			}
 		}
 		return panelInstruccion;
