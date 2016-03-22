@@ -513,12 +513,16 @@ public class JDialogAgregarCheque extends JDialog {
 					public void keyReleased(KeyEvent e) {
 						if(Character.isDigit(e.getKeyChar()) || e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 							List<String> cuits = getCuitsCandidatos();
-							dialogIntellisense.ubicar(txtCUIT, cuits.size());
-							dialogIntellisense.displaySugerencias(cuits);
-							dialogIntellisense.setVisible(true);
-							txtCUIT.requestFocus();
-							txtCUIT.setCaretPosition(calcularPosicionCursor(txtCUIT.getText()));
-							dialogIntellisense.resetSeleccion();
+							if(cuits.size() == 1 && txtCUIT.getText().trim().length() == 13) {
+								dialogIntellisense.setVisible(false);
+							} else {
+								dialogIntellisense.ubicar(txtCUIT, cuits.size());
+								dialogIntellisense.displaySugerencias(cuits);
+								dialogIntellisense.setVisible(true);
+								txtCUIT.requestFocus();
+								txtCUIT.setCaretPosition(calcularPosicionCursor(txtCUIT.getText()));
+								dialogIntellisense.resetSeleccion();
+							}
 						} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 							dialogIntellisense.updateSelectedLabel();
 						}
