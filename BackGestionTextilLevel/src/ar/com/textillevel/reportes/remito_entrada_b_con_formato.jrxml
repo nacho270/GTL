@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remito_entrada_b" pageWidth="595" pageHeight="510" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="FECHA_REMITO" class="java.lang.String"/>
+	<parameter name="TOT_PIEZAS" class="java.lang.String"/>
+	<parameter name="TOT_KILOS" class="java.lang.String"/>
+	<parameter name="TOT_METROS" class="java.lang.String"/>
+	<parameter name="CUIT" class="java.lang.String"/>
+	<parameter name="POSICION_IVA" class="java.lang.String"/>
+	<parameter name="DOMICILIO" class="java.lang.String"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\dev_ws\\BackGestionTextilLevel\\src\\ar\\com\\textillevel\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PROCESO" class="java.lang.String"/>
+	<parameter name="NRO_REMITO" class="java.lang.String"/>
+	<parameter name="REMITO_ENT" class="java.lang.String"/>
+	<field name="piezasDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<field name="piezasDS2" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<field name="piezasDS3" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<pageHeader>
+		<band height="173" splitType="Stretch">
+			<textField>
+				<reportElement x="459" y="49" width="86" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_REMITO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="83" width="347" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="109" width="121" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{POSICION_IVA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="109" width="345" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOMICILIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="437" y="83" width="144" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CUIT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="140" width="345" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{PROCESO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="496" y="140" width="85" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{REMITO_ENT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="407" y="140" width="89" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Remito Entrada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="21" width="34" height="20"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[Nro:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="446" y="21" width="135" height="20"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_REMITO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="11" y="168" width="570" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.25"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="238" y="21" width="84" height="28"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REMITO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="49" width="53" height="21"/>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="83" width="41" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="140" width="53" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proceso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="109" width="54" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Domicilio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="407" y="83" width="30" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUIT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="407" y="109" width="53" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pos. IVA:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<subreport>
+				<reportElement x="15" y="0" width="150" height="12"/>
+				<dataSourceExpression><![CDATA[$F{piezasDS1}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_entrada_b_con_formato_piezas.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="209" y="0" width="150" height="12"/>
+				<dataSourceExpression><![CDATA[$F{piezasDS2}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_entrada_b_con_formato_piezas2.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="395" y="0" width="150" height="12"/>
+				<dataSourceExpression><![CDATA[$F{piezasDS3}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_entrada_b_con_formato_piezas3.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="417" y="20" width="164" height="20"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_METROS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="20" width="173" height="20"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_KILOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="15" y="20" width="194" height="20"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_PIEZAS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
