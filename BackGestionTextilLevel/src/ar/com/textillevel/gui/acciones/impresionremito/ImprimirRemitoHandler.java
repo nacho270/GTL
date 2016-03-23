@@ -75,6 +75,35 @@ public class ImprimirRemitoHandler {
 		} while (!ok);
 	}
 
+	public static List<JasperPrint> getJasperPrints(List<RemitoSalida> remitos, int nroSuc) {
+		List<JasperPrint> prints = new ArrayList<JasperPrint>();
+		Collections.sort(remitos, new Comparator<RemitoSalida>() {
+			public int compare(RemitoSalida o1, RemitoSalida o2) {
+				return o1.getNroRemito().compareTo(o2.getNroRemito());
+			}
+		});
+
+		JasperReport reporte = null;
+		if(!GenericUtils.isSistemaTest()){
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
+		} else {
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B);
+		}
+		
+		for(RemitoSalida rs : remitos) {
+			JasperPrint jasperPrint = null;
+			if(!GenericUtils.isSistemaTest()) {
+				RemitoEntradaTO remitoEntrada = new RemitoEntradaTO(rs, nroSuc);
+				jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
+			} else {
+				RemitoEntradaBTO remito = new RemitoEntradaBTO(rs, nroSuc);
+				jasperPrint = JasperHelper.fillReport(reporte, remito.getParameters(), Collections.singletonList(remito));
+			}
+			prints.add(jasperPrint);
+		}
+		return prints;
+	}
+	
 	private void internalImprimir(String cantImprimirStr) {
 		boolean hayMasDeUnRemito = remitos != null && !remitos.isEmpty();
 		if(!hayMasDeUnRemito) {

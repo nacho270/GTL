@@ -77,6 +77,7 @@ import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -95,6 +96,7 @@ import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
+import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionAnularCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionConfirmarCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionEliminarFacturaCuentaVisitor;
@@ -1962,6 +1964,49 @@ public class JFrameVerMovimientos extends JFrame {
 			this.clienteBuscado = cliente;
 		}
 		return cliente;
+	}
+
+	public void enviarFacturaORemitoPorMail(Factura factura) {
+		String[] docs = new String[]{"FACTURA", "REMITO/S"};
+		Object opcion = JOptionPane.showInputDialog(null, "Seleccione el documento que desea enviar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, docs,docs[0]);
+		if(opcion!=null){
+			if (opcion.equals("FACTURA")) {
+				enviarDocumentoContablePorEmail(factura);
+			} else {
+				enviarRemitosPorMail(factura.getRemitos());
+			}
+		}
+	}
+
+	private void enviarRemitosPorMail(List<RemitoSalida> remitos) {
+		final Cliente clienteBuscado = getClienteBuscado();
+		if (clienteBuscado != null) {
+			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
+				@Override
+				public void performEnvio(final List<String> to, final List<String> cc) {
+					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando remito/s a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+						public void perform() {
+							try {
+								List<Integer> ids = new ArrayList<Integer>();
+								List<Integer> nros = new ArrayList<Integer>();
+								Integer nroSucursal = null;
+								for(RemitoSalida rs : remitos) {
+									ids.add(rs.getId());
+									nros.add(rs.getNroRemito());
+									nroSucursal = rs.getNroSucursal();
+								}
+								List<RemitoSalida> remitosEager = getRemitoSalidaFacade().getByIdsConPiezasYProductos(ids);
+								List<JasperPrint> jasperPrints = ImprimirRemitoHandler.getJasperPrints(remitosEager, nroSucursal);
+								GenericUtils.enviarRemitoPorEmail(nros, jasperPrints, to, cc);
+							} catch (Exception ex) {
+								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
+								ex.printStackTrace();
+							}
+						}
+					});
+				}
+			}).setVisible(true);
+		}
 	}
 
 	// private JComboBox getCmbOrdenMovimientos() {

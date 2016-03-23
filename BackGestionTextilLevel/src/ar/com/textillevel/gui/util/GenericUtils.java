@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -452,7 +453,7 @@ public class GenericUtils {
 		return provider.getBufferedImage();
 	}
 
-	public static void enviarEmail(String asunto, String cuerpo, File file, List<String> to, List<String> cc) throws AddressException, MessagingException {
+	public static void enviarEmail(String asunto, String cuerpo, List<File> files, List<String> to, List<String> cc) throws AddressException, MessagingException {
 		Properties mailServerProperties = System.getProperties();
 		mailServerProperties.put("mail.smtp.port", "587");
 		mailServerProperties.put("mail.smtp.auth", "true");
@@ -473,12 +474,14 @@ public class GenericUtils {
 		mimeBodyPartCuerpo.setContent(cuerpo, "text/html");
 		multipart.addBodyPart(mimeBodyPartCuerpo);
 
-		if (file != null) {
-			MimeBodyPart mimeBodyPartFile = new MimeBodyPart();
-	        DataSource source = new FileDataSource(file);
-	        mimeBodyPartFile.setDataHandler(new DataHandler(source));
-	        mimeBodyPartFile.setFileName(file.getName());
-	        multipart.addBodyPart(mimeBodyPartFile);
+		if (files != null && !files.isEmpty()) {
+			for(File file : files) {
+				MimeBodyPart mimeBodyPartFile = new MimeBodyPart();
+				DataSource source = new FileDataSource(file);
+				mimeBodyPartFile.setDataHandler(new DataHandler(source));
+				mimeBodyPartFile.setFileName(file.getName());
+				multipart.addBodyPart(mimeBodyPartFile);
+			}
 		}
 
 		File emailIcon = null;
@@ -533,7 +536,7 @@ public class GenericUtils {
 		GenericUtils.enviarEmail("Cotización",
 				"<html><b>Estimado cliente:<br><br>" + 
 				"En esta oportunidad, nos dirigimos a Ud. a fin de comunicarle los nuevos precios sobre nuestros servicios.<br><br>"+
-				firma(), file, to, cc);
+				firma(), Collections.singletonList(file), to, cc);
 		file.delete();
 	}
 	
@@ -545,8 +548,25 @@ public class GenericUtils {
 		GenericUtils.enviarEmail(asunto,
 				"<html><b>Estimado cliente:<br><br>" + 
 				"Por medio de la presente, adjuntamos la " + asunto + ".<br><br>" +
-				firma(), file, to, cc);
+				firma(), Collections.singletonList(file), to, cc);
 		file.delete();
+	}
+	
+	public static void enviarRemitoPorEmail(List<Integer> nrosRemito, List<JasperPrint> jaspersRemitos, List<String> to, List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
+		List<File> files = new ArrayList<File>();
+		for(int i = 0; i < jaspersRemitos.size(); i++) {
+			File file = new File(System.getProperty("java.io.tmpdir") + "remito_" + nrosRemito.get(i) + ".pdf");
+			JasperHelper.exportarAPDF(jaspersRemitos.get(i), file);
+			files.add(file);
+		}
+		String asunto = "Remito/s N° " + StringUtil.getCadena(nrosRemito, ",");
+		GenericUtils.enviarEmail(asunto,
+				"<html><b>Estimado cliente:<br><br>" + 
+				"Por medio de la presente, adjuntamos lo/s " + asunto + ".<br><br>" +
+				firma(), files, to, cc);
+		for (File file : files) {
+			file.delete();
+		}
 	}
 	
 	private static String firma() {
@@ -569,7 +589,7 @@ public class GenericUtils {
 		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE),
 				"<html><b>Estimado cliente:<br><br>" + 
 				"Por medio de la presente, adjuntamos resumen de cuenta.<br><br>" +
-				firma(), file, to, cc);
+				firma(), Collections.singletonList(file), to, cc);
 		file.delete();
 	}
 	
