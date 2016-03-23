@@ -654,7 +654,7 @@ public class JDialogAgregarCheque extends JDialog {
 	private void capturarDatos() {
 		getCheque().setBanco(banco);
 		getCheque().setEstadoCheque(EEstadoCheque.PENDIENTE_COBRAR);
-		getCheque().setFechaDeposito(DateUtil.getManiana(new java.sql.Date(getFechaDeposito().getDate().getTime())));
+		getCheque().setFechaDeposito(new java.sql.Date(getFechaDeposito().getDate().getTime()));
 		getCheque().setImporte(new BigDecimal(getTxtImporteCheque().getText().trim().replace(',','.')));
 		getCheque().setNumero(getTxtNroCheque().getText().trim());
 		getCheque().setCliente(getCliente());
