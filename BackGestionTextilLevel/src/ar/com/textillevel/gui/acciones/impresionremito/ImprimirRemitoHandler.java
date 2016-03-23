@@ -45,6 +45,8 @@ public class ImprimirRemitoHandler {
 	private final Integer nroSucursal;
 	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/remito_entrada.jasper";
 	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
+	private static final String ARCHIVO_JASPER_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_con_formato.jasper";
+	private static final String ARCHIVO_JASPER_B_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato.jasper";
 
 	public ImprimirRemitoHandler(RemitoSalida remito, Integer nroSucursal, JDialog owner) {
 		this.remito = remito;
@@ -85,9 +87,9 @@ public class ImprimirRemitoHandler {
 
 		JasperReport reporte = null;
 		if(!GenericUtils.isSistemaTest()){
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_CON_FORMATO);
 		} else {
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B);
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B_CON_FORMATO);
 		}
 		
 		for(RemitoSalida rs : remitos) {
@@ -324,6 +326,7 @@ public class ImprimirRemitoHandler {
 
 		private void cargarMap(RemitoSalida remito, Integer nroSucursal) {
 			this.parameters  = new HashMap();
+			parameters.put("NRO_REMITO", String.valueOf(remito.getNroRemito()));
 			parameters.put("FECHA_REMITO", DateUtil.dateToString(remito.getFechaEmision()));
 			parameters.put("RAZON_SOCIAL", remito.getCliente().getRazonSocial());
 			parameters.put("DOMICILIO", remito.getCliente().getDireccionFiscal().getDireccion());

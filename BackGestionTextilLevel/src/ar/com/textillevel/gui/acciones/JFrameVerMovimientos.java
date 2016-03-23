@@ -96,6 +96,7 @@ import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
+import ar.com.textillevel.gui.acciones.impresionrecibo.ImprimirReciboHandler;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionAnularCuentaVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.AccionConfirmarCuentaVisitor;
@@ -109,6 +110,7 @@ import ar.com.textillevel.gui.acciones.visitor.cuenta.HabilitarBotonesCuentaVisi
 import ar.com.textillevel.gui.acciones.visitor.cuenta.PintarFilaReciboVisitor;
 import ar.com.textillevel.gui.acciones.visitor.cuenta.PintarRecibosSecondPassVisitor;
 import ar.com.textillevel.gui.modulos.abm.listaprecios.ImprimirListaDePreciosHandler;
+import ar.com.textillevel.gui.util.EmailSender;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
 import ar.com.textillevel.gui.util.JasperHelper;
@@ -874,7 +876,7 @@ public class JFrameVerMovimientos extends JFrame {
 								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 									public void perform() {
 										try {
-											GenericUtils.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc);
+											EmailSender.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc);
 											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotización por correo a " + getClienteBuscado().getEmail(), "Información");
 										} catch (Exception ex) {
 											FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
@@ -926,7 +928,7 @@ public class JFrameVerMovimientos extends JFrame {
 									documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
 								}
 								JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
-								GenericUtils.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), jasperPrint, to, cc);
+								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), jasperPrint, to, cc);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();
@@ -953,7 +955,7 @@ public class JFrameVerMovimientos extends JFrame {
 								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 									public void perform() {
 										try {
-											GenericUtils.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc);
+											EmailSender.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc);
 											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
 										} catch (Exception ex) {
 											FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
@@ -1990,14 +1992,39 @@ public class JFrameVerMovimientos extends JFrame {
 								List<Integer> ids = new ArrayList<Integer>();
 								List<Integer> nros = new ArrayList<Integer>();
 								Integer nroSucursal = null;
+								Integer nroFactura = null;
 								for(RemitoSalida rs : remitos) {
 									ids.add(rs.getId());
 									nros.add(rs.getNroRemito());
 									nroSucursal = rs.getNroSucursal();
+									nroFactura = rs.getNroFactura();
 								}
 								List<RemitoSalida> remitosEager = getRemitoSalidaFacade().getByIdsConPiezasYProductos(ids);
 								List<JasperPrint> jasperPrints = ImprimirRemitoHandler.getJasperPrints(remitosEager, nroSucursal);
-								GenericUtils.enviarRemitoPorEmail(nros, jasperPrints, to, cc);
+								EmailSender.enviarRemitoPorEmail(nroFactura, nros, jasperPrints, to, cc);
+							} catch (Exception ex) {
+								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
+								ex.printStackTrace();
+							}
+						}
+					});
+				}
+			}).setVisible(true);
+		}
+	}
+
+	public void enviarReciboPorMail(Recibo recibo) {
+		final Cliente clienteBuscado = getClienteBuscado();
+		if (clienteBuscado != null) {
+			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
+				@Override
+				public void performEnvio(final List<String> to, final List<String> cc) {
+					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando recibo a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+						public void perform() {
+							Recibo reciboEager = getReciboFacade().getByIdEager(recibo.getId());
+							JasperPrint jasper = ImprimirReciboHandler.getJasperPrint(reciboEager, GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getNroSucursal());
+							try{
+								EmailSender.enviarReciboPorEmail(recibo.getNroRecibo(), jasper, to, cc);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();

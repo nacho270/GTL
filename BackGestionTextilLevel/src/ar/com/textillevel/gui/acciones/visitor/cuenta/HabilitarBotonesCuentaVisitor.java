@@ -41,7 +41,7 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor {
 				getFrameMovimientos().getBtnEliminarFactura().setEnabled(true);
 				getFrameMovimientos().getBtnEditar().setEnabled(true);
 			}
-			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(false);
+			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(true);
 		} else {
 			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaCredito().getAnulada() == false && GenericUtils.isSistemaTest());
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaCredito().getAnulada() == false && !(movimiento.getNotaCredito().getVerificada() != null && movimiento.getNotaCredito().getVerificada() == true));
@@ -70,7 +70,6 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor {
 			}
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(movimiento.getFactura().getCaeAFIP() == null);
 			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(GenericUtils.isSistemaTest() || movimiento.getFactura().getCaeAFIP() != null);
-
 		} else {
 			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaDebito().getAnulada() == false && GenericUtils.isSistemaTest());
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaDebito().getAnulada() == false && !(movimiento.getNotaDebito().getVerificada() != null && movimiento.getNotaDebito().getVerificada() == true));

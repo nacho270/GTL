@@ -23,6 +23,8 @@ public class AccionEnviarDocumentoContablePorEmailCuentaVisitor implements IFila
 	public void visit(MovimientoHaber movimiento) {
 		if(movimiento.getRecibo()==null){
 			getFrameMovimientos().enviarDocumentoContablePorEmail(movimiento.getNotaCredito());
+		} else {
+			getFrameMovimientos().enviarReciboPorMail(movimiento.getRecibo());
 		}
 	}
 

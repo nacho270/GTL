@@ -48,6 +48,7 @@ import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
+import ar.com.textillevel.gui.util.EmailSender;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
 import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
@@ -509,8 +510,8 @@ public class JDialogAumentadorDePrecios extends JDialog {
 											GenericUtils.realizarOperacionConDialogoDeEspera("Enviando lista a: " + c.getRazonSocial(), new BackgroundTask() {
 												public void perform() {
 													try{
-														GenericUtils.enviarCotizacionPorEmail(new ImprimirListaDePreciosHandler(c, cotizacionEmail.getVersionListaPrecio())
-														.createJasperPrint(cotizacionEmail.getValidez() + "", cotizacionEmail.getNumero()), to, cc);
+														EmailSender.enviarCotizacionPorEmail(new ImprimirListaDePreciosHandler(c, cotizacionEmail.getVersionListaPrecio())
+																.createJasperPrint(cotizacionEmail.getValidez() + "", cotizacionEmail.getNumero()), to, cc);
 													} catch (Exception ex) {
 														FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
 														ex.printStackTrace();

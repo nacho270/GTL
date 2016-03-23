@@ -44,6 +44,14 @@ public class ImprimirReciboHandler {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static JasperPrint getJasperPrint(Recibo recibo, Integer nroSucursal) {
+		ReciboTO reciboTO = new ReciboTO(recibo);
+		JasperReport reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
+		return JasperHelper.fillReport(reporte, reciboTO.getParameters(nroSucursal),
+				Collections.singletonList(reciboTO));
+	}
+	
+	@SuppressWarnings("unchecked")
 	public void imprimir() {
 		boolean ok = false;
 		do {
