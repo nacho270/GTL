@@ -210,7 +210,8 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		OrdenDeTrabajo odt = new OrdenDeTrabajo();
 		odt.setCodigo("20100902");
 
-		Cliente cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getById(formula.getCliente().getId());
+		Integer idCliente = formula.getCliente()!=null?formula.getCliente().getId():1;
+		Cliente cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getById(idCliente);
 		
 		SecuenciaODT secuencia = new SecuenciaODT();
 		PasoSecuenciaODT unicoPaso = new PasoSecuenciaODT();
