@@ -1980,7 +1980,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 	}
 
-	private void enviarRemitosPorMail(List<RemitoSalida> remitos) {
+	private void enviarRemitosPorMail(final List<RemitoSalida> remitos) {
 		final Cliente clienteBuscado = getClienteBuscado();
 		if (clienteBuscado != null) {
 			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
@@ -2013,7 +2013,7 @@ public class JFrameVerMovimientos extends JFrame {
 		}
 	}
 
-	public void enviarReciboPorMail(Recibo recibo) {
+	public void enviarReciboPorMail(final Recibo recibo) {
 		final Cliente clienteBuscado = getClienteBuscado();
 		if (clienteBuscado != null) {
 			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {

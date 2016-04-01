@@ -281,7 +281,6 @@ public class JDialogSeleccionarInstruccion extends JDialog {
 			super(lblCombo, items, itemOtro, true);
 			addBotonModificarEventListener(new BotonModificarEventListener<InstruccionProcedimientoWrapper>() {
 
-				@Override
 				public void botonModificarPresionado(BotonModificarData<InstruccionProcedimientoWrapper> data) {
 					JDialogAltaInstruccionProcedimiento dialogo = new JDialogAltaInstruccionProcedimiento(JDialogSeleccionarInstruccion.this, data.getItemAModificar().instruccion, getTipoArticulo());
 					dialogo.setVisible(true);

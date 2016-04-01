@@ -1,18 +1,42 @@
 package ar.com.textillevel.gui.modulos.odt.gui;
 
 import java.awt.Frame;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
+import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
+import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.gui.modulos.odt.gui.tenido.JDialogEditarFormula;
 import ar.com.textillevel.gui.modulos.odt.gui.tenido.PersisterFormulaHandler;
+import ar.com.textillevel.gui.modulos.odt.impresion.EFormaImpresionODT;
+import ar.com.textillevel.gui.modulos.odt.impresion.ImprimirODTHandler;
+import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.CreadorFormulasVisitor;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.FormulaTenidoCliente;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.TenidoTipoArticulo;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.ProcesoTipoMaquina;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.ProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
+import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
+import ar.com.textillevel.util.GTLBeanFactory;
 
 public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoCliente> {
 
@@ -165,6 +189,69 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 
 	public void setTipoArticuloFixed(TipoArticulo tipoArticuloFixed) {
 		this.tipoArticuloFixed = tipoArticuloFixed;
+	}
+
+	@Override
+	public void imprimirFormula(FormulaTenidoCliente formula) throws IOException {
+		boolean ok = false;
+		do {
+			String input = JOptionPane.showInputDialog(owner, "Ingrese el total de kilos:", "Imprimir Fórmula", JOptionPane.INFORMATION_MESSAGE);
+			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
+				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+			} else {
+				ok = true;				
+				ImprimirODTHandler impHandler = new ImprimirODTHandler(getODTDummy(formula, Integer.valueOf(input)), owner, EFormaImpresionODT.RESUMEN_ARTIULOS);
+				impHandler.imprimir();
+			}
+		} while(!ok);
+	}
+
+	private OrdenDeTrabajo getODTDummy(FormulaTenidoCliente formula, Integer totalKG) {
+		OrdenDeTrabajo odt = new OrdenDeTrabajo();
+		odt.setCodigo("20100902");
+
+		Cliente cliente = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class).getById(formula.getCliente().getId());
+		
+		SecuenciaODT secuencia = new SecuenciaODT();
+		PasoSecuenciaODT unicoPaso = new PasoSecuenciaODT();
+
+		unicoPaso.setSector(GTLBeanFactory.getInstance().getBean2(TipoMaquinaFacadeRemote.class).getAllByIdTipo(ESectorMaquina.SECTOR_HUMEDO.getId().intValue()).get(0));
+		secuencia.getPasos().add(unicoPaso);
+		ProcedimientoODT unicoSubroceso = new ProcedimientoODT();
+		unicoSubroceso.setNombre("SUBPROCESO_PRUEBA");
+
+		ProcesoTipoMaquina unicoProceso = new ProcesoTipoMaquina();
+		unicoProceso.setNombre("PROCESO_PRUEBA");
+
+		unicoPaso.setSubProceso(unicoSubroceso);
+		unicoPaso.setProceso(unicoProceso);
+
+		odt.setSecuenciaDeTrabajo(secuencia);
+
+		ProductoArticulo pa = new ProductoArticulo();
+		ProductoTenido p = new ProductoTenido();
+		pa.setProducto(p);
+
+		Articulo art = new Articulo();
+		art.setNombre("ART_PRUEBA");
+		pa.setArticulo(art);
+		odt.setProductoArticulo(pa);
+
+		RemitoEntrada reDummy = new RemitoEntrada();
+		reDummy.setPesoTotal(new BigDecimal(totalKG));
+		reDummy.setNroRemito(10);
+		reDummy.setCliente(cliente);
+		odt.setRemito(reDummy);
+
+		CreadorFormulasVisitor visitor = new CreadorFormulasVisitor(odt);
+		formula.accept(visitor);
+
+		InstruccionProcedimientoTipoProductoODT ipODT = new InstruccionProcedimientoTipoProductoODT();
+		ipODT.setFormula(visitor.getFormulaExplotada());
+		ipODT.setTipoProducto(ETipoProducto.TENIDO);
+		unicoSubroceso.getPasos().add(ipODT);
+
+		return odt;
 	}
 
 }

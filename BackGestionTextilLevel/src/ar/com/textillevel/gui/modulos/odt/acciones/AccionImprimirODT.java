@@ -25,7 +25,7 @@ public class AccionImprimirODT extends Accion<OrdenDeTrabajo> {
 	public boolean ejecutar(AccionEvent<OrdenDeTrabajo> e) throws FWException {
 		OrdenDeTrabajo odt = e.getSelectedElements().get(0);
 		odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odt.getId());
-		ImprimirODTHandler handler = new ImprimirODTHandler(odt,e.getSource().getFrame());
+		ImprimirODTHandler handler = new ImprimirODTHandler(odt,e.getSource().getFrame(), null);
 		try {
 			handler.imprimir();
 		} catch (IOException e1) {

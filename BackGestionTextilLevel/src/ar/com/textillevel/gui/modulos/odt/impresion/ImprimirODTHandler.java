@@ -45,15 +45,19 @@ public class ImprimirODTHandler {
 //	private Frame frameOwner;
 //	private Dialog dialogOwner;
 	private final OrdenDeTrabajo odt;
-	
 	private EFormaImpresionODT formaImpresion;
 
-	public ImprimirODTHandler(OrdenDeTrabajo odt, Frame frameOwner) {
+	public ImprimirODTHandler(OrdenDeTrabajo odt, Frame frameOwner, EFormaImpresionODT formaImpresionForzada) {
 		this.odt = odt;
 //		this.frameOwner = frameOwner;
-		formaImpresion = seleccionarFormaImpresion(frameOwner);
-		if(formaImpresion == null){
-			return;
+		if(formaImpresionForzada == null) {
+			formaImpresion = seleccionarFormaImpresion(frameOwner);
+			if(formaImpresion == null){
+				return;
+			}
+		} else {
+			formaImpresion = formaImpresionForzada;
+			validar(frameOwner, formaImpresion);
 		}
 	}
 
@@ -65,20 +69,24 @@ public class ImprimirODTHandler {
 			if(forma == null){
 				valida = true;
 			}else{
-				valida = true;
-				if(forma != EFormaImpresionODT.ENCABEZADO && odt.getSecuenciaDeTrabajo() == null){
-					FWJOptionPane.showErrorMessage(parent, "La orden de trabajo no tiene secuencia asignada", "Error");
-					valida = false;
-				}else if( (forma == EFormaImpresionODT.ENCABEZADO_SECUENCIA || forma == EFormaImpresionODT.AMBOS || forma == EFormaImpresionODT.RESUMEN_ARTIULOS) && !tieneFormula(ETipoProducto.TENIDO)){
-					FWJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia, debe tener cargada la formula de teñido", "Error");
-					valida = false;
-				}else if(forma == EFormaImpresionODT.ESTAMPADO && !tieneFormula(ETipoProducto.ESTAMPADO)){
-					FWJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia de estampado, debe tener cargada la formula", "Error");
-					valida = false;
-				}
+				valida = validar(parent, forma);
 			}
 		}while(!valida);
 		return forma;
+	}
+
+	private boolean validar(Window parent, EFormaImpresionODT forma) {
+		if(forma != EFormaImpresionODT.ENCABEZADO && odt.getSecuenciaDeTrabajo() == null){
+			FWJOptionPane.showErrorMessage(parent, "La orden de trabajo no tiene secuencia asignada", "Error");
+			return false;
+		}else if( (forma == EFormaImpresionODT.ENCABEZADO_SECUENCIA || forma == EFormaImpresionODT.AMBOS || forma == EFormaImpresionODT.RESUMEN_ARTIULOS) && !tieneFormula(ETipoProducto.TENIDO)){
+			FWJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia, debe tener cargada la formula de teñido", "Error");
+			return false;
+		}else if(forma == EFormaImpresionODT.ESTAMPADO && !tieneFormula(ETipoProducto.ESTAMPADO)){
+			FWJOptionPane.showErrorMessage(parent, "Para imprimir la secuencia de estampado, debe tener cargada la formula", "Error");
+			return false;
+		}
+		return true;
 	}
 
 	private boolean tieneFormula(ETipoProducto tipoProducto){

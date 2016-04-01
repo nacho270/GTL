@@ -1,6 +1,7 @@
 package ar.com.textillevel.gui.modulos.odt.gui.aprestado;
 
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,6 +137,10 @@ public class PanTablaFormulasAprestado extends PanelTablaFormula<FormulaAprestad
 
 	public void setPanVisualizacionQuimicosPigmentos(PanTablaQuimicosPigmentosVisualizacion panVisualizacionQuimicosPigmentos) {
 		this.panVisualizacionQuimicosPigmentos = panVisualizacionQuimicosPigmentos;
+	}
+
+	@Override
+	public void imprimirFormula(FormulaAprestadoCliente formula) throws IOException {
 	}
 
 }

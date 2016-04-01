@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 	protected PersisterFormulaHandler persisterFormulaHandler;
 	protected ETipoProducto tipoProducto;
 	private JButton btnCopiar;
+	private JButton btnImprimir;
 	protected Frame owner;
 
 	public PanelTablaFormula(Frame owner, ETipoProducto tipoProducto, PersisterFormulaHandler persisterFormulaHandler) {
@@ -40,11 +42,13 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 		this.owner = owner;
 		agregarBotonModificar();
 		agregarBoton(getBtnCopiar());
+		agregarBoton(getBtnImprimir());
 		getTabla().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int selectedRow = getTabla().getSelectedRow();
 				getBtnCopiar().setEnabled(selectedRow != -1 && !modoConsulta);
+				getBtnImprimir().setEnabled(selectedRow != -1 && !modoConsulta);
 			}
 		});
 	}
@@ -54,6 +58,8 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 	public abstract void agregarFormula(T formula);
 
 	public abstract T getFormulaElegida();
+	
+	public abstract void imprimirFormula(T formula) throws IOException;
 
 	@Override
 	public boolean validarQuitar() {
@@ -100,6 +106,30 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 			});
 		}
 		return btnCopiar;
+	}
+
+	public JButton getBtnImprimir() {
+		if(btnImprimir == null) {
+			btnImprimir = BossEstilos.createButton("ar/com/textillevel/imagenes/b_imprimir_moderno.png", "ar/com/textillevel/imagenes/b_imprimir_moderno_des.png");
+			btnImprimir.setEnabled(false);
+			btnImprimir.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					List<T> formulasSeleccionadas = new ArrayList<T>();
+					for(int i : getTabla().getSelectedRows()) {
+						T elemento = getElemento(i);
+						formulasSeleccionadas.add(elemento);
+					}
+					try {
+						imprimirFormula(formulasSeleccionadas.get(0));
+					} catch (IOException e1) {
+						FWJOptionPane.showErrorMessage(owner, e1.getMessage(), "Error");						
+					}
+				}
+
+			});
+		}
+		return btnImprimir;
 	}
 
 }
