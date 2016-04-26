@@ -60,7 +60,7 @@ public class SchedulerBackupDatabase implements Schedulable {
 
 	    String fileName = DateUtil.getAnio(hoy) + "-" + (DateUtil.getMes(hoy) + 1) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
 
-	    String command = "cmd.exe /c \"" +mysqldumpPath + "--compatible=ansi -u " + username  + " -p"+ pass + " " + database + " -r " + tempFile +"\"";
+	    String command = "cmd.exe /c \"" +mysqldumpPath + " --compatible=ansi -u " + username  + " -p"+ pass + " " + database + " -r " + tempFile +"\"";
 	    logger.info("EJECUTANDO: " + command);
 	    try {
 	        Process runtimeProcess = Runtime.getRuntime().exec(command);
@@ -101,7 +101,7 @@ public class SchedulerBackupDatabase implements Schedulable {
 		Arrays.sort(listFiles, new Comparator<File>() {
 
 			public int compare(File o1, File o2) {
-				return (int)(o1.lastModified() - o2.lastModified());
+				return Long.valueOf(o1.lastModified()).compareTo(Long.valueOf(o2.lastModified()));
 			}
 
 		});
