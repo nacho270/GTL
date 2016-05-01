@@ -439,9 +439,8 @@ public class GenericUtils {
 		bean.setHeight(10d);
 		bean.doQuietZone(false);
 
-		OutputStream out = new java.io.FileOutputStream(new File("output.png"));
-		BitmapCanvasProvider provider = new BitmapCanvasProvider(out, "image/x-png",
-				110, BufferedImage.TYPE_BYTE_GRAY, false, 0);
+		OutputStream out = new java.io.FileOutputStream(new File(System.getProperty("java.io.tmpdir") + File.pathSeparator + "output.png"));
+		BitmapCanvasProvider provider = new BitmapCanvasProvider(out, "image/x-png",110, BufferedImage.TYPE_BYTE_GRAY, false, 0);
 		bean.generateBarcode(provider, barCode);
 
 		provider.finish();

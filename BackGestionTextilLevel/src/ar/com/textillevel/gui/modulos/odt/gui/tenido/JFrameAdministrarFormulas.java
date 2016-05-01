@@ -105,7 +105,8 @@ public class JFrameAdministrarFormulas extends JFrame {
 	private void salir() {
 		int ret = FWJOptionPane.showQuestionMessage(this, "Va a cerrar el módulo, esta seguro?", "Administrar Fórmulas");
 		if (ret == FWJOptionPane.YES_OPTION) {
-			this.setVisible(false);
+			dispose();
+			instance = null;
 		}
 	}
 

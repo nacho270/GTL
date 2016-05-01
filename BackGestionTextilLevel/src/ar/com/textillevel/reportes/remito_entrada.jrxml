@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remito_entrada" pageWidth="595" pageHeight="878" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="92"/>
-	<property name="ireport.y" value="148"/>
-	<style name="table" isDefault="false">
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="502"/>
+	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#F0F8FF">
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#BFE1FF">
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
@@ -54,56 +54,60 @@
 				</elementGroup>
 			</elementGroup>
 			<textField>
-				<reportElement x="482" y="86" width="104" height="20"/>
-				<textElement/>
+				<reportElement x="469" y="70" width="113" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_REMITO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="200" splitType="Stretch">
+		<band height="197" splitType="Stretch">
 			<textField>
-				<reportElement x="85" y="57" width="179" height="20"/>
+				<reportElement x="91" y="53" width="179" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOMICILIO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="384" y="56" width="161" height="20"/>
+				<reportElement x="384" y="53" width="177" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{LOCALIDAD}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="85" y="89" width="234" height="20"/>
+				<reportElement x="160" y="94" width="186" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{POSICION_IVA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="397" y="89" width="170" height="20"/>
+				<reportElement x="425" y="94" width="151" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{CUIT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="28" y="134" width="128" height="20"/>
+				<reportElement x="32" y="132" width="128" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{ARTICULO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="212" y="128" width="129" height="20"/>
-				<textElement textAlignment="Justified"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="213" y="121" width="139" height="31"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PROCESO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="368" y="134" width="62" height="20"/>
+				<reportElement x="385" y="131" width="62" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{REMITO_ENT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="454" y="134" width="113" height="20"/>
+				<reportElement x="460" y="131" width="113" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{ODT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="85" y="29" width="453" height="20"/>
+				<reportElement x="89" y="14" width="472" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
 			</textField>
@@ -112,17 +116,17 @@
 	<columnHeader>
 		<band height="18">
 			<subreport>
-				<reportElement x="42" y="0" width="172" height="17"/>
+				<reportElement x="51" y="0" width="172" height="17"/>
 				<dataSourceExpression><![CDATA[$F{piezasDS1}]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_entrada_piezas_1.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="221" y="0" width="163" height="17"/>
+				<reportElement x="227" y="0" width="163" height="17"/>
 				<dataSourceExpression><![CDATA[$F{piezasDS2}]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_entrada_piezas_2.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="401" y="0" width="176" height="17"/>
+				<reportElement x="409" y="0" width="176" height="17"/>
 				<dataSourceExpression><![CDATA[$F{piezasDS3}]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_entrada_piezas_3.jasper"]]></subreportExpression>
 			</subreport>
@@ -131,22 +135,28 @@
 	<detail>
 		<band height="136">
 			<textField>
-				<reportElement x="74" y="8" width="267" height="20"/>
-				<textElement/>
+				<reportElement x="74" y="2" width="267" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_PIEZAS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="175" y="30" width="166" height="20"/>
-				<textElement/>
+				<reportElement x="285" y="21" width="166" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_KILOS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="42" y="30" width="99" height="20"/>
-				<textElement/>
+				<reportElement x="74" y="21" width="99" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_METROS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="425" y="104" width="71" height="20"/>
+				<reportElement x="340" y="79" width="71" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
 			</textField>

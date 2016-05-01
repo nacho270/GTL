@@ -10,20 +10,26 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="18" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="1" width="28" height="16"/>
-				<textElement/>
+				<reportElement x="0" y="0" width="28" height="16"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="42" y="1" width="47" height="16"/>
-				<textElement/>
+				<reportElement x="32" y="0" width="36" height="16"/>
+				<textElement textAlignment="Right">
+					<font size="9" isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{metros}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="99" y="1" width="42" height="16"/>
-				<textElement/>
+				<reportElement x="90" y="0" width="42" height="16"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{observaciones}]]></textFieldExpression>
 			</textField>
 		</band>

@@ -148,9 +148,9 @@ public abstract class PanComboConElementoOtro<T> extends JPanel {
 		if (btnModificar == null) {
 			btnModificar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_modificar_fila.png", "ar/com/textillevel/imagenes/b_modificar_fila_des.png");
 			btnModificar.addActionListener(new ActionListener() {
-				@Override
+				
 				public void actionPerformed(ActionEvent e) {
-					T selectedItem = getSelectedItem();
+					final T selectedItem = getSelectedItem();
 					if (selectedItem == null) {
 						return;
 					}

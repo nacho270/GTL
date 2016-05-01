@@ -317,8 +317,8 @@ public class ImprimirRemitoHandler {
 		private List<PiezaRemitoTO> piezas1;
 		private List<PiezaRemitoTO> piezas2;
 		private List<PiezaRemitoTO> piezas3;
-		private static final int CANT_PIEZAS_SPLIT = 19; 
-		private final int CANT_MAX_PIEZAS = GenericUtils.isSistemaTest() ? 48 : 53;
+		private static final int CANT_PIEZAS_SPLIT = 18; 
+		private final int CANT_MAX_PIEZAS = GenericUtils.isSistemaTest() ? 48 : 54;
 
 		public RemitoEntradaTO(RemitoSalida remito, Integer nroSucursal) {
 			cargarMap(remito, nroSucursal);
