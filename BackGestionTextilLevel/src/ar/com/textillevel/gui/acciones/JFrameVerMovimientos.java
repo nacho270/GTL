@@ -70,6 +70,7 @@ import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cuenta.CuentaCliente;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.DocumentoContableCliente;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
@@ -928,7 +929,12 @@ public class JFrameVerMovimientos extends JFrame {
 									documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
 								}
 								JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
-								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), jasperPrint, to, cc);
+								Integer nroRemito = null;
+								if (documentoContable2.getTipoDocumento() == ETipoDocumento.FACTURA) {
+									nroRemito = ((Factura)documentoContable2).getRemitos().get(0).getNroRemito();
+								}
+								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(),
+										nroRemito, jasperPrint, to, cc);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();

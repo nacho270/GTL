@@ -29,22 +29,28 @@ public final class EmailSender {
 				firma(), Collections.singletonList(file), to, cc);
 		file.delete();
 	}
-	
-	public static void enviarDocumentoContablePorEmail(ETipoDocumento tipoDocContable, Integer nroDoc,
+
+	public static void enviarDocumentoContablePorEmail(ETipoDocumento tipoDocContable, Integer nroDoc, Integer nroRemito,
 			JasperPrint jasperDocumento, List<String> to, List<String> cc) throws JRException,
 			FileNotFoundException, AddressException, MessagingException {
-		String strDocumento = tipoDocContable.toString().toLowerCase().replaceAll("_", " de ")
-				.replaceAll("debito", "débito").replaceAll("credito", "crédito");
-		File file = new File(System.getProperty("java.io.tmpdir") + tipoDocContable.toString().toLowerCase() + "_" + nroDoc + ".pdf");
+		boolean facturaB = GenericUtils.isSistemaTest() && tipoDocContable == ETipoDocumento.FACTURA;
+		String strTipoDoc = facturaB ? "Importe RTO" : tipoDocContable.toString();
+		String strDocumento = strTipoDoc.toLowerCase()
+				.replaceAll("_", " de ")
+				.replaceAll("debito", "débito")
+				.replaceAll("credito", "crédito");
+		File file = new File(System.getProperty("java.io.tmpdir") + strTipoDoc.toLowerCase() + "_" + (facturaB ? nroRemito : nroDoc) + ".pdf");
 		JasperHelper.exportarAPDF(jasperDocumento, file);
-		String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + nroDoc;
+		String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + (facturaB ? nroRemito : nroDoc);
 		GenericUtils.enviarEmail(asunto,
-				"<html><b>Estimado cliente:<br><br>" + 
-				"Por medio de la presente, adjuntamos la " + asunto + ".<br><br>" +
+				"<html><b>Estimado cliente:<br><br>Por medio de la presente, adjuntamos " +
+						(facturaB ?
+								"importe correspondiente al remito  N° " + nroRemito :
+								"la " + asunto) + ".<br><br>" +
 				firma(), Collections.singletonList(file), to, cc);
 		file.delete();
 	}
-	
+
 	public static void enviarRemitoPorEmail(Integer nroFactura, List<Integer> nrosRemito, List<JasperPrint> jaspersRemitos,
 			List<String> to, List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		List<File> files = new ArrayList<File>();
@@ -66,7 +72,7 @@ public final class EmailSender {
 			file.delete();
 		}
 	}
-	
+
 	public static void enviarResumenCuentaPorEmail(JasperPrint jasperPrintCotizacion, List<String> to,
 			List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "resumen.pdf");
