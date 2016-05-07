@@ -48,7 +48,7 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 			public void mouseClicked(MouseEvent e) {
 				int selectedRow = getTabla().getSelectedRow();
 				getBtnCopiar().setEnabled(selectedRow != -1 && !modoConsulta);
-				getBtnImprimir().setEnabled(selectedRow != -1 && !modoConsulta);
+				getBtnImprimir().setEnabled(selectedRow != -1);
 			}
 		});
 	}
