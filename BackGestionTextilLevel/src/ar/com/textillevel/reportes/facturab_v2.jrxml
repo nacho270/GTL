@@ -11,7 +11,6 @@
 	<parameter name="IVA" class="java.lang.String"/>
 	<parameter name="CUIT" class="java.lang.String"/>
 	<parameter name="COND_VENTA" class="java.lang.String"/>
-	<parameter name="NRO_REMITO" class="java.lang.String"/>
 	<parameter name="SUBTOTAL" class="java.lang.String"/>
 	<parameter name="PORC_IVA" class="java.lang.String"/>
 	<parameter name="TOTAL_IVA" class="java.lang.String"/>
@@ -106,11 +105,6 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{COND_VENTA}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="496" y="49" width="88" height="31"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_REMITO}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="36" y="4" width="40" height="20"/>
 				<textElement>
@@ -145,13 +139,6 @@
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Localidad:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="445" y="49" width="49" height="20"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Remito/s:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="84" width="568" height="20"/>
