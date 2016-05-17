@@ -43,6 +43,7 @@ public class Recibo implements Serializable {
 	private Date fecha;
 	private String observaciones;
 	private String usuarioConfirmacion;		//EL USUARIO QUE ACEPTA UN DOCUMENTO, LO PONGO ACA PARA QUE SEA FACIL TRAERLO EN LA TABLA DE MOVIMIENTOS
+	private String obsRetenciones;
 	
 	public Recibo() {
 		this.pagoReciboList = new ArrayList<PagoRecibo>();
@@ -178,7 +179,16 @@ public class Recibo implements Serializable {
 	public void setUsuarioConfirmacion(String usuarioConfirmacion) {
 		this.usuarioConfirmacion = usuarioConfirmacion;
 	}
-	
+
+	@Column(name="A_OBS_RETENCIONES", length=50, nullable=true)	
+	public String getObsRetenciones() {
+		return obsRetenciones;
+	}
+
+	public void setObsRetenciones(String obsRetenciones) {
+		this.obsRetenciones = obsRetenciones;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

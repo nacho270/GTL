@@ -97,6 +97,7 @@ public class JDialogCargaRecibo extends JDialog {
 	private FWJTextField txtCantPesos;
 	private FWJTextField txtTotalFacturas;
 	private JTextField txtNroRecibo;
+	private FWJTextField txtObsRetencion;
 	private PanelDatePicker panFecha;
 
 	private JButton btnVerificar;
@@ -133,6 +134,7 @@ public class JDialogCargaRecibo extends JDialog {
 	private FWJTextField txtNroTransf;
 	private FWJTextField txtObservaciones;
 
+	private static final Integer MAX_LENGTH_OBS_RETENCIONES = 50;
 	
 	public JDialogCargaRecibo(Frame owner, Recibo recibo, boolean modoConsulta) {
 		super(owner);
@@ -153,6 +155,7 @@ public class JDialogCargaRecibo extends JDialog {
 		}
 		getTxtCuit().setText(recibo.getCliente().getCuit());
 		getTxtNroRecibo().setText(recibo.getNroRecibo().toString());
+		getTxtObsRetencion().setText(recibo.getObsRetenciones());
 
 		if (modoConsulta) {
 			getPanelTablaPagosRecibo().agregarElementos(recibo.getPagoReciboList());
@@ -170,6 +173,7 @@ public class JDialogCargaRecibo extends JDialog {
 			getTxtNroTransf().setEditable(false);
 			getTxtImporteTransf().setEditable(false);
 			getTxtObservaciones().setEditable(false);
+			getTxtObsRetencion().setEditable(false);
 			getTxtCantPesos().setText(recibo.getTxtCantidadPesos());
 			getTxtTotalRecibo().setText(recibo.getMonto().toString());
 			getPanelFecha().setSelectedDate(recibo.getFecha());
@@ -380,6 +384,14 @@ public class JDialogCargaRecibo extends JDialog {
 		return txtTotalFacturas;
 	}
 
+	private FWJTextField getTxtObsRetencion() {
+		if (txtObsRetencion == null) {
+			txtObsRetencion = new FWJTextField();
+			//txtObsRetencion.setPreferredSize(new Dimension(150, 20));
+		}
+		return txtObsRetencion;
+	}
+
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
@@ -442,6 +454,7 @@ public class JDialogCargaRecibo extends JDialog {
 		recibo.setFecha(new Date(longFecha));
 		recibo.setEstadoRecibo(EEstadoRecibo.PENDIENTE);
 		recibo.setObservaciones(getTxtObservaciones().getText().trim());
+		recibo.setObsRetenciones(StringUtil.isNullOrEmpty(getTxtObsRetencion().getText()) ? null : getTxtObsRetencion().getText().trim());
 	}
 
 	private List<FormaPago> getFormasPago() {
@@ -590,7 +603,11 @@ public class JDialogCargaRecibo extends JDialog {
 				return false;
 			}
 		}
-		
+		if(getTxtObsRetencion().getText().trim().length() > MAX_LENGTH_OBS_RETENCIONES) {
+			FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap("Las 'Observaciones de las Retenciones' no deben superar los " + MAX_LENGTH_OBS_RETENCIONES + "."), "Error");
+			getTxtObsRetencion().requestFocus();
+			return false;
+		}
 		return true;
 	}
 
@@ -815,16 +832,19 @@ public class JDialogCargaRecibo extends JDialog {
 		JPanel pnlTotales = new JPanel();
 		pnlTotales.setLayout(new GridBagLayout());
 		pnlTotales.setBorder(BorderFactory.createTitledBorder("Totales"));
-		pnlTotales.add(new JLabel("RETENCION IVA: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 1, 0));
-		pnlTotales.add(getTxtRetencionIVA(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
-		pnlTotales.add(new JLabel("RETENCION INGRESOS BRUTOS: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
-		pnlTotales.add(getTxtRetencionIIBB(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
-		pnlTotales.add(new JLabel("RETENCION GANANCIAS: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
-		pnlTotales.add(getTxtRetencionGanancias(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(new JLabel("RET. IVA: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(getTxtRetencionIVA(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(new JLabel("RET. ING. BRUTOS: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(getTxtRetencionIIBB(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(new JLabel("RET. GANANCIAS: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(getTxtRetencionGanancias(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
 		pnlTotales.add(new JLabel("EFECTIVO: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
-		pnlTotales.add(getTxtEfectivo(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(getTxtEfectivo(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
 		pnlTotales.add(new JLabel("TOTAL: "), GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 10, 5, 2), 1, 1, 0, 0));
-		pnlTotales.add(getTxtTotalRecibo(), GenericUtils.createGridBagConstraints(1, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(getTxtTotalRecibo(), GenericUtils.createGridBagConstraints(1, 4, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(new JLabel("OBS. RETENCIONES: "), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 10, 5, 2), 1, 1, 0, 0));
+		pnlTotales.add(getTxtObsRetencion(), GenericUtils.createGridBagConstraints(1, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 10, 5, 2), 1, 1, 1, 0));
+		
 		return pnlTotales;
 	}
 

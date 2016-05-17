@@ -108,6 +108,7 @@ public class ImprimirReciboHandler {
 		private String importeRetIIBB;
 		private String importeEfectivo;
 		private String importeTotal;
+		private String obsRetenciones;
 
 		public ReciboTO() {
 		}
@@ -142,6 +143,7 @@ public class ImprimirReciboHandler {
 			this.importeEfectivo =  fixPrecioCero(GenericUtils.getDecimalFormat().format(ifpv.getImporteEfectivo().doubleValue()));
 			this.importeTotal = GenericUtils.getDecimalFormat().format(recibo.getMonto().doubleValue());
 			this.txtTotalPesos = recibo.getTxtCantidadPesos();
+			this.obsRetenciones = recibo.getObsRetenciones();
 		}
 
 		private void llenarAndDesdoblarListaNCs(List<NotaCreditoTO> notaCreditoList, BigDecimal totalNCs) {
@@ -290,6 +292,7 @@ public class ImprimirReciboHandler {
 			parameterMap.put("RETENCION_IVA", importeRetIVA);
 			parameterMap.put("RETENCION_GAN", importeRetGan);
 			parameterMap.put("RETENCION_IIBB", importeRetIIBB);
+			parameterMap.put("RETENCION_OBS", StringUtil.isNullOrEmpty(obsRetenciones) ? "" : obsRetenciones);
 			parameterMap.put("EFECTIVO", importeEfectivo);
 
 			parameterMap.put("TOTAL_PAGADO", importeTotal);
