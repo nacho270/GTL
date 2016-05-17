@@ -74,6 +74,10 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 		return materiaPrimaDAOLocal.getAllAnilinasByTipoArticulo(tipoArticulo);
 	}
 
+	public List<Anilina> getOtrasAnilinasByMismoColorIndex(Anilina anilina) {
+		return materiaPrimaDAOLocal.getOtrasAnilinasByMismoColorIndex(anilina);
+	}
+	
 	public <T extends MateriaPrima> List<T> getAllByClase(Class<T> clazz) {
 		return materiaPrimaDAOLocal.getAllByClase(clazz);
 	}

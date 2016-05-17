@@ -99,4 +99,12 @@ public class MateriaPrimaDAO extends GenericDAO<MateriaPrima, Integer> implement
 		this.getEntityManager().flush();
 	}
 
+	public List<Anilina> getOtrasAnilinasByMismoColorIndex(Anilina anilina) {
+		Query query = getEntityManager().createQuery("FROM Anilina AS a " +
+				" WHERE a.id != :idAnilina AND a.colorIndex = :colorIndex");
+		query.setParameter("idAnilina", anilina.getId());
+		query.setParameter("colorIndex", anilina.getColorIndex());
+		return query.getResultList();
+	}
+
 }

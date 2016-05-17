@@ -30,4 +30,6 @@ public interface MateriaPrimaDAOLocal extends DAOLocal<MateriaPrima, Integer> {
 
 	public abstract void updateTipoManualmente(Integer id, String tipo);
 
+	public abstract List<Anilina> getOtrasAnilinasByMismoColorIndex(Anilina anilina);
+
 }

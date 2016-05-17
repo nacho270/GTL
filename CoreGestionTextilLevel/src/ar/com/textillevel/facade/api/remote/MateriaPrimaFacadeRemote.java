@@ -33,5 +33,7 @@ public interface MateriaPrimaFacadeRemote {
 	public abstract <T extends MateriaPrima> List<T> getAllByClase(Class<T> clazz);
 
 	public abstract MateriaPrima getByIdEager(Integer id);
+	
+	public List<Anilina> getOtrasAnilinasByMismoColorIndex(Anilina anilina);
 
 }

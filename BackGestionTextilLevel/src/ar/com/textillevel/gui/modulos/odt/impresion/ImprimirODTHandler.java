@@ -191,6 +191,7 @@ public class ImprimirODTHandler {
 		private final String gramaje;
 		private final Integer nroRemito;
 		private final String cliente; // String para el caso 01/74 //TODO:
+		private final Integer nroCliente;
 		private final Integer cantidadPiezas;
 		private final String articulo;
 		private final String anchoFinal;
@@ -348,6 +349,7 @@ public class ImprimirODTHandler {
 			this.gramaje = odtDatosHelper.getDescGramaje();
 			this.nroRemito = odt.getRemito().getNroRemito();
 			this.cliente = odtDatosHelper.getDescCliente();
+			this.nroCliente = odt.getRemito().getCliente().getNroCliente();
 			this.cantidadPiezas = odt.getPiezas().size(); // esto es lo mismo que las piezas remito?
 			this.articulo = odtDatosHelper.getDescArticulo();
 			this.color = odtDatosHelper.getDescColor();
@@ -361,13 +363,13 @@ public class ImprimirODTHandler {
 			if(formaImp == EFormaImpresionODT.AMBOS || formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS || formaImp == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
 				crearPiezasDummy();
 				if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS){
-					this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos());
-					this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos());
+					this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos(), true);
+					this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos(), true);
 					this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
 				}else if(odt.getSecuenciaDeTrabajo()!=null){
-					this.resumenSectorEstampado = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_ESTAMPERIA,odt.getSecuenciaDeTrabajo().getPasos());
-					this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos());
-					this.resumenSectorHumedo = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos());
+					this.resumenSectorEstampado = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_ESTAMPERIA,odt.getSecuenciaDeTrabajo().getPasos(), true);
+					this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+					this.resumenSectorHumedo = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos(), true);
 				}
 			}
 		}
@@ -428,6 +430,7 @@ public class ImprimirODTHandler {
 //			mapa.put("MAQUINA", this.codigo);
 			mapa.put("ANCHO_CRUDO", this.anchoCrudo);
 			mapa.put("ANCHO_FINAL", this.anchoFinal);
+			mapa.put("NRO_CLIENTE", String.valueOf(nroCliente));
 			if(piezasDummy1!=null && piezasDummy2 != null){
 				mapa.put("piezasDS1", new JRBeanCollectionDataSource(piezasDummy1));
 				mapa.put("piezasDS2", new JRBeanCollectionDataSource(piezasDummy2));
