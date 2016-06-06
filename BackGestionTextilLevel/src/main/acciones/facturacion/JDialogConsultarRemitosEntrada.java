@@ -372,6 +372,7 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 				getPanTablaRemitosEntrada().agregarElementos(remitoEntradaList);
 			}
 		} else {
+			getPanTablaRemitosEntrada().getTabla().removeAllRows();
 			Integer nroRemito = getTxtNroRemito().getValue();
 			List<RemitoEntrada> remitoEntradaList = getRemitoEntradaFacade().getByNroRemito(nroRemito);
 			getPanTablaRemitosEntrada().agregarElementos(remitoEntradaList);
