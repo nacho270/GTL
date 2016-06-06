@@ -55,6 +55,7 @@ public enum EValidacionException {
 	CLIENTE_CUIT_INVALIDO							(150, "El CUIT ingresado es inválido."),
 	CLIENTE_SIN_LISTA_PRECIOS						(151, "El cliente no tiene lista de precios asociada."),
 	COTIZACION_LISTA_DE_PRECIOS_NUMERO_REPETIDO		(152, "El número de cotización generado ya existe."),
+	CORRECTOR_DE_CUENTAS_DATOS_INCONSISTENTES		(153, "Datos Inconsistentes. Había más movimientos que documentos recuperados. Chequear nro de sucursal de documentos viejos.."),
 	
 	_											(000, "");
 	

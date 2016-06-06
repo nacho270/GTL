@@ -80,12 +80,14 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	public List<Factura> getFacturaImpagaListByClient(Integer idCliente, Integer nroSucursal) {
 		String hql = "SELECT f " +
 					 "FROM Factura f " +
-					 "WHERE f.cliente.id = :idCliente AND f.nroSucursal = :nroSucursal AND " +
+					 "WHERE f.cliente.id = :idCliente AND " + (nroSucursal != null ? "f.nroSucursal = :nroSucursal AND " : "") + 
 					 "f.montoFaltantePorPagar > 0 AND f.idEstado!=3 " +
 					 "ORDER BY f.fechaEmision, f.id ASC "; 
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
-		q.setParameter("nroSucursal", nroSucursal);
+		if(nroSucursal!= null) {
+			q.setParameter("nroSucursal", nroSucursal);
+		}
 		List<Factura> resultList = q.getResultList();
 		if(resultList!=null && !resultList.isEmpty()){
 			for(Factura f : resultList){
@@ -221,11 +223,13 @@ public class FacturaDAO extends GenericDAO<Factura, Integer> implements FacturaD
 	public List<Factura> getAllByIdClienteList(Integer idCliente, Integer nroSucursal) {
 		String hql = "SELECT f " +
 					 "FROM Factura f " +
-					 "WHERE f.nroSucursal = :nroSucursal AND f.cliente.id = :idCliente AND f.idEstado!=3 " +
+					 "WHERE " + (nroSucursal != null ? "f.nroSucursal = :nroSucursal AND " : "") + " f.cliente.id = :idCliente AND f.idEstado!=3 " +
 					 "ORDER BY f.fechaEmision, f.nroFactura ASC ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
-		q.setParameter("nroSucursal", nroSucursal);
+		if(nroSucursal != null) {
+			q.setParameter("nroSucursal", nroSucursal);
+		}
 		List<Factura> facturas = q.getResultList();
 		if(facturas!=null && !facturas.isEmpty()){
 			for(Factura f : facturas){

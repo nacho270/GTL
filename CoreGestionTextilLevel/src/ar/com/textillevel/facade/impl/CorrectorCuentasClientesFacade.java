@@ -43,6 +43,7 @@ import ar.com.textillevel.entidades.documentos.recibo.pagos.visitor.IPagoReciboV
 import ar.com.textillevel.entidades.enums.EDescripcionPagoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
+import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
 import ar.com.textillevel.facade.api.local.FacturaFacadeLocal;
@@ -96,8 +97,11 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 			return;
 		}
 
+		Integer cantMovimientos = 0;
+		
 		//Borro los movimientos pero antes guardo las observaciones
 		List<MovimientoCuenta> movimientosCuentaArticulo = movDAO.getAllMovimientosByIdCuentaCliente(cuentaClienteByIdCliente.getId());
+		cantMovimientos = movimientosCuentaArticulo.size();
 		for(MovimientoCuenta m :  movimientosCuentaArticulo) {
 			if(!StringUtil.isNullOrEmpty(m.getObservaciones())) {
 				if(m instanceof MovimientoDebe) {
@@ -125,6 +129,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 		cuentaClienteByIdCliente = (CuentaCliente)ctaDAO.save(cuentaClienteByIdCliente);
 
 		//Obtengo facturas, nc, nd y recibos
+		Integer cantidadDocumentos = 0;
 		List<PagoReciboWrapper> prList = obtenerNDsAndFacturas(idCliente);
 		List<DocMovimientoHaber> docList = obtenerNCsAndRecibos(idCliente);
 		List<MetaDocumentoWrapper> allDocuments = new ArrayList<CorrectorCuentasClientesFacade.MetaDocumentoWrapper>();
@@ -135,6 +140,13 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 			allDocuments.add(new MetaDocumentoWrapper(doc));
 		}
 		Collections.sort(allDocuments);
+		
+		cantidadDocumentos += allDocuments.size();
+		
+		//chequeo cantidad de movimientos vs cant de documentos por si hay algo raro a nivel datos
+		if(cantMovimientos > cantidadDocumentos) {
+			throw new ValidacionException(EValidacionException.CORRECTOR_DE_CUENTAS_DATOS_INCONSISTENTES.getInfoValidacion());
+		}
 		
 		//Comienzo a grabar los documentos
 		for(MetaDocumentoWrapper metadoc : allDocuments) {
@@ -162,7 +174,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 				tratarDuplicacionRecibo(r, reciboRevisado);
 			}
 		}
-		List<NotaCredito> allNotaCreditoList = correccionDAO.getAllNotaCreditoList(idCliente, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
+		List<NotaCredito> allNotaCreditoList = correccionDAO.getAllNotaCreditoList(idCliente, null);
 		for(NotaCredito nc : allNotaCreditoList) {
 			resultList.add(new DocMovimientoHaber(nc));
 		}
@@ -205,7 +217,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 		for(NotaDebito nd : allNDByIdCliente) {
 			prList.add(new PagoReciboWrapper(nd));
 		}
-		List<Factura> facturaList = facturaDAO.getAllByIdClienteList(idCliente, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
+		List<Factura> facturaList = facturaDAO.getAllByIdClienteList(idCliente, null);
 		for(Factura f : facturaList) {
 			prList.add(new PagoReciboWrapper(f));
 		}
@@ -345,7 +357,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 				r.getPagoReciboList().add(prnd);
 			}
 		}
-		List<Factura> facturaList = facturaDAO.getFacturaImpagaListByClient(r.getCliente().getId(), parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
+		List<Factura> facturaList = facturaDAO.getFacturaImpagaListByClient(r.getCliente().getId(), null);
 		for(Factura f : facturaList) {
 			if((mismoDia(f.getFechaEmision(), r.getFecha()) || !f.getFechaEmision().after(r.getFecha())) && totalMontoPagado.compareTo(new BigDecimal(0)) > 0) {
 				BigDecimal montoF = f.getMontoFaltantePorPagar();

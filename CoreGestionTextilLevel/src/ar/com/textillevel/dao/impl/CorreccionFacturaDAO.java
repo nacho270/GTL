@@ -106,10 +106,12 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 	}
 
 	public List<NotaCredito> getAllNotaCreditoList(Integer idCliente, Integer nroSucursal) {
-		String hql = " SELECT nc FROM NotaCredito nc WHERE nc.nroSucursal = :nroSucursal AND nc.cliente.id = :idCliente AND nc.anulada <> true ORDER BY nc.fechaEmision";
+		String hql = " SELECT nc FROM NotaCredito nc WHERE "  + (nroSucursal != null ? "nc.nroSucursal = :nroSucursal AND " : "")+ " nc.cliente.id = :idCliente AND nc.anulada <> true ORDER BY nc.fechaEmision";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCliente", idCliente);
-		q.setParameter("nroSucursal", nroSucursal);
+		if(nroSucursal != null) {
+			q.setParameter("nroSucursal", nroSucursal);
+		}
 		return q.getResultList();
 	}
 
