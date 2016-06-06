@@ -520,7 +520,7 @@ public class JDialogParametrosGenerales extends JDialog {
 			getTxtUsuarioCuentaMail().requestFocus();
 			return false;
 		}
-		if (GenericUtils.isEmailValido(getTxtUsuarioCuentaMail().getText())) {
+		if (!GenericUtils.isEmailValido(getTxtUsuarioCuentaMail().getText())) {
 			FWJOptionPane.showErrorMessage(this, "La dirección de Mail debe ser válida", "Error");
 			getTxtUsuarioCuentaMail().requestFocus();
 			return false;
