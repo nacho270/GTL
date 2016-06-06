@@ -42,12 +42,13 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Integer CANT_COLS = 5;
+	private static final Integer CANT_COLS = 6;
 	private static final Integer COL_COLOR = 0;
 	private static final Integer COL_TIPO_ARTICULO = 1;
 	private static final Integer COL_NOMBRE = 2;
 	private static final Integer COL_CODIGO = 3;
-	private static final Integer COL_OBJ = 4;
+	private static final Integer COL_VERIFICADA = 4;
+	private static final Integer COL_OBJ = 5;
 
 	private PanTablaQuimicos panQuimicos;
 	
@@ -76,7 +77,8 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		tabla.setStringColumn(COL_COLOR, "COLOR", 180, 180, true);
 		tabla.setStringColumn(COL_TIPO_ARTICULO, "TIPO DE ARTÍCULO", 180, 180, true);
 		tabla.setStringColumn(COL_NOMBRE, "NOMBRE DE LA FÓRMULA", 150, 150, true);
-		tabla.setStringColumn(COL_CODIGO, "CÓDIGO", 110, 110, true);
+		tabla.setStringColumn(COL_CODIGO, "CÓDIGO", 70, 70, true);
+		tabla.setCheckColumn(COL_VERIFICADA, "VERIFICADA", 90, true);		
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 		return tabla;
 	}
@@ -88,6 +90,7 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		row[COL_TIPO_ARTICULO] = elemento.getTipoArticulo().getNombre();
 		row[COL_COLOR] = elemento.getColor().getNombre();
 		row[COL_CODIGO] = elemento.getCodigoFormula();
+		row[COL_VERIFICADA] = calcVerificada(elemento.getVerificada());
 		row[COL_OBJ] = elemento;
 		getTabla().addRow(row);
 	}
@@ -253,6 +256,11 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		unicoSubroceso.getPasos().add(ipODT);
 
 		return odt;
+	}
+
+	@Override
+	protected int getColVerificada() {
+		return COL_VERIFICADA;
 	}
 
 }

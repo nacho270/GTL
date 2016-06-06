@@ -1,5 +1,6 @@
 package ar.com.textillevel.gui.modulos.odt.gui;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +35,7 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 	protected ETipoProducto tipoProducto;
 	private JButton btnCopiar;
 	private JButton btnImprimir;
+	private JButton btnVerificar;
 	protected Frame owner;
 
 	public PanelTablaFormula(Frame owner, ETipoProducto tipoProducto, PersisterFormulaHandler persisterFormulaHandler) {
@@ -43,12 +45,14 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 		agregarBotonModificar();
 		agregarBoton(getBtnCopiar());
 		agregarBoton(getBtnImprimir());
+		agregarBoton(getBtnVericar());
 		getTabla().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int selectedRow = getTabla().getSelectedRow();
 				getBtnCopiar().setEnabled(selectedRow != -1 && !modoConsulta);
 				getBtnImprimir().setEnabled(selectedRow != -1);
+				getBtnVericar().setEnabled(selectedRow != -1 && !modoConsulta);
 			}
 		});
 	}
@@ -130,6 +134,34 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 			});
 		}
 		return btnImprimir;
+	}
+	
+	public JButton getBtnVericar() {
+		if(btnVerificar == null) {
+			btnVerificar = BossEstilos.createButton("ar/com/textillevel/imagenes/b_verificar_stock.png", "ar/com/textillevel/imagenes/b_verificar_stock_des.png");
+			btnVerificar.setEnabled(false);
+			btnVerificar.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					int[] selectedRows = getTabla().getSelectedRows();
+					for(int i : selectedRows) {
+						T elemento = getElemento(i);
+						boolean value = !calcVerificada(elemento.getVerificada());
+						elemento.setVerificada(value);
+						getTabla().setValueAt(value, i, getColVerificada());
+						persisterFormulaHandler.addFormulaParaGrabar(tipoProducto, elemento);
+					}
+				}
+
+			});
+		}
+		return btnVerificar;
+	}
+
+	protected abstract int getColVerificada();
+
+	protected boolean calcVerificada(Boolean verificada) {
+		return verificada == null ? false : verificada;
 	}
 
 }

@@ -18,10 +18,11 @@ public class PanTablaFormulasAprestado extends PanelTablaFormula<FormulaAprestad
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Integer CANT_COLS = 3;
+	private static final Integer CANT_COLS = 4;
 	private static final Integer COL_NOMBRE = 0;
 	private static final Integer COL_CODIGO_FORMULA = 1;
-	private static final Integer COL_OBJ = 2;
+	private static final Integer COL_VERIFICADA = 2;
+	private static final Integer COL_OBJ = 3;
 
 	private PanTablaQuimicosPigmentosVisualizacion panVisualizacionQuimicosPigmentos;
 	
@@ -47,6 +48,7 @@ public class PanTablaFormulasAprestado extends PanelTablaFormula<FormulaAprestad
 		FWJTable tabla = new FWJTable(0, CANT_COLS);
 		tabla.setStringColumn(COL_NOMBRE, "NOMBRE DE LA FÓRMULA", 250, 250, true);
 		tabla.setStringColumn(COL_CODIGO_FORMULA, "CÓDIGO", 60, 60, true);
+		tabla.setCheckColumn(COL_VERIFICADA, "VERIFICADA", 90, true);
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 		return tabla;
 	}
@@ -56,6 +58,7 @@ public class PanTablaFormulasAprestado extends PanelTablaFormula<FormulaAprestad
 		Object[] row = new Object[CANT_COLS];
 		row[COL_NOMBRE] = elemento.getNombre();
 		row[COL_CODIGO_FORMULA] = elemento.getCodigoFormula();
+		row[COL_VERIFICADA] = calcVerificada(elemento.getVerificada());
 		row[COL_OBJ] = elemento;
 		getTabla().addRow(row);
 	}
@@ -141,6 +144,11 @@ public class PanTablaFormulasAprestado extends PanelTablaFormula<FormulaAprestad
 
 	@Override
 	public void imprimirFormula(FormulaAprestadoCliente formula) throws IOException {
+	}
+
+	@Override
+	protected int getColVerificada() {
+		return COL_VERIFICADA;
 	}
 
 }

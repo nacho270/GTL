@@ -26,12 +26,13 @@ public abstract class FormulaCliente implements Serializable {
 
 	private static final long serialVersionUID = 6171393380691150327L;
 
-	private Integer id;
+	private Integer id;  
 	private String nombre;
 	private Cliente cliente;
 	private Color color;
 	private Integer nroFormula;
 	private String codigoFormula;
+	private Boolean verificada;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE)
@@ -90,6 +91,15 @@ public abstract class FormulaCliente implements Serializable {
 
 	public void setNroFormula(Integer nroFormula) {
 		this.nroFormula = nroFormula;
+	}
+
+	@Column(name = "A_VERIFICADA", nullable=true)
+	public Boolean getVerificada() {
+		return verificada;
+	}
+
+	public void setVerificada(Boolean verificada) {
+		this.verificada = verificada;
 	}
 
 	@Override

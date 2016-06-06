@@ -17,11 +17,12 @@ public class PanTablaFormulasEstampado extends PanelTablaFormula<FormulaEstampad
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Integer CANT_COLS = 4;
+	private static final Integer CANT_COLS = 5;
 	private static final Integer COL_NOMBRE = 0;
 	private static final Integer COL_COLOR = 1;
 	private static final Integer COL_CODIGO_FORMULA = 2;
-	private static final Integer COL_OBJ = 3;
+	private static final Integer COL_VERIFICADA = 3;
+	private static final Integer COL_OBJ = 4;
 
 
 	private PanTablaQuimicosPigmentosVisualizacion panVisualizacionQuimicosPigmentos;
@@ -48,6 +49,7 @@ public class PanTablaFormulasEstampado extends PanelTablaFormula<FormulaEstampad
 		tabla.setStringColumn(COL_NOMBRE, "NOMBRE DE LA FÓRMULA", 250, 250, true);
 		tabla.setStringColumn(COL_COLOR, "COLOR", 180, 180, true);
 		tabla.setStringColumn(COL_CODIGO_FORMULA, "CÓDIGO", 60, 60, true);
+		tabla.setCheckColumn(COL_VERIFICADA, "VERIFICADA", 90, true);		
 		tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 		return tabla;
 	}
@@ -58,6 +60,7 @@ public class PanTablaFormulasEstampado extends PanelTablaFormula<FormulaEstampad
 		row[COL_NOMBRE] = elemento.getNombre();
 		row[COL_COLOR] = elemento.getColor().getNombre();
 		row[COL_CODIGO_FORMULA] = elemento.getCodigoFormula();
+		row[COL_VERIFICADA] = calcVerificada(elemento.getVerificada());
 		row[COL_OBJ] = elemento;
 		getTabla().addRow(row);
 	}
@@ -148,6 +151,11 @@ public class PanTablaFormulasEstampado extends PanelTablaFormula<FormulaEstampad
 
 	@Override
 	public void imprimirFormula(FormulaEstampadoCliente formula) throws IOException {
+	}
+
+	@Override
+	protected int getColVerificada() {
+		return COL_VERIFICADA;
 	}
 
 }
