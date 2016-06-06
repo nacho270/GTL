@@ -36,6 +36,12 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 			materiaPrimaDAOLocal.updateTipoManualmente(materiaPrima.getId(), tipo);
 		}
 		if (!materiaPrima.getMpHijas().isEmpty()) {
+			MateriaPrima padre = getPadre(materiaPrima);
+			if(!padre.equals(materiaPrima)) {
+				padre.getMpHijas().addAll(materiaPrima.getMpHijas());
+				materiaPrima.getMpHijas().clear();
+				materiaPrimaDAOLocal.save(padre);
+			}
 			for (MateriaPrima mpHija : materiaPrima.getMpHijas()) {
 				materiaPrimaDAOLocal.save(mpHija);
 			}
@@ -64,6 +70,15 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 			}
 		}
 		return filtradas;
+	}
+
+	private MateriaPrima getPadre(MateriaPrima mp) {
+		if(mp.getIdPadre() == null || mp.getIdPadre().equals(mp.getId())) {
+			return mp;
+		} else {
+			MateriaPrima padre = materiaPrimaDAOLocal.getById(mp.getIdPadre());
+			return getPadre(padre);
+		}
 	}
 
 	public boolean existeMateriaPrima(String nombre, Integer idAExcluir) {

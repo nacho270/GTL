@@ -1,6 +1,5 @@
 package ar.com.textillevel.gui.modulos.odt.gui;
 
-import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

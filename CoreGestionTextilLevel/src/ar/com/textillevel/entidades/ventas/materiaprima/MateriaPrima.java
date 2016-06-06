@@ -117,7 +117,7 @@ public abstract class MateriaPrima implements Serializable {
 	}
 	
 	@Column(name = "F_MP_PADRE", nullable = true, insertable = false, updatable = false)
-	protected Integer getIdPadre() {
+	public Integer getIdPadre() {
 		return idPadre;
 	}
 

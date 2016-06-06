@@ -53,6 +53,8 @@ public class JDialogSelccionarHijosMateriaPrima extends JDialog{
 		boolean yaTieneHijas = !materiaPrima.getMpHijas().isEmpty();
 		this.mps = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class).
 				getAllOrderByTipos(yaTieneHijas, materiaPrima.getTipo());
+		
+		this.mps.remove(materiaPrimaActual);
 		setUpComponentes();
 		setUpScreen();
 	}
