@@ -370,7 +370,12 @@ public class JFrameVerMovimientos extends JFrame {
 			FWJTable tabla = getTabla();
 			for (int i = 0; i < tabla.getRowCount(); i++) {
 				MovimientoTO mto = new MovimientoTO();
-				mto.setDescripcion((String) tabla.getValueAt(i, COL_DESCR));
+				String descripcion = (String) tabla.getValueAt(i, COL_DESCR);
+				int indexOfFC = descripcion.indexOf(" - FC ");
+				if(indexOfFC != -1) {
+					descripcion = descripcion.substring(0, indexOfFC);
+				}
+				mto.setDescripcion(descripcion);
 				mto.setDebe((String) tabla.getValueAt(i, COL_DEBE));
 				mto.setHaber((String) tabla.getValueAt(i, COL_HABER));
 				mto.setSaldo((String) tabla.getValueAt(i, COL_SALDO));
