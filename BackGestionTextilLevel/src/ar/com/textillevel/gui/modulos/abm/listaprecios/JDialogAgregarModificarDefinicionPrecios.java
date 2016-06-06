@@ -385,6 +385,8 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 			tablaRango = createPanelTabla(JDialogAgregarModificarDefinicionPrecios.this);
 			tablaRango.agregarElementos((Collection<T>) getDefinicion().getRangos());
 			GuiUtil.setEstadoPanel(tablaRango, !consulta);
+			tablaRango.getBotonModificar().setEnabled(false);
+			tablaRango.getBotonEliminar().setEnabled(false);
 		}
 		return tablaRango;
 	}
