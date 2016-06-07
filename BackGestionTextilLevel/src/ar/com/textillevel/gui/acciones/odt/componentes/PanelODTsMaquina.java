@@ -75,7 +75,7 @@ public class PanelODTsMaquina extends JPanel {
 	
 	private void construct() {
 		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createTitledBorder(getEstadoMaquina().getMaquina().getNombre().toUpperCase()));
+		setBorder(BorderFactory.createTitledBorder(""));
 		add(createLabelTitulo(), BorderLayout.NORTH);
 		add(getPanelTablasEstadoAvance(), BorderLayout.CENTER);
 		add(getPanelBotones(), BorderLayout.SOUTH);

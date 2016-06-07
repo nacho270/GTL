@@ -43,7 +43,7 @@ import ar.com.textillevel.util.GTLBeanFactory;
 public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 
 	private static final long serialVersionUID = -8178949729365744925L;
-	private static final int CANT_MAX_PANEL_LINEA = 3;
+	private static final int CANT_MAX_PANEL_LINEA = 2;
 	
 	private JButton btnSalir;
 	private JButton btnImprimir;
@@ -84,7 +84,7 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 	private JLabel createLabelTitulo() {
 		JLabel lblTitlo = new JLabel(getTipoMaquina().getTipoMaquina().toUpperCase());
 		Font fuente = lblTitlo.getFont();
-		Font fuenteNueva = new Font(fuente.getFontName(), Font.BOLD, 40);
+		Font fuenteNueva = new Font(fuente.getFontName(), Font.BOLD, 30);
 		lblTitlo.setFont(fuenteNueva);
 		lblTitlo.setHorizontalAlignment(JLabel.CENTER);
 		lblTitlo.setForeground(Color.RED.darker());
@@ -147,11 +147,12 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 		
 		for(int i = 0; i< getEstadosMaquinas().size();i++){
 			EstadoActualMaquinaTO e = getEstadosMaquinas().get(i);
+			boolean ultima = i==(getEstadosMaquinas().size()-1);
 			PanelODTsMaquina panelTipoMaquina = crearPanelMaquina(e);
-			if(isUltima() && indiceX == 0) {
-				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints((int) Math.floor(CANT_MAX_PANEL_LINEA / 2), indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			if(ultima && indiceX == 0) {
+				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
 			} else {
-				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 			}
 			indiceX ++;
 			if (indiceX == CANT_MAX_PANEL_LINEA) {
@@ -205,8 +206,8 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 				refreshView();
 			}
 		});
-		panelMaquina.setSize(new Dimension(500, 300));
-		panelMaquina.setPreferredSize(new Dimension(500, 300));
+		panelMaquina.setSize(new Dimension(750, 300));
+		panelMaquina.setPreferredSize(new Dimension(750, 300));
 		return panelMaquina;
 	}
 

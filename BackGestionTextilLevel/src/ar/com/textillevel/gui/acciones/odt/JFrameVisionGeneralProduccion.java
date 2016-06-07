@@ -54,7 +54,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 
 	private static final long serialVersionUID = -5751800810347027011L;
 
-	private static final int CANT_MAX_PANEL_LINEA = 3;
+	private static final int CANT_MAX_PANEL_LINEA = 2;
 	
 	private JButton btnActualizarEstadoActual;
 	private EstadoGeneralODTsTO estadoActual;
@@ -87,6 +87,10 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	}
 
 	private void setUpComponentes() {
+//		setLayout(new GridBagLayout());
+//		add(getPanelFiltros(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 1, 0));
+//		add(getJsp(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 1, 2, 1, 1));
+//		add(getPanelSur(), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 1, 0));
 		add(getPanelFiltros(),BorderLayout.NORTH);
 		add(getJsp(),BorderLayout.CENTER);
 		add(getPanelSur(),BorderLayout.SOUTH);
@@ -105,7 +109,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	private JLabel createLabelTitulo() {
 		JLabel lblTitlo = new JLabel("ESTADO GENERAL");
 		Font fuente = lblTitlo.getFont();
-		Font fuenteNueva = new Font(fuente.getFontName(), Font.BOLD, 40);
+		Font fuenteNueva = new Font(fuente.getFontName(), Font.BOLD, 30);
 		lblTitlo.setFont(fuenteNueva);
 		lblTitlo.setHorizontalAlignment(JLabel.CENTER);
 		lblTitlo.setForeground(Color.RED.darker());
@@ -151,26 +155,25 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 			}
 		});
 //		getPanelCentral().add(panelODTSDisp);//, GenericUtils.createGridBagConstraints(indiceX++, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 1, 1));
-		panelODTSDisp.setSize(new Dimension(210, 300));
-		panelODTSDisp.setPreferredSize(new Dimension(210, 300));
-		getPanelCentral().add(panelODTSDisp, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+		panelODTSDisp.setSize(new Dimension(350, 900));
+		panelODTSDisp.setPreferredSize(new Dimension(350, 900));
+		getPanelCentral().add(panelODTSDisp, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 3, 1, 1));
 		indiceX++;
-		
+
 		// agrego las maquinas
 		List<EstadoActualTipoMaquinaTO> estadoMaquinas = getEstadoActual().getEstadoMaquinas();
 		for(int i = 0; i< estadoMaquinas.size();i++){
 			EstadoActualTipoMaquinaTO e = estadoMaquinas.get(i);
 			boolean ultima = i==(estadoMaquinas.size()-1);
 			PanelEstadoActualMaquina panelTipoMaquina = crearPanelTipoMaquina(e, ultima);
-//			getPanelCentral().add(panelTipoMaquina);
-			if(ultima && indiceX == 0) {
-				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints((int) Math.floor(CANT_MAX_PANEL_LINEA / 2), indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			if(ultima && indiceX == 1) {
+				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(2, 5, 2, 5), 2, 1, 0, 0));
 			} else {
-				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(2, 5, 2, 5), 1, 1, 0, 0));
 			}
 			indiceX ++;
-			if (indiceX == CANT_MAX_PANEL_LINEA) {
-				indiceX = 0;
+			if ( (indiceX - 1) == CANT_MAX_PANEL_LINEA) {
+				indiceX = 1;
 				indiceY++;
 			}
 		}
@@ -237,8 +240,8 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 			});
 		}
 		
-		panelTipoMaquina.setSize(new Dimension(440, 300));
-		panelTipoMaquina.setPreferredSize(new Dimension(440, 300));
+		panelTipoMaquina.setSize(new Dimension(700, 300));
+		panelTipoMaquina.setPreferredSize(new Dimension(700, 300));
 		
 		return panelTipoMaquina;
 	}
@@ -361,7 +364,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		private JButton btnCleanFilters;
 		
 		public PanelFiltros() {
-			setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 			setBorder(BorderFactory.createTitledBorder("Filtros"));
 			add(getChkFiltroFecha());
 			add(getPanelFechaDesde());

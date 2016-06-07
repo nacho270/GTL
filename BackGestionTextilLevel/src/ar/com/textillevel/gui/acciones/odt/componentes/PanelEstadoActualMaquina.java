@@ -101,7 +101,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 
 	private void constructForEstado() {
 		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createTitledBorder(getEstadoMaquinas().getTipoMaquina().getTipoMaquina().toUpperCase()));
+		setBorder(BorderFactory.createTitledBorder(""));
 		add(getLblTitulo(), BorderLayout.NORTH);
 		add(getPanelTablasEstadoAvance(), BorderLayout.CENTER);
 		add(getPanelBotones(), BorderLayout.SOUTH);
@@ -109,7 +109,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 
 	private void constructForODTsDisponibles() {
 		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createTitledBorder("ODTs DISPONIBLES"));
+		setBorder(BorderFactory.createTitledBorder(""));
 		add(createLblTitulo(), BorderLayout.NORTH);
 		add(getTablaODTsDisponibles(), BorderLayout.CENTER);
 		add(getPanelBotones(), BorderLayout.SOUTH);

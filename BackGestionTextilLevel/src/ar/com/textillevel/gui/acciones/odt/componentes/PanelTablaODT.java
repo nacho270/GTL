@@ -12,6 +12,7 @@ import ar.com.fwcommon.componentes.PanelTablaSubirBajarModificar;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarPasosSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarTransicionesODT;
+import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
@@ -74,7 +75,7 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 				}
 			}
 		});
-		nuevaTabla.setMultilineColumn(COL_ODT, getEncabezado(), 150, true,true);
+		nuevaTabla.setMultilineColumn(COL_ODT, getEncabezado(), 280, true,true);
 		nuevaTabla.setStringColumn(COL_OBJ, "", 0);
 		nuevaTabla.setAllowHidingColumns(false);
 		nuevaTabla.setReorderingAllowed(false);
@@ -93,8 +94,10 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 	@Override
 	protected void agregarElemento(ODTTO elemento) {
 		getTabla().addRow(new Object[] { "<html><b>"+ODTCodigoHelper.getInstance().formatCodigo(elemento.getCodigo()) + "</b>" +
-										 "<br>" + elemento.getNombreCliente() + 
-										 "<br>" + elemento.getProducto() +"</html>", 
+													" - CL:" + elemento.getNroCliente() + " - " + GenericUtils.getDecimalFormat().format(elemento.getTotalKilos()) + " KG - " +
+											 		  GenericUtils.getDecimalFormat().format(elemento.getTotalMetros()) + " MTS" +
+										 		  "<br>" + elemento.getProducto() + 
+										 "</html>", 
 										 elemento });
 	}
 
