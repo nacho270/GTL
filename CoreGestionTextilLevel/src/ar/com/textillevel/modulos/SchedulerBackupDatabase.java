@@ -57,14 +57,12 @@ public class SchedulerBackupDatabase implements Schedulable {
 	    String dejarUltimosN = System.getProperty("textillevel.backup.dejarUltimosN");
 	    java.sql.Date hoy = DateUtil.getHoy();
 
-
 	    String fileName = DateUtil.getAnio(hoy) + "-" + (DateUtil.getMes(hoy) + 1) + "-" + DateUtil.getDia(hoy) + "_BACKUP-"+database+".zip";
-
 	    String command = "cmd.exe /c \"" +mysqldumpPath + " --compatible=ansi -u " + username  + " -p"+ pass + " " + database + " -r " + tempFile +"\"";
 	    logger.info("EJECUTANDO: " + command);
 	    try {
 	        Process runtimeProcess = Runtime.getRuntime().exec(command);
-	        
+
 	        logger.info("VACIANDO BUFFER... " + readInputStream(runtimeProcess.getInputStream()));
 
 	        int processComplete = runtimeProcess.waitFor();
