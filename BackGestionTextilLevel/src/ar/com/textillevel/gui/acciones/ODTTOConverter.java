@@ -17,6 +17,7 @@ import ar.com.textillevel.facade.api.remote.ProductoArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO;
+import ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.PiezaODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO;
@@ -28,19 +29,22 @@ import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public final class ODTTOConverter {
 
-	private static MaquinaFacadeRemote maquinaFacade = GTLBeanFactory.getInstance().getBean2(MaquinaFacadeRemote.class);
-	private static ProductoArticuloFacadeRemote productoArticuloFacade = GTLBeanFactory.getInstance().getBean2(ProductoArticuloFacadeRemote.class);
-	private static PrecioMateriaPrimaFacadeRemote precioMPFacade = GTLBeanFactory.getInstance().getBean2(PrecioMateriaPrimaFacadeRemote.class);
-	private static ClienteFacadeRemote clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
-	private static ProveedorFacadeRemote proveedorFacade = GTLBeanFactory.getInstance().getBean2(ProveedorFacadeRemote.class);
-	private static ArticuloFacadeRemote articuloFacade = GTLBeanFactory.getInstance().getBean2(ArticuloFacadeRemote.class);
-	private static CondicionDeVentaFacadeRemote condicionVentaFacade = GTLBeanFactory.getInstance().getBean2(CondicionDeVentaFacadeRemote.class);
-	private static TarimaFacadeRemote tarimaFacade = GTLBeanFactory.getInstance().getBean2(TarimaFacadeRemote.class);
-
+	private static final MaquinaFacadeRemote maquinaFacade = GTLBeanFactory.getInstance().getBean2(MaquinaFacadeRemote.class);
+	private static final ProductoArticuloFacadeRemote productoArticuloFacade = GTLBeanFactory.getInstance().getBean2(ProductoArticuloFacadeRemote.class);
+	private static final PrecioMateriaPrimaFacadeRemote precioMPFacade = GTLBeanFactory.getInstance().getBean2(PrecioMateriaPrimaFacadeRemote.class);
+	private static final ClienteFacadeRemote clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
+	private static final ProveedorFacadeRemote proveedorFacade = GTLBeanFactory.getInstance().getBean2(ProveedorFacadeRemote.class);
+	private static final ArticuloFacadeRemote articuloFacade = GTLBeanFactory.getInstance().getBean2(ArticuloFacadeRemote.class);
+	private static final CondicionDeVentaFacadeRemote condicionVentaFacade = GTLBeanFactory.getInstance().getBean2(CondicionDeVentaFacadeRemote.class);
+	private static final TarimaFacadeRemote tarimaFacade = GTLBeanFactory.getInstance().getBean2(TarimaFacadeRemote.class);
+	private static final TipoMaquinaFacadeRemote tipoMaquinaFacade = GTLBeanFactory.getInstance().getBean2(TipoMaquinaFacadeRemote.class);
+	
+	
 	private ODTTOConverter() {
 
 	}
@@ -132,15 +136,20 @@ public final class ODTTOConverter {
 		secuenciaODT.setNombre(secuenciaODTTO.getNombre());
 		secuenciaODT.setOdt(odt);
 		secuenciaODT.setTipoProducto(ETipoProducto.getById(secuenciaODTTO.getIdTipoProducto()));
-		List<PasoSecuenciaODT> pasos = new ArrayList<PasoSecuenciaODT>(); // TODO
-		
-		
-		
-		
-		
-		
-		
-		secuenciaODT.setPasos(pasos);
+		if (secuenciaODTTO.getPasosSecuencia() != null && secuenciaODTTO.getPasosSecuencia().length > 0) {
+			List<PasoSecuenciaODT> pasos = new ArrayList<PasoSecuenciaODT>();
+			for (PasoSecuenciaODTTO pasoSecuenciaODTTO : secuenciaODTTO.getPasosSecuencia()) {
+				PasoSecuenciaODT pasoSecuenciaODT = new PasoSecuenciaODT();
+				pasoSecuenciaODT.setId(pasoSecuenciaODTTO.getId());
+				pasoSecuenciaODT.setObservaciones(pasoSecuenciaODTTO.getObservaciones());
+				pasoSecuenciaODT.setSector(tipoMaquinaFacade.getByIdEager(pasoSecuenciaODTTO.getIdSector(), TipoMaquinaFacadeRemote.MASK_PROCESOS | TipoMaquinaFacadeRemote.MASK_SUBPROCESOS | TipoMaquinaFacadeRemote.MASK_INSTRUCCIONES));
+// TODO: HAY QUE CLONAR TODOOOO: PROCEDIMIENTOODT, INSTRUCCCIONESODT (TENIDO, ESTAMPADO, ETC....)
+//				pasoSecuenciaODT.setProceso(proceso);
+//				pasoSecuenciaODT.setSubProceso(subProceso);
+				pasos.add(pasoSecuenciaODT);
+			}
+			secuenciaODT.setPasos(pasos);
+		}
 		return secuenciaODT;
 	}
 
