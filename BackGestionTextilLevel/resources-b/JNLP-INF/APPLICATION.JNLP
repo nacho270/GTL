@@ -96,7 +96,8 @@
     <property name="applicationName" value="GTL"/>
 	<property name="textillevel.chat.server.ip" value="192.168.1.13"/>
     <property name="textillevel.chat.server.port" value="7778"/>
-	
+	<property name="textillevel.odt.ipintercambio" value="192.168.1.250:8080"/>
+
     <property name="com.sun.management.jmxremote" value="" />
 
     <property name="swing.disableFileChooserSpeedFix" value="true"/>

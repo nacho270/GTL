@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -70,14 +72,19 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		}
 		*/
 
-		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = remitoBusinessDelegate.getInfoPiezasEntradaSinSalidaByClient(cliente.getId());
-		getTablaOdts().setNumRows(0);
-		int row = 0;
-		for(DetallePiezaRemitoEntradaSinSalida ip : infoPiezas) {
-			getTablaOdts().addRow();
-			getTablaOdts().setValueAt(ip.toString(), row, 0);
-			getTablaOdts().setValueAt(ip.getIdODT(), row, 1);
-			row ++;
+		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas;
+		try {
+			infoPiezas = remitoBusinessDelegate.getInfoPiezasEntradaSinSalidaByClient(cliente.getId());
+			getTablaOdts().setNumRows(0);
+			int row = 0;
+			for(DetallePiezaRemitoEntradaSinSalida ip : infoPiezas) {
+				getTablaOdts().addRow();
+				getTablaOdts().setValueAt(ip.toString(), row, 0);
+				getTablaOdts().setValueAt(ip.getIdODT(), row, 1);
+				row ++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
