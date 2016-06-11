@@ -85,7 +85,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 				row ++;
 			}
 		} catch (RemoteException e) {
-			FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.odt.ipintercambio"), "Error");
+			FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
 			e.printStackTrace();
 		}
 	}
@@ -197,7 +197,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 					try {
 						odtSelectedList.addAll(remitoBusinessDelegate.getODTByIdsEager(ids));
 					} catch (RemoteException e1) {
-						FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.odt.ipintercambio"), "Error");
+						FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
 						e1.printStackTrace();
 					}
 					dispose();
