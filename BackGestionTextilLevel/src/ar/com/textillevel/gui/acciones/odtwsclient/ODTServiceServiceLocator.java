@@ -7,7 +7,6 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"rawtypes", "serial", "unchecked"})
 public class ODTServiceServiceLocator extends org.apache.axis.client.Service implements ar.com.textillevel.gui.acciones.odtwsclient.ODTServiceService {
 
     public ODTServiceServiceLocator() {

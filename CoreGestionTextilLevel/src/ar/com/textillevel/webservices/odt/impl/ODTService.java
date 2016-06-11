@@ -1,5 +1,6 @@
 package ar.com.textillevel.webservices.odt.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
+import ar.com.textillevel.modulos.odt.to.intercambio.ODTEagerTO;
 import ar.com.textillevel.webservices.odt.api.remote.ODTServiceRemote;
 
 @Stateless
@@ -45,8 +47,12 @@ public class ODTService implements ODTServiceRemote {
 		return odtFacade.getInfoPiezasEntradaSinSalidaByClient(idCliente);
 	}
 
-	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) {
-		return odtFacade.getByIdsEager(ids);
+	public List<ODTEagerTO> getByIdsEager(List<Integer> ids) {
+		List<ODTEagerTO> lista = new ArrayList<ODTEagerTO>();
+		for(OrdenDeTrabajo odt : odtFacade.getByIdsEager(ids)) {
+			lista.add(new ODTEagerTO(odt));
+		}
+		return lista;
 	}
 
 	public Integer testMethod(Integer numero) {

@@ -4,13 +4,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.gui.acciones.odtwsclient.ODTService;
 import ar.com.textillevel.gui.acciones.odtwsclient.ODTServiceServiceLocator;
+import ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
@@ -28,7 +32,7 @@ public class RemitoEntradaBusinessDelegate {
 		return odtFacade.getInfoPiezasEntradaSinSalidaByClient(idCliente);
 	}
 
-	public List<OrdenDeTrabajo> getODTByIdsEager(List<Integer> ids) {
+	public List<OrdenDeTrabajo> getODTByIdsEager(List<Integer> ids) throws RemoteException {
 		if(GenericUtils.isSistemaTest()) {
 			return getWSClient().getByIdsEager(ids);
 		}
@@ -53,14 +57,17 @@ public class RemitoEntradaBusinessDelegate {
 			service = locator.getODTServicePort(new URL(System.getProperty("textillevel.odt.ipintercambio")));
 		}
 
-		public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) {
-//			service.get
+		public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) throws RemoteException {
+			OdtEagerTO[] byIdsEager = service.getByIdsEager(ArrayUtils.toPrimitive(ids.toArray(new Integer[ids.size()])));
 			return null;
 		}
 
 		public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) throws RemoteException{
-			ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida[] infoPiezasEntradaSinSalidaByClient = service.getInfoPiezasEntradaSinSalidaByClient(idCliente);
-			return new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
+			List<DetallePiezaRemitoEntradaSinSalida> lista = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
+			for(ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida d :service.getInfoPiezasEntradaSinSalidaByClient(idCliente)) {
+				lista.add(new DetallePiezaRemitoEntradaSinSalida(d.getNroRemito(), d.getIdODT(), d.getCodigoODT(), d.getProducto(), d.getCantPiezas(), d.getMetrosTotales()));
+			}
+			return lista;
 		}
 	}
 }
