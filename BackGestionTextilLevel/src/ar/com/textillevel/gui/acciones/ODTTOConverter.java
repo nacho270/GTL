@@ -64,7 +64,7 @@ public final class ODTTOConverter {
 			odt.setMaquinaPrincipal(maquinaFacade.getByIdEager(odtEagerTO.getIdMaquinaPrincipal()));
 		}
 		if (odtEagerTO.getIdProductoArticulo() != null) {
-			odt.setProductoArticulo(productoArticuloFacade.getById(odtEagerTO.getId()));
+			odt.setProductoArticulo(productoArticuloFacade.getById(odtEagerTO.getIdProductoArticulo()));
 		}
 		if (odtEagerTO.getPiezas() != null && odtEagerTO.getPiezas().length > 0) {
 			List<PiezaODT> piezas = new ArrayList<PiezaODT>();
@@ -165,13 +165,13 @@ public final class ODTTOConverter {
 		if (piezaODTTO.getPiezaRemito() != null) {
 			piezaODT.setPiezaRemito(piezaRemitoFromTO(odt, piezaODTTO.getPiezaRemito()));
 		}
+		List<PiezaRemito> piezasSalida = new ArrayList<PiezaRemito>();
 		if (piezaODTTO.getPiezasSalida() != null && piezaODTTO.getPiezasSalida().length > 0) {
-			List<PiezaRemito> piezasSalida = new ArrayList<PiezaRemito>();
 			for (PiezaRemitoTO piezaRemitoTO : piezaODTTO.getPiezasSalida()) {
 				piezasSalida.add(piezaRemitoFromTO(odt, piezaRemitoTO));
 			}
-			piezaODT.setPiezasSalida(piezasSalida);
 		}
+		piezaODT.setPiezasSalida(piezasSalida);
 		return piezaODT;
 	}
 
