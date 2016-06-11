@@ -42,15 +42,14 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private FWJTable tablaODTs;
 	private Cliente cliente;
 	private Frame owner;
-	private OrdenDeTrabajoFacadeRemote odtFacade;
 	private List<OrdenDeTrabajo> odtSelectedList;
+	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 	
 	public JDialogSeleccionarRemitoEntrada(Frame owner, Cliente cliente) {
 		super(owner);
 		this.owner = owner;
 		this.cliente = cliente;
 		this.odtSelectedList = new ArrayList<OrdenDeTrabajo>();
-		this.odtFacade = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class);
 		setModal(true);
 		setSize(new Dimension(520, 550));
 		setTitle("Seleccionar Órdenes de Trabajo");
@@ -71,7 +70,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		}
 		*/
 
-		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = odtFacade.getInfoPiezasEntradaSinSalidaByClient(cliente.getId());
+		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = remitoBusinessDelegate.getInfoPiezasEntradaSinSalidaByClient(cliente.getId());
 		getTablaOdts().setNumRows(0);
 		int row = 0;
 		for(DetallePiezaRemitoEntradaSinSalida ip : infoPiezas) {
@@ -182,10 +181,11 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					int[] selectedRows = getTablaOdts().getSelectedRows();
+					List<Integer> ids = new ArrayList<Integer>();
 					for(int selectedRow : selectedRows) {
-						Integer  idODT = (Integer)getTablaOdts().getValueAt(selectedRow, 1);
-						odtSelectedList.add(odtFacade.getByIdEager(idODT));
+						ids.add((Integer)getTablaOdts().getValueAt(selectedRow, 1));
 					}
+					odtSelectedList.addAll(remitoBusinessDelegate.getODTByIdsEager(ids));
 					dispose();
 				}
 

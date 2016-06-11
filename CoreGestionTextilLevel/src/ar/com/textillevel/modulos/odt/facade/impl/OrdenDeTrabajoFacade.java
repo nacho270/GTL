@@ -118,6 +118,10 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		return odtDAO.getByIdEager(idODT);
 	}
 
+	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) {
+		return odtDAO.getByIdsEager(ids);
+	}
+	
 	public OrdenDeTrabajo getByCodigoEager(String codigo) {
 		throw new RuntimeException("IMPLEMENTAR");
 	}
