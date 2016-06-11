@@ -62,11 +62,5 @@ public class ODTServiceProxy implements ar.com.textillevel.gui.acciones.odtwscli
     oDTService.recibir(arg0);
   }
   
-  public java.lang.Integer testMethod(java.lang.Integer arg0) throws java.rmi.RemoteException{
-    if (oDTService == null)
-      _initODTServiceProxy();
-    return oDTService.testMethod(arg0);
-  }
-  
   
 }

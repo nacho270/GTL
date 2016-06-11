@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.com.textillevel.modulos.odt.entidades.secuencia.fw.PasoSecuenciaAbstract;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 
 public class SecuenciaODTTO implements Serializable {
@@ -13,7 +13,7 @@ public class SecuenciaODTTO implements Serializable {
 
 	private Integer id;
 	private String nombre;
-	private List<Integer> pasos; // PasoSecuencia esta federado
+	private List<PasoSecuenciaODTTO> pasosSecuencia;
 	private Integer idCliente; // Cliente esta federado
 	private Integer idTipoProducto;
 
@@ -26,9 +26,9 @@ public class SecuenciaODTTO implements Serializable {
 		this.nombre = secuenciaDeTrabajo.getNombre();
 		this.idCliente = secuenciaDeTrabajo.getCliente().getId();
 		this.idTipoProducto = secuenciaDeTrabajo.getTipoProducto().getId();
-		this.pasos = new ArrayList<Integer>();
-		for (PasoSecuenciaAbstract<?> p : secuenciaDeTrabajo.getPasos()) {
-			this.pasos.add(p.getId());
+		this.pasosSecuencia = new ArrayList<PasoSecuenciaODTTO>();
+		for (PasoSecuenciaODT p : secuenciaDeTrabajo.getPasos()) {
+			this.pasosSecuencia.add(new PasoSecuenciaODTTO(p));
 		}
 	}
 
@@ -48,12 +48,12 @@ public class SecuenciaODTTO implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Integer> getPasos() {
-		return pasos;
+	public List<PasoSecuenciaODTTO> getPasosSecuencia() {
+		return pasosSecuencia;
 	}
 
-	public void setPasos(List<Integer> pasos) {
-		this.pasos = pasos;
+	public void setPasosSecuencia(List<PasoSecuenciaODTTO> pasosSecuencia) {
+		this.pasosSecuencia = pasosSecuencia;
 	}
 
 	public Integer getIdCliente() {
@@ -71,4 +71,5 @@ public class SecuenciaODTTO implements Serializable {
 	public void setIdTipoProducto(Integer idTipoProducto) {
 		this.idTipoProducto = idTipoProducto;
 	}
+
 }

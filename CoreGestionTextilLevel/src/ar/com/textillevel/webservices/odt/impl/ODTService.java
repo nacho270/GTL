@@ -55,8 +55,4 @@ public class ODTService implements ODTServiceRemote {
 		return lista;
 	}
 
-	public Integer testMethod(Integer numero) {
-		return numero + 1;
-	}
-
 }

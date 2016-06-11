@@ -21,6 +21,7 @@ public class PiezaRemitoTO implements Serializable {
 	private Boolean piezaSinODT;
 	private Boolean enSalida;
 	private Integer idPmpDescuentoStock; // PrecioMateriaPrima esta federada
+	private String ordenPiezaCalculado;
 
 	public PiezaRemitoTO() {
 
@@ -33,6 +34,7 @@ public class PiezaRemitoTO implements Serializable {
 		this.observaciones = pr.getObservaciones();
 		this.piezaSinODT = pr.getPiezaSinODT();
 		this.enSalida = pr.getEnSalida();
+		this.ordenPiezaCalculado = pr.getOrdenPiezaCalculado();
 		if (pr.getPmpDescuentoStock() != null) {
 			this.idPmpDescuentoStock = pr.getPmpDescuentoStock().getId();
 		}
@@ -117,5 +119,13 @@ public class PiezaRemitoTO implements Serializable {
 
 	public void setIdPmpDescuentoStock(Integer idPmpDescuentoStock) {
 		this.idPmpDescuentoStock = idPmpDescuentoStock;
+	}
+
+	public String getOrdenPiezaCalculado() {
+		return ordenPiezaCalculado;
+	}
+
+	public void setOrdenPiezaCalculado(String ordenPiezaCalculado) {
+		this.ordenPiezaCalculado = ordenPiezaCalculado;
 	}
 }

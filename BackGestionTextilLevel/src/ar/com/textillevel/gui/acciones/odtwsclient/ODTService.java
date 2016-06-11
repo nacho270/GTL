@@ -11,5 +11,4 @@ public interface ODTService extends java.rmi.Remote {
     public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] getByIdsEager(int[] arg0) throws java.rmi.RemoteException;
     public ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida[] getInfoPiezasEntradaSinSalidaByClient(java.lang.Integer arg0) throws java.rmi.RemoteException;
     public void recibir(java.lang.String arg0) throws java.rmi.RemoteException;
-    public java.lang.Integer testMethod(java.lang.Integer arg0) throws java.rmi.RemoteException;
 }

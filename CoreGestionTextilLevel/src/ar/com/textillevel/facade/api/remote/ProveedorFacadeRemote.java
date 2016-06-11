@@ -16,4 +16,5 @@ public interface ProveedorFacadeRemote {
 	public List<Proveedor> getProveedorByNombreCorto(String nombreCorto);
 	public List<Proveedor> getProveedorByRazonSocial(String razonSocial);
 	public List<ClienteDeudaTO> getProveedoresALosQueSeLesDebe();
+	public Proveedor getById(Integer idProveedor);
 }

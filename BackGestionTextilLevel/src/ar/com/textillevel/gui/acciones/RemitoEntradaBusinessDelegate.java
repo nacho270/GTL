@@ -57,8 +57,15 @@ public class RemitoEntradaBusinessDelegate {
 		}
 
 		public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) throws RemoteException {
-			OdtEagerTO[] byIdsEager = service.getByIdsEager(ArrayUtils.toPrimitive(ids.toArray(new Integer[ids.size()])));
-			return null;
+			List<OrdenDeTrabajo> odts = new ArrayList<OrdenDeTrabajo>();
+			OdtEagerTO[] odtsArr = service.getByIdsEager(ArrayUtils.toPrimitive(ids.toArray(new Integer[ids.size()])));
+			if (odtsArr == null || odtsArr.length == 0) {
+				return odts;
+			}
+			for(OdtEagerTO odtEager : odtsArr) {
+				odts.add(ODTTOConverter.fromTO(odtEager));
+			}
+			return odts;
 		}
 
 		public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) throws RemoteException{

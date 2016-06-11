@@ -18,9 +18,9 @@ public class ProductoArticuloFacade implements ProductoArticuloFacadeRemote {
 
 	public List<ProductoArticulo> save(List<ProductoArticulo> paList) {
 		List<ProductoArticulo> paListPersisted = new ArrayList<ProductoArticulo>();
-		for(ProductoArticulo pa : paList) {
+		for (ProductoArticulo pa : paList) {
 			ProductoArticulo paExistente = prodArticuloDao.getProductoArticulo(pa);
-			if(paExistente == null) {
+			if (paExistente == null) {
 				ProductoArticulo persistentPA = prodArticuloDao.save(pa);
 				paListPersisted.add(persistentPA);
 				persistentPA.setPrecioCalculado(pa.getPrecioCalculado());
@@ -30,6 +30,36 @@ public class ProductoArticuloFacade implements ProductoArticuloFacadeRemote {
 			}
 		}
 		return paListPersisted;
+	}
+
+	public ProductoArticulo getById(Integer id) {
+		ProductoArticulo pa = prodArticuloDao.getById(id);
+		if (pa == null) {
+			return null;
+		}
+		if (pa.getArticulo() != null) {
+			pa.getArticulo().getAncho();
+			pa.getArticulo().getTipoArticulo().getNombre();
+		}
+		if (pa.getColor() != null) {
+			pa.getColor().getNombre();
+			if (pa.getColor().getGama() != null) {
+				pa.getColor().getGama().getNombre();
+			}
+		}
+		if (pa.getDibujo() != null) {
+			pa.getDibujo().getAnchoCilindro();
+		}
+		if (pa.getGamaColor() != null) {
+			pa.getGamaColor().getNombre();
+		}
+		if (pa.getProducto() != null) {
+			pa.getProducto().getDescripcion();
+		}
+		if (pa.getVariante() != null) {
+			pa.getVariante().getNombre();
+		}
+		return pa;
 	}
 
 }

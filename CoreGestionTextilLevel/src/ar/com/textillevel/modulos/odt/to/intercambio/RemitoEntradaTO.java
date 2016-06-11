@@ -40,14 +40,18 @@ public class RemitoEntradaTO implements Serializable {
 	public RemitoEntradaTO(RemitoEntrada re) {
 		this.id = re.getId();
 		this.dateFechaEmision = re.getFechaEmision().getTime();
-		this.idCliente = re.getCliente().getId();
 		this.pesoTotal = re.getPesoTotal();
 		this.nroRemito = re.getNroRemito();
-		this.idProveedor = re.getProveedor().getId();
 		this.anchoCrudo = re.getAnchoCrudo();
 		this.anchoFinal = re.getAnchoFinal();
 		this.enPalet = re.getEnPalet();
 
+		if (re.getCliente() != null) {
+			this.idCliente = re.getCliente().getId();
+		}
+		if (re.getProveedor() != null) {
+			this.idProveedor = re.getProveedor().getId();
+		}
 		if (re.getCondicionDeVenta() != null) {
 			this.idCondicionDeVenta = re.getCondicionDeVenta().getId();
 		}

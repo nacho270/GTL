@@ -8,5 +8,6 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 public interface ProductoArticuloFacadeRemote {
 
 	public List<ProductoArticulo> save(List<ProductoArticulo> paList);
-
+	public ProductoArticulo getById(Integer id);
+	
 }

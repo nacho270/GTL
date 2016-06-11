@@ -7,6 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
+@SuppressWarnings({"serial", "unused", "rawtypes"})
 public class PiezaRemitoTO  implements java.io.Serializable {
     private java.lang.Boolean enSalida;
 
@@ -19,6 +20,8 @@ public class PiezaRemitoTO  implements java.io.Serializable {
     private java.lang.String observaciones;
 
     private java.lang.Integer ordenPieza;
+
+    private java.lang.String ordenPiezaCalculado;
 
     private ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO piezaEntrada;
 
@@ -36,6 +39,7 @@ public class PiezaRemitoTO  implements java.io.Serializable {
            java.math.BigDecimal metros,
            java.lang.String observaciones,
            java.lang.Integer ordenPieza,
+           java.lang.String ordenPiezaCalculado,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO piezaEntrada,
            java.lang.Boolean piezaSinODT,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaODTTO[] piezasPadreODT) {
@@ -45,6 +49,7 @@ public class PiezaRemitoTO  implements java.io.Serializable {
            this.metros = metros;
            this.observaciones = observaciones;
            this.ordenPieza = ordenPieza;
+           this.ordenPiezaCalculado = ordenPiezaCalculado;
            this.piezaEntrada = piezaEntrada;
            this.piezaSinODT = piezaSinODT;
            this.piezasPadreODT = piezasPadreODT;
@@ -172,6 +177,26 @@ public class PiezaRemitoTO  implements java.io.Serializable {
 
 
     /**
+     * Gets the ordenPiezaCalculado value for this PiezaRemitoTO.
+     * 
+     * @return ordenPiezaCalculado
+     */
+    public java.lang.String getOrdenPiezaCalculado() {
+        return ordenPiezaCalculado;
+    }
+
+
+    /**
+     * Sets the ordenPiezaCalculado value for this PiezaRemitoTO.
+     * 
+     * @param ordenPiezaCalculado
+     */
+    public void setOrdenPiezaCalculado(java.lang.String ordenPiezaCalculado) {
+        this.ordenPiezaCalculado = ordenPiezaCalculado;
+    }
+
+
+    /**
      * Gets the piezaEntrada value for this PiezaRemitoTO.
      * 
      * @return piezaEntrada
@@ -268,6 +293,9 @@ public class PiezaRemitoTO  implements java.io.Serializable {
             ((this.ordenPieza==null && other.getOrdenPieza()==null) || 
              (this.ordenPieza!=null &&
               this.ordenPieza.equals(other.getOrdenPieza()))) &&
+            ((this.ordenPiezaCalculado==null && other.getOrdenPiezaCalculado()==null) || 
+             (this.ordenPiezaCalculado!=null &&
+              this.ordenPiezaCalculado.equals(other.getOrdenPiezaCalculado()))) &&
             ((this.piezaEntrada==null && other.getPiezaEntrada()==null) || 
              (this.piezaEntrada!=null &&
               this.piezaEntrada.equals(other.getPiezaEntrada()))) &&
@@ -305,6 +333,9 @@ public class PiezaRemitoTO  implements java.io.Serializable {
         }
         if (getOrdenPieza() != null) {
             _hashCode += getOrdenPieza().hashCode();
+        }
+        if (getOrdenPiezaCalculado() != null) {
+            _hashCode += getOrdenPiezaCalculado().hashCode();
         }
         if (getPiezaEntrada() != null) {
             _hashCode += getPiezaEntrada().hashCode();
@@ -372,6 +403,13 @@ public class PiezaRemitoTO  implements java.io.Serializable {
         elemField.setFieldName("ordenPieza");
         elemField.setXmlName(new javax.xml.namespace.QName("", "ordenPieza"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenPiezaCalculado");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenPiezaCalculado"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

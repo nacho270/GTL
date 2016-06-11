@@ -7,6 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
+@SuppressWarnings({"serial", "unused", "rawtypes"})
 public class RemitoEntradaTO  implements java.io.Serializable {
     private java.math.BigDecimal anchoCrudo;
 

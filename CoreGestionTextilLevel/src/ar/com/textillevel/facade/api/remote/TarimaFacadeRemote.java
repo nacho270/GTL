@@ -12,5 +12,6 @@ public interface TarimaFacadeRemote {
 
 	public List<Tarima> getAllSorted();
 	public Tarima save(Tarima tarima) throws ValidacionException;
+	public Tarima getById(Integer idTarima);
 
 }

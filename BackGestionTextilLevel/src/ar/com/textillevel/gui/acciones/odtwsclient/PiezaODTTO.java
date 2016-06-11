@@ -7,6 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
+@SuppressWarnings({"serial", "unused", "rawtypes"})
 public class PiezaODTTO  implements java.io.Serializable {
     private java.lang.Integer id;
 

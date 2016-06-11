@@ -30,14 +30,24 @@ public class ODTEagerTO implements Serializable {
 
 	public ODTEagerTO(OrdenDeTrabajo odt) {
 		this.id = odt.getId();
-		this.idProductoArticulo = odt.getProductoArticulo().getId();
 		this.codigo = odt.getCodigo();
 		this.timestampFechaODT = odt.getFechaODT().getTime();
 		this.idEstadoODT = odt.getEstado().getId();
-		this.idAvance = odt.getAvance().getId();
-		this.idMaquinaActual = odt.getMaquinaActual().getId();
-		this.ordenEnMaquina = odt.getOrdenEnMaquina();
-		this.idMaquinaPrincipal = odt.getMaquinaPrincipal().getId();
+		if (odt.getProductoArticulo() != null) {
+			this.idProductoArticulo = odt.getProductoArticulo().getId();
+		}
+		if (odt.getAvance() != null) {
+			this.idAvance = odt.getAvance().getId();
+		}
+		if (odt.getMaquinaActual() != null) {
+			this.idMaquinaActual = odt.getMaquinaActual().getId();
+		}
+		if (odt.getOrdenEnMaquina() != null) {
+			this.ordenEnMaquina = odt.getOrdenEnMaquina();
+		}
+		if (odt.getMaquinaPrincipal() != null) {
+			this.idMaquinaPrincipal = odt.getMaquinaPrincipal().getId();
+		}
 		if (odt.getRemito() != null) {
 			this.remito = new RemitoEntradaTO(odt.getRemito());
 		}

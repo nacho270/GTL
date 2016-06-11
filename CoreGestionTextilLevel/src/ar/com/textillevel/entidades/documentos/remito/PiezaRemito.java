@@ -35,7 +35,6 @@ public class PiezaRemito implements Serializable {
 	private Boolean piezaSinODT; //Solo para piezas de remito de entrada, si es true significa que es una pieza que aún no tiene ODT
 	private Boolean enSalida;	//Tiene sentido para una pieza de entrada. Si está en true significa que ya se le dio salida
 	private PrecioMateriaPrima pmpDescuentoStock; //es la pieza materia prima desde donde se descuenta stock. Solo tiene sentido para las piezas de R.S. de descuento de stock
-	
 	private String ordenPiezaCalculado;
 
 	public PiezaRemito() {

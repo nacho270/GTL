@@ -15,7 +15,7 @@ public class PiezaODTTO implements Serializable {
 	private Integer id;
 	private PiezaRemitoTO piezaRemito;
 	private List<PiezaRemitoTO> piezasSalida;
-	// private ODTEagerTO odt; Me parece que no haria falta
+	// private ODTEagerTO odt; Me parece que no haria falta //TODO
 	private Integer nroPiezaStockInicial;
 	private BigDecimal metrosStockInicial;
 

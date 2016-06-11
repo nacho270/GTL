@@ -29,6 +29,7 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -190,7 +191,15 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					int[] selectedRows = getTablaOdts().getSelectedRows();
+					if(selectedRows.length == 0){
+						return;
+					}
 					List<Integer> ids = new ArrayList<Integer>();
+					
+					if(GenericUtils.isSistemaTest()) {
+						//TODO: Validar remito completo
+					}
+					
 					for(int selectedRow : selectedRows) {
 						ids.add((Integer)getTablaOdts().getValueAt(selectedRow, 1));
 					}

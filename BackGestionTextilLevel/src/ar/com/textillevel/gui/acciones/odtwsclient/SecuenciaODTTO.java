@@ -7,6 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
+@SuppressWarnings({"serial", "unused", "rawtypes"})
 public class SecuenciaODTTO  implements java.io.Serializable {
     private java.lang.Integer id;
 
@@ -16,7 +17,7 @@ public class SecuenciaODTTO  implements java.io.Serializable {
 
     private java.lang.String nombre;
 
-    private java.lang.Integer[] pasos;
+    private ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO[] pasosSecuencia;
 
     public SecuenciaODTTO() {
     }
@@ -26,12 +27,12 @@ public class SecuenciaODTTO  implements java.io.Serializable {
            java.lang.Integer idCliente,
            java.lang.Integer idTipoProducto,
            java.lang.String nombre,
-           java.lang.Integer[] pasos) {
+           ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO[] pasosSecuencia) {
            this.id = id;
            this.idCliente = idCliente;
            this.idTipoProducto = idTipoProducto;
            this.nombre = nombre;
-           this.pasos = pasos;
+           this.pasosSecuencia = pasosSecuencia;
     }
 
 
@@ -116,30 +117,30 @@ public class SecuenciaODTTO  implements java.io.Serializable {
 
 
     /**
-     * Gets the pasos value for this SecuenciaODTTO.
+     * Gets the pasosSecuencia value for this SecuenciaODTTO.
      * 
-     * @return pasos
+     * @return pasosSecuencia
      */
-    public java.lang.Integer[] getPasos() {
-        return pasos;
+    public ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO[] getPasosSecuencia() {
+        return pasosSecuencia;
     }
 
 
     /**
-     * Sets the pasos value for this SecuenciaODTTO.
+     * Sets the pasosSecuencia value for this SecuenciaODTTO.
      * 
-     * @param pasos
+     * @param pasosSecuencia
      */
-    public void setPasos(java.lang.Integer[] pasos) {
-        this.pasos = pasos;
+    public void setPasosSecuencia(ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO[] pasosSecuencia) {
+        this.pasosSecuencia = pasosSecuencia;
     }
 
-    public java.lang.Integer getPasos(int i) {
-        return this.pasos[i];
+    public ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO getPasosSecuencia(int i) {
+        return this.pasosSecuencia[i];
     }
 
-    public void setPasos(int i, java.lang.Integer _value) {
-        this.pasos[i] = _value;
+    public void setPasosSecuencia(int i, ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO _value) {
+        this.pasosSecuencia[i] = _value;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -166,9 +167,9 @@ public class SecuenciaODTTO  implements java.io.Serializable {
             ((this.nombre==null && other.getNombre()==null) || 
              (this.nombre!=null &&
               this.nombre.equals(other.getNombre()))) &&
-            ((this.pasos==null && other.getPasos()==null) || 
-             (this.pasos!=null &&
-              java.util.Arrays.equals(this.pasos, other.getPasos())));
+            ((this.pasosSecuencia==null && other.getPasosSecuencia()==null) || 
+             (this.pasosSecuencia!=null &&
+              java.util.Arrays.equals(this.pasosSecuencia, other.getPasosSecuencia())));
         __equalsCalc = null;
         return _equals;
     }
@@ -192,11 +193,11 @@ public class SecuenciaODTTO  implements java.io.Serializable {
         if (getNombre() != null) {
             _hashCode += getNombre().hashCode();
         }
-        if (getPasos() != null) {
+        if (getPasosSecuencia() != null) {
             for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getPasos());
+                 i<java.lang.reflect.Array.getLength(getPasosSecuencia());
                  i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getPasos(), i);
+                java.lang.Object obj = java.lang.reflect.Array.get(getPasosSecuencia(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -242,9 +243,9 @@ public class SecuenciaODTTO  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("pasos");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "pasos"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setFieldName("pasosSecuencia");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "pasosSecuencia"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "pasoSecuenciaODTTO"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         elemField.setMaxOccursUnbounded(true);
