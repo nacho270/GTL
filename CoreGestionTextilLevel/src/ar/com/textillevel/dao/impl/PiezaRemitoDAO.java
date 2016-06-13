@@ -73,7 +73,7 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 				"            R.F_CLIENTE_P_ID = R2.F_CLIENTE_P_ID " +
 				") " +
 				"GROUP BY R.A_NRO_REMITO, ODT.A_CODIGO, ODT.P_ID, PROD.A_DESCR " + 
-				"ORDER BY ODT.A_CODIGO DESC)"
+				"ORDER BY ODT.A_CODIGO DESC"
 		);
 		query.setParameter("idCliente", idCliente);
 		List<Object[]> resultList = query.getResultList();
