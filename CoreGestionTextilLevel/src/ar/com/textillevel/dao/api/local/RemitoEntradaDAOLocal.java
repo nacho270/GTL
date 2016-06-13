@@ -50,4 +50,6 @@ public interface RemitoEntradaDAOLocal extends DAOLocal<RemitoEntrada, Integer> 
 
 	public RemitoEntrada getByIdPiezaRemitoEntradaEager(Integer idPiezaRemito);
 
+	public List<RemitoEntrada> getRemitosEntradaSinFactura();
+
 }

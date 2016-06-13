@@ -53,4 +53,6 @@ public interface RemitoEntradaFacadeRemote {
 
 	public PiezaRemito getPiezaRemitoById(Integer idPiezaRemito);
 
+	public List<RemitoEntrada> getRemitosEntradaSinFactura();
+
 }

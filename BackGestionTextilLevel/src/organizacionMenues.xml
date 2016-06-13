@@ -123,6 +123,9 @@
 					<newItem
 						class="main.acciones.facturacion.CompletarPiezasRemitoEntradaStockAction"
 						nombre="Completar Remito de Entrada" id="71" action="true"/>
+					<newItem
+            class="main.acciones.facturacion.RetornarRemitoEntradaAction"
+            nombre="Retornar Remito de Entrada" id="113" action="true"/>
 				</listaModulos>
 			</GrupoModulos>
 			<GrupoModulos nombre="Agregar Factura">

@@ -239,7 +239,6 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 			}
 			return listaRet;
 		}
-
 		return Collections.emptyList();
 	}
 
@@ -258,7 +257,6 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 			Number idArticulo = (Number)resultList.get(0); 
 			return idArticulo == null ? null : idArticulo.intValue();
 		}
-		
 	}
 
 	public RemitoEntrada getByIdPiezaRemitoEntradaEager(Integer idPiezaRemito) {
@@ -273,5 +271,11 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		} else {
 			return getByIdEager(idRemitoEntrada.intValue());
 		}
+	}
+
+	@Override
+	public List<RemitoEntrada> getRemitosEntradaSinFactura() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

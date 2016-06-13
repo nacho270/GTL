@@ -331,4 +331,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return remitoEntradaDAO.getByIdPiezaRemitoEntradaEager(idPiezaRemito);
 	}
 
+	@Override
+	public List<RemitoEntrada> getRemitosEntradaSinFactura() {
+		return remitoEntradaDAO.getRemitosEntradaSinFactura();
+	}
+
 }
