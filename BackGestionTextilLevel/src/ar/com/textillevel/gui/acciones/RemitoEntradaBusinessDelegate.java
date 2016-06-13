@@ -53,7 +53,7 @@ public class RemitoEntradaBusinessDelegate {
 		ODTService service;
 		public ODTServiceClient() throws MalformedURLException, ServiceException {
 			ODTServiceServiceLocator locator = new ODTServiceServiceLocator();
-			service = locator.getODTServicePort(new URL(System.getProperty("textillevel.wsendpoint") + System.getProperty("textillevel.odt.wsendpoint")));
+			service = locator.getODTServicePort(new URL(System.getProperty("textillevel.ipintercambio") + System.getProperty("textillevel.odt.wsendpoint")));
 		}
 
 		public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) throws RemoteException {

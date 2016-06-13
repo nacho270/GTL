@@ -114,6 +114,10 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		return piezaRemitoDAO.getInfoPiezasEntradaSinSalidaByClient(idCliente);
 	}
 
+	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaCompletoSinSalidaByClient(Integer idCliente) {
+		return piezaRemitoDAO.getInfoPiezasEntradaCompletoSinSalidaByClient(idCliente);
+	}
+	
 	public OrdenDeTrabajo getByIdEager(Integer idODT) {
 		return odtDAO.getByIdEager(idODT);
 	}
