@@ -12,5 +12,7 @@ import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntra
 public interface PiezaRemitoDAOLocal extends DAOLocal<PiezaRemito, Integer>{
 
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente);
+	
+	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaCompletoSinSalidaByClient(Integer idCliente);
 
 }

@@ -14,9 +14,9 @@ import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 
 @Stateless
+@SuppressWarnings("unchecked")
 public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements PiezaRemitoDAOLocal {
 
-	@SuppressWarnings("unchecked")
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) {
 		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
 		Query query = getEntityManager().createNativeQuery(
@@ -36,6 +36,44 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 				"                 AND r.f_cliente_p_id = R2.F_CLIENTE_P_ID) " +
 				"GROUP BY r.a_nro_remito, odt.a_codigo, odt.p_id, prod.A_DESCR " + 
 				"order by odt.a_codigo DESC "
+		);
+		query.setParameter("idCliente", idCliente);
+		List<Object[]> resultList = query.getResultList();
+		for(Object[] row : resultList) {
+			DetallePiezaRemitoEntradaSinSalida detalle = new DetallePiezaRemitoEntradaSinSalida();
+			detalle.setNroRemito((Integer)row[0]);
+			detalle.setCodigoODT((String)row[1]);
+			detalle.setIdODT((Integer)row[2]);
+			detalle.setProducto((String)row[3]);
+			detalle.setCantPiezas(NumUtil.toInteger(row[4]));
+			detalle.setMetrosTotales(((BigDecimal)row[5]).doubleValue());
+			infoPiezas.add(detalle);
+		}
+		return infoPiezas;
+	}
+
+	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaCompletoSinSalidaByClient(Integer idCliente) {
+		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
+		Query query = getEntityManager().createNativeQuery(
+				"SELECT R.A_NRO_REMITO, ODT.A_CODIGO, ODT.P_ID, PROD.A_DESCR, COUNT(*), SUM(PR.A_METROS) "+
+				"FROM T_PIEZA_REMITO PR "+
+				"INNER JOIN T_PIEZA_ODT PODT ON PODT.F_PIEZA_REMITO_P_ID = PR.P_ID " +
+				"INNER JOIN T_ORDEN_DE_TRABAJO ODT ON ODT.P_ID = PODT.F_ODT_P_ID " +
+				"INNER JOIN T_PRODUCTO_ARTICULO PA ON PA.P_ID = ODT.F_PRODUCTO_ARTICULO_P_ID " +
+				"INNER JOIN T_PRODUCTO PROD ON PROD.P_ID = PA.F_PRODUCTO_P_ID " +
+				"INNER JOIN T_REMITO R ON R.P_ID = PR.F_REMITO_P_ID " +
+				"WHERE R.F_CLIENTE_P_ID=:idCliente AND  R.TIPO='ENT' AND " +
+				"NOT EXISTS( " +
+				"	SELECT 1 " +
+				"      FROM T_PIEZA_REMITO PR2 " +
+				"      INNER JOIN T_PIEZA_REMITO PRS ON PRS.F_PIEZA_PADRE_P_ID = PR2.P_ID " +
+				"      INNER JOIN T_REMITO R2 ON R2.P_ID=PRS.F_REMITO_P_ID " +
+				"      WHERE PR2.F_REMITO_P_ID = R.P_ID AND " +
+				"            PRS.F_PIEZA_PADRE_P_ID = PR2.P_ID AND R2.TIPO='SAL' AND " +
+				"            R.F_CLIENTE_P_ID = R2.F_CLIENTE_P_ID " +
+				") " +
+				"GROUP BY R.A_NRO_REMITO, ODT.A_CODIGO, ODT.P_ID, PROD.A_DESCR " + 
+				"ORDER BY ODT.A_CODIGO DESC"
 		);
 		query.setParameter("idCliente", idCliente);
 		List<Object[]> resultList = query.getResultList();

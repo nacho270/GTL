@@ -15,6 +15,6 @@ public interface OrdenDeTrabajoFacadeLocal {
 	public List<OrdenDeTrabajo> getOdtEagerByRemitoList(Integer idRE);
 
 	//METODOS WEB SERVICE
-	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente);
+	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaCompletoSinSalidaByClient(Integer idCliente);
 	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids);
 }

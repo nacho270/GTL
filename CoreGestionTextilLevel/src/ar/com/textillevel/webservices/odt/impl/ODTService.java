@@ -43,8 +43,7 @@ public class ODTService implements ODTServiceRemote {
 	}
 
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) {
-		// TODO Revisar query para no permitir remitos parciales
-		return odtFacade.getInfoPiezasEntradaSinSalidaByClient(idCliente);
+		return odtFacade.getInfoPiezasEntradaCompletoSinSalidaByClient(idCliente);
 	}
 
 	public List<ODTEagerTO> getByIdsEager(List<Integer> ids) {
