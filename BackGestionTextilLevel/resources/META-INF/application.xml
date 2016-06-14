@@ -128,5 +128,8 @@
 	<module>
 		<java>j2ssh-core-0.2.9.jar</java>
 	</module>
-	 
+	
+	<module>
+		<java>guava-19.0.jar</java>
+	</module>
 </application>
