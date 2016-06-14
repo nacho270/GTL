@@ -10,9 +10,11 @@ import javax.jws.WebService;
 import org.apache.log4j.Logger;
 
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
+import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 import ar.com.textillevel.modulos.odt.to.intercambio.ODTEagerTO;
+import ar.com.textillevel.modulos.odt.to.intercambio.RemitoEntradaTO;
 import ar.com.textillevel.webservices.odt.api.remote.ODTServiceRemote;
 
 @Stateless
@@ -23,6 +25,9 @@ public class ODTService implements ODTServiceRemote {
 	
 	@EJB
 	private OrdenDeTrabajoFacadeLocal odtFacade;
+	
+	@EJB
+	private RemitoEntradaFacadeLocal remitoEntradaFacade;
 	
 	//URL: http://localhost:8080/GTL-gtlback-server/ODTService?wsdl
 	
@@ -38,10 +43,20 @@ public class ODTService implements ODTServiceRemote {
 		xercesImpl.jar
 	 */
 	
-	public void recibir(String codigoBarras) {
-		logger.info("Registrando avance");
+	public Boolean recibirRemitoEntrada(RemitoEntradaTO remitoEntrada) {
+		logger.info("Se recibio remito " + remitoEntrada.getNroRemito() + ".");
+		return false;
 	}
 
+	public Boolean borrarRemitoDeEntrada(Integer id) {
+		try {
+			remitoEntradaFacade.eliminarRemitoEntradaForzado(id);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) {
 		return odtFacade.getInfoPiezasEntradaCompletoSinSalidaByClient(idCliente);
 	}

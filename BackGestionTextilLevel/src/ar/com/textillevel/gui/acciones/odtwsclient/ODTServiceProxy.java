@@ -44,6 +44,12 @@ public class ODTServiceProxy implements ar.com.textillevel.gui.acciones.odtwscli
     return oDTService;
   }
   
+  public java.lang.Boolean borrarRemitoDeEntrada(java.lang.Integer arg0) throws java.rmi.RemoteException{
+    if (oDTService == null)
+      _initODTServiceProxy();
+    return oDTService.borrarRemitoDeEntrada(arg0);
+  }
+  
   public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] getByIdsEager(int[] arg0) throws java.rmi.RemoteException{
     if (oDTService == null)
       _initODTServiceProxy();
@@ -56,10 +62,10 @@ public class ODTServiceProxy implements ar.com.textillevel.gui.acciones.odtwscli
     return oDTService.getInfoPiezasEntradaSinSalidaByClient(arg0);
   }
   
-  public void recibir(java.lang.String arg0) throws java.rmi.RemoteException{
+  public java.lang.Boolean recibirRemitoEntrada(ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO arg0) throws java.rmi.RemoteException{
     if (oDTService == null)
       _initODTServiceProxy();
-    oDTService.recibir(arg0);
+    return oDTService.recibirRemitoEntrada(arg0);
   }
   
   

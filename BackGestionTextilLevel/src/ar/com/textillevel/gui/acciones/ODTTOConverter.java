@@ -7,6 +7,7 @@ import java.util.List;
 
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
@@ -15,6 +16,7 @@ import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProductoArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
+import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO;
@@ -43,7 +45,7 @@ public final class ODTTOConverter {
 	private static final CondicionDeVentaFacadeRemote condicionVentaFacade = GTLBeanFactory.getInstance().getBean2(CondicionDeVentaFacadeRemote.class);
 	private static final TarimaFacadeRemote tarimaFacade = GTLBeanFactory.getInstance().getBean2(TarimaFacadeRemote.class);
 	private static final TipoMaquinaFacadeRemote tipoMaquinaFacade = GTLBeanFactory.getInstance().getBean2(TipoMaquinaFacadeRemote.class);
-	
+	private static final RemitoEntradaFacadeRemote remitoEntradaFacade = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class);
 	
 	private ODTTOConverter() {
 
@@ -203,5 +205,17 @@ public final class ODTTOConverter {
 		}
 
 		return piezaRemito;
+	}
+
+	@SuppressWarnings("unused")
+	public static RemitoEntradaTO toRemitoWSTO(DetalleRemitoEntradaNoFacturado elemento) {
+		if (true) {
+			throw new UnsupportedOperationException();
+		}
+		RemitoEntrada re = remitoEntradaFacade.getByIdEager(elemento.getId());
+		if (re == null) {
+			throw new RuntimeException("Remito no encontrado");
+		}
+		return null;
 	}
 }

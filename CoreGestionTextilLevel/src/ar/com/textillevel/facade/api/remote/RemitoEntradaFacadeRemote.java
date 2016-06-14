@@ -9,6 +9,7 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
@@ -53,6 +54,8 @@ public interface RemitoEntradaFacadeRemote {
 
 	public PiezaRemito getPiezaRemitoById(Integer idPiezaRemito);
 
-	public List<RemitoEntrada> getRemitosEntradaSinFactura();
+	public List<DetalleRemitoEntradaNoFacturado> getRemitosEntradaSinFactura();
+
+	public void eliminarRemitoEntradaForzado(Integer idRE);
 
 }

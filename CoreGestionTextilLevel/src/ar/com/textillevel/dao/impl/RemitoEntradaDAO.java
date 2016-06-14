@@ -12,10 +12,13 @@ import javax.persistence.Query;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.RemitoEntradaDAOLocal;
+import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 
 @Stateless
 @SuppressWarnings("unchecked")
@@ -39,6 +42,19 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 	private void doEager(RemitoEntrada remito) {
 		remito.getProductoArticuloList().size();
 		remito.getPiezas().size();
+		remito.getCliente().getCelular();
+		if (remito.getPiezas() != null) {
+			for(PiezaRemito pr : remito.getPiezas()) {
+				if (pr.getPiezasPadreODT() != null) {
+					pr.getPiezasPadreODT().size();
+					for (PiezaODT po : pr.getPiezasPadreODT()) {
+						if (po.getOdt() != null) {
+							po.getOdt().getCodigo();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public List<RemitoEntrada> getRemitoEntradaByClienteList(Integer idCliente) {
@@ -273,9 +289,20 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		}
 	}
 
-	@Override
-	public List<RemitoEntrada> getRemitosEntradaSinFactura() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DetalleRemitoEntradaNoFacturado> getRemitosEntradaSinFactura() {
+		List<DetalleRemitoEntradaNoFacturado> lista = new ArrayList<DetalleRemitoEntradaNoFacturado>();
+		Query query = getEntityManager().createNativeQuery(" SELECT DISTINCT re.p_id FROM T_ORDEN_DE_TRABAJO odt " +
+														   " 	INNER JOIN T_REMITO re on odt.F_REMITO_P_ID=re.P_ID AND re.TIPO='ENT' " +
+														   " 	INNER JOIN T_REMITO_SALIDA_ODT rsodt on rsodt.F_ODT_P_ID = odt.P_ID " +
+														   " 	INNER JOIN T_REMITO rs on rs.p_id = rsodt.F_REMITO_SALIDA_P_ID AND rs.F_FACTURA_P_ID IS NULL " +
+														   " ORDER BY re.A_FECHA_EMISION DESC ");
+		List<Object[]> ids = query.getResultList();
+		if (ids == null || ids.isEmpty()) {
+			return lista;
+		}
+		for(Object arr : ids) {
+			lista.add(new DetalleRemitoEntradaNoFacturado(getByIdEager(NumUtil.toInteger(arr))));
+		}
+		return lista;
 	}
 }

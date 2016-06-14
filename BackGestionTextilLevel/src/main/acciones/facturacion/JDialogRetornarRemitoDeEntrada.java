@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -15,11 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWCursor;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.fwcommon.util.GuiUtil;
-import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
+import ar.com.textillevel.gui.acciones.RemitoEntradaBusinessDelegate;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogRetornarRemitoDeEntrada extends JDialog {
@@ -29,13 +33,14 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 	private JButton btnAceptar;
 	private PanelTablaRemitos panelTabla;
 	
+	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 	private RemitoEntradaFacadeRemote remitoFacade;
 	
 	public JDialogRetornarRemitoDeEntrada(Frame padre) {
 		super(padre);
 		setUpComponentes();
 		setUpScreen();
-		getPanelTabla().agregarElementos(remitoFacade.getRemitosEntradaSinFactura());
+		getPanelTabla().agregarElementos(getRemitoFacade().getRemitosEntradaSinFactura());
 	}
 
 	private void setUpScreen() {
@@ -54,7 +59,7 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 		add(p, BorderLayout.SOUTH);
 	}
 
-	private class PanelTablaRemitos extends PanelTabla<RemitoEntrada> {
+	private class PanelTablaRemitos extends PanelTabla<DetalleRemitoEntradaNoFacturado> {
 
 		private static final long serialVersionUID = -2734929179965024589L;
 
@@ -70,10 +75,9 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 			getBotonEliminar().setVisible(false);
 		}
 
-		@Override
 		protected FWJTable construirTabla() {
 			FWJTable tabla = new FWJTable(0, CANT_COLS);
-			tabla.setStringColumn(COL_REMITO, "REMITO", 460, 460, true);
+			tabla.setMultilineColumn(COL_REMITO, "REMITO", 460, true, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			tabla.setHeaderAlignment(COL_REMITO, FWJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_REMITO, FWJTable.CENTER_ALIGN);
@@ -92,16 +96,19 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 		}
 
 		@Override
-		protected void agregarElemento(RemitoEntrada elemento) {
-			
+		protected void agregarElemento(DetalleRemitoEntradaNoFacturado elemento) {
+			getTabla().addRow(new Object[]{
+					"<html><b>" + elemento.getNroRemito() + " - " + elemento.getFecha() + " - " + elemento.getCliente() + "</b><br/>" +
+							elemento.getListaProductos() + "</html>",
+					elemento
+			});
 		}
 
 		@Override
-		protected RemitoEntrada getElemento(int fila) {
-			return null;
+		protected DetalleRemitoEntradaNoFacturado getElemento(int fila) {
+			return (DetalleRemitoEntradaNoFacturado) getTabla().getValueAt(fila, COL_OBJ);
 		}
 
-		@Override
 		protected String validarElemento(int fila) {
 			return null;
 		}
@@ -109,24 +116,35 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 		public JButton getBtnEnviar() {
 			if (btnEnviar == null) {
 				btnEnviar = BossEstilos.createButton("ar/com/textillevel/imagenes/btn_next.png", "ar/com/textillevel/imagenes/btn_next_des.png");
+				btnEnviar.setSize(20, 20);
 				btnEnviar.setEnabled(false);
 				btnEnviar.addActionListener(new ActionListener() {
-					@Override
 					public void actionPerformed(ActionEvent e) {
-						
+						boolean ok = false;
+						DetalleRemitoEntradaNoFacturado elemento = getPanelTabla().getElemento(getPanelTabla().getTabla().getSelectedRow());
+						try {
+							FWCursor.startWait(JDialogRetornarRemitoDeEntrada.this);
+							ok = remitoBusinessDelegate.retornarRemito(elemento);
+						} catch (RemoteException e1) {
+							FWJOptionPane.showErrorMessage(JDialogRetornarRemitoDeEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
+							e1.printStackTrace();
+						} finally {
+							FWCursor.endWait(JDialogRetornarRemitoDeEntrada.this);
+						}
+						if (ok) {
+							remitoFacade.eliminarRemitoEntradaForzado(elemento.getId());
+						}
 					}
 				});
 			}
 			return btnEnviar;
 		}
-		
 	}
 
 	public JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}

@@ -26,6 +26,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.PiezaRemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.excepciones.EValidacionException;
@@ -331,9 +332,12 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return remitoEntradaDAO.getByIdPiezaRemitoEntradaEager(idPiezaRemito);
 	}
 
-	@Override
-	public List<RemitoEntrada> getRemitosEntradaSinFactura() {
+	public List<DetalleRemitoEntradaNoFacturado> getRemitosEntradaSinFactura() {
 		return remitoEntradaDAO.getRemitosEntradaSinFactura();
+	}
+
+	public void eliminarRemitoEntradaForzado(Integer idRE) {
+		throw new UnsupportedOperationException();
 	}
 
 }

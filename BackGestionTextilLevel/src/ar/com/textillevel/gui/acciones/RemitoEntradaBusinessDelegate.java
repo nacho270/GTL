@@ -11,9 +11,11 @@ import javax.xml.rpc.ServiceException;
 import org.apache.commons.lang.ArrayUtils;
 
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.gui.acciones.odtwsclient.ODTService;
 import ar.com.textillevel.gui.acciones.odtwsclient.ODTServiceServiceLocator;
 import ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO;
+import ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
@@ -68,12 +70,23 @@ public class RemitoEntradaBusinessDelegate {
 			return odts;
 		}
 
-		public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) throws RemoteException{
+		public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) throws RemoteException {
 			List<DetallePiezaRemitoEntradaSinSalida> lista = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
-			for(ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida d :service.getInfoPiezasEntradaSinSalidaByClient(idCliente)) {
+			for(ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida d : service.getInfoPiezasEntradaSinSalidaByClient(idCliente)) {
 				lista.add(new DetallePiezaRemitoEntradaSinSalida(d.getNroRemito(), d.getIdODT(), d.getCodigoODT(), d.getProducto(), d.getCantPiezas(), d.getMetrosTotales()));
 			}
 			return lista;
 		}
+		
+		public boolean recibirRemitoEntrada(RemitoEntradaTO r) throws RemoteException {
+			return service.recibirRemitoEntrada(r);
+		}
+	}
+
+	public boolean retornarRemito(DetalleRemitoEntradaNoFacturado elemento) throws RemoteException {
+		if (!GenericUtils.isSistemaTest()) {
+			throw new RuntimeException("Operacion invalida desde este sistema");
+		}
+		return getWSClient().recibirRemitoEntrada(ODTTOConverter.toRemitoWSTO(elemento));
 	}
 }
