@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
@@ -207,6 +210,59 @@ public final class ODTTOConverter {
 		return piezaRemito;
 	}
 
+	private static PiezaRemitoTO piezaRemitoTOFromEntity(PiezaRemito piezaRemito) {
+		if (piezaRemito == null) {
+			return null;
+		}
+		PiezaRemitoTO piezaRemitoTO = new PiezaRemitoTO();
+		piezaRemitoTO.setEnSalida(piezaRemitoTO.getEnSalida());
+		piezaRemitoTO.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		piezaRemitoTO.setMetros(piezaRemitoTO.getMetros());
+		piezaRemitoTO.setObservaciones(piezaRemitoTO.getObservaciones());
+		piezaRemitoTO.setOrdenPieza(piezaRemitoTO.getOrdenPieza());
+		piezaRemitoTO.setOrdenPiezaCalculado(piezaRemitoTO.getOrdenPiezaCalculado());
+		piezaRemitoTO.setPiezaSinODT(piezaRemitoTO.getPiezaSinODT());
+		if (piezaRemito.getPmpDescuentoStock() != null) {
+			piezaRemitoTO.setIdPmpDescuentoStock(piezaRemito.getPmpDescuentoStock().getId());
+		}
+		if (piezaRemito.getPiezaEntrada() != null) {
+			piezaRemitoTO.setPiezaEntrada(piezaRemitoTOFromEntity(piezaRemito.getPiezaEntrada())); // OJO, recursividad
+		}
+		if (piezaRemito.getPiezasPadreODT() != null && piezaRemito.getPiezasPadreODT().size() > 0) {
+			List<PiezaODT> piezasPadreODT = piezaRemito.getPiezasPadreODT();
+			PiezaODTTO[] piezasPadrePODT = new PiezaODTTO[piezasPadreODT.size()];
+			int i = 0;
+			for (PiezaODT p : piezasPadreODT) {
+				piezasPadrePODT[i++] = piezaODTTOFromEntity(p);
+			}
+			piezaRemitoTO.setPiezasPadreODT(piezasPadrePODT);
+		}
+
+		return piezaRemitoTO;
+	}
+	
+	private static PiezaODTTO piezaODTTOFromEntity(PiezaODT piezaODT) {
+		if (piezaODT == null) {
+			return null;
+		}
+		PiezaODTTO piezaODTTO = new PiezaODTTO();
+		piezaODTTO.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		piezaODTTO.setMetrosStockInicial(piezaODT.getMetrosStockInicial());
+		piezaODTTO.setNroPiezaStockInicial(piezaODT.getNroPiezaStockInicial());
+//		piezaODTTO.setOdt(odt); // TODO ? ---> TODA LA ODT??????????
+		if (piezaODTTO.getPiezaRemito() != null) {
+			piezaODTTO.setPiezaRemito(piezaRemitoTOFromEntity(piezaODT.getPiezaRemito()));
+		}
+		List<PiezaRemitoTO> piezasSalida = new ArrayList<PiezaRemitoTO>();
+		if (piezaODT.getPiezasSalida() != null && piezaODT.getPiezasSalida().size() > 0) {
+			for (PiezaRemito piezaRemitoTO : piezaODT.getPiezasSalida()) {
+				piezasSalida.add(piezaRemitoTOFromEntity(piezaRemitoTO));
+			}
+		}
+		piezaODTTO.setPiezasSalida(piezasSalida.toArray(new PiezaRemitoTO[piezasSalida.size()]));
+		return piezaODTTO;
+	}
+
 	@SuppressWarnings("unused")
 	public static RemitoEntradaTO toRemitoWSTO(DetalleRemitoEntradaNoFacturado elemento) {
 		if (true) {
@@ -216,6 +272,32 @@ public final class ODTTOConverter {
 		if (re == null) {
 			throw new RuntimeException("Remito no encontrado");
 		}
-		return null;
+		
+		RemitoEntradaTO remitoTO = new RemitoEntradaTO();
+		remitoTO.setAnchoCrudo(re.getAnchoCrudo());
+		remitoTO.setAnchoFinal(re.getAnchoFinal());
+		remitoTO.setDateFechaEmision(re.getFechaEmision().getTime());
+		remitoTO.setEnPalet(re.getEnPalet());
+		remitoTO.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		remitoTO.setIdArticuloStock(re.getArticuloStock().getId());
+		remitoTO.setIdCliente(re.getCliente().getId());
+		remitoTO.setIdCondicionDeVenta(re.getCondicionDeVenta().getId());
+		remitoTO.setIdPrecioMatPrima(re.getPrecioMatPrima().getId());
+		remitoTO.setIdProveedor(re.getProveedor().getId());
+		remitoTO.setIdTarima(re.getTarima().getId());
+		remitoTO.setNroRemito(re.getNroRemito());
+		remitoTO.setPesoTotal(re.getPesoTotal());
+		remitoTO.setProductoArticuloIdsList(
+				FluentIterable.from(re.getProductoArticuloList()).transform(new Function<ProductoArticulo, Integer>() {
+					public Integer apply(ProductoArticulo pa) {
+						return pa.getId();
+					}
+				}).toArray(Integer.class));
+		remitoTO.setPiezas(FluentIterable.from(re.getPiezas()).transform(new Function<PiezaRemito, PiezaRemitoTO>() {
+			public PiezaRemitoTO apply(PiezaRemito pr) {
+				return piezaRemitoTOFromEntity(pr);
+			}
+		}).toArray(PiezaRemitoTO.class));
+		return remitoTO;
 	}
 }

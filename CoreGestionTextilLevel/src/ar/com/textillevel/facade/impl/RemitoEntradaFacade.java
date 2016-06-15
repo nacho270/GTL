@@ -337,6 +337,10 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	}
 
 	public void eliminarRemitoEntradaForzado(Integer idRE) {
+		/*
+		 * Seria eliminar el remito completo.
+		 * Facturas no va a tener, pero puede tener remito salida o remito de entrada de proveedor. Esto acarrea: factura proveedor, orden de pago, correccion. 
+		 */
 		throw new UnsupportedOperationException();
 	}
 
