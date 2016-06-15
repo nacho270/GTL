@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
+import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
@@ -232,4 +233,15 @@ public class OrdenDeTrabajo implements Serializable {
 	public void setMaquinaPrincipal(Maquina maquinaPrincipal) {
 		this.maquinaPrincipal = maquinaPrincipal;
 	}
+
+	@Transient
+	public PiezaODT getPiezaByPiezaPadreRE(PiezaRemito piezaEntrada) {
+		for(PiezaODT pODT : getPiezas()) {
+			if(pODT.getPiezaRemito().equals(piezaEntrada)) {
+				return pODT;
+			}
+		}
+		return null;
+	}
+
 }

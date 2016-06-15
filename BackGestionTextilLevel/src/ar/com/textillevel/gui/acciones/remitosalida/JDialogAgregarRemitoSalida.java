@@ -44,16 +44,19 @@ import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
+import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCantFilasInput;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.ODTCodigoHelper;
 
@@ -97,8 +100,9 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 	private RemitoSalidaFacadeRemote remitoSalidaFacade;
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
+//	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 
-	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;;
+	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
 
 	public JDialogAgregarRemitoSalida(Frame owner, RemitoSalida remitoSalida, boolean modoConsulta) {
 		super(owner);
@@ -497,9 +501,42 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 						BigDecimal pesoTotal = new BigDecimal(getTxtPesoTotal().getText().trim().replace(',', '.'));
 						remitoSalida.setPesoTotal(pesoTotal);
 
-						//Lógica de remito simple
+						//si es la B => tengo que persistir el RE junto con las ODTs
+						Integer idRemitoREBorrar = null;
+						if(GenericUtils.isSistemaTest()) {
+							List<OrdenDeTrabajo> odtList = new ArrayList<OrdenDeTrabajo>(remitoSalida.getOdts());
+							RemitoEntrada remitoFromA = extractRemitoEntrada(remitoSalida.getOdts());
+							idRemitoREBorrar = remitoFromA.getId();
+							remitoFromA.setId(null);//provoca un insert en el método siguiente!
+							RemitoEntrada re = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class).save(remitoFromA, odtList, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+							odtList = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getOdtEagerByRemitoList(re.getId());
+							//esta parte sincroniza los objetos que ya están en estado persistent dentro del RS que está por grabarse
+							remitoSalida.getOdts().clear();
+							remitoSalida.getOdts().addAll(odtList);
+							for(PiezaRemito pr : remitoSalida.getPiezas()) {
+								if(pr.getPiezaEntrada() != null) {
+									pr.setPiezaEntrada(re.getPiezaByOrden(pr.getPiezaEntrada().getOrdenPieza())); //pieza padre del RE
+									List<PiezaODT> piezasPadrePersistentODT = new ArrayList<PiezaODT>();
+									for(PiezaODT pODT : pr.getPiezasPadreODT()) {
+										OrdenDeTrabajo odt = findODT(pODT.getOdt().getCodigo(), odtList);
+										piezasPadrePersistentODT.add(odt.getPiezaByPiezaPadreRE(pr.getPiezaEntrada()));
+									}
+									pr.getPiezasPadreODT().clear();
+									pr.getPiezasPadreODT().addAll(piezasPadrePersistentODT);
+								}
+							}
+						}
+
+						//lógica de remito simple
 						calcularSetearMerma(remitoSalida);
 						RemitoSalida remitoSalidaSaved = getRemitoSalidaFacade().save(remitoSalida, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+
+						//si es la B => borro el RE que se acaba de utilizar idRemitoREBorrar
+						if(GenericUtils.isSistemaTest()) {
+							//TODO:
+							System.out.println(idRemitoREBorrar);
+						}
+
 						setRemitoSalida(remitoSalidaSaved);
 						setRemitosSalida(null);
 						BigDecimal toleranciaPorcentajeMerma = getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeToleranciaMermaNegativa();
@@ -520,9 +557,32 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 					} 
 				}
 
+
 			});
 		}
 		return btnAceptar;
+	}
+
+	protected OrdenDeTrabajo findODT(String codigo, List<OrdenDeTrabajo> odtList) {
+		for(OrdenDeTrabajo odt : odtList) {
+			if(odt.getCodigo().equalsIgnoreCase(codigo)) {
+				return odt;
+			}
+		}
+		return null;
+	}
+
+	private RemitoEntrada extractRemitoEntrada(List<OrdenDeTrabajo> odts) {
+		List<RemitoEntrada> remitos = new ArrayList<RemitoEntrada>();
+		for(OrdenDeTrabajo odt : odts) {
+			if(odt.getRemito() != null) {
+				remitos.add(odt.getRemito());
+			}
+		}
+		if(remitos.isEmpty()) {
+			throw new IllegalArgumentException("Las ODTs recibidas no tienen remitos de entrada...");
+		}
+		return remitos.get(0);//devuelvo el primero
 	}
 
 	private List<RemitoSalida> calcularRemitosSalida(RemitoSalida rs, Integer cantRemitos) {

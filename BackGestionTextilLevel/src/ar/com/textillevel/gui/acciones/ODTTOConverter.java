@@ -60,7 +60,7 @@ public final class ODTTOConverter {
 		odt.setCodigo(odtEagerTO.getCodigo());
 		odt.setEstadoODT(EEstadoODT.getById(odtEagerTO.getIdEstadoODT()));
 		odt.setFechaODT(new Timestamp(odtEagerTO.getTimestampFechaODT()));
-		odt.setId(odtEagerTO.getId());
+		odt.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		odt.setOrdenEnMaquina(odtEagerTO.getOrdenEnMaquina());
 		if (odtEagerTO.getIdMaquinaActual() != null) {
 			odt.setMaquinaActual(maquinaFacade.getByIdEager(odtEagerTO.getIdMaquinaActual()));
@@ -89,7 +89,7 @@ public final class ODTTOConverter {
 			return null;
 		}
 		RemitoEntrada remitoEntrada = new RemitoEntrada();
-		remitoEntrada.setId(remitoTO.getId());
+		remitoEntrada.setId(remitoTO.getId()); // Es el único que interesa que sobreviva para después referenciarlo y borrarlo del otro lado!
 		remitoEntrada.setNroRemito(remitoTO.getNroRemito());
 		remitoEntrada.setAnchoCrudo(remitoTO.getAnchoCrudo());
 		remitoEntrada.setAnchoFinal(remitoTO.getAnchoFinal());
@@ -137,7 +137,7 @@ public final class ODTTOConverter {
 		}
 		SecuenciaODT secuenciaODT = new SecuenciaODT();
 		secuenciaODT.setCliente(clienteFacade.getById(secuenciaODTTO.getIdCliente()));
-		secuenciaODT.setId(secuenciaODTTO.getId());
+		secuenciaODT.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		secuenciaODT.setNombre(secuenciaODTTO.getNombre());
 		secuenciaODT.setOdt(odt);
 		secuenciaODT.setTipoProducto(ETipoProducto.getById(secuenciaODTTO.getIdTipoProducto()));
@@ -145,7 +145,7 @@ public final class ODTTOConverter {
 			List<PasoSecuenciaODT> pasos = new ArrayList<PasoSecuenciaODT>();
 			for (PasoSecuenciaODTTO pasoSecuenciaODTTO : secuenciaODTTO.getPasosSecuencia()) {
 				PasoSecuenciaODT pasoSecuenciaODT = new PasoSecuenciaODT();
-				pasoSecuenciaODT.setId(pasoSecuenciaODTTO.getId());
+				pasoSecuenciaODT.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 				pasoSecuenciaODT.setObservaciones(pasoSecuenciaODTTO.getObservaciones());
 				pasoSecuenciaODT.setSector(tipoMaquinaFacade.getByIdEager(pasoSecuenciaODTTO.getIdSector(), TipoMaquinaFacadeRemote.MASK_PROCESOS | TipoMaquinaFacadeRemote.MASK_SUBPROCESOS | TipoMaquinaFacadeRemote.MASK_INSTRUCCIONES));
 // TODO: HAY QUE CLONAR TODOOOO: PROCEDIMIENTOODT, INSTRUCCCIONESODT (TENIDO, ESTAMPADO, ETC....)
@@ -163,7 +163,7 @@ public final class ODTTOConverter {
 			return null;
 		}
 		PiezaODT piezaODT = new PiezaODT();
-		piezaODT.setId(piezaODTTO.getId());
+		piezaODT.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		piezaODT.setMetrosStockInicial(piezaODT.getMetrosStockInicial());
 		piezaODT.setNroPiezaStockInicial(piezaODT.getNroPiezaStockInicial());
 		piezaODT.setOdt(odt);
@@ -186,7 +186,7 @@ public final class ODTTOConverter {
 		}
 		PiezaRemito piezaRemito = new PiezaRemito();
 		piezaRemito.setEnSalida(piezaRemitoTO.getEnSalida());
-		piezaRemito.setId(piezaRemitoTO.getId());
+		piezaRemito.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		piezaRemito.setMetros(piezaRemitoTO.getMetros());
 		piezaRemito.setObservaciones(piezaRemitoTO.getObservaciones());
 		piezaRemito.setOrdenPieza(piezaRemitoTO.getOrdenPieza());
