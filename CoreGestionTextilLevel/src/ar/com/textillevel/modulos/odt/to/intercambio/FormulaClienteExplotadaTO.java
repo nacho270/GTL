@@ -23,6 +23,11 @@ public class FormulaClienteExplotadaTO implements Serializable {
 	private List<MateriaPrimaCantidadExplotadaTO> pigmentos;
 	private List<MateriaPrimaCantidadExplotadaTO> quimicos;
 
+	// Necesario para el WS
+	public FormulaClienteExplotadaTO() {
+
+	}
+
 	public FormulaClienteExplotadaTO(FormulaClienteExplotada formula) {
 		if (formula instanceof FormulaTenidoClienteExplotada) {
 			tipo = "TEN";

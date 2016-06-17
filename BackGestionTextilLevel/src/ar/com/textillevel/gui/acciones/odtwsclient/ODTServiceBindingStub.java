@@ -106,6 +106,27 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "formulaClienteExplotadaTO");
+            cachedSerQNames.add(qName);
+            cls = ar.com.textillevel.gui.acciones.odtwsclient.FormulaClienteExplotadaTO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "instruccionProcedimientoODTTO");
+            cachedSerQNames.add(qName);
+            cls = ar.com.textillevel.gui.acciones.odtwsclient.InstruccionProcedimientoODTTO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "materiaPrimaCantidadExplotadaTO");
+            cachedSerQNames.add(qName);
+            cls = ar.com.textillevel.gui.acciones.odtwsclient.MateriaPrimaCantidadExplotadaTO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "odtEagerTO");
             cachedSerQNames.add(qName);
             cls = ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO.class;
@@ -130,6 +151,13 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
             qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "piezaRemitoTO");
             cachedSerQNames.add(qName);
             cls = ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "procedimientoODTTO");
+            cachedSerQNames.add(qName);
+            cls = ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);

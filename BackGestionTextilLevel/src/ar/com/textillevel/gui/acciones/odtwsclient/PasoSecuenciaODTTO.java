@@ -11,28 +11,28 @@ package ar.com.textillevel.gui.acciones.odtwsclient;
 public class PasoSecuenciaODTTO  implements java.io.Serializable {
     private java.lang.Integer id;
 
-    private java.lang.Integer idProcedimiento;
-
     private java.lang.Integer idProceso;
 
     private java.lang.Integer idSector;
 
     private java.lang.String observaciones;
 
+    private ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO subProceso;
+
     public PasoSecuenciaODTTO() {
     }
 
     public PasoSecuenciaODTTO(
            java.lang.Integer id,
-           java.lang.Integer idProcedimiento,
            java.lang.Integer idProceso,
            java.lang.Integer idSector,
-           java.lang.String observaciones) {
+           java.lang.String observaciones,
+           ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO subProceso) {
            this.id = id;
-           this.idProcedimiento = idProcedimiento;
            this.idProceso = idProceso;
            this.idSector = idSector;
            this.observaciones = observaciones;
+           this.subProceso = subProceso;
     }
 
 
@@ -53,26 +53,6 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
      */
     public void setId(java.lang.Integer id) {
         this.id = id;
-    }
-
-
-    /**
-     * Gets the idProcedimiento value for this PasoSecuenciaODTTO.
-     * 
-     * @return idProcedimiento
-     */
-    public java.lang.Integer getIdProcedimiento() {
-        return idProcedimiento;
-    }
-
-
-    /**
-     * Sets the idProcedimiento value for this PasoSecuenciaODTTO.
-     * 
-     * @param idProcedimiento
-     */
-    public void setIdProcedimiento(java.lang.Integer idProcedimiento) {
-        this.idProcedimiento = idProcedimiento;
     }
 
 
@@ -135,6 +115,26 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
         this.observaciones = observaciones;
     }
 
+
+    /**
+     * Gets the subProceso value for this PasoSecuenciaODTTO.
+     * 
+     * @return subProceso
+     */
+    public ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO getSubProceso() {
+        return subProceso;
+    }
+
+
+    /**
+     * Sets the subProceso value for this PasoSecuenciaODTTO.
+     * 
+     * @param subProceso
+     */
+    public void setSubProceso(ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO subProceso) {
+        this.subProceso = subProceso;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PasoSecuenciaODTTO)) return false;
@@ -150,9 +150,6 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
             ((this.id==null && other.getId()==null) || 
              (this.id!=null &&
               this.id.equals(other.getId()))) &&
-            ((this.idProcedimiento==null && other.getIdProcedimiento()==null) || 
-             (this.idProcedimiento!=null &&
-              this.idProcedimiento.equals(other.getIdProcedimiento()))) &&
             ((this.idProceso==null && other.getIdProceso()==null) || 
              (this.idProceso!=null &&
               this.idProceso.equals(other.getIdProceso()))) &&
@@ -161,7 +158,10 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
               this.idSector.equals(other.getIdSector()))) &&
             ((this.observaciones==null && other.getObservaciones()==null) || 
              (this.observaciones!=null &&
-              this.observaciones.equals(other.getObservaciones())));
+              this.observaciones.equals(other.getObservaciones()))) &&
+            ((this.subProceso==null && other.getSubProceso()==null) || 
+             (this.subProceso!=null &&
+              this.subProceso.equals(other.getSubProceso())));
         __equalsCalc = null;
         return _equals;
     }
@@ -176,9 +176,6 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
         if (getId() != null) {
             _hashCode += getId().hashCode();
         }
-        if (getIdProcedimiento() != null) {
-            _hashCode += getIdProcedimiento().hashCode();
-        }
         if (getIdProceso() != null) {
             _hashCode += getIdProceso().hashCode();
         }
@@ -187,6 +184,9 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
         }
         if (getObservaciones() != null) {
             _hashCode += getObservaciones().hashCode();
+        }
+        if (getSubProceso() != null) {
+            _hashCode += getSubProceso().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -201,13 +201,6 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("id");
         elemField.setXmlName(new javax.xml.namespace.QName("", "id"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("idProcedimiento");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "idProcedimiento"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
@@ -230,6 +223,13 @@ public class PasoSecuenciaODTTO  implements java.io.Serializable {
         elemField.setFieldName("observaciones");
         elemField.setXmlName(new javax.xml.namespace.QName("", "observaciones"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("subProceso");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "subProceso"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "procedimientoODTTO"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
