@@ -5,14 +5,15 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
+import ar.com.textillevel.entidades.ventas.materiaprima.Pigmento;
+import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
+import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
@@ -21,22 +22,42 @@ import ar.com.textillevel.facade.api.remote.ProductoArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
+import ar.com.textillevel.gui.acciones.odtwsclient.FormulaClienteExplotadaTO;
+import ar.com.textillevel.gui.acciones.odtwsclient.InstruccionProcedimientoODTTO;
+import ar.com.textillevel.gui.acciones.odtwsclient.MateriaPrimaCantidadExplotadaTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.PasoSecuenciaODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.PiezaODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO;
+import ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.SecuenciaODTTO;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaEstampadoClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaTenidoClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.FormulaClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.MateriaPrimaCantidadExplotada;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoPasadasODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTextoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.ProcedimientoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
+import ar.com.textillevel.modulos.odt.facade.api.remote.AccionProcedimientoFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 
 public final class ODTTOConverter {
 
@@ -50,7 +71,10 @@ public final class ODTTOConverter {
 	private static final TarimaFacadeRemote tarimaFacade = GTLBeanFactory.getInstance().getBean2(TarimaFacadeRemote.class);
 	private static final TipoMaquinaFacadeRemote tipoMaquinaFacade = GTLBeanFactory.getInstance().getBean2(TipoMaquinaFacadeRemote.class);
 	private static final RemitoEntradaFacadeRemote remitoEntradaFacade = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class);
-	
+	private static final TipoArticuloFacadeRemote tipoArticuloFacade = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class);
+	private static final AccionProcedimientoFacadeRemote accionProcedimientoFacade = GTLBeanFactory.getInstance().getBean2(AccionProcedimientoFacadeRemote.class);
+	private static final FormulaClienteFacadeRemote formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class);
+
 	private ODTTOConverter() {
 
 	}
@@ -151,9 +175,7 @@ public final class ODTTOConverter {
 				TipoMaquina sector = tipoMaquinaFacade.getByIdEager(pasoSecuenciaODTTO.getIdSector(), TipoMaquinaFacadeRemote.MASK_PROCESOS | TipoMaquinaFacadeRemote.MASK_SUBPROCESOS | TipoMaquinaFacadeRemote.MASK_INSTRUCCIONES);
 				pasoSecuenciaODT.setSector(sector);
 				pasoSecuenciaODT.setProceso(sector.getProcesoById(pasoSecuenciaODTTO.getIdProceso()));
-				//creación del subrproceso
-//				pasoSecuenciaODT.setSubProceso(subProcesoODTFromTO(pasoSecuenciaODTTO.getSubProceso()));
-				//TODO: Se posterga hasta que estén actualizadas las entidades del WS
+				pasoSecuenciaODT.setSubProceso(subProcesoODTFromTO(pasoSecuenciaODTTO.getSubProceso()));
 				pasos.add(pasoSecuenciaODT);
 			}
 			secuenciaODT.setPasos(pasos);
@@ -161,6 +183,80 @@ public final class ODTTOConverter {
 		return secuenciaODT;
 	}
 
+	private static ProcedimientoODT subProcesoODTFromTO(ProcedimientoODTTO subProcesoTO) {
+		ProcedimientoODT subProceso = new ProcedimientoODT();
+		subProceso.setId(subProceso.getId());
+		subProceso.setNombre(subProcesoTO.getNombre());
+		subProceso.setTipoArticulo(tipoArticuloFacade.getByIdEager(subProcesoTO.getIdTipoArticulo()));
+		List<InstruccionProcedimientoODT> pasos = new ArrayList<InstruccionProcedimientoODT>();
+		for(InstruccionProcedimientoODTTO instruccionTO : subProcesoTO.getPasos()) {
+			pasos.add(instruccionProcedimientoODTFromTO(instruccionTO, subProceso));
+		}
+		subProceso.setPasos(pasos);
+		return subProceso;
+	}
+
+	private static InstruccionProcedimientoODT instruccionProcedimientoODTFromTO(InstruccionProcedimientoODTTO instruccionTO, ProcedimientoODT subProceso) {
+		InstruccionProcedimientoODT instruccion;
+		if (instruccionTO.getTipo().equals("IPPODT")) {
+			instruccion = new InstruccionProcedimientoPasadasODT();
+			((InstruccionProcedimientoPasadasODT) instruccion).setCantidadPasadas(instruccionTO.getCantidadPasadas());
+			((InstruccionProcedimientoPasadasODT) instruccion).setTemperatura(instruccionTO.getTemperatura());
+			((InstruccionProcedimientoPasadasODT) instruccion).setVelocidad(instruccionTO.getVelocidad());
+			((InstruccionProcedimientoPasadasODT) instruccion).setAccion(accionProcedimientoFacade.getById(instruccionTO.getAccionProcedimientoId()));
+			List<MateriaPrimaCantidadExplotada<Quimico>> quimicos = new ArrayList<MateriaPrimaCantidadExplotada<Quimico>>();
+			for(MateriaPrimaCantidadExplotadaTO mpcto : instruccionTO.getMpCantidadExplotadas()) {
+				quimicos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+			}
+			((InstruccionProcedimientoPasadasODT) instruccion).setQuimicosExplotados(quimicos);
+		} else if (instruccionTO.getTipo().equals("IPPTODT")){
+			instruccion = new InstruccionProcedimientoTextoODT();
+			((InstruccionProcedimientoTextoODT)instruccion).setEspecificacion(instruccionTO.getEspecificacion());
+		} else {
+			instruccion = new InstruccionProcedimientoTipoProductoODT();
+			((InstruccionProcedimientoTipoProductoODT) instruccion).setTipoArticulo(tipoArticuloFacade.getByIdEager(instruccionTO.getIdTipoArticulo()));
+			((InstruccionProcedimientoTipoProductoODT) instruccion).setTipoProducto(ETipoProducto.getById(instruccionTO.getIdTipoProducto()));
+			FormulaClienteExplotada formula;
+			FormulaClienteExplotadaTO formulaTO = instruccionTO.getFormula();
+			if (formulaTO.getTipo().equals("TEN")) {
+				formula = new FormulaTenidoClienteExplotada();
+				List<MateriaPrimaCantidadExplotada<Anilina>> anilinas = new ArrayList<MateriaPrimaCantidadExplotada<Anilina>>();
+				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getAnilinas()) {
+					anilinas.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
+				}
+				((FormulaTenidoClienteExplotada) formula).setMateriasPrimas(anilinas);
+			} else {
+				formula = new FormulaEstampadoClienteExplotada();
+				List<MateriaPrimaCantidadExplotada<Pigmento>> pigmentos = new ArrayList<MateriaPrimaCantidadExplotada<Pigmento>>();
+				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getPigmentos()) {
+					pigmentos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
+				}
+				List<MateriaPrimaCantidadExplotada<Quimico>> quimicos = new ArrayList<MateriaPrimaCantidadExplotada<Quimico>>();
+				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getQuimicos()) {
+					quimicos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+				}
+				((FormulaEstampadoClienteExplotada) formula).setPigmentos(pigmentos);
+				((FormulaEstampadoClienteExplotada) formula).setQuimicos(quimicos);
+			}
+			formula.setFormulaDesencadenante(formulaFacade.getById(formulaTO.getIdFormulaDesencadenante()));
+			((InstruccionProcedimientoTipoProductoODT) instruccion).setFormula(formula);
+		}
+		instruccion.setObservaciones(instruccionTO.getObservaciones());
+		instruccion.setSectorMaquina(ESectorMaquina.getById(instruccionTO.getIdTipoSector()));
+		instruccion.setProcedimiento(subProceso);
+		return instruccion;
+	}
+	
+	private static <T extends Formulable> MateriaPrimaCantidadExplotada<T> materiaPrimaCantidadExplotadaFromTO(MateriaPrimaCantidadExplotadaTO mpceTO, Class<T> clazz) {
+		MateriaPrimaCantidadExplotada<T> mpce = new MateriaPrimaCantidadExplotada<T>();
+		mpce.setCantidadExplotada(mpceTO.getCantidadExplotada());
+		mpce.setTipoArticulo(tipoArticuloFacade.getByIdEager(mpceTO.getIdTipoArticulo()));
+//		TODO: REVISAR ESTAS 2. HAY QUE HACER UN Facade DE MATERIA PRIMA CANTIDAD?
+//		mpce.setId()); TODO: NO VA? En MateriaPrimaCantidadExplotadaTO se estaba poniendo el id de la MP explotada como el id de la MP cantidad. Revisar
+//		mpce.setMateriaPrimaCantidadDesencadenante(mpceTO.getIdMateriaPrimaCantidad());
+		return mpce;	
+	}
+	
 	private static PiezaODT piezaODTFromTO(OrdenDeTrabajo odt, PiezaODTTO piezaODTTO) {
 		if (piezaODTTO == null) {
 			return null;

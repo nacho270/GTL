@@ -29,6 +29,7 @@ public class FormulaClienteExplotadaTO implements Serializable {
 	}
 
 	public FormulaClienteExplotadaTO(FormulaClienteExplotada formula) {
+		this.idFormulaDesencadenante = formula.getFormulaDesencadenante().getId();
 		if (formula instanceof FormulaTenidoClienteExplotada) {
 			tipo = "TEN";
 			FormulaTenidoClienteExplotada formulaT = (FormulaTenidoClienteExplotada)formula;
@@ -42,7 +43,6 @@ public class FormulaClienteExplotadaTO implements Serializable {
 			setQuimicos(new ArrayList<MateriaPrimaCantidadExplotadaTO>());
 			llenarListaConLista(getQuimicos(), formulaE.getQuimicos());
 		}
-
 	}
 
 	private <T extends Formulable> void llenarListaConLista(List<MateriaPrimaCantidadExplotadaTO> listaParaLlenar, List<MateriaPrimaCantidadExplotada<T>> lista) {

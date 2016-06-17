@@ -17,4 +17,6 @@ public interface AccionProcedimientoFacadeRemote {
 
 	public AccionProcedimiento save(AccionProcedimiento accion) throws ValidacionException;
 
+	public AccionProcedimiento getById(Integer id);
+
 }

@@ -23,7 +23,7 @@ import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.modulos.odt.gui.tenido.PersisterFormulaHandler;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
-import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaTenidoClienteFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelTabla<T> {
@@ -98,7 +98,7 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 						}
 						if(FWJOptionPane.showQuestionMessage(owner, "Va copiar las siguientes formulas al cliente " + clienteElegido.getRazonSocial() + ":\n\n" + StringUtil.getCadena(codigosFormulas, "\n") + "\n\nDesea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
 							try {
-								GTLBeanFactory.getInstance().getBean2(FormulaTenidoClienteFacadeRemote.class).copiarFormulas(formulasSeleccionadas, clienteElegido, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+								GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class).copiarFormulas(formulasSeleccionadas, clienteElegido, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 								FWJOptionPane.showInformationMessage(owner, "Las formulas de copiaron con exito", "Informacion");
 							} catch (ValidacionException e1) {
 								FWJOptionPane.showErrorMessage(owner, e1.getMensajeError(), "Error");

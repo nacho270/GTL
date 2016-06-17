@@ -54,7 +54,6 @@ public class InstruccionProcedimientoODTTO implements Serializable {
 			InstruccionProcedimientoTextoODT instODTT = (InstruccionProcedimientoTextoODT) instODT;
 			this.tipo = "IPPTODT";
 			this.especificacion = instODTT.getEspecificacion();
-
 		} else {
 			InstruccionProcedimientoTipoProductoODT instODTTP = (InstruccionProcedimientoTipoProductoODT) instODT;
 			this.tipo = "IPTPODT";
