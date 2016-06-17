@@ -29,6 +29,7 @@ import ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.SecuenciaODTTO;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
@@ -147,10 +148,12 @@ public final class ODTTOConverter {
 				PasoSecuenciaODT pasoSecuenciaODT = new PasoSecuenciaODT();
 				pasoSecuenciaODT.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 				pasoSecuenciaODT.setObservaciones(pasoSecuenciaODTTO.getObservaciones());
-				pasoSecuenciaODT.setSector(tipoMaquinaFacade.getByIdEager(pasoSecuenciaODTTO.getIdSector(), TipoMaquinaFacadeRemote.MASK_PROCESOS | TipoMaquinaFacadeRemote.MASK_SUBPROCESOS | TipoMaquinaFacadeRemote.MASK_INSTRUCCIONES));
-// TODO: HAY QUE CLONAR TODOOOO: PROCEDIMIENTOODT, INSTRUCCCIONESODT (TENIDO, ESTAMPADO, ETC....)
-//				pasoSecuenciaODT.setProceso(proceso);
-//				pasoSecuenciaODT.setSubProceso(subProceso);
+				TipoMaquina sector = tipoMaquinaFacade.getByIdEager(pasoSecuenciaODTTO.getIdSector(), TipoMaquinaFacadeRemote.MASK_PROCESOS | TipoMaquinaFacadeRemote.MASK_SUBPROCESOS | TipoMaquinaFacadeRemote.MASK_INSTRUCCIONES);
+				pasoSecuenciaODT.setSector(sector);
+				pasoSecuenciaODT.setProceso(sector.getProcesoById(pasoSecuenciaODTTO.getIdProceso()));
+				//creación del subrproceso
+//				pasoSecuenciaODT.setSubProceso(subProcesoODTFromTO(pasoSecuenciaODTTO.getSubProceso()));
+				//TODO: Se posterga hasta que estén actualizadas las entidades del WS
 				pasos.add(pasoSecuenciaODT);
 			}
 			secuenciaODT.setPasos(pasos);

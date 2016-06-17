@@ -12,10 +12,9 @@ public class PasoSecuenciaODTTO implements Serializable {
 	private Integer idSector; // TipoMaquina esta federado
 	private Integer idProceso; // ProcesoTipoMaquina esta federado
 	private String observaciones;
-	private Integer idProcedimiento; // ProcedimientoODT esta federado
+	private ProcedimientoODTTO subProceso; // ProcedimientoODT NO esta federado
 
 	public PasoSecuenciaODTTO() {
-
 	}
 
 	public PasoSecuenciaODTTO(PasoSecuenciaODT p) {
@@ -23,7 +22,7 @@ public class PasoSecuenciaODTTO implements Serializable {
 		this.idSector = p.getSector().getId();
 		this.idProceso = p.getProceso().getId();
 		this.observaciones = p.getObservaciones();
-		this.idProcedimiento = p.getSubProceso().getId();
+		this.subProceso = new ProcedimientoODTTO(p.getSubProceso());
 	}
 
 	public Integer getId() {
@@ -58,12 +57,12 @@ public class PasoSecuenciaODTTO implements Serializable {
 		this.observaciones = observaciones;
 	}
 
-	public Integer getIdProcedimiento() {
-		return idProcedimiento;
+	public ProcedimientoODTTO getSubProceso() {
+		return subProceso;
 	}
 
-	public void setIdProcedimiento(Integer idProcedimiento) {
-		this.idProcedimiento = idProcedimiento;
+	public void setSubProceso(ProcedimientoODTTO subProceso) {
+		this.subProceso = subProceso;
 	}
 
 }

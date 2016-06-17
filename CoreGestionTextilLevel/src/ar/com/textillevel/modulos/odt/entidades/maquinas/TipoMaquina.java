@@ -137,4 +137,14 @@ public class TipoMaquina implements Serializable {
 	public String toString(){
 		return nombre.toUpperCase();
 	}
+
+	@Transient
+	public ProcesoTipoMaquina getProcesoById(Integer idProceso) {
+		for(ProcesoTipoMaquina p : getProcesos()) {
+			if(p.getId().equals(idProceso)) {
+				return p;
+			}
+		}
+		return null;
+	}
 }
