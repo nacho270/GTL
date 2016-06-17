@@ -71,7 +71,9 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 				"      WHERE PR2.F_REMITO_P_ID = R.P_ID AND " +
 				"            PRS.F_PIEZA_PADRE_P_ID = PR2.P_ID AND R2.TIPO='SAL' AND " +
 				"            R.F_CLIENTE_P_ID = R2.F_CLIENTE_P_ID " +
-				") " +
+				") AND " +
+				// SI TIENE EL REMITO DE ENTRADA TIENE REMITO ENTRADA PROVEEDOR, NO SE PUEDE PASAR A LA B
+				" NOT EXISTS (SELECT 1 FROM T_REMITO_ENTRADA_PROV rep WHERE R.p_id = rep.f_rem_ent_cliente_p_id) " +
 				"GROUP BY R.A_NRO_REMITO, ODT.A_CODIGO, ODT.P_ID, PROD.A_DESCR " + 
 				"ORDER BY ODT.A_CODIGO DESC"
 		);

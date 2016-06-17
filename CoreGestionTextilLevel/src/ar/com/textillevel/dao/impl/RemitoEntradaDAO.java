@@ -295,6 +295,8 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 														   " 	INNER JOIN T_REMITO re on odt.F_REMITO_P_ID=re.P_ID AND re.TIPO='ENT' " +
 														   " 	INNER JOIN T_REMITO_SALIDA_ODT rsodt on rsodt.F_ODT_P_ID = odt.P_ID " +
 														   " 	INNER JOIN T_REMITO rs on rs.p_id = rsodt.F_REMITO_SALIDA_P_ID AND rs.F_FACTURA_P_ID IS NULL " +
+														   // SI TIENE REMITO ENTRADA PROVEEDOR, NO SE PUEDE PASAR A LA A
+														   " WHERE NOT EXISTS (SELECT 1 FROM T_REMITO_ENTRADA_PROV rep WHERE re.p_id = rep.f_rem_ent_cliente_p_id) " +
 														   " ORDER BY re.A_FECHA_EMISION DESC ");
 		List<Object[]> ids = query.getResultList();
 		if (ids == null || ids.isEmpty()) {
