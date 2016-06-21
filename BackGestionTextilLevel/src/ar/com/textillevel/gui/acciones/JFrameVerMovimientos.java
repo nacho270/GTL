@@ -1261,10 +1261,12 @@ public class JFrameVerMovimientos extends JFrame {
 					getFacturaFacade().eliminarFactura(factura, getUsuarioAdministrador().getUsrName());
 				}
 				if (jds.isBorrarRemitoSalida() && factura.getRemitos() != null) {
-					//	getRemitoSalidaFacade().borrarRemito(factura.getRemito(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+					for(RemitoSalida rs : factura.getRemitos()) {
+						getRemitoSalidaFacade().eliminarRemitoSalida(rs.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+					}
 				}
 				if (jds.isBorrarRemitoEntrada()) {
-					// TODO: no se como llegar a este
+					// TODO: no sé como llegar a este
 				}
 				FWJOptionPane.showInformationMessage(this, "La operación ha finalizado con éxito", "Información");
 				buscarMovimientos();

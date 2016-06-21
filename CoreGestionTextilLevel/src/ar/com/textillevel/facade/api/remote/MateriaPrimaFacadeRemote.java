@@ -7,9 +7,11 @@ import javax.ejb.Remote;
 
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
+import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.TipoAnilina;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.MateriaPrimaCantidad;
 
 @Remote
 public interface MateriaPrimaFacadeRemote {
@@ -35,5 +37,7 @@ public interface MateriaPrimaFacadeRemote {
 	public abstract MateriaPrima getByIdEager(Integer id);
 	
 	public List<Anilina> getOtrasAnilinasByMismoColorIndex(Anilina anilina);
+	
+	public <T extends Formulable> MateriaPrimaCantidad<T>getMateriaPrimaCantidadById(Integer idMP);
 
 }

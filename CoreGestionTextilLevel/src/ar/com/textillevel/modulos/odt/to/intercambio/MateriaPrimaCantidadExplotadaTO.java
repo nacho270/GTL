@@ -16,8 +16,8 @@ public class MateriaPrimaCantidadExplotadaTO implements Serializable {
 	}
 
 	public MateriaPrimaCantidadExplotadaTO(MateriaPrimaCantidadExplotada<?> mpc) {
-		this.idMateriaPrimaCantidad = mpc.getMateriaPrimaCantidadDesencadenante().getId(); // TODO: ESTO LO CAMBIE, ESTA BIEN?
-		this.idTipoArticulo = mpc.getTipoArticulo().getId();
+		this.idMateriaPrimaCantidad = mpc.getMateriaPrimaCantidadDesencadenante().getId();
+		this.idTipoArticulo = mpc.getTipoArticulo() == null ? null : mpc.getTipoArticulo().getId();
 		this.cantidadExplotada = mpc.getCantidadExplotada();
 	}
 

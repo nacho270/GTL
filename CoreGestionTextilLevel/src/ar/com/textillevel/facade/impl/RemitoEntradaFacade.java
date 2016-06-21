@@ -36,6 +36,7 @@ import ar.com.textillevel.facade.api.local.RemitoEntradaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
+import ar.com.textillevel.modulos.odt.dao.api.local.TransicionODTDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 
@@ -50,6 +51,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 
 	@EJB
 	private OrdenDeTrabajoDAOLocal odtDAO;
+
+	@EJB
+	private TransicionODTDAOLocal transicionODTDAO;
 
 	@EJB
 	private RemitoSalidaDAOLocal remitoSalidaDAO;
@@ -131,6 +135,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			checkEliminacionRemitoEntrada(re.getId(), odts);
 		}
 		for(OrdenDeTrabajo odt : odts) {
+			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
 			odtDAO.removeById(odt.getId());
 		}
 		remitoEntradaDAO.removeById(re.getId());

@@ -8,19 +8,25 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.DiscriminatorValue;
 
+import ar.com.textillevel.dao.api.local.MateriaPrimaCantidadDAOLocal;
 import ar.com.textillevel.dao.api.local.MateriaPrimaDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.ventas.articulos.TipoArticulo;
+import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.TipoAnilina;
 import ar.com.textillevel.facade.api.remote.MateriaPrimaFacadeRemote;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.MateriaPrimaCantidad;
 
 @Stateless
 public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 
 	@EJB
 	private MateriaPrimaDAOLocal materiaPrimaDAOLocal;
+	
+	@EJB
+	private MateriaPrimaCantidadDAOLocal materiaPrimaCantidadDAOLocal;
 
 	public List<MateriaPrima> getAllOrderByName(boolean incluirRepetidos) {
 		return materiaPrimaDAOLocal.getAllOrderByName(incluirRepetidos);
@@ -99,6 +105,11 @@ public class MateriaPrimaFacade implements MateriaPrimaFacadeRemote {
 
 	public MateriaPrima getByIdEager(Integer id) {
 		return materiaPrimaDAOLocal.getByIdEager(id);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Formulable> MateriaPrimaCantidad<T> getMateriaPrimaCantidadById(Integer idMP) {
+		return materiaPrimaCantidadDAOLocal.getById(idMP);
 	}
 
 }

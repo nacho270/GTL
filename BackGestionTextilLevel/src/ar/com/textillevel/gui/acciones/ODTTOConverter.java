@@ -17,6 +17,7 @@ import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ClienteFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.MateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProductoArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
@@ -36,6 +37,7 @@ import ar.com.textillevel.gui.acciones.odtwsclient.SecuenciaODTTO;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.MateriaPrimaCantidad;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaEstampadoClienteExplotada;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaTenidoClienteExplotada;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.FormulaClienteExplotada;
@@ -74,6 +76,8 @@ public final class ODTTOConverter {
 	private static final TipoArticuloFacadeRemote tipoArticuloFacade = GTLBeanFactory.getInstance().getBean2(TipoArticuloFacadeRemote.class);
 	private static final AccionProcedimientoFacadeRemote accionProcedimientoFacade = GTLBeanFactory.getInstance().getBean2(AccionProcedimientoFacadeRemote.class);
 	private static final FormulaClienteFacadeRemote formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class);
+	private static final MateriaPrimaFacadeRemote materiaPrimaFacade = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class);
+	
 
 	private ODTTOConverter() {
 
@@ -187,12 +191,12 @@ public final class ODTTOConverter {
 		ProcedimientoODT subProceso = new ProcedimientoODT();
 		subProceso.setId(subProceso.getId());
 		subProceso.setNombre(subProcesoTO.getNombre());
-		subProceso.setTipoArticulo(tipoArticuloFacade.getByIdEager(subProcesoTO.getIdTipoArticulo()));
-		List<InstruccionProcedimientoODT> pasos = new ArrayList<InstruccionProcedimientoODT>();
-		for(InstruccionProcedimientoODTTO instruccionTO : subProcesoTO.getPasos()) {
-			pasos.add(instruccionProcedimientoODTFromTO(instruccionTO, subProceso));
+		if(subProcesoTO.getIdTipoArticulo() != null) {
+			subProceso.setTipoArticulo(tipoArticuloFacade.getByIdEager(subProcesoTO.getIdTipoArticulo()));
 		}
-		subProceso.setPasos(pasos);
+		for(InstruccionProcedimientoODTTO instruccionTO : subProcesoTO.getPasos()) {
+			subProceso.getPasos().add(instruccionProcedimientoODTFromTO(instruccionTO, subProceso));
+		}
 		return subProceso;
 	}
 
@@ -220,23 +224,17 @@ public final class ODTTOConverter {
 			FormulaClienteExplotadaTO formulaTO = instruccionTO.getFormula();
 			if (formulaTO.getTipo().equals("TEN")) {
 				formula = new FormulaTenidoClienteExplotada();
-				List<MateriaPrimaCantidadExplotada<Anilina>> anilinas = new ArrayList<MateriaPrimaCantidadExplotada<Anilina>>();
 				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getAnilinas()) {
-					anilinas.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
+					((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
 				}
-				((FormulaTenidoClienteExplotada) formula).setMateriasPrimas(anilinas);
 			} else {
 				formula = new FormulaEstampadoClienteExplotada();
-				List<MateriaPrimaCantidadExplotada<Pigmento>> pigmentos = new ArrayList<MateriaPrimaCantidadExplotada<Pigmento>>();
 				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getPigmentos()) {
-					pigmentos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
+					((FormulaEstampadoClienteExplotada) formula).getPigmentos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
 				}
-				List<MateriaPrimaCantidadExplotada<Quimico>> quimicos = new ArrayList<MateriaPrimaCantidadExplotada<Quimico>>();
 				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getQuimicos()) {
-					quimicos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+					((FormulaEstampadoClienteExplotada) formula).getQuimicos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
 				}
-				((FormulaEstampadoClienteExplotada) formula).setPigmentos(pigmentos);
-				((FormulaEstampadoClienteExplotada) formula).setQuimicos(quimicos);
 			}
 			formula.setFormulaDesencadenante(formulaFacade.getById(formulaTO.getIdFormulaDesencadenante()));
 			((InstruccionProcedimientoTipoProductoODT) instruccion).setFormula(formula);
@@ -250,10 +248,11 @@ public final class ODTTOConverter {
 	private static <T extends Formulable> MateriaPrimaCantidadExplotada<T> materiaPrimaCantidadExplotadaFromTO(MateriaPrimaCantidadExplotadaTO mpceTO, Class<T> clazz) {
 		MateriaPrimaCantidadExplotada<T> mpce = new MateriaPrimaCantidadExplotada<T>();
 		mpce.setCantidadExplotada(mpceTO.getCantidadExplotada());
-		mpce.setTipoArticulo(tipoArticuloFacade.getByIdEager(mpceTO.getIdTipoArticulo()));
-//		TODO: REVISAR ESTAS 2. HAY QUE HACER UN Facade DE MATERIA PRIMA CANTIDAD?
-//		mpce.setId()); TODO: NO VA? En MateriaPrimaCantidadExplotadaTO se estaba poniendo el id de la MP explotada como el id de la MP cantidad. Revisar
-//		mpce.setMateriaPrimaCantidadDesencadenante(mpceTO.getIdMateriaPrimaCantidad());
+		if(mpceTO.getIdTipoArticulo() != null) {
+			mpce.setTipoArticulo(tipoArticuloFacade.getByIdEager(mpceTO.getIdTipoArticulo()));
+		}
+		MateriaPrimaCantidad<T> mpCantidad = materiaPrimaFacade.getMateriaPrimaCantidadById(mpceTO.getIdMateriaPrimaCantidad());
+		mpce.setMateriaPrimaCantidadDesencadenante(mpCantidad);
 		return mpce;	
 	}
 	
@@ -339,7 +338,7 @@ public final class ODTTOConverter {
 
 		return piezaRemitoTO;
 	}
-	
+
 	private static PiezaODTTO piezaODTTOFromEntity(PiezaODT piezaODT) {
 		if (piezaODT == null) {
 			return null;
