@@ -1,7 +1,6 @@
 package ar.com.textillevel.modulos.odt.to.intercambio;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import ar.com.textillevel.modulos.odt.entidades.workflow.CambioAvance;
 
@@ -10,7 +9,7 @@ public class CambioAvanceTO implements Serializable {
 	private static final long serialVersionUID = -97299466712659620L;
 
 	private Byte idAvance;
-	private Timestamp fechaHora;
+	private Long fechaHora;
 	private Integer idUsuarioSistema;
 	private String observaciones;
 
@@ -19,7 +18,7 @@ public class CambioAvanceTO implements Serializable {
 	
 	public CambioAvanceTO(CambioAvance ca) {
 		this.idAvance = ca.getAvance().getId();
-		this.fechaHora = ca.getFechaHora();
+		this.fechaHora = ca.getFechaHora().getTime();
 		this.idUsuarioSistema = ca.getUsuario().getId();
 		this.observaciones = ca.getObservaciones();
 	}
@@ -32,11 +31,11 @@ public class CambioAvanceTO implements Serializable {
 		this.idAvance = idAvance;
 	}
 
-	public Timestamp getFechaHora() {
+	public Long getFechaHora() {
 		return fechaHora;
 	}
 
-	public void setFechaHora(Timestamp fechaHora) {
+	public void setFechaHora(Long fechaHora) {
 		this.fechaHora = fechaHora;
 	}
 

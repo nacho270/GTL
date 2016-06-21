@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"serial", "unused", "rawtypes"})
+@SuppressWarnings({"serial", "rawtypes", "unused"})
 public class OdtEagerTO  implements java.io.Serializable {
     private java.lang.String codigo;
 
@@ -33,6 +33,8 @@ public class OdtEagerTO  implements java.io.Serializable {
 
     private java.lang.Long timestampFechaODT;
 
+    private ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO[] transiciones;
+
     public OdtEagerTO() {
     }
 
@@ -48,7 +50,8 @@ public class OdtEagerTO  implements java.io.Serializable {
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaODTTO[] piezas,
            ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO remito,
            ar.com.textillevel.gui.acciones.odtwsclient.SecuenciaODTTO secuenciaDeTrabajo,
-           java.lang.Long timestampFechaODT) {
+           java.lang.Long timestampFechaODT,
+           ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO[] transiciones) {
            this.codigo = codigo;
            this.id = id;
            this.idAvance = idAvance;
@@ -61,6 +64,7 @@ public class OdtEagerTO  implements java.io.Serializable {
            this.remito = remito;
            this.secuenciaDeTrabajo = secuenciaDeTrabajo;
            this.timestampFechaODT = timestampFechaODT;
+           this.transiciones = transiciones;
     }
 
 
@@ -311,6 +315,34 @@ public class OdtEagerTO  implements java.io.Serializable {
         this.timestampFechaODT = timestampFechaODT;
     }
 
+
+    /**
+     * Gets the transiciones value for this OdtEagerTO.
+     * 
+     * @return transiciones
+     */
+    public ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO[] getTransiciones() {
+        return transiciones;
+    }
+
+
+    /**
+     * Sets the transiciones value for this OdtEagerTO.
+     * 
+     * @param transiciones
+     */
+    public void setTransiciones(ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO[] transiciones) {
+        this.transiciones = transiciones;
+    }
+
+    public ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO getTransiciones(int i) {
+        return this.transiciones[i];
+    }
+
+    public void setTransiciones(int i, ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO _value) {
+        this.transiciones[i] = _value;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof OdtEagerTO)) return false;
@@ -358,7 +390,10 @@ public class OdtEagerTO  implements java.io.Serializable {
               this.secuenciaDeTrabajo.equals(other.getSecuenciaDeTrabajo()))) &&
             ((this.timestampFechaODT==null && other.getTimestampFechaODT()==null) || 
              (this.timestampFechaODT!=null &&
-              this.timestampFechaODT.equals(other.getTimestampFechaODT())));
+              this.timestampFechaODT.equals(other.getTimestampFechaODT()))) &&
+            ((this.transiciones==null && other.getTransiciones()==null) || 
+             (this.transiciones!=null &&
+              java.util.Arrays.equals(this.transiciones, other.getTransiciones())));
         __equalsCalc = null;
         return _equals;
     }
@@ -413,6 +448,17 @@ public class OdtEagerTO  implements java.io.Serializable {
         }
         if (getTimestampFechaODT() != null) {
             _hashCode += getTimestampFechaODT().hashCode();
+        }
+        if (getTransiciones() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getTransiciones());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getTransiciones(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -508,6 +554,14 @@ public class OdtEagerTO  implements java.io.Serializable {
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("transiciones");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "transiciones"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "transicionODTTO"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        elemField.setMaxOccursUnbounded(true);
         typeDesc.addFieldDesc(elemField);
     }
 

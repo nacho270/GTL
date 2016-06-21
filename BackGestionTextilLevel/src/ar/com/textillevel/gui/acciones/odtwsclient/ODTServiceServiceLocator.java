@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"serial", "unchecked", "rawtypes"})
+@SuppressWarnings({"serial", "rawtypes", "unchecked"})
 public class ODTServiceServiceLocator extends org.apache.axis.client.Service implements ar.com.textillevel.gui.acciones.odtwsclient.ODTServiceService {
 
     public ODTServiceServiceLocator() {
@@ -23,7 +23,7 @@ public class ODTServiceServiceLocator extends org.apache.axis.client.Service imp
     }
 
     // Use to get a proxy class for ODTServicePort
-    private java.lang.String ODTServicePort_address = "http://armor:8080/GTL-gtlback-server/ODTService";
+    private java.lang.String ODTServicePort_address = "http://dev-gtl:8080/GTL-gtlback-server/ODTService";
 
     public java.lang.String getODTServicePortAddress() {
         return ODTServicePort_address;

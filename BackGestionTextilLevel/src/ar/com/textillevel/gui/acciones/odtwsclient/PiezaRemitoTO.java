@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"serial", "unused", "rawtypes"})
+@SuppressWarnings({"serial", "rawtypes", "unused"})
 public class PiezaRemitoTO  implements java.io.Serializable {
     private java.lang.Boolean enSalida;
 

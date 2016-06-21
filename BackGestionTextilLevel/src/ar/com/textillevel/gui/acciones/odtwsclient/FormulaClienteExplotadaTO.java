@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"serial", "unused", "rawtypes"})
+@SuppressWarnings({"serial", "rawtypes", "unused"})
 public class FormulaClienteExplotadaTO  implements java.io.Serializable {
     private ar.com.textillevel.gui.acciones.odtwsclient.MateriaPrimaCantidadExplotadaTO[] anilinas;
 

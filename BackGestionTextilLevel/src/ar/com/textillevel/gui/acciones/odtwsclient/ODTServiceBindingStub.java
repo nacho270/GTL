@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"unchecked", "unused", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class ODTServiceBindingStub extends org.apache.axis.client.Stub implements ar.com.textillevel.gui.acciones.odtwsclient.ODTService {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
@@ -99,6 +99,13 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "cambioAvanceTO");
+            cachedSerQNames.add(qName);
+            cls = ar.com.textillevel.gui.acciones.odtwsclient.CambioAvanceTO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "detallePiezaRemitoEntradaSinSalida");
             cachedSerQNames.add(qName);
             cls = ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida.class;
@@ -172,6 +179,13 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
             qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "secuenciaODTTO");
             cachedSerQNames.add(qName);
             cls = ar.com.textillevel.gui.acciones.odtwsclient.SecuenciaODTTO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "transicionODTTO");
+            cachedSerQNames.add(qName);
+            cls = ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);

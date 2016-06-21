@@ -1,7 +1,6 @@
 package ar.com.textillevel.modulos.odt.to.intercambio;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class TransicionODTTO implements Serializable {
 
 	private Integer idMaquina;
 	private Integer idTipoMaquina;
-	private Timestamp fechaHoraRegistro;
+	private Long fechaHoraRegistro;
 	private List<CambioAvanceTO> cambiosAvance;
 	private Integer idUsuarioSistema;
 
@@ -24,7 +23,7 @@ public class TransicionODTTO implements Serializable {
 	public TransicionODTTO(TransicionODT tODT) {
 		this.idMaquina = tODT.getMaquina().getId();
 		this.idTipoMaquina = tODT.getTipoMaquina().getId();
-		this.fechaHoraRegistro = tODT.getFechaHoraRegistro();
+		this.fechaHoraRegistro = tODT.getFechaHoraRegistro().getTime();
 		this.idUsuarioSistema = tODT.getUsuarioSistema().getId();
 		this.cambiosAvance = new ArrayList<CambioAvanceTO>();
 		for(CambioAvance ca : tODT.getCambiosAvance()) {
@@ -48,11 +47,11 @@ public class TransicionODTTO implements Serializable {
 		this.idTipoMaquina = idTipoMaquina;
 	}
 
-	public Timestamp getFechaHoraRegistro() {
+	public Long getFechaHoraRegistro() {
 		return fechaHoraRegistro;
 	}
 
-	public void setFechaHoraRegistro(Timestamp fechaHoraRegistro) {
+	public void setFechaHoraRegistro(Long fechaHoraRegistro) {
 		this.fechaHoraRegistro = fechaHoraRegistro;
 	}
 
