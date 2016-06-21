@@ -70,6 +70,7 @@ import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 
 @Stateless
@@ -173,6 +174,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		RemitoSalida remitoSalida = remitoSalidaDAOLocal.getById(idRemitoSalida);
 		if(remitoSalida.getProveedor() == null) { //es un remito de salida de cliente
 			checkEliminacionOrAnulacionRemitoSalida(remitoSalida.getId());
+			desvincularODTs(remitoSalida);
 			remitoSalidaDAOLocal.removeById(remitoSalida.getId());
 			auditoriaFacade.auditar(usrName, "Eliminación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.BAJA, remitoSalida);
 		} else {//es un remito de salida de proveedor
@@ -630,6 +632,11 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 	public void anularRemitoSalida(RemitoSalida remito) {
 		remito = remitoSalidaDAOLocal.getById(remito.getId());
 		remito.setAnulado(true);
+		desvincularODTs(remito);
+		remitoSalidaDAOLocal.save(remito);
+	}
+
+	private void desvincularODTs(RemitoSalida remito) {
 		//desvinculo las ODTs del remito de salida
 		for(OrdenDeTrabajo odt :  remito.getOdts()) {
 			List<PiezaODT> piezas = odt.getPiezas();
@@ -641,10 +648,11 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 					pr.getPiezasPadreODT().clear();
 				}
 			}
+			//cambio la ODT a estado IMPRESA ya que la creación del RS la vuelve a EN_OFICINA
+			odt.setEstadoODT(EEstadoODT.IMPRESA);
 			odtDAO.save(odt);
 		}
 		remito.getOdts().clear();
-		remitoSalidaDAOLocal.save(remito);
 	}
 
 	public RemitoSalida guardarRemito(RemitoSalida remito) {

@@ -6,6 +6,7 @@ import java.util.List;
 
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 
 public class ODTEagerTO implements Serializable {
 
@@ -23,12 +24,13 @@ public class ODTEagerTO implements Serializable {
 	private Integer idMaquinaActual; // Maquina esta federada
 	private Short ordenEnMaquina;
 	private Integer idMaquinaPrincipal; // Maquina esta federada
+	private List<TransicionODTTO> transiciones;
 
 	public ODTEagerTO() {
 
 	}
 
-	public ODTEagerTO(OrdenDeTrabajo odt) {
+	public ODTEagerTO(OrdenDeTrabajo odt, List<TransicionODT> transiciones) {
 		this.id = odt.getId();
 		this.codigo = odt.getCodigo();
 		this.timestampFechaODT = odt.getFechaODT().getTime();
@@ -58,6 +60,12 @@ public class ODTEagerTO implements Serializable {
 			this.piezas = new ArrayList<PiezaODTTO>();
 			for (PiezaODT po : odt.getPiezas()) {
 				this.piezas.add(new PiezaODTTO(po));
+			}
+		}
+		if(!transiciones.isEmpty()) {
+			this.transiciones = new ArrayList<TransicionODTTO>();
+			for(TransicionODT tODT : transiciones) {
+				getTransiciones().add(new TransicionODTTO(tODT));
 			}
 		}
 	}
@@ -156,6 +164,14 @@ public class ODTEagerTO implements Serializable {
 
 	public void setIdMaquinaPrincipal(Integer idMaquinaPrincipal) {
 		this.idMaquinaPrincipal = idMaquinaPrincipal;
+	}
+
+	public List<TransicionODTTO> getTransiciones() {
+		return transiciones;
+	}
+
+	public void setTransiciones(List<TransicionODTTO> transiciones) {
+		this.transiciones = transiciones;
 	}
 
 }

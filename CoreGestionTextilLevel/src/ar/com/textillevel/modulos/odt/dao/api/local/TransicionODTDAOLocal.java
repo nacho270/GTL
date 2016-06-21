@@ -13,7 +13,9 @@ public interface TransicionODTDAOLocal extends DAOLocal<TransicionODT, Integer>{
 	public TransicionODT getByODT(Integer idOdt);
 
 	public List<TransicionODT> getAllByODT(Integer idODT);
-	
+
+	public List<TransicionODT> getAllEagerByODT(Integer idODT);	
+
 	public void deleteTransicionesFromODT(Integer idODT);
 
 }

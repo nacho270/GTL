@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
+import ar.com.textillevel.modulos.odt.dao.api.local.TransicionODTDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 import ar.com.textillevel.modulos.odt.to.intercambio.ODTEagerTO;
@@ -28,6 +29,9 @@ public class ODTService implements ODTServiceRemote {
 	
 	@EJB
 	private RemitoEntradaFacadeLocal remitoEntradaFacade;
+
+	@EJB
+	private TransicionODTDAOLocal transicionODTDAO;
 	
 	//URL: http://localhost:8080/GTL-gtlback-server/ODTService?wsdl
 	
@@ -64,7 +68,7 @@ public class ODTService implements ODTServiceRemote {
 	public List<ODTEagerTO> getByIdsEager(List<Integer> ids) {
 		List<ODTEagerTO> lista = new ArrayList<ODTEagerTO>();
 		for(OrdenDeTrabajo odt : odtFacade.getByIdsEager(ids)) {
-			lista.add(new ODTEagerTO(odt));
+			lista.add(new ODTEagerTO(odt, transicionODTDAO.getAllEagerByODT(odt.getId())));
 		}
 		return lista;
 	}

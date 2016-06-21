@@ -20,6 +20,14 @@ public class TransicionODTDAO extends GenericDAO<TransicionODT, Integer> impleme
 		return getEntityManager().createQuery(" SELECT tr FROM TransicionODT tr LEFT JOIN FETCH tr.maquina WHERE tr.odt.id = :idOdt ORDER BY tr.fechaHoraRegistro").setParameter("idOdt", idODT).getResultList();
 	}
 
+	public List<TransicionODT> getAllEagerByODT(Integer idODT) {
+		List<TransicionODT> trODT = getEntityManager().createQuery(" SELECT tr FROM TransicionODT tr WHERE tr.odt.id = :idOdt").setParameter("idOdt", idODT).getResultList();
+		for(TransicionODT tr : trODT) {
+			tr.getCambiosAvance().size();
+		}
+		return trODT;
+	}
+
 	public void deleteTransicionesFromODT(Integer idODT) {
 		List<TransicionODT> allByODT = getAllByODT(idODT);
 		for(TransicionODT t : allByODT) {
