@@ -57,6 +57,8 @@ public class ODTService implements ODTServiceRemote {
 			remitoEntradaFacade.eliminarRemitoEntradaForzado(id);
 			return true;
 		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
 			return false;
 		}
 	}

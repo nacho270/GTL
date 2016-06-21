@@ -342,11 +342,27 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	}
 
 	public void eliminarRemitoEntradaForzado(Integer idRE) {
-		/*
-		 * Seria eliminar el remito completo.
-		 * Facturas no va a tener, pero puede tener remito salida o remito de entrada de proveedor. Esto acarrea: factura proveedor, orden de pago, correccion. 
-		 */
-		throw new UnsupportedOperationException();
+		RemitoEntrada re = remitoEntradaDAO.getByIdEager(idRE);
+		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(re.getId());
+		if(!odts.isEmpty()) {
+			for(OrdenDeTrabajo odt : odts) {
+				List<RemitoSalida> remitosByODT = remitoSalidaDAO.getRemitosByODT(odt);
+				if(remitosByODT != null && !remitosByODT.isEmpty()) {
+					//NO DEBERIA PASAR
+					throw new RuntimeException("No se puede forzar la eliminacion del remito de entrada id " + idRE + " porque tiene remito de salida. ");
+				}
+			}
+			RemitoEntradaProveedor reProveedor = remitoEntradaProveedorDAO.getREProveedorByIdRECliente(idRE);
+			if(reProveedor != null) {
+				//NO DEBERIA PASAR
+				throw new RuntimeException("No se puede forzar la eliminacion del remito de entrada id " + idRE + " porque tiene remito de entrada de proveedor.");
+			}
+		}
+		for(OrdenDeTrabajo odt : odts) {
+			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
+			odtDAO.removeById(odt.getId());
+		}
+		remitoEntradaDAO.removeById(re.getId());
 	}
 
 }
