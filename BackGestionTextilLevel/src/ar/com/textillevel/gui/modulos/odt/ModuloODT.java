@@ -39,7 +39,7 @@ public class ModuloODT extends ModuloTemplate<OrdenDeTrabajo, ModeloCabeceraODT>
 	protected void setModuloModelActivo(ModuloModel<OrdenDeTrabajo, ModeloCabeceraODT> moduloModelActivo) {
 		super.setModuloModelActivo(moduloModelActivo);
 		FWJTable tabla = getGuiTabla().getJTable();
-		tabla.getColumnModel().getColumn(3).setCellRenderer(tabla.createCheckRenderer());
+		tabla.getColumnModel().getColumn(4).setCellRenderer(tabla.createCheckRenderer());
 	}
 	
 	@Override

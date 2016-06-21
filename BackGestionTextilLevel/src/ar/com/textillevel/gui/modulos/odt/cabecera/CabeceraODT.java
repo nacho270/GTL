@@ -74,6 +74,7 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 	private JComboBox getCmbEstadoODT() {
 		if(cmbEstadoODT == null){
 			cmbEstadoODT = new JComboBox();
+			cmbEstadoODT.addItem("TODOS");
 			for(EEstadoODT estado : EEstadoODT.values()){
 				if(estado == EEstadoODT.ANTERIOR){
 					continue;
