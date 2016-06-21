@@ -14,13 +14,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -31,8 +31,9 @@ import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntra
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
-import ar.com.textillevel.util.GTLBeanFactory;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 
 @SuppressWarnings("unused")
 public class JDialogSeleccionarRemitoEntrada extends JDialog {
@@ -48,7 +49,9 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private Frame owner;
 	private List<OrdenDeTrabajo> odtSelectedList;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
-	
+	private Multimap<Integer, Integer> mapaRemitoFilas = TreeMultimap.create();
+	private Multimap<Integer, Integer> mapaFilasRemito = TreeMultimap.create();
+
 	public JDialogSeleccionarRemitoEntrada(Frame owner, Cliente cliente) {
 		super(owner);
 		this.owner = owner;
@@ -62,29 +65,20 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	}
 
 	private void llenarTablaODTs() {
-		/*
-		List<OrdenDeTrabajo> odtList = odtFacade.getOdtNoAsociadasByClient(cliente.getId());
-		getTablaOdts().setNumRows(0);
-		int row = 0;
-		for(OrdenDeTrabajo odt : odtList) {
-			getTablaOdts().addRow();
-			getTablaOdts().setValueAt(odt.toString(), row, 0);
-			getTablaOdts().setValueAt(odt, row, 1);
-			row ++;
-		}
-		*/
-
 		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas;
 		try {
 			infoPiezas = remitoBusinessDelegate.getInfoPiezasEntradaSinSalidaByClient(cliente.getId());
 			getTablaOdts().setNumRows(0);
 			int row = 0;
 			for(DetallePiezaRemitoEntradaSinSalida ip : infoPiezas) {
+				mapaRemitoFilas.put(ip.getNroRemito(), row);
+				mapaFilasRemito.put(row, ip.getNroRemito());
 				getTablaOdts().addRow();
 				getTablaOdts().setValueAt(ip.toString(), row, 0);
 				getTablaOdts().setValueAt(ip.getIdODT(), row, 1);
 				row ++;
 			}
+			System.out.println("a");
 		} catch (RemoteException e) {
 			FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
 			e.printStackTrace();
@@ -118,9 +112,8 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 
 				@Override
 				public void newRowSelected(int newRow, int oldRow) {
-						getBtnAceptar().setEnabled(newRow != -1);
+					getBtnAceptar().setEnabled(newRow != -1);
 				}
-
 			};
 			tablaODTs.setStringColumn(0, "ODT", 460, 460, true);
 			tablaODTs.setStringColumn(1, "", 0, 0, true);
@@ -133,21 +126,9 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 						handleSeleccionODT();
 					}
 				}
-
 			});
 		}
 		return tablaODTs;
-	}
-
-	protected void llenarTabla(List<Cliente> clienteList) {
-		getTablaOdts().setNumRows(0);
-		int row = 0;
-		for(Cliente c : clienteList) {
-			getTablaOdts().addRow();
-			getTablaOdts().setValueAt(c.getRazonSocial(), row, 0);
-			getTablaOdts().setValueAt(c, row, 1);
-			row ++;
-		}
 	}
 
 	private JTextField getTxtRazSoc() {
@@ -173,12 +154,10 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		if(btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					odtSelectedList.clear();
 					dispose();
 				}
-
 			});
 		}
 		return btnCancelar;
@@ -194,12 +173,24 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 					if(selectedRows.length == 0){
 						return;
 					}
-					List<Integer> ids = new ArrayList<Integer>();
-					
-					if(GenericUtils.isSistemaTest()) {
-						//TODO: Validar remito completo
+					List<Integer> selectedRowsList = new ArrayList<Integer>();
+					for(int r : selectedRows) {
+						selectedRowsList.add(r);
 					}
-					
+					List<Integer> ids = new ArrayList<Integer>();
+					if(GenericUtils.isSistemaTest()) {
+						for(int row : selectedRows) {
+							Collection<Integer> idsRemitos = mapaFilasRemito.get(row);
+							for(int idR : idsRemitos) {
+								Collection<Integer> filasRemito = mapaRemitoFilas.get(idR);
+								if(GenericUtils.restaConjuntosOrdenada(filasRemito, selectedRowsList).size() > 0) {
+									FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "Solo puede dar salida a remitos completos."
+											+ "\nEl remito de la fila " + (row + 1) + " no ha sido seleccionado en su totalidad.", "Error");
+									return;
+								}
+							}
+						}
+					}
 					for(int selectedRow : selectedRows) {
 						ids.add((Integer)getTablaOdts().getValueAt(selectedRow, 1));
 					}
@@ -211,7 +202,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 					}
 					dispose();
 				}
-
 			});
 			btnAceptar.setEnabled(false);
 		}
