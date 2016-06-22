@@ -56,6 +56,6 @@ public interface RemitoEntradaFacadeRemote {
 
 	public List<DetalleRemitoEntradaNoFacturado> getRemitosEntradaSinFactura();
 
-	public void eliminarRemitoEntradaForzado(Integer idRE);
+	public void eliminarRemitoEntradaForzado(Integer idRE, Boolean borrarRemitos);
 
 }

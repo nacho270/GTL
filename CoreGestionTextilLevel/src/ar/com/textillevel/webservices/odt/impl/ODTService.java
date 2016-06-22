@@ -54,7 +54,7 @@ public class ODTService implements ODTServiceRemote {
 
 	public Boolean borrarRemitoDeEntrada(Integer id) {
 		try {
-			remitoEntradaFacade.eliminarRemitoEntradaForzado(id);
+			remitoEntradaFacade.eliminarRemitoEntradaForzado(id, false);
 			return true;
 		} catch (Exception e) {
 			logger.error(e);

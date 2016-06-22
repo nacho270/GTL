@@ -132,7 +132,7 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 							FWCursor.endWait(JDialogRetornarRemitoDeEntrada.this);
 						}
 						if (ok) {
-							remitoFacade.eliminarRemitoEntradaForzado(elemento.getId());
+							remitoFacade.eliminarRemitoEntradaForzado(elemento.getId(), true);
 						}
 					}
 				});

@@ -341,15 +341,19 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return remitoEntradaDAO.getRemitosEntradaSinFactura();
 	}
 
-	public void eliminarRemitoEntradaForzado(Integer idRE) {
+	public void eliminarRemitoEntradaForzado(Integer idRE, Boolean borrarRemitos) {
 		RemitoEntrada re = remitoEntradaDAO.getByIdEager(idRE);
 		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(re.getId());
 		if(!odts.isEmpty()) {
 			for(OrdenDeTrabajo odt : odts) {
 				List<RemitoSalida> remitosByODT = remitoSalidaDAO.getRemitosByODT(odt);
 				if(remitosByODT != null && !remitosByODT.isEmpty()) {
-					//NO DEBERIA PASAR
-					throw new RuntimeException("No se puede forzar la eliminacion del remito de entrada id " + idRE + " porque tiene remito de salida. ");
+					if (!borrarRemitos) {
+						throw new RuntimeException("No se puede forzar la eliminacion del remito de entrada id " + idRE + " porque tiene remito de salida. ");
+					}
+					for (RemitoSalida rs : remitosByODT) {
+						remitoSalidaDAO.removeById(rs.getId());
+					}
 				}
 			}
 			RemitoEntradaProveedor reProveedor = remitoEntradaProveedorDAO.getREProveedorByIdRECliente(idRE);
