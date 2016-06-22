@@ -33,6 +33,8 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
     private java.lang.Integer nroRemito;
 
+    private ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts;
+
     private java.math.BigDecimal pesoTotal;
 
     private ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezas;
@@ -55,6 +57,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            java.lang.Integer idProveedor,
            java.lang.Integer idTarima,
            java.lang.Integer nroRemito,
+           ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts,
            java.math.BigDecimal pesoTotal,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezas,
            java.lang.Integer[] productoArticuloIdsList) {
@@ -70,6 +73,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            this.idProveedor = idProveedor;
            this.idTarima = idTarima;
            this.nroRemito = nroRemito;
+           this.odts = odts;
            this.pesoTotal = pesoTotal;
            this.piezas = piezas;
            this.productoArticuloIdsList = productoArticuloIdsList;
@@ -317,6 +321,34 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
 
     /**
+     * Gets the odts value for this RemitoEntradaTO.
+     * 
+     * @return odts
+     */
+    public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] getOdts() {
+        return odts;
+    }
+
+
+    /**
+     * Sets the odts value for this RemitoEntradaTO.
+     * 
+     * @param odts
+     */
+    public void setOdts(ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts) {
+        this.odts = odts;
+    }
+
+    public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO getOdts(int i) {
+        return this.odts[i];
+    }
+
+    public void setOdts(int i, ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO _value) {
+        this.odts[i] = _value;
+    }
+
+
+    /**
      * Gets the pesoTotal value for this RemitoEntradaTO.
      * 
      * @return pesoTotal
@@ -439,6 +471,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
             ((this.nroRemito==null && other.getNroRemito()==null) || 
              (this.nroRemito!=null &&
               this.nroRemito.equals(other.getNroRemito()))) &&
+            ((this.odts==null && other.getOdts()==null) || 
+             (this.odts!=null &&
+              java.util.Arrays.equals(this.odts, other.getOdts()))) &&
             ((this.pesoTotal==null && other.getPesoTotal()==null) || 
              (this.pesoTotal!=null &&
               this.pesoTotal.equals(other.getPesoTotal()))) &&
@@ -494,6 +529,17 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         }
         if (getNroRemito() != null) {
             _hashCode += getNroRemito().hashCode();
+        }
+        if (getOdts() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getOdts());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getOdts(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         if (getPesoTotal() != null) {
             _hashCode += getPesoTotal().hashCode();
@@ -613,6 +659,14 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("odts");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "odts"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "odtEagerTO"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        elemField.setMaxOccursUnbounded(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("pesoTotal");

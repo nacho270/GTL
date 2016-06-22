@@ -15,7 +15,7 @@ public class PiezaODTTO implements Serializable {
 	private Integer id;
 	private PiezaRemitoTO piezaRemito;
 	private List<PiezaRemitoTO> piezasSalida;
-	// private ODTEagerTO odt; Me parece que no haria falta //TODO
+	private String codigoOdt;
 	private Integer nroPiezaStockInicial;
 	private BigDecimal metrosStockInicial;
 
@@ -34,9 +34,9 @@ public class PiezaODTTO implements Serializable {
 				this.piezasSalida.add(new PiezaRemitoTO(pr));
 			}
 		}
-//		if (po.getOdt() != null) {
-//			this.odt = new ODTEagerTO(po.getOdt());
-//		}
+		if (po.getOdt() != null) {
+			this.codigoOdt = po.getOdt().getCodigo();
+		}
 	}
 
 	public Integer getId() {
@@ -85,6 +85,14 @@ public class PiezaODTTO implements Serializable {
 
 	public void setMetrosStockInicial(BigDecimal metrosStockInicial) {
 		this.metrosStockInicial = metrosStockInicial;
+	}
+
+	public String getCodigoOdt() {
+		return codigoOdt;
+	}
+
+	public void setCodigoOdt(String codigoOdt) {
+		this.codigoOdt = codigoOdt;
 	}
 
 }

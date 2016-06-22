@@ -9,6 +9,8 @@ package ar.com.textillevel.gui.acciones.odtwsclient;
 
 @SuppressWarnings({"serial", "rawtypes", "unused"})
 public class PiezaODTTO  implements java.io.Serializable {
+    private java.lang.String codigoOdt;
+
     private java.lang.Integer id;
 
     private java.math.BigDecimal metrosStockInicial;
@@ -23,16 +25,38 @@ public class PiezaODTTO  implements java.io.Serializable {
     }
 
     public PiezaODTTO(
+           java.lang.String codigoOdt,
            java.lang.Integer id,
            java.math.BigDecimal metrosStockInicial,
            java.lang.Integer nroPiezaStockInicial,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO piezaRemito,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezasSalida) {
+           this.codigoOdt = codigoOdt;
            this.id = id;
            this.metrosStockInicial = metrosStockInicial;
            this.nroPiezaStockInicial = nroPiezaStockInicial;
            this.piezaRemito = piezaRemito;
            this.piezasSalida = piezasSalida;
+    }
+
+
+    /**
+     * Gets the codigoOdt value for this PiezaODTTO.
+     * 
+     * @return codigoOdt
+     */
+    public java.lang.String getCodigoOdt() {
+        return codigoOdt;
+    }
+
+
+    /**
+     * Sets the codigoOdt value for this PiezaODTTO.
+     * 
+     * @param codigoOdt
+     */
+    public void setCodigoOdt(java.lang.String codigoOdt) {
+        this.codigoOdt = codigoOdt;
     }
 
 
@@ -155,6 +179,9 @@ public class PiezaODTTO  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.codigoOdt==null && other.getCodigoOdt()==null) || 
+             (this.codigoOdt!=null &&
+              this.codigoOdt.equals(other.getCodigoOdt()))) &&
             ((this.id==null && other.getId()==null) || 
              (this.id!=null &&
               this.id.equals(other.getId()))) &&
@@ -181,6 +208,9 @@ public class PiezaODTTO  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getCodigoOdt() != null) {
+            _hashCode += getCodigoOdt().hashCode();
+        }
         if (getId() != null) {
             _hashCode += getId().hashCode();
         }
@@ -215,6 +245,13 @@ public class PiezaODTTO  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "piezaODTTO"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("codigoOdt");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "codigoOdt"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("id");
         elemField.setXmlName(new javax.xml.namespace.QName("", "id"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));

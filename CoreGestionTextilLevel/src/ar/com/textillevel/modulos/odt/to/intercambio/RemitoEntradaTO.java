@@ -33,6 +33,9 @@ public class RemitoEntradaTO implements Serializable {
 	private Integer idTarima; // Tarima esta federada
 	private Boolean enPalet;
 
+	// Replica de ODTTO
+	private List<ODTEagerTO> odts;
+
 	public RemitoEntradaTO() {
 
 	}
@@ -196,5 +199,13 @@ public class RemitoEntradaTO implements Serializable {
 
 	public void setEnPalet(Boolean enPalet) {
 		this.enPalet = enPalet;
+	}
+
+	public List<ODTEagerTO> getOdts() {
+		return odts;
+	}
+
+	public void setOdts(List<ODTEagerTO> odts) {
+		this.odts = odts;
 	}
 }
