@@ -15,6 +15,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 
 @Stateless
 @SuppressWarnings("unchecked")
@@ -44,6 +45,9 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 			pr.getPiezasPadreODT().size();
 			if(pr.getPiezaEntrada() != null) {
 				pr.getPiezaEntrada().getPiezasPadreODT().size();
+				for(PiezaODT pODT : pr.getPiezasPadreODT()) {
+					pODT.getOdt().getCodigo();
+				}
 			}
 		}
 		remitoSalida.getProductoList().size();
