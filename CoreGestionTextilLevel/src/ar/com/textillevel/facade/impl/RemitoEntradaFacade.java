@@ -39,6 +39,14 @@ import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.TransicionODTDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaEstampadoClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaTenidoClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.FormulaClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoPasadasODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 
 @Stateless
 public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEntradaFacadeLocal {
@@ -373,6 +381,30 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		RemitoEntrada re = remitoEntradaDAO.getByIdEager(id);
 		List<OrdenDeTrabajo> odtsRemito = odtDAO.getOdtEagerByRemitoList(id);
 		for (OrdenDeTrabajo odt : odtsRemito) {
+			SecuenciaODT secuenciaDeTrabajo = odt.getSecuenciaDeTrabajo();
+			if(secuenciaDeTrabajo != null) {
+				secuenciaDeTrabajo.getNombre();
+				secuenciaDeTrabajo.getPasos().size();
+				for(PasoSecuenciaODT p : secuenciaDeTrabajo.getPasos()) {
+					p.getObservaciones();
+					p.getSubProceso().getNombre();
+					p.getSubProceso().getPasos().size();
+					for (InstruccionProcedimientoODT instruccion : p.getSubProceso().getPasos()) {
+						if (instruccion instanceof InstruccionProcedimientoPasadasODT) {
+							((InstruccionProcedimientoPasadasODT) instruccion).getAccion().getNombre();
+							((InstruccionProcedimientoPasadasODT) instruccion).getQuimicosExplotados().size();
+						} else if (instruccion instanceof InstruccionProcedimientoTipoProductoODT) {
+							FormulaClienteExplotada formula = ((InstruccionProcedimientoTipoProductoODT)instruccion).getFormula();
+							if (formula instanceof FormulaEstampadoClienteExplotada) {
+								((FormulaEstampadoClienteExplotada) formula).getPigmentos().size();
+								((FormulaEstampadoClienteExplotada) formula).getQuimicos().size();
+							} else {
+								((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().size();
+							}
+						}
+					}
+				}
+			}
 			for (PiezaODT podt : odt.getPiezas()) {
 				PiezaRemito pr = getPiezaRemito(re.getPiezas(), podt.getPiezaRemito());
 				if (pr == null) {
