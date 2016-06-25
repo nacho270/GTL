@@ -369,4 +369,30 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		remitoEntradaDAO.removeById(re.getId());
 	}
 
+	public RemitoEntrada getByIdEagerConPiezasODTYRemito(Integer id) {
+		RemitoEntrada re = remitoEntradaDAO.getByIdEager(id);
+		List<OrdenDeTrabajo> odtsRemito = odtDAO.getOdtEagerByRemitoList(id);
+		for (OrdenDeTrabajo odt : odtsRemito) {
+			for (PiezaODT podt : odt.getPiezas()) {
+				PiezaRemito pr = getPiezaRemito(re.getPiezas(), podt.getPiezaRemito());
+				if (pr == null) {
+					throw new RuntimeException("Estado inconsistente!!!");
+				}
+				if (podt.getPiezasSalida() != null) {
+					podt.getPiezasSalida().size();
+				}
+				podt.setPiezaRemito(pr);
+			}
+		}
+		return re;
+	}
+
+	private PiezaRemito getPiezaRemito(List<PiezaRemito> piezas, PiezaRemito piezaRemito) {
+		for(PiezaRemito pr : piezas) {
+			if(pr.equals(piezaRemito)) {
+				return pr;
+			}
+		}
+		return null;
+	}
 }

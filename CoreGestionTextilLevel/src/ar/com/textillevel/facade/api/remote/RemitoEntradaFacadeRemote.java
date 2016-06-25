@@ -58,4 +58,6 @@ public interface RemitoEntradaFacadeRemote {
 
 	public void eliminarRemitoEntradaForzado(Integer idRE, Boolean borrarRemitos);
 
+	public RemitoEntrada getByIdEagerConPiezasODTYRemito(Integer id);
+
 }

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
@@ -24,6 +25,7 @@ import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
+import ar.com.textillevel.gui.acciones.odtwsclient.CambioAvanceTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.FormulaClienteExplotadaTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.InstruccionProcedimientoODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.MateriaPrimaCantidadExplotadaTO;
@@ -34,6 +36,7 @@ import ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.ProcedimientoODTTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.SecuenciaODTTO;
+import ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
@@ -49,6 +52,8 @@ import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedi
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.ProcedimientoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.workflow.CambioAvance;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
@@ -56,10 +61,12 @@ import ar.com.textillevel.modulos.odt.facade.api.remote.AccionProcedimientoFacad
 import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.TransicionODTFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Sets;
 
 public final class ODTTOConverter {
 
@@ -77,8 +84,8 @@ public final class ODTTOConverter {
 	private static final AccionProcedimientoFacadeRemote accionProcedimientoFacade = GTLBeanFactory.getInstance().getBean2(AccionProcedimientoFacadeRemote.class);
 	private static final FormulaClienteFacadeRemote formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class);
 	private static final MateriaPrimaFacadeRemote materiaPrimaFacade = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class);
+	private static final TransicionODTFacadeRemote transicionODTFacade = GTLBeanFactory.getInstance().getBean2(TransicionODTFacadeRemote.class);
 	
-
 	private ODTTOConverter() {
 
 	}
@@ -313,13 +320,13 @@ public final class ODTTOConverter {
 			return null;
 		}
 		PiezaRemitoTO piezaRemitoTO = new PiezaRemitoTO();
-		piezaRemitoTO.setEnSalida(piezaRemitoTO.getEnSalida());
+		piezaRemitoTO.setEnSalida(piezaRemito.getEnSalida());
 		piezaRemitoTO.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
-		piezaRemitoTO.setMetros(piezaRemitoTO.getMetros());
-		piezaRemitoTO.setObservaciones(piezaRemitoTO.getObservaciones());
-		piezaRemitoTO.setOrdenPieza(piezaRemitoTO.getOrdenPieza());
-		piezaRemitoTO.setOrdenPiezaCalculado(piezaRemitoTO.getOrdenPiezaCalculado());
-		piezaRemitoTO.setPiezaSinODT(piezaRemitoTO.getPiezaSinODT());
+		piezaRemitoTO.setMetros(piezaRemito.getMetros());
+		piezaRemitoTO.setObservaciones(piezaRemito.getObservaciones());
+		piezaRemitoTO.setOrdenPieza(piezaRemito.getOrdenPieza());
+		piezaRemitoTO.setOrdenPiezaCalculado(piezaRemito.getOrdenPiezaCalculado());
+		piezaRemitoTO.setPiezaSinODT(piezaRemito.getPiezaSinODT());
 		if (piezaRemito.getPmpDescuentoStock() != null) {
 			piezaRemitoTO.setIdPmpDescuentoStock(piezaRemito.getPmpDescuentoStock().getId());
 		}
@@ -347,55 +354,233 @@ public final class ODTTOConverter {
 		piezaODTTO.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		piezaODTTO.setMetrosStockInicial(piezaODT.getMetrosStockInicial());
 		piezaODTTO.setNroPiezaStockInicial(piezaODT.getNroPiezaStockInicial());
-//		piezaODTTO.setOdt(odt); // TODO ? ---> TODA LA ODT??????????
+		piezaODTTO.setCodigoOdt(piezaODT.getOdt().getCodigo());
 		if (piezaODTTO.getPiezaRemito() != null) {
 			piezaODTTO.setPiezaRemito(piezaRemitoTOFromEntity(piezaODT.getPiezaRemito()));
 		}
-		List<PiezaRemitoTO> piezasSalida = new ArrayList<PiezaRemitoTO>();
-		if (piezaODT.getPiezasSalida() != null && piezaODT.getPiezasSalida().size() > 0) {
-			for (PiezaRemito piezaRemitoTO : piezaODT.getPiezasSalida()) {
-				piezasSalida.add(piezaRemitoTOFromEntity(piezaRemitoTO));
-			}
-		}
-		piezaODTTO.setPiezasSalida(piezasSalida.toArray(new PiezaRemitoTO[piezasSalida.size()]));
+//		TODO: VER... HACE STACKOVERFLOW
+//		List<PiezaRemitoTO> piezasSalida = new ArrayList<PiezaRemitoTO>();
+//		if (piezaODT.getPiezasSalida() != null && piezaODT.getPiezasSalida().size() > 0) {
+//			for (PiezaRemito piezaRemitoTO : piezaODT.getPiezasSalida()) {
+//				piezasSalida.add(piezaRemitoTOFromEntity(piezaRemitoTO));
+//			}
+//		}
+//		piezaODTTO.setPiezasSalida(piezasSalida.toArray(new PiezaRemitoTO[piezasSalida.size()]));
 		return piezaODTTO;
 	}
 
-	@SuppressWarnings("unused")
 	public static RemitoEntradaTO toRemitoWSTO(DetalleRemitoEntradaNoFacturado elemento) {
-		if (true) {
-			throw new UnsupportedOperationException();
-		}
-		RemitoEntrada re = remitoEntradaFacade.getByIdEager(elemento.getId());
+		RemitoEntrada re = remitoEntradaFacade.getByIdEagerConPiezasODTYRemito(elemento.getId());
 		if (re == null) {
 			throw new RuntimeException("Remito no encontrado");
 		}
 		
 		RemitoEntradaTO remitoTO = new RemitoEntradaTO();
+		remitoTO.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		remitoTO.setAnchoCrudo(re.getAnchoCrudo());
 		remitoTO.setAnchoFinal(re.getAnchoFinal());
 		remitoTO.setDateFechaEmision(re.getFechaEmision().getTime());
 		remitoTO.setEnPalet(re.getEnPalet());
-		remitoTO.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
-		remitoTO.setIdArticuloStock(re.getArticuloStock().getId());
+		remitoTO.setIdArticuloStock(re.getArticuloStock() != null ? re.getArticuloStock().getId() : null);
 		remitoTO.setIdCliente(re.getCliente().getId());
 		remitoTO.setIdCondicionDeVenta(re.getCondicionDeVenta().getId());
-		remitoTO.setIdPrecioMatPrima(re.getPrecioMatPrima().getId());
-		remitoTO.setIdProveedor(re.getProveedor().getId());
-		remitoTO.setIdTarima(re.getTarima().getId());
+		remitoTO.setIdPrecioMatPrima(re.getPrecioMatPrima() != null ? re.getPrecioMatPrima().getId() : null);
+		remitoTO.setIdProveedor(re.getProveedor() != null ? re.getProveedor().getId() : null);
+		remitoTO.setIdTarima(re.getTarima() != null ? re.getTarima().getId() : null);
 		remitoTO.setNroRemito(re.getNroRemito());
 		remitoTO.setPesoTotal(re.getPesoTotal());
-		remitoTO.setProductoArticuloIdsList(
-				FluentIterable.from(re.getProductoArticuloList()).transform(new Function<ProductoArticulo, Integer>() {
-					public Integer apply(ProductoArticulo pa) {
-						return pa.getId();
-					}
-				}).toArray(Integer.class));
+		if (re.getProductoArticuloList() != null && !re.getProductoArticuloList().isEmpty()) {
+			remitoTO.setProductoArticuloIdsList(
+					FluentIterable.from(re.getProductoArticuloList()).transform(new Function<ProductoArticulo, Integer>() {
+						public Integer apply(ProductoArticulo pa) {
+							return pa.getId();
+						}
+					}).toArray(Integer.class));
+		}
 		remitoTO.setPiezas(FluentIterable.from(re.getPiezas()).transform(new Function<PiezaRemito, PiezaRemitoTO>() {
 			public PiezaRemitoTO apply(PiezaRemito pr) {
 				return piezaRemitoTOFromEntity(pr);
 			}
 		}).toArray(PiezaRemitoTO.class));
+		Set<OrdenDeTrabajo> odtsSet = Sets.newHashSet();
+		for (PiezaRemito pr : re.getPiezas()) {
+			for (PiezaODT podt : pr.getPiezasPadreODT()) {
+				odtsSet.add(podt.getOdt());
+			}
+		}
+		int index = 0;
+		remitoTO.setOdts(new OdtEagerTO[odtsSet.size()]);
+		for (OrdenDeTrabajo odt : odtsSet) {
+			remitoTO.getOdts()[index++] = odtEagerTOWSFromEntity(odt);
+		}
 		return remitoTO;
+	}
+	
+	private static OdtEagerTO odtEagerTOWSFromEntity(OrdenDeTrabajo odt) {
+		OdtEagerTO odtto = new OdtEagerTO();
+		odtto.setId(null);			// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		odtto.setRemito(null);		// Ya la estoy agregando al remitoTO de arriba
+		odtto.setCodigo(odt.getCodigo());
+		odtto.setTimestampFechaODT(odt.getFechaODT().getTime());
+		if (odt.getAvance() != null) {
+			odtto.setIdAvance(odt.getAvance().getId());
+		}
+		odtto.setIdEstadoODT(odt.getEstado().getId());
+		if (odt.getProductoArticulo() != null) {
+			odtto.setIdProductoArticulo(odt.getProductoArticulo().getId());
+		}
+		if (odt.getMaquinaActual() != null) {
+			odtto.setIdMaquinaActual(odt.getMaquinaActual().getId());
+		}
+		if (odt.getOrdenEnMaquina() != null) {
+			odtto.setOrdenEnMaquina(odt.getOrdenEnMaquina());
+		}
+		if (odt.getMaquinaPrincipal() != null) {
+			odtto.setIdMaquinaPrincipal(odt.getMaquinaPrincipal().getId());
+		}
+		if (odt.getSecuenciaDeTrabajo() != null) {
+			odtto.setSecuenciaDeTrabajo(secuenciaTOWsFromEntity(odt.getSecuenciaDeTrabajo()));
+		}
+		List<TransicionODT> transiciones = transicionODTFacade.getAllEagerByODT(odt.getId());
+		if(!transiciones.isEmpty()) {
+			odtto.setTransiciones(new TransicionODTTO[transiciones.size()]);
+			int index = 0;
+			for(TransicionODT tODT : transiciones) {
+				odtto.getTransiciones()[index++] = transicionODTTOWSFromEntity(tODT);
+			}
+		}
+		if (odt.getPiezas() != null && !odt.getPiezas().isEmpty()) {
+			odtto.setPiezas(new PiezaODTTO[odt.getPiezas().size()]);
+			int index = 0;
+			for (PiezaODT po : odt.getPiezas()) {
+				odtto.getPiezas()[index++] = piezaODTTOFromEntity(po);
+			}
+		}
+		return odtto;
+	}
+
+	private static TransicionODTTO transicionODTTOWSFromEntity(TransicionODT tODT) {
+		TransicionODTTO transicion = new TransicionODTTO();
+		transicion.setIdMaquina(tODT.getMaquina().getId());
+		transicion.setIdTipoMaquina(tODT.getTipoMaquina().getId());
+		transicion.setFechaHoraRegistro(tODT.getFechaHoraRegistro().getTime());
+		transicion.setIdUsuarioSistema(tODT.getUsuarioSistema().getId());
+		transicion.setCambiosAvance(new CambioAvanceTO[tODT.getCambiosAvance().size()]);
+		int index = 0;
+		for(CambioAvance ca : tODT.getCambiosAvance()) {
+			transicion.getCambiosAvance()[index++] = cambioAvanceTOWSFromEntity(ca);
+		}
+		return transicion;
+	}
+
+	private static CambioAvanceTO cambioAvanceTOWSFromEntity(CambioAvance ca) {
+		CambioAvanceTO cambio = new CambioAvanceTO();
+		cambio.setIdAvance(ca.getAvance().getId());
+		cambio.setFechaHora(ca.getFechaHora().getTime());
+		cambio.setIdUsuarioSistema(ca.getUsuario().getId());
+		cambio.setObservaciones(ca.getObservaciones());
+		return cambio;
+	}
+
+	private static SecuenciaODTTO secuenciaTOWsFromEntity(SecuenciaODT secuencia) {
+		SecuenciaODTTO secuenciaTO = new SecuenciaODTTO();
+		secuenciaTO.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		secuenciaTO.setNombre(secuencia.getNombre());
+		secuenciaTO.setIdCliente(secuencia.getCliente().getId());
+		secuenciaTO.setIdTipoProducto(secuencia.getTipoProducto().getId());
+		secuenciaTO.setPasosSecuencia(new PasoSecuenciaODTTO[secuencia.getPasos().size()]);
+		int index = 0;
+		for (PasoSecuenciaODT p : secuencia.getPasos()) {
+			secuenciaTO.getPasosSecuencia()[index++] = pasoSecuenciaODTTOWsFromEntity(p);
+		}
+		return secuenciaTO;
+	}
+
+	private static PasoSecuenciaODTTO pasoSecuenciaODTTOWsFromEntity(PasoSecuenciaODT p) {
+		PasoSecuenciaODTTO paso = new PasoSecuenciaODTTO();
+		paso.setId(null);	// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		paso.setIdSector(p.getSector().getId());
+		paso.setIdProceso(p.getProceso().getId());
+		paso.setObservaciones(p.getObservaciones());
+		paso.setSubProceso(procedimientoODTTOWsFromEntity(p.getSubProceso()));
+		return paso;
+	}
+
+	private static ProcedimientoODTTO procedimientoODTTOWsFromEntity(ProcedimientoODT procODT) {
+		ProcedimientoODTTO procedimiento = new ProcedimientoODTTO();
+		procedimiento.setNombre(procODT.getNombre());
+		procedimiento.setIdTipoArticulo(procODT.getTipoArticulo().getId());
+		procedimiento.setPasos(new InstruccionProcedimientoODTTO[procODT.getPasos().size()]);
+		int index = 0;
+		for (InstruccionProcedimientoODT paso : procODT.getPasos()) {
+			procedimiento.getPasos()[index++] = instruccionProcedimientoODTTOWSFromEntity(paso);
+		}
+		return procedimiento;
+	}
+
+	private static InstruccionProcedimientoODTTO instruccionProcedimientoODTTOWSFromEntity(InstruccionProcedimientoODT instODT) {
+		InstruccionProcedimientoODTTO instruccion = new InstruccionProcedimientoODTTO();
+		instruccion.setIdTipoSector(instODT.getSectorMaquina().getId());
+		instruccion.setObservaciones(instODT.getObservaciones());
+		if (instODT instanceof InstruccionProcedimientoPasadasODT) {
+			InstruccionProcedimientoPasadasODT instODTP = (InstruccionProcedimientoPasadasODT) instODT;
+			instruccion.setTipo("IPPODT");
+			instruccion.setCantidadPasadas(instODTP.getCantidadPasadas());
+			instruccion.setTemperatura(instODTP.getTemperatura());
+			instruccion.setVelocidad(instODTP.getVelocidad());
+			instruccion.setAccionProcedimientoId(instODTP.getAccion().getId());
+			instruccion.setMpCantidadExplotadas(new MateriaPrimaCantidadExplotadaTO[instODTP.getQuimicosExplotados().size()]);
+			int index = 0;
+			for (MateriaPrimaCantidadExplotada<Quimico> mp : instODTP.getQuimicosExplotados()) {
+				instruccion.getMpCantidadExplotadas()[index++] = materiaPrimaCantidadExplotadaTOWSFromEntity(mp);
+			}
+		} else if (instODT instanceof InstruccionProcedimientoTextoODT) {
+			InstruccionProcedimientoTextoODT instODTT = (InstruccionProcedimientoTextoODT) instODT;
+			instruccion.setTipo("IPPTODT");
+			instruccion.setEspecificacion(instODTT.getEspecificacion());
+		} else {
+			InstruccionProcedimientoTipoProductoODT instODTTP = (InstruccionProcedimientoTipoProductoODT) instODT;
+			instruccion.setTipo("IPTPODT");
+			instruccion.setIdTipoArticulo(instODTTP.getTipoArticulo().getId());
+			instruccion.setIdTipoProducto(instODTTP.getTipoProducto().getId());
+			instruccion.setFormula(formulaClienteExplotadaTOWSFromEntity(instODTTP.getFormula()));
+		}
+		return instruccion;
+	}
+
+	private static MateriaPrimaCantidadExplotadaTO materiaPrimaCantidadExplotadaTOWSFromEntity(MateriaPrimaCantidadExplotada<?> mpc) {
+		MateriaPrimaCantidadExplotadaTO mpcTO = new MateriaPrimaCantidadExplotadaTO();
+		mpcTO.setIdMateriaPrimaCantidad(mpc.getMateriaPrimaCantidadDesencadenante().getId()); // TODO: ESTA BIEN?
+		mpcTO.setIdTipoArticulo(mpc.getTipoArticulo() == null ? null : mpc.getTipoArticulo().getId());
+		mpcTO.setCantidadExplotada(mpc.getCantidadExplotada());
+		return mpcTO;
+	}
+
+	private static FormulaClienteExplotadaTO formulaClienteExplotadaTOWSFromEntity(FormulaClienteExplotada formula) {
+		FormulaClienteExplotadaTO formulaTO = new FormulaClienteExplotadaTO();
+		formulaTO.setIdFormulaDesencadenante(formula.getFormulaDesencadenante().getId());
+		if (formula instanceof FormulaTenidoClienteExplotada) {
+			formulaTO.setTipo("TEN");
+			FormulaTenidoClienteExplotada formulaT = (FormulaTenidoClienteExplotada) formula;
+			formulaTO.setAnilinas(new MateriaPrimaCantidadExplotadaTO[formulaT.getMateriasPrimas().size()]);
+			int index = 0;
+			for (MateriaPrimaCantidadExplotada<?> mpce : formulaT.getMateriasPrimas()) {
+				formulaTO.getAnilinas()[index++] = materiaPrimaCantidadExplotadaTOWSFromEntity(mpce);
+			}
+		} else {
+			formulaTO.setTipo("ESTAMP");
+			FormulaEstampadoClienteExplotada formulaE = (FormulaEstampadoClienteExplotada) formula;
+			formulaTO.setPigmentos(new MateriaPrimaCantidadExplotadaTO[formulaE.getPigmentos().size()]);
+			int index = 0;
+			for (MateriaPrimaCantidadExplotada<?> mpce : formulaE.getPigmentos()) {
+				formulaTO.getPigmentos()[index++] = materiaPrimaCantidadExplotadaTOWSFromEntity(mpce);
+			}
+			formulaTO.setQuimicos(new MateriaPrimaCantidadExplotadaTO[formulaE.getQuimicos().size()]);
+			index = 0;
+			for (MateriaPrimaCantidadExplotada<?> mpce : formulaE.getQuimicos()) {
+				formulaTO.getPigmentos()[index++] = materiaPrimaCantidadExplotadaTOWSFromEntity(mpce);
+			}
+		}
+		return formulaTO;
 	}
 }

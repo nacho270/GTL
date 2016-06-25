@@ -90,6 +90,9 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 				public void mouseClicked(MouseEvent e) {
 					int selectedRow = getTabla().getSelectedRow();
 					getBtnEnviar().setEnabled(selectedRow >= 0);
+					if (selectedRow >= 0 && e.getClickCount() == 2) {
+						getBtnEnviar().doClick();
+					}
 				}
 			});
 			return tabla;
@@ -128,6 +131,9 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 						} catch (RemoteException e1) {
 							FWJOptionPane.showErrorMessage(JDialogRetornarRemitoDeEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
 							e1.printStackTrace();
+						} catch (RuntimeException rte) {
+							FWJOptionPane.showErrorMessage(JDialogRetornarRemitoDeEntrada.this, rte.getMessage(), "Error");
+							rte.printStackTrace();
 						} finally {
 							FWCursor.endWait(JDialogRetornarRemitoDeEntrada.this);
 						}

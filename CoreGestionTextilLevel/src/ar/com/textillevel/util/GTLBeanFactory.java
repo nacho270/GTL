@@ -64,6 +64,7 @@ import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.SecuenciaTipoProductoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.TransicionODTFacadeRemote;
 
 public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 
@@ -133,6 +134,7 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 		addJndiName(DocumentoContableFacadeRemote.class);
 		addJndiName(GamaColorClienteFacadeRemote.class);
 		addJndiName(ProductoArticuloFacadeRemote.class);
+		addJndiName(TransicionODTFacadeRemote.class);
 	}
 
 	public static GTLBeanFactory getInstance() {

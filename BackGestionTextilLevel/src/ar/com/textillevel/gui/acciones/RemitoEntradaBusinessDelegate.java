@@ -78,7 +78,12 @@ public class RemitoEntradaBusinessDelegate {
 			return lista;
 		}
 		
+		@SuppressWarnings("unused")
 		public boolean recibirRemitoEntrada(RemitoEntradaTO r) throws RemoteException {
+			if (true) {
+				// TODO: BORRAR PARA QUE ESTO SE VAYA A LA B
+				throw new RuntimeException();
+			}
 			return service.recibirRemitoEntrada(r);
 		}
 	}
