@@ -47,6 +47,7 @@ import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedi
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 
 @Stateless
 public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEntradaFacadeLocal {
@@ -83,6 +84,16 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 
 	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario) {
 		boolean isAlta = remitoEntrada.getId() == null;
+		remitoEntrada = internalSave(remitoEntrada, odtList);
+		if(isAlta) {
+			auditoriaFacade.auditar(usuario, "Creacion de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+		} else {
+			auditoriaFacade.auditar(usuario, "Modificación de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION,remitoEntrada);
+		}
+		return remitoEntrada;
+	}
+
+	private RemitoEntrada internalSave(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList) {
 		remitoEntrada = remitoEntradaDAO.save(remitoEntrada);
 
 		//Borro las odts que estaban asociadas y ahora no están (solo en caso de modificación se borran)
@@ -102,9 +113,27 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
 			odt = odtDAO.save(odt);
 		}
+		return remitoEntrada;
+	}
 
+	public RemitoEntrada saveWithTransiciones(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, List<TransicionODT> transiciones, String usuario) {
+		boolean isAlta = remitoEntrada.getId() == null;
+		remitoEntrada = internalSave(remitoEntrada, odtList);
+		//recupero las ODTs grabadas para setearlas en las transiciones
+		List<OrdenDeTrabajo> odtPersistent = odtDAO.getODTAsociadas(remitoEntrada.getId());
+		if(!transiciones.isEmpty()) {
+			for(TransicionODT tr : transiciones) {
+				for(OrdenDeTrabajo odt : odtPersistent) {
+					if(odt.getCodigo().equals(tr.getOdt().getCodigo())) {
+						tr.setOdt(odt);
+					}
+				}
+			}
+			//grabo las transiciones
+			transicionODTDAO.save(transiciones);
+		}
 		if(isAlta) {
-			auditoriaFacade.auditar(usuario, "Creacion de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+			auditoriaFacade.auditar(usuario, "Creación (con transiciones) de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
 		} else {
 			auditoriaFacade.auditar(usuario, "Modificación de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION,remitoEntrada);
 		}
@@ -208,25 +237,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			undoRemitoEntrada01OrCompraTela(remitoEntrada.getId());
 		}
 		
-		remitoEntrada = remitoEntradaDAO.save(remitoEntrada);
-
-		//Borro las odts que estaban asociadas y ahora no están (solo en caso de modificación se borran)
-		List<OrdenDeTrabajo> odtsYaAsociadas = odtDAO.getODTAsociadas(remitoEntrada.getId());
-		for(OrdenDeTrabajo odt : odtsYaAsociadas) {
-			if(!odtList.contains(odt)) {
-				odtDAO.removeById(odt.getId());
-			}
-		}
-
-		//Grabo las nuevas o las odts que existian y quedaron luego de la modificación
-		for(OrdenDeTrabajo odt : odtList) {
-			odt.setRemito(remitoEntrada);
-			for(PiezaODT podt : odt.getPiezas()) {
-				podt.setPiezaRemito(getPiezaRemito(remitoEntrada.getPiezas(), podt.getPiezaRemito().getOrdenPieza()));
-			}
-			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
-			odt = odtDAO.save(odt);
-		}
+		remitoEntrada = internalSave(remitoEntrada, odtList);
 
 		//Modifico la cuenta del cliente/tela agregando tela
 		cuentaArticuloFacade.crearMovimientoHaber(remitoEntrada);
@@ -273,25 +284,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			undoRemitoEntrada01OrCompraTela(remitoEntrada.getId());
 		}
 		
-		remitoEntrada = remitoEntradaDAO.save(remitoEntrada);
-
-		//Borro las odts que estaban asociadas y ahora no están (solo en caso de modificación se borran)
-		List<OrdenDeTrabajo> odtsYaAsociadas = odtDAO.getODTAsociadas(remitoEntrada.getId());
-		for(OrdenDeTrabajo odt : odtsYaAsociadas) {
-			if(!odtList.contains(odt)) {
-				odtDAO.removeById(odt.getId());
-			}
-		}
-
-		//Grabo las nuevas o las odts que existian y quedaron luego de la modificación
-		for(OrdenDeTrabajo odt : odtList) {
-			odt.setRemito(remitoEntrada);
-			for(PiezaODT podt : odt.getPiezas()) {
-				podt.setPiezaRemito(getPiezaRemito(remitoEntrada.getPiezas(), podt.getPiezaRemito().getOrdenPieza()));
-			}
-			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
-			odt = odtDAO.save(odt);
-		}
+		remitoEntrada = internalSave(remitoEntrada, odtList);
 
 		//Genero un remito de entrada de proveedor que finalmente provoca la entrada de stock
 		RemitoEntradaProveedor rep = generarRemitoEntradaProveedor(remitoEntrada);

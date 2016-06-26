@@ -15,4 +15,5 @@ public interface UsuarioSistemaFacadeRemote {
 	public UsuarioSistema login(String usuario, String password);
 	public Boolean existeUsuario(String usuario);
 	public UsuarioSistema esPasswordDeAdministrador(String pass);
+	public UsuarioSistema getById(Integer idUsuarioSistema);
 }

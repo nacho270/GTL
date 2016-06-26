@@ -26,6 +26,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.util.ODTCodigoHelper;
@@ -48,6 +49,8 @@ public class OrdenDeTrabajo implements Serializable {
 	private Short ordenEnMaquina;
 	private SecuenciaODT secuenciaDeTrabajo;
 	private Maquina maquinaPrincipal;
+	
+	private List<TransicionODT> transiciones;
 	
 	public OrdenDeTrabajo() {
 		this.piezas = new ArrayList<PiezaODT>();
@@ -242,6 +245,15 @@ public class OrdenDeTrabajo implements Serializable {
 			}
 		}
 		return null;
+	}
+
+	@Transient
+	public List<TransicionODT> getTransiciones() {
+		return transiciones;
+	}
+
+	public void setTransiciones(List<TransicionODT> transiciones) {
+		this.transiciones = transiciones;
 	}
 
 }

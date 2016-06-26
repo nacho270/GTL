@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,10 +53,12 @@ import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCantFilasInput;
+import ar.com.textillevel.gui.acciones.RemitoEntradaBusinessDelegate;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.ODTCodigoHelper;
@@ -100,7 +103,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 	private RemitoSalidaFacadeRemote remitoSalidaFacade;
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
-//	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
+	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 
 	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
 
@@ -508,7 +511,8 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 							RemitoEntrada remitoFromA = extractRemitoEntrada(remitoSalida.getOdts());
 							idRemitoREBorrar = remitoFromA.getId();
 							remitoFromA.setId(null);//provoca un insert en el método siguiente!
-							RemitoEntrada re = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class).save(remitoFromA, odtList, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+							RemitoEntrada re = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class).saveWithTransiciones(remitoFromA, odtList, extractTransiciones(odtList), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+
 							odtList = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getOdtEagerByRemitoList(re.getId());
 							//esta parte sincroniza los objetos que ya están en estado persistent dentro del RS que está por grabarse
 							remitoSalida.getOdts().clear();
@@ -531,10 +535,14 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 						calcularSetearMerma(remitoSalida);
 						RemitoSalida remitoSalidaSaved = getRemitoSalidaFacade().save(remitoSalida, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 
-						//si es la B => borro el RE que se acaba de utilizar idRemitoREBorrar
+						//si es la B => borro el RE (desde la A) que se acaba de utilizar (i.e. idRemitoREBorrar)
 						if(GenericUtils.isSistemaTest()) {
-							//TODO:
-							System.out.println(idRemitoREBorrar);
+							try {
+								remitoBusinessDelegate.borrarRemitoDeEntrada(idRemitoREBorrar);
+							} catch (RemoteException e1) {
+								FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(e1.getMessage()), "Erroor");
+								return;
+							}
 						}
 
 						setRemitoSalida(remitoSalidaSaved);
@@ -557,6 +565,16 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 					} 
 				}
 
+				private List<TransicionODT> extractTransiciones(List<OrdenDeTrabajo> odtList) {
+					List<TransicionODT> transiciones  = new ArrayList<TransicionODT>();
+					Set<OrdenDeTrabajo> odtSet = new HashSet<OrdenDeTrabajo>(odtList);
+					for(OrdenDeTrabajo odt : odtSet) {
+						if(odt.getTransiciones() != null) {
+							transiciones.addAll(odt.getTransiciones());
+						}
+					}
+					return transiciones;
+				}
 
 			});
 		}

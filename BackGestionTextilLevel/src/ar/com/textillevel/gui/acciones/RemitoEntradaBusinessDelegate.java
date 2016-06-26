@@ -78,14 +78,14 @@ public class RemitoEntradaBusinessDelegate {
 			return lista;
 		}
 		
-		@SuppressWarnings("unused")
 		public boolean recibirRemitoEntrada(RemitoEntradaTO r) throws RemoteException {
-			if (true) {
-				// TODO: BORRAR PARA QUE ESTO SE VAYA A LA B
-				throw new RuntimeException();
-			}
 			return service.recibirRemitoEntrada(r);
 		}
+
+		public boolean borrarRemitoDeEntrada(Integer idRE) throws RemoteException {
+			return service.borrarRemitoDeEntrada(idRE);
+		}
+
 	}
 
 	public boolean retornarRemito(DetalleRemitoEntradaNoFacturado elemento) throws RemoteException {
@@ -94,4 +94,12 @@ public class RemitoEntradaBusinessDelegate {
 		}
 		return getWSClient().recibirRemitoEntrada(ODTTOConverter.toRemitoWSTO(elemento));
 	}
+
+	public boolean borrarRemitoDeEntrada(Integer idRE) throws RemoteException {
+		if (!GenericUtils.isSistemaTest()) {
+			throw new RuntimeException("Operacion invalida desde este sistema");
+		}
+		return getWSClient().borrarRemitoDeEntrada(idRE);
+	}
+
 }

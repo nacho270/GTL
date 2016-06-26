@@ -25,6 +25,7 @@ import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TipoArticuloFacadeRemote;
+import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.acciones.odtwsclient.CambioAvanceTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.FormulaClienteExplotadaTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.InstruccionProcedimientoODTTO;
@@ -85,7 +86,8 @@ public final class ODTTOConverter {
 	private static final FormulaClienteFacadeRemote formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class);
 	private static final MateriaPrimaFacadeRemote materiaPrimaFacade = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class);
 	private static final TransicionODTFacadeRemote transicionODTFacade = GTLBeanFactory.getInstance().getBean2(TransicionODTFacadeRemote.class);
-	
+	private static final UsuarioSistemaFacadeRemote usuarioSistemaFacade = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class);	
+
 	private ODTTOConverter() {
 
 	}
@@ -117,6 +119,12 @@ public final class ODTTOConverter {
 
 		odt.setSecuenciaDeTrabajo(secuenciaODTFromTO(odt, odtEagerTO.getSecuenciaDeTrabajo()));
 		odt.setRemito(remitoEntradaFromTO(odt, odtEagerTO.getRemito()));
+
+		//si hay transiciones las agrego en forma transient a la ODT para luego persistirlas
+		odt.setTransiciones(new ArrayList<TransicionODT>());
+		for(TransicionODTTO trTO : odtEagerTO.getTransiciones()) {
+			odt.getTransiciones().add(transicionEntityFromTOWS(trTO));
+		}
 		return odt;
 	}
 
@@ -330,18 +338,22 @@ public final class ODTTOConverter {
 		if (piezaRemito.getPmpDescuentoStock() != null) {
 			piezaRemitoTO.setIdPmpDescuentoStock(piezaRemito.getPmpDescuentoStock().getId());
 		}
-		if (piezaRemito.getPiezaEntrada() != null) {
-			piezaRemitoTO.setPiezaEntrada(piezaRemitoTOFromEntity(piezaRemito.getPiezaEntrada())); // OJO, recursividad
-		}
-		if (piezaRemito.getPiezasPadreODT() != null && piezaRemito.getPiezasPadreODT().size() > 0) {
-			List<PiezaODT> piezasPadreODT = piezaRemito.getPiezasPadreODT();
-			PiezaODTTO[] piezasPadrePODT = new PiezaODTTO[piezasPadreODT.size()];
-			int i = 0;
-			for (PiezaODT p : piezasPadreODT) {
-				piezasPadrePODT[i++] = piezaODTTOFromEntity(p);
-			}
-			piezaRemitoTO.setPiezasPadreODT(piezasPadrePODT);
-		}
+
+		//La pieza de entrada es sólo para el remito de salida, no haría falta setear esa propiedad  
+//		if (piezaRemito.getPiezaEntrada() != null) {
+//			piezaRemitoTO.setPiezaEntrada(piezaRemitoTOFromEntity(piezaRemito.getPiezaEntrada())); // OJO, recursividad
+//		}
+
+		//Las piezas padre ODT son seteadas en las piezas del remito de salida
+//		if (piezaRemito.getPiezasPadreODT() != null && piezaRemito.getPiezasPadreODT().size() > 0) {
+//			List<PiezaODT> piezasPadreODT = piezaRemito.getPiezasPadreODT();
+//			PiezaODTTO[] piezasPadrePODT = new PiezaODTTO[piezasPadreODT.size()];
+//			int i = 0;
+//			for (PiezaODT p : piezasPadreODT) {
+//				piezasPadrePODT[i++] = piezaODTTOFromEntity(p);
+//			}
+//			piezaRemitoTO.setPiezasPadreODT(piezasPadrePODT);
+//		}
 
 		return piezaRemitoTO;
 	}
@@ -358,13 +370,17 @@ public final class ODTTOConverter {
 		if (piezaODTTO.getPiezaRemito() != null) {
 			piezaODTTO.setPiezaRemito(piezaRemitoTOFromEntity(piezaODT.getPiezaRemito()));
 		}
-//		TODO: VER... HACE STACKOVERFLOW
+		
+		//Esto se setea cuando se trata de un R.S. 
+		//VER... HACE STACKOVERFLOW
 //		List<PiezaRemitoTO> piezasSalida = new ArrayList<PiezaRemitoTO>();
 //		if (piezaODT.getPiezasSalida() != null && piezaODT.getPiezasSalida().size() > 0) {
 //			for (PiezaRemito piezaRemitoTO : piezaODT.getPiezasSalida()) {
 //				piezasSalida.add(piezaRemitoTOFromEntity(piezaRemitoTO));
 //			}
 //		}
+
+		//Esto se setea cuando se trata de un R.S. 
 //		piezaODTTO.setPiezasSalida(piezasSalida.toArray(new PiezaRemitoTO[piezasSalida.size()]));
 		return piezaODTTO;
 	}
@@ -459,6 +475,27 @@ public final class ODTTOConverter {
 		return odtto;
 	}
 
+	private static TransicionODT transicionEntityFromTOWS(TransicionODTTO tODT) {
+		TransicionODT transicion = new TransicionODT();
+		transicion.setMaquina(maquinaFacade.getByIdEager(tODT.getIdMaquina()));
+		transicion.setTipoMaquina(tipoMaquinaFacade.getByIdEager(tODT.getIdTipoMaquina(), 0));
+		transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
+		transicion.setUsuarioSistema(usuarioSistemaFacade.getById(tODT.getIdUsuarioSistema()));
+		for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
+			transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
+		}
+		return transicion;
+	}
+
+	private static CambioAvance cambioAvanceEntityFromTOWS(CambioAvanceTO caTO) {
+		CambioAvance cambio = new CambioAvance();
+		cambio.setAvance(EAvanceODT.getById(caTO.getIdAvance()));
+		cambio.setFechaHora(new Timestamp(caTO.getFechaHora()));
+		cambio.setUsuario(usuarioSistemaFacade.getById(caTO.getIdUsuarioSistema()));
+		cambio.setObservaciones(caTO.getObservaciones());
+		return cambio;
+	}
+
 	private static TransicionODTTO transicionODTTOWSFromEntity(TransicionODT tODT) {
 		TransicionODTTO transicion = new TransicionODTTO();
 		transicion.setIdMaquina(tODT.getMaquina().getId());
@@ -550,7 +587,7 @@ public final class ODTTOConverter {
 
 	private static MateriaPrimaCantidadExplotadaTO materiaPrimaCantidadExplotadaTOWSFromEntity(MateriaPrimaCantidadExplotada<?> mpc) {
 		MateriaPrimaCantidadExplotadaTO mpcTO = new MateriaPrimaCantidadExplotadaTO();
-		mpcTO.setIdMateriaPrimaCantidad(mpc.getMateriaPrimaCantidadDesencadenante().getId()); // TODO: ESTA BIEN?
+		mpcTO.setIdMateriaPrimaCantidad(mpc.getMateriaPrimaCantidadDesencadenante().getId());
 		mpcTO.setIdTipoArticulo(mpc.getTipoArticulo() == null ? null : mpc.getTipoArticulo().getId());
 		mpcTO.setCantidadExplotada(mpc.getCantidadExplotada());
 		return mpcTO;

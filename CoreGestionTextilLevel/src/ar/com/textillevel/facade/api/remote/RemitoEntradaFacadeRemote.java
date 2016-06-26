@@ -12,11 +12,14 @@ import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaPro
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 
 @Remote
 public interface RemitoEntradaFacadeRemote {
 
 	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario);
+
+	public RemitoEntrada saveWithTransiciones(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, List<TransicionODT> transiciones, String usuario);
 
 	public boolean existsNroRemitoByCliente(Integer idCliente, Integer nroRemito);
 	
