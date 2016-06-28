@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"serial", "rawtypes", "unused"})
+@SuppressWarnings({"serial", "unused", "rawtypes"})
 public class MateriaPrimaCantidadExplotadaTO  implements java.io.Serializable {
     private java.lang.Float cantidadExplotada;
 

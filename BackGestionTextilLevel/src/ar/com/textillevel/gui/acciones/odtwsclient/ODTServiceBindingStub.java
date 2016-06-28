@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"unchecked", "rawtypes", "unused"})
+@SuppressWarnings({"unchecked", "unused", "rawtypes"})
 public class ODTServiceBindingStub extends org.apache.axis.client.Stub implements ar.com.textillevel.gui.acciones.odtwsclient.ODTService {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
