@@ -35,7 +35,6 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 
-@SuppressWarnings("unused")
 public class JDialogSeleccionarRemitoEntrada extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -46,7 +45,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private JPanel pnlBotones;
 	private FWJTable tablaODTs;
 	private Cliente cliente;
-	private Frame owner;
 	private List<OrdenDeTrabajo> odtSelectedList;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 	private Multimap<Integer, Integer> mapaRemitoFilas = TreeMultimap.create();
@@ -54,7 +52,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 
 	public JDialogSeleccionarRemitoEntrada(Frame owner, Cliente cliente) {
 		super(owner);
-		this.owner = owner;
 		this.cliente = cliente;
 		this.odtSelectedList = new ArrayList<OrdenDeTrabajo>();
 		setModal(true);
@@ -70,6 +67,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			infoPiezas = remitoBusinessDelegate.getInfoPiezasEntradaSinSalidaByClient(cliente.getId());
 			getTablaOdts().setNumRows(0);
 			int row = 0;
+
 			for(DetallePiezaRemitoEntradaSinSalida ip : infoPiezas) {
 				mapaRemitoFilas.put(ip.getNroRemito(), row);
 				mapaFilasRemito.put(row, ip.getNroRemito());
@@ -110,7 +108,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 
 				private static final long serialVersionUID = -2960448130069418277L;
 
-				@Override
 				public void newRowSelected(int newRow, int oldRow) {
 					getBtnAceptar().setEnabled(newRow != -1);
 				}
@@ -120,7 +117,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			tablaODTs.setAlignment(0, FWJTable.CENTER_ALIGN);
 			tablaODTs.addMouseListener(new MouseAdapter () {
 
-				@Override
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount() == 2) {
 						handleSeleccionODT();

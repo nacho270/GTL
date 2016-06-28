@@ -139,6 +139,8 @@ public class JDialogRetornarRemitoDeEntrada extends JDialog {
 						}
 						if (ok) {
 							remitoFacade.eliminarRemitoEntradaForzado(elemento.getId(), true);
+							FWJOptionPane.showInformationMessage(JDialogRetornarRemitoDeEntrada.this, "La operación se realizó correctamente", "Atención");
+							dispose();
 						}
 					}
 				});

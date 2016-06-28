@@ -95,7 +95,7 @@ public class ODTService implements ODTServiceRemote {
 
 	@EJB
 	private PrecioMateriaPrimaDAOLocal pmpDAO;
-
+	
 	@EJB
 	private MaquinaDAOLocal maqDAO;
 	
@@ -149,6 +149,9 @@ public class ODTService implements ODTServiceRemote {
 		re.setPesoTotal(remitoEntrada.getPesoTotal());
 		Map<Integer, PiezaRemito> piezasRemitoMap = getPiezasRemitoMap(remitoEntrada.getPiezas());
 		re.getPiezas().addAll(piezasRemitoMap.values());
+		for(Integer paId : remitoEntrada.getProductoArticuloIdsList()) {
+			re.getProductoArticuloList().add(paDAO.getReferenceById(paId));
+		}
 		//Construyo entitys ODT
 		List<TransicionODT> transiciones = new ArrayList<TransicionODT>();
 		List<OrdenDeTrabajo> odtList = new ArrayList<OrdenDeTrabajo>();
@@ -166,7 +169,7 @@ public class ODTService implements ODTServiceRemote {
 			odt.getPiezas().addAll(getPiezasODT(odt, odtTO.getPiezas(), piezasRemitoMap));
 			odt.setSecuenciaDeTrabajo(secuenciaODTFromTO(odt, odtTO.getSecuenciaDeTrabajo()));
 			odtList.add(odt);
-			transiciones.addAll(transicionesEntityFromTOWSList(odtTO.getTransiciones()));
+			transiciones.addAll(transicionesEntityFromTOWSList(odt, odtTO.getTransiciones()));
 		}
 		//Construyo las Transiciones
 		remitoEntradaFacade.saveWithTransiciones(re, odtList, transiciones, "admin");//TODO: hacer q el usuario venga como parámetro, implica regenerar el WS
@@ -183,7 +186,9 @@ public class ODTService implements ODTServiceRemote {
 			pr.setOrdenPieza(pTO.getOrdenPieza());
 			pr.setOrdenPiezaCalculado(pTO.getOrdenPiezaCalculado());
 			pr.setPiezaSinODT(pTO.getPiezaSinODT());
-			pr.setPmpDescuentoStock(pmpDAO.getReferenceById(pTO.getIdPmpDescuentoStock()));
+			if(pTO.getIdPmpDescuentoStock() != null) {
+				pr.setPmpDescuentoStock(pmpDAO.getReferenceById(pTO.getIdPmpDescuentoStock()));
+			}
 			map.put(pr.getOrdenPieza(), pr);
 		}
 		return map;
@@ -285,16 +290,19 @@ public class ODTService implements ODTServiceRemote {
 		return instruccion;
 	}
 
-	private List<TransicionODT> transicionesEntityFromTOWSList(List<TransicionODTTO> tODTList) {
+	private List<TransicionODT> transicionesEntityFromTOWSList(OrdenDeTrabajo odt, List<TransicionODTTO> tODTList) {
 		List<TransicionODT> transiciones = new ArrayList<TransicionODT>(); 
 		for(TransicionODTTO tODT : tODTList) {
 			TransicionODT transicion = new TransicionODT();
-			transicion.setMaquina(maqDAO.getReferenceById(tODT.getIdMaquina()));
-			transicion.setTipoMaquina(tmDAO.getReferenceById(tODT.getIdTipoMaquina()));
+			transicion.setOdt(odt);
+			transicion.setMaquina(tODT.getIdMaquina() == null ? null : maqDAO.getReferenceById(tODT.getIdMaquina()));
+			transicion.setTipoMaquina(tODT.getIdTipoMaquina() == null ? null : tmDAO.getReferenceById(tODT.getIdTipoMaquina()));
 			transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
 			transicion.setUsuarioSistema(usDAO.getReferenceById(tODT.getIdUsuarioSistema()));
-			for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
-				transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
+			if(tODT.getCambiosAvance() != null) {
+				for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
+					transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
+				}
 			}
 			transiciones.add(transicion);
 		}

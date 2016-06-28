@@ -233,6 +233,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	private void cambiarEstadoODTs(List<RemitoSalida> remitos, EEstadoODT estadoODT) {
 		Set<OrdenDeTrabajo> odtSet = new HashSet<OrdenDeTrabajo>();
 		for(RemitoSalida rs : remitos) {
+			rs = remitoSalidaFacade.getByIdConPiezasYProductos(rs.getId());
 			odtSet.addAll(rs.getOdts());
 		}
 		for(OrdenDeTrabajo odt : odtSet) {

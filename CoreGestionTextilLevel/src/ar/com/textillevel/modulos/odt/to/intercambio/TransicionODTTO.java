@@ -21,8 +21,8 @@ public class TransicionODTTO implements Serializable {
 	}
 	
 	public TransicionODTTO(TransicionODT tODT) {
-		this.idMaquina = tODT.getMaquina().getId();
-		this.idTipoMaquina = tODT.getTipoMaquina().getId();
+		this.idMaquina = tODT.getMaquina() == null ? null : tODT.getMaquina().getId();
+		this.idTipoMaquina = tODT.getTipoMaquina() == null ? null : tODT.getTipoMaquina().getId();
 		this.fechaHoraRegistro = tODT.getFechaHoraRegistro().getTime();
 		this.idUsuarioSistema = tODT.getUsuarioSistema().getId();
 		this.cambiosAvance = new ArrayList<CambioAvanceTO>();

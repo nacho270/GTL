@@ -3,6 +3,7 @@ package ar.com.textillevel.gui.acciones;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,13 +62,13 @@ import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.AccionProcedimientoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TransicionODTFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Sets;
 
 public final class ODTTOConverter {
 
@@ -87,6 +88,7 @@ public final class ODTTOConverter {
 	private static final MateriaPrimaFacadeRemote materiaPrimaFacade = GTLBeanFactory.getInstance().getBean2(MateriaPrimaFacadeRemote.class);
 	private static final TransicionODTFacadeRemote transicionODTFacade = GTLBeanFactory.getInstance().getBean2(TransicionODTFacadeRemote.class);
 	private static final UsuarioSistemaFacadeRemote usuarioSistemaFacade = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class);	
+	private static final OrdenDeTrabajoFacadeRemote odtFacade = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class);
 
 	private ODTTOConverter() {
 
@@ -121,9 +123,13 @@ public final class ODTTOConverter {
 		odt.setRemito(remitoEntradaFromTO(odt, odtEagerTO.getRemito()));
 
 		//si hay transiciones las agrego en forma transient a la ODT para luego persistirlas
-		odt.setTransiciones(new ArrayList<TransicionODT>());
-		for(TransicionODTTO trTO : odtEagerTO.getTransiciones()) {
-			odt.getTransiciones().add(transicionEntityFromTOWS(trTO));
+		if(odtEagerTO.getTransiciones() != null && odtEagerTO.getTransiciones().length > 0) {
+			odt.setTransiciones(new ArrayList<TransicionODT>());
+			for(TransicionODTTO trTO : odtEagerTO.getTransiciones()) {
+				TransicionODT transicion = transicionEntityFromTOWS(trTO);
+				transicion.setOdt(odt);
+				odt.getTransiciones().add(transicion);
+			}
 		}
 		return odt;
 	}
@@ -367,7 +373,7 @@ public final class ODTTOConverter {
 		piezaODTTO.setMetrosStockInicial(piezaODT.getMetrosStockInicial());
 		piezaODTTO.setNroPiezaStockInicial(piezaODT.getNroPiezaStockInicial());
 		piezaODTTO.setCodigoOdt(piezaODT.getOdt().getCodigo());
-		if (piezaODTTO.getPiezaRemito() != null) {
+		if (piezaODT.getPiezaRemito() != null) {
 			piezaODTTO.setPiezaRemito(piezaRemitoTOFromEntity(piezaODT.getPiezaRemito()));
 		}
 		
@@ -418,12 +424,10 @@ public final class ODTTOConverter {
 				return piezaRemitoTOFromEntity(pr);
 			}
 		}).toArray(PiezaRemitoTO.class));
-		Set<OrdenDeTrabajo> odtsSet = Sets.newHashSet();
-		for (PiezaRemito pr : re.getPiezas()) {
-			for (PiezaODT podt : pr.getPiezasPadreODT()) {
-				odtsSet.add(podt.getOdt());
-			}
-		}
+		
+		//Traigo las ODTs y genero un TO EAGER por c/u
+		Set<OrdenDeTrabajo> odtsSet = new HashSet<OrdenDeTrabajo>(odtFacade.getOdtEagerByRemitoList(re.getId()));
+		
 		int index = 0;
 		remitoTO.setOdts(new OdtEagerTO[odtsSet.size()]);
 		for (OrdenDeTrabajo odt : odtsSet) {
@@ -477,12 +481,14 @@ public final class ODTTOConverter {
 
 	private static TransicionODT transicionEntityFromTOWS(TransicionODTTO tODT) {
 		TransicionODT transicion = new TransicionODT();
-		transicion.setMaquina(maquinaFacade.getByIdEager(tODT.getIdMaquina()));
-		transicion.setTipoMaquina(tipoMaquinaFacade.getByIdEager(tODT.getIdTipoMaquina(), 0));
+		transicion.setMaquina(tODT.getIdMaquina() == null ? null : maquinaFacade.getByIdEager(tODT.getIdMaquina()));
+		transicion.setTipoMaquina(tODT.getIdTipoMaquina() == null ? null : tipoMaquinaFacade.getByIdEager(tODT.getIdTipoMaquina(), 0));
 		transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
 		transicion.setUsuarioSistema(usuarioSistemaFacade.getById(tODT.getIdUsuarioSistema()));
-		for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
-			transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
+		if(tODT.getCambiosAvance() != null) {
+			for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
+				transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
+			}
 		}
 		return transicion;
 	}
@@ -498,8 +504,8 @@ public final class ODTTOConverter {
 
 	private static TransicionODTTO transicionODTTOWSFromEntity(TransicionODT tODT) {
 		TransicionODTTO transicion = new TransicionODTTO();
-		transicion.setIdMaquina(tODT.getMaquina().getId());
-		transicion.setIdTipoMaquina(tODT.getTipoMaquina().getId());
+		transicion.setIdMaquina(tODT.getMaquina() == null ? null : tODT.getMaquina().getId());
+		transicion.setIdTipoMaquina(tODT.getTipoMaquina() == null ? null : tODT.getTipoMaquina().getId());
 		transicion.setFechaHoraRegistro(tODT.getFechaHoraRegistro().getTime());
 		transicion.setIdUsuarioSistema(tODT.getUsuarioSistema().getId());
 		transicion.setCambiosAvance(new CambioAvanceTO[tODT.getCambiosAvance().size()]);
