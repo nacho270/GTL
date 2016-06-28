@@ -7,7 +7,7 @@
 
 package ar.com.textillevel.gui.acciones.odtwsclient;
 
-@SuppressWarnings({"unchecked", "unused", "rawtypes"})
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class ODTServiceBindingStub extends org.apache.axis.client.Stub implements ar.com.textillevel.gui.acciones.odtwsclient.ODTService {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
@@ -60,6 +60,8 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("recibirRemitoEntrada");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "arg0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://impl.odt.webservices.textillevel.com.ar/", "remitoEntradaTO"), ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "arg1"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         oper.setReturnClass(java.lang.Boolean.class);
@@ -358,7 +360,7 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
 }
     }
 
-    public java.lang.Boolean recibirRemitoEntrada(ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO arg0) throws java.rmi.RemoteException {
+    public java.lang.Boolean recibirRemitoEntrada(ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO arg0, java.lang.String arg1) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -374,7 +376,7 @@ public class ODTServiceBindingStub extends org.apache.axis.client.Stub implement
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {arg0});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {arg0, arg1});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

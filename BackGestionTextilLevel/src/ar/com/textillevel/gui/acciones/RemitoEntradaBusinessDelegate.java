@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import main.GTLGlobalCache;
+
 import org.apache.commons.lang.ArrayUtils;
 
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
@@ -79,7 +81,7 @@ public class RemitoEntradaBusinessDelegate {
 		}
 		
 		public boolean recibirRemitoEntrada(RemitoEntradaTO r) throws RemoteException {
-			return service.recibirRemitoEntrada(r);
+			return service.recibirRemitoEntrada(r, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 		}
 
 		public boolean borrarRemitoDeEntrada(Integer idRE) throws RemoteException {

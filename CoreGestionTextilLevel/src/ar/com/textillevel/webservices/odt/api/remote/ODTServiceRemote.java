@@ -10,7 +10,7 @@ import ar.com.textillevel.modulos.odt.to.intercambio.RemitoEntradaTO;
 
 @Remote
 public interface ODTServiceRemote {
-	public Boolean recibirRemitoEntrada(RemitoEntradaTO remitoEntrada);
+	public Boolean recibirRemitoEntrada(RemitoEntradaTO remitoEntrada, String usuarioSistema);
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente);
 	public List<ODTEagerTO> getByIdsEager(List<Integer> ids);
 }

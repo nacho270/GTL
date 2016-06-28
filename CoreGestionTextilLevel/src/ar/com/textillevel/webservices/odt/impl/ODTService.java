@@ -134,7 +134,7 @@ public class ODTService implements ODTServiceRemote {
 		xercesImpl.jar
 	 */
 	
-	public Boolean recibirRemitoEntrada(RemitoEntradaTO remitoEntrada) {
+	public Boolean recibirRemitoEntrada(RemitoEntradaTO remitoEntrada, String usuarioSistema) {
 		logger.info("Se recibio remito " + remitoEntrada.getNroRemito() + ".");
 		//Construyo entity RemitoEntrada
 		RemitoEntrada re = new RemitoEntrada();
@@ -172,7 +172,7 @@ public class ODTService implements ODTServiceRemote {
 			transiciones.addAll(transicionesEntityFromTOWSList(odt, odtTO.getTransiciones()));
 		}
 		//Construyo las Transiciones
-		remitoEntradaFacade.saveWithTransiciones(re, odtList, transiciones, "admin");//TODO: hacer q el usuario venga como parámetro, implica regenerar el WS
+		remitoEntradaFacade.saveWithTransiciones(re, odtList, transiciones, usuarioSistema);
 		return true;
 	}
 
