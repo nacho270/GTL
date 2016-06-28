@@ -1,16 +1,12 @@
 package ar.com.textillevel.entidades.documentos.remito.to;
 
 import java.io.Serializable;
-import java.util.List;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
 
 import ar.com.fwcommon.util.DateUtil;
-import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
-import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 
 public class DetalleRemitoEntradaNoFacturado implements Serializable {
 
@@ -29,17 +25,6 @@ public class DetalleRemitoEntradaNoFacturado implements Serializable {
 		this.cliente = re.getCliente().getRazonSocial();
 		this.fecha = DateUtil.dateToString(re.getFechaEmision());
 		this.listaProductos = FluentIterable.from(re.getProductoArticuloList()).join(Joiner.on(","));
-		this.listaODTs = Joiner.on(",").join(
-				FluentIterable.from(re.getPiezas()).transformAndConcat(new Function<PiezaRemito, List<PiezaODT>>() {
-					public List<PiezaODT> apply(PiezaRemito pr) {
-						return pr.getPiezasPadreODT();
-					}
-				}).transform(new Function<PiezaODT, String>() {
-					public String apply(PiezaODT po) {
-						return po.getOdt().getCodigo();
-					}
-				}).toSet()
-		);
 	}
 
 	public Integer getId() {

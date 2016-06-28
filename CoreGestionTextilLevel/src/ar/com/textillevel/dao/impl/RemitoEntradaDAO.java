@@ -35,15 +35,15 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 
 	public RemitoEntrada getByIdEager(Integer idRemito) {
 		RemitoEntrada remito = getById(idRemito);
-		doEager(remito);
+		doEager(remito, true);
 		return remito;
 	}
 
-	private void doEager(RemitoEntrada remito) {
+	private void doEager(RemitoEntrada remito, boolean piezas) {
 		remito.getProductoArticuloList().size();
 		remito.getPiezas().size();
 		remito.getCliente().getCelular();
-		if (remito.getPiezas() != null) {
+		if (piezas && remito.getPiezas() != null) {
 			for(PiezaRemito pr : remito.getPiezas()) {
 				if (pr.getPiezasPadreODT() != null) {
 					pr.getPiezasPadreODT().size();
@@ -83,7 +83,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		List<RemitoEntrada> remitoEntList = query.getResultList();
 		if(remitoEntList.size() == 1) {
 			RemitoEntrada remitoEntrada = remitoEntList.get(0);
-			doEager(remitoEntrada);
+			doEager(remitoEntrada, true);
 			return remitoEntrada;
 		}
 		return null;
@@ -107,7 +107,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		List<RemitoEntrada> remitoEntList = query.getResultList();
 		if (remitoEntList.size() == 1) {
 			RemitoEntrada remitoEntrada = remitoEntList.get(0);
-			doEager(remitoEntrada);
+			doEager(remitoEntrada, true);
 			if(remitoEntrada.getProveedor() != null) {
 				remitoEntrada.getProveedor().getNombreCorto();
 			}
@@ -303,7 +303,9 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 			return lista;
 		}
 		for(Object arr : ids) {
-			lista.add(new DetalleRemitoEntradaNoFacturado(getByIdEager(NumUtil.toInteger(arr))));
+			RemitoEntrada remito = getById(NumUtil.toInteger(arr));
+			doEager(remito, false);
+			lista.add(new DetalleRemitoEntradaNoFacturado(remito));
 		}
 		return lista;
 	}
