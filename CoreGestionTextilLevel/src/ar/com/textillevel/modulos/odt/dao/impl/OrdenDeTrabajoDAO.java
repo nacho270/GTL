@@ -93,7 +93,7 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		query.setParameter("idRemito", idRemito);
 		List<OrdenDeTrabajo> resultList = query.getResultList();
 		for(OrdenDeTrabajo odt : resultList) {
-			odt.getPiezas().size();
+			odt = getByIdEager(odt.getId());
 		}
 		return resultList;
 	}

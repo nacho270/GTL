@@ -159,7 +159,9 @@ public class ODTService implements ODTServiceRemote {
 			OrdenDeTrabajo odt = new OrdenDeTrabajo();
 			odt.setAvance(EAvanceODT.getById(odtTO.getIdAvance()));
 			odt.setCodigo(odtTO.getCodigo());
-			odt.setEstadoODT(EEstadoODT.getById(odtTO.getIdEstadoODT()));
+			//el estado más problable es EN_OFICINA que significa que del otro lado tenía RemitoDeSalida (ver llamada OrdenDeTrabajoFacade.cambiarODTAOficina) si es así => se cambia a EN_PROCESO (estado anterior)
+			//caso contrario se deja el estado que tenía
+			odt.setEstadoODT(odtTO.getIdEstadoODT() == EEstadoODT.EN_OFICINA.getId() ? EEstadoODT.EN_PROCESO : EEstadoODT.getById(odtTO.getIdEstadoODT()));
 			odt.setFechaODT(new Timestamp(odtTO.getTimestampFechaODT()));
 			odt.setMaquinaActual(odtTO.getIdMaquinaActual() == null ? null : maqDAO.getReferenceById(odtTO.getIdMaquinaActual()));
 			odt.setMaquinaPrincipal(odtTO.getIdMaquinaPrincipal() == null ? null : maqDAO.getReferenceById(odtTO.getIdMaquinaPrincipal()));
@@ -170,6 +172,26 @@ public class ODTService implements ODTServiceRemote {
 			odt.setSecuenciaDeTrabajo(secuenciaODTFromTO(odt, odtTO.getSecuenciaDeTrabajo()));
 			odtList.add(odt);
 			transiciones.addAll(transicionesEntityFromTOWSList(odt, odtTO.getTransiciones()));
+			
+			//de nuevo, si estado anterior es EN_OFICINA => estoy trayendo una transición de más, que es el pasaje a EN_OFICINA
+			//rastreo esa transición (es la última) y no la incluyo en la lista de transiciones a grabar
+			if(odtTO.getIdEstadoODT() == EEstadoODT.EN_OFICINA.getId() && !transiciones.isEmpty()) {
+				List<TransicionODT> transicionesTmp = new ArrayList<TransicionODT>();
+				for(int i=0; i < transiciones.size()-1; i++) {//recorro todas menos la última
+					transicionesTmp.add(transiciones.get(i));
+				}
+				transiciones.clear();
+				transiciones.addAll(transicionesTmp);
+				
+				//y ahora para dejar todo consistente debo setear la máq. de la última transición ya que eso determina el estado de la ODT dentro de visión general
+				if(!transiciones.isEmpty()) {
+					TransicionODT ultTransicion = transiciones.get(transiciones.size() - 1);
+					if(ultTransicion.getMaquina() != null) {
+						odt.setMaquinaActual(ultTransicion.getMaquina());
+					}
+				}
+				
+			}
 		}
 		//Construyo las Transiciones
 		remitoEntradaFacade.saveWithTransiciones(re, odtList, transiciones, usuarioSistema);

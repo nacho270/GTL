@@ -31,6 +31,7 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaArticuloFacadeLocal;
+import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoEntradaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
@@ -79,6 +80,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	@EJB
 	private RemitoEntradaProveedorFacadeLocal remitoEntradaProveedorFacade;
 	
+	@EJB
+	private MovimientoStockFacadeLocal movStockFacade;
+
 	@EJB
 	private AuditoriaFacadeLocal<RemitoEntrada> auditoriaFacade;
 
@@ -365,6 +369,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		}
 		for(OrdenDeTrabajo odt : odts) {
 			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
+			movStockFacade.borrarMovientosStockODT(odt.getId());
 			odtDAO.removeById(odt.getId());
 		}
 		remitoEntradaDAO.removeById(re.getId());
