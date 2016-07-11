@@ -231,9 +231,10 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		ndp.setFechaIngreso(DateUtil.getHoy());
 		ndp.setMontoTotal(cheque.getImporte());
 		ndp.setMontoTotal(ndp.getMontoTotal().add(gastos));
-		ndp.setMontoFaltantePorPagar(cheque.getImporte());
-		ndp.setProveedor(proveedorSalida);
 		
+		ndp.setMontoFaltantePorPagar(ndp.getMontoTotal());
+		ndp.setProveedor(proveedorSalida);
+
 		ItemCorreccionCheque icch = new ItemCorreccionCheque();
 		icch.setCantidad(new BigDecimal(1));
 		icch.setDescripcion("Rechazo de Cheque: " + cheque.toString());
@@ -242,15 +243,17 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		icch.setImporte(cheque.getImporte());
 		icch.setPrecioUnitario(cheque.getImporte());
 		icch.setCheque(cheque);
-		
+
 		ItemCorreccionFacturaProveedor itr = new ItemCorreccionResumen();
 		itr.setImporte(gastos);
 		itr.setPrecioUnitario(gastos);
-		
+
 		if (debeDiscriminarIVA) {
 			ImpuestoItemProveedor impuestoIVA21 = impuestoItemDAO.getByTipoYPorcentaje(ETipoImpuesto.IVA, 21d);
 			if (impuestoIVA21 != null) {
 				itr.setImpuestos(Collections.singletonList(impuestoIVA21));
+				ndp.setMontoTotal(ndp.getMontoTotal().add(itr.getImporte().multiply(new BigDecimal(0.21d)))); //monto total + gastos * IVA
+				ndp.setMontoFaltantePorPagar(ndp.getMontoTotal());
 			}
 		}
 		
@@ -263,8 +266,9 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 
 		ndp.getItemsCorreccion().add(icch);
 		ndp.getItemsCorreccion().add(itr);
-		
+
 		correccionProveedorFacade.guardarCorreccionYGenerarMovimiento(ndp, usuario, null);
+		
 	}
 
 	public void eliminarCheque(Integer id, String usuario) throws ValidacionException {
