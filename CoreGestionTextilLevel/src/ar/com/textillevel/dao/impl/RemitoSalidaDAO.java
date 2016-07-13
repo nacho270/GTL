@@ -45,7 +45,7 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 			pr.getPiezasPadreODT().size();
 			if (pr.getPiezaEntrada() != null) {
 				pr.getPiezaEntrada().getPiezasPadreODT().size();
-				for (PiezaODT pODT : pr.getPiezasPadreODT()) {
+				for(PiezaODT pODT : pr.getPiezasPadreODT()) {
 					pODT.getOdt().getCodigo();
 				}
 			}
