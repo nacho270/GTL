@@ -203,7 +203,7 @@ public class ImpresionFacturaHandler {
 		if (getFactura() != null) {
 			factura.setTotalIvaInscr(getFactura().getPorcentajeIVAInscripto() != null ? GenericUtils.getDecimalFormatFactura().format(getFactura().getPorcentajeIVAInscripto().doubleValue() * getFactura().getMontoSubtotal().doubleValue() / 100) : null);
 		} else {
-			factura.setTotalIvaInscr(getCorreccionFactura().getPorcentajeIVAInscripto() != null ? (getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + getIvaInsc() : null);
+			factura.setTotalIvaInscr(getCorreccionFactura().getPorcentajeIVAInscripto() != null ? getIvaInsc() : null);
 		}
 		return factura;
 	}
@@ -288,23 +288,19 @@ public class ImpresionFacturaHandler {
 				lista.add(ito);
 			}
 		}else{
-			ItemFacturaTO ito = new ItemFacturaTO();
-			ito.setCantidad("1");
-			ito.setDescripcion(getCorreccionFactura().getDescripcion());
-			BigDecimal montoSubtotal = getCorreccionFactura().getMontoSubtotal();
-			if(montoSubtotal!=null){
-				montoSubtotal = montoSubtotal.multiply(new BigDecimal(getCorreccionFactura() instanceof NotaCredito?-1:1));
-				ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(montoSubtotal));
-				ito.setImporte(montoSubtotal != null ? (GenericUtils.getDecimalFormatFactura().format(montoSubtotal.doubleValue())) : null);
-			} else {
-				BigDecimal monto = getCorreccionFactura().getMontoTotal();
-				if (monto!=null){
-					monto = monto.multiply(new BigDecimal(getCorreccionFactura() instanceof NotaCredito?-1:1));
-					ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(monto));
-					ito.setImporte(GenericUtils.getDecimalFormatFactura().format(monto));
+			for (ItemFactura item : getCorreccionFactura().getItems()) {
+				ItemFacturaTO ito = new ItemFacturaTO();
+				ito.setCantidad("1");
+				ito.setDescripcion(item.getDescripcion());
+				ito.setUnidad(item.getUnidad().getDescripcion());
+				BigDecimal precioUnitario = item.getPrecioUnitario();
+				if (precioUnitario != null) {
+					precioUnitario = precioUnitario.multiply(new BigDecimal(getCorreccionFactura() instanceof NotaCredito ? -1 : 1));
+					ito.setPrecioUnitario(GenericUtils.getDecimalFormatFactura().format(precioUnitario));
+					ito.setImporte(precioUnitario != null ? (GenericUtils.getDecimalFormatFactura().format(precioUnitario.doubleValue())) : null);
 				}
+				lista.add(ito);
 			}
-			lista.add(ito);
 		}
 		return lista;
 	}
