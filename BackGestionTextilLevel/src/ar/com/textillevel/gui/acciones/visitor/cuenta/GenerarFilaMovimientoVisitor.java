@@ -87,7 +87,14 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 	private Object[] getFilaMovimientoDebe(MovimientoCuenta movimiento, Integer size) {
 		Object[] row = new Object[size];
 		row[0] = "";
-		row[1] = movimiento.getDescripcionResumen();
+		String descripcion = movimiento.getDescripcionResumen();
+		if (GenericUtils.isSistemaTest()) {
+			int indexOfFC = descripcion.indexOf(" - FC ");
+			if(indexOfFC != -1) {
+				descripcion = descripcion.substring(0, indexOfFC);
+			}
+		}
+		row[1] = descripcion;
 		row[2] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
 		row[3] = null;
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue() * -1));
