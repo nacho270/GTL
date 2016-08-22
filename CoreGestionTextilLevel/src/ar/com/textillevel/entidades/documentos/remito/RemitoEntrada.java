@@ -156,4 +156,14 @@ public class RemitoEntrada extends Remito {
 		return sb.toString();
 	}
 
+	@Transient
+	public PiezaRemito getPiezaByOrden(Integer ordenPieza) {
+		for(PiezaRemito pr : getPiezas()) {
+			if(pr.getOrdenPieza().equals(ordenPieza)) {
+				return pr;
+			}
+		}
+		return null;
+	}
+
 }

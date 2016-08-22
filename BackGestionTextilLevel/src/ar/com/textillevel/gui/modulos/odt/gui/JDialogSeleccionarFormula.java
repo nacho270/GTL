@@ -28,7 +28,7 @@ import ar.com.textillevel.gui.modulos.odt.gui.tenido.PanContenedorFormula;
 import ar.com.textillevel.gui.modulos.odt.gui.tenido.PersisterFormulaHandler;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.FormulaTenidoCliente;
-import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaTenidoClienteFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogSeleccionarFormula extends JDialog {
@@ -42,7 +42,7 @@ public class JDialogSeleccionarFormula extends JDialog {
 	private boolean acepto;
 	private FormulaTenidoCliente formulaElegida;
 
-	private FormulaTenidoClienteFacadeRemote formulaFacade;
+	private FormulaClienteFacadeRemote formulaFacade;
 
 	private final Frame padre;
 	private Cliente cliente;
@@ -227,9 +227,9 @@ public class JDialogSeleccionarFormula extends JDialog {
 		return btnCancelar;
 	}
 
-	public FormulaTenidoClienteFacadeRemote getFormulaFacade() {
+	public FormulaClienteFacadeRemote getFormulaFacade() {
 		if (formulaFacade == null) {
-			formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaTenidoClienteFacadeRemote.class);
+			formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class);
 		}
 		return formulaFacade;
 	}

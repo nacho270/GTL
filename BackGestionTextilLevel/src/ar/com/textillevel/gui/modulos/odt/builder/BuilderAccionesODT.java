@@ -21,6 +21,7 @@ import ar.com.textillevel.gui.modulos.odt.acciones.AccionDobleClickODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionImprimirODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaClienteODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaCodigoODT;
+import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaEstadoODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaProductoODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaSecuenciaAsignada;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -53,6 +54,7 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 
 	public Tabla<OrdenDeTrabajo> construirTabla(int idModel) {
 		Tabla<OrdenDeTrabajo> tabla = new Tabla<OrdenDeTrabajo>();
+		tabla.addColumna(new ColumnaEstadoODT());
 		tabla.addColumna(new ColumnaCodigoODT());
 		tabla.addColumna(new ColumnaProductoODT());
 		tabla.addColumna(new ColumnaClienteODT());

@@ -25,7 +25,7 @@ import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.util.controles.PanelBusquedaClienteMinimal;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
-import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaTenidoClienteFacadeRemote;
+import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JFrameAdministrarFormulas extends JFrame {
@@ -39,7 +39,7 @@ public class JFrameAdministrarFormulas extends JFrame {
 	private JPanel panBotones;
 	private PanelBusquedaClienteMinimal panelBusquedaCliente;
 	private TabPaneFormulas tabPaneFormulas;
-	private FormulaTenidoClienteFacadeRemote formulaFacade;
+	private FormulaClienteFacadeRemote formulaFacade;
 	private Cliente cliente;
 
 	private boolean isModificar = true;
@@ -218,9 +218,9 @@ public class JFrameAdministrarFormulas extends JFrame {
 		return panelBusquedaCliente;
 	}
 
-	public FormulaTenidoClienteFacadeRemote getFormulaFacade() {
+	public FormulaClienteFacadeRemote getFormulaFacade() {
 		if(formulaFacade == null) {
-			formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaTenidoClienteFacadeRemote.class);
+			formulaFacade = GTLBeanFactory.getInstance().getBean2(FormulaClienteFacadeRemote.class);
 		}
 		return formulaFacade;
 	}

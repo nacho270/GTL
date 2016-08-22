@@ -7,7 +7,9 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -45,13 +47,16 @@ import ar.com.textillevel.facade.api.local.FacturaFacadeLocal;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.local.PrecioMateriaPrimaFacadeLocal;
+import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoSalidaFacadeLocal;
 import ar.com.textillevel.facade.api.local.UsuarioSistemaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 import ar.com.textillevel.modulos.fe.connector.DatosRespuestaAFIP;
+import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 
 @Stateless
@@ -88,10 +93,17 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	private OrdenDeTrabajoFacadeLocal odtFacade;
 
 	@EJB
+	private OrdenDeTrabajoDAOLocal odtDAO;
+
+	@EJB
 	private DocumentoContableFacadeLocal docContableFacade; 
 
 	@EJB
 	private UsuarioSistemaFacadeLocal usuSistemaFacade;
+	
+	@EJB
+	private RemitoEntradaFacadeLocal remitroEntradaFacade;
+	
 	
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
 		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
@@ -102,6 +114,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			throw new ValidacionException(EValidacionException.FACTURA_NO_ES_LA_ULTIMA.getInfoValidacion());
 		}
 		docContableFacade.checkAutorizacionAFIP(factura);
+		cambiarEstadoODTs(factura.getRemitos(), EEstadoODT.EN_OFICINA);
 		factura = eliminarInterno(factura);
 		auditoriaFacade.auditar(usrName, "Eliminación de factura  Nº: " + factura.getNroFactura(),EnumTipoEvento.BAJA,factura);
 	}
@@ -196,6 +209,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		}
 		factura.setEstadoFactura(EEstadoFactura.ANULADA);
 		if(factura.getRemitos()!=null) {
+			cambiarEstadoODTs(factura.getRemitos(), EEstadoODT.EN_OFICINA);
 			for(RemitoSalida remito : factura.getRemitos()){
 				if(anularRemitoSalida) {
 					remitoSalidaFacade.anularRemitoSalida(remito);
@@ -214,6 +228,18 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		factura.setRemitos(null);
 		factura = facturaDao.save(factura);
 		auditoriaFacade.auditar(usuario, "Anulación de factura  Nº: " + factura.getNroFactura(),EnumTipoEvento.ANULACION,factura);
+	}
+
+	private void cambiarEstadoODTs(List<RemitoSalida> remitos, EEstadoODT estadoODT) {
+		Set<OrdenDeTrabajo> odtSet = new HashSet<OrdenDeTrabajo>();
+		for(RemitoSalida rs : remitos) {
+			rs = remitoSalidaFacade.getByIdConPiezasYProductos(rs.getId());
+			odtSet.addAll(rs.getOdts());
+		}
+		for(OrdenDeTrabajo odt : odtSet) {
+			odt.setEstadoODT(estadoODT);
+		}
+		odtDAO.save(odtSet);
 	}
 
 	public void cambiarEstadoFactura(Factura factura, EEstadoFactura estadoNuevo, String usuario) {
@@ -399,7 +425,6 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 //			System.out.println(ultimoNroComprobanteAutorizado);
 			
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

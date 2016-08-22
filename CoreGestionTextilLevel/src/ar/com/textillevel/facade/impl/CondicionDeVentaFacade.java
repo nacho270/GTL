@@ -26,4 +26,8 @@ public class CondicionDeVentaFacade implements CondicionDeVentaFacadeRemote{
 	public CondicionDeVenta save(CondicionDeVenta condicion) {
 		return condicionDao.save(condicion);
 	}
+
+	public CondicionDeVenta getById(Integer id) {
+		return condicionDao.getById(id);
+	}
 }

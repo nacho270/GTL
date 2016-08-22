@@ -15,6 +15,19 @@ public class DetallePiezaRemitoEntradaSinSalida implements Serializable {
 	private Integer cantPiezas;
 	private double metrosTotales;
 
+	public DetallePiezaRemitoEntradaSinSalida() {
+
+	}
+
+	public DetallePiezaRemitoEntradaSinSalida(Integer nroRemito, Integer idODT, String codigoODT, String producto, Integer cantPiezas, double metrosTotales) {
+		this.nroRemito = nroRemito;
+		this.idODT = idODT;
+		this.codigoODT = codigoODT;
+		this.producto = producto;
+		this.cantPiezas = cantPiezas;
+		this.metrosTotales = metrosTotales;
+	}
+
 	public Integer getNroRemito() {
 		return nroRemito;
 	}

@@ -41,9 +41,9 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 	}
 
 	private void doEager(RemitoSalida remitoSalida) {
-		for(PiezaRemito pr : remitoSalida.getPiezas()) {
+		for (PiezaRemito pr : remitoSalida.getPiezas()) {
 			pr.getPiezasPadreODT().size();
-			if(pr.getPiezaEntrada() != null) {
+			if (pr.getPiezaEntrada() != null) {
 				pr.getPiezaEntrada().getPiezasPadreODT().size();
 				for(PiezaODT pODT : pr.getPiezasPadreODT()) {
 					pODT.getOdt().getCodigo();
@@ -51,14 +51,15 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 			}
 		}
 		remitoSalida.getProductoList().size();
-		if(remitoSalida.getProveedor() != null) {
+		if (remitoSalida.getProveedor() != null) {
 			remitoSalida.getProveedor().getNombreCorto();
 			remitoSalida.getItems().size();
 		}
-		if(remitoSalida.getFactura()!=null){
+		if (remitoSalida.getFactura() != null) {
 			remitoSalida.getFactura().getFechaEmision();
 		}
-		for(CorreccionFacturaProveedor cfp : remitoSalida.getCorreccionesProvGeneradas()) {
+		for (CorreccionFacturaProveedor cfp : remitoSalida
+				.getCorreccionesProvGeneradas()) {
 			cfp.getFacturas().size();
 		}
 	}

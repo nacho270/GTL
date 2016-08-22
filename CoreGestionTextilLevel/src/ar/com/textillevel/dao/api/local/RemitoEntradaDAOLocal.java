@@ -8,6 +8,7 @@ import javax.ejb.Local;
 
 import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
@@ -49,5 +50,7 @@ public interface RemitoEntradaDAOLocal extends DAOLocal<RemitoEntrada, Integer> 
 	public Integer getArticuloByPiezaSalidaCruda(Integer idPiezaRemitoSalidaCruda);
 
 	public RemitoEntrada getByIdPiezaRemitoEntradaEager(Integer idPiezaRemito);
+
+	public List<DetalleRemitoEntradaNoFacturado> getRemitosEntradaSinFactura();
 
 }

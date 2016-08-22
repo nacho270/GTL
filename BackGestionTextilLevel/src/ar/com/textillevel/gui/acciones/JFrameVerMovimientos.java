@@ -67,6 +67,7 @@ import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.CuentaCliente;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
@@ -371,9 +372,11 @@ public class JFrameVerMovimientos extends JFrame {
 			for (int i = 0; i < tabla.getRowCount(); i++) {
 				MovimientoTO mto = new MovimientoTO();
 				String descripcion = (String) tabla.getValueAt(i, COL_DESCR);
-				int indexOfFC = descripcion.indexOf(" - FC ");
-				if(indexOfFC != -1) {
-					descripcion = descripcion.substring(0, indexOfFC);
+				if (GenericUtils.isSistemaTest()) {
+					int indexOfFC = descripcion.indexOf(" - FC ");
+					if(indexOfFC != -1) {
+						descripcion = descripcion.substring(0, indexOfFC);
+					}
 				}
 				mto.setDescripcion(descripcion);
 				mto.setDebe((String) tabla.getValueAt(i, COL_DEBE));
@@ -883,7 +886,11 @@ public class JFrameVerMovimientos extends JFrame {
 									public void perform() {
 										try {
 											EmailSender.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc);
-											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado la cotización por correo a " + getClienteBuscado().getEmail(), "Información");
+											String textoMensaje = "Se ha enviado la cotización por correo a: " + StringUtil.getCadena(to, ", ");
+											if (to != null && !to.isEmpty()) {
+												textoMensaje +=  "\nCon copia a: " + StringUtil.getCadena(cc, ", ");
+											}
+											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, StringW.wordWrap(textoMensaje), "Información");
 										} catch (Exception ex) {
 											FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 											ex.printStackTrace();
@@ -967,7 +974,11 @@ public class JFrameVerMovimientos extends JFrame {
 									public void perform() {
 										try {
 											EmailSender.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc);
-											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, "Se ha enviado el resumen de cuenta por correo a " + getClienteBuscado().getEmail(), "Información");
+											String textoMensaje = "Se ha enviado la cotización por correo a: " + StringUtil.getCadena(to, ", ");
+											if (to != null && !to.isEmpty()) {
+												textoMensaje +=  "\nCon copia a: " + StringUtil.getCadena(cc, ", ");
+											}
+											FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, StringW.wordWrap(textoMensaje), "Información");
 										} catch (Exception ex) {
 											FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 											ex.printStackTrace();
@@ -1261,10 +1272,12 @@ public class JFrameVerMovimientos extends JFrame {
 					getFacturaFacade().eliminarFactura(factura, getUsuarioAdministrador().getUsrName());
 				}
 				if (jds.isBorrarRemitoSalida() && factura.getRemitos() != null) {
-					//	getRemitoSalidaFacade().borrarRemito(factura.getRemito(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+					for(RemitoSalida rs : factura.getRemitos()) {
+						getRemitoSalidaFacade().eliminarRemitoSalida(rs.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+					}
 				}
 				if (jds.isBorrarRemitoEntrada()) {
-					// TODO: no se como llegar a este
+					// TODO: no sé como llegar a este
 				}
 				FWJOptionPane.showInformationMessage(this, "La operación ha finalizado con éxito", "Información");
 				buscarMovimientos();

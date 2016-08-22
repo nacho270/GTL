@@ -10,5 +10,6 @@ import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 public interface CondicionDeVentaFacadeRemote {
 	public CondicionDeVenta save(CondicionDeVenta condicion);
 	public void remove(CondicionDeVenta condicion);
-	public List< CondicionDeVenta> getAllOrderByName();
+	public List<CondicionDeVenta> getAllOrderByName();
+	public CondicionDeVenta getById(Integer id);
 }

@@ -37,4 +37,8 @@ public class AccionProcedimientoFacade implements AccionProcedimientoFacadeRemot
 		return accionDao.getAllSortedBySector(sector);
 	}
 
+	public AccionProcedimiento getById(Integer id) {
+		return accionDao.getById(id);
+	}
+
 }

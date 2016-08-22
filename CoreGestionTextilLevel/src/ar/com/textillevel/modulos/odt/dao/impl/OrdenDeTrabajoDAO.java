@@ -1,6 +1,7 @@
 package ar.com.textillevel.modulos.odt.dao.impl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,7 +93,7 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		query.setParameter("idRemito", idRemito);
 		List<OrdenDeTrabajo> resultList = query.getResultList();
 		for(OrdenDeTrabajo odt : resultList) {
-			odt.getPiezas().size();
+			odt = getByIdEager(odt.getId());
 		}
 		return resultList;
 	}
@@ -161,6 +162,14 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 			}
 		}
 		return odt;
+	}
+
+	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids) {
+		List<OrdenDeTrabajo> lista = new ArrayList<OrdenDeTrabajo>();
+		for (Integer id : ids) {
+			lista.add(getByIdEager(id));
+		}
+		return lista;
 	}
 
 	private void doEagerIntruccionesODT(List<InstruccionProcedimientoODT> instrucciones) {

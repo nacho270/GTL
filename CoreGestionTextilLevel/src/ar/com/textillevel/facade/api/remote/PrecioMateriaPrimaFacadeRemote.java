@@ -31,5 +31,6 @@ public interface PrecioMateriaPrimaFacadeRemote {
 	public List<ItemMateriaPrimaTO> getStockTelasFisicas();
 	public List<GrupoDetallePiezasFisicasTO> getDetallePiezas(Articulo articuloElegido, ETipoTela tipoTelaElegida);
 	public BigDecimal getPrecioMasRecienteTela(Integer idArticulo);
+	public PrecioMateriaPrima getById(Integer id);
 	
 }

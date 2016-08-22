@@ -31,4 +31,8 @@ public class TarimaFacade implements TarimaFacadeRemote {
 		return tarimaDAO.save(tarima);
 	}
 
+	public Tarima getById(Integer idTarima) {
+		return tarimaDAO.getById(idTarima);
+	}
+
 }

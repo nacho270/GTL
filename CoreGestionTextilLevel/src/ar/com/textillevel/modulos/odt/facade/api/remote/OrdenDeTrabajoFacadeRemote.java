@@ -34,6 +34,8 @@ public interface OrdenDeTrabajoFacadeRemote {
 
 	public OrdenDeTrabajo getByIdEager(Integer idODT);
 
+	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids);
+	
 	public OrdenDeTrabajo getByCodigoEager(String codigo);
 	
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta);

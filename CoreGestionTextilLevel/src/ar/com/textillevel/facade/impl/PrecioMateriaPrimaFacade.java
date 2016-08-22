@@ -410,4 +410,8 @@ public class PrecioMateriaPrimaFacade implements PrecioMateriaPrimaFacadeRemote,
 		return precioMPDao.getPrecioMasRecienteTela(idArticulo);
 	}
 
+	public PrecioMateriaPrima getById(Integer id) {
+		return precioMPDao.getById(id);
+	}
+
 }

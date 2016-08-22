@@ -26,17 +26,29 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.PiezaRemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
+import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaArticuloFacadeLocal;
+import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoEntradaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
+import ar.com.textillevel.modulos.odt.dao.api.local.TransicionODTDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaEstampadoClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.FormulaTenidoClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.explotaciones.fw.FormulaClienteExplotada;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoPasadasODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 
 @Stateless
 public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEntradaFacadeLocal {
@@ -49,6 +61,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 
 	@EJB
 	private OrdenDeTrabajoDAOLocal odtDAO;
+
+	@EJB
+	private TransicionODTDAOLocal transicionODTDAO;
 
 	@EJB
 	private RemitoSalidaDAOLocal remitoSalidaDAO;
@@ -66,10 +81,23 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	private RemitoEntradaProveedorFacadeLocal remitoEntradaProveedorFacade;
 	
 	@EJB
+	private MovimientoStockFacadeLocal movStockFacade;
+
+	@EJB
 	private AuditoriaFacadeLocal<RemitoEntrada> auditoriaFacade;
 
 	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario) {
 		boolean isAlta = remitoEntrada.getId() == null;
+		remitoEntrada = internalSave(remitoEntrada, odtList);
+		if(isAlta) {
+			auditoriaFacade.auditar(usuario, "Creacion de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+		} else {
+			auditoriaFacade.auditar(usuario, "Modificación de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION,remitoEntrada);
+		}
+		return remitoEntrada;
+	}
+
+	private RemitoEntrada internalSave(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList) {
 		remitoEntrada = remitoEntradaDAO.save(remitoEntrada);
 
 		//Borro las odts que estaban asociadas y ahora no están (solo en caso de modificación se borran)
@@ -89,9 +117,27 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
 			odt = odtDAO.save(odt);
 		}
+		return remitoEntrada;
+	}
 
+	public RemitoEntrada saveWithTransiciones(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, List<TransicionODT> transiciones, String usuario) {
+		boolean isAlta = remitoEntrada.getId() == null;
+		remitoEntrada = internalSave(remitoEntrada, odtList);
+		//recupero las ODTs grabadas para setearlas en las transiciones
+		List<OrdenDeTrabajo> odtPersistent = odtDAO.getODTAsociadas(remitoEntrada.getId());
+		if(!transiciones.isEmpty()) {
+			for(TransicionODT tr : transiciones) {
+				for(OrdenDeTrabajo odt : odtPersistent) {
+					if(odt.getCodigo().equals(tr.getOdt().getCodigo())) {
+						tr.setOdt(odt);
+					}
+				}
+			}
+			//grabo las transiciones
+			transicionODTDAO.save(transiciones);
+		}
 		if(isAlta) {
-			auditoriaFacade.auditar(usuario, "Creacion de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+			auditoriaFacade.auditar(usuario, "Creación (con transiciones) de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
 		} else {
 			auditoriaFacade.auditar(usuario, "Modificación de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION,remitoEntrada);
 		}
@@ -130,6 +176,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			checkEliminacionRemitoEntrada(re.getId(), odts);
 		}
 		for(OrdenDeTrabajo odt : odts) {
+			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
 			odtDAO.removeById(odt.getId());
 		}
 		remitoEntradaDAO.removeById(re.getId());
@@ -194,25 +241,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			undoRemitoEntrada01OrCompraTela(remitoEntrada.getId());
 		}
 		
-		remitoEntrada = remitoEntradaDAO.save(remitoEntrada);
-
-		//Borro las odts que estaban asociadas y ahora no están (solo en caso de modificación se borran)
-		List<OrdenDeTrabajo> odtsYaAsociadas = odtDAO.getODTAsociadas(remitoEntrada.getId());
-		for(OrdenDeTrabajo odt : odtsYaAsociadas) {
-			if(!odtList.contains(odt)) {
-				odtDAO.removeById(odt.getId());
-			}
-		}
-
-		//Grabo las nuevas o las odts que existian y quedaron luego de la modificación
-		for(OrdenDeTrabajo odt : odtList) {
-			odt.setRemito(remitoEntrada);
-			for(PiezaODT podt : odt.getPiezas()) {
-				podt.setPiezaRemito(getPiezaRemito(remitoEntrada.getPiezas(), podt.getPiezaRemito().getOrdenPieza()));
-			}
-			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
-			odt = odtDAO.save(odt);
-		}
+		remitoEntrada = internalSave(remitoEntrada, odtList);
 
 		//Modifico la cuenta del cliente/tela agregando tela
 		cuentaArticuloFacade.crearMovimientoHaber(remitoEntrada);
@@ -259,25 +288,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			undoRemitoEntrada01OrCompraTela(remitoEntrada.getId());
 		}
 		
-		remitoEntrada = remitoEntradaDAO.save(remitoEntrada);
-
-		//Borro las odts que estaban asociadas y ahora no están (solo en caso de modificación se borran)
-		List<OrdenDeTrabajo> odtsYaAsociadas = odtDAO.getODTAsociadas(remitoEntrada.getId());
-		for(OrdenDeTrabajo odt : odtsYaAsociadas) {
-			if(!odtList.contains(odt)) {
-				odtDAO.removeById(odt.getId());
-			}
-		}
-
-		//Grabo las nuevas o las odts que existian y quedaron luego de la modificación
-		for(OrdenDeTrabajo odt : odtList) {
-			odt.setRemito(remitoEntrada);
-			for(PiezaODT podt : odt.getPiezas()) {
-				podt.setPiezaRemito(getPiezaRemito(remitoEntrada.getPiezas(), podt.getPiezaRemito().getOrdenPieza()));
-			}
-			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
-			odt = odtDAO.save(odt);
-		}
+		remitoEntrada = internalSave(remitoEntrada, odtList);
 
 		//Genero un remito de entrada de proveedor que finalmente provoca la entrada de stock
 		RemitoEntradaProveedor rep = generarRemitoEntradaProveedor(remitoEntrada);
@@ -331,4 +342,87 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return remitoEntradaDAO.getByIdPiezaRemitoEntradaEager(idPiezaRemito);
 	}
 
+	public List<DetalleRemitoEntradaNoFacturado> getRemitosEntradaSinFactura() {
+		return remitoEntradaDAO.getRemitosEntradaSinFactura();
+	}
+
+	public void eliminarRemitoEntradaForzado(Integer idRE, Boolean borrarRemitos) {
+		RemitoEntrada re = remitoEntradaDAO.getByIdEager(idRE);
+		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(re.getId());
+		if(!odts.isEmpty()) {
+			for(OrdenDeTrabajo odt : odts) {
+				List<RemitoSalida> remitosByODT = remitoSalidaDAO.getRemitosByODT(odt);
+				if(remitosByODT != null && !remitosByODT.isEmpty()) {
+					if (!borrarRemitos) {
+						throw new RuntimeException("No se puede forzar la eliminacion del remito de entrada id " + idRE + " porque tiene remito de salida. ");
+					}
+					for (RemitoSalida rs : remitosByODT) {
+						remitoSalidaDAO.removeById(rs.getId());
+					}
+				}
+			}
+			RemitoEntradaProveedor reProveedor = remitoEntradaProveedorDAO.getREProveedorByIdRECliente(idRE);
+			if(reProveedor != null) {
+				//NO DEBERIA PASAR
+				throw new RuntimeException("No se puede forzar la eliminacion del remito de entrada id " + idRE + " porque tiene remito de entrada de proveedor.");
+			}
+		}
+		for(OrdenDeTrabajo odt : odts) {
+			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
+			movStockFacade.borrarMovientosStockODT(odt.getId());
+			odtDAO.removeById(odt.getId());
+		}
+		remitoEntradaDAO.removeById(re.getId());
+	}
+
+	public RemitoEntrada getByIdEagerConPiezasODTYRemito(Integer id) {
+		RemitoEntrada re = remitoEntradaDAO.getByIdEager(id);
+		List<OrdenDeTrabajo> odtsRemito = odtDAO.getOdtEagerByRemitoList(id);
+		for (OrdenDeTrabajo odt : odtsRemito) {
+			SecuenciaODT secuenciaDeTrabajo = odt.getSecuenciaDeTrabajo();
+			if(secuenciaDeTrabajo != null) {
+				secuenciaDeTrabajo.getNombre();
+				secuenciaDeTrabajo.getPasos().size();
+				for(PasoSecuenciaODT p : secuenciaDeTrabajo.getPasos()) {
+					p.getObservaciones();
+					p.getSubProceso().getNombre();
+					p.getSubProceso().getPasos().size();
+					for (InstruccionProcedimientoODT instruccion : p.getSubProceso().getPasos()) {
+						if (instruccion instanceof InstruccionProcedimientoPasadasODT) {
+							((InstruccionProcedimientoPasadasODT) instruccion).getAccion().getNombre();
+							((InstruccionProcedimientoPasadasODT) instruccion).getQuimicosExplotados().size();
+						} else if (instruccion instanceof InstruccionProcedimientoTipoProductoODT) {
+							FormulaClienteExplotada formula = ((InstruccionProcedimientoTipoProductoODT)instruccion).getFormula();
+							if (formula instanceof FormulaEstampadoClienteExplotada) {
+								((FormulaEstampadoClienteExplotada) formula).getPigmentos().size();
+								((FormulaEstampadoClienteExplotada) formula).getQuimicos().size();
+							} else {
+								((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().size();
+							}
+						}
+					}
+				}
+			}
+			for (PiezaODT podt : odt.getPiezas()) {
+				PiezaRemito pr = getPiezaRemito(re.getPiezas(), podt.getPiezaRemito());
+				if (pr == null) {
+					throw new RuntimeException("Estado inconsistente!!!");
+				}
+				if (podt.getPiezasSalida() != null) {
+					podt.getPiezasSalida().size();
+				}
+				podt.setPiezaRemito(pr);
+			}
+		}
+		return re;
+	}
+
+	private PiezaRemito getPiezaRemito(List<PiezaRemito> piezas, PiezaRemito piezaRemito) {
+		for(PiezaRemito pr : piezas) {
+			if(pr.equals(piezaRemito)) {
+				return pr;
+			}
+		}
+		return null;
+	}
 }
