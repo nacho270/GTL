@@ -3,6 +3,7 @@ package ar.com.textillevel.gui.modulos.odt.gui;
 import java.util.HashMap;
 import java.util.Map;
 
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.Pigmento;
 import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
@@ -28,12 +29,19 @@ import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedi
 public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor {
 
 	private InstruccionProcedimientoODT instruccionExplotada;
-	private final OrdenDeTrabajo odt;
+	private OrdenDeTrabajo odt;
+	private Float litros;
 	
 	private final Map<MateriaPrima, Float> mapaStock;
 	
 	public ExplotadorInstrucciones(OrdenDeTrabajo odt) {
 		this.odt = odt;
+		mapaStock = new HashMap<MateriaPrima, Float>();
+	}
+	
+	public ExplotadorInstrucciones(OrdenDeTrabajo odt, Float litros) {
+		this.odt = odt;
+		this.litros = litros;
 		mapaStock = new HashMap<MateriaPrima, Float>();
 	}
 
@@ -45,7 +53,8 @@ public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor
 		nuevo.setVelocidad(instruccion.getVelocidad());
 		nuevo.setSectorMaquina(instruccion.getSectorMaquina());
 		for (QuimicoCantidad qc : instruccion.getQuimicos()) {
-			float cantidad = qc.getCantidad() * odt.getRemito().getPesoTotal().floatValue();
+			float multiplicador = qc.getUnidad() == EUnidad.GRAMOS_POR_KILOS ? odt.getRemito().getPesoTotal().floatValue() : litros;
+			float cantidad = qc.getCantidad() * multiplicador;
 			updateStockInfo(qc.getMateriaPrima(), cantidad);
 			MateriaPrimaCantidadExplotada<Quimico> mpce = new MateriaPrimaCantidadExplotada<Quimico>();
 			mpce.setCantidadExplotada(cantidad);

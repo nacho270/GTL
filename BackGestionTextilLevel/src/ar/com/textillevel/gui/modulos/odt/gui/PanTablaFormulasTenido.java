@@ -26,10 +26,15 @@ import ar.com.textillevel.gui.modulos.odt.impresion.EFormaImpresionODT;
 import ar.com.textillevel.gui.modulos.odt.impresion.ImprimirODTHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.CreadorFormulasVisitor;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.FormulaTenidoCliente;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.tenido.TenidoTipoArticulo;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimiento;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.InstruccionProcedimientoPasadas;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.ProcedimientoTipoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.procesos.ProcesoTipoMaquina;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.ProcedimientoODT;
@@ -199,6 +204,9 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		boolean ok = false;
 		do {
 			String input = JOptionPane.showInputDialog(owner, "Ingrese el total de kilos:", "Imprimir Fórmula", JOptionPane.INFORMATION_MESSAGE);
+			if (input == null) {
+				break;
+			}
 			if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
 				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
@@ -218,8 +226,9 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		
 		SecuenciaODT secuencia = new SecuenciaODT();
 		PasoSecuenciaODT unicoPaso = new PasoSecuenciaODT();
-
-		unicoPaso.setSector(GTLBeanFactory.getInstance().getBean2(TipoMaquinaFacadeRemote.class).getAllByIdTipo(ESectorMaquina.SECTOR_HUMEDO.getId().intValue()).get(0));
+		int mask = TipoMaquinaFacadeRemote.MASK_PROCESOS | TipoMaquinaFacadeRemote.MASK_SUBPROCESOS | TipoMaquinaFacadeRemote.MASK_INSTRUCCIONES;
+		TipoMaquina tipo = GTLBeanFactory.getInstance().getBean2(TipoMaquinaFacadeRemote.class).getByIdEager(ESectorMaquina.SECTOR_HUMEDO.getId().intValue(), mask);
+		unicoPaso.setSector(tipo);
 		secuencia.getPasos().add(unicoPaso);
 		ProcedimientoODT unicoSubroceso = new ProcedimientoODT();
 		unicoSubroceso.setNombre("SUBPROCESO_PRUEBA");
@@ -246,7 +255,34 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		reDummy.setNroRemito(10);
 		reDummy.setCliente(cliente);
 		odt.setRemito(reDummy);
-
+		
+		TipoArticulo ta = formula.getTipoArticulo();
+		InstruccionProcedimientoPasadas instruccionProcedimiento = null;
+		instruccionProcedimiento = buscarDescrude(tipo, ta, instruccionProcedimiento);
+		
+		if (instruccionProcedimiento != null) {
+			Float litros = null;
+			boolean ok = false;
+			do {
+				String input = JOptionPane.showInputDialog(owner, "Ingrese el total de litros:", "Imprimir Fórmula", JOptionPane.INFORMATION_MESSAGE);
+				if (input == null) {
+					return null;
+				}
+				if (input.trim().length()==0 || !GenericUtils.esNumerico(input)) {
+					FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
+				} else {
+					ok = true;
+					litros = Float.valueOf(input);
+				}
+			} while(!ok);
+			
+			
+			ExplotadorInstrucciones explotador = new ExplotadorInstrucciones(odt, litros);
+			instruccionProcedimiento.accept(explotador);
+			InstruccionProcedimientoODT instruccionExplotada = explotador.getInstruccionExplotada();
+			unicoSubroceso.getPasos().add(instruccionExplotada);
+		}
+		
 		CreadorFormulasVisitor visitor = new CreadorFormulasVisitor(odt);
 		formula.accept(visitor);
 
@@ -254,8 +290,24 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		ipODT.setFormula(visitor.getFormulaExplotada());
 		ipODT.setTipoProducto(ETipoProducto.TENIDO);
 		unicoSubroceso.getPasos().add(ipODT);
-
 		return odt;
+	}
+
+	private InstruccionProcedimientoPasadas buscarDescrude(TipoMaquina tipo, TipoArticulo ta, InstruccionProcedimientoPasadas instruccionProcedimiento) {
+		for(ProcesoTipoMaquina ptm : tipo.getProcesos()) {
+			if (ptm.getNombre().toLowerCase().indexOf("descrude") != -1) {
+				for (ProcedimientoTipoArticulo pta : ptm.getProcedimientos()) {
+					if (pta.getTipoArticulo().equals(ta)) {
+						for (InstruccionProcedimiento instruccionProcedimiento2 : pta.getPasos()) {
+							if (instruccionProcedimiento2 instanceof InstruccionProcedimientoPasadas) {
+								instruccionProcedimiento = (InstruccionProcedimientoPasadas) instruccionProcedimiento2;
+							}
+						}
+					}
+				}
+			}
+		}
+		return instruccionProcedimiento;
 	}
 
 	@Override
