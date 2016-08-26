@@ -76,7 +76,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 				getTablaOdts().setValueAt(ip.getIdODT(), row, 1);
 				row ++;
 			}
-			System.out.println("a");
 		} catch (RemoteException e) {
 			FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
 			e.printStackTrace();
