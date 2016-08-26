@@ -53,7 +53,7 @@ public class ExplotadorInstrucciones implements IInstruccionProcedimientoVisitor
 		nuevo.setVelocidad(instruccion.getVelocidad());
 		nuevo.setSectorMaquina(instruccion.getSectorMaquina());
 		for (QuimicoCantidad qc : instruccion.getQuimicos()) {
-			float multiplicador = qc.getUnidad() == EUnidad.GRAMOS_POR_KILOS ? odt.getRemito().getPesoTotal().floatValue() : litros;
+			float multiplicador = qc.getUnidad() == EUnidad.GRAMOS_POR_KILOS || litros == null ? odt.getRemito().getPesoTotal().floatValue() : litros;
 			float cantidad = qc.getCantidad() * multiplicador;
 			updateStockInfo(qc.getMateriaPrima(), cantidad);
 			MateriaPrimaCantidadExplotada<Quimico> mpce = new MateriaPrimaCantidadExplotada<Quimico>();
