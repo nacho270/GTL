@@ -49,6 +49,7 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Boolean anulado;
 	private Factura factura;
 	private Integer nroSucursal;
+	private Boolean entregado;
 	
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
@@ -218,6 +219,15 @@ public class RemitoSalida extends Remito implements Serializable {
 	@Override
 	public String toString(){
 		return "Remito Salida Nº " + getNroRemito() +". Fecha: " + DateUtil.dateToString(getFechaEmision());
+	}
+
+	@Column(name = "A_ENTREGADO", nullable = true)
+	public Boolean getEntregado() {
+		return entregado;
+	}
+
+	public void setEntregado(Boolean entregado) {
+		this.entregado = entregado;
 	}
 
 }

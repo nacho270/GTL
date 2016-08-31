@@ -42,6 +42,7 @@ public class OrdenDePago implements Serializable {
 	private List<PagoOrdenDePago> pagos;
 	private Integer nroReciboProveedor;
 	private String usuarioCreador;
+	private Boolean entregado;
 	
 	public OrdenDePago(){
 		formasDePago = new ArrayList<FormaPagoOrdenDePago>();
@@ -175,6 +176,15 @@ public class OrdenDePago implements Serializable {
 		this.usuarioCreador = usuarioCreador;
 	}
 
+	@Column(name = "A_ENTREGADO", nullable = true)
+	public Boolean getEntregado() {
+		return entregado;
+	}
+
+	public void setEntregado(Boolean entregado) {
+		this.entregado = entregado;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
