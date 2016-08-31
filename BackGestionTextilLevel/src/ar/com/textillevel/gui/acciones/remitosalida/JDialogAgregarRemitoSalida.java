@@ -610,7 +610,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		rs.getPiezas().clear();
 		rs.getPiezas().addAll(new ArrayList<PiezaRemito>(piezas.subList(0, CANT_PIEZAS_POR_REMITO_MAX)));
 		//Creo los remitos y seteo los datos básicos
-		for(int i = 1; i < cantRemitos; i++) {
+		for(int i = 0; i < cantRemitos; i++) {
 			RemitoSalida rsNew = new RemitoSalida();
 			rsNew.setNroRemito(nroRemito + i);
 			rsNew.setNroOrden(i);
