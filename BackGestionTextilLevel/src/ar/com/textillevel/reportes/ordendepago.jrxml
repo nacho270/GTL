@@ -25,6 +25,7 @@
 	<parameter name="IMPORTE_TRANSF" class="java.lang.String"/>
 	<parameter name="NRO_TRANSF" class="java.lang.String"/>
 	<parameter name="OBS_TRANSF" class="java.lang.String"/>
+	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<field name="pagosDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<field name="pagosDS2" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<field name="chequesDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
@@ -133,6 +134,10 @@ Inicio de Actividades:03/2005 ]]></text>
 					<printWhenExpression><![CDATA[$P{IMPRIMIR_DATOS}.equals(Boolean.TRUE)?Boolean.TRUE:Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
+			</image>
+			<image hAlign="Center">
+				<reportElement x="256" y="54" width="110" height="34"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
 			</image>
 		</band>
 	</title>

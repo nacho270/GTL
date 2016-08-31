@@ -26,6 +26,7 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.StringUtil;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
@@ -342,6 +343,11 @@ public class ImprimirRemitoHandler {
 			parameters.put("TOT_PIEZAS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " " + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size())));
 			parameters.put("TOT_KILOS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
 			parameters.put("TOT_METROS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			try {
+				parameters.put("IMAGEN", GenericUtils.createBarCode(ETipoDocumento.REMITO_SALIDA.getPrefijoCodigoBarras() + remito.getNroRemito()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezas()));
 		}
 

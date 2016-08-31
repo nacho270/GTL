@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.DateUtil;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.ordendepago.formapago.FormaPagoOrdenDePago;
 import ar.com.textillevel.entidades.documentos.ordendepago.pagos.PagoOrdenDePago;
@@ -240,6 +241,12 @@ public class ImprimirOrdenDePagoHandler {
 			params.put("TOTAL_PAGADO", GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(total.doubleValue())));
 			params.put("TOTAL_LETRAS", "Son Pesos: " + GenericUtils.convertirNumeroATexto(total.doubleValue()));
 			params.put("IMPRIMIR_DATOS", !GenericUtils.isSistemaTest());
+			
+			try {
+				params.put("IMAGEN", GenericUtils.createBarCode(ETipoDocumento.ORDEN_PAGO.getPrefijoCodigoBarras() + nroOrden));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			if(orden.infoTransferencia!=null){
 				params.put("IMPORTE_TRANSF", orden.infoTransferencia.getImporteTransfBancaria());
 				params.put("NRO_TRANSF", orden.infoTransferencia.getNroTx());

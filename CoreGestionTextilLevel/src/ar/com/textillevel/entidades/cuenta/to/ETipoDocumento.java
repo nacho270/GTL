@@ -4,25 +4,27 @@ import ar.com.textillevel.entidades.enums.ETipoFactura;
 
 public enum ETipoDocumento {
 	
-	FACTURA(1,1),
-	NOTA_DEBITO(2,2),
-	RECIBO(3,4),
-	NOTA_CREDITO(4,3),
-	ORDEN_PAGO(5,null),
-	CHEQUE(6,null),
-	REMITO_ENTRADA(7,null),
-	REMITO_SALIDA(8,null),
-	REMITO_ENTRADA_PROV(9,null),
-	FACTURA_PROV(10,null),
-	NOTA_CREDITO_PROV(11,null),
-	NOTA_DEBITO_PROV(12,null);
+	FACTURA(1,1, null),
+	NOTA_DEBITO(2,2, null),
+	RECIBO(3,4, null),
+	NOTA_CREDITO(4,3, null),
+	ORDEN_PAGO(5,null, "1111"),
+	CHEQUE(6,null, null),
+	REMITO_ENTRADA(7,null, null),
+	REMITO_SALIDA(8,null, "2222"),
+	REMITO_ENTRADA_PROV(9,null, null),
+	FACTURA_PROV(10,null, null),
+	NOTA_CREDITO_PROV(11,null, null),
+	NOTA_DEBITO_PROV(12,null, null);
 
 	private int id;
 	private Integer idTipoDocAFIP;
+	private String prefijoCodigoBarras;
 	
-	private ETipoDocumento(int id, Integer idTipoDocAFIP) {
+	private ETipoDocumento(int id, Integer idTipoDocAFIP, String prefijoCodigoBarras) {
 		this.id = id;
 		this.idTipoDocAFIP = idTipoDocAFIP;
+		this.prefijoCodigoBarras = prefijoCodigoBarras;
 	}
 
 	public int getId() {
@@ -38,5 +40,9 @@ public enum ETipoDocumento {
 
 	public String getDescripcion() {
 		return toString().replace("_", " ");
+	}
+
+	public String getPrefijoCodigoBarras() {
+		return prefijoCodigoBarras;
 	}
 }
