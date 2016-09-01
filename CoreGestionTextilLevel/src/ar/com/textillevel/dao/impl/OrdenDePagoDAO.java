@@ -109,4 +109,16 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 		q.setParameter("idProveedor", idProveedor);
 		return q.getResultList();
 	}
+
+	@SuppressWarnings("unchecked")
+	public OrdenDePago getByNumero(String numero) {
+		String hql = "SELECT o FROM OrdenDePago o WHERE o.nroOrden = :nroOrden ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("nroOrden", Integer.valueOf(numero));
+		List<OrdenDePago> l = q.getResultList();
+		if(l==null || l.isEmpty()){
+			return null;
+		}
+		return l.get(0);
+	}
 }

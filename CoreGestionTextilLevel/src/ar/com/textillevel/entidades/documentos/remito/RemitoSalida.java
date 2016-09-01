@@ -2,6 +2,7 @@ package ar.com.textillevel.entidades.documentos.remito;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,6 +51,7 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Factura factura;
 	private Integer nroSucursal;
 	private Boolean entregado;
+	private Timestamp fechaHoraEntregado;
 	
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
@@ -230,4 +232,12 @@ public class RemitoSalida extends Remito implements Serializable {
 		this.entregado = entregado;
 	}
 
+	@Column(name = "A_FECHA_HORA_ENTREGADO", nullable = true)
+	public Timestamp getFechaHoraEntregado() {
+		return fechaHoraEntregado;
+	}
+
+	public void setFechaHoraEntregado(Timestamp fechaHoraEntregado) {
+		this.fechaHoraEntregado = fechaHoraEntregado;
+	}
 }

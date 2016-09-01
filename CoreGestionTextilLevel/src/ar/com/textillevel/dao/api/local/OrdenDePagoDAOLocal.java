@@ -21,4 +21,6 @@ public interface OrdenDePagoDAOLocal extends DAOLocal<OrdenDePago, Integer> {
 
 	public OrdenDePago getByIdEager(Integer idODP);
 
+	public OrdenDePago getByNumero(String numero);
+
 }

@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 
 import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.OrdenDePagoDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
@@ -183,5 +184,28 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 
 	public OrdenDePago getByIdEager(Integer idODP) {
 		return ordenDePagoDao.getByIdEager(idODP);
+	}
+
+	@Override
+	public void marcarEntregada(String numero) {
+		OrdenDePago odp = ordenDePagoDao.getByNumero(numero);
+		if (odp == null) {
+			throw new RuntimeException("Orden de pago no encontrada");
+		}
+		odp.setEntregado(true);
+		odp.setFechaHoraEntregada(DateUtil.getAhora());
+		auditoriaFacade.auditar("Terminal", "Marcar orden de pago numero: " + numero + " como entregada",
+				EnumTipoEvento.MODIFICACION, odp);
+	}
+
+	@Override
+	public void reingresar(String numero) {
+		OrdenDePago odp = ordenDePagoDao.getByNumero(numero);
+		if (odp == null) {
+			throw new RuntimeException("Orden de pago no encontrada");
+		}
+		odp.setEntregado(null);
+		odp.setFechaHoraEntregada(null);
+		auditoriaFacade.auditar("Terminal", "Reingreso orden de pago numero: " + numero, EnumTipoEvento.MODIFICACION, odp);
 	}
 }

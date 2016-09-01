@@ -18,6 +18,7 @@ public interface RemitoSalidaDAOLocal extends DAOLocal<RemitoSalida, Integer> {
 	public Integer getLastNroRemito();
 	public RemitoSalida getByIdConPiezasYProductos(Integer id);
 	public RemitoSalida getByNroRemitoConPiezasYProductos(Integer nroRemito);
+	public RemitoSalida getByNumero(String numero);
 	
 	/**
 	 * Devuelve el remito de salida con piezas y productos aunque está anulado.

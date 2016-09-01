@@ -213,5 +213,16 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		}
 		return remitos;
 	}
-	
+
+	@Override
+	public RemitoSalida getByNumero(String numero) {
+		String hql = "SELECT rs FROM RemitoSalida rs WHERE rs.nroRemito = :nroRemito ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("nroRemito", Integer.valueOf(numero));
+		List<RemitoSalida> remitos = q.getResultList();
+		if(remitos != null && remitos.size()>0){
+			return remitos.get(0);
+		}
+		return null;
+	}
 }

@@ -43,6 +43,7 @@ public class OrdenDePago implements Serializable {
 	private Integer nroReciboProveedor;
 	private String usuarioCreador;
 	private Boolean entregado;
+	private Timestamp fechaHoraEntregada;
 	
 	public OrdenDePago(){
 		formasDePago = new ArrayList<FormaPagoOrdenDePago>();
@@ -176,13 +177,22 @@ public class OrdenDePago implements Serializable {
 		this.usuarioCreador = usuarioCreador;
 	}
 
-	@Column(name = "A_ENTREGADO", nullable = true)
+	@Column(name = "A_ENTREGADA", nullable = true)
 	public Boolean getEntregado() {
 		return entregado;
 	}
 
 	public void setEntregado(Boolean entregado) {
 		this.entregado = entregado;
+	}
+	
+	@Column(name = "A_FECHA_HORA_ENTREGADA", nullable = true)
+	public Timestamp getFechaHoraEntregada() {
+		return fechaHoraEntregada;
+	}
+
+	public void setFechaHoraEntregada(Timestamp fechaHoraEntregada) {
+		this.fechaHoraEntregada = fechaHoraEntregada;
 	}
 	
 	@Override

@@ -45,4 +45,13 @@ public enum ETipoDocumento {
 	public String getPrefijoCodigoBarras() {
 		return prefijoCodigoBarras;
 	}
+
+	public static ETipoDocumento getByPrefijo(String prefijo) {
+		for(ETipoDocumento etd : values()) {
+			if (etd.getPrefijoCodigoBarras() != null && etd.getPrefijoCodigoBarras().equals(prefijo)) {
+				return etd;
+			}
+		}
+		return null;
+	}
 }
