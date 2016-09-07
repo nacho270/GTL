@@ -66,6 +66,7 @@ import ar.com.textillevel.facade.api.remote.FacturaProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ServicioFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
+import ar.com.textillevel.util.DocumentoProveedorHelper;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogCargarFacturaServicioProveedor extends JDialog {
@@ -79,11 +80,11 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 	private JTextField txtRazonSocial;
 	private PanTablaItemFactura panTablaItemFactura;
 
-	private JTextField txtSubtotal;
+	private FWJTextField txtSubtotal;
 	private JTextField txtSubtotalConFactor;
-	private JTextField txtTotal;
+	private FWJTextField txtTotal;
 	private JTextField txtTotalConFactor;
-	private JTextField txtDescuento;
+	private FWJTextField txtDescuento;
 	private FWJTable tablaImpuestos;
 	private Frame padre;
 	private boolean modoConsulta;
@@ -119,11 +120,11 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		if(factura.getFechaIngreso() != null) {
 			getPanelFecha().setSelectedDate(factura.getFechaIngreso());
 		}
-		getTxtDescuento().setText(GenericUtils.getDecimalFormat().format(factura.getDescuento().longValue()));
-		getTxtSubtotal().setText(GenericUtils.getDecimalFormat().format(factura.getMontoSubtotal().longValue()));
-		getTxtTotal().setText(GenericUtils.getDecimalFormat().format(factura.getMontoTotal().longValue()));
-		getTxtImpVarios().setText(GenericUtils.getDecimalFormat().format(factura.getImpVarios().longValue()));
-		getTxtPercepIVA().setText(GenericUtils.getDecimalFormat().format(factura.getPercepIVA().longValue()));
+		getTxtDescuento().setText(formatBigDecimal(factura.getDescuento()));
+		getTxtSubtotal().setText(formatBigDecimal(factura.getMontoSubtotal()));
+		getTxtTotal().setText(formatBigDecimal(factura.getMontoTotal()));
+		getTxtImpVarios().setText(formatBigDecimal(factura.getImpVarios()));
+		getTxtPercepIVA().setText(formatBigDecimal(factura.getPercepIVA()));
 		getTxtNroFactura().setText(factura.getNroFactura());
 		getPanTablaItemFactura().agregarElementos(factura.getItems());
 		if(modoConsulta) {
@@ -132,11 +133,20 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 			getTxtDescuento().setEditable(false);
 			getTxtImpVarios().setEditable(false);
 			getTxtPercepIVA().setEditable(false);
+			getTxtSubtotal().setEditable(false);
+			getTxtTotal().setEditable(false);
 			getPanelFecha().setEnabled(false);
 		}
-		updateTotales(getPanTablaItemFactura().getElementos());
+		List<ItemFacturaProveedor> itemFacturaList = getPanTablaItemFactura().getElementos();
+		Float factorMoneda = getFactorMoneda(itemFacturaList);
+		updateTablaImpuestos(itemFacturaList, factorMoneda);
+		updateTotales(itemFacturaList);
 	}
 
+	private String formatBigDecimal(BigDecimal value) {
+		return GenericUtils.getDecimalFormat3().format(value.floatValue());
+	}
+	
 	private void construct() {
 		setUpScreen();
 		setUpComponentes();
@@ -221,102 +231,108 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 
 	private double getValueInTextField(JTextField txt) {
 		String strValue = txt.getText().trim();
-		if (StringUtil.isNullOrEmpty(strValue) || !GenericUtils.esNumerico(strValue)) {
-			return 0D;
-		} else {
+		if (isValorDecimalValido(txt)) {
+			strValue = strValue.replaceAll(",", "");
 			return new Double(strValue.replace(',', '.')).doubleValue();
+		} else {
+			return 0D;
 		}
 	}
 
+	private boolean isValorDecimalValido(JTextField txt) {
+		String strValue = txt.getText().trim();
+		return !StringUtil.isNullOrEmpty(strValue) && GenericUtils.esNumerico(strValue);
+	}
+	
 	private FWJTextField getTxtPercepIVA() {
 		if (txtPercepIVA == null) {
 			txtPercepIVA = new FWJTextField();
-			txtPercepIVA.addFocusListener(new FocusAdapter() {
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					handleIngresoPercepIVA();
-				}
-
-			});
-			
-			txtPercepIVA.addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						handleIngresoPercepIVA();
-					}
-				}
-
-			});
-			
+			addKeyAndFocusLostAdapter(txtPercepIVA);
 		}
 		return txtPercepIVA;
 	}
 
-
-	protected void handleIngresoPercepIVA() {
-		String percepIVAStr = getTxtPercepIVA().getText();
-		if(!StringUtil.isNullOrEmpty(percepIVAStr)) {
-			if(GenericUtils.esNumerico(percepIVAStr)) {
-				updateTotales(getPanTablaItemFactura().getElementos());
-			} else {
-				GuiUtil.showTooltipText(getTxtPercepIVA(), "El texto debe ser numérico.");
-			}
-		}
-		updateTotales(getPanTablaItemFactura().getElementos());
-	}
-
-	
 	private FWJTextField getTxtImpVarios() {
 		if (txtImpVarios == null) {
 			txtImpVarios = new FWJTextField();
-			txtImpVarios.addFocusListener(new FocusAdapter() {
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					handleIngresoImpVarios();
-				}
-
-			});
-			
-			txtImpVarios.addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						handleIngresoImpVarios();
-					}
-				}
-
-			});
-
-			
+			addKeyAndFocusLostAdapter(txtImpVarios);
 		}
 		return txtImpVarios;
 	}
 
-	protected void handleIngresoImpVarios() {
-		String impVariosStr = getTxtImpVarios().getText();
-		if(!StringUtil.isNullOrEmpty(impVariosStr)) {
-			if(GenericUtils.esNumerico(impVariosStr)) {
-				updateTotales(getPanTablaItemFactura().getElementos());
-			} else {
-				GuiUtil.showTooltipText(getTxtImpVarios(), "El texto debe ser numérico.");
+	private void handleIngresoTextNumerico(FWJTextField txt) {
+		String valor = txt.getText();
+		if(!StringUtil.isNullOrEmpty(valor)) {
+			if(!GenericUtils.esNumerico(valor)) {
+				GuiUtil.showTooltipText(txt, "El texto debe ser numérico.");
 			}
 		}
-		updateTotales(getPanTablaItemFactura().getElementos());
+	}
+	
+	private void addKeyAndFocusLostAdapter(final FWJTextField txt) {
+		txt.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				handleIngresoTextNumerico(txt);
+			}
+
+		});
+
+		txt.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					handleIngresoTextNumerico(txt);
+				}
+			}
+
+		});
+	}
+
+	
+	private void handleIngresoTextNumericoAndUpdateTotales(FWJTextField txt) {
+		String valor = txt.getText();
+		if(!StringUtil.isNullOrEmpty(valor)) {
+			if(!GenericUtils.esNumerico(valor)) {
+				GuiUtil.showTooltipText(txt, "El texto debe ser numérico.");
+			} else {
+				updateTotales(getPanTablaItemFactura().getElementos());
+			}
+		}
+	}
+
+	private void addKeyAndFocusLostAdapterWithUpdateTotales(final FWJTextField txt) {
+		txt.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				handleIngresoTextNumericoAndUpdateTotales(txt);
+			}
+
+		});
+
+		txt.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					handleIngresoTextNumericoAndUpdateTotales(txt);
+				}
+			}
+
+		});
 	}
 
 	private JTextField getTxtTotal() {
 		if(txtTotal == null) {
-			txtTotal = new JTextField();
-			txtTotal.setEditable(false);
+			txtTotal = new FWJTextField();
+			addKeyAndFocusLostAdapterWithUpdateTotales(txtTotal);
 		}
 		return txtTotal;
 	}
-	
+
 	private JTextField getTxtTotalConFactor() {
 		if(txtTotalConFactor == null) {
 			txtTotalConFactor = new JTextField();
@@ -325,10 +341,10 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		return txtTotalConFactor;
 	}
 
-	private JTextField getTxtSubtotal() {
+	private FWJTextField getTxtSubtotal() {
 		if(txtSubtotal == null) {
-			txtSubtotal = new JTextField();
-			txtSubtotal.setEditable(false);
+			txtSubtotal = new FWJTextField();
+			addKeyAndFocusLostAdapterWithUpdateTotales(txtSubtotal);
 		}
 		return txtSubtotal;
 	}
@@ -473,6 +489,23 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		java.sql.Date fechaSQLEnGMT_3 = new java.sql.Date(fechaEnGMT_3.getTime());
 		factura.setFechaIngreso(fechaSQLEnGMT_3);
 		factura.setNroFactura(getTxtNroFactura().getText().trim());
+		
+		//totales
+		double subtotal = getValueInTextField(getTxtSubtotal());
+		factura.setMontoSubtotal(new BigDecimal(subtotal));
+		
+		double descuento = getValueInTextField(getTxtDescuento());
+		factura.setDescuento(new BigDecimal(descuento));
+		
+		double total = getValueInTextField(getTxtTotal());
+		factura.setMontoTotal(new BigDecimal(total));
+		factura.setMontoFaltantePorPagar(new BigDecimal(total));
+
+		double totalImpVarios = getValueInTextField(getTxtImpVarios());
+		factura.setImpVarios(new BigDecimal(totalImpVarios));
+
+		double totalPercepIVA = getValueInTextField(getTxtPercepIVA());
+		factura.setPercepIVA(new BigDecimal(totalPercepIVA));
 	}
 
 	private boolean validar() {
@@ -513,6 +546,45 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("Debe agregar al menos un servicio."), getTitle());
 			return false;
 		}
+		//valido completitud de los valores decimales
+		if(!isValorDecimalValido(getTxtSubtotal())) {
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El subtotal debe ser un número válido"), getTitle());
+			return false;
+		}
+		if(!isValorDecimalValido(getTxtDescuento())) {
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("Descuento debe ser un número válido"), getTitle());
+			return false;
+		}
+		if(!isValorDecimalValido(getTxtImpVarios())) {
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("Imp Varios debe ser un número válido"), getTitle());
+			return false;
+		}
+		if(!isValorDecimalValido(getTxtPercepIVA())) {
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("Percepción de Iva debe ser un número válido"), getTitle());
+			return false;
+		}
+		if(!isValorDecimalValido(getTxtTotal())) {
+			FWJOptionPane.showErrorMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El total debe ser un número válido"), getTitle());
+			return false;
+		}
+		//valido correctitud de subtotal, impuestos, total, etc..
+		List<ItemFacturaProveedor> itemFacturaList = getPanTablaItemFactura().getElementos();
+		Float factorMoneda = DocumentoProveedorHelper.getInstance().getFactorMoneda(itemFacturaList);
+		double subtotal = getValueInTextField(getTxtSubtotal());
+		double descuento = (getValueInTextField(getTxtDescuento())/100)*subtotal; 
+
+		double totalImpuestos = updateTablaImpuestos(itemFacturaList, factorMoneda);
+		totalImpuestos = Math.floor(totalImpuestos * 1000) / 1000d;//redondeo a tres decimales
+
+		double totalImpVarios = getValueInTextField(getTxtImpVarios());
+		double totalPercepIVA = getValueInTextField(getTxtPercepIVA());
+		double total = getValueInTextField(getTxtTotal());
+		if(total != (subtotal - descuento + totalImpuestos + totalImpVarios + totalPercepIVA)) {
+			if(FWJOptionPane.showQuestionMessage(JDialogCargarFacturaServicioProveedor.this, StringW.wordWrap("El subtotal, impuestos, descuento sumados no dan lo mismo que el total ¿Desea Continuar?"), getTitle()) == FWJOptionPane.NO_OPTION) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
@@ -536,7 +608,9 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 			panTablaItemFactura.addItemFacturaProveedorListener(new ItemFacturaProveedorEventListener() {
 
 				public void changeItemFactura(ItemFacturaProveedorEvent evt) {
-					updateTotales(evt.getItemFacturaList());
+					List<ItemFacturaProveedor> itemFacturaList = getPanTablaItemFactura().getElementos();
+					Float factorMoneda = DocumentoProveedorHelper.getInstance().getFactorMoneda(itemFacturaList);
+					updateTablaImpuestos(itemFacturaList, factorMoneda);
 				}
 
 			});
@@ -547,26 +621,15 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 	}
 
 	private void updateTotales(List<ItemFacturaProveedor> itemFacturaList) {
-		Float factorMoneda = getFactorMoneda(itemFacturaList);
-		double subtotal = updateSubtotal(itemFacturaList, factorMoneda);
-		double descuento = (getValueInTextField(getTxtDescuento())/100)*subtotal; 
-		double totalImpuestos = updateTablaImpuestos(itemFacturaList, factorMoneda);
-		double totalImpVarios = getValueInTextField(getTxtImpVarios());
-		double totalPercIVA = getValueInTextField(getTxtPercepIVA());
-		double total = subtotal - descuento + totalImpuestos + totalImpVarios + totalPercIVA;
-		getTxtTotal().setText(GenericUtils.getDecimalFormat().format(total));
-		if(factorMoneda == null || factorMoneda == 0f) {
+		Float factorMoneda = DocumentoProveedorHelper.getInstance().getFactorMoneda(itemFacturaList);
+		double total = getValueInTextField(getTxtTotal());
+		double subtotal = getValueInTextField(getTxtSubtotal());
+		if(factorMoneda == null || factorMoneda == 0f || factorMoneda == 1f) {
 			getTxtTotalConFactor().setText("");
+			getTxtSubtotalConFactor().setText("");
 		} else {
-			getTxtTotalConFactor().setText(GenericUtils.getDecimalFormat().format(total/factorMoneda));
-		}
-		if(!modoConsulta) {
-			factura.setDescuento(new BigDecimal(getValueInTextField(getTxtDescuento())));
-			factura.setMontoSubtotal(new BigDecimal(subtotal));
-			factura.setMontoTotal(new BigDecimal(total));
-			factura.setMontoFaltantePorPagar(new BigDecimal(total));
-			factura.setImpVarios(new BigDecimal(totalImpVarios));
-			factura.setPercepIVA(new BigDecimal(totalPercIVA));
+			getTxtSubtotalConFactor().setText(GenericUtils.getDecimalFormat3().format(subtotal/factorMoneda));
+			getTxtTotalConFactor().setText(GenericUtils.getDecimalFormat3().format(total/factorMoneda));
 		}
 	}
 
@@ -587,20 +650,6 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 			return null;
 		}
 		return factorSet.iterator().next();
-	}
-
-	private double updateSubtotal(List<ItemFacturaProveedor> itemFacturaList, Float factorMoneda) {
-		BigDecimal subtotal = new BigDecimal(0);
-		for(ItemFacturaProveedor ifp : itemFacturaList) {
-			subtotal = subtotal.add(ifp.getImporteSinImpuestos());
-		}
-		getTxtSubtotal().setText(GenericUtils.getDecimalFormat().format(subtotal.doubleValue()));
-		if(factorMoneda == null || factorMoneda == 0f) {
-			getTxtSubtotalConFactor().setText("");
-		} else {
-			getTxtSubtotalConFactor().setText(GenericUtils.getDecimalFormat().format(subtotal.doubleValue()/factorMoneda));
-		}
-		return subtotal.doubleValue();
 	}
 
 	private double updateTablaImpuestos(List<ItemFacturaProveedor> itemFacturaList, Float factorMoneda) {
@@ -627,11 +676,11 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		for(Entry<ImpuestoItemProveedor, Double> e : mapImpuestos.entrySet()) {
 			getTablaImpuestos().addRow();
 			getTablaImpuestos().setValueAt(e.getKey(), row, COL_NOMBRE_IMPUESTO);
-			getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat().format(e.getValue()), row, COL_VALOR_IMPUESTO);
-			if(factorMoneda == null || factorMoneda == 0f) {
+			getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat3().format(e.getValue()), row, COL_VALOR_IMPUESTO);
+			if(factorMoneda == null || factorMoneda == 0f || factorMoneda == 1f) {
 				getTablaImpuestos().setValueAt(null, row, COL_VALOR_IMPUESTO_CON_FACTOR);
 			} else {
-				getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat().format(e.getValue()/factorMoneda), row, COL_VALOR_IMPUESTO_CON_FACTOR);
+				getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat3().format(e.getValue()/factorMoneda), row, COL_VALOR_IMPUESTO_CON_FACTOR);
 			}
 			row ++;
 			total += e.getValue();
@@ -639,11 +688,11 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 		//fila del total
 		getTablaImpuestos().addRow();
 		getTablaImpuestos().setValueAt("TOTAL", row, COL_NOMBRE_IMPUESTO);
-		getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat().format(total), row, COL_VALOR_IMPUESTO);
-		if(factorMoneda == null || factorMoneda == 0f) {
+		getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat3().format(total), row, COL_VALOR_IMPUESTO);
+		if(factorMoneda == null || factorMoneda == 0f || factorMoneda == 1f) {
 			getTablaImpuestos().setValueAt(null, row, COL_VALOR_IMPUESTO_CON_FACTOR);
 		} else {
-			getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat().format(total/factorMoneda), row, COL_VALOR_IMPUESTO_CON_FACTOR);
+			getTablaImpuestos().setValueAt(GenericUtils.getDecimalFormat3().format(total/factorMoneda), row, COL_VALOR_IMPUESTO_CON_FACTOR);
 		}
 		getTablaImpuestos().setBackgroundRow(row, Color.YELLOW);
 		
@@ -704,7 +753,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 			row[COL_DESCRIPCION] = servicio.getNombre();
 			row[COL_FACTOR_MONEDA] = elemento.getFactorConversionMoneda().floatValue();
 			row[COL_PRECIO_UNITARIO] = elemento.getPrecioUnitario().floatValue();
-			row[COL_IMPORTE] = GenericUtils.getDecimalFormat().format(elemento.getImporte().floatValue());
+			row[COL_IMPORTE] = formatBigDecimal(elemento.getImporte());
 			row[COL_IMPUESTO] = StringUtil.getCadena(elemento.getImpuestos(), ", ");
 			row[COL_OBJ] = elemento;
 			getTabla().addRow(row);
@@ -736,7 +785,6 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 								descuento = 0f;
 							}
 							elemento.setPorcDescuento(new BigDecimal(descuento));
-							getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), row, COL_IMPORTE);
 							fireChangeItemFacturaEvent(getElementos());							
 						}
 						if(cell == COL_PRECIO_UNITARIO) {
@@ -746,7 +794,6 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 								precioUnitario = 0f;
 							}
 							elemento.setPrecioUnitario(new BigDecimal(precioUnitario));
-							getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), row, COL_IMPORTE);
 							fireChangeItemFacturaEvent(getElementos());				
 						}
 						if(cell == COL_FACTOR_MONEDA) {
@@ -756,7 +803,6 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 								factorMoneda = 0f;
 							}
 							elemento.setFactorConversionMoneda(new BigDecimal(factorMoneda));
-							getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), row, COL_IMPORTE);
 							fireChangeItemFacturaEvent(getElementos());				
 						}
 						if(cell == COL_CANTIDAD) {
@@ -766,7 +812,6 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 								cantidad = 0f;
 							}
 							elemento.setCantidad(new BigDecimal(cantidad));
-							getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), row, COL_IMPORTE);
 							fireChangeItemFacturaEvent(getElementos());				
 						}
 						if(cell == COL_DESCRIPCION) {
@@ -793,13 +838,13 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 
 			});
 
-			tabla.setFloatColumn(COL_CANTIDAD, "Cantidad", 0F, 1000F, 100, false);
+			tabla.setFloatColumn(COL_CANTIDAD, "Cantidad", 0F, 1000F, 60, false);
 			tabla.setStringColumn(COL_DESCRIPCION, "Descripcion", 280, 280, false);
 			tabla.setFloatColumn(COL_DESCUENTO, "Descuento (%)", 0F, 1000F, 80, false);
 			tabla.setFloatColumn(COL_PRECIO_UNITARIO, "Precio Unitario", 0F, Float.MAX_VALUE, 80, false);
 			tabla.setFloatColumn(COL_FACTOR_MONEDA, "Factor ($)", 0F, Float.MAX_VALUE, 60, false);
-			tabla.setStringColumn(COL_IMPORTE, "Importe Total", 70, 70, true);
-			tabla.setStringColumn(COL_IMPUESTO, "Impuestos", 200, 200, true);
+			tabla.setFloatColumn(COL_IMPORTE, "Importe Total", 0F, Float.MAX_VALUE, 60, false);
+			tabla.setStringColumn(COL_IMPUESTO, "Impuestos", 240, 240, true);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 
 			tabla.setReorderingAllowed(false);
@@ -884,7 +929,7 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 						int indexRows = 0;
 						for(ItemFacturaProveedor elemento : elementos) {
 							elemento.getImpuestos().addAll(impuestosSelectedResult);
-							getTabla().setValueAt(GenericUtils.getDecimalFormat().format(elemento.recalcularImporteTotal().floatValue()), selectedRows[indexRows], COL_IMPORTE);
+							getTabla().setValueAt(formatBigDecimal(elemento.recalcularImporteTotal()), selectedRows[indexRows], COL_IMPORTE);
 							getTabla().setValueAt(StringUtil.getCadena(elemento.getImpuestos(), ", "), selectedRows[indexRows], COL_IMPUESTO);
 							indexRows++;
 						}
@@ -947,47 +992,16 @@ public class JDialogCargarFacturaServicioProveedor extends JDialog {
 
 	private JTextField getTxtDescuento() {
 		if(txtDescuento == null) {
-			txtDescuento = new JTextField();
-			txtDescuento.addFocusListener(new FocusAdapter() {
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					handleIngresoDescuento();
-				}
-
-			});
-
-			txtDescuento.addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						handleIngresoDescuento();
-					}
-				}
-
-			});
-
+			txtDescuento = new FWJTextField();
+			addKeyAndFocusLostAdapter(txtDescuento);
 		}
 		return txtDescuento;
-	}
-
-	private void handleIngresoDescuento() {
-		String descStr = getTxtDescuento().getText();
-		if(!StringUtil.isNullOrEmpty(descStr)) {
-			if(GenericUtils.esNumerico(descStr)) {
-				updateTotales(getPanTablaItemFactura().getElementos());
-			} else {
-				GuiUtil.showTooltipText(getTxtDescuento(), "El texto debe ser numérico.");
-			}
-		}
-		updateTotales(getPanTablaItemFactura().getElementos());
 	}
 
 	private FWJTable getTablaImpuestos() {
 		if(tablaImpuestos == null) {
 			tablaImpuestos = new FWJTable(0, 3);
-			tablaImpuestos.setStringColumn(COL_NOMBRE_IMPUESTO, "IMPUESTO", 100);
+			tablaImpuestos.setStringColumn(COL_NOMBRE_IMPUESTO, "IMPUESTO", 190, 190, false);
 			tablaImpuestos.setStringColumn(COL_VALOR_IMPUESTO, "IMPORTE PESOS", 90);
 			tablaImpuestos.setStringColumn(COL_VALOR_IMPUESTO_CON_FACTOR, "IMPORTE DOLARES", 90);
 		}

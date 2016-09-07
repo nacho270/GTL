@@ -31,6 +31,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 	private Map<Integer, Color> mapaColores;
 	private final List<InfoSecondPass> rowsPagosSaldoAFavor;
 	private BigDecimal transporte;
+	private DecimalFormat df;
 
 	public GenerarFilaMovimientoVisitor(FWJTable tabla, Integer cantCols, BigDecimal transporte) {
 		this.tabla = tabla;
@@ -183,9 +184,11 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 	}
 
 	private DecimalFormat getDecimalFormat() {
-		DecimalFormat df = new DecimalFormat("#,###.00");
-		df.setMaximumFractionDigits(2);
-		df.setGroupingUsed(true);
+		if(df == null) {
+			df = new DecimalFormat("#,###.000");
+			df.setMaximumFractionDigits(3);
+			df.setGroupingUsed(true);
+		}
 		return df;
 	}
 
