@@ -52,6 +52,7 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Integer nroSucursal;
 	private Boolean entregado;
 	private Timestamp fechaHoraEntregado;
+	private String terminalEntrega;
 	
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
@@ -239,5 +240,14 @@ public class RemitoSalida extends Remito implements Serializable {
 
 	public void setFechaHoraEntregado(Timestamp fechaHoraEntregado) {
 		this.fechaHoraEntregado = fechaHoraEntregado;
+	}
+	
+	@Column(name = "A_TERMINAL_ENTREGA", nullable = true)
+	public String getTerminalEntrega() {
+		return terminalEntrega;
+	}
+
+	public void setTerminalEntrega(String terminalEntrega) {
+		this.terminalEntrega = terminalEntrega;
 	}
 }

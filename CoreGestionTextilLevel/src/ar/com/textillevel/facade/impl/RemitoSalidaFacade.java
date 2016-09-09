@@ -680,26 +680,28 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 	}
 
 	@Override
-	public void marcarEntregado(String numero) {
+	public void marcarEntregado(String numero, String nombreTerminal) {
 		RemitoSalida rs = remitoSalidaDAOLocal.getByNumero(numero);
 		if (rs == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
 		rs.setEntregado(true);
 		rs.setFechaHoraEntregado(DateUtil.getAhora());
-		auditoriaFacade.auditar("Terminal", "Marcar remito salida numero: " + numero + " como entregado",
+		rs.setTerminalEntrega(nombreTerminal);
+		auditoriaFacade.auditar(nombreTerminal, "Marcar remito salida numero: " + numero + " como entregado",
 				EnumTipoEvento.MODIFICACION, rs);
 	}
 
 	@Override
-	public void reingresar(String numero) {
+	public void reingresar(String numero, String nombreTerminal) {
 		RemitoSalida rs = remitoSalidaDAOLocal.getByNumero(numero);
 		if (rs == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
 		rs.setEntregado(null);
 		rs.setFechaHoraEntregado(null);
-		auditoriaFacade.auditar("Terminal", "Reingreso remito salida numero: " + numero, EnumTipoEvento.MODIFICACION, rs);
+		rs.setTerminalEntrega(null);
+		auditoriaFacade.auditar(nombreTerminal, "Reingreso remito salida numero: " + numero, EnumTipoEvento.MODIFICACION, rs);
 	}
 
 }

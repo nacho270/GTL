@@ -229,7 +229,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 
 		private static final long serialVersionUID = -2675346740708514360L;
 
-		private static final int CANT_COLS_TBL_MOVS = 10;
+		private static final int CANT_COLS_TBL_MOVS = 11;
 		private static final int COL_PAGOS = 0;
 		private static final int COL_DESCR = 1;
 		private static final int COL_DEBE = 2;
@@ -240,6 +240,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 		private static final int COL_USUARIO_VERIFICADOR = 7;
 		private static final int COL_USUARIO_CREADOR = 8;
 		private static final int COL_OBSERVACIONES = 9;
+		private static final int COL_ENTREGADA = 10;
 
 		@Override
 		protected void agregarElemento(MovimientoCuenta mov) {
@@ -273,6 +274,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			tabla.setStringColumn(COL_USUARIO_VERIFICADOR, "Usuario verficador", 100, 100, true);
 			tabla.setStringColumn(COL_USUARIO_CREADOR, "Usuario creador", 100, 100, true);
 			tabla.setStringColumn(COL_OBSERVACIONES, "Observaciones", 220, 320, true);
+			tabla.setStringColumn(COL_ENTREGADA, "Entregada", 200, 200, true);
 			tabla.setReorderingAllowed(false);
 			tabla.setHeaderAlignment(COL_PAGOS, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
@@ -283,6 +285,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			tabla.setHeaderAlignment(COL_USUARIO_VERIFICADOR, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_USUARIO_CREADOR, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_OBSERVACIONES, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ENTREGADA, FWJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_USUARIO_VERIFICADOR, FWJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_USUARIO_CREADOR, FWJTable.CENTER_ALIGN);
 			tabla.getColumnModel().getColumn(COL_PAGOS).setCellRenderer(getCellRenderer());

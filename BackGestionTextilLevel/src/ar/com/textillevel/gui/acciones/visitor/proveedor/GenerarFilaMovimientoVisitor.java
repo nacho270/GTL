@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebePersona;
@@ -101,6 +102,12 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 			row[6] = movimiento.getOrdenDePago().getEstadoOrden() == EEstadoOrdenDePago.VERIFICADO;
 			row[7] = movimiento.getOrdenDePago().getEstadoOrden() == EEstadoOrdenDePago.VERIFICADO ? movimiento.getOrdenDePago().getUsuarioConfirmacion() : "";
 			row[8] = movimiento.getOrdenDePago().getUsuarioCreador()!=null?movimiento.getOrdenDePago().getUsuarioCreador():"";
+			Boolean entregada = movimiento.getOrdenDePago().getEntregado();
+			if (entregada != null && entregada.equals(Boolean.TRUE)) {
+				row[10] = DateUtil.dateToString(movimiento.getOrdenDePago().getFechaHoraEntregada(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + movimiento.getOrdenDePago().getTerminalEntrega(); 
+			} else {
+				row[10] = "NO";
+			}
 		}else if(movimiento.getNotaCredito() != null){
 			Boolean verificada = movimiento.getNotaCredito().getVerificada();
 			if(verificada!= null && verificada == true ){

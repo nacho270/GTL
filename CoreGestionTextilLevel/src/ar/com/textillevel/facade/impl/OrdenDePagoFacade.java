@@ -187,25 +187,27 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 	}
 
 	@Override
-	public void marcarEntregada(String numero) {
+	public void marcarEntregada(String numero, String nombreTerminal) {
 		OrdenDePago odp = ordenDePagoDao.getByNumero(numero);
 		if (odp == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
 		odp.setEntregado(true);
 		odp.setFechaHoraEntregada(DateUtil.getAhora());
-		auditoriaFacade.auditar("Terminal", "Marcar orden de pago numero: " + numero + " como entregada",
+		odp.setTerminalEntrega(nombreTerminal);
+		auditoriaFacade.auditar(nombreTerminal, "Marcar orden de pago numero: " + numero + " como entregada",
 				EnumTipoEvento.MODIFICACION, odp);
 	}
 
 	@Override
-	public void reingresar(String numero) {
+	public void reingresar(String numero, String nombreTerminal) {
 		OrdenDePago odp = ordenDePagoDao.getByNumero(numero);
 		if (odp == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
 		odp.setEntregado(null);
 		odp.setFechaHoraEntregada(null);
-		auditoriaFacade.auditar("Terminal", "Reingreso orden de pago numero: " + numero, EnumTipoEvento.MODIFICACION, odp);
+		odp.setTerminalEntrega(nombreTerminal);
+		auditoriaFacade.auditar(nombreTerminal, "Reingreso orden de pago numero: " + numero, EnumTipoEvento.MODIFICACION, odp);
 	}
 }

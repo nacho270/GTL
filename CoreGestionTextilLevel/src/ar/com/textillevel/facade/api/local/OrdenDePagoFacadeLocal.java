@@ -8,6 +8,6 @@ import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 public interface OrdenDePagoFacadeLocal {
 	public OrdenDePago getByIdEager(Integer idODP);
 	public OrdenDePago getOrdenDePagoByNroOrdenEager(Integer nroOrden);
-	public void marcarEntregada(String numero);
-	public void reingresar(String numero);
+	public void marcarEntregada(String numero, String nombreTerminal);
+	public void reingresar(String numero, String nombreTerminal);
 }

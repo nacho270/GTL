@@ -25,7 +25,7 @@ public class TerminalService implements TerminalServiceRemote {
 	// URL: http://localhost:8080/GTL-gtlback-server/TerminalService?wsdl
 
 	@Override
-	public TerminalServiceResponse marcarEntregado(String codigo) {
+	public TerminalServiceResponse marcarEntregado(String codigo, String nombreTerminal) {
 		if (StringUtil.isNullOrEmpty(codigo)) {
 			return new TerminalServiceResponse(TerminalServiceError.CODIGO_NO_INGRESADO);
 		}
@@ -36,11 +36,11 @@ public class TerminalService implements TerminalServiceRemote {
 		try {
 			switch (etd) {
 				case ORDEN_PAGO: {
-					odpFacade.marcarEntregada(codigo.substring(4));
+					odpFacade.marcarEntregada(codigo.substring(4), nombreTerminal);
 					break;
 				}
 				case REMITO_SALIDA: {
-					rsFacade.marcarEntregado(codigo.substring(4));
+					rsFacade.marcarEntregado(codigo.substring(4), nombreTerminal);
 					break;
 				}
 				default: {
@@ -57,7 +57,7 @@ public class TerminalService implements TerminalServiceRemote {
 	}
 
 	@Override
-	public TerminalServiceResponse reingresar(String codigo) {
+	public TerminalServiceResponse reingresar(String codigo, String nombreTerminal) {
 		if (StringUtil.isNullOrEmpty(codigo)) {
 			return new TerminalServiceResponse(TerminalServiceError.CODIGO_NO_INGRESADO);
 		}
@@ -68,11 +68,11 @@ public class TerminalService implements TerminalServiceRemote {
 		try {
 			switch (etd) {
 				case ORDEN_PAGO: {
-					odpFacade.reingresar(codigo.substring(4));
+					odpFacade.reingresar(codigo.substring(4), nombreTerminal);
 					break;
 				}
 				case REMITO_SALIDA: {
-					rsFacade.reingresar(codigo.substring(4));
+					rsFacade.reingresar(codigo.substring(4), nombreTerminal);
 					break;
 				}
 				default: {

@@ -7,6 +7,6 @@ import ar.com.textillevel.webservices.terminal.impl.TerminalService.TerminalServ
 @Remote
 public interface TerminalServiceRemote {
 
-	public TerminalServiceResponse marcarEntregado(String codigo);
-	public TerminalServiceResponse reingresar(String codigo);
+	public TerminalServiceResponse marcarEntregado(String codigo, String nombreTerminal);
+	public TerminalServiceResponse reingresar(String codigo, String nombreTerminal);
 }

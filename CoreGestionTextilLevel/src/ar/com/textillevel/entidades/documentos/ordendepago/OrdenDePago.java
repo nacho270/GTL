@@ -44,6 +44,7 @@ public class OrdenDePago implements Serializable {
 	private String usuarioCreador;
 	private Boolean entregado;
 	private Timestamp fechaHoraEntregada;
+	private String terminalEntrega;
 	
 	public OrdenDePago(){
 		formasDePago = new ArrayList<FormaPagoOrdenDePago>();
@@ -195,6 +196,15 @@ public class OrdenDePago implements Serializable {
 		this.fechaHoraEntregada = fechaHoraEntregada;
 	}
 	
+	@Column(name = "A_TERMINAL_ENTREGA", nullable = true)
+	public String getTerminalEntrega() {
+		return terminalEntrega;
+	}
+
+	public void setTerminalEntrega(String terminalEntrega) {
+		this.terminalEntrega = terminalEntrega;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

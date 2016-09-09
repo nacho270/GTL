@@ -16,8 +16,8 @@ public interface RemitoSalidaFacadeLocal {
 	
 	public RemitoSalida getByIdConPiezasYProductos(Integer id);
 
-	public void marcarEntregado(String numero);
+	public void marcarEntregado(String numero, String nombreTerminal);
 
-	public void reingresar(String numero);
+	public void reingresar(String numero, String nombreTerminal);
 
 }
