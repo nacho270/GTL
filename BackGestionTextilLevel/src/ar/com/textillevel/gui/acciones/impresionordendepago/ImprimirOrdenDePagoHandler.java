@@ -32,6 +32,7 @@ import ar.com.textillevel.entidades.documentos.recibo.to.PagoTO;
 import ar.com.textillevel.entidades.documentos.recibo.to.TransferenciaBancariaTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
+import ar.com.textillevel.util.GestorTerminalBarcode;
 
 @SuppressWarnings("unused")
 public class ImprimirOrdenDePagoHandler {
@@ -243,7 +244,7 @@ public class ImprimirOrdenDePagoHandler {
 			params.put("IMPRIMIR_DATOS", !GenericUtils.isSistemaTest());
 			
 			try {
-				params.put("IMAGEN", GenericUtils.createBarCode(ETipoDocumento.ORDEN_PAGO.getPrefijoCodigoBarras() + nroOrden));
+				params.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.ORDEN_PAGO, nroOrden, GenericUtils.isSistemaTest())));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

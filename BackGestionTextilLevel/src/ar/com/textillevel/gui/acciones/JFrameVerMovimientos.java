@@ -245,7 +245,7 @@ public class JFrameVerMovimientos extends JFrame {
 
 		private static final long serialVersionUID = -2675346740708514360L;
 
-		private static final int CANT_COLS_TBL_MOVS = 9;
+		private static final int CANT_COLS_TBL_MOVS = 10;
 		private static final int COL_PAGOS = 0;
 		private static final int COL_DESCR = 1;
 		private static final int COL_DEBE = 2;
@@ -255,6 +255,7 @@ public class JFrameVerMovimientos extends JFrame {
 		private static final int COL_VERIFICADO = 6;
 		private static final int COL_USUARIO_VERIFICADOR = 7;
 		private static final int COL_OBSERVACIONES = 8;
+		private static final int COL_ENTREGADO = 9;
 
 		@Override
 		protected void agregarElemento(MovimientoCuenta mov) {
@@ -271,6 +272,7 @@ public class JFrameVerMovimientos extends JFrame {
 			row[COL_OBJ] = "";
 			row[COL_VERIFICADO] = false;
 			row[COL_USUARIO_VERIFICADOR] = "";
+			row[COL_ENTREGADO] = "<html><div style=\"padding:2px 0px;\">&nbsp;</div></html>";
 			getTabla().addRow(row);
 			getTabla().setForegroundCell(getTabla().getRowCount() - 1, COL_SALDO, transporteCuenta.doubleValue() > 0 ? Color.GREEN.darker() : transporteCuenta.doubleValue() < 0 ? Color.RED : Color.BLACK);
 		}
@@ -287,6 +289,7 @@ public class JFrameVerMovimientos extends JFrame {
 			tabla.setCheckColumn(COL_VERIFICADO, "Verificado", 60, true);
 			tabla.setStringColumn(COL_USUARIO_VERIFICADOR, "Usuario verficador", 100, 100, true);
 			tabla.setStringColumn(COL_OBSERVACIONES, "Observaciones", 160, 260, true);
+			tabla.setMultilineColumn(COL_ENTREGADO, "Entregado", 250, true, true);
 			tabla.setReorderingAllowed(false);
 			tabla.setHeaderAlignment(COL_PAGOS, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
@@ -296,6 +299,7 @@ public class JFrameVerMovimientos extends JFrame {
 			tabla.setHeaderAlignment(COL_VERIFICADO, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_USUARIO_VERIFICADOR, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_OBSERVACIONES, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ENTREGADO, FWJTable.CENTER_ALIGN);
 			tabla.setAlignment(COL_USUARIO_VERIFICADOR, FWJTable.CENTER_ALIGN);
 			tabla.getColumnModel().getColumn(COL_PAGOS).setCellRenderer(getCellRenderer());
 			consultaDocumentoMovimientoVisitor = new ConsultaDocumentoVisitor(JFrameVerMovimientos.this);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
@@ -19,6 +20,8 @@ import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberPersona;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoInternoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
+import ar.com.textillevel.entidades.documentos.factura.Factura;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
 import ar.com.textillevel.gui.acciones.InfoSecondPass;
@@ -100,9 +103,26 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue() * -1));
 		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
 		row[5] = movimiento;
+		StringBuilder sb = new StringBuilder();
+		sb.append("<html>");
 		if(((MovimientoDebe) movimiento).getFactura() != null){
 			row[6] = ((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA;
 			row[7] = (((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA) ? ((MovimientoDebe) movimiento).getFactura().getUsuarioConfirmacion() : "";
+			Factura f = ((MovimientoDebe) movimiento).getFactura();
+			for (RemitoSalida r : f.getRemitos()) {
+				sb.append("<div style=\"padding:2px 0px;\">");
+				boolean entregado = r.getEntregado() != null && r.getEntregado().equals(Boolean.TRUE);
+				sb.append(r.getNroRemito() + " - ");
+				if (entregado) {
+					sb.append(DateUtil.dateToString(r.getFechaHoraEntregado(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + r.getTerminalEntrega());
+				} else {
+					sb.append("NO");
+				}
+				sb.append("</div>");
+			}
+//			for (int i = 0; i<3; i++) {
+//				sb.append("<div style=\"padding:2px 0px;\">" +i + " - " + "SI - 08/09/2016 21:30:39 - Terminal local</div>");
+//			}
 		}else{
 			Boolean verificada = ((MovimientoDebe) movimiento).getNotaDebito().getVerificada();
 			if(verificada!=null && verificada == true){
@@ -112,8 +132,11 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 				row[6] = false;
 				row[7] = "";
 			}
+			sb.append("<div style=\"padding:2px 0px;\"></html>");
 		}
 		row[8] = movimiento.getObservaciones();
+		sb.append("</html>");
+		row[9] = sb.toString();
 		return row;
 	}
 
@@ -140,6 +163,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 			}
 		}
 		row[8] = movimiento.getObservaciones();
+		row[9] = "<html><div style=\"padding:2px 0px;\">&nbsp;</div></html>";
 		return row;
 	}
 

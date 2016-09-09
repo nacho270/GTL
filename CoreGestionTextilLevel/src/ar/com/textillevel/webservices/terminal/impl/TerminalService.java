@@ -10,6 +10,7 @@ import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.facade.api.local.OrdenDePagoFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoSalidaFacadeLocal;
+import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.webservices.terminal.api.remote.TerminalServiceRemote;
 
 @Stateless
@@ -29,18 +30,18 @@ public class TerminalService implements TerminalServiceRemote {
 		if (StringUtil.isNullOrEmpty(codigo)) {
 			return new TerminalServiceResponse(TerminalServiceError.CODIGO_NO_INGRESADO);
 		}
-		ETipoDocumento etd = ETipoDocumento.getByPrefijo(codigo.subSequence(0, 4).toString());
+		ETipoDocumento etd = GestorTerminalBarcode.getTipoDocumento(codigo);
 		if (etd == null) {
 			return new TerminalServiceResponse(TerminalServiceError.TIPO_DOC_RECONOCIDO);
 		}
 		try {
 			switch (etd) {
 				case ORDEN_PAGO: {
-					odpFacade.marcarEntregada(codigo.substring(4), nombreTerminal);
+					odpFacade.marcarEntregada(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
 					break;
 				}
 				case REMITO_SALIDA: {
-					rsFacade.marcarEntregado(codigo.substring(4), nombreTerminal);
+					rsFacade.marcarEntregado(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
 					break;
 				}
 				default: {
@@ -61,18 +62,18 @@ public class TerminalService implements TerminalServiceRemote {
 		if (StringUtil.isNullOrEmpty(codigo)) {
 			return new TerminalServiceResponse(TerminalServiceError.CODIGO_NO_INGRESADO);
 		}
-		ETipoDocumento etd = ETipoDocumento.getByPrefijo(codigo.subSequence(0, 4).toString());
+		ETipoDocumento etd = GestorTerminalBarcode.getTipoDocumento(codigo);
 		if (etd == null) {
 			return new TerminalServiceResponse(TerminalServiceError.TIPO_DOC_RECONOCIDO);
 		}
 		try {
 			switch (etd) {
 				case ORDEN_PAGO: {
-					odpFacade.reingresar(codigo.substring(4), nombreTerminal);
+					odpFacade.reingresar(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
 					break;
 				}
 				case REMITO_SALIDA: {
-					rsFacade.reingresar(codigo.substring(4), nombreTerminal);
+					rsFacade.reingresar(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
 					break;
 				}
 				default: {

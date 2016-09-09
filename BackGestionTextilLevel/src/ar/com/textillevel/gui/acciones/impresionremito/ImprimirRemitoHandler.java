@@ -34,6 +34,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.util.ODTCodigoHelper;
 
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -344,7 +345,7 @@ public class ImprimirRemitoHandler {
 			parameters.put("TOT_KILOS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
 			parameters.put("TOT_METROS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
 			try {
-				parameters.put("IMAGEN", GenericUtils.createBarCode(ETipoDocumento.REMITO_SALIDA.getPrefijoCodigoBarras() + remito.getNroRemito()));
+				parameters.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.REMITO_SALIDA, remito.getNroRemito(), GenericUtils.isSistemaTest())));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
