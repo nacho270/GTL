@@ -186,7 +186,6 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 		return ordenDePagoDao.getByIdEager(idODP);
 	}
 
-	@Override
 	public void marcarEntregada(String numero, String nombreTerminal) {
 		OrdenDePago odp = ordenDePagoDao.getByNumero(numero);
 		if (odp == null) {
@@ -199,7 +198,6 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 				EnumTipoEvento.MODIFICACION, odp);
 	}
 
-	@Override
 	public void reingresar(String numero, String nombreTerminal) {
 		OrdenDePago odp = ordenDePagoDao.getByNumero(numero);
 		if (odp == null) {

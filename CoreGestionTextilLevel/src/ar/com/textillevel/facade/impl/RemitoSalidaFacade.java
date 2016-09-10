@@ -679,7 +679,6 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		return remitoSalidaDAOLocal.getRemitosByNroRemitoConPiezasYProductos(nroRemito);
 	}
 
-	@Override
 	public void marcarEntregado(String numero, String nombreTerminal) {
 		RemitoSalida rs = remitoSalidaDAOLocal.getByNumero(numero);
 		if (rs == null) {
@@ -692,7 +691,6 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				EnumTipoEvento.MODIFICACION, rs);
 	}
 
-	@Override
 	public void reingresar(String numero, String nombreTerminal) {
 		RemitoSalida rs = remitoSalidaDAOLocal.getByNumero(numero);
 		if (rs == null) {

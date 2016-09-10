@@ -25,7 +25,6 @@ public class TerminalService implements TerminalServiceRemote {
 
 	// URL: http://localhost:8080/GTL-gtlback-server/TerminalService?wsdl
 
-	@Override
 	public TerminalServiceResponse marcarEntregado(String codigo, String nombreTerminal) {
 		if (StringUtil.isNullOrEmpty(codigo)) {
 			return new TerminalServiceResponse(TerminalServiceError.CODIGO_NO_INGRESADO);
@@ -57,7 +56,6 @@ public class TerminalService implements TerminalServiceRemote {
 		return new TerminalServiceResponse();
 	}
 
-	@Override
 	public TerminalServiceResponse reingresar(String codigo, String nombreTerminal) {
 		if (StringUtil.isNullOrEmpty(codigo)) {
 			return new TerminalServiceResponse(TerminalServiceError.CODIGO_NO_INGRESADO);
