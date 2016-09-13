@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -105,7 +106,8 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 
-	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
+//	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
+	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 4 : 53;
 
 	public JDialogAgregarRemitoSalida(Frame owner, RemitoSalida remitoSalida, boolean modoConsulta) {
 		super(owner);
@@ -434,7 +436,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 					if(validar()) {
 						RemitoSalida remitoSalida = capturarSetearDatos();
-						//Lógica de múltiples remitos
+						//Lógica de múltiples remitos	
 						if(remitoSalida.getPiezas().size() > CANT_PIEZAS_POR_REMITO_MAX) {
 							Integer nroRemito = remitoSalida.getNroRemito();
 							Integer cantRemitos = (int)Math.ceil(remitoSalida.getPiezas().size() / (double)CANT_PIEZAS_POR_REMITO_MAX);
@@ -469,7 +471,19 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 									return;
 								}
 
+								//si es la B => tengo que persistir el RE junto con las ODTs
+								HandlerOtroSistema handler = new HandlerOtroSistema();
+								if(GenericUtils.isSistemaTest()) {
+									handler.persistRemitos(remitosSalida);
+								}
+
 								List<RemitoSalida> remitosSalidaSaved = getRemitoSalidaFacade().save(remitosSalida, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+
+								//si es la B => borro el RE (desde la A) que se acaba de utilizar
+								if(GenericUtils.isSistemaTest()) {
+									handler.borarRemitos();
+								}
+
 								setRemitosSalida(remitosSalidaSaved);
 								setRemitoSalida(null);
 								BigDecimal toleranciaPorcentajeMerma = getParametrosGeneralesFacade().getParametrosGenerales().getPorcentajeToleranciaMermaNegativa();
@@ -505,44 +519,18 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 						remitoSalida.setPesoTotal(pesoTotal);
 
 						//si es la B => tengo que persistir el RE junto con las ODTs
-						Integer idRemitoREBorrar = null;
+						HandlerOtroSistema handler = new HandlerOtroSistema();
 						if(GenericUtils.isSistemaTest()) {
-							List<OrdenDeTrabajo> odtList = new ArrayList<OrdenDeTrabajo>(remitoSalida.getOdts());
-							RemitoEntrada remitoFromA = extractRemitoEntrada(remitoSalida.getOdts());
-							idRemitoREBorrar = remitoFromA.getId();
-							remitoFromA.setId(null);//provoca un insert en el método siguiente!
-							RemitoEntrada re = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class).saveWithTransiciones(remitoFromA, odtList, extractTransiciones(odtList), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-
-							odtList = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getOdtEagerByRemitoList(re.getId());
-							//esta parte sincroniza los objetos que ya están en estado persistent dentro del RS que está por grabarse
-							remitoSalida.getOdts().clear();
-							remitoSalida.getOdts().addAll(odtList);
-							for(PiezaRemito pr : remitoSalida.getPiezas()) {
-								if(pr.getPiezaEntrada() != null) {
-									pr.setPiezaEntrada(re.getPiezaByOrden(pr.getPiezaEntrada().getOrdenPieza())); //pieza padre del RE
-									List<PiezaODT> piezasPadrePersistentODT = new ArrayList<PiezaODT>();
-									for(PiezaODT pODT : pr.getPiezasPadreODT()) {
-										OrdenDeTrabajo odt = findODT(pODT.getOdt().getCodigo(), odtList);
-										piezasPadrePersistentODT.add(odt.getPiezaByPiezaPadreRE(pr.getPiezaEntrada()));
-									}
-									pr.getPiezasPadreODT().clear();
-									pr.getPiezasPadreODT().addAll(piezasPadrePersistentODT);
-								}
-							}
+							handler.persistRemitos(Collections.singletonList(remitoSalida));
 						}
 
 						//lógica de remito simple
 						calcularSetearMerma(remitoSalida);
 						RemitoSalida remitoSalidaSaved = getRemitoSalidaFacade().save(remitoSalida, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 
-						//si es la B => borro el RE (desde la A) que se acaba de utilizar (i.e. idRemitoREBorrar)
+						//si es la B => borro el RE (desde la A) que se acaba de utilizar
 						if(GenericUtils.isSistemaTest()) {
-							try {
-								remitoBusinessDelegate.borrarRemitoDeEntrada(idRemitoREBorrar);
-							} catch (RemoteException e1) {
-								FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(e1.getMessage()), "Erroor");
-								return;
-							}
+							handler.borarRemitos();
 						}
 
 						setRemitoSalida(remitoSalidaSaved);
@@ -565,17 +553,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 					} 
 				}
 
-				private List<TransicionODT> extractTransiciones(List<OrdenDeTrabajo> odtList) {
-					List<TransicionODT> transiciones  = new ArrayList<TransicionODT>();
-					Set<OrdenDeTrabajo> odtSet = new HashSet<OrdenDeTrabajo>(odtList);
-					for(OrdenDeTrabajo odt : odtSet) {
-						if(odt.getTransiciones() != null) {
-							transiciones.addAll(odt.getTransiciones());
-						}
-					}
-					return transiciones;
-				}
-
 			});
 		}
 		return btnAceptar;
@@ -590,19 +567,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		return null;
 	}
 
-	private RemitoEntrada extractRemitoEntrada(List<OrdenDeTrabajo> odts) {
-		List<RemitoEntrada> remitos = new ArrayList<RemitoEntrada>();
-		for(OrdenDeTrabajo odt : odts) {
-			if(odt.getRemito() != null) {
-				remitos.add(odt.getRemito());
-			}
-		}
-		if(remitos.isEmpty()) {
-			throw new IllegalArgumentException("Las ODTs recibidas no tienen remitos de entrada...");
-		}
-		return remitos.get(0);//devuelvo el primero
-	}
-
 	private List<RemitoSalida> calcularRemitosSalida(RemitoSalida rs, Integer cantRemitos) {
 		Integer nroRemito = rs.getNroRemito();
 		List<RemitoSalida> remitos = new ArrayList<RemitoSalida>();
@@ -610,7 +574,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		rs.getPiezas().clear();
 		rs.getPiezas().addAll(new ArrayList<PiezaRemito>(piezas.subList(0, CANT_PIEZAS_POR_REMITO_MAX)));
 		//Creo los remitos y seteo los datos básicos
-		for(int i = 0; i < cantRemitos; i++) {
+		for(int i = 1; i < cantRemitos; i++) {
 			RemitoSalida rsNew = new RemitoSalida();
 			rsNew.setNroRemito(nroRemito + i);
 			rsNew.setNroOrden(i);
@@ -1176,6 +1140,149 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	
 	private void setRemitosSalida(List<RemitoSalida> remitosSalida) {
 		this.remitosSalida = remitosSalida;
+	}
+
+	private class HandlerOtroSistema {
+
+		private List<Integer> idsRemitoREBorrar;
+
+		public HandlerOtroSistema() {
+			this.idsRemitoREBorrar = new ArrayList<Integer>();
+		}
+
+		public void persistRemitos(List<RemitoSalida> remitosSalida) {
+			Map<RemitoEntradaWrapper, Set<OrdenDeTrabajo>> remitoODTMap = new HashMap<RemitoEntradaWrapper, Set<OrdenDeTrabajo>>();
+			//obtengo remitos para persistir 
+			for(RemitoSalida remitoSalida : remitosSalida) {
+				extractRemitoODTMap(remitoODTMap, remitoSalida.getOdts());
+				if(!remitoODTMap.keySet().isEmpty()) {//si hay remitos que persistir
+					for(RemitoEntradaWrapper remitoFromA : remitoODTMap.keySet()) {
+						Integer idRemitoREBorrar = remitoFromA.getRemito().getId();
+						remitoFromA.getRemito().setId(null);//provoca un insert en el método siguiente!
+						idsRemitoREBorrar.add(idRemitoREBorrar); //acumulo los remitos para borrarlos en el método borarRemitos
+					}
+				}
+			}
+
+			Set<OrdenDeTrabajo> odtPersistentSet = new HashSet<OrdenDeTrabajo>();
+			for(RemitoEntradaWrapper remitoFromA : remitoODTMap.keySet())  {
+				RemitoEntrada re = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class).saveWithTransiciones(remitoFromA.getRemito(), new ArrayList<OrdenDeTrabajo>(remitoODTMap.get(remitoFromA)), extractTransiciones(remitoODTMap.get(remitoFromA)), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+				odtPersistentSet.addAll(GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getOdtEagerByRemitoList(re.getId()));
+			}
+			
+			if(!remitoODTMap.keySet().isEmpty()) {//si hay remitos que persistir
+				for(RemitoSalida remitoSalida : remitosSalida) {
+					//esta parte sincroniza los objetos que ya están en estado persistent dentro del RS que está por grabarse
+					List<OrdenDeTrabajo> odtsByRS = new ArrayList<OrdenDeTrabajo>(remitoSalida.getOdts());
+					remitoSalida.getOdts().clear();
+					remitoSalida.getOdts().addAll(new ArrayList<OrdenDeTrabajo>(calcularODTsPersistent(odtsByRS, odtPersistentSet)));
+					for(PiezaRemito pr : remitoSalida.getPiezas()) {
+						if(pr.getPiezaEntrada() != null) {
+							List<PiezaODT> piezasPadrePersistentODT = new ArrayList<PiezaODT>();
+							OrdenDeTrabajo odt = null;
+							for(PiezaODT pODT : pr.getPiezasPadreODT()) {
+								odt = findODT(pODT.getOdt().getCodigo(), remitoSalida.getOdts());
+								piezasPadrePersistentODT.add(odt.getPiezaByPiezaPadreRE(pr.getPiezaEntrada()));
+							}
+							pr.setPiezaEntrada(odt.getRemito().getPiezaByOrden(pr.getPiezaEntrada().getOrdenPieza())); //pieza padre del RE
+							pr.getPiezasPadreODT().clear();
+							pr.getPiezasPadreODT().addAll(piezasPadrePersistentODT);//piezas padre ODT
+						}
+					}
+				}
+			}
+		}
+
+		private Set<OrdenDeTrabajo> calcularODTsPersistent(List<OrdenDeTrabajo> odtsByRS, Set<OrdenDeTrabajo> odtPersistentSet) {
+			Set<OrdenDeTrabajo> resultSet = new HashSet<OrdenDeTrabajo>();
+			for(OrdenDeTrabajo odtTransient : odtsByRS) {
+				OrdenDeTrabajo odtPersistent = null;
+				for(OrdenDeTrabajo odtPersistenIT : odtPersistentSet) {
+					if(odtTransient.getId() != null) {//al final no era transient => la agrego
+						odtPersistent = odtTransient;
+						break;
+					}
+					if(odtTransient.getCodigo().equals(odtPersistenIT.getCodigo())) {
+						odtPersistent = odtPersistenIT;
+						break;
+					}
+				}
+				if(odtPersistent != null) {
+					resultSet.add(odtPersistent);
+				}
+			}
+			return resultSet;
+		}
+
+		public void borarRemitos() {
+			for(Integer idRemitoREBorrar: idsRemitoREBorrar) {
+				try {
+					remitoBusinessDelegate.borrarRemitoDeEntrada(idRemitoREBorrar);
+				} catch (RemoteException e1) {
+					FWJOptionPane.showErrorMessage(JDialogAgregarRemitoSalida.this, StringW.wordWrap(e1.getMessage()), "Error");
+					return;
+				}
+			}
+		}
+
+		private List<TransicionODT> extractTransiciones(Set<OrdenDeTrabajo> odtList) {
+			List<TransicionODT> transiciones  = new ArrayList<TransicionODT>();
+			Set<OrdenDeTrabajo> odtSet = new HashSet<OrdenDeTrabajo>(odtList);
+			for(OrdenDeTrabajo odt : odtSet) {
+				if(odt.getTransiciones() != null) {
+					transiciones.addAll(odt.getTransiciones());
+				}
+			}
+			return transiciones;
+		}
+
+		private Map<RemitoEntradaWrapper, Set<OrdenDeTrabajo>> extractRemitoODTMap(Map<RemitoEntradaWrapper, Set<OrdenDeTrabajo>> remitosODTMap, List<OrdenDeTrabajo> odts) {
+			for(OrdenDeTrabajo odt : odts) {
+				if(odt.isNoLocal()) {
+					RemitoEntradaWrapper rew = new RemitoEntradaWrapper(odt.getRemito());
+					Set<OrdenDeTrabajo> odtSetByRemito = remitosODTMap.get(rew);
+					if(odtSetByRemito == null) {
+						odtSetByRemito = new HashSet<OrdenDeTrabajo>();
+						remitosODTMap.put(rew, odtSetByRemito);
+					}
+					odtSetByRemito.add(odt);
+				}
+			}
+			return remitosODTMap;
+		}
+
+	}
+
+	
+	private class RemitoEntradaWrapper {
+
+		private RemitoEntrada remito;
+
+		public RemitoEntradaWrapper(RemitoEntrada remito) {
+			this.remito = remito;
+		}
+
+		public RemitoEntrada getRemito() {
+			return remito;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			final RemitoEntradaWrapper other = (RemitoEntradaWrapper) obj;
+			if (getRemito() == null) {
+				if (other.getRemito() != null)
+					return false;
+			} else if (!getRemito().getNroRemito().equals(other.getRemito().getNroRemito()))
+				return false;
+			return true;
+		}
+
 	}
 
 }

@@ -14,6 +14,7 @@ public class DetallePiezaRemitoEntradaSinSalida implements Serializable {
 	private String producto;
 	private Integer cantPiezas;
 	private double metrosTotales;
+	private boolean noLocales;//es una marca para las ODTs que son obtenidas desde el Web Service
 
 	public DetallePiezaRemitoEntradaSinSalida() {
 
@@ -76,6 +77,14 @@ public class DetallePiezaRemitoEntradaSinSalida implements Serializable {
 		this.producto = producto;
 	}
 
+	public boolean isNoLocales() {
+		return noLocales;
+	}
+
+	public void setNoLocales(boolean noLocales) {
+		this.noLocales = noLocales;
+	}
+	
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		str.append(ODTCodigoHelper.getInstance().formatCodigo(codigoODT)).append(" - ")

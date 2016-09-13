@@ -30,16 +30,43 @@ public class RemitoEntradaBusinessDelegate {
 
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) throws RemoteException {
 		if(GenericUtils.isSistemaTest()) {
-			return getWSClient().getInfoPiezasEntradaSinSalidaByClient(idCliente);
+			List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = odtFacade.getInfoPiezasEntradaSinSalidaByClient(idCliente);
+			infoPiezas.addAll(marcarComoNoLocales(getWSClient().getInfoPiezasEntradaSinSalidaByClient(idCliente)));
+			return infoPiezas;
 		}
 		return odtFacade.getInfoPiezasEntradaSinSalidaByClient(idCliente);
 	}
 
-	public List<OrdenDeTrabajo> getODTByIdsEager(List<Integer> ids) throws RemoteException {
-		if(GenericUtils.isSistemaTest()) {
-			return getWSClient().getByIdsEager(ids);
+	private List<DetallePiezaRemitoEntradaSinSalida> marcarComoNoLocales(List<DetallePiezaRemitoEntradaSinSalida> infoPiezasEntradaSinSalidaByClient) {
+		for(DetallePiezaRemitoEntradaSinSalida d : infoPiezasEntradaSinSalidaByClient) {
+			d.setNoLocales(true);
 		}
-		return odtFacade.getByIdsEager(ids);
+		return infoPiezasEntradaSinSalidaByClient;
+	}
+
+	public List<OrdenDeTrabajo> getODTByIdsEager(List<DetallePiezaRemitoEntradaSinSalida> odtsInfo) throws RemoteException {
+		List<OrdenDeTrabajo> result = new ArrayList<OrdenDeTrabajo>();
+		List<Integer> idsODTsLocales = new ArrayList<Integer>();
+		List<Integer> idsODTsExternas = new ArrayList<Integer>();
+		for(DetallePiezaRemitoEntradaSinSalida dprss : odtsInfo) {
+			if(dprss.isNoLocales()) {
+				idsODTsExternas.add(dprss.getIdODT());
+			} else {
+				idsODTsLocales.add(dprss.getIdODT());
+			}
+		}
+		if(!idsODTsExternas.isEmpty()) {
+			result.addAll(marcarODTComoNoLocales(getWSClient().getByIdsEager(idsODTsExternas)));
+		}
+		result.addAll(odtFacade.getByIdsEager(idsODTsLocales));
+		return result;
+	}
+
+	private List<OrdenDeTrabajo> marcarODTComoNoLocales(List<OrdenDeTrabajo> odts) {
+		for(OrdenDeTrabajo odt : odts) {
+			odt.setNoLocal(true);
+		}
+		return odts;
 	}
 
 	private ODTServiceClient getWSClient() {
@@ -74,8 +101,11 @@ public class RemitoEntradaBusinessDelegate {
 
 		public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) throws RemoteException {
 			List<DetallePiezaRemitoEntradaSinSalida> lista = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
-			for(ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida d : service.getInfoPiezasEntradaSinSalidaByClient(idCliente)) {
-				lista.add(new DetallePiezaRemitoEntradaSinSalida(d.getNroRemito(), d.getIdODT(), d.getCodigoODT(), d.getProducto(), d.getCantPiezas(), d.getMetrosTotales()));
+			ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida[] infoPiezasEntradaSinSalidaByClient = service.getInfoPiezasEntradaSinSalidaByClient(idCliente);
+			if(infoPiezasEntradaSinSalidaByClient != null) {
+				for(ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida d : infoPiezasEntradaSinSalidaByClient) {
+					lista.add(new DetallePiezaRemitoEntradaSinSalida(d.getNroRemito(), d.getIdODT(), d.getCodigoODT(), d.getProducto(), d.getCantPiezas(), d.getMetrosTotales()));
+				}
 			}
 			return lista;
 		}

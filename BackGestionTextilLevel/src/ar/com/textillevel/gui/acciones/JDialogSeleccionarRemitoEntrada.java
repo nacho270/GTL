@@ -2,6 +2,7 @@ package ar.com.textillevel.gui.acciones;
 
 import static ar.com.textillevel.gui.util.GenericUtils.createGridBagConstraints;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -14,7 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -44,6 +44,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
 	private FWJTable tablaODTs;
+	private JPanel panReferenciaRemExternos;
 	private Cliente cliente;
 	private List<OrdenDeTrabajo> odtSelectedList;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
@@ -59,6 +60,9 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		setTitle("Seleccionar Órdenes de Trabajo");
 		construct();
 		llenarTablaODTs();
+		if(!GenericUtils.isSistemaTest()) {
+			getPanReferenciaRemitosExternos().setVisible(false);
+		}
 	}
 
 	private void llenarTablaODTs() {
@@ -73,7 +77,12 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 				mapaFilasRemito.put(row, ip.getNroRemito());
 				getTablaOdts().addRow();
 				getTablaOdts().setValueAt(ip.toString(), row, 0);
-				getTablaOdts().setValueAt(ip.getIdODT(), row, 1);
+				getTablaOdts().setValueAt(ip, row, 1);
+				
+				if(ip.isNoLocales()) {
+					getTablaOdts().setBackgroundCell(row, 0, Color.GREEN.darker());
+				}
+
 				row ++;
 			}
 		} catch (RemoteException e) {
@@ -97,8 +106,19 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			JScrollPane scrollPane = new JScrollPane(getTablaOdts());
 			scrollPane.setBorder(BorderFactory.createTitledBorder("Ordenes de Trabajo"));
 			panDetalle.add(scrollPane, createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 3, 1, 0, 1));
+			panDetalle.add(getPanReferenciaRemitosExternos(), createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
 		}
 		return panDetalle;
+	}
+
+	private JPanel getPanReferenciaRemitosExternos() {
+		if(panReferenciaRemExternos == null) {
+			panReferenciaRemExternos = new JPanel();
+			panReferenciaRemExternos.setLayout(new FlowLayout());
+			panReferenciaRemExternos.add(new JLabel("Remitos Externos"));
+			panReferenciaRemExternos.setBackground(Color.GREEN.darker());
+		}
+		return panReferenciaRemExternos;
 	}
 
 	private FWJTable getTablaOdts() {
@@ -172,7 +192,8 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 					for(int r : selectedRows) {
 						selectedRowsList.add(r);
 					}
-					List<Integer> ids = new ArrayList<Integer>();
+					List<DetallePiezaRemitoEntradaSinSalida> ids = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
+					/*
 					if(GenericUtils.isSistemaTest()) {
 						for(int row : selectedRows) {
 							Collection<Integer> idsRemitos = mapaFilasRemito.get(row);
@@ -186,8 +207,9 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 							}
 						}
 					}
+					*/
 					for(int selectedRow : selectedRows) {
-						ids.add((Integer)getTablaOdts().getValueAt(selectedRow, 1));
+						ids.add((DetallePiezaRemitoEntradaSinSalida)getTablaOdts().getValueAt(selectedRow, 1));
 					}
 					try {
 						odtSelectedList.addAll(remitoBusinessDelegate.getODTByIdsEager(ids));

@@ -52,6 +52,9 @@ public class OrdenDeTrabajo implements Serializable {
 	
 	private List<TransicionODT> transiciones;
 	
+	private boolean noLocal=false;
+	
+
 	public OrdenDeTrabajo() {
 		this.piezas = new ArrayList<PiezaODT>();
 		this.setEstadoODT(EEstadoODT.PENDIENTE); 
@@ -240,7 +243,7 @@ public class OrdenDeTrabajo implements Serializable {
 	@Transient
 	public PiezaODT getPiezaByPiezaPadreRE(PiezaRemito piezaEntrada) {
 		for(PiezaODT pODT : getPiezas()) {
-			if(pODT.getPiezaRemito().equals(piezaEntrada)) {
+			if(pODT.getPiezaRemito().getOrdenPieza().equals(piezaEntrada.getOrdenPieza())) {
 				return pODT;
 			}
 		}
@@ -254,6 +257,15 @@ public class OrdenDeTrabajo implements Serializable {
 
 	public void setTransiciones(List<TransicionODT> transiciones) {
 		this.transiciones = transiciones;
+	}
+
+	@Transient
+	public boolean isNoLocal() {
+		return noLocal;
+	}
+
+	public void setNoLocal(boolean noLocal) {
+		this.noLocal = noLocal;
 	}
 
 }
