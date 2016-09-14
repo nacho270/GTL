@@ -106,8 +106,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 
-//	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
-	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 4 : 53;
+	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
 
 	public JDialogAgregarRemitoSalida(Frame owner, RemitoSalida remitoSalida, boolean modoConsulta) {
 		super(owner);
