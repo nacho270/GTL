@@ -17,6 +17,8 @@ public class DetallePiezaRemitoEntradaSinSalida  implements java.io.Serializable
 
     private double metrosTotales;
 
+    private boolean noLocales;
+
     private java.lang.Integer nroRemito;
 
     private java.lang.String producto;
@@ -29,12 +31,14 @@ public class DetallePiezaRemitoEntradaSinSalida  implements java.io.Serializable
            java.lang.String codigoODT,
            java.lang.Integer idODT,
            double metrosTotales,
+           boolean noLocales,
            java.lang.Integer nroRemito,
            java.lang.String producto) {
            this.cantPiezas = cantPiezas;
            this.codigoODT = codigoODT;
            this.idODT = idODT;
            this.metrosTotales = metrosTotales;
+           this.noLocales = noLocales;
            this.nroRemito = nroRemito;
            this.producto = producto;
     }
@@ -121,6 +125,26 @@ public class DetallePiezaRemitoEntradaSinSalida  implements java.io.Serializable
 
 
     /**
+     * Gets the noLocales value for this DetallePiezaRemitoEntradaSinSalida.
+     * 
+     * @return noLocales
+     */
+    public boolean isNoLocales() {
+        return noLocales;
+    }
+
+
+    /**
+     * Sets the noLocales value for this DetallePiezaRemitoEntradaSinSalida.
+     * 
+     * @param noLocales
+     */
+    public void setNoLocales(boolean noLocales) {
+        this.noLocales = noLocales;
+    }
+
+
+    /**
      * Gets the nroRemito value for this DetallePiezaRemitoEntradaSinSalida.
      * 
      * @return nroRemito
@@ -181,6 +205,7 @@ public class DetallePiezaRemitoEntradaSinSalida  implements java.io.Serializable
              (this.idODT!=null &&
               this.idODT.equals(other.getIdODT()))) &&
             this.metrosTotales == other.getMetrosTotales() &&
+            this.noLocales == other.isNoLocales() &&
             ((this.nroRemito==null && other.getNroRemito()==null) || 
              (this.nroRemito!=null &&
               this.nroRemito.equals(other.getNroRemito()))) &&
@@ -208,6 +233,7 @@ public class DetallePiezaRemitoEntradaSinSalida  implements java.io.Serializable
             _hashCode += getIdODT().hashCode();
         }
         _hashCode += new Double(getMetrosTotales()).hashCode();
+        _hashCode += (isNoLocales() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getNroRemito() != null) {
             _hashCode += getNroRemito().hashCode();
         }
@@ -249,6 +275,12 @@ public class DetallePiezaRemitoEntradaSinSalida  implements java.io.Serializable
         elemField.setFieldName("metrosTotales");
         elemField.setXmlName(new javax.xml.namespace.QName("", "metrosTotales"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("noLocales");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "noLocales"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
