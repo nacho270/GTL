@@ -111,12 +111,14 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 			Factura f = ((MovimientoDebe) movimiento).getFactura();
 			for (RemitoSalida r : f.getRemitos()) {
 				sb.append("<div style=\"padding:2px 0px;\">");
-				boolean entregado = r.getEntregado() != null && r.getEntregado().equals(Boolean.TRUE);
+				Boolean entregado = r.getEntregado();
 				sb.append(r.getNroRemito() + " - ");
-				if (entregado) {
+				if (entregado == null) {
+					sb.append("NO");
+				} else if (entregado.equals(Boolean.TRUE)) {
 					sb.append(DateUtil.dateToString(r.getFechaHoraEntregado(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + r.getTerminalEntrega());
 				} else {
-					sb.append("NO");
+					sb.append("R - " + DateUtil.dateToString(r.getFechaHoraEntregado(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + r.getTerminalEntrega());
 				}
 				sb.append("</div>");
 			}
@@ -132,7 +134,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 				row[6] = false;
 				row[7] = "";
 			}
-			sb.append("<div style=\"padding:2px 0px;\"></html>");
+			sb.append("<div style=\"padding:2px 0px;\">&nbsp;</div>");
 		}
 		row[8] = movimiento.getObservaciones();
 		sb.append("</html>");

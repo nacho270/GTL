@@ -684,22 +684,25 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		if (rs == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
-		rs.setEntregado(true);
-		rs.setFechaHoraEntregado(DateUtil.getAhora());
-		rs.setTerminalEntrega(nombreTerminal);
-		auditoriaFacade.auditar(nombreTerminal, "Marcar remito salida numero: " + numero + " como entregado",
-				EnumTipoEvento.MODIFICACION, rs);
+		if (rs.getEntregado() == null || rs.getEntregado().equals(Boolean.FALSE)) {
+			rs.setEntregado(true);
+			rs.setFechaHoraEntregado(DateUtil.getAhora());
+			rs.setTerminalEntrega(nombreTerminal);
+			auditoriaFacade.auditar(nombreTerminal, "Marcar remito salida numero: " + numero + " como entregado", EnumTipoEvento.MODIFICACION, rs);
+		}
 	}
 
 	public void reingresar(String numero, String nombreTerminal) {
 		RemitoSalida rs = remitoSalidaDAOLocal.getByNumero(numero);
 		if (rs == null) {
-			throw new RuntimeException("Orden de pago no encontrada");
+			throw new RuntimeException("Remito de salida no encontrada");
 		}
-		rs.setEntregado(null);
-		rs.setFechaHoraEntregado(null);
-		rs.setTerminalEntrega(null);
-		auditoriaFacade.auditar(nombreTerminal, "Reingreso remito salida numero: " + numero, EnumTipoEvento.MODIFICACION, rs);
+		if (rs.getEntregado() != null && rs.getEntregado().equals(Boolean.TRUE)) {
+			rs.setEntregado(false);
+			rs.setFechaHoraEntregado(DateUtil.getAhora());
+			rs.setTerminalEntrega(nombreTerminal);
+			auditoriaFacade.auditar(nombreTerminal, "Reingreso remito salida numero: " + numero, EnumTipoEvento.MODIFICACION, rs);
+		}
 	}
 
 }

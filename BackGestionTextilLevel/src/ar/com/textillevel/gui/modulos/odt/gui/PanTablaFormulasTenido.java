@@ -211,7 +211,12 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 				FWJOptionPane.showErrorMessage(owner, "Ingreso incorrecto", "error");
 			} else {
 				ok = true;				
-				ImprimirODTHandler impHandler = new ImprimirODTHandler(getODTDummy(formula, Integer.valueOf(input)), owner, EFormaImpresionODT.RESUMEN_ARTIULOS);
+				OrdenDeTrabajo odtDummy = getODTDummy(formula, Integer.valueOf(input));
+				if (odtDummy == null) {
+					ok = true;
+					break;
+				}
+				ImprimirODTHandler impHandler = new ImprimirODTHandler(odtDummy, owner, EFormaImpresionODT.RESUMEN_ARTIULOS);
 				impHandler.imprimir();
 			}
 		} while(!ok);

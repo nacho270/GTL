@@ -48,7 +48,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import org.krysalis.barcode4j.impl.int2of5.Interleaved2Of5Bean;
+import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
 import ar.com.fwcommon.boss.BossIO;
@@ -435,12 +435,12 @@ public class GenericUtils {
 	}
 	
 	public static BufferedImage createBarCode(String barCode) throws IOException {
-		Interleaved2Of5Bean bean = new Interleaved2Of5Bean();
+		Code128Bean bean = new Code128Bean();
 		bean.setHeight(10d);
 		bean.doQuietZone(false);
 
 		OutputStream out = new java.io.FileOutputStream(new File(System.getProperty("java.io.tmpdir") + File.pathSeparator + "output.png"));
-		BitmapCanvasProvider provider = new BitmapCanvasProvider(out, "image/x-png",110, BufferedImage.TYPE_BYTE_GRAY, false, 0);
+		BitmapCanvasProvider provider = new BitmapCanvasProvider(out, "image/x-png",330, BufferedImage.TYPE_BYTE_GRAY, true, 0);
 		bean.generateBarcode(provider, barCode);
 
 		provider.finish();

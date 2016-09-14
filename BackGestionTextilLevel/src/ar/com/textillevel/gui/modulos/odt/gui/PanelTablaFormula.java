@@ -118,6 +118,9 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 			btnImprimir.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
+					if (getTabla().getSelectedRows() == null || getTabla().getSelectedRows().length == 0) {
+						return;
+					}
 					List<T> formulasSeleccionadas = new ArrayList<T>();
 					for(int i : getTabla().getSelectedRows()) {
 						T elemento = getElemento(i);

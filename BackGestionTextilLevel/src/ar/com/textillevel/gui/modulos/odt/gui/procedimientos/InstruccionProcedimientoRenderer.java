@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
 import ar.com.textillevel.entidades.ventas.materiaprima.MateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.anilina.Anilina;
@@ -287,18 +288,23 @@ public class InstruccionProcedimientoRenderer {
 //					html += "* " + proporcion + " - " + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion() + ": " + GenericUtils.getDecimalFormat3().format(mp.getCantidadExplotada()) + " " + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion() + "<br>";
 //				}else{
 				Float cantidadExplotada = mp.getCantidadExplotada();
+				EUnidad unidad = mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad();
+				String descripcion = unidad.getDescripcion();
+				if (cantidadExplotada < 1 && unidad == EUnidad.KILOS) {
+					descripcion = descripcion.replace("KG", "GR");
+				}
 				String prefijo = "*&nbsp;" + proporcion + "&nbsp;&nbsp;||&nbsp;&nbsp;";
 				String pad = "";
 				for (int i = 0; i<prefijo.length()/2;i++){
 					pad += "&nbsp;";
 				}
-				String cantidadExplotadaFormateada = "<span style='font-size:17px;'>" + GenericUtils.getDecimalFormat3().format(cantidadExplotada).replace(",", "</span>,<span style='font-size:15px; vertical-align: super;'>") + "</span>";
+				String cantidadExplotadaFormateada = "<span style='font-size:17px;'>" + GenericUtils.getDecimalFormat3().format(cantidadExplotada).replace(".", ",").replace(",", "</span>,<span style='font-size:15px; vertical-align: super;'>") + "</span>";
 				// formato: <span style='font-size:17px;'>PARTE ENTERA</span>,<sup style='font-size:15px;'>PARTE DECIMAL</sup>
 				html += prefijo + mp.getMateriaPrimaCantidadDesencadenante().getDescripcion()
 					 + appendAnilinasConMismoColorIndex("&nbsp;&nbsp;&nbsp;", mostrarOtrasMPConMismoColorIndex, (MateriaPrima)mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima()) 	
 					 + "<br>" + pad + "<b>"
 					 + cantidadExplotadaFormateada + " "
-					 + mp.getMateriaPrimaCantidadDesencadenante().getMateriaPrima().getUnidad().getDescripcion().replace("KG", "GR")
+					 + descripcion
 					 + "</b><br><br>";
 //				}
 			}

@@ -191,11 +191,13 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 		if (odp == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
-		odp.setEntregado(true);
-		odp.setFechaHoraEntregada(DateUtil.getAhora());
-		odp.setTerminalEntrega(nombreTerminal);
-		auditoriaFacade.auditar(nombreTerminal, "Marcar orden de pago numero: " + numero + " como entregada",
-				EnumTipoEvento.MODIFICACION, odp);
+		if (odp.getEntregado() == null || odp.getEntregado().equals(Boolean.FALSE)) {
+			odp.setEntregado(true);
+			odp.setFechaHoraEntregada(DateUtil.getAhora());
+			odp.setTerminalEntrega(nombreTerminal);
+			auditoriaFacade.auditar(nombreTerminal, "Marcar orden de pago numero: " + numero + " como entregada",
+					EnumTipoEvento.MODIFICACION, odp);
+		}
 	}
 
 	public void reingresar(String numero, String nombreTerminal) {
@@ -203,9 +205,11 @@ public class OrdenDePagoFacade implements OrdenDePagoFacadeRemote, OrdenDePagoFa
 		if (odp == null) {
 			throw new RuntimeException("Orden de pago no encontrada");
 		}
-		odp.setEntregado(null);
-		odp.setFechaHoraEntregada(null);
-		odp.setTerminalEntrega(nombreTerminal);
-		auditoriaFacade.auditar(nombreTerminal, "Reingreso orden de pago numero: " + numero, EnumTipoEvento.MODIFICACION, odp);
+		if (odp.getEntregado() != null && odp.getEntregado().equals(Boolean.TRUE)) {
+			odp.setEntregado(false);
+			odp.setFechaHoraEntregada(DateUtil.getAhora());
+			odp.setTerminalEntrega(nombreTerminal);
+			auditoriaFacade.auditar(nombreTerminal, "Reingreso orden de pago numero: " + numero, EnumTipoEvento.MODIFICACION, odp);
+		}
 	}
 }

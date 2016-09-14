@@ -103,10 +103,12 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 			row[7] = movimiento.getOrdenDePago().getEstadoOrden() == EEstadoOrdenDePago.VERIFICADO ? movimiento.getOrdenDePago().getUsuarioConfirmacion() : "";
 			row[8] = movimiento.getOrdenDePago().getUsuarioCreador()!=null?movimiento.getOrdenDePago().getUsuarioCreador():"";
 			Boolean entregada = movimiento.getOrdenDePago().getEntregado();
-			if (entregada != null && entregada.equals(Boolean.TRUE)) {
+			if (entregada == null) {
+				row[10] = "NO";
+			} else  if (entregada.equals(Boolean.TRUE)) {
 				row[10] = DateUtil.dateToString(movimiento.getOrdenDePago().getFechaHoraEntregada(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + movimiento.getOrdenDePago().getTerminalEntrega(); 
 			} else {
-				row[10] = "NO";
+				row[10] = "R - " + DateUtil.dateToString(movimiento.getOrdenDePago().getFechaHoraEntregada(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + movimiento.getOrdenDePago().getTerminalEntrega();
 			}
 		}else if(movimiento.getNotaCredito() != null){
 			Boolean verificada = movimiento.getNotaCredito().getVerificada();

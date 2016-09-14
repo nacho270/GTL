@@ -12,11 +12,11 @@ public class GestorTerminalBarcode {
 	}
 
 	public static ETipoDocumento getTipoDocumento(String codigo) {
-		return ETipoDocumento.getByPrefijo(codigo.substring(0, 4).toString());
+		return ETipoDocumento.getByPrefijo(codigo.substring(0, 3).toString());
 	}
 
 	public static String extraer(String codigo) {
 		int len = codigo.length();
-		return codigo.substring(4, len - 1);
+		return codigo.substring(3, len - 1);
 	}
 }
