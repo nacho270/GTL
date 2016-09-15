@@ -73,13 +73,19 @@ public class GrupoTipoArticuloGama extends GrupoTipoArticulo implements Serializ
 
 	@Transient
 	public Float getPrecio(ProductoArticulo productoArticulo) {
+		//primero busco en todas las gamas editadas
 		for(PrecioGama pc : getPrecios() ) {
 			if (pc.getGamaCliente() != null && pc.getGamaCliente().getColores().contains(productoArticulo.getColor())) {//la gama editada necesariamente se compara por color
 				return pc.getPrecio();
-			} else if (pc.getGamaDefault()!=null && pc.getGamaDefault().getId().equals(productoArticulo.getGamaColor().getId())) {
+			}
+		}
+		//No encontré el precio en las gamas editadas => busco en las defaults
+		for(PrecioGama pc : getPrecios() ) {
+			if(pc.getGamaDefault()!=null && pc.getGamaDefault().getId().equals(productoArticulo.getGamaColor().getId())) {
 				return pc.getPrecio();
 			}
 		}
+		//No lo encontré en ninguna => devuelvo null
 		return null;
 	}
 
