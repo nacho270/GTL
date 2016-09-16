@@ -19,6 +19,7 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.entidades.Modulo;
 import ar.com.fwcommon.templates.main.config.IConfigClienteManager;
+import ar.com.fwcommon.templates.main.login.EmptyLoginManager;
 import ar.com.fwcommon.templates.main.login.FWLoginManager;
 import ar.com.fwcommon.templates.main.menu.ManejadorMenues;
 import ar.com.fwcommon.templates.main.menu.MenuModulosSimple;
@@ -88,6 +89,10 @@ public abstract class FWMainTemplate<T extends FWLoginManager, V extends IConfig
 	 */
 	@Override
 	protected void postLogin() throws FWException {
+		if(loginManager instanceof EmptyLoginManager) {
+			agregarModulos();
+			return;
+		}
 		try {
 			//Se carga la lista de módulos de usuario
 			List<Modulo> modulosUsuario = loginManager.getModulosUsuario();

@@ -31,6 +31,7 @@ import ar.com.fwcommon.componentes.MenuVentana;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.GuiForm;
 import ar.com.fwcommon.templates.main.login.DialogoLogin;
+import ar.com.fwcommon.templates.main.login.EmptyLoginManager;
 import ar.com.fwcommon.templates.main.login.ILoginManager;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.ImageUtil;
@@ -157,6 +158,18 @@ public abstract class AbstractMainTemplate<T extends ILoginManager> extends JFra
 	 * principal.
 	 */
 	protected void verDialogoLogin() {
+		loginManager = crearLoginManager();
+		if (loginManager instanceof EmptyLoginManager) {
+			try {
+				intentosFallidosLogin = 0;
+				habilitarMenu(true);
+				postLogin();
+			} catch(FWException e) {
+				BossError.gestionarError(e);
+			}
+			return;
+		}
+		
 		habilitarMenu(false);
 		if(dialogoLogin == null) {
 			dialogoLogin = new DialogoLogin(this, System.getProperty("usuario"));
