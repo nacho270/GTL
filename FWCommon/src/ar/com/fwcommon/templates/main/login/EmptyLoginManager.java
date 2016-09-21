@@ -12,14 +12,15 @@ public class EmptyLoginManager extends FWLoginManager {
 		super(idAplicacion);
 	}
 
-	@Override
 	public boolean login(String usuario, String password) throws FWException {
 		return true;
 	}
 
 	@Override
 	public List<Modulo> getModulosUsuario() throws FWException {
-		return new ArrayList<Modulo>();
+		List<Modulo> modulos = new ArrayList<Modulo>();
+		modulos.add(new Modulo(1, "Lector", "main.acciones.VerLectorRemitoEntradaClienteAction", -1, true));
+		return modulos;
 	}
 
 	@Override
