@@ -463,7 +463,6 @@ public abstract class AbstractMainTemplate<T extends ILoginManager> extends JFra
 				UIDefaults map = new UIDefaults();
 				Painter<JComponent> painter = new Painter<JComponent>() {
 					
-					@Override
 					public void paint(Graphics2D g, JComponent object, int width, int height) {
 						g.setColor(Color.white);
 						g.fillRect(0, 0, width, height);

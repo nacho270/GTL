@@ -1,12 +1,11 @@
 package ar.com.fwcommon.templates.main.login;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.entidades.Modulo;
 
-public class EmptyLoginManager extends FWLoginManager {
+public abstract class EmptyLoginManager extends FWLoginManager {
 
 	public EmptyLoginManager(int idAplicacion) {
 		super(idAplicacion);
@@ -17,11 +16,7 @@ public class EmptyLoginManager extends FWLoginManager {
 	}
 
 	@Override
-	public List<Modulo> getModulosUsuario() throws FWException {
-		List<Modulo> modulos = new ArrayList<Modulo>();
-		modulos.add(new Modulo(1, "Lector", "main.acciones.VerLectorRemitoEntradaClienteAction", -1, true));
-		return modulos;
-	}
+	public abstract List<Modulo> getModulosUsuario() throws FWException;
 
 	@Override
 	public List<Modulo> getModulosAplicacion() throws FWException {
