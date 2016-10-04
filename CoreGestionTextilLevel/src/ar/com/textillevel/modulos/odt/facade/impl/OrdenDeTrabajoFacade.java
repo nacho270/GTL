@@ -379,4 +379,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		}
 		return odtRet;
 	}
+
+	public OrdenDeTrabajo getODTEagerByCodigo(String codigo) {
+		return odtDAO.getODTEagerByCodigo(codigo);
+	}
+
 }

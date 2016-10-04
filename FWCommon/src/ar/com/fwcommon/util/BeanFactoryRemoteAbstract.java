@@ -1,5 +1,7 @@
 package ar.com.fwcommon.util;
 
+import java.util.Properties;
+
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ public class BeanFactoryRemoteAbstract extends BeanFactoryAbstract {
 		this(null);
 	}
 	protected BeanFactoryRemoteAbstract(String defaultAppName) throws FWException {
+		super();
 		setApplicationName( System.getProperty("applicationName") );
 		if (getApplicationName() == null) {
 			if (StringUtil.isNullOrEmpty(defaultAppName))
@@ -26,6 +29,19 @@ public class BeanFactoryRemoteAbstract extends BeanFactoryAbstract {
 		}
 	}	
 	
+	protected BeanFactoryRemoteAbstract(String defaultAppName, Properties properties) throws FWException {
+		super(properties);
+		setApplicationName( System.getProperty("applicationName") );
+		if (getApplicationName() == null) {
+			if (StringUtil.isNullOrEmpty(defaultAppName))
+				throw new FWException("No se pudo determinar a que aplicación acceder") ;
+			else
+				setApplicationName(defaultAppName);
+		}
+		if (!getApplicationName().endsWith("/")) {
+			setApplicationName( getApplicationName() + "/" );
+		}
+	}	
 	
 
 	protected void addJndiName(Class<?> interfaceRemota) throws FWException {

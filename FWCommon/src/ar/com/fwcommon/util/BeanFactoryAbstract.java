@@ -2,6 +2,7 @@ package ar.com.fwcommon.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,12 +12,20 @@ import ar.com.fwcommon.componentes.error.FWRuntimeException;
 
 public abstract class BeanFactoryAbstract {
 
+	private Properties properties;
 	private static InitialContext initialContext ;
 	private Map<Class<?>, String> jndiNames = new HashMap<Class<?>, String>() ;
 	private Map<Class<?>, Object> beanCache = new HashMap<Class<?>, Object>() ;
 
 	private String applicationName ;
+
+	protected BeanFactoryAbstract() {
+	}
 	
+	protected BeanFactoryAbstract(Properties properties) {
+		this.properties = properties;
+	}
+
 	protected String getApplicationName(){
 		return applicationName;
 	}
@@ -66,7 +75,11 @@ public abstract class BeanFactoryAbstract {
 	public synchronized InitialContext getInitialContext() throws FWException {
 		if (initialContext == null) {
 			try {
-				initialContext = new InitialContext();
+				if(properties == null) {
+					initialContext = new InitialContext();
+				} else {
+					initialContext = new InitialContext(properties);
+				}
 			} catch (NamingException e) {
 				e.printStackTrace();
 				throw new FWException("No se pudo crear un contexto inicial para acceder al Servidor de aplicaciones", e) ;

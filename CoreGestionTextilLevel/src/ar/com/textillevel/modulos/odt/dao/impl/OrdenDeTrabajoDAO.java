@@ -383,4 +383,22 @@ delete from t_procedimiento_odt;
 	public void flush() {
 		getEntityManager().flush();
 	}
+
+	@Override
+	public OrdenDeTrabajo getODTEagerByCodigo(String codigo) {
+		Query query = getEntityManager().createQuery(" SELECT odt " +
+													 " FROM OrdenDeTrabajo odt " +
+													 " WHERE odt.codigo = :codigo");
+		query.setParameter("codigo", codigo);
+		List<OrdenDeTrabajo> resultList = query.getResultList();
+		if(resultList.isEmpty()) {
+			return null;
+		} else if(resultList.size() > 1) {
+			throw new IllegalArgumentException("Existe más de una ODT con código " + codigo);
+		} else {
+			OrdenDeTrabajo odt = resultList.get(0);
+			getByIdEager(odt.getId());
+			return odt;
+		}
+	}
 }

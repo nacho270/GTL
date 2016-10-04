@@ -51,4 +51,7 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 	public void borrarSecuencia(OrdenDeTrabajo ordenDeTrabajo);
 
 	public void flush();
+	
+	public OrdenDeTrabajo getODTEagerByCodigo(String codigo);
+
 }

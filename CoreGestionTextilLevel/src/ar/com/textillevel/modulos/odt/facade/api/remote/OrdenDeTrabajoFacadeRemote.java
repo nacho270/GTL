@@ -64,4 +64,5 @@ public interface OrdenDeTrabajoFacadeRemote {
 
 	public OrdenDeTrabajo grabarODTYDescontarStock(OrdenDeTrabajo odt, Set<InfoBajaStock> infoStock, UsuarioSistema usuarioSistema);
 	public OrdenDeTrabajo actualizarODTYStock(OrdenDeTrabajo odt, Set<InfoBajaStock> infoStock, UsuarioSistema usuarioSistema);
+	public OrdenDeTrabajo getODTEagerByCodigo(String codigo);
 }
