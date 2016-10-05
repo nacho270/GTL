@@ -247,6 +247,7 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 		odt.setSecuenciaDeTrabajo(secuencia);
 
 		ProductoArticulo pa = new ProductoArticulo();
+		pa.setColor(formula.getColor());
 		ProductoTenido p = new ProductoTenido();
 		pa.setProducto(p);
 

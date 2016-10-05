@@ -8,6 +8,7 @@
 	<parameter name="RESUMEN_POLIESTER" class="java.lang.String"/>
 	<parameter name="NRO_CLIENTE" class="java.lang.String"/>
 	<parameter name="KILOS" class="java.lang.String"/>
+	<parameter name="COLOR" class="java.lang.String"/>
 	<title>
 		<band height="50">
 			<staticText>
@@ -20,9 +21,9 @@
 		</band>
 	</title>
 	<detail>
-		<band height="88" splitType="Stretch">
+		<band height="104" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="155" y="64" width="163" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="155" y="80" width="163" height="20"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -36,7 +37,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_POLIESTER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="64" width="144" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="80" width="144" height="20"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -50,7 +51,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="336" y="64" width="151" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="336" y="80" width="151" height="20"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -64,7 +65,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_ALGODON}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="155" y="37" width="163" height="20"/>
+				<reportElement x="155" y="53" width="163" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -78,7 +79,7 @@
 				<text><![CDATA[POLIESTER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="37" width="144" height="20"/>
+				<reportElement x="0" y="53" width="144" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -92,7 +93,7 @@
 				<text><![CDATA[QUIMICOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="336" y="37" width="151" height="20"/>
+				<reportElement x="336" y="53" width="151" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -133,6 +134,20 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="149" y="27" width="162" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{COLOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="27" width="144" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COLOR:]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
