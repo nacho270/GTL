@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 
@@ -30,7 +29,8 @@ public class PiezaODT implements Serializable {
 	private OrdenDeTrabajo odt;
 	private Integer nroPiezaStockInicial; //Es solo relevante para las piezas que se generan a partir del descuento del stock inicial
 	private BigDecimal metrosStockInicial; //Es solo relevante para las piezas que se generan a partir del descuento del stock inicial. 
-										  //son los metros que se descontaron del stock inicial. En el caso normal se toman de la piezaRemito de entrada. 
+										  //son los metros que se descontaron del stock inicial. En el caso normal se toman de la piezaRemito de entrada.
+	private BigDecimal metros;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -90,13 +90,13 @@ public class PiezaODT implements Serializable {
 		this.metrosStockInicial = metrosStockInicial;
 	}
 
-	@Transient
+	@Column(name="A_METROS", nullable=true)
 	public BigDecimal getMetros() {
-		if(getPiezaRemito() == null) {
-			return getMetrosStockInicial();
-		} else {
-			return getPiezaRemito().getMetros();
-		}
+		return metros;
+	}
+
+	public void setMetros(BigDecimal metros) {
+		this.metros = metros;
 	}
 
 }

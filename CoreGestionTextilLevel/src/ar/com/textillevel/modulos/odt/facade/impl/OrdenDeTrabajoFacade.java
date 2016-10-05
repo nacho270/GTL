@@ -384,4 +384,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		return odtDAO.getODTEagerByCodigo(codigo);
 	}
 
+	public OrdenDeTrabajo grabarPiezasODT(OrdenDeTrabajo odt) {
+		return odtDAO.save(odt);
+	}
+
 }
