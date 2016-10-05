@@ -257,6 +257,11 @@ public class ImprimirRemitoHandler {
 			parameters.put("TOT_PIEZAS", "TOTAL PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size()))+")");
 			parameters.put("TOT_KILOS", "TOTAL KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
 			parameters.put("TOT_METROS", "TOTAL METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			try {
+				parameters.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.REMITO_SALIDA, remito.getNroRemito(), GenericUtils.isSistemaTest())));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		public Map getParameters() {
