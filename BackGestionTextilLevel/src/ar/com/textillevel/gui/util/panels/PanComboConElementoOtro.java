@@ -1,5 +1,6 @@
 package ar.com.textillevel.gui.util.panels;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,13 +11,13 @@ import java.util.EventListener;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
 import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWComboExpandible;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 
@@ -25,7 +26,7 @@ public abstract class PanComboConElementoOtro<T> extends JPanel {
 	private static final long serialVersionUID = -5227003402308737323L;
 
 	private JButton btnModificar;
-	private JComboBox cmbItems;
+	private FWComboExpandible cmbItems;
 	private String lblCombo;
 	private List<T> items;
 	private T itemOtro;
@@ -115,9 +116,10 @@ public abstract class PanComboConElementoOtro<T> extends JPanel {
 	protected void itemDistintoOtroSelected(T itemSelected) {
 	}
 
-	private JComboBox getCmbItems() {
+	private FWComboExpandible getCmbItems() {
 		if(cmbItems == null) {
-			cmbItems = new JComboBox();
+			cmbItems = new FWComboExpandible();
+			cmbItems.setPreferredSize(new Dimension(300, 20));
 		}
 		return cmbItems;
 	}

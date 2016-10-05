@@ -208,7 +208,7 @@ public class OrdenDeTrabajo implements Serializable {
 	public BigDecimal getTotalMetros() {
 		BigDecimal totalMetros = new BigDecimal(0);
 		for (PiezaODT pieza : getPiezas()) {
-			totalMetros = totalMetros.add(pieza.getMetros());
+			totalMetros = totalMetros.add(pieza.getMetros() == null ? BigDecimal.ZERO : pieza.getMetros());
 		}
 		return totalMetros;
 	}
