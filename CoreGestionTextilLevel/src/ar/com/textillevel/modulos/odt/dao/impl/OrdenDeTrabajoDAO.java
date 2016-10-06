@@ -384,7 +384,6 @@ delete from t_procedimiento_odt;
 		getEntityManager().flush();
 	}
 
-	@Override
 	public OrdenDeTrabajo getODTEagerByCodigo(String codigo) {
 		Query query = getEntityManager().createQuery(" SELECT odt " +
 													 " FROM OrdenDeTrabajo odt " +
