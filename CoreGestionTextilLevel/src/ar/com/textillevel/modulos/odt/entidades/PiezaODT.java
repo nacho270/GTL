@@ -32,6 +32,7 @@ public class PiezaODT implements Serializable {
 	private BigDecimal metrosStockInicial; //Es solo relevante para las piezas que se generan a partir del descuento del stock inicial. 
 										  //son los metros que se descontaron del stock inicial. En el caso normal se toman de la piezaRemito de entrada.
 	private BigDecimal metros;
+	private Integer ordenSubpieza;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -107,6 +108,55 @@ public class PiezaODT implements Serializable {
 
 	public void setMetros(BigDecimal metros) {
 		this.metros = metros;
+	}
+
+	@Column(name="A_ORDEN_SUBPIEZA", nullable=true)
+	public Integer getOrdenSubpieza() {
+		return ordenSubpieza;
+	}
+
+	public void setOrdenSubpieza(Integer ordenSubpieza) {
+		this.ordenSubpieza = ordenSubpieza;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((metros == null) ? 0 : metros.hashCode());
+		result = prime * result
+				+ ((ordenSubpieza == null) ? 0 : ordenSubpieza.hashCode());
+		result = prime * result
+				+ ((piezaRemito == null) ? 0 : piezaRemito.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PiezaODT other = (PiezaODT) obj;
+		if (metros == null) {
+			if (other.metros != null)
+				return false;
+		} else if (!metros.equals(other.metros))
+			return false;
+		if (ordenSubpieza == null) {
+			if (other.ordenSubpieza != null)
+				return false;
+		} else if (!ordenSubpieza.equals(other.ordenSubpieza))
+			return false;
+		if (piezaRemito == null) {
+			if (other.piezaRemito != null)
+				return false;
+		} else if (!piezaRemito.equals(other.piezaRemito))
+			return false;
+		return true;
 	}
 
 }
