@@ -24,6 +24,7 @@ public class PiezaODT implements Serializable {
 	private static final long serialVersionUID = 3651496545967580809L;
 
 	private Integer id;
+	private Integer orden;
 	private PiezaRemito piezaRemito; //Pieza de remito de entrada asociada
 	private List<PiezaRemito> piezasSalida; //Piezas de remito de salida
 	private OrdenDeTrabajo odt;
@@ -41,6 +42,15 @@ public class PiezaODT implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	@Column(name = "A_ORDEN")
+	public Integer getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Integer orden) {
+		this.orden = orden;
 	}
 
 	@ManyToOne
