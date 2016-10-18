@@ -13,4 +13,5 @@ public interface ODTServiceRemote {
 	public Boolean recibirRemitoEntrada(RemitoEntradaTO remitoEntrada, String usuarioSistema);
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente);
 	public List<ODTEagerTO> getByIdsEager(List<Integer> ids);
+	public List<ODTEagerTO> getOrdenesDeTrabajo(Integer idEstado, java.util.Date fechaDesde, java.util.Date fechaHasta);
 }

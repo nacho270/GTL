@@ -62,6 +62,12 @@ public class ODTServiceProxy implements ar.com.textillevel.gui.acciones.odtwscli
     return oDTService.getInfoPiezasEntradaSinSalidaByClient(arg0);
   }
   
+  public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] getOrdenesDeTrabajo(java.lang.Integer arg0, java.util.Calendar arg1, java.util.Calendar arg2) throws java.rmi.RemoteException{
+    if (oDTService == null)
+      _initODTServiceProxy();
+    return oDTService.getOrdenesDeTrabajo(arg0, arg1, arg2);
+  }
+  
   public java.lang.Boolean recibirRemitoEntrada(ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO arg0, java.lang.String arg1) throws java.rmi.RemoteException{
     if (oDTService == null)
       _initODTServiceProxy();

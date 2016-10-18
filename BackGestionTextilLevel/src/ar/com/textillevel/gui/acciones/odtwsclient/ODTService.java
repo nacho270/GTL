@@ -11,5 +11,6 @@ public interface ODTService extends java.rmi.Remote {
     public java.lang.Boolean borrarRemitoDeEntrada(java.lang.Integer arg0) throws java.rmi.RemoteException;
     public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] getByIdsEager(int[] arg0) throws java.rmi.RemoteException;
     public ar.com.textillevel.gui.acciones.odtwsclient.DetallePiezaRemitoEntradaSinSalida[] getInfoPiezasEntradaSinSalidaByClient(java.lang.Integer arg0) throws java.rmi.RemoteException;
+    public ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] getOrdenesDeTrabajo(java.lang.Integer arg0, java.util.Calendar arg1, java.util.Calendar arg2) throws java.rmi.RemoteException;
     public java.lang.Boolean recibirRemitoEntrada(ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO arg0, java.lang.String arg1) throws java.rmi.RemoteException;
 }

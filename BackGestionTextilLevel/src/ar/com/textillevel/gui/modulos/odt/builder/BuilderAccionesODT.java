@@ -17,6 +17,7 @@ import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
 import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionBorrarSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionCargarSecuenciaDeTrabajoODT;
+import ar.com.textillevel.gui.modulos.odt.acciones.AccionDarSalidaPiezasODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionDobleClickODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionImprimirODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaClienteODT;
@@ -44,6 +45,7 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 		accionesCreacion.add(new AccionCargarSecuenciaDeTrabajoODT());
 		accionesCreacion.add(new AccionImprimirODT());
 		accionesCreacion.add(new AccionBorrarSecuenciaODT());
+		accionesCreacion.add(new AccionDarSalidaPiezasODT());
 		acciones.addElementGroup("Acciones",accionesCreacion);
 		return acciones;
 	}
@@ -54,6 +56,7 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 
 	public Tabla<OrdenDeTrabajo> construirTabla(int idModel) {
 		Tabla<OrdenDeTrabajo> tabla = new Tabla<OrdenDeTrabajo>();
+		tabla.setTablaColorManager(new ColorManagerItemODT());
 		tabla.addColumna(new ColumnaEstadoODT());
 		tabla.addColumna(new ColumnaCodigoODT());
 		tabla.addColumna(new ColumnaProductoODT());

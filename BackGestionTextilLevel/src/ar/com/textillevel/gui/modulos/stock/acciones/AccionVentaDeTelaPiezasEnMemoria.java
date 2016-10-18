@@ -2,7 +2,7 @@ package ar.com.textillevel.gui.modulos.stock.acciones;
 
 import java.util.ArrayList;
 
-import main.acciones.facturacion.IngresoRemitoSalidaHandler;
+import main.acciones.facturacion.IngresoRemitoSalidaVentaDeTelaHandler;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
@@ -24,7 +24,7 @@ public class AccionVentaDeTelaPiezasEnMemoria extends Accion<ItemMateriaPrimaTO>
 	@Override
 	public boolean ejecutar(AccionEvent<ItemMateriaPrimaTO> e) throws FWException {
 		ModuloStockTelasFisicasModel moduloModel = (ModuloStockTelasFisicasModel)e.getSource().getModulosModel().get(1);
-		IngresoRemitoSalidaHandler rsHandler = new IngresoRemitoSalidaHandler(e.getSource().getFrame(), ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, new ArrayList<DetallePiezaFisicaTO>(moduloModel.getPiezasElegidas()));
+		IngresoRemitoSalidaVentaDeTelaHandler rsHandler = new IngresoRemitoSalidaVentaDeTelaHandler(e.getSource().getFrame(), ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, new ArrayList<DetallePiezaFisicaTO>(moduloModel.getPiezasElegidas()));
 		if(rsHandler.gestionarIngresoRemitoSalida() != null) {
 			moduloModel.getPiezasElegidas().clear();
 		}

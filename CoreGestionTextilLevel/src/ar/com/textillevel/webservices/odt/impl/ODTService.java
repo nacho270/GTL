@@ -13,6 +13,7 @@ import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
 
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ArticuloDAOLocal;
 import ar.com.textillevel.dao.api.local.ClienteDAOLocal;
 import ar.com.textillevel.dao.api.local.CondicionDeVentaDAOLocal;
@@ -372,6 +373,15 @@ public class ODTService implements ODTServiceRemote {
 			lista.add(new ODTEagerTO(odt, transicionODTDAO.getAllEagerByODT(odt.getId())));
 		}
 		return lista;
+	}
+
+	public List<ODTEagerTO> getOrdenesDeTrabajo(Integer idEstado, java.util.Date fechaDesde, java.util.Date fechaHasta) {
+		List<OrdenDeTrabajo> odts = odtFacade.getOrdenesDeTrabajo(EEstadoODT.getById(idEstado), DateUtil.toDate(fechaDesde), DateUtil.toDate(fechaHasta));
+		List<ODTEagerTO> result = new ArrayList<>(odts.size());
+		for(OrdenDeTrabajo odt : odts) {
+			result.add(new ODTEagerTO(odt, transicionODTDAO.getAllEagerByODT(odt.getId())));
+		}
+		return result;
 	}
 
 }

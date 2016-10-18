@@ -3,15 +3,13 @@ package ar.com.textillevel.gui.acciones;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
-
 import javax.xml.rpc.ServiceException;
-
 import main.GTLGlobalCache;
-
 import org.apache.commons.lang.ArrayUtils;
-
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.gui.acciones.odtwsclient.ODTService;
@@ -20,6 +18,7 @@ import ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO;
 import ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -118,6 +117,18 @@ public class RemitoEntradaBusinessDelegate {
 			return service.borrarRemitoDeEntrada(idRE);
 		}
 
+		public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date desde, Date hasta) throws RemoteException {
+			GregorianCalendar gcdesde = new GregorianCalendar();
+			gcdesde.setTime(desde);
+			GregorianCalendar gchasta = new GregorianCalendar();
+			gchasta.setTime(hasta);
+			OdtEagerTO[] odtsWS = service.getOrdenesDeTrabajo(estado.getId(), gcdesde, gchasta);
+			List<OrdenDeTrabajo> odts = new ArrayList<OrdenDeTrabajo>(odtsWS.length);
+			for(OdtEagerTO odtWS : odtsWS) {
+				odts.add(ODTTOConverter.fromTO(odtWS));
+			}
+			return odts;
+		}
 	}
 
 	public boolean retornarRemito(DetalleRemitoEntradaNoFacturado elemento) throws RemoteException {
@@ -132,6 +143,15 @@ public class RemitoEntradaBusinessDelegate {
 			throw new RuntimeException("Operacion invalida desde este sistema");
 		}
 		return getWSClient().borrarRemitoDeEntrada(idRE);
+	}
+
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajos(EEstadoODT estado, Date desde, Date hasta) throws RemoteException {
+		if(GenericUtils.isSistemaTest()) {
+			List<OrdenDeTrabajo> infoPiezas = odtFacade.getOrdenesDeTrabajo(estado, desde, hasta);
+			infoPiezas.addAll(marcarODTComoNoLocales(getWSClient().getOrdenesDeTrabajo(estado, desde, hasta)));
+			return infoPiezas;
+		}
+		return odtFacade.getOrdenesDeTrabajo(estado, desde, hasta);
 	}
 
 }

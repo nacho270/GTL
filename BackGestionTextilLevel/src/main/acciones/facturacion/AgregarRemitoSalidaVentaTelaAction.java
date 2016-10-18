@@ -37,7 +37,7 @@ public class AgregarRemitoSalidaVentaTelaAction implements Action {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		IngresoRemitoSalidaHandler rsHandler = new IngresoRemitoSalidaHandler(frame, ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, null);
+		IngresoRemitoSalidaVentaDeTelaHandler rsHandler = new IngresoRemitoSalidaVentaDeTelaHandler(frame, ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, null);
 		rsHandler.gestionarIngresoRemitoSalida();
 	}
 

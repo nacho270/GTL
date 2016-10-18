@@ -40,7 +40,7 @@ import javax.swing.filechooser.FileFilter;
 
 import main.GTLGlobalCache;
 import main.acciones.compras.OperacionSobreFacturaProveedorHandler;
-import main.acciones.facturacion.IngresoRemitoSalidaHandler;
+import main.acciones.facturacion.IngresoRemitoSalidaVentaDeTelaHandler;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -1505,7 +1505,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			btnAgregarRemitoVentaTela.setToolTipText("Agregar remito venta de tela");
 			btnAgregarRemitoVentaTela.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					IngresoRemitoSalidaHandler rsHandler = new IngresoRemitoSalidaHandler(JFrameVerMovimientosProveedor.this, ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, null);
+					IngresoRemitoSalidaVentaDeTelaHandler rsHandler = new IngresoRemitoSalidaVentaDeTelaHandler(JFrameVerMovimientosProveedor.this, ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, null);
 					rsHandler.gestionarIngresoRemitoSalida();
 					buscarMovimientos();
 				}

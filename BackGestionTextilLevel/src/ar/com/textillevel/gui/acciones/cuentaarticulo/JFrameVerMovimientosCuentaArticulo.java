@@ -44,7 +44,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableCellRenderer;
 
 import main.GTLGlobalCache;
-import main.acciones.facturacion.IngresoRemitoSalidaHandler;
+import main.acciones.facturacion.IngresoRemitoSalidaVentaDeTelaHandler;
 import main.acciones.facturacion.OperacionSobreRemitoEntradaHandler;
 import main.acciones.facturacion.OperacionSobreRemitoSalidaHandler;
 import ar.com.fwcommon.boss.BossEstilos;
@@ -974,7 +974,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 			btnAgregarRemitoSalida01.setEnabled(false);
 			btnAgregarRemitoSalida01.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					IngresoRemitoSalidaHandler rsHandler = new IngresoRemitoSalidaHandler(JFrameVerMovimientosCuentaArticulo.this, ETipoRemitoSalida.CLIENTE_SALIDA_01, false, null);
+					IngresoRemitoSalidaVentaDeTelaHandler rsHandler = new IngresoRemitoSalidaVentaDeTelaHandler(JFrameVerMovimientosCuentaArticulo.this, ETipoRemitoSalida.CLIENTE_SALIDA_01, false, null);
 					rsHandler.agregarRemitoCliente(GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales(),clienteElegido);
 					buscarMovimientos();
 				}
@@ -1029,7 +1029,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 			btnAgregarRemitoVentaTela.setEnabled(false);
 			btnAgregarRemitoVentaTela.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					IngresoRemitoSalidaHandler rsHandler = new IngresoRemitoSalidaHandler(JFrameVerMovimientosCuentaArticulo.this, ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, null);
+					IngresoRemitoSalidaVentaDeTelaHandler rsHandler = new IngresoRemitoSalidaVentaDeTelaHandler(JFrameVerMovimientosCuentaArticulo.this, ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA, false, null);
 					rsHandler.agregarRemitoCliente(GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales(), clienteElegido);
 					buscarMovimientos();
 				}

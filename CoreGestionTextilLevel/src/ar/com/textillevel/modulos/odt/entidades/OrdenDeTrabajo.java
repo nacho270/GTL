@@ -268,4 +268,14 @@ public class OrdenDeTrabajo implements Serializable {
 		this.noLocal = noLocal;
 	}
 
+	@Transient
+	public boolean puedeAsignarMetrosEnPiezas() {
+		return getEstado().ordinal() < EEstadoODT.EN_PROCESO.ordinal() || getEstado().ordinal() > EEstadoODT.EN_OFICINA.ordinal();
+	}
+
+	@Transient
+	public boolean puedeDarSalida() {
+		return getEstado() == EEstadoODT.EN_OFICINA;
+	}
+
 }

@@ -18,7 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import main.acciones.facturacion.IngresoRemitoSalidaHandler;
+import main.acciones.facturacion.IngresoRemitoSalidaVentaDeTelaHandler;
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTextField;
@@ -264,7 +264,7 @@ public class JDialogDetallePiezasFisicas extends JDialog {
 			for(GrupoDetallePiezasFisicasTO gr : elementos) {
 				detallePiezasResult.addAll(gr.getPiezasSeleccionadas());
 			}
-			IngresoRemitoSalidaHandler rsHandler = new IngresoRemitoSalidaHandler(padre, tipoRS, false, detallePiezasResult);
+			IngresoRemitoSalidaVentaDeTelaHandler rsHandler = new IngresoRemitoSalidaVentaDeTelaHandler(padre, tipoRS, false, detallePiezasResult);
 			rsHandler.gestionarIngresoRemitoSalida();
 			dispose();
 		}

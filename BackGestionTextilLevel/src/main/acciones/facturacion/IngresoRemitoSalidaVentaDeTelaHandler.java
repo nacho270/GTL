@@ -20,14 +20,14 @@ import ar.com.textillevel.gui.acciones.remitosalidaventatela.JDialogAgregarRemit
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public class IngresoRemitoSalidaHandler {
+public class IngresoRemitoSalidaVentaDeTelaHandler {
 
 	private final Frame owner;
 	private final ETipoRemitoSalida tipoRemitoSalida;
 	private final List<DetallePiezaFisicaTO> detallePiezas;
 	private final boolean modoConsulta;
 
-	public IngresoRemitoSalidaHandler(Frame owner, ETipoRemitoSalida tipoRemitoSalida, boolean modoConsulta, List<DetallePiezaFisicaTO> detallePiezas) {
+	public IngresoRemitoSalidaVentaDeTelaHandler(Frame owner, ETipoRemitoSalida tipoRemitoSalida, boolean modoConsulta, List<DetallePiezaFisicaTO> detallePiezas) {
 		this.owner = owner;
 		this.tipoRemitoSalida = tipoRemitoSalida;
 		this.modoConsulta = modoConsulta;
