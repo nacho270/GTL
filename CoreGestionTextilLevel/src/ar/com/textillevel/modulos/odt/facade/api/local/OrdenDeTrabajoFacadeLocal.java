@@ -8,7 +8,6 @@ import javax.ejb.Local;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 
 @Local
 public interface OrdenDeTrabajoFacadeLocal {
@@ -19,6 +18,6 @@ public interface OrdenDeTrabajoFacadeLocal {
 	//METODOS WEB SERVICE
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaCompletoSinSalidaByClient(Integer idCliente);
 	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids);
-	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta);
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde, Date fechaHasta);
 
 }

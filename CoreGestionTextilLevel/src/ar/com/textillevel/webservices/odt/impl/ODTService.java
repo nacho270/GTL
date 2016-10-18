@@ -376,7 +376,7 @@ public class ODTService implements ODTServiceRemote {
 	}
 
 	public List<ODTEagerTO> getOrdenesDeTrabajo(Integer idEstado, java.util.Date fechaDesde, java.util.Date fechaHasta) {
-		List<OrdenDeTrabajo> odts = odtFacade.getOrdenesDeTrabajo(EEstadoODT.getById(idEstado), DateUtil.toDate(fechaDesde), DateUtil.toDate(fechaHasta));
+		List<OrdenDeTrabajo> odts = odtFacade.getOrdenesDeTrabajoSinSalida(DateUtil.toDate(fechaDesde), DateUtil.toDate(fechaHasta));
 		List<ODTEagerTO> result = new ArrayList<>(odts.size());
 		for(OrdenDeTrabajo odt : odts) {
 			result.add(new ODTEagerTO(odt, transicionODTDAO.getAllEagerByODT(odt.getId())));

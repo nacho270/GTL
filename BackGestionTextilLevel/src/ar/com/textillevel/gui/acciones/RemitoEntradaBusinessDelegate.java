@@ -7,9 +7,13 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
 import javax.xml.rpc.ServiceException;
+
 import main.GTLGlobalCache;
+
 import org.apache.commons.lang.ArrayUtils;
+
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.gui.acciones.odtwsclient.ODTService;
@@ -123,6 +127,9 @@ public class RemitoEntradaBusinessDelegate {
 			GregorianCalendar gchasta = new GregorianCalendar();
 			gchasta.setTime(hasta);
 			OdtEagerTO[] odtsWS = service.getOrdenesDeTrabajo(estado.getId(), gcdesde, gchasta);
+			if(odtsWS == null) {
+				return new ArrayList<OrdenDeTrabajo>();
+			} 
 			List<OrdenDeTrabajo> odts = new ArrayList<OrdenDeTrabajo>(odtsWS.length);
 			for(OdtEagerTO odtWS : odtsWS) {
 				odts.add(ODTTOConverter.fromTO(odtWS));
@@ -146,7 +153,7 @@ public class RemitoEntradaBusinessDelegate {
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajos(EEstadoODT estado, Date desde, Date hasta) throws RemoteException {
-		if(GenericUtils.isSistemaTest()) {
+		if(GenericUtils.isSistemaTest() && estado==EEstadoODT.EN_OFICINA) {
 			List<OrdenDeTrabajo> infoPiezas = odtFacade.getOrdenesDeTrabajo(estado, desde, hasta);
 			infoPiezas.addAll(marcarODTComoNoLocales(getWSClient().getOrdenesDeTrabajo(estado, desde, hasta)));
 			return infoPiezas;

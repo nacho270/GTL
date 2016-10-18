@@ -400,4 +400,20 @@ delete from t_procedimiento_odt;
 			return odt;
 		}
 	}
+
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde,Date fechaHasta) {
+		String hql = " SELECT odt FROM OrdenDeTrabajo odt WHERE 1=1 "+
+				 (fechaDesde!=null?" AND odt.fechaODT >= :fechaDesde  ":" ")+
+				 (fechaHasta!=null?" AND odt.fechaODT <= :fechaHasta  ":" ")+
+				 (" AND NOT EXISTS(SELECT 1 FROM odt.piezas podt WHERE podt.piezasSalida IS NOT EMPTY) ");
+		Query q = getEntityManager().createQuery(hql);
+		if(fechaDesde!=null){
+			q.setParameter("fechaDesde", fechaDesde);
+		}
+		if(fechaHasta!=null){
+			q.setParameter("fechaHasta", fechaHasta);
+		}
+		return q.getResultList();
+	}
+
 }

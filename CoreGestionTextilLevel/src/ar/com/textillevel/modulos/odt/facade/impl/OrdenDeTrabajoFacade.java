@@ -131,7 +131,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta) {
-		return odtDAO.getOrdenesDeTrabajo(estado,fechaDesde,fechaHasta,null);
+//		return odtDAO.getOrdenesDeTrabajo(estado,fechaDesde,fechaHasta,null);
+		return odtDAO.getOrdenesDeTrabajoSinSalida(fechaDesde, fechaHasta);
 	}
 
 	public List<EstadoActualMaquinaTO> getEstadoMaquinas(Integer idTipoMaquina, Date fechaDesde, Date fechaHasta, Cliente cliente) {
@@ -388,4 +389,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		return odtDAO.save(odt);
 	}
 
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde, Date fechaHasta) {
+		return odtDAO.getOrdenesDeTrabajoSinSalida(fechaDesde, fechaHasta);
+	}
+	
 }

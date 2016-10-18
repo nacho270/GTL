@@ -54,4 +54,6 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 	
 	public OrdenDeTrabajo getODTEagerByCodigo(String codigo);
 
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde, Date fechaHasta);
+
 }
