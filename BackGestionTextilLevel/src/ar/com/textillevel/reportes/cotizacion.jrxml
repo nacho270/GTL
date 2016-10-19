@@ -324,7 +324,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TUBOS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="235" y="129" width="80" height="20"/>
+				<reportElement x="227" y="129" width="80" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
@@ -346,7 +346,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{CARGA_MINIMA_COLOR}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="315" y="129" width="40" height="20"/>
+				<reportElement x="307" y="129" width="40" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -383,6 +383,13 @@
 				</textElement>
 				<text><![CDATA[Carga mínima estampado:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="372" y="98" width="179" height="51"/>
+				<textElement textAlignment="Justified">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[*NOTA: Hasta un 3% de mercadería de 2da calidad o faltante por motivos de producción se considerará como merma normal.]]></text>
+			</staticText>
 		</band>
 	</pageFooter>
 	<lastPageFooter>
@@ -398,7 +405,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="1" y="3" width="554" height="89"/>
+				<reportElement x="1" y="3" width="554" height="86"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="5" y="8" width="226" height="20"/>
@@ -456,7 +463,7 @@
 				<text><![CDATA[La empresa no realiza retiro ni entrega de mercaderia a domicilio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="96" width="179" height="20"/>
+				<reportElement x="5" y="98" width="179" height="20"/>
 				<textElement>
 					<font isBold="true" isItalic="false"/>
 				</textElement>
@@ -468,11 +475,18 @@
 				<text><![CDATA[Atentamente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="438" y="116" width="100" height="20"/>
+				<reportElement x="5" y="142" width="100" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[TEXTIL LEVEL S.A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="98" width="179" height="51"/>
+				<textElement textAlignment="Justified">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[*NOTA: Hasta un 3% de mercadería de 2da calidad o faltante por motivos de producción se considerará como merma normal.]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>
