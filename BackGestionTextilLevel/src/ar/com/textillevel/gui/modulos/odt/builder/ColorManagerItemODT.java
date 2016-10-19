@@ -7,11 +7,11 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 public class  ColorManagerItemODT implements TablaColorManager<OrdenDeTrabajo> {
 
-	private static final Color COLOR_VIOLETA = new Color(234, 211, 235);
+	private static final Color COLOR_VERDE = Color.GREEN.darker();
 
 	public Color getBackgroundColor(OrdenDeTrabajo item) {
 		if(item.isNoLocal()) {
-			return COLOR_VIOLETA;
+			return COLOR_VERDE;
 		}
 		return null;
 	}
