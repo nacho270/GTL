@@ -19,7 +19,7 @@ import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 
 @Entity
 @Table(name = "T_PIEZA_ODT")
-public class PiezaODT implements Serializable {
+public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 
 	private static final long serialVersionUID = 3651496545967580809L;
 
@@ -157,6 +157,11 @@ public class PiezaODT implements Serializable {
 		} else if (!piezaRemito.equals(other.piezaRemito))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(PiezaODT o) {
+		return (this.getOrden() == null || o.getOrden() == null)  ? -1 : (this.getOrden().compareTo(o.getOrden()));
 	}
 
 }

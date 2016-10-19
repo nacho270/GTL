@@ -153,7 +153,7 @@ public class RemitoEntradaBusinessDelegate {
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajos(EEstadoODT estado, Date desde, Date hasta) throws RemoteException {
-		if(GenericUtils.isSistemaTest() && estado==EEstadoODT.EN_OFICINA) {
+		if(GenericUtils.isSistemaTest()) {
 			List<OrdenDeTrabajo> infoPiezas = odtFacade.getOrdenesDeTrabajo(estado, desde, hasta);
 			infoPiezas.addAll(marcarODTComoNoLocales(getWSClient().getOrdenesDeTrabajo(estado, desde, hasta)));
 			return infoPiezas;

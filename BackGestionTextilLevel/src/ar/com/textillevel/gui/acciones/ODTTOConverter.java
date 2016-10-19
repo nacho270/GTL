@@ -230,10 +230,12 @@ public final class ODTTOConverter {
 			((InstruccionProcedimientoPasadasODT) instruccion).setVelocidad(instruccionTO.getVelocidad());
 			((InstruccionProcedimientoPasadasODT) instruccion).setAccion(accionProcedimientoFacade.getById(instruccionTO.getAccionProcedimientoId()));
 			List<MateriaPrimaCantidadExplotada<Quimico>> quimicos = new ArrayList<MateriaPrimaCantidadExplotada<Quimico>>();
-			for(MateriaPrimaCantidadExplotadaTO mpcto : instruccionTO.getMpCantidadExplotadas()) {
-				quimicos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+			if(instruccionTO.getMpCantidadExplotadas() != null) {
+				for(MateriaPrimaCantidadExplotadaTO mpcto : instruccionTO.getMpCantidadExplotadas()) {
+					quimicos.add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+				}
+				((InstruccionProcedimientoPasadasODT) instruccion).setQuimicosExplotados(quimicos);
 			}
-			((InstruccionProcedimientoPasadasODT) instruccion).setQuimicosExplotados(quimicos);
 		} else if (instruccionTO.getTipo().equals("IPPTODT")){
 			instruccion = new InstruccionProcedimientoTextoODT();
 			((InstruccionProcedimientoTextoODT)instruccion).setEspecificacion(instruccionTO.getEspecificacion());

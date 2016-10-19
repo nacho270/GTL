@@ -34,6 +34,7 @@ import ar.com.textillevel.modulos.odt.dao.api.local.SecuenciaODTDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.TipoMaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.TransicionODTDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
 import ar.com.textillevel.modulos.odt.entidades.workflow.CambioAvance;
@@ -131,8 +132,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta) {
-//		return odtDAO.getOrdenesDeTrabajo(estado,fechaDesde,fechaHasta,null);
-		return odtDAO.getOrdenesDeTrabajoSinSalida(fechaDesde, fechaHasta);
+		return odtDAO.getOrdenesDeTrabajo(estado,fechaDesde,fechaHasta,null);
 	}
 
 	public List<EstadoActualMaquinaTO> getEstadoMaquinas(Integer idTipoMaquina, Date fechaDesde, Date fechaHasta, Cliente cliente) {
@@ -257,6 +257,13 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 
 	public void cambiarODTAFacturada(Integer idOdt, UsuarioSistema usuarioSistema){
 		OrdenDeTrabajo odt = odtDAO.getReferenceById(idOdt);
+		//chequeo que todas las piezas de la ODT tengan salida, si existe una sin salida => salgo
+		for(PiezaODT pODT : odt.getPiezas()) {
+			if(pODT.getPiezasSalida().isEmpty()) {
+				return;
+			}
+		}
+		
 		odt.setMaquinaActual(null);
 		odt.setEstadoODT(EEstadoODT.FACTURADA);
 		odt.setAvance(null);

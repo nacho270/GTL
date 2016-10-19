@@ -120,7 +120,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		}
 		construct();
 		setDatos();
-		setModal(true);
+		setModal(true);		
 	}
 
 	private void setDatos() {
@@ -680,13 +680,14 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		public PanelTablaPieza(RemitoSalida remitoSalida, boolean modoConsulta) {
 			setModoConsulta(modoConsulta);
 			initializePopupMenu();
-			agregarBoton(getBtnAgregarSubPiezas());
-			agregarBoton(getBtnCombinarPiezas());
-			agregarBoton(getBtnDescombinarPiezas());
+			//no agrego los botones de combinar piezas porque la idea es que eso se haga desde el sistema GTLLite
+//			agregarBoton(getBtnAgregarSubPiezas());
+//			agregarBoton(getBtnCombinarPiezas());
+//			agregarBoton(getBtnDescombinarPiezas());
 			getBotonAgregar().setVisible(false);
 			this.remitoSalida = remitoSalida;
 			if(remitoSalida.getPiezas().isEmpty()) {
-				addRowsInTabla(CANT_PIEZAS_INICIALES, true);
+				addRowsInTabla(CANT_PIEZAS_INICIALES, false);
 				actualizarTotales();
 			} else {
 				agregarElementos(remitoSalida.getPiezas());
@@ -743,8 +744,8 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 								PiezaRemito pr = new PiezaRemito();
 								pr.setPiezaEntrada(podt.getPiezaRemito());
 								pr.getPiezasPadreODT().add(podt);
-								pr.setMetros(podt.getPiezaRemito().getMetros());
-								pr.setOrdenPieza(podt.getPiezaRemito().getOrdenPieza());
+								pr.setMetros(podt.getMetros());
+								pr.setOrdenPieza(podt.getOrden());
 								remitoSalida.getPiezas().add(pr);
 							}
 						}
@@ -939,17 +940,21 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		private void addRowsInTabla(Integer cantFilas, boolean sugerirMetrosEntrada) {
 			int ordenPieza = 0;
 			for(OrdenDeTrabajo odt : remitoSalida.getOdts()) {
+				Collections.sort(odt.getPiezas());
+				
 				for(PiezaODT podt : odt.getPiezas()) {
 					if(podt.getPiezasSalida().isEmpty()) {
-						PiezaRemito piezaEntrada = new PiezaRemito();
-						piezaEntrada.setPiezaEntrada(podt.getPiezaRemito());
-						piezaEntrada.getPiezasPadreODT().add(podt);
+						PiezaRemito piezaSalida = new PiezaRemito();
+						piezaSalida.setPiezaEntrada(podt.getPiezaRemito());
+						piezaSalida.getPiezasPadreODT().add(podt);
 						if(sugerirMetrosEntrada) {
-							piezaEntrada.setMetros(podt.getPiezaRemito().getMetros());
+							piezaSalida.setMetros(podt.getPiezaRemito().getMetros());
+						} else {
+							piezaSalida.setMetros(podt.getMetros());
 						}
-						remitoSalida.getPiezas().add(piezaEntrada);
-						piezaEntrada.setOrdenPieza(ordenPieza);
-						agregarElemento(piezaEntrada);
+						remitoSalida.getPiezas().add(piezaSalida);
+						piezaSalida.setOrdenPieza(ordenPieza);
+						agregarElemento(piezaSalida);
 						ordenPieza ++;
 					}
 				}
@@ -1082,22 +1087,18 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			}
 			
 			int actual = 0;
-			int orden = 0;
 			for(int fila = 0; fila < getTabla().getRowCount(); fila++) {
 				PiezaRemito pr = getElemento(fila);
-				orden = pr.getOrdenPieza();
 				Integer totalSubpiezas = piezaPadreMap.get(pr.getPiezaEntrada());
 				if(totalSubpiezas == null || totalSubpiezas == 1) {
 					getTabla().setValueAt(StringUtil.getCadena(extractOrdenes(pr.getPiezasPadreODT()), ", ") , actual, COL_NRO_PIEZA);
 					actual++;
 				} else {
 					for(int cant = 1; cant <= totalSubpiezas; cant ++) {
-						if(cant == 1) {
-							getTabla().setValueAt(orden+1, actual, COL_NRO_PIEZA);
-						} else {
-							getTabla().setValueAt((orden+1)+"-"+(cant-1), actual, COL_NRO_PIEZA);
+						if(cant != 1) {
 							getTabla().setValueAt(null, actual, COL_METROS_PIEZA_ORIG);
 						}
+						getTabla().setValueAt(actual+1, actual, COL_NRO_PIEZA);
 						actual++;
 					}
 					fila += totalSubpiezas-1;
@@ -1110,7 +1111,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			List<Integer> ordenList = new ArrayList<Integer>();
 			for(PiezaODT podt : piezasPadreODT) {
 				if(podt.getPiezaRemito() != null) {
-					ordenList.add(podt.getPiezaRemito().getOrdenPieza());
+					ordenList.add(podt.getOrden()+1);
 				}
 			}
 			return ordenList;
