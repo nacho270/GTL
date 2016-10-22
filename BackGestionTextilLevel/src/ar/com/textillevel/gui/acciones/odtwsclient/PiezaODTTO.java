@@ -13,9 +13,15 @@ public class PiezaODTTO  implements java.io.Serializable {
 
     private java.lang.Integer id;
 
+    private java.math.BigDecimal metros;
+
     private java.math.BigDecimal metrosStockInicial;
 
     private java.lang.Integer nroPiezaStockInicial;
+
+    private java.lang.Integer orden;
+
+    private java.lang.Integer ordenSubpieza;
 
     private ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO piezaRemito;
 
@@ -27,14 +33,20 @@ public class PiezaODTTO  implements java.io.Serializable {
     public PiezaODTTO(
            java.lang.String codigoOdt,
            java.lang.Integer id,
+           java.math.BigDecimal metros,
            java.math.BigDecimal metrosStockInicial,
            java.lang.Integer nroPiezaStockInicial,
+           java.lang.Integer orden,
+           java.lang.Integer ordenSubpieza,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO piezaRemito,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezasSalida) {
            this.codigoOdt = codigoOdt;
            this.id = id;
+           this.metros = metros;
            this.metrosStockInicial = metrosStockInicial;
            this.nroPiezaStockInicial = nroPiezaStockInicial;
+           this.orden = orden;
+           this.ordenSubpieza = ordenSubpieza;
            this.piezaRemito = piezaRemito;
            this.piezasSalida = piezasSalida;
     }
@@ -81,6 +93,26 @@ public class PiezaODTTO  implements java.io.Serializable {
 
 
     /**
+     * Gets the metros value for this PiezaODTTO.
+     * 
+     * @return metros
+     */
+    public java.math.BigDecimal getMetros() {
+        return metros;
+    }
+
+
+    /**
+     * Sets the metros value for this PiezaODTTO.
+     * 
+     * @param metros
+     */
+    public void setMetros(java.math.BigDecimal metros) {
+        this.metros = metros;
+    }
+
+
+    /**
      * Gets the metrosStockInicial value for this PiezaODTTO.
      * 
      * @return metrosStockInicial
@@ -117,6 +149,46 @@ public class PiezaODTTO  implements java.io.Serializable {
      */
     public void setNroPiezaStockInicial(java.lang.Integer nroPiezaStockInicial) {
         this.nroPiezaStockInicial = nroPiezaStockInicial;
+    }
+
+
+    /**
+     * Gets the orden value for this PiezaODTTO.
+     * 
+     * @return orden
+     */
+    public java.lang.Integer getOrden() {
+        return orden;
+    }
+
+
+    /**
+     * Sets the orden value for this PiezaODTTO.
+     * 
+     * @param orden
+     */
+    public void setOrden(java.lang.Integer orden) {
+        this.orden = orden;
+    }
+
+
+    /**
+     * Gets the ordenSubpieza value for this PiezaODTTO.
+     * 
+     * @return ordenSubpieza
+     */
+    public java.lang.Integer getOrdenSubpieza() {
+        return ordenSubpieza;
+    }
+
+
+    /**
+     * Sets the ordenSubpieza value for this PiezaODTTO.
+     * 
+     * @param ordenSubpieza
+     */
+    public void setOrdenSubpieza(java.lang.Integer ordenSubpieza) {
+        this.ordenSubpieza = ordenSubpieza;
     }
 
 
@@ -185,12 +257,21 @@ public class PiezaODTTO  implements java.io.Serializable {
             ((this.id==null && other.getId()==null) || 
              (this.id!=null &&
               this.id.equals(other.getId()))) &&
+            ((this.metros==null && other.getMetros()==null) || 
+             (this.metros!=null &&
+              this.metros.equals(other.getMetros()))) &&
             ((this.metrosStockInicial==null && other.getMetrosStockInicial()==null) || 
              (this.metrosStockInicial!=null &&
               this.metrosStockInicial.equals(other.getMetrosStockInicial()))) &&
             ((this.nroPiezaStockInicial==null && other.getNroPiezaStockInicial()==null) || 
              (this.nroPiezaStockInicial!=null &&
               this.nroPiezaStockInicial.equals(other.getNroPiezaStockInicial()))) &&
+            ((this.orden==null && other.getOrden()==null) || 
+             (this.orden!=null &&
+              this.orden.equals(other.getOrden()))) &&
+            ((this.ordenSubpieza==null && other.getOrdenSubpieza()==null) || 
+             (this.ordenSubpieza!=null &&
+              this.ordenSubpieza.equals(other.getOrdenSubpieza()))) &&
             ((this.piezaRemito==null && other.getPiezaRemito()==null) || 
              (this.piezaRemito!=null &&
               this.piezaRemito.equals(other.getPiezaRemito()))) &&
@@ -214,11 +295,20 @@ public class PiezaODTTO  implements java.io.Serializable {
         if (getId() != null) {
             _hashCode += getId().hashCode();
         }
+        if (getMetros() != null) {
+            _hashCode += getMetros().hashCode();
+        }
         if (getMetrosStockInicial() != null) {
             _hashCode += getMetrosStockInicial().hashCode();
         }
         if (getNroPiezaStockInicial() != null) {
             _hashCode += getNroPiezaStockInicial().hashCode();
+        }
+        if (getOrden() != null) {
+            _hashCode += getOrden().hashCode();
+        }
+        if (getOrdenSubpieza() != null) {
+            _hashCode += getOrdenSubpieza().hashCode();
         }
         if (getPiezaRemito() != null) {
             _hashCode += getPiezaRemito().hashCode();
@@ -259,6 +349,13 @@ public class PiezaODTTO  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("metros");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "metros"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "decimal"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("metrosStockInicial");
         elemField.setXmlName(new javax.xml.namespace.QName("", "metrosStockInicial"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "decimal"));
@@ -268,6 +365,20 @@ public class PiezaODTTO  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("nroPiezaStockInicial");
         elemField.setXmlName(new javax.xml.namespace.QName("", "nroPiezaStockInicial"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("orden");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "orden"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ordenSubpieza");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ordenSubpieza"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

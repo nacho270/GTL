@@ -39,6 +39,7 @@ public class AccionDarSalidaPiezasODT extends Accion<OrdenDeTrabajo> {
 		Set<Cliente> extractClientes = extractClientes(e.getSelectedElements()); //tiene que haber uno solo!!
 		try {
 			List<OrdenDeTrabajo> odts = getDelegate().getODTByIdsEager(toDetallePiezaODT(e.getSelectedElements()));
+			setIdsEnNULL(odts);
 			IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(e.getSource().getFrame(), extractClientes.iterator().next(), odts);
 			handler.gestionarIngresoRemitoSalida();
 			return true;
@@ -46,6 +47,12 @@ public class AccionDarSalidaPiezasODT extends Accion<OrdenDeTrabajo> {
 			e1.printStackTrace();
 		}
 		return false;
+	}
+
+	private void setIdsEnNULL(List<OrdenDeTrabajo> odtByIdsEager) {
+		for(OrdenDeTrabajo odt : odtByIdsEager) {
+			odt.setId(null);
+		}
 	}
 
 	private List<DetallePiezaRemitoEntradaSinSalida> toDetallePiezaODT(List<OrdenDeTrabajo> odts) {

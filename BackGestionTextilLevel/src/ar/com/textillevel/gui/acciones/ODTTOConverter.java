@@ -94,13 +94,17 @@ public final class ODTTOConverter {
 
 	}
 
-	public static OrdenDeTrabajo fromTO(OdtEagerTO odtEagerTO) {
+	public static OrdenDeTrabajo fromTO(OdtEagerTO odtEagerTO, boolean setearIDEnNULL) {
 		OrdenDeTrabajo odt = new OrdenDeTrabajo();
 		odt.setAvance(EAvanceODT.getById(odtEagerTO.getIdAvance()));
 		odt.setCodigo(odtEagerTO.getCodigo());
 		odt.setEstadoODT(EEstadoODT.getById(odtEagerTO.getIdEstadoODT()));
 		odt.setFechaODT(new Timestamp(odtEagerTO.getTimestampFechaODT()));
-		odt.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+		if(setearIDEnNULL) {// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
+			odt.setId(null);
+		} else {
+			odt.setId(odtEagerTO.getId());
+		}
 		odt.setOrdenEnMaquina(odtEagerTO.getOrdenEnMaquina());
 		if (odtEagerTO.getIdMaquinaActual() != null) {
 			odt.setMaquinaActual(maquinaFacade.getByIdEager(odtEagerTO.getIdMaquinaActual()));
@@ -287,6 +291,9 @@ public final class ODTTOConverter {
 		piezaODT.setId(null); // Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 		piezaODT.setMetrosStockInicial(piezaODT.getMetrosStockInicial());
 		piezaODT.setNroPiezaStockInicial(piezaODT.getNroPiezaStockInicial());
+		piezaODT.setOrden(piezaODT.getOrden());
+		piezaODT.setOrdenSubpieza(piezaODT.getOrdenSubpieza());
+		piezaODT.setMetros(piezaODT.getMetros());
 		piezaODT.setOdt(odt);
 		if (piezaODTTO.getPiezaRemito() != null) {
 			piezaODT.setPiezaRemito(piezaRemitoFromTO(odt, piezaODTTO.getPiezaRemito()));

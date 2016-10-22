@@ -13,11 +13,14 @@ public class PiezaODTTO implements Serializable {
 	private static final long serialVersionUID = 6354127632575678745L;
 
 	private Integer id;
+	private Integer orden;
 	private PiezaRemitoTO piezaRemito;
 	private List<PiezaRemitoTO> piezasSalida;
 	private String codigoOdt;
 	private Integer nroPiezaStockInicial;
 	private BigDecimal metrosStockInicial;
+	private BigDecimal metros;
+	private Integer ordenSubpieza;
 
 	public PiezaODTTO() {
 
@@ -28,6 +31,9 @@ public class PiezaODTTO implements Serializable {
 		this.piezaRemito = new PiezaRemitoTO(po.getPiezaRemito());
 		this.nroPiezaStockInicial = po.getNroPiezaStockInicial();
 		this.metrosStockInicial = po.getMetrosStockInicial();
+		this.metros = po.getMetros();
+		this.ordenSubpieza = po.getOrdenSubpieza();
+		this.orden = po.getOrden();
 		if (po.getPiezasSalida() != null && !po.getPiezasSalida().isEmpty()) {
 			this.piezasSalida = new ArrayList<PiezaRemitoTO>();
 			for (PiezaRemito pr : po.getPiezasSalida()) {
@@ -93,6 +99,30 @@ public class PiezaODTTO implements Serializable {
 
 	public void setCodigoOdt(String codigoOdt) {
 		this.codigoOdt = codigoOdt;
+	}
+
+	public BigDecimal getMetros() {
+		return metros;
+	}
+
+	public void setMetros(BigDecimal metros) {
+		this.metros = metros;
+	}
+
+	public Integer getOrdenSubpieza() {
+		return ordenSubpieza;
+	}
+
+	public void setOrdenSubpieza(Integer ordenSubpieza) {
+		this.ordenSubpieza = ordenSubpieza;
+	}
+
+	public Integer getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Integer orden) {
+		this.orden = orden;
 	}
 
 }

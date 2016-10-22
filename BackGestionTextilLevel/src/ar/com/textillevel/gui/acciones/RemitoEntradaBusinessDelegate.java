@@ -97,7 +97,7 @@ public class RemitoEntradaBusinessDelegate {
 				return odts;
 			}
 			for(OdtEagerTO odtEager : odtsArr) {
-				odts.add(ODTTOConverter.fromTO(odtEager));
+				odts.add(ODTTOConverter.fromTO(odtEager, false));
 			}
 			return odts;
 		}
@@ -132,7 +132,7 @@ public class RemitoEntradaBusinessDelegate {
 			} 
 			List<OrdenDeTrabajo> odts = new ArrayList<OrdenDeTrabajo>(odtsWS.length);
 			for(OdtEagerTO odtWS : odtsWS) {
-				odts.add(ODTTOConverter.fromTO(odtWS));
+				odts.add(ODTTOConverter.fromTO(odtWS, false));//las quiero con ID
 			}
 			return odts;
 		}

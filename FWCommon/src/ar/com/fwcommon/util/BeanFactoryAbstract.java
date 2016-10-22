@@ -13,7 +13,7 @@ import ar.com.fwcommon.componentes.error.FWRuntimeException;
 public abstract class BeanFactoryAbstract {
 
 	private Properties properties;
-	private static InitialContext initialContext ;
+	private InitialContext initialContext ;
 	private Map<Class<?>, String> jndiNames = new HashMap<Class<?>, String>() ;
 	private Map<Class<?>, Object> beanCache = new HashMap<Class<?>, Object>() ;
 
