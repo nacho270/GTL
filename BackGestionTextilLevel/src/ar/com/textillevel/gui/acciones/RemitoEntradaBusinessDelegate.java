@@ -126,7 +126,7 @@ public class RemitoEntradaBusinessDelegate {
 			gcdesde.setTime(desde);
 			GregorianCalendar gchasta = new GregorianCalendar();
 			gchasta.setTime(hasta);
-			OdtEagerTO[] odtsWS = service.getOrdenesDeTrabajo(estado.getId(), gcdesde, gchasta);
+			OdtEagerTO[] odtsWS = service.getOrdenesDeTrabajo(estado == null ? EEstadoODT.EN_OFICINA.getId() : estado.getId(), gcdesde, gchasta);
 			if(odtsWS == null) {
 				return new ArrayList<OrdenDeTrabajo>();
 			} 
