@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 
@@ -162,6 +163,11 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 	@Override
 	public int compareTo(PiezaODT o) {
 		return (this.getOrden() == null || o.getOrden() == null)  ? -1 : (this.getOrden().compareTo(o.getOrden()));
+	}
+
+	@Transient
+	public boolean tieneSalida() {
+		return getPiezasSalida() != null && !getPiezasSalida().isEmpty();
 	}
 
 }

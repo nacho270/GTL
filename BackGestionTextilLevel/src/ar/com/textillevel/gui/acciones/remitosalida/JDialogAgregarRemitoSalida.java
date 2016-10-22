@@ -817,7 +817,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			};
 			tablaPiezaEntrada.setStringColumn(COL_NRO_PIEZA, "NUMERO", 80, 80, true);
 			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA_ORIG, "METROS ENT.", 80, true);
-			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA, "METROS", 0, Float.MAX_VALUE, 80, false);
+			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA, "METROS", 0, Float.MAX_VALUE, 80, true);
 			tablaPiezaEntrada.setStringColumn(COL_OBSERVACIONES, "OBSERVACIONES", 225, 225, false);
 			tablaPiezaEntrada.setStringColumn(COL_OBJ, "", 0, 0, true);
 

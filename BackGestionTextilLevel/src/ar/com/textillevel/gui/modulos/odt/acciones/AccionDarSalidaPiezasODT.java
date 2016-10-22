@@ -51,7 +51,9 @@ public class AccionDarSalidaPiezasODT extends Accion<OrdenDeTrabajo> {
 
 	private void setIdsEnNULL(List<OrdenDeTrabajo> odtByIdsEager) {
 		for(OrdenDeTrabajo odt : odtByIdsEager) {
-			odt.setId(null);
+			if(odt.isNoLocal()) {
+				odt.setId(null);
+			}
 		}
 	}
 
