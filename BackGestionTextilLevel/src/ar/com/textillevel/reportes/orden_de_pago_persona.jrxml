@@ -13,6 +13,7 @@
 	<parameter name="TOTAL_GENERAL" class="java.lang.String"/>
 	<parameter name="MOTIVO" class="java.lang.String"/>
 	<parameter name="IMPRIMIR_DATOS" class="java.lang.Boolean"/>
+	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<field name="chequesDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<field name="chequesDS2" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<title>
@@ -98,6 +99,10 @@ email: leveltextil@speedy.com.ar]]></text>
 Ing.  Brutos: C.M. 901-209740-7
 Inicio de Actividades:03/2005 ]]></text>
 			</staticText>
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement x="404" y="33" width="137" height="34"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>

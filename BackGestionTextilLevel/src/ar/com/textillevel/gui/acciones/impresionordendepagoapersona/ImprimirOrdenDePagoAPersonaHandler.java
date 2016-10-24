@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.DateUtil;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOrdenDePagoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOrdenDePagoPersonaCheque;
@@ -24,6 +25,7 @@ import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOr
 import ar.com.textillevel.entidades.documentos.recibo.to.ChequeTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
+import ar.com.textillevel.util.GestorTerminalBarcode;
 
 public class ImprimirOrdenDePagoAPersonaHandler {
 
@@ -142,6 +144,11 @@ public class ImprimirOrdenDePagoAPersonaHandler {
 			params.put("MOTIVO",motivo.toUpperCase());
 			params.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
 			params.put("IMPRIMIR_DATOS", !GenericUtils.isSistemaTest());
+			try {
+				params.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.ORDEN_PAGO_PERSONA, Integer.valueOf(nroOrden), GenericUtils.isSistemaTest())));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return params;
 		}
 
