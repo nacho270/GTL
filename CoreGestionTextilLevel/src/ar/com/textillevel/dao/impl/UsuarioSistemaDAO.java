@@ -86,4 +86,13 @@ public class UsuarioSistemaDAO extends GenericDAO<UsuarioSistema, Integer> imple
 		return (UsuarioSistema) q.getResultList().get(0);
 	}
 
+	public Integer getProximoCodigoUsuario() {
+		Query query = getEntityManager().createQuery("SELECT MAX(u.codigoUsuario) FROM UsuarioSistema u ");
+		Number lastNumero = (Number)query.getSingleResult();
+		if(lastNumero==null){
+			return 100;
+		}else{
+			return lastNumero.intValue() + 1;
+		}
+	}
 }

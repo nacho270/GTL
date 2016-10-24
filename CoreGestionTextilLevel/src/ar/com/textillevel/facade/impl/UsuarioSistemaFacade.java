@@ -59,4 +59,8 @@ public class UsuarioSistemaFacade implements UsuarioSistemaFacadeRemote,UsuarioS
 	public UsuarioSistema getById(Integer idUsuarioSistema) {
 		return usuarioDao.getById(idUsuarioSistema);
 	}
+
+	public Integer getProximoCodigoUsuario() {
+		return usuarioDao.getProximoCodigoUsuario();
+	}
 }

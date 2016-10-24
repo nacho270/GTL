@@ -339,7 +339,7 @@ public class ImprimirRemitoHandler {
 			parameters.put("DOMICILIO", remito.getCliente().getDireccionFiscal().getDireccion());
 			parameters.put("LOCALIDAD", remito.getCliente().getDireccionFiscal().getLocalidad().getNombreLocalidad());
 			parameters.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
-			parameters.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+			parameters.put("USUARIO", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
 			parameters.put("ARTICULO", extractArticulo(remito));
 			parameters.put("POSICION_IVA", remito.getCliente().getPosicionIva() == null ? "" : remito.getCliente().getPosicionIva().getDescripcion());
 			parameters.put("CUIT", remito.getCliente().getCuit());

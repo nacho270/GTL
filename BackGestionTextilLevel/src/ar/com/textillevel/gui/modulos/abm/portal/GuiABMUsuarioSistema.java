@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
+import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
@@ -41,6 +42,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	private JPanel panDetalle;
 	
 	private FWJTextField txtUserName;
+	private FWJNumericTextField txtCodigoUsuario;
 	private JPasswordField txtPassword;
 	private JComboBox cmbPerfiles;
 	private JLabel lblPassStrength;
@@ -82,9 +84,11 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 			panDetalle.add(new JLabel("Password: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
 			panDetalle.add(getTxtPassword(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
 			panDetalle.add(getLblPassStrength(), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Perfil: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
-			panDetalle.add(getCmbPerfiles(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel(TIPS_PASSWORD), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 2, 1, 1, 0));
+			panDetalle.add(new JLabel("Codigo: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getTxtCodigoUsuario(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
+			panDetalle.add(new JLabel("Perfil: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getCmbPerfiles(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
+			panDetalle.add(new JLabel(TIPS_PASSWORD), GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 2, 1, 1, 0));
 		}
 		return panDetalle;
 	}
@@ -101,6 +105,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	@Override
 	public void botonAgregarPresionado(int nivelNodoSeleccionado) {
 		limpiarDatos();
+		getTxtCodigoUsuario().setValue(Long.valueOf(getUsuarioFacade().getProximoCodigoUsuario()));
 		setUsuarioActual(new UsuarioSistema());
 		getTxtUserName().requestFocus();
 		setEditando(false);
@@ -152,6 +157,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	private void capturarSetearDatos() {
 		getUsuarioActual().setUsrName(getTxtUserName().getText());
 		getUsuarioActual().setPassword(new String(getTxtPassword().getPassword()));
+		getUsuarioActual().setCodigoUsuario(Integer.valueOf(getTxtCodigoUsuario().getValue()));
 		getUsuarioActual().setPerfil((Perfil)getCmbPerfiles().getSelectedItem());
 	}
 
@@ -194,6 +200,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 		if(getUsuarioActual() != null) {
 			getTxtUserName().setText(getUsuarioActual().getUsrName());
 			getTxtPassword().setText(getUsuarioActual().getPassword());
+			getTxtCodigoUsuario().setValue(Long.valueOf(getUsuarioActual().getCodigoUsuario()));
 			getCmbPerfiles().setSelectedItem(getUsuarioActual().getPerfil());
 			getLblPassStrength().setText("");
 		}
@@ -203,6 +210,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	public void limpiarDatos() {
 		getTxtPassword().setText("");
 		getTxtUserName().setText("");
+		getTxtCodigoUsuario().setValue(null);
 		if(getCmbPerfiles().getItemCount()>0){
 			getCmbPerfiles().setSelectedIndex(0);
 		}
@@ -230,6 +238,14 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 		return txtUserName;
 	}
 
+	private FWJNumericTextField getTxtCodigoUsuario() {
+		if (txtCodigoUsuario == null) {
+			txtCodigoUsuario = new FWJNumericTextField(100, Integer.MAX_VALUE);
+			txtCodigoUsuario.setEditable(false);
+		}
+		return txtCodigoUsuario;
+	}
+	
 	private JPasswordField getTxtPassword() {
 		if(txtPassword == null){
 			txtPassword = new JPasswordField();

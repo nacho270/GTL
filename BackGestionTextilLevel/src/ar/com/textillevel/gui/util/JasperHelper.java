@@ -187,7 +187,7 @@ public class JasperHelper {
 		JasperWrapperProperties properties = new JasperWrapperProperties();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("Logo", "ar/com/textillevel/imagenes/logogtl-impresion.jpg");
-		parameters.put("Usuario", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+		parameters.put("Usuario", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
 		parameters.put("FechaImpresion", new SimpleDateFormat(DateUtil.SHORT_DATE_WITH_HOUR).format(DateUtil.getAhora()));
 		parameters.put("Titulo", titulo);
 		parameters.put("SubTitulo", subtitulo);

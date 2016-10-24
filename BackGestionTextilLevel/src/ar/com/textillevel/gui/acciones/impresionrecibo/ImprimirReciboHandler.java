@@ -282,7 +282,7 @@ public class ImprimirReciboHandler {
 			parameterMap.put("DESCR_RECIBO", GenericUtils.isSistemaTest() ?
 					"RECIBO PROVISORIO" : "RECIBO AUTORIZADO");
 			parameterMap.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
-			parameterMap.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+			parameterMap.put("USUARIO", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
 			parameterMap.put("IS_TEST", GenericUtils.isSistemaTest());
 			
 			parameterMap.put("TOT_TRANSF_BANCARIA", importeTransfBancaria);

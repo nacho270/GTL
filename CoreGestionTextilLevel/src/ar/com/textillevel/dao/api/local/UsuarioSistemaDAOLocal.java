@@ -14,5 +14,6 @@ public interface UsuarioSistemaDAOLocal extends DAOLocal<UsuarioSistema, Integer
 	public boolean yaExisteClave(String pass);
 	public UsuarioSistema getUsuarioSistemaByUsername(String usrName);
 	public UsuarioSistema getByNombre(String nombre);
+	public Integer getProximoCodigoUsuario();
 
 }

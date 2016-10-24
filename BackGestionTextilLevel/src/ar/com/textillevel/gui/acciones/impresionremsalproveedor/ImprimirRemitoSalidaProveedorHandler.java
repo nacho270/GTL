@@ -97,7 +97,7 @@ public class ImprimirRemitoSalidaProveedorHandler {
 			parameters.put("DOMICILIO", remito.getProveedor().getDireccionFiscal().getDireccion());
 			parameters.put("LOCALIDAD", remito.getProveedor().getDireccionFiscal().getLocalidad().getNombreLocalidad());
 			parameters.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
-			parameters.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+			parameters.put("USUARIO", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
 			
 			parameters.put("ARTICULO", "-");
 

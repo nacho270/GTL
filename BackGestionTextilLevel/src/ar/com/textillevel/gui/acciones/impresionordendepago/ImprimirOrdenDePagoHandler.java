@@ -234,7 +234,7 @@ public class ImprimirOrdenDePagoHandler {
 			params.put("DIRECCION_PROVEEDOR", direccionProv);
 			params.put("COND_VENTA", "");
 			params.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
-			params.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+			params.put("USUARIO", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
 			params.put("TOT_RET_ING_BRUT", GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(totIngBrut.doubleValue())));
 			params.put("TOT_RET_GAN", GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(totGanancias.doubleValue())));
 			params.put("TOT_EFECTIVO", GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(totEfectivo.doubleValue())));

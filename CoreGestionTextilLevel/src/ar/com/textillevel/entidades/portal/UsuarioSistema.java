@@ -21,6 +21,7 @@ public class UsuarioSistema implements Serializable {
 	private Integer id;
 	private String usrName;
 	private String password;
+	private Integer codigoUsuario;
 	private Perfil perfil;
 
 	@Id
@@ -52,6 +53,15 @@ public class UsuarioSistema implements Serializable {
 		this.password = password;
 	}
 
+	@Column(name = "A_CODIGO_USUARIO", nullable = false)
+	public Integer getCodigoUsuario() {
+		return codigoUsuario;
+	}
+
+	public void setCodigoUsuario(Integer codigoUsuario) {
+		this.codigoUsuario = codigoUsuario;
+	}
+	
 	@ManyToOne
 	@JoinColumn(name = "F_PERFIL_P_ID", nullable = false)
 	public Perfil getPerfil() {

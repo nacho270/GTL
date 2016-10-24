@@ -14,6 +14,7 @@ public interface UsuarioSistemaFacadeRemote {
 	public void remove (UsuarioSistema usuario);
 	public UsuarioSistema login(String usuario, String password);
 	public Boolean existeUsuario(String usuario);
+	public Integer getProximoCodigoUsuario();
 	public UsuarioSistema esPasswordDeAdministrador(String pass);
 	public UsuarioSistema getById(Integer idUsuarioSistema);
 }
