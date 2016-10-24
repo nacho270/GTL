@@ -14,6 +14,7 @@
 	<parameter name="PROCESO" class="java.lang.String"/>
 	<parameter name="NRO_REMITO" class="java.lang.String"/>
 	<parameter name="REMITO_ENT" class="java.lang.String"/>
+	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<field name="piezasDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<field name="piezasDS2" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<field name="piezasDS3" class="net.sf.jasperreports.engine.JRDataSource"/>
@@ -74,6 +75,10 @@
 				<textElement/>
 				<text><![CDATA[RTO:]]></text>
 			</staticText>
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement x="7" y="60" width="137" height="34"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<detail>
