@@ -185,7 +185,10 @@ public class ImpresionFacturaHandler {
 			factura.setNroFactura(getNroFactura());
 			factura.setNroRemito(getStrFacturasRelacionadas() != null && getStrFacturasRelacionadas().trim().length() > 0 ? getStrFacturasRelacionadas().replaceAll("/", " / ") : getNrosRemitos());
 		}
-		factura.setPorcIvaInsc(GenericUtils.getDecimalFormatFactura().format(getFactura()!=null?getFactura().getPorcentajeIVAInscripto():getCorreccionFactura().getPorcentajeIVAInscripto()));
+		BigDecimal porcIvaInscripto = getFactura()!=null?getFactura().getPorcentajeIVAInscripto():getCorreccionFactura().getPorcentajeIVAInscripto();
+		if(porcIvaInscripto != null) {
+			factura.setPorcIvaInsc(GenericUtils.getDecimalFormatFactura().format(porcIvaInscripto));
+		}
 		factura.setSubTotal((getCorreccionFactura() != null && getCorreccionFactura() instanceof NotaCredito ? "-" : "") + (getCorreccionFactura() != null ? GenericUtils.getDecimalFormatFactura().format(getCorreccionFactura().getMontoSubtotal().doubleValue()) : GenericUtils.getDecimalFormatFactura().format(getFactura().getMontoSubtotal().doubleValue())));
 		
 		if (getCorreccionFactura() != null) {
