@@ -404,6 +404,7 @@ public class ImprimirODTHandler {
 			mapa.put("PIEZAS", this.cantidadPiezas);
 			mapa.put("ARTICULO", this.articulo);
 			
+			mapa.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 			mapa.put("COLOR", this.color);
 			mapa.put("TARIMA", this.tarima);
 //			mapa.put("MAQUINA", this.codigo);
@@ -425,6 +426,7 @@ public class ImprimirODTHandler {
 			mapa.put("PIEZAS", this.cantidadPiezas);
 			mapa.put("ARTICULO", this.articulo);
 			mapa.put("CODIGO_ODT", ODTCodigoHelper.getInstance().formatCodigo(this.codigo));
+			mapa.put("USUARIO", GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 			mapa.put("COLOR", this.color);
 			mapa.put("TARIMA", this.tarima);
 //			mapa.put("MAQUINA", this.codigo);

@@ -9,6 +9,7 @@
 	<parameter name="NRO_CLIENTE" class="java.lang.String"/>
 	<parameter name="KILOS" class="java.lang.String"/>
 	<parameter name="COLOR" class="java.lang.String"/>
+	<parameter name="USUARIO" class="java.lang.String"/>
 	<title>
 		<band height="50">
 			<staticText>
@@ -147,6 +148,20 @@
 					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[COLOR:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="403" y="27" width="100" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="318" y="27" width="81" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[USUARIO:]]></text>
 			</staticText>
 		</band>
 	</detail>
