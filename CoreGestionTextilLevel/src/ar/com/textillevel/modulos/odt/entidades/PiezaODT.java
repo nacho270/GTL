@@ -162,7 +162,14 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 
 	@Override
 	public int compareTo(PiezaODT o) {
-		return (this.getOrden() == null || o.getOrden() == null)  ? -1 : (this.getOrden().compareTo(o.getOrden()));
+		if(this.getOrden() == null || o.getOrden() == null) {
+			return 0;
+		} else if(this.getOrden().compareTo(o.getOrden()) != 0) {
+			return this.getOrden().compareTo(o.getOrden());
+		} else if(this.getOrdenSubpieza() != null && o.getOrdenSubpieza()!=null){
+			return this.getOrdenSubpieza().compareTo(o.getOrdenSubpieza());
+		}
+		return 0;
 	}
 
 	@Transient
