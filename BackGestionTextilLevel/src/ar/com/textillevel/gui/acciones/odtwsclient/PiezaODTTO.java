@@ -11,6 +11,8 @@ package ar.com.textillevel.gui.acciones.odtwsclient;
 public class PiezaODTTO  implements java.io.Serializable {
     private java.lang.String codigoOdt;
 
+    private java.lang.Boolean esDeSegunda;
+
     private java.lang.Integer id;
 
     private java.math.BigDecimal metros;
@@ -32,6 +34,7 @@ public class PiezaODTTO  implements java.io.Serializable {
 
     public PiezaODTTO(
            java.lang.String codigoOdt,
+           java.lang.Boolean esDeSegunda,
            java.lang.Integer id,
            java.math.BigDecimal metros,
            java.math.BigDecimal metrosStockInicial,
@@ -41,6 +44,7 @@ public class PiezaODTTO  implements java.io.Serializable {
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO piezaRemito,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezasSalida) {
            this.codigoOdt = codigoOdt;
+           this.esDeSegunda = esDeSegunda;
            this.id = id;
            this.metros = metros;
            this.metrosStockInicial = metrosStockInicial;
@@ -69,6 +73,26 @@ public class PiezaODTTO  implements java.io.Serializable {
      */
     public void setCodigoOdt(java.lang.String codigoOdt) {
         this.codigoOdt = codigoOdt;
+    }
+
+
+    /**
+     * Gets the esDeSegunda value for this PiezaODTTO.
+     * 
+     * @return esDeSegunda
+     */
+    public java.lang.Boolean getEsDeSegunda() {
+        return esDeSegunda;
+    }
+
+
+    /**
+     * Sets the esDeSegunda value for this PiezaODTTO.
+     * 
+     * @param esDeSegunda
+     */
+    public void setEsDeSegunda(java.lang.Boolean esDeSegunda) {
+        this.esDeSegunda = esDeSegunda;
     }
 
 
@@ -254,6 +278,9 @@ public class PiezaODTTO  implements java.io.Serializable {
             ((this.codigoOdt==null && other.getCodigoOdt()==null) || 
              (this.codigoOdt!=null &&
               this.codigoOdt.equals(other.getCodigoOdt()))) &&
+            ((this.esDeSegunda==null && other.getEsDeSegunda()==null) || 
+             (this.esDeSegunda!=null &&
+              this.esDeSegunda.equals(other.getEsDeSegunda()))) &&
             ((this.id==null && other.getId()==null) || 
              (this.id!=null &&
               this.id.equals(other.getId()))) &&
@@ -291,6 +318,9 @@ public class PiezaODTTO  implements java.io.Serializable {
         int _hashCode = 1;
         if (getCodigoOdt() != null) {
             _hashCode += getCodigoOdt().hashCode();
+        }
+        if (getEsDeSegunda() != null) {
+            _hashCode += getEsDeSegunda().hashCode();
         }
         if (getId() != null) {
             _hashCode += getId().hashCode();
@@ -338,6 +368,13 @@ public class PiezaODTTO  implements java.io.Serializable {
         elemField.setFieldName("codigoOdt");
         elemField.setXmlName(new javax.xml.namespace.QName("", "codigoOdt"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("esDeSegunda");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "esDeSegunda"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

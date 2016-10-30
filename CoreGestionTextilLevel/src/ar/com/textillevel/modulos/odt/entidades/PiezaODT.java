@@ -34,6 +34,8 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 										  //son los metros que se descontaron del stock inicial. En el caso normal se toman de la piezaRemito de entrada.
 	private BigDecimal metros;
 	private Integer ordenSubpieza;
+	private Boolean esDeSegunda;
+
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -120,6 +122,19 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 		this.ordenSubpieza = ordenSubpieza;
 	}
 
+	@Column(name="A_ES_DE_SEGUNDA", nullable=true)
+	public Boolean getEsDeSegunda() {
+		return esDeSegunda;
+	}
+
+	public void setEsDeSegunda(Boolean esDeSegunda) {
+		this.esDeSegunda = esDeSegunda;
+	}
+
+	@Override
+	public String toString() {
+		return getOrden() + (getOrdenSubpieza() == null  ? "" : " / " + (getOrdenSubpieza()+1));
+	}
 
 	@Override
 	public int hashCode() {

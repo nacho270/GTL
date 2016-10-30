@@ -21,6 +21,7 @@ public class PiezaODTTO implements Serializable {
 	private BigDecimal metrosStockInicial;
 	private BigDecimal metros;
 	private Integer ordenSubpieza;
+	private Boolean esDeSegunda;
 
 	public PiezaODTTO() {
 
@@ -34,6 +35,7 @@ public class PiezaODTTO implements Serializable {
 		this.metros = po.getMetros();
 		this.ordenSubpieza = po.getOrdenSubpieza();
 		this.orden = po.getOrden();
+		this.esDeSegunda = po.getEsDeSegunda();
 		if (po.getPiezasSalida() != null && !po.getPiezasSalida().isEmpty()) {
 			this.piezasSalida = new ArrayList<PiezaRemitoTO>();
 			for (PiezaRemito pr : po.getPiezasSalida()) {
@@ -123,6 +125,14 @@ public class PiezaODTTO implements Serializable {
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}
+
+	public Boolean getEsDeSegunda() {
+		return esDeSegunda;
+	}
+
+	public void setEsDeSegunda(Boolean esDeSegunda) {
+		this.esDeSegunda = esDeSegunda;
 	}
 
 }

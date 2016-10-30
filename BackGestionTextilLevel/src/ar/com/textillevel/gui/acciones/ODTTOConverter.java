@@ -382,6 +382,7 @@ public final class ODTTOConverter {
 		piezaODTTO.setMetrosStockInicial(piezaODT.getMetrosStockInicial());
 		piezaODTTO.setNroPiezaStockInicial(piezaODT.getNroPiezaStockInicial());
 		piezaODTTO.setCodigoOdt(piezaODT.getOdt().getCodigo());
+		piezaODTTO.setEsDeSegunda(piezaODT.getEsDeSegunda());
 		if (piezaODT.getPiezaRemito() != null) {
 			piezaODTTO.setPiezaRemito(piezaRemitoTOFromEntity(piezaODT.getPiezaRemito()));
 		}

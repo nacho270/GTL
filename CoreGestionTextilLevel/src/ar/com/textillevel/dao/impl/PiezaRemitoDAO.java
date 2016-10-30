@@ -20,7 +20,7 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaSinSalidaByClient(Integer idCliente) {
 		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
 		Query query = getEntityManager().createNativeQuery(
-				"select r.a_nro_remito, odt.a_codigo, odt.p_id, prod.A_DESCR, count(*), sum(pr.a_metros) " +
+				"select r.a_nro_remito, odt.a_codigo, odt.p_id, prod.A_DESCR, count(*), sum(podt.a_metros) " +
 				"from t_pieza_remito pr " + 
 				"inner join T_PIEZA_ODT podt on podt.F_PIEZA_REMITO_P_ID = pr.p_id " + 
 				"inner join T_ORDEN_DE_TRABAJO odt on odt.p_id = podt.f_odt_p_id " +
@@ -46,7 +46,7 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 			detalle.setIdODT((Integer)row[2]);
 			detalle.setProducto((String)row[3]);
 			detalle.setCantPiezas(NumUtil.toInteger(row[4]));
-			detalle.setMetrosTotales(((BigDecimal)row[5]).doubleValue());
+			detalle.setMetrosTotales(row[5] == null ? 0d : ((BigDecimal)row[5]).doubleValue());
 			infoPiezas.add(detalle);
 		}
 		return infoPiezas;
@@ -55,7 +55,7 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 	public List<DetallePiezaRemitoEntradaSinSalida> getInfoPiezasEntradaCompletoSinSalidaByClient(Integer idCliente) {
 		List<DetallePiezaRemitoEntradaSinSalida> infoPiezas = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
 		Query query = getEntityManager().createNativeQuery(
-				"SELECT R.A_NRO_REMITO, ODT.A_CODIGO, ODT.P_ID, PROD.A_DESCR, COUNT(*), SUM(PR.A_METROS) "+
+				"SELECT R.A_NRO_REMITO, ODT.A_CODIGO, ODT.P_ID, PROD.A_DESCR, COUNT(*), SUM(PODT.A_METROS) "+
 				"FROM T_PIEZA_REMITO PR "+
 				"INNER JOIN T_PIEZA_ODT PODT ON PODT.F_PIEZA_REMITO_P_ID = PR.P_ID " +
 				"INNER JOIN T_ORDEN_DE_TRABAJO ODT ON ODT.P_ID = PODT.F_ODT_P_ID " +
@@ -86,7 +86,7 @@ public class PiezaRemitoDAO extends GenericDAO<PiezaRemito, Integer> implements 
 			detalle.setIdODT((Integer)row[2]);
 			detalle.setProducto((String)row[3]);
 			detalle.setCantPiezas(NumUtil.toInteger(row[4]));
-			detalle.setMetrosTotales(((BigDecimal)row[5]).doubleValue());
+			detalle.setMetrosTotales(row[5] == null ? 0d : ((BigDecimal)row[5]).doubleValue());
 			infoPiezas.add(detalle);
 		}
 		return infoPiezas;

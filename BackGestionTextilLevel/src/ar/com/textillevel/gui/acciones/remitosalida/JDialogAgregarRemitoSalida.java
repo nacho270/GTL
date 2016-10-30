@@ -608,7 +608,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			piezaODTSet.addAll(pr.getPiezasPadreODT());
 		}
 		for(PiezaODT podt : piezaODTSet) {
-			totalMetrosDesdeODTs += podt.getMetros().doubleValue();
+			totalMetrosDesdeODTs += podt.getMetros() == null ? podt.getPiezaRemito().getMetros().doubleValue() :  podt.getMetros().doubleValue();
 		}
 		//hago el cálculo
 		double totalMetrosRS = remitoSalida.getTotalMetros().doubleValue();
@@ -661,12 +661,13 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 		private static final long serialVersionUID = 1L;
 
-		private static final int CANT_COLS = 5;
-		private static final int COL_METROS_PIEZA_ORIG = 0;
-		private static final int COL_NRO_PIEZA = 1;
-		private static final int COL_METROS_PIEZA = 2;
-		private static final int COL_OBSERVACIONES = 3;
-		private static final int COL_OBJ = 4;
+		private static final int CANT_COLS = 6;
+		private static final int COL_ODT = 0;
+		private static final int COL_METROS_PIEZA_ORIG = 1;
+		private static final int COL_NRO_PIEZA = 2;
+		private static final int COL_METROS_PIEZA = 3;
+		private static final int COL_OBSERVACIONES = 4;
+		private static final int COL_OBJ = 5;
 
 		private static final int CANT_PIEZAS_INICIALES = 15;
 		private final int CANT_FILAS_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
@@ -782,12 +783,21 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		private Object[] getRow(PiezaRemito elemento) {
 			String nroPieza = elemento.getOrdenPieza().toString();
 			Object[] row = new Object[CANT_COLS];
+			row[COL_ODT] = getODT(elemento);
 			row[COL_NRO_PIEZA] = nroPieza;
 			row[COL_METROS_PIEZA] = elemento.getMetros() == null ? null : elemento.getMetros().toString();
 			row[COL_OBSERVACIONES] = elemento.getObservaciones();
 			row[COL_METROS_PIEZA_ORIG] = elemento.getPiezaEntrada() == null ? null : getSumMetros(elemento);
 			row[COL_OBJ] = elemento;
 			return row;
+		}
+
+		private String getODT(PiezaRemito elemento) {
+			if(elemento.getPiezasPadreODT() == null || elemento.getPiezasPadreODT().isEmpty()) {
+				return ""; //no debería pasar!
+			} else {//existe al menos 1
+				return ODTCodigoHelper.getInstance().formatCodigo(elemento.getPiezasPadreODT().get(0).getOdt().getCodigo());
+			}
 		}
 
 		private BigDecimal getSumMetros(PiezaRemito elemento) {
@@ -815,10 +825,11 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 				}
 
 			};
+			tablaPiezaEntrada.setStringColumn(COL_ODT, "ODT", 90, 90, true);
 			tablaPiezaEntrada.setStringColumn(COL_NRO_PIEZA, "NUMERO", 80, 80, true);
 			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA_ORIG, "METROS ENT.", 80, true);
-			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA, "METROS", 0, Float.MAX_VALUE, 80, true);
-			tablaPiezaEntrada.setStringColumn(COL_OBSERVACIONES, "OBSERVACIONES", 225, 225, false);
+			tablaPiezaEntrada.setFloatColumn(COL_METROS_PIEZA, "METROS", 0, Float.MAX_VALUE, 80, false);
+			tablaPiezaEntrada.setStringColumn(COL_OBSERVACIONES, "OBSERVACIONES", 135, 135, false);
 			tablaPiezaEntrada.setStringColumn(COL_OBJ, "", 0, 0, true);
 
 			tablaPiezaEntrada.addMouseListener(new MouseAdapter() {
@@ -1111,7 +1122,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			List<Integer> ordenList = new ArrayList<Integer>();
 			for(PiezaODT podt : piezasPadreODT) {
 				if(podt.getPiezaRemito() != null) {
-					ordenList.add(podt.getOrden()+1);
+					ordenList.add(podt.getOrden() == null ? podt.getPiezaRemito().getOrdenPieza() : podt.getOrden()+1);
 				}
 			}
 			return ordenList;
