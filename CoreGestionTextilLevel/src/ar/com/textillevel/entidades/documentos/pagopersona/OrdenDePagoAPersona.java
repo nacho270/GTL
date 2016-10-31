@@ -3,6 +3,7 @@ package ar.com.textillevel.entidades.documentos.pagopersona;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,6 +36,9 @@ public class OrdenDePagoAPersona implements Serializable {
 	private List<FormaPagoOrdenDePagoPersona> formasDePago;
 	private String usuarioVerificador;
 	private String usuarioCreador;
+	private Boolean entregado;
+	private Timestamp fechaHoraEntregada;
+	private String terminalEntrega;
 	
 	@Id
 	@Column(name="P_ID")
@@ -119,5 +123,32 @@ public class OrdenDePagoAPersona implements Serializable {
 
 	public void setUsuarioCreador(String usuarioCreador) {
 		this.usuarioCreador = usuarioCreador;
+	}
+	
+	@Column(name = "A_ENTREGADA", nullable = true)
+	public Boolean getEntregado() {
+		return entregado;
+	}
+
+	public void setEntregado(Boolean entregado) {
+		this.entregado = entregado;
+	}
+	
+	@Column(name = "A_FECHA_HORA_ENTREGADA", nullable = true)
+	public Timestamp getFechaHoraEntregada() {
+		return fechaHoraEntregada;
+	}
+
+	public void setFechaHoraEntregada(Timestamp fechaHoraEntregada) {
+		this.fechaHoraEntregada = fechaHoraEntregada;
+	}
+	
+	@Column(name = "A_TERMINAL_ENTREGA", nullable = true)
+	public String getTerminalEntrega() {
+		return terminalEntrega;
+	}
+
+	public void setTerminalEntrega(String terminalEntrega) {
+		this.terminalEntrega = terminalEntrega;
 	}
 }

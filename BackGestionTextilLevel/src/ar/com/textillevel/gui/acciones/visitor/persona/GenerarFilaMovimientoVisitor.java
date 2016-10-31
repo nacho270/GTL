@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.fwcommon.componentes.FWJTable;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebePersona;
@@ -143,6 +144,14 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		row[7] = movimiento.getOrdenDePago().getUsuarioVerificador();
 		row[8] = movimiento.getOrdenDePago().getUsuarioCreador();
 		row[9] = movimiento.getObservaciones();
+		Boolean entregada = movimiento.getOrdenDePago().getEntregado();
+		if (entregada == null) {
+			row[10] = "NO";
+		} else  if (entregada.equals(Boolean.TRUE)) {
+			row[10] = DateUtil.dateToString(movimiento.getOrdenDePago().getFechaHoraEntregada(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + movimiento.getOrdenDePago().getTerminalEntrega(); 
+		} else {
+			row[10] = "R - " + DateUtil.dateToString(movimiento.getOrdenDePago().getFechaHoraEntregada(), DateUtil.SHORT_DATE_WITH_HOUR_SECONDS) + " - " + movimiento.getOrdenDePago().getTerminalEntrega();
+		}
 		return row;
 	}
 	
@@ -160,6 +169,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		row[7] = movimiento.getFacturaPersona().getUsuarioVerificador();
 		row[8] = movimiento.getFacturaPersona().getUsuarioCreador();
 		row[9] = movimiento.getObservaciones();
+		row[10] = "";
 		return row;
 	}
 

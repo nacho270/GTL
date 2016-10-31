@@ -9,6 +9,7 @@ import javax.jws.WebService;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.facade.api.local.OrdenDePagoFacadeLocal;
+import ar.com.textillevel.facade.api.local.OrdenDePagoPersonaFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoSalidaFacadeLocal;
 import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.webservices.terminal.api.remote.TerminalServiceRemote;
@@ -22,6 +23,9 @@ public class TerminalService implements TerminalServiceRemote {
 
 	@EJB
 	private RemitoSalidaFacadeLocal rsFacade;
+	
+	@EJB
+	private OrdenDePagoPersonaFacadeLocal odpPersonaFacade;
 
 	// URL: http://localhost:8080/GTL-gtlback-server/TerminalService?wsdl
 
@@ -43,6 +47,9 @@ public class TerminalService implements TerminalServiceRemote {
 					rsFacade.marcarEntregado(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
 					break;
 				}
+				case ORDEN_PAGO_PERSONA: {
+					odpPersonaFacade.marcarEntregada(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
+				}
 				default: {
 					return new TerminalServiceResponse(TerminalServiceError.OPERACION_NO_PERMITIDA);
 				}
@@ -51,6 +58,7 @@ public class TerminalService implements TerminalServiceRemote {
 			if (etd == ETipoDocumento.REMITO_SALIDA) {
 				return new TerminalServiceResponse(TerminalServiceError.RS_NO_ENCONTRADO);
 			}
+			// ODP comun y persona
 			return new TerminalServiceResponse(TerminalServiceError.ODP_NO_ENCONTRADA);
 		}
 		return new TerminalServiceResponse();
@@ -74,6 +82,9 @@ public class TerminalService implements TerminalServiceRemote {
 					rsFacade.reingresar(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
 					break;
 				}
+				case ORDEN_PAGO_PERSONA: {
+					odpPersonaFacade.reingresar(GestorTerminalBarcode.extraer(codigo), nombreTerminal);
+				}
 				default: {
 					return new TerminalServiceResponse(TerminalServiceError.OPERACION_NO_PERMITIDA);
 				}
@@ -82,6 +93,7 @@ public class TerminalService implements TerminalServiceRemote {
 			if (etd == ETipoDocumento.REMITO_SALIDA) {
 				return new TerminalServiceResponse(TerminalServiceError.RS_NO_ENCONTRADO);
 			}
+			// ODP comun y persona
 			return new TerminalServiceResponse(TerminalServiceError.ODP_NO_ENCONTRADA);
 		}
 		return new TerminalServiceResponse();

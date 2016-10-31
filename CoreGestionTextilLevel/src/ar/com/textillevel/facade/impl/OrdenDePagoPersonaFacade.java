@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 
 import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.OrdenDePagoPersonaDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
@@ -13,12 +14,13 @@ import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOr
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.facade.api.local.ChequeFacadeLocal;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
+import ar.com.textillevel.facade.api.local.OrdenDePagoPersonaFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
 
 @Stateless
-public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote{
+public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote, OrdenDePagoPersonaFacadeLocal {
 
 	@EJB
 	private OrdenDePagoPersonaDAOLocal ordenDao;
@@ -111,5 +113,34 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote{
 		ordenDePago.setUsuarioVerificador(usuario);
 		ordenDao.save(ordenDePago);
 		auditoriaFacade.auditar(usuario, "Verificación de Orden de pago a persona Nº: " + ordenDePago.getNroOrden(), EnumTipoEvento.MODIFICACION, ordenDePago);
+	}
+
+	@Override
+	public void marcarEntregada(String numero, String nombreTerminal) {
+		OrdenDePagoAPersona odp = ordenDao.getOrdenByNro(Integer.valueOf(numero));
+		if (odp == null) {
+			throw new RuntimeException("Orden de pago no encontrada");
+		}
+		if (odp.getEntregado() == null || odp.getEntregado().equals(Boolean.FALSE)) {
+			odp.setEntregado(true);
+			odp.setFechaHoraEntregada(DateUtil.getAhora());
+			odp.setTerminalEntrega(nombreTerminal);
+			auditoriaFacade.auditar(nombreTerminal, "Marcar orden de pago a persona numero: " + numero + " como entregada",
+					EnumTipoEvento.MODIFICACION, odp);
+		}
+	}
+
+	@Override
+	public void reingresar(String numero, String nombreTerminal) {
+		OrdenDePagoAPersona odp = ordenDao.getOrdenByNro(Integer.valueOf(numero));
+		if (odp == null) {
+			throw new RuntimeException("Orden de pago no encontrada");
+		}
+		if (odp.getEntregado() != null && odp.getEntregado().equals(Boolean.TRUE)) {
+			odp.setEntregado(false);
+			odp.setFechaHoraEntregada(DateUtil.getAhora());
+			odp.setTerminalEntrega(nombreTerminal);
+			auditoriaFacade.auditar(nombreTerminal, "Reingreso orden de pago a persona numero: " + numero, EnumTipoEvento.MODIFICACION, odp);
+		}
 	}
 }
