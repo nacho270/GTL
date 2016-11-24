@@ -399,17 +399,22 @@ public class JDialogCargaRecibo extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if (validar()) {
-						capturarSetearDatos();
 						try {
 							getBtnGuardar().setEnabled(false);
-							getReciboFacade().ingresarRecibo(recibo, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-							FWJOptionPane.showInformationMessage(JDialogCargaRecibo.this, "El recibo se ha grabado con éxito.", "Información");
-							if(FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Desea imprimir el Recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-								imprimirRecibo();
+							capturarSetearDatos();
+							try {
+								getBtnGuardar().setEnabled(false);
+								getReciboFacade().ingresarRecibo(recibo, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+								FWJOptionPane.showInformationMessage(JDialogCargaRecibo.this, "El recibo se ha grabado con éxito.", "Información");
+								if (FWJOptionPane.showQuestionMessage(JDialogCargaRecibo.this, "¿Desea imprimir el Recibo?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+									imprimirRecibo();
+								}
+								dispose();
+							} catch (ValidacionException e1) {
+								FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap(e1.getMensajeError()), "Atención");
 							}
-							dispose();
-						} catch (ValidacionException e1) {
-							FWJOptionPane.showErrorMessage(JDialogCargaRecibo.this, StringW.wordWrap(e1.getMensajeError()), "Atención");
+						} finally {
+							getBtnGuardar().setEnabled(true);
 						}
 					}
 				}
