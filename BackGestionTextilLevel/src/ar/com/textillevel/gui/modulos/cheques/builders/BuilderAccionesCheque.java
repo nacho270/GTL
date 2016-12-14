@@ -33,6 +33,7 @@ import ar.com.textillevel.gui.modulos.cheques.columnas.ColumnaFechaSalidaCheque;
 import ar.com.textillevel.gui.modulos.cheques.columnas.ColumnaImporteCheque;
 import ar.com.textillevel.gui.modulos.cheques.columnas.ColumnaNumeracionCheque;
 import ar.com.textillevel.gui.modulos.cheques.columnas.ColumnaNumeroCheque;
+import ar.com.textillevel.gui.modulos.cheques.columnas.ColumnaNumeroCuentaCheque;
 
 public class BuilderAccionesCheque implements IBuilderAcciones<Cheque>,
 											  IBuilderFiltros<Cheque>, 
@@ -71,6 +72,7 @@ public class BuilderAccionesCheque implements IBuilderAcciones<Cheque>,
 		tabla.addColumna(new ColumnaFechaEntradaCheque());
 		tabla.addColumna(new ColumnaClienteCheque());
 		tabla.addColumna(new ColumnaBancoCheque());
+		tabla.addColumna(new ColumnaNumeroCuentaCheque());
 		tabla.addColumna(new ColumnaCuitCheque());
 		tabla.addColumna(new ColumnaNumeroCheque());
 		tabla.addColumna(new ColumnaFechaDepositoCheque());

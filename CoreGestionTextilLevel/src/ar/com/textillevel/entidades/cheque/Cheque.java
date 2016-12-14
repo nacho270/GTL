@@ -48,6 +48,7 @@ public class Cheque implements Serializable {
 	private Cliente clienteSalida;
 	private Persona personaSalida;
 	private Banco bancoSalida;
+	private String nroCuenta;
 	
 	@Id
 	@Column(name = "P_ID")
@@ -226,6 +227,15 @@ public class Cheque implements Serializable {
 		this.bancoSalida = bancoSalida;
 	}
 	
+	@Column(name = "A_NRO_CUENTA")
+	public String getNroCuenta() {
+		return nroCuenta;
+	}
+
+	public void setNroCuenta(String nroCuenta) {
+		this.nroCuenta = nroCuenta;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -66,6 +66,7 @@ public class JDialogAgregarCheque extends JDialog {
 
 	private static final long serialVersionUID = 2011134895322286079L;
 
+	private JTextField txtNroCuenta;
 	private JTextField txtBanco;
 	private PanelDatePicker fechaDeposito;
 	private PanelDatePicker fechaEntrada;
@@ -255,7 +256,7 @@ public class JDialogAgregarCheque extends JDialog {
 	}
 
 	private void setUpScreen() {
-		setSize(new Dimension(640, 430));
+		setSize(new Dimension(640, 460));
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setTitle("Alta de cheque");
 		GuiUtil.centrar(this);
@@ -311,11 +312,13 @@ public class JDialogAgregarCheque extends JDialog {
 			panelGeneral.add(getTxtCUIT(),  GenericUtils.createGridBagConstraints(1, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelGeneral.add(new JLabel("Número: "), GenericUtils.createGridBagConstraints(0, 5,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelGeneral.add(getTxtNroCheque(),  GenericUtils.createGridBagConstraints(1, 5,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelGeneral.add(getFechaDeposito(),  GenericUtils.createGridBagConstraints(0, 6,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
-			panelGeneral.add(new JLabel("Importe: "), GenericUtils.createGridBagConstraints(0, 7,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelGeneral.add(getTxtImporteCheque(),  GenericUtils.createGridBagConstraints(1, 7,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelGeneral.add(new JLabel("Capital o interior: "), GenericUtils.createGridBagConstraints(0, 8,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelGeneral.add(getCmbCapitalOInterior(),  GenericUtils.createGridBagConstraints(1, 8,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.1, 0));
+			panelGeneral.add(new JLabel("Cuenta: "), GenericUtils.createGridBagConstraints(0, 6,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelGeneral.add(getTxtNroCuenta(),  GenericUtils.createGridBagConstraints(1, 6,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelGeneral.add(getFechaDeposito(),  GenericUtils.createGridBagConstraints(0, 7,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 10, 5, 5), 4, 1, 1, 0));
+			panelGeneral.add(new JLabel("Importe: "), GenericUtils.createGridBagConstraints(0, 8,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelGeneral.add(getTxtImporteCheque(),  GenericUtils.createGridBagConstraints(1, 8,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panelGeneral.add(new JLabel("Capital o interior: "), GenericUtils.createGridBagConstraints(0, 9,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelGeneral.add(getCmbCapitalOInterior(),  GenericUtils.createGridBagConstraints(1, 9,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.1, 0));
 		}
 		return panelGeneral;
 	}
@@ -374,6 +377,16 @@ public class JDialogAgregarCheque extends JDialog {
 		return txtBanco;
 	}
 
+	public JTextField getTxtNroCuenta() {
+		if (txtNroCuenta == null) {
+			txtNroCuenta = new JTextField();
+			if(getCheque()!=null && getCheque().getNroCuenta() != null) {
+				txtNroCuenta.setText(getCheque().getNroCuenta());
+			}
+		}
+		return txtNroCuenta;
+	}
+	
 	private BancoFacadeRemote getBancoFacade() {
 		if (bancoFacade == null) {
 			bancoFacade = GTLBeanFactory.getInstance().getBean2(BancoFacadeRemote.class);
@@ -583,27 +596,56 @@ public class JDialogAgregarCheque extends JDialog {
 	}
 
 	private boolean validar() {
+		if(getCliente() == null){
+			FWJOptionPane.showErrorMessage(this, "Debe seleccionar a un cliente", "Error");
+			getLblelegirCliente().requestFocus();
+			return false;
+		}
+		
+		if(banco == null) {
+			FWJOptionPane.showErrorMessage(this, "Debe elegir un Banco.", "Error");
+			return false;
+		}
+		
+		if(getTxtCUIT().getText().trim().length() < 13) {
+			FWJOptionPane.showErrorMessage(this, "Debe completar el CUIT.","Error");
+			getTxtCUIT().requestFocus();
+			return false;
+		}
+		
 		if(getTxtNroCheque().getText().trim().length() == 0){
 			FWJOptionPane.showErrorMessage(this, "Debe ingresar el número de cheque", "Error");
 			getTxtNroCheque().requestFocus();
 			return false;
 		}
 
+		if(!GenericUtils.esNumerico(getTxtNroCheque().getText())){
+			FWJOptionPane.showErrorMessage(this, "El número de cheque no puede tener letras.","Error");
+			getTxtNroCheque().requestFocus();
+			return false;
+		}
+		
+		if(getTxtNroCuenta().getText().trim().length() == 0){
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el número de cuenta", "Error");
+			getTxtNroCuenta().requestFocus();
+			return false;
+		}
+		
+		if(getFechaDeposito().getDate()==null){
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de deposito", "Error");
+			getFechaDeposito().requestFocus();
+			return false;
+		}
+		
 		if(getTxtImporteCheque().getText().trim().length()==0){
 			FWJOptionPane.showErrorMessage(this, "Debe ingresar el importe", "Error");
 			getTxtImporteCheque().requestFocus();
 			return false;
 		}
 		
-		if(getCliente() == null){
-			FWJOptionPane.showErrorMessage(this, "Debe seleccionar a un cliente", "Error");
-			getLblelegirCliente().requestFocus();
-			return false;
-		}
-
-		if(getFechaDeposito().getDate()==null){
-			FWJOptionPane.showErrorMessage(this, "Debe ingresar la fecha de deposito", "Error");
-			getFechaDeposito().requestFocus();
+		if(!GenericUtils.esNumerico(getTxtImporteCheque().getText())){
+			FWJOptionPane.showErrorMessage(this, "El importe de cheque no puede tener letras.","Error");
+			getTxtImporteCheque().requestFocus();
 			return false;
 		}
 		
@@ -620,32 +662,10 @@ public class JDialogAgregarCheque extends JDialog {
 			getFechaEntrada().requestFocus();
 			return false;
 		}
-		
-		if(getTxtCUIT().getText().trim().length() < 13) {
-			FWJOptionPane.showErrorMessage(this, "Debe completar el CUIT.","Error");
-			getTxtCUIT().requestFocus();
-			return false;
-		}
-		
-		if(!GenericUtils.esNumerico(getTxtNroCheque().getText())){
-			FWJOptionPane.showErrorMessage(this, "El número de cheque no puede tener letras.","Error");
-			getTxtNroCheque().requestFocus();
-			return false;
-		}
 
-		if(!GenericUtils.esNumerico(getTxtImporteCheque().getText())){
-			FWJOptionPane.showErrorMessage(this, "El importe de cheque no puede tener letras.","Error");
-			getTxtImporteCheque().requestFocus();
-			return false;
-		}
-		
 		if(isModificacion() == false && getChequeFacade().getChequeByNumero(getTxtNroCheque().getText().trim())!=null){
 			FWJOptionPane.showErrorMessage(this, "Ya existe un cheque con el número ingresado", "Error");
 			getTxtNroCheque().requestFocus();
-			return false;
-		}
-		if(banco == null) {
-			FWJOptionPane.showErrorMessage(this, "Debe elegir un Banco.", "Error");
 			return false;
 		}
 		return true;
@@ -661,6 +681,7 @@ public class JDialogAgregarCheque extends JDialog {
 		getCheque().setCuit(getTxtCUIT().getText().trim());
 		getCheque().setFechaEntrada(new java.sql.Date(getFechaEntrada().getDate().getTime()));
 		getCheque().setCapitalOInterior((Character)getCmbCapitalOInterior().getSelectedItem());
+		getCheque().setNroCuenta(getTxtNroCuenta().getText().trim());
 	}
 
 	private JButton getBtnSalir() {
@@ -904,5 +925,4 @@ public class JDialogAgregarCheque extends JDialog {
 	private Set<String> getCuits() {
 		return cuits;
 	}
-
 }
