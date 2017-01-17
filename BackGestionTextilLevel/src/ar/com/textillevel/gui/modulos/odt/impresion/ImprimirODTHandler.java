@@ -14,11 +14,6 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.InstruccionProcedimientoRenderer;
@@ -26,6 +21,7 @@ import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
@@ -35,6 +31,11 @@ import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.ODTCodigoHelper;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ImprimirODTHandler {
 
@@ -46,9 +47,11 @@ public class ImprimirODTHandler {
 //	private Dialog dialogOwner;
 	private final OrdenDeTrabajo odt;
 	private EFormaImpresionODT formaImpresion;
+	private FormulaCliente formulaCliente;
 
-	public ImprimirODTHandler(OrdenDeTrabajo odt, Frame frameOwner, EFormaImpresionODT formaImpresionForzada) {
+	public ImprimirODTHandler(OrdenDeTrabajo odt, Frame frameOwner, EFormaImpresionODT formaImpresionForzada, FormulaCliente formulaCliente) {
 		this.odt = odt;
+		this.formulaCliente = formulaCliente;
 //		this.frameOwner = frameOwner;
 		if(formaImpresionForzada == null) {
 			formaImpresion = seleccionarFormaImpresion(frameOwner);
@@ -147,7 +150,7 @@ public class ImprimirODTHandler {
 			} else if(formaImpresion == EFormaImpresionODT.RESUMEN_ARTIULOS){
 				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_ARTICULO);
 			}
-			ODTTO odtto = new ODTTO(this.odt,formaImpresion);
+			ODTTO odtto = new ODTTO(this.odt,formaImpresion, this.formulaCliente);
 			try {
 				JasperPrint jasperPrint = null;
 				Map<String, Object> mapa = null;
@@ -163,7 +166,7 @@ public class ImprimirODTHandler {
 				e.printStackTrace();
 			}
 		}else{
-			ODTTO odtto = new ODTTO(this.odt,formaImpresion);
+			ODTTO odtto = new ODTTO(this.odt,formaImpresion, this.formulaCliente);
 			try {
 				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_SECUENCIA);
 				JasperPrint jasperPrint = null;
@@ -340,7 +343,7 @@ public class ImprimirODTHandler {
 			}
 		}
 		
-		public ODTTO(final OrdenDeTrabajo odt, EFormaImpresionODT formaImp) {
+		public ODTTO(final OrdenDeTrabajo odt, EFormaImpresionODT formaImp, FormulaCliente formulaCliente) {
 			ODTDatosMostradoHelper odtDatosHelper = new ODTDatosMostradoHelper(odt);
 			
 			this.codigo = odt.getCodigo();
@@ -352,7 +355,11 @@ public class ImprimirODTHandler {
 			this.nroCliente = odt.getRemito().getCliente().getNroCliente();
 			this.cantidadPiezas = odt.getPiezas().size(); // esto es lo mismo que las piezas remito?
 			this.articulo = odtDatosHelper.getDescArticulo();
-			this.color = odtDatosHelper.getDescColor();
+			if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS && formulaCliente != null){
+				this.color = odtDatosHelper.getDescColor() + " (" + formulaCliente.getCodigoFormula() + ")"; 
+			} else {
+				this.color = odtDatosHelper.getDescColor();
+			}
 			// this.maquina
 			this.tarima = odtDatosHelper.getDescTarima();
 			this.anchoFinal = odtDatosHelper.getDescAnchoFinal();

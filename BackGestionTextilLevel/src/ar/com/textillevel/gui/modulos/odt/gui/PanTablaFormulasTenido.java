@@ -216,7 +216,7 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 					ok = true;
 					break;
 				}
-				ImprimirODTHandler impHandler = new ImprimirODTHandler(odtDummy, owner, EFormaImpresionODT.RESUMEN_ARTIULOS);
+				ImprimirODTHandler impHandler = new ImprimirODTHandler(odtDummy, owner, EFormaImpresionODT.RESUMEN_ARTIULOS, formula);
 				impHandler.imprimir();
 			}
 		} while(!ok);
