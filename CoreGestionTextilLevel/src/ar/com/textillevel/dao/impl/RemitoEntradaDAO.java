@@ -40,7 +40,9 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 	}
 
 	private void doEager(RemitoEntrada remito, boolean piezas) {
-		remito.getProductoArticuloList().size();
+		if(remito.getProductoArticuloList() != null) {
+			remito.getProductoArticuloList().size();
+		}
 		remito.getPiezas().size();
 		remito.getCliente().getCelular();
 		if (piezas && remito.getPiezas() != null) {

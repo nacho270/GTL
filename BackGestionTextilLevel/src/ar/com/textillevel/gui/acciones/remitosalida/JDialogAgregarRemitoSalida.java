@@ -1209,10 +1209,10 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			for(OrdenDeTrabajo odtTransient : odtsByRS) {
 				OrdenDeTrabajo odtPersistent = null;
 				for(OrdenDeTrabajo odtPersistenIT : odtPersistentSet) {
-					if(odtTransient.getId() != null) {//al final no era transient => la agrego
-						odtPersistent = odtTransient;
-						break;
-					}
+//					if(odtTransient.getId() != null) {//al final no era transient => la agrego
+//						odtPersistent = odtTransient;
+//						break;
+//					}
 					if(odtTransient.getCodigo().equals(odtPersistenIT.getCodigo())) {
 						odtPersistent = odtPersistenIT;
 						break;
