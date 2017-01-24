@@ -68,6 +68,7 @@ public class RemitoEntradaBusinessDelegate {
 	private List<OrdenDeTrabajo> marcarODTComoNoLocales(List<OrdenDeTrabajo> odts) {
 		for(OrdenDeTrabajo odt : odts) {
 			odt.setNoLocal(true);
+			odt.setId(null); //la marco como transient así no tenemos problemas de persistencia
 		}
 		return odts;
 	}
