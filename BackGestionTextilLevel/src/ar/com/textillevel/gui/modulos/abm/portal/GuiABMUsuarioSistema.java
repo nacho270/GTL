@@ -156,7 +156,9 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 
 	private void capturarSetearDatos() {
 		getUsuarioActual().setUsrName(getTxtUserName().getText());
-		getUsuarioActual().setPassword(new String(getTxtPassword().getPassword()));
+		if (!isEditando()) {
+			getUsuarioActual().setPassword(new String(getTxtPassword().getPassword()));
+		}
 		getUsuarioActual().setCodigoUsuario(Integer.valueOf(getTxtCodigoUsuario().getValue()));
 		getUsuarioActual().setPerfil((Perfil)getCmbPerfiles().getSelectedItem());
 	}

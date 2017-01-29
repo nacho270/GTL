@@ -81,6 +81,7 @@ import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
@@ -92,11 +93,13 @@ import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
+import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -1663,6 +1666,23 @@ public class JDialogCargaFactura extends JDialog {
 			if(StringUtil.isNullOrEmpty(i.getDescripcion())) {
 				FWJOptionPane.showErrorMessage(this, "Debe completar la Descripción de todos los ítems.", "Error");
 				return false;
+			}
+		}
+		if(getCorrecionFactura() instanceof NotaCredito) {
+			if (!GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getIsAdmin()) {
+				UsuarioSistema usrAdmin = null;
+				do {
+					JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JDialogCargaFactura.this, "Autorizar alta nota de credito");
+					boolean acepto = jDialogPasswordInput.isAcepto();
+					if (!acepto) {
+						return false;
+					}
+					String pass = new String(jDialogPasswordInput.getPassword());
+					usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
+					if (usrAdmin == null) {
+						FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+					}
+				} while (usrAdmin == null);
 			}
 		}
 		if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
