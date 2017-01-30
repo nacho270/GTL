@@ -61,6 +61,14 @@ public class ODTCodigoHelper {
 		return codigoODT.substring(0, OFFSET_ANIO) + SEP_ODT + codigoODT.substring(OFFSET_ANIO, OFFSET_MES) + SEP_ODT + StringUtil.fillLeftWithZeros(codigoODT.substring(OFFSET_MES), 2);
 	}
 
+	/**
+	 * Devuelve el codigo ODT formateado de acuerdo al separador <code>SEP_ODT</code>
+	 * @param codigoODT
+	 */
+	public String formatCodigo2DigitosAnio(String codigoODT) {
+		return codigoODT.substring(2, OFFSET_ANIO) + SEP_ODT + codigoODT.substring(OFFSET_ANIO, OFFSET_MES) + SEP_ODT + StringUtil.fillLeftWithZeros(codigoODT.substring(OFFSET_MES), 2);
+	}
+
 	private String getProximoCodigoInternal(String codigoODT) {
 		int anio = getAnioFromCodigo(codigoODT);
 		int mes = getMesFromCodigo(codigoODT);
