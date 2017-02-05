@@ -1,6 +1,7 @@
 -- INSERT DE LOS MODULOS DISPONIBLES
 INSERT INTO T_MODULO_TERMINAL VALUES(1, 'main.acciones.VerDialogoOrdenarPiezasODTAction', 'Cosido');
 INSERT INTO T_MODULO_TERMINAL VALUES(2, 'main.acciones.VerLectorODTAction', 'Asignar metros piezas ODT');
+INSERT INTO T_MODULO_TERMINAL VALUES(3, 'main.acciones.VerEntregaReingresoDocumentosAction', 'Entrega/Reingreso documentos');
 
 -- INSERT DE LAS TERMINALES
 INSERT INTO T_TERMINAL VALUES(1, 'TERMINAL COSIDO', 'por definir', 1);

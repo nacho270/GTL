@@ -1,11 +1,11 @@
-package ar.com.textillevel.webservices.terminal.api.remote;
+package ar.com.textillevel.facade.api.local;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import ar.com.textillevel.entidades.to.TerminalServiceResponse;
 
-@Remote
-public interface TerminalServiceRemote {
+@Local
+public interface EntregaReingresoDocumentosFacadeLocal {
 
 	public TerminalServiceResponse marcarEntregado(String codigo, String nombreTerminal);
 	public TerminalServiceResponse reingresar(String codigo, String nombreTerminal);

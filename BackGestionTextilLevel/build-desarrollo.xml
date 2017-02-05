@@ -68,6 +68,9 @@
 				<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
 				<include name="ar/com/textillevel/modulos/fe/to/**" />
 				
+				<include name="ar/com/textillevel/modulos/terminal/entidades/**" />
+				<include name="ar/com/textillevel/modulos/terminal/facade/api/remote/**" />
+				
 			</fileset>
 		</jar>
 	</target>
@@ -113,6 +116,9 @@
 				
 				<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
 				<include name="ar/com/textillevel/modulos/fe/to/**" />
+
+				<include name="ar/com/textillevel/modulos/terminal/entidades/**" />
+				<include name="ar/com/textillevel/modulos/terminal/facade/api/remote/**" />
 
 			</fileset>
 		</jar>

@@ -401,4 +401,20 @@ public class ImageUtil {
 		return name;
 	}
 
+	public static Image iconToImage(Icon icon) {
+        if (icon instanceof ImageIcon) {
+            return ((ImageIcon) icon).getImage();
+        } else {
+            final int w = icon.getIconWidth();
+            final int h = icon.getIconHeight();
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            final GraphicsDevice gd = ge.getDefaultScreenDevice();
+            final GraphicsConfiguration gc = gd.getDefaultConfiguration();
+            final BufferedImage image = gc.createCompatibleImage(w, h);
+            final Graphics2D g = image.createGraphics();
+            icon.paintIcon(null, g, 0, 0);
+            g.dispose();
+            return image;
+        }
+    }
 }
