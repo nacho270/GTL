@@ -150,7 +150,8 @@ INSERT INTO T_MODULO VALUES
  (110,'main.acciones.cuentas.VerFacturasSinAutorizacionAFIP','Cuentas - Visualizar facturas sin autorizacion de AFIP',0,0),
  (111,'main.acciones.cuentas.VerEstadoServerAFIPAction','Cuentas - Visualizar estado de servicios AFIP',0,0),
  (112,'main.acciones.modulos.productos.AumentarPreciosAction','Productos - Aumentar Precios',0,0)
- (113,'main.acciones.facturacion.RetornarRemitoEntradaAction','Facturacion - Retornar Remito de Entrada',0,0)
+ (113,'main.acciones.facturacion.RetornarRemitoEntradaAction','Facturacion - Retornar Remito de Entrada',0,0),
+ (114,'ar.com.textillevel.gui.modulos.abm.GuiABMTerminal','Terminal - Administrar módulos de terminales',0,0)
  ;
 
  

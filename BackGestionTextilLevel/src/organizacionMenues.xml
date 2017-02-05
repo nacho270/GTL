@@ -86,6 +86,9 @@
 					<newItem
 					class="ar.com.textillevel.gui.modulos.abm.GuiABMServicios"
 					nombre="Administrar Servicios" id="75" />
+					<newItem
+          class="ar.com.textillevel.gui.modulos.abm.GuiABMTerminal"
+          nombre="Administrar Terminales" id="114" />
 				</listaModulos>
 			</GrupoModulos>
 			<GrupoModulos nombre="Seguridad">
