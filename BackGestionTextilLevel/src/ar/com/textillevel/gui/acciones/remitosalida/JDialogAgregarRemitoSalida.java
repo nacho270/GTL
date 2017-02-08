@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,8 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
-
-import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -63,6 +60,7 @@ import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.ODTCodigoHelper;
+import main.GTLGlobalCache;
 
 public class JDialogAgregarRemitoSalida extends JDialog {
 
@@ -435,7 +433,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 					if(validar()) {
 						RemitoSalida remitoSalida = capturarSetearDatos();
-						//Lógica de múltiples remitos	
+						//Lógica de múltiples remitos
 						if(remitoSalida.getPiezas().size() > CANT_PIEZAS_POR_REMITO_MAX) {
 							Integer nroRemito = remitoSalida.getNroRemito();
 							Integer cantRemitos = (int)Math.ceil(remitoSalida.getPiezas().size() / (double)CANT_PIEZAS_POR_REMITO_MAX);
@@ -692,9 +690,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 				actualizarTotales();
 			} else {
 				agregarElementos(remitoSalida.getPiezas());
-				if(!modoConsulta) {
-					setearNumerosPiezas();
-				}
 			}
 		}
 
@@ -781,13 +776,26 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		}
 
 		private Object[] getRow(PiezaRemito elemento) {
-			String nroPieza = elemento.getOrdenPieza().toString();
+			String nroPieza = null;
+			boolean noPasoPorModulosGTLLite = elemento.getPiezasPadreODT().isEmpty() || elemento.getPiezasPadreODT().get(0).getOrden() == null;
+			if(noPasoPorModulosGTLLite) {//[flujo viejo] empieza desde cero el orden, esto es para los remitos viejos que no pasan por GTLLITE
+				nroPieza = String.valueOf(elemento.getOrdenPieza()+1); 
+			} else {
+				nroPieza = elemento.getPiezasPadreODT().get(0).toString();
+			}
 			Object[] row = new Object[CANT_COLS];
 			row[COL_ODT] = getODT(elemento);
 			row[COL_NRO_PIEZA] = nroPieza;
 			row[COL_METROS_PIEZA] = elemento.getMetros() == null ? null : elemento.getMetros().toString();
 			row[COL_OBSERVACIONES] = elemento.getObservaciones();
-			row[COL_METROS_PIEZA_ORIG] = elemento.getPiezaEntrada() == null ? null : getSumMetros(elemento);
+			
+			if(noPasoPorModulosGTLLite) {//lógica vieja
+				row[COL_METROS_PIEZA_ORIG] = elemento.getPiezaEntrada() == null ? null : getSumMetros(elemento);  
+			} else {
+				if(elemento.getPiezasPadreODT().get(0).getOrdenSubpieza() == null) {//pongo metros de entrada sólo si no son subpiezas
+					row[COL_METROS_PIEZA_ORIG] = elemento.getPiezasPadreODT().get(0).getPiezaRemito().getMetros();
+				}
+			}
 			row[COL_OBJ] = elemento;
 			return row;
 		}
@@ -927,7 +935,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			remitoSalida.recalcularOrdenes();
 			getTabla().setNumRows(0);
 			agregarElementos(remitoSalida.getPiezas());
-			setearNumerosPiezas();
 			actualizarTotales();
 		}
 
@@ -970,8 +977,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 					}
 				}
 			}
-//			remitoSalida.recalcularOrdenes();
-			setearNumerosPiezas();
 		}
 
 		@Override
@@ -984,9 +989,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 				piezaEntradaList.add(elemento);
 			}
 			remitoSalida.getPiezas().removeAll(piezaEntradaList);
-
 			//FIXME: borrar bien cuando selecciono una pieza padre y otra subpieza
-			//FIXME: deshabilitar el combinar cuando se selecciona una subpieza
 
 			return true;
 		}
@@ -1080,52 +1083,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			}
 
 			return btnAgregarSubPiezas;
-		}
-
-		private void setearNumerosPiezas() {
-			Map<PiezaRemito, Integer> piezaPadreMap = new LinkedHashMap<PiezaRemito, Integer>();
-			for(PiezaRemito pr : remitoSalida.getPiezas()) {
-				PiezaRemito pPadre = pr.getPiezaEntrada();
-				if(pPadre != null) {
-					Integer cantSubpiezas = piezaPadreMap.get(pPadre);
-					if(cantSubpiezas == null) {
-						cantSubpiezas = 1;
-					} else {
-						cantSubpiezas += 1;
-					}
-					piezaPadreMap.put(pPadre, cantSubpiezas);
-				}
-			}
-			
-			int actual = 0;
-			for(int fila = 0; fila < getTabla().getRowCount(); fila++) {
-				PiezaRemito pr = getElemento(fila);
-				Integer totalSubpiezas = piezaPadreMap.get(pr.getPiezaEntrada());
-				if(totalSubpiezas == null || totalSubpiezas == 1) {
-					getTabla().setValueAt(StringUtil.getCadena(extractOrdenes(pr.getPiezasPadreODT()), ", ") , actual, COL_NRO_PIEZA);
-					actual++;
-				} else {
-					for(int cant = 1; cant <= totalSubpiezas; cant ++) {
-						if(cant != 1) {
-							getTabla().setValueAt(null, actual, COL_METROS_PIEZA_ORIG);
-						}
-						getTabla().setValueAt(actual+1, actual, COL_NRO_PIEZA);
-						actual++;
-					}
-					fila += totalSubpiezas-1;
-				}
-			}
-
-		}
-
-		private List<Integer> extractOrdenes(List<PiezaODT> piezasPadreODT) {
-			List<Integer> ordenList = new ArrayList<Integer>();
-			for(PiezaODT podt : piezasPadreODT) {
-				if(podt.getPiezaRemito() != null) {
-					ordenList.add(podt.getOrden() == null ? podt.getPiezaRemito().getOrdenPieza() : podt.getOrden()+1);
-				}
-			}
-			return ordenList;
 		}
 
 	}

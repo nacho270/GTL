@@ -705,4 +705,11 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		}
 	}
 
+	@Override
+	public void marcarRemitoSalidaComoControlado(RemitoSalida rs) {
+		RemitoSalida rsDB = getById(rs.getId());
+		rsDB.setControlado(true);
+		remitoSalidaDAOLocal.save(rsDB);
+	}
+
 }

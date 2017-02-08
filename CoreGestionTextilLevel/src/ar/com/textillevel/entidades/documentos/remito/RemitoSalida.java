@@ -53,7 +53,9 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Boolean entregado;
 	private Timestamp fechaHoraEntregado;
 	private String terminalEntrega;
+	private Boolean controlado;
 	
+
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
 		this.items = new ArrayList<ItemRemitoSalidaProveedor>();
@@ -233,6 +235,15 @@ public class RemitoSalida extends Remito implements Serializable {
 		this.entregado = entregado;
 	}
 
+	@Column(name = "A_CONTROLADO", nullable = true)
+	public Boolean getControlado() {
+		return controlado;
+	}
+
+	public void setControlado(Boolean controlado) {
+		this.controlado = controlado;
+	}
+	
 	@Column(name = "A_FECHA_HORA_ENTREGADO", nullable = true)
 	public Timestamp getFechaHoraEntregado() {
 		return fechaHoraEntregado;

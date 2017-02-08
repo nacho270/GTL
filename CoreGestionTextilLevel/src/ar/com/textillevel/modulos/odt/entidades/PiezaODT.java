@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 
 @Entity
@@ -133,7 +134,17 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 
 	@Override
 	public String toString() {
-		return getOrden() + (getOrdenSubpieza() == null  ? "" : " / " + (getOrdenSubpieza()+1));
+		return getOrden() + (getOrdenSubpieza() == null  ? "" : " / " + getOrdenSubpieza());
+	}
+
+	/**
+	 * Calcula el código de barras para una pieza. 
+	 * Si NO es una subpieza => el cod de barras es [COD_ODT] + [ORDEN_PIEZA] + 00
+	 * Si es una subpieza => el cod barras es  [COD_ODT] + [ORDEN_PIEZA] + [ORDEN_SUBPIEZA]
+	 * @param codODT
+	 */
+	public String getCodigoBarras(String codODT) {
+		return codODT + StringUtil.fillLeftWithZeros(getOrden()+"", 2) + (getOrdenSubpieza() == null ? "00" : StringUtil.fillLeftWithZeros(getOrdenSubpieza()+"", 2));
 	}
 
 	@Override
@@ -190,6 +201,24 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 	@Transient
 	public boolean tieneSalida() {
 		return getPiezasSalida() != null && !getPiezasSalida().isEmpty();
+	}
+
+	public static void main(String[] args) {
+		int totalPiezas = 8;
+		String infoPieza = "503";
+		Integer nroPieza=null, nroSubPieza=null;
+		
+		String patternSubPieza = StringUtil.fillLeftWithZeros("", Double.valueOf(Math.ceil(Math.log10(totalPiezas))).intValue());
+		int indexPattern = infoPieza.lastIndexOf(patternSubPieza);
+		if(indexPattern == -1) {//no hay subpieza => todo el string es un número de pieza
+			nroPieza = Integer.valueOf(infoPieza);
+		} else {//existe subpieza! => quito los ceros separadores y separo en pieza/subpieza
+			nroPieza = Integer.valueOf(infoPieza.substring(0, indexPattern));
+			nroSubPieza = Integer.valueOf(infoPieza.substring(indexPattern, infoPieza.length()));
+		}
+
+		System.out.println(nroPieza);
+		System.out.println(nroSubPieza);
 	}
 
 }

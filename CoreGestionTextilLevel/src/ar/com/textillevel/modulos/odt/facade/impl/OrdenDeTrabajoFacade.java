@@ -30,6 +30,7 @@ import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.CambioAvanceDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.MaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
+import ar.com.textillevel.modulos.odt.dao.api.local.PiezaODTDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.SecuenciaODTDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.TipoMaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.TransicionODTDAOLocal;
@@ -86,6 +87,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	@EJB
 	private PrecioMateriaPrimaFacadeLocal precioMateriaPrimaFacade;
 	
+	@EJB
+	private PiezaODTDAOLocal piezaODTDAO;
+
 	public List<OrdenDeTrabajo> getOdtNoAsociadasByClient(Integer idCliente) {
 		return odtDAO.getOdtNoAsociadasByClient(idCliente);
 	}
@@ -399,5 +403,16 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde, Date fechaHasta) {
 		return odtDAO.getOrdenesDeTrabajoSinSalida(fechaDesde, fechaHasta);
 	}
-	
+
+	@Override
+	public PiezaODT getPiezaODTByCodigo(String codPiezaODT) {
+		String codODT = codPiezaODT.substring(0, 8);//cod odt
+		Integer nroPieza = Integer.valueOf(codPiezaODT.substring(8, 10));
+		Integer nroSubPieza = Integer.valueOf(codPiezaODT.substring(10, codPiezaODT.length()));
+		if(nroSubPieza == 0) {//no hay subpieza => todo el string es un número de pieza
+			nroSubPieza = null;
+		}
+		return piezaODTDAO.getByParams(codODT, nroPieza, nroSubPieza);
+	}
+
 }

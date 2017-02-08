@@ -176,4 +176,12 @@ public class PiezaRemito implements Serializable {
 		this.ordenPiezaCalculado = ordenPiezaCalculado;
 	}
 
+	@Transient
+	public PiezaODT getPiezaPadreODT() {
+		if(!getPiezasPadreODT().isEmpty()) {
+			return getPiezasPadreODT().get(0);
+		}
+		return null;
+	}
+
 }
