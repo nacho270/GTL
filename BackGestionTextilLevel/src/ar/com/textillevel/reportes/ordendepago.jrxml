@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ordendepago" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="7"/>
 	<parameter name="NRO_ORDEN" class="java.lang.String"/>
@@ -51,7 +51,7 @@
 				</textElement>
 				<text><![CDATA[Av. Gral. San Martín 4215 - CP 1752 Lomas del Mirador - Pcia. Bs. As.
 	Tel. (5411)4454-2279/2395 L. Rotativas
-email: leveltextil@speedy.com.ar]]></text>
+email: info@textillevel.com]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="105" y="24" width="114" height="24">
