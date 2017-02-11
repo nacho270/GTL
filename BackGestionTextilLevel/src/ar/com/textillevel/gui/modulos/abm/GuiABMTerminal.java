@@ -27,12 +27,14 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 	private static final long serialVersionUID = 1840795762852110775L;
 
 	private static final int MAX_LONGITUD_NOMBRE = 50;
+	private static final int MAX_LONGITUD_CODIGO = 5;
 
 	private JPanel tabDetalle;
 	private JPanel panDetalle;
 
 	private FWJTextField txtNombre;
 	private FWJTextField txtIp;
+	private FWJTextField txtCodigo;
 	private JComboBox cmbModulosTerminal;
 
 	private TerminalFacadeRemote terminalFacade;
@@ -49,8 +51,6 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 	private void constructGui() {
 		panTabs.addTab("Información de la terminal", getTabDetalle());
-		getBtnAgregar().setVisible(false);
-		getBtnEliminar().setVisible(false);
 	}
 
 	private JPanel getTabDetalle() {
@@ -68,13 +68,22 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(new JLabel("Nombre:"), createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panDetalle.add(getTxtNombre(), createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("IP:"), createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtIp(), createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(new JLabel("Módulo:"), createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getCmbModulosTerminal(), createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(new JLabel("Código:"), createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getTxtCodigo(), createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(new JLabel("IP:"), createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getTxtIp(), createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(new JLabel("Módulo:"), createGridBagConstraints(0, 3, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getCmbModulosTerminal(), createGridBagConstraints(1, 3, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 
 		}
 		return panDetalle;
+	}
+
+	private FWJTextField getTxtCodigo() {
+		if (txtCodigo == null) {
+			txtCodigo = new FWJTextField(MAX_LONGITUD_CODIGO);
+		}
+		return txtCodigo;
 	}
 
 	private FWJTextField getTxtNombre() {
@@ -137,11 +146,18 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 	private boolean validar() {
 		if (getTxtNombre().getText().trim().length() == 0) {
 			FWJOptionPane.showErrorMessage(this, "Debe ingresar el nombre del sector.", this.getTitle());
+			getTxtNombre().requestFocus();
+			return false;
+		}
+		if (getTxtCodigo().getText().trim().length() == 0) {
+			FWJOptionPane.showErrorMessage(this, "Debe ingresar el Código.", this.getTitle());
+			getTxtCodigo().requestFocus();
 			return false;
 		}
 
 		if (getTxtIp().getText().trim().length() == 0) {
 			FWJOptionPane.showErrorMessage(this, "Debe ingresar el IP.", this.getTitle());
+			getTxtIp().requestFocus();
 			return false;
 		}
 
@@ -152,11 +168,19 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 		if (getTerminalFacade().existeNombre(getTerminalActual().getId(), getTxtNombre().getText())) {
 			FWJOptionPane.showErrorMessage(this, "Ya existe una terminal con el nombre ingresado.", this.getTitle());
+			getTxtNombre().requestFocus();
 			return false;
 		}
 		
+		if (getTerminalFacade().existeCodigo(getTerminalActual().getId(), getTxtCodigo().getText())) {
+			FWJOptionPane.showErrorMessage(this, "Ya existe una terminal con el código ingresado.", this.getTitle());
+			getTxtCodigo().requestFocus();
+			return false;
+		}
+
 		if (getTerminalFacade().existeIp(getTerminalActual().getId(), getTxtIp().getText())) {
 			FWJOptionPane.showErrorMessage(this, "Ya existe una terminal con el IP ingresado.", this.getTitle());
+			getTxtIp().requestFocus();
 			return false;
 		}
 		return true;
@@ -164,6 +188,7 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 	private void capturarSetearDatos() {
 		getTerminalActual().setNombre(getTxtNombre().getText().trim().toUpperCase());
+		getTerminalActual().setCodigo(getTxtCodigo().getText().trim().toUpperCase());
 		getTerminalActual().setIp(getTxtIp().getText());
 		getTerminalActual().setModuloPorDefecto((ModuloTerminal) getCmbModulosTerminal().getSelectedItem());
 	}
@@ -194,6 +219,7 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 		if (getTerminalActual() != null) {
 			getTxtNombre().setText(getTerminalActual().getNombre());
 			getTxtIp().setText(getTerminalActual().getIp());
+			getTxtCodigo().setText(getTerminalActual().getCodigo());
 			getCmbModulosTerminal().setSelectedItem(getTerminalActual().getModuloPorDefecto());
 		}
 	}
@@ -202,6 +228,7 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 	public void limpiarDatos() {
 		getTxtIp().setText("");
 		getTxtNombre().setText("");
+		getTxtCodigo().setText("");
 		getCmbModulosTerminal().setSelectedIndex(0);
 	}
 

@@ -53,4 +53,18 @@ public class TerminalDAO extends GenericDAO<Terminal, Integer> implements Termin
 		return resultList != null && resultList.size() > 0;
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean existeCodigo(Integer id, String codigo) {
+		String hql = "SELECT t From Terminal t WHERE t.codigo = :codigo "
+				+ ((id != null) ? " AND t.id <> :id " : " ");
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("codigo", codigo);
+		if(id!=null){
+			q.setParameter("id", id);
+		}
+		List<Terminal> resultList = q.getResultList();
+		return resultList != null && resultList.size() > 0;
+	}
+
 }

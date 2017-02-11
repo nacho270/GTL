@@ -18,6 +18,7 @@ public class Terminal implements Serializable {
 
 	private Integer id;
 	private String nombre;
+	private String codigo;
 	private String ip;
 	private ModuloTerminal moduloPorDefecto;
 
@@ -40,6 +41,15 @@ public class Terminal implements Serializable {
 		this.nombre = nombre;
 	}
 
+	@Column(name = "A_CODIGO", nullable = false)
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
 	@Column(name = "A_IP", nullable = false)
 	public String getIp() {
 		return ip;
@@ -50,7 +60,7 @@ public class Terminal implements Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="F_MODULO_TERMINAL_P_ID")
+	@JoinColumn(name = "F_MODULO_TERMINAL_P_ID")
 	public ModuloTerminal getModuloPorDefecto() {
 		return moduloPorDefecto;
 	}
@@ -63,7 +73,7 @@ public class Terminal implements Serializable {
 	public String toString() {
 		return nombre;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

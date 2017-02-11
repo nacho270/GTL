@@ -15,4 +15,5 @@ public interface TerminalFacadeRemote {
 	public List<Terminal> getAll();
 	public boolean existeNombre(Integer id, String nombre);
 	public boolean existeIp(Integer id, String ip);
+	public boolean existeCodigo(Integer id, String codigo);
 }

@@ -11,5 +11,6 @@ public interface TerminalDAOLocal extends DAOLocal<Terminal, Integer> {
 	public Terminal getByIP(final String ip);
 	public boolean existeNombre(Integer id, String nombre);
 	public boolean existeIp(Integer id, String ip);
+	public boolean existeCodigo(Integer id, String codigo);
 
 }

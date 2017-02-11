@@ -44,4 +44,9 @@ public class TerminalFacade implements TerminalFacadeRemote {
 	public boolean existeIp(Integer id, String ip) {
 		return terminalDao.existeIp(id, ip);
 	}
+
+	@Override
+	public boolean existeCodigo(Integer id, String codigo) {
+		return terminalDao.existeCodigo(id, codigo);
+	}
 }
