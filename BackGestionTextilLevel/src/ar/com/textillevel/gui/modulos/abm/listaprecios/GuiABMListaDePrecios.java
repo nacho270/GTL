@@ -238,7 +238,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		Collections.sort(getListaActual().getVersiones(), new Comparator<VersionListaDePrecios>() {
 			public int compare(VersionListaDePrecios o1, VersionListaDePrecios o2) {
 				int compFecha = o1.getInicioValidez().compareTo(o2.getInicioValidez());
-				return -1 * (compFecha == 0 ? o1.getId().compareTo(o2.getId()) : compFecha);
+				return -1 * (compFecha == 0 && o1.getId() != null && o2.getId() != null ? o1.getId().compareTo(o2.getId()) : compFecha);
 			}
 		});
 	}
