@@ -100,7 +100,7 @@ public class ImprimirRemitoHandler {
 				RemitoEntradaTO remitoEntrada = new RemitoEntradaTO(rs, nroSuc);
 				jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
 			} else {
-				RemitoEntradaBTO remito = new RemitoEntradaBTO(rs, nroSuc);
+				RemitoEntradaBTO remito = new RemitoEntradaBTO(rs, nroSuc, 1);
 				jasperPrint = JasperHelper.fillReport(reporte, remito.getParameters(), Collections.singletonList(remito));
 			}
 			prints.add(jasperPrint);
@@ -121,7 +121,6 @@ public class ImprimirRemitoHandler {
 		});
 
 		JasperReport reporte = null;
-//		if(System.getProperties().getProperty("test")== null || System.getProperties().getProperty("test").equals("0")) {
 		if(!GenericUtils.isSistemaTest()){
 			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
 		} else {
@@ -130,16 +129,19 @@ public class ImprimirRemitoHandler {
 		
 		for(RemitoSalida rs : remitos) {
 			JasperPrint jasperPrint = null;
+			Integer cantidadAImprimir = Integer.valueOf(cantImprimirStr);
 			if(!GenericUtils.isSistemaTest()) {
 				RemitoEntradaTO remitoEntrada = new RemitoEntradaTO(rs, nroSucursal);
 				jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
+				for(int i = 0; i < cantidadAImprimir; i ++) {
+					imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
+				}
 			} else {
-				RemitoEntradaBTO remitoEntrada = new RemitoEntradaBTO(rs, nroSucursal);
-				jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
-			}
-			Integer cantidadAImprimir = Integer.valueOf(cantImprimirStr);
-			for(int i = 0; i < cantidadAImprimir; i ++) {
-				imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
+				for(int i = 0; i < cantidadAImprimir; i ++) {
+					RemitoEntradaBTO remitoEntrada = new RemitoEntradaBTO(rs, nroSucursal, (i + 1));
+					jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
+					imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
+				}
 			}
 		}
 	}
@@ -173,8 +175,8 @@ public class ImprimirRemitoHandler {
 		private static final int CANT_PIEZAS_SPLIT = 16;
 		private static final int CANT_MAX_PIEZAS = 48;
 		
-		public RemitoEntradaBTO(RemitoSalida remito, Integer nroSucursal) {
-			cargarMap(remito, nroSucursal);
+		public RemitoEntradaBTO(RemitoSalida remito, Integer nroSucursal, Integer nroCopia) {
+			cargarMap(remito, nroSucursal, nroCopia);
 			this.piezas1 = new ArrayList<PiezaRemitoTO>();
 			this.piezas2 = new ArrayList<PiezaRemitoTO>();
 			this.piezas3 = new ArrayList<PiezaRemitoTO>();
@@ -241,8 +243,16 @@ public class ImprimirRemitoHandler {
 			return ordenes;
 		}
 
-		private void cargarMap(RemitoSalida remito, Integer nroSucursal) {
+		private void cargarMap(RemitoSalida remito, Integer nroSucursal, Integer nroCopia) {
 			this.parameters  = new HashMap();
+			String tipoCopia;
+			if (nroCopia == 1) {
+				tipoCopia = "ORIGINAL";
+			} else if (nroCopia == 2) {
+				tipoCopia = "DUPLICADO";
+			} else {
+				tipoCopia = "TRIPLICADO";
+			}
 			parameters.put("FECHA_REMITO", DateUtil.dateToString(remito.getFechaEmision()));
 			parameters.put("NRO_REMITO", String.valueOf(remito.getNroRemito()));
 			parameters.put("RAZON_SOCIAL", remito.getCliente().getRazonSocial());
@@ -257,6 +267,7 @@ public class ImprimirRemitoHandler {
 			parameters.put("TOT_PIEZAS", "TOTAL PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size()))+")");
 			parameters.put("TOT_KILOS", "TOTAL KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
 			parameters.put("TOT_METROS", "TOTAL METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			parameters.put("TIPO_COPIA", tipoCopia);
 			try {
 				parameters.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.REMITO_SALIDA, remito.getNroRemito(), GenericUtils.isSistemaTest())));
 			} catch (Exception e) {
