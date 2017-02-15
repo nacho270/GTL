@@ -25,6 +25,7 @@ public class Modulo implements Serializable {
 	private Boolean trigger;
 	private List<Accion> acciones;
 	private Boolean servicio;
+	private Boolean sistema;
 
 	@Id
 	@Column(name = "P_ID")
@@ -83,7 +84,16 @@ public class Modulo implements Serializable {
 	public void setServicio(Boolean servicio) {
 		this.servicio = servicio;
 	}
-	
+
+	@Column(name = "A_SISTEMA", nullable = true)
+	public Boolean getSistema() {
+		return sistema;
+	}
+
+	public void setSistema(Boolean sistema) {
+		this.sistema = sistema;
+	}
+
 	@Transient
 	@Override
 	public String toString(){

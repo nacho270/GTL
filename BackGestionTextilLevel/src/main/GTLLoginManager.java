@@ -27,7 +27,7 @@ public class GTLLoginManager extends FWLoginManager {
 		List<Modulo> modulos = new ArrayList<Modulo>();
 		List<ar.com.textillevel.entidades.portal.Modulo> modulosPerfil = GTLGlobalCache.getInstance().getUsuarioSistema().getPerfil().getModulos();
 		for(ar.com.textillevel.entidades.portal.Modulo m : modulosPerfil){
-			if(!m.getTrigger() && !m.getServicio()){
+			if(!m.getTrigger() && !m.getServicio() && !m.getSistema()){
 				modulos.add(new Modulo(m.getId(), m.getNombre(), m.getClassName()));
 			}
 		}
