@@ -18,6 +18,7 @@ import ar.com.textillevel.facade.api.remote.CuentaArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CuentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
+import ar.com.textillevel.facade.api.remote.EntregaReingresoDocumentosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.EventoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaPersonaFacadeRemote;
@@ -139,6 +140,7 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 		addJndiName(TransicionODTFacadeRemote.class);
 		addJndiName(TerminalFacadeRemote.class);
 		addJndiName(ModuloTerminalFacadeRemote.class);
+		addJndiName(EntregaReingresoDocumentosFacadeRemote.class);
 	}
 
 	public static GTLBeanFactory getInstance() {

@@ -284,6 +284,9 @@
 					nombre="Consultar orden de depósito" id="52" action="true"/>
 				</listaModulos>
 			</GrupoModulos>
+			<newItem
+			class="main.acciones.pagos.EntregaReingresoDocumentosAction"
+			nombre="Entrega Reingreso de Documentos" id="115" action="true"/>
 		</listaModulos>
 	</GrupoModulos>
 	

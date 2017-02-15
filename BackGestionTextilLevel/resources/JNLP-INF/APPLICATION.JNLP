@@ -114,6 +114,7 @@
     <property name="textillevel.chat.server.port" value="7777"/>
 	<property name="textillevel.ipintercambio" value="http://192.168.1.13:8080/"/>
 	<property name="textillevel.odt.wsendpoint" value="GTL-gtlback-server/ODTService"/>
+	<property name="textillevel.entregingdoc.wsendpoint" value="GTL-gtlback-server/TerminalService"/>	
 
     <property name="com.sun.management.jmxremote" value="" />
 
