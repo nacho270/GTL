@@ -279,7 +279,7 @@ public class OrdenDeTrabajo implements Serializable {
 
 	@Transient
 	public boolean puedeAsignarMetrosEnPiezas() {
-		return getEstado().ordinal() <= EEstadoODT.EN_OFICINA.ordinal();
+		return getEstado().ordinal() < EEstadoODT.EN_OFICINA.ordinal();
 	}
 
 	@Transient
