@@ -1,1 +1,0 @@
-INSERT INTO T_MODULO VALUES (115,'main.acciones.pagos.EntregaReingresoDocumentosAction','Pagos - Entrega Reingreso de Documentos',0,0);

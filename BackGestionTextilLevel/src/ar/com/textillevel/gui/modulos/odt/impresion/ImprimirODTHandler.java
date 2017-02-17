@@ -347,7 +347,7 @@ public class ImprimirODTHandler {
 			ODTDatosMostradoHelper odtDatosHelper = new ODTDatosMostradoHelper(odt);
 			
 			this.codigo = odt.getCodigo();
-			this.metros = odt.getTotalMetros();
+			this.metros = odt.getTotalMetrosEntrada();
 			this.kilos = odt.getRemito().getPesoTotal();
 			this.gramaje = odtDatosHelper.getDescGramaje();
 			this.nroRemito = odt.getRemito().getNroRemito();

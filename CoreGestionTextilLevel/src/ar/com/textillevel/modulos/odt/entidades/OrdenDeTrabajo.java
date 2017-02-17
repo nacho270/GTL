@@ -213,6 +213,15 @@ public class OrdenDeTrabajo implements Serializable {
 		return totalMetros;
 	}
 
+	@Transient
+	public BigDecimal getTotalMetrosEntrada() {
+		BigDecimal totalMetros = new BigDecimal(0);
+		for (PiezaODT pieza : getPiezas()) {
+			totalMetros = totalMetros.add(pieza.getPiezaRemito().getMetros() == null ? BigDecimal.ZERO : pieza.getPiezaRemito().getMetros());
+		}
+		return totalMetros;
+	}
+	
 	@Override
 	@Transient
 	public String toString() {
