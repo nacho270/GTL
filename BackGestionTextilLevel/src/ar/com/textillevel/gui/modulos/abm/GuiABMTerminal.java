@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -95,7 +96,7 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 	private FWJTextField getTxtIp() {
 		if (txtIp == null) {
-			txtIp = new FWJTextField();
+			txtIp = new FWJTextField();			
 		}
 		return txtIp;
 	}
@@ -119,6 +120,9 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 	@Override
 	public void botonAgregarPresionado(int nivelNodoSeleccionado) {
+		limpiarDatos();
+		setTerminalActual(new Terminal());
+		getTxtNombre().requestFocus();
 	}
 
 	@Override
@@ -129,7 +133,12 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 	@Override
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
-
+		if(lista.getSelectedIndex() >= 0) {
+			if(FWJOptionPane.showQuestionMessage(this, "¿Está seguro que desea eliminar la terminal seleccionada?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+				getTerminalFacade().remove(getTerminalActual());
+				itemSelectorSeleccionado(-1);
+			}
+		}
 	}
 
 	@Override
@@ -180,6 +189,12 @@ public class GuiABMTerminal extends GuiABMListaTemplate {
 
 		if (getTerminalFacade().existeIp(getTerminalActual().getId(), getTxtIp().getText())) {
 			FWJOptionPane.showErrorMessage(this, "Ya existe una terminal con el IP ingresado.", this.getTitle());
+			getTxtIp().requestFocus();
+			return false;
+		}
+		Pattern ipPattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
+		if(!ipPattern.matcher(getTxtIp().getText().trim()).matches()) {
+			FWJOptionPane.showErrorMessage(this, "La dirección IP no es válida.", this.getTitle());
 			getTxtIp().requestFocus();
 			return false;
 		}

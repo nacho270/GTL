@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +25,8 @@ public class Terminal implements Serializable {
 	private ModuloTerminal moduloPorDefecto;
 
 	@Id
-	@Column(name = "P_ID", nullable = false)
+	@Column(name = "P_ID")
+	@GeneratedValue(strategy=GenerationType.AUTO)	
 	public Integer getId() {
 		return id;
 	}

@@ -49,4 +49,10 @@ public class TerminalFacade implements TerminalFacadeRemote {
 	public boolean existeCodigo(Integer id, String codigo) {
 		return terminalDao.existeCodigo(id, codigo);
 	}
+
+	@Override
+	public void remove(Terminal terminal) {
+		terminalDao.removeById(terminal.getId());
+	}
+
 }

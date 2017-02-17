@@ -11,9 +11,11 @@ public interface TerminalFacadeRemote {
 
 	public Terminal getByIP(final String ip);
 	public Terminal getById(Integer id);
-	public Terminal save(Terminal terminalActual);
+	public Terminal save(Terminal terminal);
 	public List<Terminal> getAll();
 	public boolean existeNombre(Integer id, String nombre);
 	public boolean existeIp(Integer id, String ip);
 	public boolean existeCodigo(Integer id, String codigo);
+	public void remove(Terminal terminal);
+
 }
