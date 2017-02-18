@@ -17,6 +17,7 @@
 	<parameter name="ANCHO_CRUDO" class="java.lang.String"/>
 	<parameter name="ANCHO_FINAL" class="java.lang.String"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
+	<parameter name="FECHA_REMITO_ENTRADA" class="java.lang.String"/>
 	<pageHeader>
 		<band height="164" splitType="Stretch">
 			<textField isBlankWhenNull="true">
@@ -55,7 +56,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="67" y="93" width="71" height="20"/>
+				<reportElement x="67" y="93" width="46" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -128,6 +129,13 @@
 				<reportElement x="0" y="0" width="105" height="40"/>
 				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="125" y="93" width="62" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_REMITO_ENTRADA}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

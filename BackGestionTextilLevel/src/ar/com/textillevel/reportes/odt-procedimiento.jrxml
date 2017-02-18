@@ -25,6 +25,7 @@
 	<parameter name="RESUMEN_SECTOR_HUMEDO" class="java.lang.String"/>
 	<parameter name="RESUMEN_SECTOR_SECO" class="java.lang.String"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
+	<parameter name="FECHA_REMITO_ENTRADA" class="java.lang.String"/>
 	<pageHeader>
 		<band height="204" splitType="Stretch">
 			<textField isBlankWhenNull="true">
@@ -275,6 +276,19 @@
 				<reportElement x="335" y="155" width="105" height="42"/>
 				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="63" y="104" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_REMITO_ENTRADA}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<detail>

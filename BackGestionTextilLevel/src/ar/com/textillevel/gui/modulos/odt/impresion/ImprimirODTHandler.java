@@ -6,6 +6,7 @@ import java.awt.Window;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,6 +15,11 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.gui.modulos.odt.gui.procedimientos.InstruccionProcedimientoRenderer;
@@ -31,11 +37,6 @@ import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.ODTCodigoHelper;
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 public class ImprimirODTHandler {
 
@@ -210,7 +211,7 @@ public class ImprimirODTHandler {
 		private String resumenQuimicos;
 		private String resumenAlgodon;
 		private String resumenPoliester;
-
+		private String fechaRemitoEntrada;
 
 		// private String maquina;
 		
@@ -355,6 +356,7 @@ public class ImprimirODTHandler {
 			this.nroCliente = odt.getRemito().getCliente().getNroCliente();
 			this.cantidadPiezas = odt.getPiezas().size(); // esto es lo mismo que las piezas remito?
 			this.articulo = odtDatosHelper.getDescArticulo();
+			this.fechaRemitoEntrada = new SimpleDateFormat("dd/MM").format(odt.getRemito().getFechaEmision());
 			if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS && formulaCliente != null){
 				this.color = odtDatosHelper.getDescColor() + " (" + formulaCliente.getCodigoFormula() + ")"; 
 			} else {
@@ -410,7 +412,7 @@ public class ImprimirODTHandler {
 			mapa.put("CLIENTE", this.cliente);
 			mapa.put("PIEZAS", this.cantidadPiezas);
 			mapa.put("ARTICULO", this.articulo);
-			
+			mapa.put("FECHA_REMITO_ENTRADA", this.fechaRemitoEntrada);
 			mapa.put("USUARIO", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
 			mapa.put("COLOR", this.color);
 			mapa.put("TARIMA", this.tarima);
@@ -440,6 +442,7 @@ public class ImprimirODTHandler {
 			mapa.put("ANCHO_CRUDO", this.anchoCrudo);
 			mapa.put("ANCHO_FINAL", this.anchoFinal);
 			mapa.put("NRO_CLIENTE", String.valueOf(nroCliente));
+			mapa.put("FECHA_REMITO_ENTRADA", this.fechaRemitoEntrada);
 			if(piezasDummy1!=null && piezasDummy2 != null){
 				mapa.put("piezasDS1", new JRBeanCollectionDataSource(piezasDummy1));
 				mapa.put("piezasDS2", new JRBeanCollectionDataSource(piezasDummy2));
