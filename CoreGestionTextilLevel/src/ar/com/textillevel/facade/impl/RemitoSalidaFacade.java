@@ -705,11 +705,12 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		}
 	}
 
-	@Override
-	public void marcarRemitoSalidaComoControlado(RemitoSalida rs) {
+	public void marcarRemitoSalidaComoControlado(RemitoSalida rs, String nombreTerminal) {
 		RemitoSalida rsDB = getById(rs.getId());
 		rsDB.setControlado(true);
+		rsDB.setTerminalControl(nombreTerminal);
 		remitoSalidaDAOLocal.save(rsDB);
+		auditoriaFacade.auditar(nombreTerminal, "Control de remito de salida: " + rsDB.getNroRemito(), EnumTipoEvento.MODIFICACION, rs);		
 	}
 
 }

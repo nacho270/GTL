@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.textillevel.entidades.documentos.remito.enums.EEstadoControlPiezaRemitoSalida;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 
@@ -36,6 +37,7 @@ public class PiezaRemito implements Serializable {
 	private Boolean enSalida;	//Tiene sentido para una pieza de entrada. Si está en true significa que ya se le dio salida
 	private PrecioMateriaPrima pmpDescuentoStock; //es la pieza materia prima desde donde se descuenta stock. Solo tiene sentido para las piezas de R.S. de descuento de stock
 	private String ordenPiezaCalculado;
+	private Integer idEstadoControl; //indica si una pieza (de salida) ya fue controlada para su entrega, relacionado a RemitoSalida.controlado
 
 	public PiezaRemito() {
 		this.piezasPadreODT = new ArrayList<PiezaODT>();
@@ -129,6 +131,28 @@ public class PiezaRemito implements Serializable {
 		this.pmpDescuentoStock = pmpDescuentoStock;
 	}
 
+	@Column(name="A_ID_ESTADO_CONTROL", nullable=true)
+	private Integer getIdEstadoControl() {
+		return idEstadoControl;
+	}
+
+	private void setIdEstadoControl(Integer idEstadoControl) {
+		this.idEstadoControl = idEstadoControl;
+	}
+
+	@Transient
+	public EEstadoControlPiezaRemitoSalida getEstadoControl() {
+		if(getIdEstadoControl() == null) {
+			return EEstadoControlPiezaRemitoSalida.PENDIENTE;
+		} else {
+			return EEstadoControlPiezaRemitoSalida.getById(getIdEstadoControl());
+		}
+	}
+
+	public void setEstadoControl(EEstadoControlPiezaRemitoSalida estadoControl) {
+		setIdEstadoControl(estadoControl.getId());
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

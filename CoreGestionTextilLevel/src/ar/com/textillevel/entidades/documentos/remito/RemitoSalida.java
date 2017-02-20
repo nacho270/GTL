@@ -54,6 +54,7 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Timestamp fechaHoraEntregado;
 	private String terminalEntrega;
 	private Boolean controlado;
+	private String terminalControl;
 	
 
 	public RemitoSalida() {
@@ -261,4 +262,14 @@ public class RemitoSalida extends Remito implements Serializable {
 	public void setTerminalEntrega(String terminalEntrega) {
 		this.terminalEntrega = terminalEntrega;
 	}
+
+	@Column(name = "A_TERMINAL_CONTROL", nullable = true)
+	public String getTerminalControl() {
+		return terminalControl;
+	}
+
+	public void setTerminalControl(String terminalControl) {
+		this.terminalControl = terminalControl;
+	}
+
 }

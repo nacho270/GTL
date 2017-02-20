@@ -58,6 +58,8 @@ public interface RemitoSalidaFacadeRemote {
 
 	public List<RemitoSalida> getRemitosSalidaSinFacturaPorCliente(Cliente cliente);
 
-	public void marcarRemitoSalidaComoControlado(RemitoSalida rs);
+	public void marcarRemitoSalidaComoControlado(RemitoSalida rs, String nombreTerminal);
+	
+	public RemitoSalida guardarRemito(RemitoSalida remito);
 
 }
