@@ -1,4 +1,16 @@
 Archivo guia: http://www.afip.gob.ar/ws/WSAA/WSAA.ObtenerCertificado.pdf
+http://www.sistemasagiles.com.ar/trac/wiki/ManualPyAfipWs#Certificados
+
+C:\OpenSSL\bin>openssl genrsa -out empresa.key 2048
+C:\OpenSSL\bin>openssl.exe req -new -key empresa.key -subj "/C=AR/O=TEXTIL LEVEL S.A/CN=Diego Salem/serialNumber=CUIT 20319632264" -out pedido.csr
+
+Ir a AFIP: Administración de Certificados Digitales. Ir al alias, subir el CSR y bajarse la clave publica: clave-publica.crt
+
+C:\OpenSSL\bin>openssl pkcs12 -export -in clave-publica.crt  -inkey empresa.key -name "Diego Salem" -out salem.p12
+Enter Export Password: soloio
+Verifying - Enter Export Password: soloio
+
+=========================================================================================================================================================
 
 1- Generar clave privada
 
@@ -19,8 +31,9 @@ Organization: TEXTIL LEVEL S.A
 serialNumber: CUIT 20319632264
 
 5- Bajarse certificado de la AFIP (cert-wsaahomo.crt) desde la URL: http://www.afip.gob.ar/ws/
+   Para prod hay que bajarse 3 certificados de: https://wsaa.afip.gov.ar/ws/services/LoginCms usando firefox
 
-6- Importar el certificado a java.
+6- Importar el certificado a java (En prod, para los 3).
 	6.1- Ir <dir_java>/jre/lib/security
 	6.2- Pegar el archivo descargado en el punto 5
 	6.3- Correr: sudo keytool -import -alias ca -file cert-wsaahomo.crt -keystore cacerts -storepass changeit
@@ -30,4 +43,5 @@ serialNumber: CUIT 20319632264
 8- En el archivo properties apuntar correctamente:
 	-endpoint
 	-dstdn
-	-A raiz del punto 4, poner en "keystore-signer": Diego Salem 
+	-A raiz del punto 4, poner en "keystore-signer": Diego Salem
+	 
