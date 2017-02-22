@@ -356,7 +356,11 @@ public class ImprimirODTHandler {
 			this.nroCliente = odt.getRemito().getCliente().getNroCliente();
 			this.cantidadPiezas = odt.getPiezas().size(); // esto es lo mismo que las piezas remito?
 			this.articulo = odtDatosHelper.getDescArticulo();
-			this.fechaRemitoEntrada = new SimpleDateFormat("dd/MM").format(odt.getRemito().getFechaEmision());
+			if (odt.getRemito() != null && odt.getRemito().getFechaEmision() != null) {
+				this.fechaRemitoEntrada = new SimpleDateFormat("dd/MM").format(odt.getRemito().getFechaEmision());
+			} else {
+				this.fechaRemitoEntrada = ""; // para que no imprima "NULL" en el reporte
+			}
 			if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS && formulaCliente != null){
 				this.color = odtDatosHelper.getDescColor() + " (" + formulaCliente.getCodigoFormula() + ")"; 
 			} else {
