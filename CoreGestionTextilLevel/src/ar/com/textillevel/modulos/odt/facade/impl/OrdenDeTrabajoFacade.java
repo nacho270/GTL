@@ -42,6 +42,7 @@ import ar.com.textillevel.modulos.odt.entidades.workflow.CambioAvance;
 import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.local.OrdenDeTrabajoFacadeLocal;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.to.EstadoActualMaquinaTO;
@@ -396,7 +397,26 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		return odtDAO.getODTEagerByCodigo(codigo);
 	}
 
-	public OrdenDeTrabajo grabarPiezasODT(OrdenDeTrabajo odt) {
+	public OrdenDeTrabajo grabarPiezasODT(OrdenDeTrabajo odt, UsuarioSistema usuarioSistema) {
+		if(odt.getEstado() == null || odt.getEstado().ordinal() <= EEstadoODT.DETENIDA.ordinal()) {
+			Maquina maquinaActual = odt.getMaquinaActual();
+			if (maquinaActual == null || maquinaActual.getTipoMaquina().getSectorMaquina() == ESectorMaquina.SECTOR_COSIDO) {
+				if (maquinaActual == null) {
+					maquinaActual = maquinaDao.getAllBySector(ESectorMaquina.SECTOR_COSIDO).get(0);
+					odt.setMaquinaActual(maquinaActual);
+				}
+				boolean todasLasPiezasTienenOrden = true;
+				for(PiezaODT podt : odt.getPiezas()) {
+					if (podt.getOrden() == null) {
+						todasLasPiezasTienenOrden = false;
+						break;
+					}
+				}
+				registrarTransicionODT(odt.getId(),maquinaActual, usuarioSistema);
+				odt.setAvance(todasLasPiezasTienenOrden ? EAvanceODT.FINALIZADO : EAvanceODT.POR_COMENZAR);
+				odt.setEstadoODT(EEstadoODT.EN_PROCESO);
+			}
+		}
 		return odtDAO.save(odt);
 	}
 
