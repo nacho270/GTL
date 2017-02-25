@@ -3,46 +3,14 @@
 	<parameter name="RESUMEN_SECTOR_ESTAMPADO" class="java.lang.String"/>
 	<parameter name="RESUMEN_SECTOR_HUMEDO" class="java.lang.String"/>
 	<parameter name="RESUMEN_SECTOR_SECO" class="java.lang.String"/>
+	<parameter name="RESUMEN_QUIMICOS" class="java.lang.String"/>
+	<parameter name="RESUMEN_ALGODON" class="java.lang.String"/>
+	<parameter name="RESUMEN_POLIESTER" class="java.lang.String"/>
+	<parameter name="COLOR" class="java.lang.String"/>
 	<detail>
-		<band height="62" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="361" y="37" width="177" height="20"/>
-				<box leftPadding="2">
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement markup="html"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="37" width="175" height="20"/>
-				<box leftPadding="2">
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement markup="html"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_HUMEDO}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="188" y="37" width="168" height="20"/>
-				<box leftPadding="2">
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement markup="html"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_SECO}]]></textFieldExpression>
-			</textField>
+		<band height="93" splitType="Stretch">
 			<staticText>
-				<reportElement x="361" y="10" width="177" height="20"/>
+				<reportElement x="183" y="42" width="176" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -53,10 +21,10 @@
 				<textElement textAlignment="Center">
 					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SECTOR ESTAMPADO]]></text>
+				<text><![CDATA[POLIESTER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="10" width="175" height="20"/>
+				<reportElement x="378" y="42" width="164" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -67,10 +35,81 @@
 				<textElement textAlignment="Center">
 					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SECTOR HUMEDO]]></text>
+				<text><![CDATA[ALGODON]]></text>
 			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="183" y="69" width="176" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_POLIESTER}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="188" y="10" width="168" height="20"/>
+				<reportElement x="6" y="42" width="157" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QUIMICOS]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="69" width="157" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="378" y="69" width="164" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_ALGODON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="12" width="536" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["SECTOR HUMEDO [" + $P{COLOR} + "]"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="0" width="536" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -82,6 +121,50 @@
 					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SECTOR SECO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="27" width="536" height="20"/>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_SECO}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="4" y="26" width="538" height="20">
+					<printWhenExpression><![CDATA[new Boolean($P{RESUMEN_SECTOR_ESTAMPADO} != null && !$P{RESUMEN_SECTOR_ESTAMPADO}.isEmpty())]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="4" y="0" width="538" height="20">
+					<printWhenExpression><![CDATA[new Boolean($P{RESUMEN_SECTOR_ESTAMPADO} != null && !$P{RESUMEN_SECTOR_ESTAMPADO}.isEmpty())]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SECTOR ESTAMPADO]]></text>
 			</staticText>
 		</band>
 	</detail>

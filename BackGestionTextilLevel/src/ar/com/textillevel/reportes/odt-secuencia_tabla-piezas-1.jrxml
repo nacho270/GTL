@@ -66,7 +66,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{metros}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -78,7 +78,7 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{metrosFrac}]]></textFieldExpression>
 			</textField>
 		</band>

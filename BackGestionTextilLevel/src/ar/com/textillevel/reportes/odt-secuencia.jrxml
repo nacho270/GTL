@@ -20,6 +20,7 @@
 	<parameter name="pasosDS" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<parameter name="IMAGEN" class="java.lang.Object"/>
 	<parameter name="FECHA_REMITO_ENTRADA" class="java.lang.String"/>
+	<parameter name="USUARIO" class="java.lang.String"/>
 	<pageHeader>
 		<band height="211">
 			<textField isBlankWhenNull="true">
@@ -263,7 +264,7 @@
 				<reportElement x="0" y="210" width="573" height="1"/>
 			</line>
 			<image>
-				<reportElement x="317" y="155" width="105" height="51"/>
+				<reportElement x="357" y="155" width="105" height="51"/>
 				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
 			</image>
 			<image>
@@ -283,6 +284,20 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_REMITO_ENTRADA}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="235" y="168" width="100" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="216" y="168" width="18" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[U:]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>

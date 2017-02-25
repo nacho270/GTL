@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.IInstruccionProcedimiento;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
@@ -37,6 +39,8 @@ import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 import ar.com.textillevel.util.ODTCodigoHelper;
+
+import com.google.common.collect.Lists;
 
 public class ImprimirODTHandler {
 
@@ -205,9 +209,9 @@ public class ImprimirODTHandler {
 		private SecuenciaODTTO secuencia;
 		private List<DummyPiezaTablaImpresion> piezasDummy1;
 		private List<DummyPiezaTablaImpresion> piezasDummy2;
-		private String resumenSectorSeco;
-		private String resumenSectorHumedo;
-		private String resumenSectorEstampado;
+//		private String resumenSectorSeco;
+//		private String resumenSectorHumedo;
+//		private String resumenSectorEstampado;
 		private String resumenQuimicos;
 		private String resumenAlgodon;
 		private String resumenPoliester;
@@ -223,8 +227,9 @@ public class ImprimirODTHandler {
 			private String metros;
 			private String metrosFrac;
 			
-			public DummyPiezaTablaImpresion(Short nroPieza) {
+			public DummyPiezaTablaImpresion(Short nroPieza, String metros) {
 				this.nroPieza = nroPieza;
+				this.metros = metros;
 			}
 
 			public Short getNroPieza() {
@@ -358,10 +363,8 @@ public class ImprimirODTHandler {
 			this.articulo = odtDatosHelper.getDescArticulo();
 			if (odt.getRemito() != null && odt.getRemito().getFechaEmision() != null) {
 				this.fechaRemitoEntrada = new SimpleDateFormat("dd/MM").format(odt.getRemito().getFechaEmision());
-			} else {
-				this.fechaRemitoEntrada = ""; // para que no imprima "NULL" en el reporte
 			}
-			if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS && formulaCliente != null){
+			if(formulaCliente != null){
 				this.color = odtDatosHelper.getDescColor() + " (" + formulaCliente.getCodigoFormula() + ")"; 
 			} else {
 				this.color = odtDatosHelper.getDescColor();
@@ -374,29 +377,46 @@ public class ImprimirODTHandler {
 				this.secuencia = new SecuenciaODTTO(odt.getSecuenciaDeTrabajo(),formaImp);
 			}
 			if(formaImp == EFormaImpresionODT.AMBOS || formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS || formaImp == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
-				crearPiezasDummy();
-				if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS){
-					this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos(), true);
-					this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos(), true);
-					this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
-				}else if(odt.getSecuenciaDeTrabajo()!=null){
-					this.resumenSectorEstampado = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_ESTAMPERIA,odt.getSecuenciaDeTrabajo().getPasos(), true);
-					this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos(), true);
-					this.resumenSectorHumedo = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+				crearPiezas(odt.getPiezas());
+//				if(formaImp == EFormaImpresionODT.RESUMEN_ARTIULOS){
+//					this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos(), true);
+//					this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos(), true);
+//					this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
+//				}else if(odt.getSecuenciaDeTrabajo()!=null){
+//					this.resumenSectorEstampado = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_ESTAMPERIA,odt.getSecuenciaDeTrabajo().getPasos(), true);
+//					this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+//					this.resumenSectorHumedo = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+					if(odt.getSecuenciaDeTrabajo()!=null){
+						this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos(), true);
+						this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos(), true);
+						this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
+					}
 				}
-			}
 		}
 		
-		private void crearPiezasDummy() {
+		private void crearPiezas(List<PiezaODT> piezas) {
 			piezasDummy1 = new ArrayList<ImprimirODTHandler.ODTTO.DummyPiezaTablaImpresion>();
 			piezasDummy2 = new ArrayList<ImprimirODTHandler.ODTTO.DummyPiezaTablaImpresion>();
+			final List<PiezaODT> piezasODT = Lists.newArrayList(piezas);
+			Collections.sort(piezasODT, new Comparator<PiezaODT>() {
+				@Override
+				public int compare(PiezaODT p1, PiezaODT p2) {
+					if (p1.getOrden() != null && p2.getOrden() != null) {
+						return p1.getOrden().compareTo(p2.getOrden());
+					}
+					if (p1.getOrden() == null && p2.getOrden() == null) {
+						return 0;
+					}
+					return p1.getOrden() == null ? 1 : -1;
+				}
+			});
 			int i = 1;
 			int medio = (cantidadPiezas % 2 ==0?cantidadPiezas/2:(cantidadPiezas+1)/2);
-			while(i <= this.cantidadPiezas){
+			for (PiezaODT podt : piezasODT){
 				if( i <= medio){
-					piezasDummy1.add(new DummyPiezaTablaImpresion((short) i));
+					piezasDummy1.add(new DummyPiezaTablaImpresion((short) i, String.valueOf(podt.getPiezaRemito().getMetros())));
 				}else{
-					piezasDummy2.add(new DummyPiezaTablaImpresion((short) i));
+					piezasDummy2.add(new DummyPiezaTablaImpresion((short) i, String.valueOf(podt.getPiezaRemito().getMetros())));
 				}
 				i++;
 			}
@@ -451,15 +471,15 @@ public class ImprimirODTHandler {
 				mapa.put("piezasDS1", new JRBeanCollectionDataSource(piezasDummy1));
 				mapa.put("piezasDS2", new JRBeanCollectionDataSource(piezasDummy2));
 			}
-			if(resumenSectorEstampado!=null){
-				mapa.put("RESUMEN_SECTOR_ESTAMPADO", resumenSectorEstampado);
-			}
-			if(resumenSectorHumedo != null){
-				mapa.put("RESUMEN_SECTOR_HUMEDO", resumenSectorHumedo);
-			}
-			if(resumenSectorSeco != null){
-				mapa.put("RESUMEN_SECTOR_SECO", resumenSectorSeco);
-			}
+//			if(resumenSectorEstampado!=null){
+//				mapa.put("RESUMEN_SECTOR_ESTAMPADO", resumenSectorEstampado);
+//			}
+//			if(resumenSectorHumedo != null){
+//				mapa.put("RESUMEN_SECTOR_HUMEDO", resumenSectorHumedo);
+//			}
+//			if(resumenSectorSeco != null){
+//				mapa.put("RESUMEN_SECTOR_SECO", resumenSectorSeco);
+//			}
 			if(resumenQuimicos!=null){
 				mapa.put("RESUMEN_QUIMICOS", resumenQuimicos);
 			}
