@@ -52,7 +52,7 @@ public class ODTDatosMostradoHelper {
 	}
 
 	public String getDescGramaje() {
-		return GenericUtils.getDecimalFormat3().format(odt.getRemito().getTotalMetros().floatValue()/odt.getRemito().getPesoTotal().floatValue());
+		return GenericUtils.getDecimalFormat3().format(odt.getRemito().getPesoTotal().floatValue() / odt.getRemito().getTotalMetros().floatValue());
 	}
 
 	public String getDescAnchoFinal() {
