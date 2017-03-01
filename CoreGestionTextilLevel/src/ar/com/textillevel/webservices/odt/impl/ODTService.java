@@ -148,6 +148,7 @@ public class ODTService implements ODTServiceRemote {
 		re.setFechaEmision(new Date(remitoEntrada.getDateFechaEmision()));
 		re.setNroRemito(remitoEntrada.getNroRemito());
 		re.setPesoTotal(remitoEntrada.getPesoTotal());
+		re.setControl(remitoEntrada.getControl());
 		Map<Integer, PiezaRemito> piezasRemitoMap = getPiezasRemitoMap(remitoEntrada.getPiezas());
 		re.getPiezas().addAll(piezasRemitoMap.values());
 		for(Integer paId : remitoEntrada.getProductoArticuloIdsList()) {

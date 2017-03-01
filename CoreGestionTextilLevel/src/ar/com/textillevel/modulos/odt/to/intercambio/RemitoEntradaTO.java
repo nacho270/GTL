@@ -32,6 +32,7 @@ public class RemitoEntradaTO implements Serializable {
 	private BigDecimal anchoFinal;
 	private Integer idTarima; // Tarima esta federada
 	private Boolean enPalet;
+	private String control;
 
 	// Replica de ODTTO
 	private List<ODTEagerTO> odts;
@@ -48,6 +49,7 @@ public class RemitoEntradaTO implements Serializable {
 		this.anchoCrudo = re.getAnchoCrudo();
 		this.anchoFinal = re.getAnchoFinal();
 		this.enPalet = re.getEnPalet();
+		this.control = re.getControl();
 
 		if (re.getCliente() != null) {
 			this.idCliente = re.getCliente().getId();
@@ -201,6 +203,14 @@ public class RemitoEntradaTO implements Serializable {
 		this.enPalet = enPalet;
 	}
 
+	public String getControl() {
+		return control;
+	}
+
+	public void setControl(String control) {
+		this.control = control;
+	}
+	
 	public List<ODTEagerTO> getOdts() {
 		return odts;
 	}

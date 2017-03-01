@@ -37,6 +37,7 @@ public class RemitoEntrada extends Remito {
 	private BigDecimal anchoFinal;
 	private Tarima tarima;
 	private Boolean enPalet;
+	private String control;
 
 	public RemitoEntrada() {
 		this.productoArticuloList = new ArrayList<ProductoArticulo>();
@@ -131,6 +132,15 @@ public class RemitoEntrada extends Remito {
 		this.enPalet = enPalet;
 	}
 
+	@Column(name="A_CONTROL")
+	public String getControl() {
+		return control;
+	}
+
+	public void setControl(String control) {
+		this.control = control;
+	}
+	
 	@Transient
 	public void recalcularOrdenes() {
 		int ordenPieza = 1;

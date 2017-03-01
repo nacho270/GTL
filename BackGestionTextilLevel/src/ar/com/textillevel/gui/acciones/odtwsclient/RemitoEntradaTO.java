@@ -32,8 +32,10 @@ public class RemitoEntradaTO  implements java.io.Serializable {
     private java.lang.Integer idTarima;
 
     private java.lang.Integer nroRemito;
+    
+    private java.lang.String control;
 
-    private ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts;
+	private ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts;
 
     private java.math.BigDecimal pesoTotal;
 
@@ -57,6 +59,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            java.lang.Integer idProveedor,
            java.lang.Integer idTarima,
            java.lang.Integer nroRemito,
+           java.lang.String control,           
            ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts,
            java.math.BigDecimal pesoTotal,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezas,
@@ -73,6 +76,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            this.idProveedor = idProveedor;
            this.idTarima = idTarima;
            this.nroRemito = nroRemito;
+           this.control = control;
            this.odts = odts;
            this.pesoTotal = pesoTotal;
            this.piezas = piezas;
@@ -319,6 +323,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         this.nroRemito = nroRemito;
     }
 
+    public java.lang.String getControl() {
+		return control;
+	}
+
+	public void setControl(java.lang.String control) {
+		this.control = control;
+	}
 
     /**
      * Gets the odts value for this RemitoEntradaTO.

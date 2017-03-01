@@ -148,6 +148,7 @@ public final class ODTTOConverter {
 		remitoEntrada.setAnchoCrudo(remitoTO.getAnchoCrudo());
 		remitoEntrada.setAnchoFinal(remitoTO.getAnchoFinal());
 		remitoEntrada.setEnPalet(remitoTO.getEnPalet());
+		remitoEntrada.setControl(remitoTO.getControl());
 		remitoEntrada.setFechaEmision(new Date(remitoTO.getDateFechaEmision()));
 		remitoEntrada.setPesoTotal(remitoTO.getPesoTotal());
 		if (remitoTO.getIdCliente() != null) {
@@ -413,6 +414,7 @@ public final class ODTTOConverter {
 		remitoTO.setAnchoFinal(re.getAnchoFinal());
 		remitoTO.setDateFechaEmision(re.getFechaEmision().getTime());
 		remitoTO.setEnPalet(re.getEnPalet());
+		remitoTO.setControl(re.getControl());
 		remitoTO.setIdArticuloStock(re.getArticuloStock() != null ? re.getArticuloStock().getId() : null);
 		remitoTO.setIdCliente(re.getCliente().getId());
 		remitoTO.setIdCondicionDeVenta(re.getCondicionDeVenta().getId());
