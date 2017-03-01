@@ -320,6 +320,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		transicionDao.save(transicion);
 	}
 
+	
 	public List<TransicionODT> getHistoricoTransiciones(Integer idODT) {
 		return transicionDao.getAllByODT(idODT);
 	}
@@ -416,6 +417,30 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 				odt.setAvance(todasLasPiezasTienenOrden ? EAvanceODT.FINALIZADO : EAvanceODT.POR_COMENZAR);
 				odt.setEstadoODT(EEstadoODT.EN_PROCESO);
 			}
+		}
+		if(odt.getEstado() == EEstadoODT.EN_OFICINA && odt.getAvance() != EAvanceODT.POR_COMENZAR) {//solo si ya no se hizo antes
+			odt.setAvance(EAvanceODT.POR_COMENZAR);
+			TipoMaquina tp = tipoMaquinaDAO.getTipoMaquinaConOrdenMayor();
+			List<Maquina> allByTipo = maquinaDao.getAllByTipo(tp);
+			Maquina maquina = allByTipo.get(0); //elijo la primer máquina
+			odt.setMaquinaActual(maquina);
+			odt.setAvance(EAvanceODT.POR_COMENZAR);
+			odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquina)+1));
+
+			TransicionODT transicion = new TransicionODT();
+			Timestamp ahora = DateUtil.getAhora();
+			transicion.setFechaHoraRegistro(ahora);
+			transicion.setMaquina(maquina);
+			transicion.setOdt(odt);
+			transicion.setTipoMaquina(tp);
+			transicion.setUsuarioSistema(usuarioSistema);
+
+			CambioAvance ca = new CambioAvance();
+			ca.setAvance(EAvanceODT.POR_COMENZAR);
+			ca.setFechaHora(ahora);
+			ca.setUsuario(usuarioSistema);
+			transicion.getCambiosAvance().add(ca);
+			transicionDao.save(transicion);
 		}
 		return odtDAO.save(odt);
 	}
