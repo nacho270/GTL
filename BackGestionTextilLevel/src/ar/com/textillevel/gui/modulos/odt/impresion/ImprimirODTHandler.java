@@ -451,6 +451,9 @@ public class ImprimirODTHandler {
 			Map<String, Object> mapa = new HashMap<String, Object>();
 			mapa.put("BAR_CODE", this.codigo);
 			mapa.put("IMAGEN", GenericUtils.createBarCode(this.codigo));
+			mapa.put("ANIO_ODT", Integer.valueOf(String.valueOf(ODTCodigoHelper.getInstance().getAnioFromCodigo(this.codigo)).substring(2, 4)));
+			mapa.put("MES_ODT", ODTCodigoHelper.getInstance().getMesFromCodigo(this.codigo));
+			mapa.put("NRO_ODT", ODTCodigoHelper.getInstance().getNroODTFromCodigo(this.codigo));
 			mapa.put("METROS", GenericUtils.getDecimalFormat().format(this.metros.doubleValue()));
 			mapa.put("KILOS", GenericUtils.getDecimalFormat().format(this.kilos.doubleValue()));
 			mapa.put("GRAMAJE", this.gramaje);
