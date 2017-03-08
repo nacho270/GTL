@@ -179,8 +179,10 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		for(OrdenDeTrabajo odt : allODTSEnProceso){
 			TipoMaquina tm = odt.getMaquinaActual().getTipoMaquina();
 			EstadoActualTipoMaquinaTO estadoActualTipoMaquinaTO = mapa.get(tm);
-			estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(new ODTTO(odt));
-			mapa.put(tm,estadoActualTipoMaquinaTO);
+			if(estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()) != null) {
+				estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(new ODTTO(odt));
+				mapa.put(tm,estadoActualTipoMaquinaTO);
+			}
 		}
 		
 		return new ArrayList<EstadoActualTipoMaquinaTO>(mapa.values());
@@ -398,51 +400,63 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		return odtDAO.getODTEagerByCodigo(codigo);
 	}
 
-	public OrdenDeTrabajo grabarPiezasODT(OrdenDeTrabajo odt, UsuarioSistema usuarioSistema) {
-		if(odt.getEstado() == null || odt.getEstado().ordinal() <= EEstadoODT.DETENIDA.ordinal()) {
-			Maquina maquinaActual = odt.getMaquinaActual();
-			if (maquinaActual == null || maquinaActual.getTipoMaquina().getSectorMaquina() == ESectorMaquina.SECTOR_COSIDO) {
-				if (maquinaActual == null) {
+	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, UsuarioSistema usuarioSistema) {
+		checkConsistenciaCambioEstadoAndAvance(odt, estado, avance);
+		
+		if(odt.getEstado() != estado || avance.ordinal() > odt.getAvance().ordinal()) {
+
+			//cambio de avance
+			CambioAvance ca = new CambioAvance();
+			ca.setFechaHora(DateUtil.getAhora());
+			ca.setAvance(avance);
+			ca.setUsuario(usuarioSistema);
+
+			if(avance == EAvanceODT.POR_COMENZAR) {//creo una nueva transición
+				Maquina maquinaActual = null;
+				//máquina
+				if(estado == EEstadoODT.EN_PROCESO) {//modulo cosido
 					maquinaActual = maquinaDao.getAllBySector(ESectorMaquina.SECTOR_COSIDO).get(0);
 					odt.setMaquinaActual(maquinaActual);
+					odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquinaActual)+1));
+				} else {//elijo la primer máquina
+					TipoMaquina tp = tipoMaquinaDAO.getTipoMaquinaConOrdenMayor();
+					List<Maquina> allByTipo = maquinaDao.getAllByTipo(tp);
+					maquinaActual = allByTipo.get(0); //elijo la primer máquina
 				}
-				boolean todasLasPiezasTienenOrden = true;
-				for(PiezaODT podt : odt.getPiezas()) {
-					if (podt.getOrden() == null) {
-						todasLasPiezasTienenOrden = false;
-						break;
-					}
-				}
-				registrarTransicionODT(odt.getId(),maquinaActual, usuarioSistema);
-				odt.setAvance(todasLasPiezasTienenOrden ? EAvanceODT.FINALIZADO : EAvanceODT.POR_COMENZAR);
-				odt.setEstadoODT(EEstadoODT.EN_PROCESO);
+				odt.setMaquinaActual(maquinaActual);
+			
+				//nueva transición
+				TransicionODT transicion = new TransicionODT();
+				transicion.setFechaHoraRegistro(DateUtil.getAhora());
+				transicion.setMaquina(maquinaActual);
+				transicion.setOdt(odt);
+				transicion.setTipoMaquina(maquinaActual.getTipoMaquina());
+				transicion.setUsuarioSistema(usuarioSistema);
+				transicion.getCambiosAvance().add(ca);
+				
+				transicionDao.save(transicion);
+		
+			} else { //voy a buscar la transicion existente
+				TransicionODT transicion = transicionDao.getByODT(odt.getId());
+				transicion.getCambiosAvance().add(ca);
+				transicionDao.save(transicion);
 			}
+			
+			//estados en la ODT
+			odt.setEstadoODT(estado);
+			odt.setAvance(avance);
 		}
-		if(odt.getEstado() == EEstadoODT.EN_OFICINA && odt.getAvance() != EAvanceODT.POR_COMENZAR) {//solo si ya no se hizo antes
-			odt.setAvance(EAvanceODT.POR_COMENZAR);
-			TipoMaquina tp = tipoMaquinaDAO.getTipoMaquinaConOrdenMayor();
-			List<Maquina> allByTipo = maquinaDao.getAllByTipo(tp);
-			Maquina maquina = allByTipo.get(0); //elijo la primer máquina
-			odt.setMaquinaActual(maquina);
-			odt.setAvance(EAvanceODT.POR_COMENZAR);
-			odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquina)+1));
-
-			TransicionODT transicion = new TransicionODT();
-			Timestamp ahora = DateUtil.getAhora();
-			transicion.setFechaHoraRegistro(ahora);
-			transicion.setMaquina(maquina);
-			transicion.setOdt(odt);
-			transicion.setTipoMaquina(tp);
-			transicion.setUsuarioSistema(usuarioSistema);
-
-			CambioAvance ca = new CambioAvance();
-			ca.setAvance(EAvanceODT.POR_COMENZAR);
-			ca.setFechaHora(ahora);
-			ca.setUsuario(usuarioSistema);
-			transicion.getCambiosAvance().add(ca);
-			transicionDao.save(transicion);
-		}
+		
 		return odtDAO.save(odt);
+	}
+
+	private void checkConsistenciaCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance) {
+		if(odt.getEstado() != null && odt.getEstado().ordinal() > estado.ordinal()) {
+			throw new IllegalArgumentException("La ODT tiene estado " + odt.getEstado()  + " y se está intentando cambiarla a estado (menor) " + estado + ".");
+		}
+		if(odt.getEstado() != null && odt.getEstado() == estado && odt.getAvance() != null && odt.getAvance().ordinal() > avance.ordinal()) {
+			throw new IllegalArgumentException("La ODT con estado " + odt.getEstado()  + " se está intentando avanzarla de " + odt.getAvance() + " a estado (menor) " + avance + ".");
+		}
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde, Date fechaHasta) {

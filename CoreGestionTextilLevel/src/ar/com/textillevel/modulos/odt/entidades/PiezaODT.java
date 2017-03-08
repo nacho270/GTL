@@ -147,15 +147,37 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 		return codODT + StringUtil.fillLeftWithZeros(getOrden()+"", 2) + (getOrdenSubpieza() == null ? "00" : StringUtil.fillLeftWithZeros(getOrdenSubpieza()+"", 2));
 	}
 
+
+	@Override
+	public int compareTo(PiezaODT o) {
+		if(this.getOrden() == null && o.getOrden() == null) {
+			return 0;
+		} else if(this.getOrden() == null && o.getOrden() != null) {
+			return -1;
+		} else if(this.getOrden() != null && o.getOrden() == null) {
+			return 1;
+		} else if(this.getOrden().compareTo(o.getOrden()) == 0) {
+			if(this.getOrdenSubpieza() == null && o.getOrdenSubpieza()==null) {
+				return 0;
+			} else if(this.getOrdenSubpieza() == null && o.getOrdenSubpieza()!=null) {
+				return -1;
+			} else if(this.getOrdenSubpieza() != null && o.getOrdenSubpieza()==null) {
+				return 1;
+			} else {
+				return this.getOrdenSubpieza().compareTo(o.getOrdenSubpieza());
+			}
+		} else {
+			return this.getOrden().compareTo(o.getOrden());
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((metros == null) ? 0 : metros.hashCode());
-		result = prime * result
-				+ ((ordenSubpieza == null) ? 0 : ordenSubpieza.hashCode());
-		result = prime * result
-				+ ((piezaRemito == null) ? 0 : piezaRemito.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((orden == null) ? 0 : orden.hashCode());
+		result = prime * result + ((ordenSubpieza == null) ? 0 : ordenSubpieza.hashCode());
 		return result;
 	}
 
@@ -168,36 +190,24 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 		if (getClass() != obj.getClass())
 			return false;
 		PiezaODT other = (PiezaODT) obj;
-		if (metros == null) {
-			if (other.metros != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!metros.equals(other.metros))
+		} else if (!id.equals(other.id))
+			return false;
+		if (orden == null) {
+			if (other.orden != null)
+				return false;
+		} else if (!orden.equals(other.orden))
 			return false;
 		if (ordenSubpieza == null) {
 			if (other.ordenSubpieza != null)
 				return false;
 		} else if (!ordenSubpieza.equals(other.ordenSubpieza))
 			return false;
-		if (piezaRemito == null) {
-			if (other.piezaRemito != null)
-				return false;
-		} else if (!piezaRemito.equals(other.piezaRemito))
-			return false;
 		return true;
 	}
-
-	@Override
-	public int compareTo(PiezaODT o) {
-		if(this.getOrden() == null || o.getOrden() == null) {
-			return 0;
-		} else if(this.getOrden().compareTo(o.getOrden()) != 0) {
-			return this.getOrden().compareTo(o.getOrden());
-		} else if(this.getOrdenSubpieza() != null && o.getOrdenSubpieza()!=null){
-			return this.getOrdenSubpieza().compareTo(o.getOrdenSubpieza());
-		}
-		return 0;
-	}
-
+	
 	@Transient
 	public boolean tieneSalida() {
 		return getPiezasSalida() != null && !getPiezasSalida().isEmpty();

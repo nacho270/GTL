@@ -67,7 +67,7 @@ public interface OrdenDeTrabajoFacadeRemote {
 	public OrdenDeTrabajo actualizarODTYStock(OrdenDeTrabajo odt, Set<InfoBajaStock> infoStock, UsuarioSistema usuarioSistema);
 	
 	public OrdenDeTrabajo getODTEagerByCodigo(String codigo);
-	public OrdenDeTrabajo grabarPiezasODT(OrdenDeTrabajo odt, UsuarioSistema usuarioSistema);
+	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, UsuarioSistema usuarioSistema);
 
 	public PiezaODT getPiezaODTByCodigo(String codPiezaODT);
 	
