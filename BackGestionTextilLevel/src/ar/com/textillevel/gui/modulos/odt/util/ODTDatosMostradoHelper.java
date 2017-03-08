@@ -51,6 +51,14 @@ public class ODTDatosMostradoHelper {
 		return odt.getProductoArticulo().getArticulo() != null ? odt.getProductoArticulo().getArticulo().getNombre() : odt.getProductoArticulo().getArticulo().getDescripcion();
 	}
 
+	public String getDescTipoArticulo() {
+		return odt.getProductoArticulo().getArticulo() == null ? "" : odt.getProductoArticulo().getArticulo().getTipoArticulo().getSigla();
+	}
+
+	public String getDescAnchoArticulo() {
+		return odt.getProductoArticulo().getArticulo() == null ? "" : odt.getProductoArticulo().getArticulo().getAncho().toString();
+	}
+
 	public String getDescGramaje() {
 		return GenericUtils.getDecimalFormat3().format(odt.getRemito().getPesoTotal().floatValue() / odt.getRemito().getTotalMetros().floatValue());
 	}

@@ -36,8 +36,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-import main.GTLGlobalCache;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWDateField;
@@ -59,12 +57,14 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
-import ar.com.textillevel.gui.modulos.odt.gui.JDialogSeleccionarImprimirODT;
+import ar.com.textillevel.gui.acciones.impresionremito.ImpresionRemitoEntradaFichaHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.panels.PanComboConElementoOtro;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JDialogAgregarRemitoEntrada extends JDialog {
 
@@ -78,6 +78,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private JPanel pnlBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
+	private JButton btnImprimir;
 	private FWJNumericTextField txtNroRemito;
 	private FWDateField txtFechaEmision;
 	private FWJTextField txtPesoTotal;
@@ -120,6 +121,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
 	private TarimaFacadeRemote tarimaFacade;
 	private CondicionDeVentaFacadeRemote condicionDeVentaFacade;
+
 
 	public JDialogAgregarRemitoEntrada(Frame owner, RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, boolean modoConsulta) {
 		super(owner);
@@ -520,13 +522,30 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			pnlBotones.setLayout(new FlowLayout(FlowLayout.CENTER));
 			pnlBotones.add(getBtnAceptar());
 			pnlBotones.add(getBtnCancelar());
-			
+			if(modoConsulta) {
+				pnlBotones.add(getBtnImprimir());
+			}
 			getBtnCancelar().setEnabled(!modoConsulta);
 		}
 		return pnlBotones;
 	}
-
 	
+	private JButton getBtnImprimir() {
+		if(btnImprimir == null) {
+			btnImprimir = new JButton("Imprimir");
+			btnImprimir.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					List<OrdenDeTrabajo> odts = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getOdtEagerByRemitoList(remitoEntrada.getId());
+					handleImprimir(odts);
+				}
+
+			});
+
+		}
+		return btnImprimir;
+	}
+
 	private JButton getBtnCancelar() {
 		if(btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
@@ -561,10 +580,8 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 
 						//si hay ODTs => pregunto si las quiere imprimir
 						if(!odtCapturedList.isEmpty()) {
-							if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, "¿Desea imprimir la(s) ODT(s)?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-								JDialogSeleccionarImprimirODT dialogoImpresionODT = new JDialogSeleccionarImprimirODT(owner, odtCapturedList);
-								GuiUtil.centrarEnPadre(dialogoImpresionODT);
-								dialogoImpresionODT.setVisible(true);
+							if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, "¿Desea imprimir la(s) fichas de entrada de las ODT(s)?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+								handleImprimir(odtCapturedList);
 							}
 						}
 
@@ -572,9 +589,22 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 					} 
 				}
 
+
 			});
 		}
 		return btnAceptar;
+	}
+
+	private void handleImprimir(List<OrdenDeTrabajo> odtCapturedList) {
+		for(OrdenDeTrabajo odt : odtCapturedList) {
+			ImpresionRemitoEntradaFichaHandler handler = new ImpresionRemitoEntradaFichaHandler(odt, owner);
+			handler.imprimir();
+		}
+		/*
+					JDialogSeleccionarImprimirODT dialogoImpresionODT = new JDialogSeleccionarImprimirODT(owner, odtCapturedList);
+					GuiUtil.centrarEnPadre(dialogoImpresionODT);
+					dialogoImpresionODT.setVisible(true);
+		 */
 	}
 
 	private void setRemitoEntrada(RemitoEntrada remitoEntradaSaved) {
