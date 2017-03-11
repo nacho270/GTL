@@ -402,6 +402,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 
 	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, UsuarioSistema usuarioSistema) {
 		checkConsistenciaCambioEstadoAndAvance(odt, estado, avance);
+		checkConsistenciaEstadoFinalizado(odt, estado, avance);
 		
 		if(odt.getEstado() != estado || avance.ordinal() > odt.getAvance().ordinal()) {
 
@@ -448,6 +449,25 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		}
 		
 		return odtDAO.save(odt);
+	}
+
+	private void checkConsistenciaEstadoFinalizado(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance) {
+		if(avance == EAvanceODT.FINALIZADO) {
+			if(estado == EEstadoODT.EN_PROCESO) {//módulo cosido, que todas las piezas tengan orden
+				for(PiezaODT p : odt.getPiezas()) {
+					if(p.getOrden()==null || p.getOrden() <=0) {
+						throw new IllegalArgumentException("La ODT " + odt + " no puede quedar en estado " + EEstadoODT.EN_PROCESO + "- " + EAvanceODT.FINALIZADO + " porque tiene piezas sin orden");
+					}
+				}
+			}
+			if(estado == EEstadoODT.EN_OFICINA) {//módulo asignación de metros, que todas las piezas tengan metros
+				for(PiezaODT p : odt.getPiezas()) {
+					if(p.getMetros()==null || p.getMetros().floatValue() <=0f) {
+						throw new IllegalArgumentException("La ODT " + odt + " no puede quedar en estado " + EEstadoODT.EN_OFICINA + "- " + EAvanceODT.FINALIZADO + " porque tiene piezas sin metros");
+					}
+				}
+			}
+		}
 	}
 
 	private void checkConsistenciaCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance) {
