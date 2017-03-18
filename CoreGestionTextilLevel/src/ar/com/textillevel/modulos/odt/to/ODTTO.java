@@ -29,12 +29,12 @@ public class ODTTO implements Serializable {
 		this.codigo = odt.getCodigo();
 		this.idRemito = odt.getRemito().getId();
 		this.nombreCliente = odt.getRemito().getCliente().getDescripcionResumida();
-		this.producto = odt.getProductoArticulo().toString();
+		this.producto =  odt.getProductoArticulo() != null ? odt.getProductoArticulo().toString(): "";
 		this.ordenEnMaquina = odt.getOrdenEnMaquina();
 		this.nroCliente = odt.getRemito().getCliente().getNroCliente();
 		this.maquinaActual = odt.getMaquinaActual()!=null?odt.getMaquinaActual().getId():null;
-		this.totalMetros = odt.getTotalMetros();
-		this.totalKilos = odt.getTotalMetros();
+		this.totalMetros = odt.getRemito().getTotalMetros();
+		this.totalKilos = odt.getRemito().getPesoTotal();
 	}
 
 	public Integer getId() {

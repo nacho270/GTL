@@ -72,9 +72,9 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	
 	public JFrameVisionGeneralProduccion(Frame padre){
 		datosFiltro = new ModeloFiltro();
-		refreshView();
 		setUpComponentes();
 		setUpScreen();
+		refreshView();
 	}
 
 	private void setUpScreen() {
@@ -441,6 +441,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		private JCheckBox getChkFiltroFecha() {
 			if(chkFiltroFecha == null){
 				chkFiltroFecha = new JCheckBox("Filtrar por fecha");
+				chkFiltroFecha.setSelected(true);
 				chkFiltroFecha.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						GuiUtil.setEstadoPanel(getPanelFechaDesde(), getChkFiltroFecha().isSelected());
@@ -454,9 +455,10 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		private PanelDatePicker getPanelFechaDesde() {
 			if(panelFechaDesde == null){
 				panelFechaDesde = new PanelDatePicker();
-				panelFechaDesde.setEnabled(false);
+				panelFechaDesde.setEnabled(getChkFiltroFecha().isSelected());
 				panelFechaDesde.setCaption("Fecha desde: ");
-				panelFechaDesde.setSelectedDate(DateUtil.restarDias(DateUtil.getHoy(), 7));
+				panelFechaDesde.setSelectedDate(DateUtil.restarDias(DateUtil.getHoy(), 180));
+				getDatosFiltro().setFechaDesde(new java.sql.Date(getPanelFechaDesde().getDate().getTime()));
 			}
 			return panelFechaDesde;
 		}
@@ -464,9 +466,10 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		private PanelDatePicker getPanelFechaHasta() {
 			if(panelFechaHasta == null){
 				panelFechaHasta = new PanelDatePicker();
-				panelFechaHasta.setEnabled(false);
+				panelFechaHasta.setEnabled(getChkFiltroFecha().isSelected());
 				panelFechaHasta.setCaption("Fecha hasta: ");
-				panelFechaHasta.setSelectedDate(DateUtil.restarDias(DateUtil.getHoy(), 7));
+				panelFechaHasta.setSelectedDate(DateUtil.getHoy());
+				getDatosFiltro().setFechaHasta(DateUtil.getManiana(new java.sql.Date(getPanelFechaHasta().getDate().getTime())));
 			}
 			return panelFechaHasta;
 		}

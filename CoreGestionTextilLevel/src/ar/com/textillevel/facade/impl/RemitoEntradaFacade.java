@@ -114,7 +114,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			for(PiezaODT podt : odt.getPiezas()) {
 				podt.setPiezaRemito(getPiezaRemito(remitoEntrada.getPiezas(), podt.getPiezaRemito().getOrdenPieza()));
 			}
-			odt.setFechaODT(new Timestamp(remitoEntrada.getFechaEmision().getTime()));
+			odt.setFechaODT(DateUtil.getAhora());
 			odt = odtDAO.save(odt);
 		}
 		return remitoEntrada;

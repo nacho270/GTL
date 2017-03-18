@@ -36,7 +36,7 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 
 	public List<OrdenDeTrabajo> getByIdsEager(List<Integer> ids);
 	
-	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta, Cliente cliente);
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(Date fechaDesde, Date fechaHasta, Cliente cliente, EEstadoODT... estado);
 
 	public List<OrdenDeTrabajo> getAllEnProceso(Date fechaDesde, Date fechaHasta, Cliente cliente);
 

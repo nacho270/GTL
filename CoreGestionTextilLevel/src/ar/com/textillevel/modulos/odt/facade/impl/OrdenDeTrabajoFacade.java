@@ -137,7 +137,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta) {
-		return odtDAO.getOrdenesDeTrabajo(estado,fechaDesde,fechaHasta,null);
+		return odtDAO.getOrdenesDeTrabajo(fechaDesde,fechaHasta,null, estado);
 	}
 
 	public List<EstadoActualMaquinaTO> getEstadoMaquinas(Integer idTipoMaquina, Date fechaDesde, Date fechaHasta, Cliente cliente) {
@@ -189,8 +189,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	}
 
 	private List<ODTTO> getOdtsPendientes(Date fechaDesde, Date fechaHasta, Cliente cliente) {
-		List<OrdenDeTrabajo> odtsPendientes = odtDAO.getOrdenesDeTrabajo(EEstadoODT.IMPRESA,fechaDesde,fechaHasta,cliente);
-		odtsPendientes.addAll(odtDAO.getOrdenesDeTrabajo(EEstadoODT.DETENIDA,fechaDesde,fechaHasta,cliente));
+		List<OrdenDeTrabajo> odtsPendientes = odtDAO.getOrdenesDeTrabajo(fechaDesde,fechaHasta,cliente, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA);
+		odtsPendientes.addAll(odtDAO.getOrdenesDeTrabajo(fechaDesde,fechaHasta,cliente, EEstadoODT.DETENIDA));
 		List<ODTTO> odtsPendientesTO = new ArrayList<ODTTO>();
 		if(odtsPendientes!=null && !odtsPendientes.isEmpty()){
 			for(OrdenDeTrabajo odt : odtsPendientes){

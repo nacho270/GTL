@@ -2,12 +2,18 @@ package ar.com.textillevel.modulos.odt.dao.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
@@ -200,15 +206,24 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		}		
 	}	
 	
-	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta, Cliente cliente) {
+	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(Date fechaDesde, Date fechaHasta, Cliente cliente, EEstadoODT... estado) {
 		String hql = " SELECT odt FROM OrdenDeTrabajo odt WHERE 1=1 "+
-					 (estado!=null?" AND odt.idEstadoODT = :idEstadoODT ":" ")+
+					 (estado!=null && estado.length > 0 && estado[0] != null ?" AND odt.idEstadoODT IN (:idEstadoODT) ":" ")+
 					 (fechaDesde!=null?" AND odt.fechaODT >= :fechaDesde  ":" ")+
 					 (fechaHasta!=null?" AND odt.fechaODT <= :fechaHasta  ":" ") +
-					 (cliente!=null?" AND odt.remito.cliente.id = :idCliente ":" ");
+					 (cliente!=null?" AND odt.remito.cliente.id = :idCliente ":" ") +
+					 " ORDER BY odt.fechaODT DESC ";
 		Query q = getEntityManager().createQuery(hql);
-		if(estado!=null){
-			q.setParameter("idEstadoODT", estado.getId());
+		if(estado!=null && estado.length > 0 && estado[0] != null){
+			ImmutableList<Integer> idsEstados = FluentIterable.from(Arrays.asList(estado))
+					.filter(Predicates.notNull())
+					.transform(new Function<EEstadoODT, Integer>() {
+						@Override
+						public Integer apply(EEstadoODT estado) {
+							return estado.getId();
+						}
+					}).toList();
+			q.setParameter("idEstadoODT", idsEstados);
 		}
 		if(fechaDesde!=null){
 			q.setParameter("fechaDesde", fechaDesde);

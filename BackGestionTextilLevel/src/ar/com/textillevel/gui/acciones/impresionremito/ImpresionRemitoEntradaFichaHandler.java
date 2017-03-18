@@ -149,7 +149,7 @@ public class ImpresionRemitoEntradaFichaHandler {
 			for (int i=1; i <= odt.getPiezas().size(); i++) {
 				PiezaResumenTO p = new PiezaResumenTO();
 				p.setNroPieza(new Short(i+""));
-				p.setMetros("" /*odt.getPiezas(i-1).getPiezaRemito().getMetros().toString()*/);
+				p.setMetros(odt.getPiezas().get(i-1).getPiezaRemito().getMetros().toString());
 				getPiezasDS(i).add(p);
 			}
 		}

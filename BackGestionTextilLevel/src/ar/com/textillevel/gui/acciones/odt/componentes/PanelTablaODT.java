@@ -4,8 +4,11 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.ListSelectionModel;
+
+import com.google.common.collect.Lists;
 
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.PanelTablaSubirBajarModificar;
@@ -14,6 +17,8 @@ import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarPasosSecuenciaODT
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarTransicionesODT;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
+import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.to.ODTTO;
@@ -65,7 +70,12 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 					ODTTO odtto = getElemento(getTabla().getSelectedRow());
 					if(odtto.getMaquinaActual() == null) {//Se muestra directamente la secuencia de trabajo de la ODT
 						OrdenDeTrabajo odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odtto.getId());
-						JDialogVisualizarPasosSecuenciaODT d = new JDialogVisualizarPasosSecuenciaODT(padre, odt, odt.getSecuenciaDeTrabajo().getPasos(), true);
+						SecuenciaODT secuenciaDeTrabajo = odt.getSecuenciaDeTrabajo();
+						List<PasoSecuenciaODT> lista = Lists.newArrayList();
+						if (secuenciaDeTrabajo != null) {
+							lista = secuenciaDeTrabajo.getPasos();
+						}
+						JDialogVisualizarPasosSecuenciaODT d = new JDialogVisualizarPasosSecuenciaODT(padre, odt, lista, true);
 						d.setVisible(true);
 					} else {
 						JDialogVisualizarTransicionesODT dialogo = new JDialogVisualizarTransicionesODT(padre, odtto.getId());

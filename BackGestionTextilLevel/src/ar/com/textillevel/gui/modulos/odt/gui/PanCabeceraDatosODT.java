@@ -119,7 +119,7 @@ public class PanCabeceraDatosODT extends JPanel {
 		if(txtTotalMetros == null) {
 			txtTotalMetros = new FWJTextField();
 			if(remitoEntrada.getId() != null) {
-				txtTotalMetros.setText(GenericUtils.getDecimalFormat().format(odt.getTotalMetros().doubleValue()));
+				txtTotalMetros.setText(GenericUtils.getDecimalFormat().format(odt.getRemito().getTotalMetros().doubleValue()));
 			}
 			txtTotalMetros.setEnabled(false);
 		}
