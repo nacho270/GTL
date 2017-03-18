@@ -10,7 +10,7 @@ import ar.com.textillevel.entidades.portal.UsuarioSistema;
 @Remote
 public interface UsuarioSistemaFacadeRemote {
 	public List<UsuarioSistema> getAllOrderByName();
-	public UsuarioSistema save(UsuarioSistema usuario) throws ValidacionException;
+	public UsuarioSistema save(UsuarioSistema usuario, boolean cambiarPassword) throws ValidacionException;
 	public void remove (UsuarioSistema usuario);
 	public UsuarioSistema login(String usuario, String password);
 	public Boolean existeUsuario(String usuario);

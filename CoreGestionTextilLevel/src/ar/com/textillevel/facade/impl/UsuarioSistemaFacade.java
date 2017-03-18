@@ -27,9 +27,11 @@ public class UsuarioSistemaFacade implements UsuarioSistemaFacadeRemote,UsuarioS
 		usuarioDao.removeById(usuario.getId());
 	}
 
-	public UsuarioSistema save(UsuarioSistema usuario) throws ValidacionException {
-		usuario.setPassword(PortalUtils.getHash(usuario.getPassword(),"MD5"));
-		if(usuarioDao.yaExisteClave(usuario.getPassword())){
+	public UsuarioSistema save(UsuarioSistema usuario, boolean cambiarPassword) throws ValidacionException {
+		if (cambiarPassword) {
+			usuario.setPassword(PortalUtils.getHash(usuario.getPassword(),"MD5"));
+		}
+		if(cambiarPassword && usuarioDao.yaExisteClave(usuario.getPassword())){
 			throw new ValidacionException(EValidacionException.CLAVE_YA_EN_USO.getInfoValidacion());
 		}
 		return usuarioDao.save(usuario);

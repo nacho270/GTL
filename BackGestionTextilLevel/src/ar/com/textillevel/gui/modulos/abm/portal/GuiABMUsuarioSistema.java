@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,6 +47,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	private JPasswordField txtPassword;
 	private JComboBox cmbPerfiles;
 	private JLabel lblPassStrength;
+	private JCheckBox chkCambiarPass;
 	
 	private UsuarioSistema usuarioActual;
 	
@@ -78,17 +80,20 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	private JPanel getPanDetalle() {
 		if (panDetalle == null) {
 			panDetalle = new JPanel();
+			int indiceY = 0;
 			panDetalle.setLayout(new GridBagLayout());
-			panDetalle.add(new JLabel("Nombre: "), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
-			panDetalle.add(getTxtUserName(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 2, 1, 1, 0));
-			panDetalle.add(new JLabel("Password: "), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
-			panDetalle.add(getTxtPassword(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
-			panDetalle.add(getLblPassStrength(), GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel("Codigo: "), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
-			panDetalle.add(getTxtCodigoUsuario(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
-			panDetalle.add(new JLabel("Perfil: "), GenericUtils.createGridBagConstraints(0, 3, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
-			panDetalle.add(getCmbPerfiles(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
-			panDetalle.add(new JLabel(TIPS_PASSWORD), GenericUtils.createGridBagConstraints(0, 4, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 2, 1, 1, 0));
+			panDetalle.add(new JLabel("Nombre: "), GenericUtils.createGridBagConstraints(0, indiceY, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getTxtUserName(), GenericUtils.createGridBagConstraints(1, indiceY++, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 2, 1, 1, 0));
+			panDetalle.add(new JLabel("Password: "), GenericUtils.createGridBagConstraints(0, indiceY, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getTxtPassword(), GenericUtils.createGridBagConstraints(1, indiceY, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
+			panDetalle.add(getLblPassStrength(), GenericUtils.createGridBagConstraints(2, indiceY++, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
+			panDetalle.add(new JLabel("Cambiar password?"), GenericUtils.createGridBagConstraints(0, indiceY, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getChkCambiarPass(), GenericUtils.createGridBagConstraints(1, indiceY++, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
+			panDetalle.add(new JLabel("Codigo: "), GenericUtils.createGridBagConstraints(0, indiceY, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getTxtCodigoUsuario(), GenericUtils.createGridBagConstraints(1, indiceY++, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1,1 , 1, 0));
+			panDetalle.add(new JLabel("Perfil: "), GenericUtils.createGridBagConstraints(0, indiceY, GridBagConstraints.EAST,GridBagConstraints.NONE, new Insets(10, 10, 5, 5),1, 1, 0, 0));
+			panDetalle.add(getCmbPerfiles(), GenericUtils.createGridBagConstraints(1, indiceY++, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 1, 1, 1, 0));
+			panDetalle.add(new JLabel(TIPS_PASSWORD), GenericUtils.createGridBagConstraints(0, indiceY, GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL, new Insets(10, 10,5, 5), 2, 1, 1, 0));
 		}
 		return panDetalle;
 	}
@@ -109,6 +114,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 		setUsuarioActual(new UsuarioSistema());
 		getTxtUserName().requestFocus();
 		setEditando(false);
+		getChkCambiarPass().setEnabled(false);
 	}
 
 	@Override
@@ -138,7 +144,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 			capturarSetearDatos();
 			UsuarioSistema usuario;
 			try {
-				usuario = getUsuarioFacade().save(getUsuarioActual());
+				usuario = getUsuarioFacade().save(getUsuarioActual(), !isEditando() || getChkCambiarPass().isSelected());
 				lista.setSelectedValue(usuario, true);
 				cargarLista();
 				return true;
@@ -156,7 +162,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 
 	private void capturarSetearDatos() {
 		getUsuarioActual().setUsrName(getTxtUserName().getText());
-		if (!isEditando()) {
+		if (!isEditando() || getChkCambiarPass().isSelected()) {
 			getUsuarioActual().setPassword(new String(getTxtPassword().getPassword()));
 		}
 		getUsuarioActual().setCodigoUsuario(Integer.valueOf(getTxtCodigoUsuario().getValue()));
@@ -181,9 +187,9 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	@Override
 	public boolean botonModificarPresionado(int nivelNodoSeleccionado) {
 		if(nivelNodoSeleccionado >= 0) {
-			setModoEdicion(true);
 			getTxtUserName().requestFocus();
 			setEditando(true);
+			setModoEdicion(true);
 			return true;
 		} else {
 			FWJOptionPane.showErrorMessage(this, "Debe seleccionar un perfil", "Error");
@@ -213,6 +219,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 		getTxtPassword().setText("");
 		getTxtUserName().setText("");
 		getTxtCodigoUsuario().setValue(null);
+		getChkCambiarPass().setSelected(false);
 		if(getCmbPerfiles().getItemCount()>0){
 			getCmbPerfiles().setSelectedIndex(0);
 		}
@@ -230,6 +237,7 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 
 	@Override
 	public void setModoEdicion(boolean estado) {
+		getChkCambiarPass().setEnabled(isEditando());
 		GuiUtil.setEstadoPanel(getTabDetalle(), estado);
 	}
 
@@ -312,5 +320,13 @@ public class GuiABMUsuarioSistema extends GuiABMListaTemplate{
 	
 	public void setEditando(boolean editando) {
 		this.editando = editando;
+	}
+
+	public JCheckBox getChkCambiarPass() {
+		if (chkCambiarPass == null) {
+			chkCambiarPass = new JCheckBox();
+			chkCambiarPass.setEnabled(false);
+		}
+		return chkCambiarPass;
 	}
 }
