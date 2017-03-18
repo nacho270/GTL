@@ -66,7 +66,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 		setLayout(new GridBagLayout());
 		add(getPanDetalle(), createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
 		add(getPanelBotones(), createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-		getChkBuscarNro().setSelected(true);
+		getChkBuscarNro().setSelected(false);
 	}
 
 	private JPanel getPanDetalle() {
@@ -88,7 +88,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 				List<Component> textList = Arrays.asList(comps);
 
 				public Component getFirstComponent(Container focusCycleRoot) {
-					return comps[1];
+					return comps[2];
 				}
 
 				public Component getLastComponent(Container focusCycleRoot) {
@@ -106,7 +106,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 				}
 
 				public Component getDefaultComponent(Container focusCycleRoot) {
-					return comps[1];
+					return comps[2];
 				}
 			};
 			
@@ -208,6 +208,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 	private FWJNumericTextField getTxtNroCliente() {
 		if(txtNroCliente == null) {
 			txtNroCliente = new FWJNumericTextField(0, Long.MAX_VALUE);
+			txtNroCliente.setEditable(false);
 			txtNroCliente.addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -231,8 +232,14 @@ public class JDialogSeleccionarCliente extends JDialog {
 				public void itemStateChanged(ItemEvent e) {
 					getTxtNroCliente().setEditable(e.getStateChange() == ItemEvent.SELECTED);
 					getTxtRazSoc().setEditable(e.getStateChange() != ItemEvent.SELECTED);
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						getTxtNroCliente().requestFocus();
+						getTxtNroCliente().setText("");
+					} else {
+						getTxtRazSoc().requestFocus();
+						getTxtRazSoc().setText("");
+					}
 				}
-
 			});
 		}
 		return chkBuscarNro;
