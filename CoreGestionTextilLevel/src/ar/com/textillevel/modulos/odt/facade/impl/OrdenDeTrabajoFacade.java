@@ -21,6 +21,7 @@ import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
 import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.excepciones.EValidacionException;
@@ -178,11 +179,13 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		List<OrdenDeTrabajo> allODTSEnProceso = odtDAO.getAllEnProceso(fechaDesde,fechaHasta,cliente);
 		
 		for(OrdenDeTrabajo odt : allODTSEnProceso){
-			TipoMaquina tm = odt.getMaquinaActual().getTipoMaquina();
-			EstadoActualTipoMaquinaTO estadoActualTipoMaquinaTO = mapa.get(tm);
-			if(estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()) != null) {
-				estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(new ODTTO(odt));
-				mapa.put(tm,estadoActualTipoMaquinaTO);
+			if(odt.getProductoArticulo() != null && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.DEVOLUCION && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.REPROCESO_SIN_CARGO) {
+				TipoMaquina tm = odt.getMaquinaActual().getTipoMaquina();
+				EstadoActualTipoMaquinaTO estadoActualTipoMaquinaTO = mapa.get(tm);
+				if(estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()) != null) {
+					estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(new ODTTO(odt));
+					mapa.put(tm,estadoActualTipoMaquinaTO);
+				}
 			}
 		}
 		
@@ -195,7 +198,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		List<ODTTO> odtsPendientesTO = new ArrayList<ODTTO>();
 		if(odtsPendientes!=null && !odtsPendientes.isEmpty()){
 			for(OrdenDeTrabajo odt : odtsPendientes){
-				odtsPendientesTO.add(new ODTTO(odt));
+				if(odt.getProductoArticulo() != null && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.DEVOLUCION && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.REPROCESO_SIN_CARGO) {
+					odtsPendientesTO.add(new ODTTO(odt));
+				}
 			}
 		}
 		return odtsPendientesTO;

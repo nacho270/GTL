@@ -13,10 +13,10 @@ import javax.swing.JPanel;
 import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.gui.acciones.RemitoEntradaLinkeableLabel;
+import ar.com.textillevel.gui.acciones.odt.componentes.ODTLinkeableLabel;
 import ar.com.textillevel.gui.modulos.odt.util.ODTDatosMostradoHelper;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.util.ODTCodigoHelper;
 
 public class PanCabeceraDatosODT extends JPanel {
 
@@ -89,7 +89,7 @@ public class PanCabeceraDatosODT extends JPanel {
 	}
 
 	private JLabel createLabelTitulo() {
-		JLabel lblTitlo = new JLabel("ORDEN DE TRABAJO N° " + ODTCodigoHelper.getInstance().formatCodigo(odt.getCodigo()));
+		ODTLinkeableLabel lblTitlo = new ODTLinkeableLabel(odt);
 		Font fuente = lblTitlo.getFont();
 		Font fuenteNueva = new Font(fuente.getFontName(), Font.BOLD, 25);
 		lblTitlo.setFont(fuenteNueva);

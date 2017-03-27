@@ -64,7 +64,15 @@ public class PanelODTsMaquina extends JPanel {
 			List<ODTTO> odts = estadoMaquina.getOdtsPorEstado().get(e);
 			Collections.sort(odts, new Comparator<ODTTO>() {
 				public int compare(ODTTO o1, ODTTO o2) {
-					return o1.getOrdenEnMaquina().compareTo(o2.getOrdenEnMaquina());
+					if(o1.getOrdenEnMaquina() == null && o2.getOrdenEnMaquina() == null) {
+						return 0;
+					} else if(o1.getOrdenEnMaquina() == null && o2.getOrdenEnMaquina() != null) {
+						return -1;
+					} else if(o1.getOrdenEnMaquina() != null && o2.getOrdenEnMaquina() == null) {
+						return 1;
+					} else {
+						return o1.getOrdenEnMaquina().compareTo(o2.getOrdenEnMaquina());
+					}
 				}
 			});
 			if(odts!=null && !odts.isEmpty()){
