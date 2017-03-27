@@ -13,6 +13,7 @@ import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ReciboFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaRecibo;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class AgregarReciboAction implements Action {
@@ -44,7 +45,7 @@ public class AgregarReciboAction implements Action {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame);
+		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame, EModoDialogo.MODO_ID);
 		GuiUtil.centrar(dialogSeleccionarCliente);
 		dialogSeleccionarCliente.setVisible(true);
 		Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

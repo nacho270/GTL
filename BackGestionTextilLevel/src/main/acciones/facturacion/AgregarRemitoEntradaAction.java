@@ -12,6 +12,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.acciones.JDialogAgregarRemitoEntrada;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 public class AgregarRemitoEntradaAction implements Action {
@@ -43,7 +44,7 @@ public class AgregarRemitoEntradaAction implements Action {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame);
+		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame, EModoDialogo.MODO_ID);
 		GuiUtil.centrar(dialogSeleccionarCliente);
 		dialogSeleccionarCliente.setVisible(true);
 		Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

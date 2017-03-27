@@ -44,6 +44,7 @@ import ar.com.textillevel.gui.acciones.odt.event.WorkFlowODTSiguienteEventListen
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.to.EstadoActualTipoMaquinaTO;
@@ -385,7 +386,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 					public void itemStateChanged(ItemEvent e) {
 						if (e.getStateChange() == ItemEvent.SELECTED) {
 							if (cmbTipoBusquedaCliente.getSelectedItem().equals("NOMBRE")) {
-								JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null);
+								JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_NOMBRE);
 								GuiUtil.centrar(dialogSeleccionarCliente);
 								dialogSeleccionarCliente.setVisible(true);
 								Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

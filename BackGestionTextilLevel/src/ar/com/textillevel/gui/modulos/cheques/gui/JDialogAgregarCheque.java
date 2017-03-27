@@ -60,6 +60,7 @@ import ar.com.textillevel.gui.util.controles.intellisense.JDialogIntellisense;
 import ar.com.textillevel.gui.util.controles.intellisense.ValorSeleccionadoData;
 import ar.com.textillevel.gui.util.controles.intellisense.ValorSeleccionadoListener;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAgregarCheque extends JDialog {
@@ -424,7 +425,7 @@ public class JDialogAgregarCheque extends JDialog {
 				@Override
 				public void labelClickeada(MouseEvent e) {
 					if (e.getClickCount() == 1) {
-						JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(getPadre());
+						JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(getPadre(), EModoDialogo.MODO_ID);
 						GuiUtil.centrar(dialogSeleccionarCliente);
 						dialogSeleccionarCliente.setVisible(true);
 						Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

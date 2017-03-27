@@ -18,6 +18,7 @@ import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
 import ar.com.textillevel.gui.acciones.JDialogQuestionNumberInput;
 import ar.com.textillevel.gui.acciones.remitosalidaventatela.JDialogAgregarRemitoSalidaVentaTela;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class IngresoRemitoSalidaVentaDeTelaHandler {
@@ -37,7 +38,7 @@ public class IngresoRemitoSalidaVentaDeTelaHandler {
 	public RemitoSalida gestionarIngresoRemitoSalida() {
 		ParametrosGeneralesFacadeRemote paramGeneralesFacadeRemote = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		ParametrosGenerales parametrosGenerales = paramGeneralesFacadeRemote.getParametrosGenerales();
-		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(owner);
+		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(owner, EModoDialogo.MODO_ID);
 		GuiUtil.centrar(dialogSeleccionarCliente);
 		dialogSeleccionarCliente.setVisible(true);
 		Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

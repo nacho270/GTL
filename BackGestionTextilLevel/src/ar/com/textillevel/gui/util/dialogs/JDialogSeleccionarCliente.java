@@ -52,9 +52,11 @@ public class JDialogSeleccionarCliente extends JDialog {
 	private FWJTable tablaResultados;
 	private ClienteFacadeRemote clienteFacade;
 	private Cliente cliente;
-
-	public JDialogSeleccionarCliente(Frame owner) {
+	private EModoDialogo modo;
+	
+	public JDialogSeleccionarCliente(Frame owner, EModoDialogo modo) {
 		super(owner);
+		this.modo = modo;
 		this.clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
 		setModal(true);
 		setSize(new Dimension(455, 550));
@@ -66,7 +68,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 		setLayout(new GridBagLayout());
 		add(getPanDetalle(), createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
 		add(getPanelBotones(), createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-		getChkBuscarNro().setSelected(false);
+		getChkBuscarNro().setSelected(modo == EModoDialogo.MODO_ID);
 	}
 
 	private JPanel getPanDetalle() {
@@ -88,7 +90,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 				List<Component> textList = Arrays.asList(comps);
 
 				public Component getFirstComponent(Container focusCycleRoot) {
-					return comps[2];
+					return comps[modo == EModoDialogo.MODO_ID ? 1:2];
 				}
 
 				public Component getLastComponent(Container focusCycleRoot) {
@@ -106,7 +108,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 				}
 
 				public Component getDefaultComponent(Container focusCycleRoot) {
-					return comps[2];
+					return comps[modo == EModoDialogo.MODO_ID ? 1 : 2];
 				}
 			};
 			
@@ -171,7 +173,6 @@ public class JDialogSeleccionarCliente extends JDialog {
 					}
 					llenarTabla(clienteList);
 				}
-
 			});
 		}
 		return btnBuscar;
@@ -208,7 +209,7 @@ public class JDialogSeleccionarCliente extends JDialog {
 	private FWJNumericTextField getTxtNroCliente() {
 		if(txtNroCliente == null) {
 			txtNroCliente = new FWJNumericTextField(0, Long.MAX_VALUE);
-			txtNroCliente.setEditable(false);
+			txtNroCliente.setEditable(modo == EModoDialogo.MODO_ID);
 			txtNroCliente.addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -310,4 +311,8 @@ public class JDialogSeleccionarCliente extends JDialog {
 		return cliente;
 	}
 
+	public enum EModoDialogo {
+		MODO_ID,
+		MODO_NOMBRE;
+	}
 }

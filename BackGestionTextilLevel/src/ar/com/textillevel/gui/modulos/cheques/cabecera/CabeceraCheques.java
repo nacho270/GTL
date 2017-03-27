@@ -38,6 +38,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.controles.PanelPaginador;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarPersona;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarProveedor;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -278,7 +279,7 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						if(cmbTipoBusquedaCliente.getSelectedItem().equals("NOMBRE CLIENTE")){
-							JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null);
+							JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_NOMBRE);
 							GuiUtil.centrar(dialogSeleccionarCliente);
 							dialogSeleccionarCliente.setVisible(true);
 							Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

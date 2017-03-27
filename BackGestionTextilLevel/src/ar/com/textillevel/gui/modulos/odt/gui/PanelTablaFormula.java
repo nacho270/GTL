@@ -22,6 +22,7 @@ import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.gui.modulos.odt.gui.tenido.PersisterFormulaHandler;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.formulas.FormulaCliente;
 import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -84,7 +85,7 @@ public abstract class PanelTablaFormula<T extends FormulaCliente> extends PanelT
 			btnCopiar.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null);
+					JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_ID);
 					GuiUtil.centrar(dialogSeleccionarCliente);
 					dialogSeleccionarCliente.setVisible(true);
 					Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

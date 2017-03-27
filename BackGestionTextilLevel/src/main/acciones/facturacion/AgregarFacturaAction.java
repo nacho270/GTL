@@ -14,6 +14,7 @@ import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
 import ar.com.textillevel.gui.acciones.JDialogElegirRemitosClienteSinFactura;
 import ar.com.textillevel.gui.acciones.JDialogQuestionNumberInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 
 public class AgregarFacturaAction implements Action {
 
@@ -44,7 +45,7 @@ public class AgregarFacturaAction implements Action {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame);
+		JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame, EModoDialogo.MODO_ID);
 		GuiUtil.centrar(dialogSeleccionarCliente);
 		dialogSeleccionarCliente.setVisible(true);
 		Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

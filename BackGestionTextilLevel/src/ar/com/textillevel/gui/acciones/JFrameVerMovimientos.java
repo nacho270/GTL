@@ -121,6 +121,7 @@ import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail;
 import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail.PerformEnvioEmailHandler;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JFrameVerMovimientos extends JFrame {
@@ -652,7 +653,7 @@ public class JFrameVerMovimientos extends JFrame {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if (cmbTipoBusquedaCliente.getSelectedItem().equals("NOMBRE")) {
-							JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null);
+							JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_NOMBRE);
 							GuiUtil.centrar(dialogSeleccionarCliente);
 							dialogSeleccionarCliente.setVisible(true);
 							Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

@@ -44,6 +44,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -341,7 +342,7 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 				@Override
 				public void labelClickeada(MouseEvent e) {
 					if (e.getClickCount() == 1) {
-						JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame);
+						JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(frame, EModoDialogo.MODO_ID);
 						GuiUtil.centrar(dialogSeleccionarCliente);
 						dialogSeleccionarCliente.setVisible(true);
 						Cliente clienteElegido = dialogSeleccionarCliente.getCliente();

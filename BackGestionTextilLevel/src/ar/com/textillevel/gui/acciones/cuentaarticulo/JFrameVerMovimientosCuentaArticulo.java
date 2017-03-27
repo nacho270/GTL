@@ -89,6 +89,7 @@ import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
+import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarProveedor;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -499,7 +500,7 @@ public class JFrameVerMovimientosCuentaArticulo extends JFrame {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if (cmbTipoBusquedaCliente.getSelectedItem().equals("NOMBRE")) {
-							JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null);
+							JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_NOMBRE);
 							GuiUtil.centrar(dialogSeleccionarCliente);
 							dialogSeleccionarCliente.setVisible(true);
 							clienteElegido = dialogSeleccionarCliente.getCliente();
