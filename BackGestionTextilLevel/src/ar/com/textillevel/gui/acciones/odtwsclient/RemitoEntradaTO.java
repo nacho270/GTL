@@ -13,6 +13,8 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
     private java.math.BigDecimal anchoFinal;
 
+    private java.lang.String control;
+
     private java.lang.Long dateFechaEmision;
 
     private java.lang.Boolean enPalet;
@@ -32,10 +34,8 @@ public class RemitoEntradaTO  implements java.io.Serializable {
     private java.lang.Integer idTarima;
 
     private java.lang.Integer nroRemito;
-    
-    private java.lang.String control;
 
-	private ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts;
+    private ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts;
 
     private java.math.BigDecimal pesoTotal;
 
@@ -49,6 +49,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
     public RemitoEntradaTO(
            java.math.BigDecimal anchoCrudo,
            java.math.BigDecimal anchoFinal,
+           java.lang.String control,
            java.lang.Long dateFechaEmision,
            java.lang.Boolean enPalet,
            java.lang.Integer id,
@@ -59,13 +60,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            java.lang.Integer idProveedor,
            java.lang.Integer idTarima,
            java.lang.Integer nroRemito,
-           java.lang.String control,           
            ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts,
            java.math.BigDecimal pesoTotal,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezas,
            java.lang.Integer[] productoArticuloIdsList) {
            this.anchoCrudo = anchoCrudo;
            this.anchoFinal = anchoFinal;
+           this.control = control;
            this.dateFechaEmision = dateFechaEmision;
            this.enPalet = enPalet;
            this.id = id;
@@ -76,7 +77,6 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            this.idProveedor = idProveedor;
            this.idTarima = idTarima;
            this.nroRemito = nroRemito;
-           this.control = control;
            this.odts = odts;
            this.pesoTotal = pesoTotal;
            this.piezas = piezas;
@@ -121,6 +121,26 @@ public class RemitoEntradaTO  implements java.io.Serializable {
      */
     public void setAnchoFinal(java.math.BigDecimal anchoFinal) {
         this.anchoFinal = anchoFinal;
+    }
+
+
+    /**
+     * Gets the control value for this RemitoEntradaTO.
+     * 
+     * @return control
+     */
+    public java.lang.String getControl() {
+        return control;
+    }
+
+
+    /**
+     * Sets the control value for this RemitoEntradaTO.
+     * 
+     * @param control
+     */
+    public void setControl(java.lang.String control) {
+        this.control = control;
     }
 
 
@@ -323,13 +343,6 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         this.nroRemito = nroRemito;
     }
 
-    public java.lang.String getControl() {
-		return control;
-	}
-
-	public void setControl(java.lang.String control) {
-		this.control = control;
-	}
 
     /**
      * Gets the odts value for this RemitoEntradaTO.
@@ -452,6 +465,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
             ((this.anchoFinal==null && other.getAnchoFinal()==null) || 
              (this.anchoFinal!=null &&
               this.anchoFinal.equals(other.getAnchoFinal()))) &&
+            ((this.control==null && other.getControl()==null) || 
+             (this.control!=null &&
+              this.control.equals(other.getControl()))) &&
             ((this.dateFechaEmision==null && other.getDateFechaEmision()==null) || 
              (this.dateFechaEmision!=null &&
               this.dateFechaEmision.equals(other.getDateFechaEmision()))) &&
@@ -510,6 +526,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         }
         if (getAnchoFinal() != null) {
             _hashCode += getAnchoFinal().hashCode();
+        }
+        if (getControl() != null) {
+            _hashCode += getControl().hashCode();
         }
         if (getDateFechaEmision() != null) {
             _hashCode += getDateFechaEmision().hashCode();
@@ -598,6 +617,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         elemField.setFieldName("anchoFinal");
         elemField.setXmlName(new javax.xml.namespace.QName("", "anchoFinal"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "decimal"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("control");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "control"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

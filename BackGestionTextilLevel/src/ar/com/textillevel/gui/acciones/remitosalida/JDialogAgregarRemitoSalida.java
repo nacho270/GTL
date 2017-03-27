@@ -599,19 +599,24 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	}
 
 	private void calcularSetearMerma(RemitoSalida remitoSalida) {
-		double totalMetrosDesdeODTs = 0;
+		double totalMetrosDesdeEntrada = 0;
 		//Calculo Primero las piezas ODTs involucradas y luego sumo el total de metros en base a ellas
 		Set<PiezaODT> piezaODTSet = new HashSet<PiezaODT>();
 		for(PiezaRemito pr : remitoSalida.getPiezas()) {
 			piezaODTSet.addAll(pr.getPiezasPadreODT());
 		}
 		for(PiezaODT podt : piezaODTSet) {
-			totalMetrosDesdeODTs += podt.getMetros() == null ? podt.getPiezaRemito().getMetros().doubleValue() :  podt.getMetros().doubleValue();
+			if(podt.getPiezaRemito() != null && podt.getPiezaRemito().getMetros() != null) {
+				totalMetrosDesdeEntrada +=  podt.getPiezaRemito().getMetros().doubleValue();
+			}
 		}
 		//hago el cálculo
 		double totalMetrosRS = remitoSalida.getTotalMetros().doubleValue();
-		double difMetros = totalMetrosRS - totalMetrosDesdeODTs;
-		double porcentajeMerma = (difMetros*100)/totalMetrosDesdeODTs;
+		double difMetros = totalMetrosRS - totalMetrosDesdeEntrada;
+		if(totalMetrosDesdeEntrada == 0) {
+			throw new IllegalArgumentException("La suma de metros de entrada da cero ..");
+		}
+		double porcentajeMerma = (difMetros*100)/totalMetrosDesdeEntrada;
 		remitoSalida.setPorcentajeMerma(new BigDecimal(porcentajeMerma));
 	}
 

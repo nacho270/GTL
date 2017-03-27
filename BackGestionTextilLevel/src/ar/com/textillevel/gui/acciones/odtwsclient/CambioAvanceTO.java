@@ -13,6 +13,8 @@ public class CambioAvanceTO  implements java.io.Serializable {
 
     private java.lang.Byte idAvance;
 
+    private java.lang.Integer idTerminal;
+
     private java.lang.Integer idUsuarioSistema;
 
     private java.lang.String observaciones;
@@ -23,10 +25,12 @@ public class CambioAvanceTO  implements java.io.Serializable {
     public CambioAvanceTO(
            java.lang.Long fechaHora,
            java.lang.Byte idAvance,
+           java.lang.Integer idTerminal,
            java.lang.Integer idUsuarioSistema,
            java.lang.String observaciones) {
            this.fechaHora = fechaHora;
            this.idAvance = idAvance;
+           this.idTerminal = idTerminal;
            this.idUsuarioSistema = idUsuarioSistema;
            this.observaciones = observaciones;
     }
@@ -69,6 +73,26 @@ public class CambioAvanceTO  implements java.io.Serializable {
      */
     public void setIdAvance(java.lang.Byte idAvance) {
         this.idAvance = idAvance;
+    }
+
+
+    /**
+     * Gets the idTerminal value for this CambioAvanceTO.
+     * 
+     * @return idTerminal
+     */
+    public java.lang.Integer getIdTerminal() {
+        return idTerminal;
+    }
+
+
+    /**
+     * Sets the idTerminal value for this CambioAvanceTO.
+     * 
+     * @param idTerminal
+     */
+    public void setIdTerminal(java.lang.Integer idTerminal) {
+        this.idTerminal = idTerminal;
     }
 
 
@@ -129,6 +153,9 @@ public class CambioAvanceTO  implements java.io.Serializable {
             ((this.idAvance==null && other.getIdAvance()==null) || 
              (this.idAvance!=null &&
               this.idAvance.equals(other.getIdAvance()))) &&
+            ((this.idTerminal==null && other.getIdTerminal()==null) || 
+             (this.idTerminal!=null &&
+              this.idTerminal.equals(other.getIdTerminal()))) &&
             ((this.idUsuarioSistema==null && other.getIdUsuarioSistema()==null) || 
              (this.idUsuarioSistema!=null &&
               this.idUsuarioSistema.equals(other.getIdUsuarioSistema()))) &&
@@ -151,6 +178,9 @@ public class CambioAvanceTO  implements java.io.Serializable {
         }
         if (getIdAvance() != null) {
             _hashCode += getIdAvance().hashCode();
+        }
+        if (getIdTerminal() != null) {
+            _hashCode += getIdTerminal().hashCode();
         }
         if (getIdUsuarioSistema() != null) {
             _hashCode += getIdUsuarioSistema().hashCode();
@@ -179,6 +209,13 @@ public class CambioAvanceTO  implements java.io.Serializable {
         elemField.setFieldName("idAvance");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idAvance"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "byte"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("idTerminal");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "idTerminal"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

@@ -16,6 +16,7 @@ public class ModuloTerminal implements Serializable {
 	private Integer id;
 	private String nombre;
 	private String clase;
+	private Boolean requiereLogin;
 
 	@Id
 	@Column(name = "P_ID", nullable = false)
@@ -43,6 +44,15 @@ public class ModuloTerminal implements Serializable {
 
 	public void setClase(String clase) {
 		this.clase = clase;
+	}
+
+	@Column(name = "A_REQUIERE_LOGIN", nullable = false)
+	public Boolean getRequiereLogin() {
+		return requiereLogin;
+	}
+
+	public void setRequiereLogin(Boolean requiereLogin) {
+		this.requiereLogin = requiereLogin;
 	}
 
 	@Override

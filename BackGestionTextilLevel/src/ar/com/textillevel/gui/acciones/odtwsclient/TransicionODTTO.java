@@ -15,6 +15,8 @@ public class TransicionODTTO  implements java.io.Serializable {
 
     private java.lang.Integer idMaquina;
 
+    private java.lang.Integer idTerminal;
+
     private java.lang.Integer idTipoMaquina;
 
     private java.lang.Integer idUsuarioSistema;
@@ -26,11 +28,13 @@ public class TransicionODTTO  implements java.io.Serializable {
            ar.com.textillevel.gui.acciones.odtwsclient.CambioAvanceTO[] cambiosAvance,
            java.lang.Long fechaHoraRegistro,
            java.lang.Integer idMaquina,
+           java.lang.Integer idTerminal,
            java.lang.Integer idTipoMaquina,
            java.lang.Integer idUsuarioSistema) {
            this.cambiosAvance = cambiosAvance;
            this.fechaHoraRegistro = fechaHoraRegistro;
            this.idMaquina = idMaquina;
+           this.idTerminal = idTerminal;
            this.idTipoMaquina = idTipoMaquina;
            this.idUsuarioSistema = idUsuarioSistema;
     }
@@ -105,6 +109,26 @@ public class TransicionODTTO  implements java.io.Serializable {
 
 
     /**
+     * Gets the idTerminal value for this TransicionODTTO.
+     * 
+     * @return idTerminal
+     */
+    public java.lang.Integer getIdTerminal() {
+        return idTerminal;
+    }
+
+
+    /**
+     * Sets the idTerminal value for this TransicionODTTO.
+     * 
+     * @param idTerminal
+     */
+    public void setIdTerminal(java.lang.Integer idTerminal) {
+        this.idTerminal = idTerminal;
+    }
+
+
+    /**
      * Gets the idTipoMaquina value for this TransicionODTTO.
      * 
      * @return idTipoMaquina
@@ -164,6 +188,9 @@ public class TransicionODTTO  implements java.io.Serializable {
             ((this.idMaquina==null && other.getIdMaquina()==null) || 
              (this.idMaquina!=null &&
               this.idMaquina.equals(other.getIdMaquina()))) &&
+            ((this.idTerminal==null && other.getIdTerminal()==null) || 
+             (this.idTerminal!=null &&
+              this.idTerminal.equals(other.getIdTerminal()))) &&
             ((this.idTipoMaquina==null && other.getIdTipoMaquina()==null) || 
              (this.idTipoMaquina!=null &&
               this.idTipoMaquina.equals(other.getIdTipoMaquina()))) &&
@@ -197,6 +224,9 @@ public class TransicionODTTO  implements java.io.Serializable {
         }
         if (getIdMaquina() != null) {
             _hashCode += getIdMaquina().hashCode();
+        }
+        if (getIdTerminal() != null) {
+            _hashCode += getIdTerminal().hashCode();
         }
         if (getIdTipoMaquina() != null) {
             _hashCode += getIdTipoMaquina().hashCode();
@@ -232,6 +262,13 @@ public class TransicionODTTO  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("idMaquina");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idMaquina"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("idTerminal");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "idTerminal"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

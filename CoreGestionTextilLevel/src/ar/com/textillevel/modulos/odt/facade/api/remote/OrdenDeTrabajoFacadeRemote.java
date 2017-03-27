@@ -17,10 +17,12 @@ import ar.com.textillevel.modulos.odt.entidades.workflow.CambioAvance;
 import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.to.EstadoActualMaquinaTO;
 import ar.com.textillevel.modulos.odt.to.EstadoGeneralODTsTO;
 import ar.com.textillevel.modulos.odt.to.ODTTO;
 import ar.com.textillevel.modulos.odt.to.stock.InfoBajaStock;
+import ar.com.textillevel.modulos.terminal.entidades.Terminal;
 
 @Remote
 public interface OrdenDeTrabajoFacadeRemote {
@@ -70,5 +72,7 @@ public interface OrdenDeTrabajoFacadeRemote {
 	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, UsuarioSistema usuarioSistema);
 
 	public PiezaODT getPiezaODTByCodigo(String codPiezaODT);
+	
+	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sectorAnterior, ESectorMaquina sectorHacia, Terminal terminal);
 	
 }

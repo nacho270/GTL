@@ -21,6 +21,7 @@ import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.terminal.entidades.Terminal;
 
 @Entity
 @Table(name="T_TRANSICION_ODT")
@@ -35,6 +36,7 @@ public class TransicionODT implements Serializable {
 	private Timestamp fechaHoraRegistro;
 	private List<CambioAvance> cambiosAvance;
 	private UsuarioSistema usuarioSistema;
+	private Terminal terminal;
 
 	public TransicionODT() {
 		cambiosAvance = new ArrayList<CambioAvance>();
@@ -91,7 +93,7 @@ public class TransicionODT implements Serializable {
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="F_USUARIO_P_ID",nullable=false)
+	@JoinColumn(name="F_USUARIO_P_ID",nullable=true)
 	public UsuarioSistema getUsuarioSistema() {
 		return usuarioSistema;
 	}
@@ -100,6 +102,16 @@ public class TransicionODT implements Serializable {
 		this.usuarioSistema = usuarioSistema;
 	}
 
+	@ManyToOne
+	@JoinColumn(name="F_TERMINAL_P_ID",nullable=true)
+	public Terminal getTerminal() {
+		return terminal;
+	}
+
+	public void setTerminal(Terminal terminal) {
+		this.terminal = terminal;
+	}
+	
 	@OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
 	@org.hibernate.annotations.Cascade(value=org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	@JoinColumn(name="F_TRANSICION_P_ID")

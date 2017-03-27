@@ -68,6 +68,7 @@ import ar.com.textillevel.modulos.odt.to.intercambio.ProcedimientoODTTO;
 import ar.com.textillevel.modulos.odt.to.intercambio.RemitoEntradaTO;
 import ar.com.textillevel.modulos.odt.to.intercambio.SecuenciaODTTO;
 import ar.com.textillevel.modulos.odt.to.intercambio.TransicionODTTO;
+import ar.com.textillevel.modulos.terminal.dao.api.local.TerminalDAOLocal;
 import ar.com.textillevel.webservices.odt.api.remote.ODTServiceRemote;
 
 @Stateless
@@ -120,6 +121,9 @@ public class ODTService implements ODTServiceRemote {
 	
 	@EJB
 	private UsuarioSistemaDAOLocal usDAO;
+	
+	@EJB
+	private TerminalDAOLocal terminalDAO;
 
 	//URL: http://localhost:8080/GTL-gtlback-server/ODTService?wsdl
 	
@@ -323,6 +327,9 @@ public class ODTService implements ODTServiceRemote {
 			transicion.setTipoMaquina(tODT.getIdTipoMaquina() == null ? null : tmDAO.getReferenceById(tODT.getIdTipoMaquina()));
 			transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
 			transicion.setUsuarioSistema(usDAO.getReferenceById(tODT.getIdUsuarioSistema()));
+			if(tODT.getIdTerminal() != null) {
+				transicion.setTerminal(terminalDAO.getReferenceById(tODT.getIdTerminal()));
+			}
 			if(tODT.getCambiosAvance() != null) {
 				for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
 					transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
@@ -338,6 +345,9 @@ public class ODTService implements ODTServiceRemote {
 		cambio.setAvance(EAvanceODT.getById(caTO.getIdAvance()));
 		cambio.setFechaHora(new Timestamp(caTO.getFechaHora()));
 		cambio.setUsuario(usDAO.getReferenceById(caTO.getIdUsuarioSistema()));
+		if(caTO.getIdTerminal() != null) {
+			cambio.setTerminal(terminalDAO.getReferenceById(caTO.getIdTerminal()));
+		}
 		cambio.setObservaciones(caTO.getObservaciones());
 		return cambio;
 	}

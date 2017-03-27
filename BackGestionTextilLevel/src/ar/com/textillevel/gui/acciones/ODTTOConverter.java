@@ -65,6 +65,7 @@ import ar.com.textillevel.modulos.odt.facade.api.remote.MaquinaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TipoMaquinaFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.TransicionODTFacadeRemote;
+import ar.com.textillevel.modulos.terminal.facade.api.remote.TerminalFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.google.common.base.Function;
@@ -89,6 +90,7 @@ public final class ODTTOConverter {
 	private static final TransicionODTFacadeRemote transicionODTFacade = GTLBeanFactory.getInstance().getBean2(TransicionODTFacadeRemote.class);
 	private static final UsuarioSistemaFacadeRemote usuarioSistemaFacade = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class);	
 	private static final OrdenDeTrabajoFacadeRemote odtFacade = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class);
+	private static final TerminalFacadeRemote terminalFacade = GTLBeanFactory.getInstance().getBean2(TerminalFacadeRemote.class);
 
 	private ODTTOConverter() {
 
@@ -151,6 +153,7 @@ public final class ODTTOConverter {
 		remitoEntrada.setControl(remitoTO.getControl());
 		remitoEntrada.setFechaEmision(new Date(remitoTO.getDateFechaEmision()));
 		remitoEntrada.setPesoTotal(remitoTO.getPesoTotal());
+		remitoEntrada.setControl(remitoTO.getControl());
 		if (remitoTO.getIdCliente() != null) {
 			remitoEntrada.setCliente(clienteFacade.getById(remitoTO.getIdCliente()));
 		}
@@ -497,6 +500,9 @@ public final class ODTTOConverter {
 		transicion.setTipoMaquina(tODT.getIdTipoMaquina() == null ? null : tipoMaquinaFacade.getByIdEager(tODT.getIdTipoMaquina(), 0));
 		transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
 		transicion.setUsuarioSistema(usuarioSistemaFacade.getById(tODT.getIdUsuarioSistema()));
+		if(tODT.getIdTerminal() != null) {
+			transicion.setTerminal(terminalFacade.getById(tODT.getIdTerminal()));
+		}
 		if(tODT.getCambiosAvance() != null) {
 			for(CambioAvanceTO ca : tODT.getCambiosAvance()) {
 				transicion.getCambiosAvance().add(cambioAvanceEntityFromTOWS(ca));
@@ -510,6 +516,9 @@ public final class ODTTOConverter {
 		cambio.setAvance(EAvanceODT.getById(caTO.getIdAvance()));
 		cambio.setFechaHora(new Timestamp(caTO.getFechaHora()));
 		cambio.setUsuario(usuarioSistemaFacade.getById(caTO.getIdUsuarioSistema()));
+		if(caTO.getIdTerminal() != null) {
+			cambio.setTerminal(terminalFacade.getById(caTO.getIdTerminal()));
+		}
 		cambio.setObservaciones(caTO.getObservaciones());
 		return cambio;
 	}

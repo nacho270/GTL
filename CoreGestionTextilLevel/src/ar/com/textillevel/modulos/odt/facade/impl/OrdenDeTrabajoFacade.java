@@ -50,6 +50,7 @@ import ar.com.textillevel.modulos.odt.to.EstadoActualTipoMaquinaTO;
 import ar.com.textillevel.modulos.odt.to.EstadoGeneralODTsTO;
 import ar.com.textillevel.modulos.odt.to.ODTTO;
 import ar.com.textillevel.modulos.odt.to.stock.InfoBajaStock;
+import ar.com.textillevel.modulos.terminal.entidades.Terminal;
 import ar.com.textillevel.util.ODTCodigoHelper;
 
 @Stateless
@@ -214,6 +215,59 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		TransicionODT tr = transicionDao.getByODT(idOdt);
 		tr.getCambiosAvance().add(ca);
 		transicionDao.save(tr);	
+	}
+
+	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sectorAnterior, ESectorMaquina sectorHacia, Terminal terminal) {
+		OrdenDeTrabajo odt = odtDAO.getReferenceById(idODT);
+		List<Maquina> allBySector = maquinaDao.getAllBySector(sectorHacia);
+		checkConsistenciaAvanceEnEstadoEnProceso(odt, sectorAnterior, sectorHacia, allBySector);
+		
+		Maquina maquina = allBySector.get(0); //tomo la primera
+
+		TransicionODT transicion = new TransicionODT();
+		transicion.setFechaHoraRegistro(DateUtil.getAhora());
+		transicion.setMaquina(maquina);
+		transicion.setOdt(odt);
+		transicion.setTipoMaquina(maquina.getTipoMaquina());
+		transicion.setTerminal(terminal);
+
+		CambioAvance ca = new CambioAvance();
+		ca.setFechaHora(DateUtil.getAhora());
+		ca.setAvance(EAvanceODT.POR_COMENZAR);
+		ca.setTerminal(terminal);
+		transicion.getCambiosAvance().add(ca);
+
+		ca = new CambioAvance();
+		ca.setFechaHora(DateUtil.getAhora());
+		ca.setAvance(EAvanceODT.FINALIZADO);
+		ca.setTerminal(terminal);
+		transicion.getCambiosAvance().add(ca);
+		
+		odt.setAvance(EAvanceODT.FINALIZADO);
+		odt.setMaquinaActual(maquina);
+		
+		//persist
+		odtDAO.save(odt);
+		transicionDao.save(transicion);
+	}
+
+	private void checkConsistenciaAvanceEnEstadoEnProceso(OrdenDeTrabajo odt, ESectorMaquina sectorAnterior, ESectorMaquina sectorHacia, List<Maquina> allMaquinasBySector) {
+		if(odt.getMaquinaActual() == null) {
+			throw new IllegalArgumentException("La ODT " + odt.toString() + " no tiene máquina actual seteada.");
+		}
+		if(odt.getMaquinaActual().getTipoMaquina().getSectorMaquina() != sectorAnterior) {
+			throw new IllegalArgumentException("No se puede pasar la ODT al sector " + sectorHacia + " porque el sector actual es " + sectorAnterior);
+		}
+		if(odt.getAvance() != EAvanceODT.FINALIZADO) {
+			throw new IllegalArgumentException("No se puede pasar la ODT al sector " + sectorHacia + " porque tiene que estar FINALIZADA en el sector " + sectorAnterior + " y figura como " + odt.getAvance());
+		}
+		if(allMaquinasBySector.isEmpty()) {
+			throw new IllegalArgumentException("No existen máquinas cargadas para el sector " + sectorHacia);
+		}
+		Maquina maquina = allMaquinasBySector.get(0);
+		if(odt.getMaquinaActual().getTipoMaquina().getOrden() >= maquina.getTipoMaquina().getOrden()) {
+			throw new IllegalArgumentException("La ODT " + odt.toString() + " no tiene máquina actual seteada.");			
+		}
 	}
 
 	public void registrarTransicionODT(Integer idOdt, Maquina maquina, UsuarioSistema usuarioSistema) {

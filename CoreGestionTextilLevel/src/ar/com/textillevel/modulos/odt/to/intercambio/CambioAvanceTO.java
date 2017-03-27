@@ -12,6 +12,7 @@ public class CambioAvanceTO implements Serializable {
 	private Long fechaHora;
 	private Integer idUsuarioSistema;
 	private String observaciones;
+	private Integer idTerminal;
 
 	public CambioAvanceTO() {
 	}
@@ -21,6 +22,9 @@ public class CambioAvanceTO implements Serializable {
 		this.fechaHora = ca.getFechaHora().getTime();
 		this.idUsuarioSistema = ca.getUsuario().getId();
 		this.observaciones = ca.getObservaciones();
+		if(ca.getTerminal() != null) {
+			this.idTerminal = ca.getTerminal().getId();
+		}
 	}
 
 	public Byte getIdAvance() {
@@ -53,6 +57,14 @@ public class CambioAvanceTO implements Serializable {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	public Integer getIdTerminal() {
+		return idTerminal;
+	}
+
+	public void setIdTerminal(Integer idTerminal) {
+		this.idTerminal = idTerminal;
 	}
 
 }

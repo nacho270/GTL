@@ -16,6 +16,7 @@ public class TransicionODTTO implements Serializable {
 	private Long fechaHoraRegistro;
 	private List<CambioAvanceTO> cambiosAvance;
 	private Integer idUsuarioSistema;
+	private Integer idTerminal;
 
 	public TransicionODTTO() {
 	}
@@ -26,6 +27,7 @@ public class TransicionODTTO implements Serializable {
 		this.fechaHoraRegistro = tODT.getFechaHoraRegistro().getTime();
 		this.idUsuarioSistema = tODT.getUsuarioSistema().getId();
 		this.cambiosAvance = new ArrayList<CambioAvanceTO>();
+		this.idTerminal = tODT.getTerminal() == null ? null : tODT.getTerminal().getId(); 
 		for(CambioAvance ca : tODT.getCambiosAvance()) {
 			getCambiosAvance().add(new CambioAvanceTO(ca));
 		}
@@ -69,6 +71,14 @@ public class TransicionODTTO implements Serializable {
 
 	public void setCambiosAvance(List<CambioAvanceTO> cambiosAvance) {
 		this.cambiosAvance = cambiosAvance;
+	}
+
+	public Integer getIdTerminal() {
+		return idTerminal;
+	}
+
+	public void setIdTerminal(Integer idTerminal) {
+		this.idTerminal = idTerminal;
 	}
 
 }

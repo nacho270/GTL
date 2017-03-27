@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
+import ar.com.textillevel.modulos.terminal.entidades.Terminal;
 
 @Entity
 @Table(name="T_CAMBIO_AVANCE_ODT")
@@ -26,6 +27,7 @@ public class CambioAvance implements Serializable {
 	private Byte idAvance; // EAvanceODT
 	private Timestamp fechaHora;
 	private UsuarioSistema usuario;
+	private Terminal terminal;
 	private String observaciones;
 	
 	@Id
@@ -67,7 +69,7 @@ public class CambioAvance implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name="F_USUARIO_P_ID",nullable=false)
+	@JoinColumn(name="F_USUARIO_P_ID",nullable=true)
 	public UsuarioSistema getUsuario() {
 		return usuario;
 	}
@@ -85,6 +87,16 @@ public class CambioAvance implements Serializable {
 		this.observaciones = observaciones;
 	}
 
+	@ManyToOne
+	@JoinColumn(name="F_TERMINAL_P_ID",nullable=true)
+	public Terminal getTerminal() {
+		return terminal;
+	}
+
+	public void setTerminal(Terminal terminal) {
+		this.terminal = terminal;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
