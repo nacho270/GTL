@@ -160,12 +160,12 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		RangoAnchoArticuloEstampado rango = (RangoAnchoArticuloEstampado)definicion.getRango(min, max, exacto);
 		if(rango == null) {
 			rango = new RangoAnchoArticuloEstampado();
-			rango.setAnchoExacto(exacto);
-			rango.setAnchoMinimo(min);
-			rango.setAnchoMaximo(max);
 			getDefinicion().getRangos().add(rango);
 			rango.setDefinicionPrecio(definicion);
 		}
+		rango.setAnchoExacto(exacto);
+		rango.setAnchoMinimo(min);
+		rango.setAnchoMaximo(max);
 		
 		//Grupo
 		TipoArticulo ta = getTipoArticulo();
@@ -190,17 +190,19 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			grupo.getPrecios().add(precioBase);
 			precioBase.setGrupoTipoArticuloBase(grupo);
 		}
+
 		//Rango Cant Colores
 		Integer minCantColores = Integer.valueOf(getTxtCantColoresDesde().getText());
 		Integer maxCantColores = Integer.valueOf(getTxtCantColoresHasta().getText());
 		RangoCantidadColores rangoCantColores = precioBase.getRango(minCantColores, maxCantColores);
 		if(rangoCantColores == null) {
 			rangoCantColores = new RangoCantidadColores();
-			rangoCantColores.setMinimo(minCantColores);
-			rangoCantColores.setMaximo(maxCantColores);
 			precioBase.getRangosDeColores().add(rangoCantColores);
 			rangoCantColores.setPrecioBase(precioBase);
 		}
+		rangoCantColores.setMinimo(minCantColores);
+		rangoCantColores.setMaximo(maxCantColores);
+
 		//Rango Cobertura
 		Integer minCobertura = Integer.valueOf(getTxtCoberturaDesde().getText());
 		Integer maxCobertura = Integer.valueOf(getTxtCoberturaHasta().getText());

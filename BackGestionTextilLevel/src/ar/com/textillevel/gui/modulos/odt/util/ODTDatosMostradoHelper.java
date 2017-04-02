@@ -60,7 +60,11 @@ public class ODTDatosMostradoHelper {
 	}
 
 	public String getDescGramaje() {
-		return GenericUtils.getDecimalFormat3().format(odt.getRemito().getPesoTotal().floatValue() / odt.getRemito().getTotalMetros().floatValue());
+		return GenericUtils.getDecimalFormat3().format(getGramaje());
+	}
+
+	public float getGramaje() {
+		return odt.getRemito().getPesoTotal().floatValue() / odt.getRemito().getTotalMetros().floatValue();
 	}
 
 	public String getDescAnchoFinal() {

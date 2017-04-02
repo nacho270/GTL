@@ -1477,6 +1477,7 @@ public class JDialogCargaFactura extends JDialog {
 					} else {
 						addItemFacturaCorreccionVacio();
 					}
+					actualizarSeguro();
 					llenarTablaProductos();
 				}
 			});
@@ -1522,6 +1523,7 @@ public class JDialogCargaFactura extends JDialog {
 						ItemFactura itf = (ItemFactura) getTablaProductos().getValueAt(getTablaProductos().getSelectedRow(), COL_OBJ_FACTURA);
 						getDocContable().getItems().remove(itf);
 						getTablaProductos().removeRow(getTablaProductos().getSelectedRow());
+						actualizarSeguro();
 						calcularSubTotal();
 					} else {
 						getBtnQuitarProducto().setEnabled(false);

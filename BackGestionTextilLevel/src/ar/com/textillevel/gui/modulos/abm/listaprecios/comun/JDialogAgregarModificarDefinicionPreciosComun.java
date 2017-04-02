@@ -62,12 +62,13 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 		RangoAnchoComun rango = (RangoAnchoComun)definicion.getRango(min, max, exacto);
 		if(rango == null) {
 			rango = new RangoAnchoComun();
-			rango.setAnchoExacto(exacto);
-			rango.setAnchoMinimo(min);
-			rango.setAnchoMaximo(max);
 			getDefinicion().getRangos().add(rango);
 			rango.setDefinicionPrecio(definicion);
 		}
+		rango.setAnchoExacto(exacto);
+		rango.setAnchoMinimo(min);
+		rango.setAnchoMaximo(max);
+
 		//Precio Tipo Articulo
 		PrecioTipoArticulo precioTipoArticulo = null;
 		TipoArticulo ta = getTipoArticulo();
@@ -79,10 +80,10 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 			precioTipoArticulo = new PrecioTipoArticulo();
 			precioTipoArticulo.setRangoAncho(rango);
 			precioTipoArticulo.setArticulo(art);
-			precioTipoArticulo.setPrecio(getPrecio());
 			precioTipoArticulo.setTipoArticulo(getTipoArticulo());
 			rango.getPrecios().add(precioTipoArticulo);
 		}
+		precioTipoArticulo.setPrecio(getPrecio());
 
 		getDefinicion().deepOrderBy();
 

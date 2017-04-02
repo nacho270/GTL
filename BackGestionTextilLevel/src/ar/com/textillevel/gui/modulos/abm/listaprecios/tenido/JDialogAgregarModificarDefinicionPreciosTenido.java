@@ -191,12 +191,12 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		RangoAnchoArticuloTenido rango = (RangoAnchoArticuloTenido)definicion.getRango(min, max, exacto);
 		if(rango == null) {
 			rango = new RangoAnchoArticuloTenido();
-			rango.setAnchoExacto(exacto);
-			rango.setAnchoMinimo(min);
-			rango.setAnchoMaximo(max);
 			getDefinicion().getRangos().add(rango);
 			rango.setDefinicionPrecio(definicion);
 		}
+		rango.setAnchoExacto(exacto);
+		rango.setAnchoMinimo(min);
+		rango.setAnchoMaximo(max);
 		
 		//Grupo
 		TipoArticulo ta = getTipoArticulo();
@@ -217,9 +217,9 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			pg.setGamaCliente(gcc);
 			pg.setGamaDefault(gcc.getGamaOriginal());
 			pg.setGrupoTipoArticuloGama(grupo);
-			pg.setPrecio(precio);
 			grupo.getPrecios().add(pg);
 		}
+		pg.setPrecio(precio);
 		
 		getDefinicion().deepOrderBy();
 
