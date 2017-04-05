@@ -8,8 +8,11 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoDesmanchadoYLavado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDevolucion;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDoblado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoEstampadoSobreCrudo;
 import ar.com.textillevel.entidades.ventas.productos.ProductoImpermeabilizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoLavado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoLavadoEspecialYTermofijado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoLavadoYTermofijado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoPlanchado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoConCargo;
 import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
@@ -18,6 +21,7 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoSandforizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoSuavizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTermofijado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoVentaTelaCruda;
 
 public interface IProductoVisitor {
 
@@ -39,5 +43,10 @@ public interface IProductoVisitor {
 	public void visit(ProductoReprocesoConCargo productoReprocesoConCargo);
 	public void visit(ProductoAprestado productoAprestado);
 	public void visit(ProductoDescrude productoDescrude);
+	public void visit(ProductoEstampadoSobreCrudo productoEstampadoSobreCrudo);
+	public void visit(ProductoLavadoYTermofijado productoLavadoYTermofijado);
+	public void visit(ProductoLavadoEspecialYTermofijado productoLavadoEspecialYTermofijado);
+	public void visit(ProductoVentaTelaCruda productoVentaTelaCruda);
+
 
 }

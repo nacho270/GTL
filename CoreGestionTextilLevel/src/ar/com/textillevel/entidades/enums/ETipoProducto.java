@@ -12,8 +12,11 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoDesmanchadoYLavado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDevolucion;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDoblado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoEstampadoSobreCrudo;
 import ar.com.textillevel.entidades.ventas.productos.ProductoImpermeabilizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoLavado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoLavadoEspecialYTermofijado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoLavadoYTermofijado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoPlanchado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoConCargo;
 import ar.com.textillevel.entidades.ventas.productos.ProductoReprocesoSinCargo;
@@ -22,6 +25,7 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoSandforizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoSuavizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTenido;
 import ar.com.textillevel.entidades.ventas.productos.ProductoTermofijado;
+import ar.com.textillevel.entidades.ventas.productos.ProductoVentaTelaCruda;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 
 public enum ETipoProducto {
@@ -43,7 +47,11 @@ public enum ETipoProducto {
 	LAVADO(13, "Lavado", EUnidad.KILOS, ProductoLavado.class.getName(),ESectorMaquina.SECTOR_HUMEDO),
 	REVISADO(14, "Revisado", EUnidad.METROS, ProductoRevisado.class.getName(), ESectorMaquina.SECTOR_TERMINADO),
 	APRESTADO(15, "Aprestado", EUnidad.METROS, ProductoAprestado.class.getName(), ESectorMaquina.SECTOR_SECO),
-	DESCRUDE(16, "Descrude", EUnidad.METROS, ProductoAprestado.class.getName(), ESectorMaquina.SECTOR_HUMEDO);
+	DESCRUDE(16, "Descrude", EUnidad.METROS, ProductoAprestado.class.getName(), ESectorMaquina.SECTOR_HUMEDO),
+	ESTAMPADO_SOBRE_CRUDO(17, "Estampado sobre crudo", EUnidad.METROS, ProductoEstampadoSobreCrudo.class.getName(), ESectorMaquina.SECTOR_ESTAMPERIA),
+	LAVADO_Y_TERMOFIJADO(18, "Lavado y termofijado", EUnidad.KILOS, ProductoLavadoYTermofijado.class.getName(), ESectorMaquina.SECTOR_HUMEDO),
+	LAVADO_ESPECIAL_Y_TERMOFIJADO(19, "Lavado y termofijado (Sacando cascarillas)", EUnidad.KILOS, ProductoLavadoEspecialYTermofijado.class.getName(), ESectorMaquina.SECTOR_HUMEDO),
+	VENTA_TELA_CRUDA(20, "Venta tela cruda", EUnidad.METROS, ProductoVentaTelaCruda.class.getName(), null);
 
 	private Integer id;
 	private String descripcion;
