@@ -410,8 +410,8 @@ public abstract class AbstractMainTemplate<T extends ILoginManager> extends JFra
 	/* Crea la barra de menú de la ventana principal */
 	private JMenuBar crearMenuBar() {
 		menuBar = new JMenuBar();
-		menuVentana = new MenuVentana(desktop);
-		agregarMenu(menuVentana);
+//		menuVentana = new MenuVentana(desktop);
+//		agregarMenu(menuVentana);
 		return menuBar;
 	}
 

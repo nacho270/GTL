@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.JInternalFrame;
 
-import main.acciones.cambioskin.MenuCambioSkin;
 import main.acciones.chat.MenuChat;
 import main.servicios.Servicio;
 import main.servicios.ServiciosPool;
@@ -64,9 +63,9 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	private void construirMenues() {
 		/** COMENTAR **/
 		agregarMenuDespl(new MenuChat(), 1);
-		agregarMenuDespl(new MenuCambioSkin(GTLMainTemplate.getFrameInstance(),this), 2);
-		agregarMenuDespl(new MenuImpresion(), 3);
-		agregarMenuDespl(new MenuAyuda(), 4);
+//		agregarMenuDespl(new MenuCambioSkin(GTLMainTemplate.getFrameInstance(),this), 2);
+//		agregarMenuDespl(new MenuImpresion(), 3);
+//		agregarMenuDespl(new MenuAyuda(), 4);
 	}
 	
 	private static void initFlagTest(){
