@@ -351,10 +351,14 @@ public class ImprimirODTHandler {
 		
 		public ODTTO(final OrdenDeTrabajo odt, EFormaImpresionODT formaImp, FormulaCliente formulaCliente) {
 			ODTDatosMostradoHelper odtDatosHelper = new ODTDatosMostradoHelper(odt);
-			
 			this.codigo = odt.getCodigo();
-			this.metros = odt.getTotalMetrosEntrada();
-			this.kilos = new BigDecimal(this.metros.floatValue()*odtDatosHelper.getGramaje());
+			if(formulaCliente == null) {
+				this.metros = odt.getTotalMetrosEntrada();
+				this.kilos = new BigDecimal(this.metros.floatValue()*odtDatosHelper.getGramaje());
+			} else { //si es la impresión simulada!
+				this.metros = odt.getRemito().getTotalMetros();
+				this.kilos = odt.getRemito().getPesoTotal();
+			}
 			this.gramaje = odtDatosHelper.getDescGramaje();
 			this.nroRemito = odt.getRemito().getNroRemito();
 			this.cliente = odtDatosHelper.getDescCliente();
