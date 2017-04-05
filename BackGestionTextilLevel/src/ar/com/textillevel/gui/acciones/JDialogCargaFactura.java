@@ -1950,6 +1950,9 @@ public class JDialogCargaFactura extends JDialog {
 	}
 
 	private void actualizarSeguro() {
+		if(getFactura() == null) {
+			return;
+		}
 		int rowSeguro = getNumeroFilaSeguro();
 		BigDecimal importeSeguro = new BigDecimal(getValorParaSeguro() * getParametrosGenerales().getPorcentajeSeguro().doubleValue() / 100);
 		for (ItemFactura itf : getFactura().getItems()) {
