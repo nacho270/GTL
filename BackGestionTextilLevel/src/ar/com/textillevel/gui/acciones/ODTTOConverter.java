@@ -253,22 +253,24 @@ public final class ODTTOConverter {
 			((InstruccionProcedimientoTipoProductoODT) instruccion).setTipoProducto(ETipoProducto.getById(instruccionTO.getIdTipoProducto()));
 			FormulaClienteExplotada formula;
 			FormulaClienteExplotadaTO formulaTO = instruccionTO.getFormula();
-			if (formulaTO.getTipo().equals("TEN")) {
-				formula = new FormulaTenidoClienteExplotada();
-				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getAnilinas()) {
-					((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
+			if(formulaTO != null) {
+				if (formulaTO.getTipo().equals("TEN")) {
+					formula = new FormulaTenidoClienteExplotada();
+					for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getAnilinas()) {
+						((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
+					}
+				} else {
+					formula = new FormulaEstampadoClienteExplotada();
+					for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getPigmentos()) {
+						((FormulaEstampadoClienteExplotada) formula).getPigmentos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
+					}
+					for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getQuimicos()) {
+						((FormulaEstampadoClienteExplotada) formula).getQuimicos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+					}
 				}
-			} else {
-				formula = new FormulaEstampadoClienteExplotada();
-				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getPigmentos()) {
-					((FormulaEstampadoClienteExplotada) formula).getPigmentos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
-				}
-				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getQuimicos()) {
-					((FormulaEstampadoClienteExplotada) formula).getQuimicos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
-				}
+				formula.setFormulaDesencadenante(formulaFacade.getById(formulaTO.getIdFormulaDesencadenante()));
+				((InstruccionProcedimientoTipoProductoODT) instruccion).setFormula(formula);
 			}
-			formula.setFormulaDesencadenante(formulaFacade.getById(formulaTO.getIdFormulaDesencadenante()));
-			((InstruccionProcedimientoTipoProductoODT) instruccion).setFormula(formula);
 		}
 		instruccion.setObservaciones(instruccionTO.getObservaciones());
 		instruccion.setSectorMaquina(ESectorMaquina.getById(instruccionTO.getIdTipoSector()));

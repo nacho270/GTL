@@ -59,7 +59,9 @@ public class InstruccionProcedimientoODTTO implements Serializable {
 			this.tipo = "IPTPODT";
 			this.idTipoArticulo = instODTTP.getTipoArticulo().getId();
 			this.idTipoProducto = instODTTP.getTipoProducto().getId();
-			this.formula = new FormulaClienteExplotadaTO(instODTTP.getFormula());
+			if(instODTTP.getFormula() != null) {
+				this.formula = new FormulaClienteExplotadaTO(instODTTP.getFormula());
+			}
 		}
 	}
 
