@@ -12,6 +12,7 @@ import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoF
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.productos.Producto;
 
 @Local
 public interface RemitoEntradaDAOLocal extends DAOLocal<RemitoEntrada, Integer> {
@@ -33,7 +34,7 @@ public interface RemitoEntradaDAOLocal extends DAOLocal<RemitoEntrada, Integer> 
 	 */
 	public RemitoEntrada getByIdClienteAndNro(Integer idCliente, Integer idProveedor, Integer nroRemitoEntrada);
 
-	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente);
+	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto);
 
 	public List<RemitoEntrada> getRemitoEntradaConPiezasNoAsociadasList();
 

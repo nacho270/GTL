@@ -11,6 +11,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 
@@ -31,11 +32,11 @@ public interface RemitoEntradaFacadeRemote {
 
 	public RemitoEntrada getByNroRemitoEager(Integer nroCliente, Integer nroRemito);
 
-	public void eliminarRemitoEntrada(Integer idRE) throws ValidacionException;
+	public void eliminarRemitoEntrada(Integer idRE, String usuario) throws ValidacionException;
 
-	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente);
+	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto);
 
-	public void checkEliminacionRemitoEntrada(Integer idRECliente, List<OrdenDeTrabajo> odts) throws ValidacionException;
+	public void checkEliminacionOrEdicionRemitoEntrada(Integer idRECliente, List<OrdenDeTrabajo> odts) throws ValidacionException;
 
 	public List<RemitoEntrada> getRemitoEntradaConPiezasNoAsociadasList();
 
@@ -48,6 +49,8 @@ public interface RemitoEntradaFacadeRemote {
 	public List<RemitoEntrada> getRemitoEntradaConPiezasSinODTByCliente(Integer idCliente);
 
 	public RemitoEntrada completarPiezasRemitoEntrada(RemitoEntrada remitoEntrada,List<OrdenDeTrabajo> odtCapturedList, String usrName);
+	
+	public RemitoEntrada cambiarClienteRE(RemitoEntrada remitoEntrada, String usuario) throws ValidacionException;	
 
 	public List<RemitoEntrada> getByNroRemito(Integer nroRemito);
 

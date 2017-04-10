@@ -14,7 +14,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -23,8 +22,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import main.GTLGlobalCache;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -45,9 +42,10 @@ import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
-import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
+
 
 public class JDialogConsultarRemitosEntrada extends JDialog {
 
@@ -369,7 +367,7 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 		if(getRbtBuscarRemitoPorCliente().isSelected()) {
 			if(getCliente() != null) {
 				getPanTablaRemitosEntrada().getTabla().removeAllRows();
-				List<RemitoEntrada> remitoEntradaList = getRemitoEntradaFacade().getRemitoEntradaByFechasAndCliente(new Date(getPanelFechaDesde().getDate().getTime()), DateUtil.getManiana(new Date(getPanelFechaHasta().getDate().getTime())), getCliente().getId());
+				List<RemitoEntrada> remitoEntradaList = getRemitoEntradaFacade().getRemitoEntradaByFechasAndCliente(new Date(getPanelFechaDesde().getDate().getTime()), DateUtil.getManiana(new Date(getPanelFechaHasta().getDate().getTime())), getCliente().getId(), null);
 				getPanTablaRemitosEntrada().agregarElementos(remitoEntradaList);
 			}
 		} else {
@@ -460,15 +458,15 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 		@Override
 		protected void botonModificarPresionado(int filaSeleccionada) {
 			RemitoEntrada re = ((RemitoEntrada)getTabla().getValueAt(filaSeleccionada, COL_OBJ));
-			List<OrdenDeTrabajo> odtList = getOdtFacade().getOdtEagerByRemitoList(re.getId());
-			try {
-				getRemitoEntradaFacade().checkEliminacionRemitoEntrada(re.getId(), odtList);
+//			List<OrdenDeTrabajo> odtList = getOdtFacade().getOdtEagerByRemitoList(re.getId());
+//			try {
+//				getRemitoEntradaFacade().checkEliminacionRemitoEntrada(re.getId(), odtList);
 				RemitoEntrada remitoEntrada = getElemento(getTabla().getSelectedRow());
 				OperacionSobreRemitoEntradaHandler consultaREHandler = new OperacionSobreRemitoEntradaHandler(frame, remitoEntrada, false);
 				consultaREHandler.showRemitoEntradaDialog();
-			} catch (ValidacionException e) {
-				FWJOptionPane.showInformationMessage(frame, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
-			}
+//			} catch (ValidacionException e) {
+//				FWJOptionPane.showInformationMessage(frame, StringW.wordWrap(e.getMensajeError()), "Imposible Editar");
+//			}
 		}
 
 		@Override
@@ -479,8 +477,8 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 					if(remitoEntrada.getArticuloStock() != null || remitoEntrada.getPrecioMatPrima() != null) {
 						getRemitoEntradaFacade().eliminarRemitoEntrada01OrCompraDeTela(remitoEntrada.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 					} else {
-						getRemitoEntradaFacade().checkEliminacionRemitoEntrada(remitoEntrada.getId(), new ArrayList<OrdenDeTrabajo>());
-						getRemitoEntradaFacade().eliminarRemitoEntrada(remitoEntrada.getId());
+//						getRemitoEntradaFacade().checkEliminacionRemitoEntrada(remitoEntrada.getId(), new ArrayList<OrdenDeTrabajo>());
+						getRemitoEntradaFacade().eliminarRemitoEntrada(remitoEntrada.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 					}
 					FWJOptionPane.showInformationMessage(frame, "Remito borrado éxitosamente.", "Información");				
 				} catch (ValidacionException e) {

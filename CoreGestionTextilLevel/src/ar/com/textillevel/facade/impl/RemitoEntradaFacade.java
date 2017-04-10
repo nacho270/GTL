@@ -28,6 +28,7 @@ import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaPro
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaArticuloFacadeLocal;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
@@ -89,10 +90,30 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		boolean isAlta = remitoEntrada.getId() == null;
 		remitoEntrada = internalSave(remitoEntrada, odtList);
 		if(isAlta) {
-			auditoriaFacade.auditar(usuario, "Creacion de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+			auditoriaFacade.auditar(usuario, "ALTA RE Nº: " + remitoEntrada.getId() + "| " + detalleODTAuditoria(odtList), EnumTipoEvento.ALTA,remitoEntrada);
 		} else {
-			auditoriaFacade.auditar(usuario, "Modificación de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION,remitoEntrada);
+			auditoriaFacade.auditar(usuario, "MODIF RE Nº: " + remitoEntrada.getId() + "| " + detalleODTAuditoria(odtList), EnumTipoEvento.MODIFICACION,remitoEntrada);
 		}
+		return remitoEntrada;
+	}
+
+	private String detalleODTAuditoria(List<OrdenDeTrabajo> odtList) {
+		if(odtList == null || odtList.isEmpty()) {
+			return "SIN ODTs";
+		} else {
+			List<String> detalleODTs = new ArrayList<>(odtList.size());
+			for(OrdenDeTrabajo odt : odtList) {
+				detalleODTs.add(odt.getCodigo() + " (" + odt.getPiezas().size() + " PZAs)");
+			}
+			return StringUtil.getCadena(detalleODTs, "-");
+		}
+	}
+	
+	public RemitoEntrada cambiarClienteRE(RemitoEntrada remitoEntrada, String usuario) throws ValidacionException {
+		List<OrdenDeTrabajo> odtAsociadas = odtDAO.getODTAsociadas(remitoEntrada.getId());
+		checkEliminacionOrEdicionRemitoEntrada(remitoEntrada.getId(), odtAsociadas);
+		remitoEntrada = internalSave(remitoEntrada, odtAsociadas);
+		auditoriaFacade.auditar(usuario, "RE ID: " + remitoEntrada.getId() + " Cambio CL: " + remitoEntrada.getCliente().getNroCliente(), EnumTipoEvento.MODIFICACION,remitoEntrada);
 		return remitoEntrada;
 	}
 
@@ -136,9 +157,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			transicionODTDAO.save(transiciones);
 		}
 		if(isAlta) {
-			auditoriaFacade.auditar(usuario, "Creación (con transiciones) de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+			auditoriaFacade.auditar(usuario, "ALTA RE (con TRANS) Nº: " + remitoEntrada.getId() + "|" + detalleODTAuditoria(odtList), EnumTipoEvento.ALTA,remitoEntrada);
 		} else {
-			auditoriaFacade.auditar(usuario, "Modificación de remito de entrada Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.MODIFICACION,remitoEntrada);
+			auditoriaFacade.auditar(usuario, "MODIF RE (con TRANS) Nº: " + remitoEntrada.getId() + "|" + detalleODTAuditoria(odtList), EnumTipoEvento.MODIFICACION,remitoEntrada);
 		}
 		return remitoEntrada;
 	}
@@ -168,17 +189,19 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return remitoEntradaDAO.getByNroRemitoEager(nroCliente, nroRemito);
 	}
 
-	public void eliminarRemitoEntrada(Integer idRE) throws ValidacionException {
+	public void eliminarRemitoEntrada(Integer idRE, String usuario) throws ValidacionException {
+		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(idRE);
 		RemitoEntrada re = remitoEntradaDAO.getByIdEager(idRE);
-		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(re.getId());
+		String detalleODTs = detalleODTAuditoria(odts); //solo para auditoria
 		if(!odts.isEmpty()) {
-			checkEliminacionRemitoEntrada(re.getId(), odts);
+			checkEliminacionOrEdicionRemitoEntrada(re.getId(), odts);
 		}
 		for(OrdenDeTrabajo odt : odts) {
 			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
 			odtDAO.removeById(odt.getId());
 		}
 		remitoEntradaDAO.removeById(re.getId());
+		auditoriaFacade.auditar(usuario, "BAJA RE Nº: " + re.getId() + "|" + detalleODTs, EnumTipoEvento.BAJA, re);
 	}
 
 	public void eliminarRemitoEntrada01OrCompraDeTela(Integer idRemitoEntrada, String usrName) throws ValidacionException {
@@ -205,7 +228,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		cuentaArticuloFacade.borrarMovimientosCuentaArticulo(re);
 	}
 
-	public void checkEliminacionRemitoEntrada(Integer idRECliente, List<OrdenDeTrabajo> odts) throws ValidacionException {
+	public void checkEliminacionOrEdicionRemitoEntrada(Integer idRECliente, List<OrdenDeTrabajo> odts) throws ValidacionException {
 		List<RemitoSalida> remitoSalida = new ArrayList<RemitoSalida>();
 		for(OrdenDeTrabajo odt : odts) {
 			remitoSalida.addAll(remitoSalidaDAO.getRemitosByODT(odt));
@@ -227,8 +250,8 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return StringUtil.getCadena(infoList, ", ");
 	}
 
-	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente) {
-		return remitoEntradaDAO.getRemitoEntradaByFechasAndCliente(fechaDesde, fechaHasta, idCliente);
+	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto) {
+		return remitoEntradaDAO.getRemitoEntradaByFechasAndCliente(fechaDesde, fechaHasta, idCliente, producto);
 	}
 
 	public List<RemitoEntrada> getRemitoEntradaConPiezasNoAsociadasList() {
@@ -244,7 +267,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 
 		//Modifico la cuenta del cliente/tela agregando tela
 		cuentaArticuloFacade.crearMovimientoHaber(remitoEntrada);
-		auditoriaFacade.auditar(usuario, "Creacion de remito de entrada 01 Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+		auditoriaFacade.auditar(usuario, "ALTA RE 01 Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA, remitoEntrada);
 		
 		return remitoEntrada;
 	}
@@ -291,7 +314,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 
 		//Genero un remito de entrada de proveedor que finalmente provoca la entrada de stock
 		RemitoEntradaProveedor rep = generarRemitoEntradaProveedor(remitoEntrada);
-		auditoriaFacade.auditar(usuario, "Creacion de remito de entrada (compra de tela) Nº: " + remitoEntrada.getNroRemito(), EnumTipoEvento.ALTA,remitoEntrada);
+		auditoriaFacade.auditar(usuario, "ALTA RE (compra de tela) Nº: " + remitoEntrada.getId() + "|" + detalleODTAuditoria(odtList), EnumTipoEvento.ALTA,remitoEntrada);
 
 		return rep;
 	}
@@ -348,6 +371,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	public void eliminarRemitoEntradaForzado(Integer idRE, Boolean borrarRemitos) {
 		RemitoEntrada re = remitoEntradaDAO.getByIdEager(idRE);
 		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(re.getId());
+		String detalleODTs = detalleODTAuditoria(odts);//solo para auditoria 
 		if(!odts.isEmpty()) {
 			for(OrdenDeTrabajo odt : odts) {
 				List<RemitoSalida> remitosByODT = remitoSalidaDAO.getRemitosByODT(odt);
@@ -372,6 +396,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 			odtDAO.removeById(odt.getId());
 		}
 		remitoEntradaDAO.removeById(re.getId());
+		auditoriaFacade.auditar("[no identificado]", "BAJA (Web Service) RE Nº: " + re.getId() + "|" + detalleODTs, EnumTipoEvento.BAJA, re);
 	}
 
 	public RemitoEntrada getByIdEagerConPiezasODTYRemito(Integer id) {
