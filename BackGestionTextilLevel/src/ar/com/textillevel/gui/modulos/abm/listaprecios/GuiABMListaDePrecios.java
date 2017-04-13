@@ -587,7 +587,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				public void mouseClicked(MouseEvent e) {
 					int selectedRow = getTabla().getSelectedRow();
 					if (selectedRow >= 0) {
-						if (isEdicion && e.getClickCount() == 2) {
+						if (e.getClickCount() == 2) {
 							botonModificarPresionado(selectedRow);
 						}
 					}
@@ -708,7 +708,7 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 				return;
 			}
 			DefinicionPrecio definicionSeleccionada = getElemento(getTabla().getSelectedRow());
-			JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true, false);
+			JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true, !isEdicion);
 			d.setVisible(true);
 			if (d.isAcepto()) {
 				versionSeleccionada.getPrecios().set(getTabla().getSelectedRow(), d.getDefinicion());

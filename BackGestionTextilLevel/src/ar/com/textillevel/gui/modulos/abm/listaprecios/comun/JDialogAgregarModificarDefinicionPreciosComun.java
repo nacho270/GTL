@@ -79,10 +79,10 @@ public class JDialogAgregarModificarDefinicionPreciosComun extends JDialogAgrega
 		if(precioTipoArticulo == null || (precioTipoArticulo.getArticulo() == null && art != null)) {
 			precioTipoArticulo = new PrecioTipoArticulo();
 			precioTipoArticulo.setRangoAncho(rango);
-			precioTipoArticulo.setArticulo(art);
 			precioTipoArticulo.setTipoArticulo(getTipoArticulo());
 			rango.getPrecios().add(precioTipoArticulo);
 		}
+		precioTipoArticulo.setArticulo(art);
 		precioTipoArticulo.setPrecio(getPrecio());
 
 		getDefinicion().deepOrderBy();

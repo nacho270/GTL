@@ -174,10 +174,10 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 		if(grupo == null || (grupo.getArticulo() == null && art != null)) {
 			grupo = new GrupoTipoArticuloBaseEstampado();
 			grupo.setTipoArticulo(ta);
-			grupo.setArticulo(art);
 			rango.getGruposBase().add(grupo);
 			grupo.setRangoAnchoArticulo(rango);
 		}
+		grupo.setArticulo(art);
 		
 		//Precios Base (Gama)
 		GamaColor base = (GamaColor)getCmbBase().getSelectedItem();  

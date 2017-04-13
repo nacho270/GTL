@@ -97,6 +97,7 @@ public abstract class JDialogAgregarModificarDefinicionPrecios<T extends RangoAn
 		setUpComponentes();
 		setUpScreen();
 		llenarComboArticulos();
+		getTablaRango().setModoConsulta(consulta);
 	}
 
 	private void setUpScreen() {

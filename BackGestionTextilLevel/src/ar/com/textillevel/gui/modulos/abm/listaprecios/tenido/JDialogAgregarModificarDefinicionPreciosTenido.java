@@ -205,10 +205,10 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		if(grupo == null || (grupo.getArticulo() == null && art != null)) {
 			grupo = new GrupoTipoArticuloGama();
 			grupo.setTipoArticulo(ta);
-			grupo.setArticulo(art);
 			rango.getGruposGama().add(grupo);
 			grupo.setRangoAnchoArticuloTenido(rango);
 		}
+		grupo.setArticulo(art);
 		//Float precio = getPrecio();
 		//GamaColorCliente gcc = (GamaColorCliente) getCmbGama().getSelectedItem();
 		PrecioGama pg = grupo.getPrecioGama(gcc);
