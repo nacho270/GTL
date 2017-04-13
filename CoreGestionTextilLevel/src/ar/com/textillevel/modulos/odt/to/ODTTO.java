@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 
 public class ODTTO implements Serializable {
 
@@ -19,6 +20,7 @@ public class ODTTO implements Serializable {
 	private Integer maquinaActual;
 	private BigDecimal totalMetros;
 	private BigDecimal totalKilos;
+	private EAvanceODT avance;
 	
 	public ODTTO() {
 
@@ -35,6 +37,7 @@ public class ODTTO implements Serializable {
 		this.maquinaActual = odt.getMaquinaActual()!=null?odt.getMaquinaActual().getId():null;
 		this.totalMetros = odt.getRemito().getTotalMetros();
 		this.totalKilos = odt.getRemito().getPesoTotal();
+		this.avance = odt.getAvance();
 	}
 
 	public Integer getId() {
@@ -103,6 +106,10 @@ public class ODTTO implements Serializable {
 
 	public BigDecimal getTotalKilos() {
 		return totalKilos;
+	}
+
+	public EAvanceODT getAvance() {
+		return avance;
 	}
 
 }

@@ -207,7 +207,7 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 	}	
 	
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(Date fechaDesde, Date fechaHasta, Cliente cliente, EEstadoODT... estado) {
-		String hql = " SELECT odt FROM OrdenDeTrabajo odt WHERE 1=1 "+
+		String hql = " SELECT odt FROM OrdenDeTrabajo odt LEFT JOIN FETCH odt.remito LEFT JOIN FETCH odt.remito.cliente LEFT JOIN FETCH odt.productoArticulo WHERE 1=1 "+
 					 (estado!=null && estado.length > 0 && estado[0] != null ?" AND odt.idEstadoODT IN (:idEstadoODT) ":" ")+
 					 (fechaDesde!=null?" AND odt.fechaODT >= :fechaDesde  ":" ")+
 					 (fechaHasta!=null?" AND odt.fechaODT <= :fechaHasta  ":" ") +

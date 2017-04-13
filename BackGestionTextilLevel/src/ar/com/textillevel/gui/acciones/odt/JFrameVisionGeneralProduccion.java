@@ -26,7 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import main.GTLGlobalCache;
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -50,12 +49,11 @@ import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemo
 import ar.com.textillevel.modulos.odt.to.EstadoActualTipoMaquinaTO;
 import ar.com.textillevel.modulos.odt.to.EstadoGeneralODTsTO;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JFrameVisionGeneralProduccion extends JFrame{
 
 	private static final long serialVersionUID = -5751800810347027011L;
-
-	private static final int CANT_MAX_PANEL_LINEA = 2;
 	
 	private JButton btnActualizarEstadoActual;
 	private EstadoGeneralODTsTO estadoActual;
@@ -70,9 +68,11 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	
 	private OrdenDeTrabajoFacadeRemote odtFacade;
 	private final ModeloFiltro datosFiltro;
+	private EModoVisualizacionEstadoProduccion modoVisualizacion;
 	
 	public JFrameVisionGeneralProduccion(Frame padre){
 		datosFiltro = new ModeloFiltro();
+		setModoVisualizacion(EModoVisualizacionEstadoProduccion.SIN_DESGLOSE_POR_AVANCE);
 		setUpComponentes();
 		setUpScreen();
 		refreshView();
@@ -144,7 +144,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		int indiceX = 0;
 		
 		// agrego las ODT disponibles
-		PanelEstadoActualMaquina panelODTSDisp = new PanelEstadoActualMaquina(JFrameVisionGeneralProduccion.this,getEstadoActual().getOdtsDisponibles(),getDatosFiltro());
+		PanelEstadoActualMaquina panelODTSDisp = new PanelEstadoActualMaquina(JFrameVisionGeneralProduccion.this,getEstadoActual().getOdtsDisponibles(),getDatosFiltro(), modoVisualizacion);
 		panelODTSDisp.addBotonSiguienteActionListener(new WorkFlowODTSiguienteEventListener() {
 			public void botonSiguienteWorkFlowPersionado(WorkFlowODTEvent eventData) {
 				JDialogSeleccionarMaquina dialog = new JDialogSeleccionarMaquina(JFrameVisionGeneralProduccion.this,(byte)-1,JDialogSeleccionarMaquina.MODO_SIGUIENTE);
@@ -156,9 +156,9 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 			}
 		});
 //		getPanelCentral().add(panelODTSDisp);//, GenericUtils.createGridBagConstraints(indiceX++, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 1, 1));
-		panelODTSDisp.setSize(new Dimension(350, 900));
-		panelODTSDisp.setPreferredSize(new Dimension(350, 900));
-		getPanelCentral().add(panelODTSDisp, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 3, 1, 1));
+		panelODTSDisp.setSize(new Dimension(modoVisualizacion.getAnchoPanelODTsDisponibles(), 900));
+		panelODTSDisp.setPreferredSize(new Dimension(modoVisualizacion.getAnchoPanelODTsDisponibles(), 900));
+		getPanelCentral().add(panelODTSDisp, GenericUtils.createGridBagConstraints(indiceX, indiceY, modoVisualizacion.getGridbagAlignPanTipoMaquinaContainer(), GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 3, 1, 1));
 		indiceX++;
 
 		// agrego las maquinas
@@ -173,7 +173,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 				getPanelCentral().add(panelTipoMaquina, GenericUtils.createGridBagConstraints(indiceX, indiceY, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(2, 5, 2, 5), 1, 1, 0, 0));
 			}
 			indiceX ++;
-			if ( (indiceX - 1) == CANT_MAX_PANEL_LINEA) {
+			if ( (indiceX - 1) == modoVisualizacion.getCantPanelMaquinasPorFila()) {
 				indiceX = 1;
 				indiceY++;
 			}
@@ -184,7 +184,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	}
 
 	private PanelEstadoActualMaquina crearPanelTipoMaquina(EstadoActualTipoMaquinaTO e, boolean ultima) {
-		PanelEstadoActualMaquina panelTipoMaquina = new PanelEstadoActualMaquina(JFrameVisionGeneralProduccion.this,e,!ultima,getDatosFiltro());
+		PanelEstadoActualMaquina panelTipoMaquina = new PanelEstadoActualMaquina(JFrameVisionGeneralProduccion.this,e,!ultima,getDatosFiltro(), modoVisualizacion);
 		panelTipoMaquina.addBotonAnteriorActionListener(new WorkFlowODTAnteriorEventListener() {
 			public void botonAnteriorWorkFlowPersionado(WorkFlowODTEvent eventData) {
 				if(eventData.getOrdenMaquina() > 1){
@@ -241,9 +241,8 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 			});
 		}
 		
-		panelTipoMaquina.setSize(new Dimension(700, 300));
-		panelTipoMaquina.setPreferredSize(new Dimension(700, 300));
-		
+		panelTipoMaquina.setSize(new Dimension(modoVisualizacion.getAnchoPanelTipoMaquina(), modoVisualizacion.getAltoPanelTipoMaquina()));
+		panelTipoMaquina.setPreferredSize(new Dimension(modoVisualizacion.getAnchoPanelTipoMaquina(), modoVisualizacion.getAltoPanelTipoMaquina()));
 		return panelTipoMaquina;
 	}
 
@@ -498,4 +497,58 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	public ModeloFiltro getDatosFiltro() {
 		return datosFiltro;
 	}
+
+	private void setModoVisualizacion(EModoVisualizacionEstadoProduccion modoVisualizacion) {
+		this.modoVisualizacion = modoVisualizacion;
+	}
+	
+	public static enum EModoVisualizacionEstadoProduccion {
+		
+		DESGLOSE_POR_AVANCE(2, 700, 300, GridBagConstraints.NORTHWEST, 280, 350),
+		SIN_DESGLOSE_POR_AVANCE(3, 400, 430, GridBagConstraints.CENTER, 340, 400);
+		
+		private int cantPanelMaquinasPorFila;
+		private int anchoPanelTipoMaquina;
+		private int altoPanelTipoMaquina;
+		private int gridbagAlignPanTipoMaquinaContainer;
+		private int anchoHeaderTabla;
+		private int anchoPanelODTsDisponibles;
+		
+		private EModoVisualizacionEstadoProduccion(int cantPanelMaquinasPorFila, int anchoPanelTipoMaquina, int altoPanelTipoMaquina, int gridbagAlignPanTipoMaquinaContainer, int anchoHeaderTabla, int anchoPanelODTsDisponibles) {
+			this.cantPanelMaquinasPorFila = cantPanelMaquinasPorFila;
+			this.anchoPanelTipoMaquina = anchoPanelTipoMaquina;
+			this.altoPanelTipoMaquina = altoPanelTipoMaquina;
+			this.gridbagAlignPanTipoMaquinaContainer = gridbagAlignPanTipoMaquinaContainer;
+			this.anchoHeaderTabla = anchoHeaderTabla;
+			this.anchoPanelODTsDisponibles = anchoPanelODTsDisponibles;
+		}
+
+		public int getAnchoPanelODTsDisponibles() {
+			return anchoPanelODTsDisponibles;
+		}
+
+		public int getAnchoPanelTipoMaquina() {
+			return anchoPanelTipoMaquina;
+		}
+
+
+		public int getAltoPanelTipoMaquina() {
+			return altoPanelTipoMaquina;
+		}
+
+
+		public int getCantPanelMaquinasPorFila() {
+			return cantPanelMaquinasPorFila;
+		}
+		
+		public int getGridbagAlignPanTipoMaquinaContainer() {
+			return gridbagAlignPanTipoMaquinaContainer;
+		}
+
+		public int getAnchoHeaderTabla() {
+			return anchoHeaderTabla;
+		}
+	
+	}
+
 }

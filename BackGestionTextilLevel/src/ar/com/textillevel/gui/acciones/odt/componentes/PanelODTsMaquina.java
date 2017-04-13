@@ -26,6 +26,7 @@ import javax.swing.event.EventListenerList;
 
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.textillevel.gui.acciones.odt.JFrameVisionGeneralProduccion.EModoVisualizacionEstadoProduccion;
 import ar.com.textillevel.gui.acciones.odt.event.BotonADerechaEventListener;
 import ar.com.textillevel.gui.acciones.odt.event.BotonAIzquierdaEventListener;
 import ar.com.textillevel.gui.acciones.odt.event.BotonCambiarMaquinaActionListener;
@@ -127,7 +128,7 @@ public class PanelODTsMaquina extends JPanel {
 		private static final long serialVersionUID = 4126642857601080280L;
 
 		public PanelTablaODTMaquina(Frame padre, EAvanceODT tipoAvance, boolean ultima) {
-			super(padre, tipoAvance, ultima);
+			super(padre, tipoAvance, ultima, EModoVisualizacionEstadoProduccion.DESGLOSE_POR_AVANCE);
 			getBotonModificar().setVisible(false);
 			getBotonSubir().setVisible(tipoAvance == EAvanceODT.POR_COMENZAR);
 			getBotonBajar().setVisible(tipoAvance == EAvanceODT.POR_COMENZAR);
@@ -161,7 +162,9 @@ public class PanelODTsMaquina extends JPanel {
 		}
 		
 		@Override
-		protected void habilitarBotones(int rowSelected, EAvanceODT tipoAvance) {
+		protected void habilitarBotones(int rowSelected) {
+			ODTTO elemento = getElemento(rowSelected);
+			EAvanceODT tipoAvance = elemento.getAvance();
 			getBotonSubir().setEnabled(rowSelected>0);
 			getBotonBajar().setEnabled(rowSelected<getTabla().getRowCount()-1);
 			getBtnCambiarMaquina().setEnabled(rowSelected!=-1 && tipoAvance!=null && tipoAvance == EAvanceODT.POR_COMENZAR);

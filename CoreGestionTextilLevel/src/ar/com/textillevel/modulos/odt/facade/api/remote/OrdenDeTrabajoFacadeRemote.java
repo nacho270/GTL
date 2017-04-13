@@ -73,6 +73,6 @@ public interface OrdenDeTrabajoFacadeRemote {
 
 	public PiezaODT getPiezaODTByCodigo(String codPiezaODT);
 	
-	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sectorAnterior, ESectorMaquina sectorHacia, Terminal terminal);
+	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sector, Terminal terminal);
 	
 }

@@ -12,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import javax.swing.event.EventListenerList;
 
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.VerticalFlowLayout;
+import ar.com.textillevel.gui.acciones.odt.JFrameVisionGeneralProduccion.EModoVisualizacionEstadoProduccion;
 import ar.com.textillevel.gui.acciones.odt.JFrameVisionGeneralProduccion.ModeloFiltro;
 import ar.com.textillevel.gui.acciones.odt.event.BotonADerechaEventListener;
 import ar.com.textillevel.gui.acciones.odt.event.BotonAIzquierdaEventListener;
@@ -70,29 +72,45 @@ public class PanelEstadoActualMaquina extends JPanel {
 	
 	private final boolean isOdts;
 	private ModeloFiltro datosFiltro;
+	private EModoVisualizacionEstadoProduccion modoVisualizacion;
 
-	public PanelEstadoActualMaquina(Frame padre, EstadoActualTipoMaquinaTO estadoActual, boolean showBotonSiguiente, ModeloFiltro filtros) {
+	private PanelTablaODTTipoMaquina panelTablaUnicoListado;
+
+	public PanelEstadoActualMaquina(Frame padre, EstadoActualTipoMaquinaTO estadoActual, boolean showBotonSiguiente, ModeloFiltro filtros, EModoVisualizacionEstadoProduccion modoVisualizacion) {
 		this.padre = padre;
 		this.datosFiltro = filtros;
 		this.estadoMaquinas=estadoActual;
 		this.mostrarBotonMaquinaAnterior = true; //siempre se podria volver atras... segun el dibujo de salem, puede pasar de cosido a ODT Disponible
 		this.mostrarBotonMaquinaSiguiente = showBotonSiguiente;
+		this.modoVisualizacion = modoVisualizacion;
 		isOdts = false;
 		constructForEstado();
-		for(EAvanceODT e : mapaTablas.keySet()){
-			List<ODTTO> odts = estadoActual.getOdtsPorEstado().get(e);
-			if(odts!=null && !odts.isEmpty()){
-				mapaTablas.get(e).agregarElementos(odts);
+		if(modoVisualizacion == EModoVisualizacionEstadoProduccion.DESGLOSE_POR_AVANCE) {
+			for(EAvanceODT e : mapaTablas.keySet()){
+				List<ODTTO> odts = estadoActual.getOdtsPorEstado().get(e);
+				if(odts!=null && !odts.isEmpty()){
+					mapaTablas.get(e).agregarElementos(odts);
+				}
 			}
+		} else {
+			List<ODTTO> allODTs = new ArrayList<ODTTO>();
+			for(EAvanceODT e : EAvanceODT.values()) {
+				List<ODTTO> odts = estadoActual.getOdtsPorEstado().get(e);
+				if(odts!=null && !odts.isEmpty()){
+					allODTs.addAll(odts);
+				}
+			}
+			panelTablaUnicoListado.agregarElementos(allODTs);
 		}
 	}
 
-	public PanelEstadoActualMaquina(Frame padre, List<ODTTO> odtsDisponibles, ModeloFiltro filtros) {
+	public PanelEstadoActualMaquina(Frame padre, List<ODTTO> odtsDisponibles, ModeloFiltro filtros, EModoVisualizacionEstadoProduccion modoVisualizacion) {
 		this.padre = padre;
 		this.datosFiltro = filtros;
 		mostrarBotonMaquinaAnterior = false;
 		mostrarBotonMaquinaSiguiente = true;
 		isOdts = true;
+		this.modoVisualizacion = modoVisualizacion;
 		constructForODTsDisponibles();
 		if(odtsDisponibles!=null && !odtsDisponibles.isEmpty()){
 			getTablaODTsDisponibles().agregarElementos(odtsDisponibles);
@@ -103,10 +121,18 @@ public class PanelEstadoActualMaquina extends JPanel {
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createTitledBorder(""));
 		add(getLblTitulo(), BorderLayout.NORTH);
-		add(getPanelTablasEstadoAvance(), BorderLayout.CENTER);
+		add(getPanelAvance(), BorderLayout.CENTER);
 		add(getPanelBotones(), BorderLayout.SOUTH);
 	}
 
+	private JPanel getPanelAvance() {
+		if(modoVisualizacion == EModoVisualizacionEstadoProduccion.DESGLOSE_POR_AVANCE) {
+			return getPanelTablasEstadoAvance();
+		} else {
+			return getPanelTablasEstadoAvanceSinDesglose();
+		}
+	}
+	
 	private void constructForODTsDisponibles() {
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createTitledBorder(""));
@@ -134,7 +160,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 		return panelBotones;
 	}
 
-	public JPanel getPanelTablasEstadoAvance() {
+	private JPanel getPanelTablasEstadoAvance() {
 		if (panelTablasEstadoAvance == null) {
 			panelTablasEstadoAvance = new JPanel(new GridBagLayout());
 			panelTablasEstadoAvance.add(getMapaTablas().get(EAvanceODT.POR_COMENZAR), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 1, 3, 1, 1));
@@ -148,6 +174,16 @@ public class PanelEstadoActualMaquina extends JPanel {
 		}
 		return panelTablasEstadoAvance;
 	}
+
+	private JPanel getPanelTablasEstadoAvanceSinDesglose() {
+		if (panelTablasEstadoAvance == null) {
+			panelTablasEstadoAvance = new JPanel(new GridBagLayout());
+			panelTablaUnicoListado = new PanelTablaODTTipoMaquina(padre, null,modoVisualizacion, !isMostrarBotonMaquinaSiguiente());
+			panelTablasEstadoAvance.add(panelTablaUnicoListado, GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 1, 3, 1, 1));
+		}
+		return panelTablasEstadoAvance;
+	}
+
 	
 	public void addLabelClickeadaActionListener(LabelClickeadaEventListener listener) {
 		listeners.add(LabelClickeadaEventListener.class, listener);
@@ -169,7 +205,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 		listeners.add(BotonADerechaEventListener.class, listener);
 	}
 
-	public JButton getBtnMaquinaSiguiente() {
+	private JButton getBtnMaquinaSiguiente() {
 		if (btnMaquinaSiguiente == null) {
 			btnMaquinaSiguiente = BossEstilos.createButton("ar/com/textillevel/imagenes/btn_next.png", "ar/com/textillevel/imagenes/btn_next_des.png");
 			btnMaquinaSiguiente.setVisible(mostrarBotonMaquinaSiguiente);
@@ -191,7 +227,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 		return btnMaquinaSiguiente;
 	}
 	
-	public JButton getBtnMaquinaAnterior() {
+	private JButton getBtnMaquinaAnterior() {
 		if (btnMaquinaAnterior == null) {
 			btnMaquinaAnterior = BossEstilos.createButton("ar/com/textillevel/imagenes/btn_previous.png", "ar/com/textillevel/imagenes/btn_previous_des.png");
 			btnMaquinaAnterior.setVisible(mostrarBotonMaquinaAnterior);
@@ -213,7 +249,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 		return btnMaquinaAnterior;
 	}
 
-	public JButton getBtnPasarAIzquierda() {
+	private JButton getBtnPasarAIzquierda() {
 		if (btnPasarAIzquierda == null) {
 			btnPasarAIzquierda = BossEstilos.createButton("ar/com/textillevel/imagenes/btn_left.png", "ar/com/textillevel/imagenes/btn_left_des.png");
 			btnPasarAIzquierda.setEnabled(false);
@@ -234,7 +270,7 @@ public class PanelEstadoActualMaquina extends JPanel {
 		return btnPasarAIzquierda;
 	}
 
-	public JButton getBtnPasarADerecha() {
+	private JButton getBtnPasarADerecha() {
 		if (btnpasarADerecha == null) {
 			btnpasarADerecha = BossEstilos.createButton("ar/com/textillevel/imagenes/btn_right.png", "ar/com/textillevel/imagenes/btn_right_des.png");
 			btnpasarADerecha.setEnabled(false);
@@ -259,8 +295,12 @@ public class PanelEstadoActualMaquina extends JPanel {
 		if (isODTsDisponibles()) {
 			return getTablaODTsDisponibles().getElemento(getTablaODTsDisponibles().getTabla().getSelectedRow());
 		} else {
-			PanelTablaODT panelTablaODT = getMapaTablas().get(tipoAvance);
-			return panelTablaODT.getElemento(panelTablaODT.getTabla().getSelectedRow());
+			if(modoVisualizacion == EModoVisualizacionEstadoProduccion.DESGLOSE_POR_AVANCE) {
+				PanelTablaODT panelTablaODT = getMapaTablas().get(tipoAvance);
+				return panelTablaODT.getElemento(panelTablaODT.getTabla().getSelectedRow());
+			} else {
+				return panelTablaUnicoListado.getElemento(panelTablaUnicoListado.getTabla().getSelectedRow());
+			}
 		}
 	}
 
@@ -285,12 +325,12 @@ public class PanelEstadoActualMaquina extends JPanel {
 		return isOdts;
 	}
 
-	public Map<EAvanceODT, PanelTablaODTTipoMaquina> getMapaTablas() {
+	private Map<EAvanceODT, PanelTablaODTTipoMaquina> getMapaTablas() {
 		if (mapaTablas == null) {
 			mapaTablas = new HashMap<EAvanceODT,PanelTablaODTTipoMaquina>();
 			Set<EAvanceODT> keySet = getEstadoMaquinas().getOdtsPorEstado().keySet();
 			for (EAvanceODT e : keySet) {
-				mapaTablas.put(e, new PanelTablaODTTipoMaquina(padre, e,!isMostrarBotonMaquinaSiguiente()));
+				mapaTablas.put(e, new PanelTablaODTTipoMaquina(padre, e,modoVisualizacion, !isMostrarBotonMaquinaSiguiente()));
 			}
 		}
 		return mapaTablas;
@@ -298,9 +338,9 @@ public class PanelEstadoActualMaquina extends JPanel {
 
 	public PanelTablaODT getTablaODTsDisponibles() {
 		if (tablaODTsDisponibles == null) {
-			tablaODTsDisponibles = new PanelTablaODTTipoMaquina(padre,"ODTs");
-			tablaODTsDisponibles.setSize(new Dimension(500, 500));
-			tablaODTsDisponibles.setPreferredSize(new Dimension(500, 500));
+			tablaODTsDisponibles = new PanelTablaODTTipoMaquina(padre, modoVisualizacion, "ODTs");
+			tablaODTsDisponibles.setSize(new Dimension(modoVisualizacion.getAnchoPanelTipoMaquina()-20, modoVisualizacion.getAltoPanelTipoMaquina()-20));
+			tablaODTsDisponibles.setPreferredSize(new Dimension(modoVisualizacion.getAnchoPanelTipoMaquina()-20, modoVisualizacion.getAltoPanelTipoMaquina()-20));
 		}
 		return tablaODTsDisponibles;
 	}
@@ -355,34 +395,45 @@ public class PanelEstadoActualMaquina extends JPanel {
 		this.datosFiltro = datosFiltro;
 	}
 	
-	private class PanelTablaODTTipoMaquina extends PanelTablaODT{
+	private class PanelTablaODTTipoMaquina extends PanelTablaODT {
 
 		private static final long serialVersionUID = -699055534292116651L;
 		
-		public PanelTablaODTTipoMaquina(Frame padre, EAvanceODT tipoAvance, boolean ultima) {
-			super(padre, tipoAvance, ultima);
+		public PanelTablaODTTipoMaquina(Frame padre, EAvanceODT tipoAvance, EModoVisualizacionEstadoProduccion modoVisualizacionEstadoProduccion, boolean ultima) {
+			super(padre, tipoAvance, ultima, modoVisualizacionEstadoProduccion);
 			getBotonBajar().setVisible(false);
 			getBotonModificar().setVisible(false);
 			getBotonSubir().setVisible(false);
 		}
 		
-		public PanelTablaODTTipoMaquina(Frame padre, String header){
-			super(padre,header);
+		public PanelTablaODTTipoMaquina(Frame padre, EModoVisualizacionEstadoProduccion modoVisualizacionEstadoProduccion, String header){
+			super(padre,header, modoVisualizacionEstadoProduccion);
 			getBotonBajar().setVisible(false);
 			getBotonModificar().setVisible(false);
 			getBotonSubir().setVisible(false);
 		}
 
 		@Override
-		protected void habilitarBotones(int rowSelected, EAvanceODT tipoAvance) {
+		protected void habilitarBotones(int rowSelected) {
+			if(rowSelected == -1) {
+				getBtnMaquinaSiguiente().setEnabled(false);
+				getBtnMaquinaAnterior().setEnabled(false);
+				getBtnPasarADerecha().setEnabled(false);
+				getBtnPasarAIzquierda().setEnabled(false);
+				return;
+			}
+			ODTTO elemento = getElemento(rowSelected);
+			EAvanceODT tipoAvance = elemento.getAvance();
 			if (isODTsDisponibles() || tipoAvance == null) {
 				getBtnMaquinaSiguiente().setEnabled(rowSelected!=-1);
 			} else if (tipoAvance == EAvanceODT.POR_COMENZAR) {
 				getBtnMaquinaAnterior().setEnabled(rowSelected!=-1);
+				getBtnMaquinaSiguiente().setEnabled(false);
 				getBtnPasarADerecha().setEnabled(rowSelected!=-1);
 				getBtnPasarAIzquierda().setEnabled(false);
 			} else if (tipoAvance == EAvanceODT.FINALIZADO) {
 				getBtnMaquinaSiguiente().setEnabled(rowSelected!=-1);
+				getBtnMaquinaAnterior().setEnabled(false);
 				getBtnPasarADerecha().setEnabled(false);
 				getBtnPasarAIzquierda().setEnabled(rowSelected!=-1);
 			} else {

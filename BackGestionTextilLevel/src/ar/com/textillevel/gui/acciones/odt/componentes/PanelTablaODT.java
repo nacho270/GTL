@@ -1,6 +1,6 @@
 package ar.com.textillevel.gui.acciones.odt.componentes;
 
-import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.PanelTablaSubirBajarModificar;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.textillevel.gui.acciones.odt.JFrameVisionGeneralProduccion.EModoVisualizacionEstadoProduccion;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarPasosSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.gui.JDialogVisualizarTransicionesODT;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -35,28 +36,33 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 
 	private String encabezado;
 	private EAvanceODT tipoAvance;
+	private EModoVisualizacionEstadoProduccion modoVisualizacion;
 	
 	private final Frame padre;
 
-	public PanelTablaODT(Frame padre, String header) {
+	public PanelTablaODT(Frame padre, String header, EModoVisualizacionEstadoProduccion modoVisualizacion) {
 		this.padre = padre;
+		this.modoVisualizacion = modoVisualizacion;
 		setEncabezado(header);
 		FWJTable nuevaTabla = createNewTabla();
 		rebuildTable(nuevaTabla);
 	}
 	
-	public PanelTablaODT(Frame padre, EAvanceODT tipoAvance, boolean ultima) {
+	public PanelTablaODT(Frame padre, EAvanceODT tipoAvance, boolean ultima, EModoVisualizacionEstadoProduccion modoVisualizacion) {
 		this.padre = padre;
-		if(ultima && tipoAvance == EAvanceODT.FINALIZADO){
-			setEncabezado("Oficina");
-		}else{
-			setEncabezado(tipoAvance.getDescripcion());
+		this.modoVisualizacion = modoVisualizacion;
+		if(tipoAvance == null) {
+			setEncabezado("ODT");
+		} else {
+			if(ultima && tipoAvance == EAvanceODT.FINALIZADO){
+				setEncabezado("Oficina");
+			}else{
+				setEncabezado(tipoAvance.getDescripcion());
+			}
 		}
 		this.tipoAvance = tipoAvance;
 		FWJTable nuevaTabla = createNewTabla();
 		rebuildTable(nuevaTabla);
-		setSize(new Dimension(500, 500));
-		setPreferredSize(new Dimension(500, 500));
 	}
 
 	private FWJTable createNewTabla() {
@@ -64,9 +70,9 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 		nuevaTabla.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				habilitarBotones(getTabla().getSelectedRow(),getTipoAvance());
+				habilitarBotones(getTabla().getSelectedRow());
 				//doble click => muestra dialogo de header e historia de la ODT o el de la secuencia de trabajo explotada
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 2 && getTabla().getSelectedRow() != -1) {
 					ODTTO odtto = getElemento(getTabla().getSelectedRow());
 					if(odtto.getMaquinaActual() == null) {//Se muestra directamente la secuencia de trabajo de la ODT
 						OrdenDeTrabajo odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odtto.getId());
@@ -85,7 +91,7 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 				}
 			}
 		});
-		nuevaTabla.setMultilineColumn(COL_ODT, getEncabezado(), 280, true,true);
+		nuevaTabla.setMultilineColumn(COL_ODT, getEncabezado(), modoVisualizacion.getAnchoHeaderTabla(), true,true);
 		nuevaTabla.setStringColumn(COL_OBJ, "", 0);
 		nuevaTabla.setAllowHidingColumns(false);
 		nuevaTabla.setReorderingAllowed(false);
@@ -109,6 +115,7 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 										 		  "<br>" + elemento.getProducto() + 
 										 "</html>", 
 										 elemento });
+		getTabla().setBackgroundRow(getTabla().getRowCount()-1, elemento.getAvance() == EAvanceODT.POR_COMENZAR ? Color.YELLOW : Color.GREEN);
 	}
 
 	@Override
@@ -134,5 +141,5 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 		this.encabezado = header;
 	}
 	
-	protected abstract void habilitarBotones(int rowSelected,EAvanceODT tipoAvance);
+	protected abstract void habilitarBotones(int rowSelected);
 }

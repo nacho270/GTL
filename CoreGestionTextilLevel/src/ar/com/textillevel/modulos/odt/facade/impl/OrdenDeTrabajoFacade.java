@@ -222,10 +222,10 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		transicionDao.save(tr);	
 	}
 
-	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sectorAnterior, ESectorMaquina sectorHacia, Terminal terminal) {
+	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sector, Terminal terminal) {
 		OrdenDeTrabajo odt = odtDAO.getReferenceById(idODT);
-		List<Maquina> allBySector = maquinaDao.getAllBySector(sectorHacia);
-		checkConsistenciaAvanceEnEstadoEnProceso(odt, sectorAnterior, sectorHacia, allBySector);
+		List<Maquina> allBySector = maquinaDao.getAllBySector(sector);
+		checkConsistenciaAvanceEnEstadoEnProceso(odt, sector, allBySector);
 		
 		Maquina maquina = allBySector.get(0); //tomo la primera
 
@@ -256,22 +256,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		transicionDao.save(transicion);
 	}
 
-	private void checkConsistenciaAvanceEnEstadoEnProceso(OrdenDeTrabajo odt, ESectorMaquina sectorAnterior, ESectorMaquina sectorHacia, List<Maquina> allMaquinasBySector) {
+	private void checkConsistenciaAvanceEnEstadoEnProceso(OrdenDeTrabajo odt, ESectorMaquina sector, List<Maquina> allMaquinasBySector) {
 		if(odt.getMaquinaActual() == null) {
 			throw new IllegalArgumentException("La ODT " + odt.toString() + " no tiene máquina actual seteada.");
-		}
-		if(odt.getMaquinaActual().getTipoMaquina().getSectorMaquina() != sectorAnterior) {
-			throw new IllegalArgumentException("No se puede pasar la ODT al sector " + sectorHacia + " porque el sector actual es " + sectorAnterior);
-		}
-		if(odt.getAvance() != EAvanceODT.FINALIZADO) {
-			throw new IllegalArgumentException("No se puede pasar la ODT al sector " + sectorHacia + " porque tiene que estar FINALIZADA en el sector " + sectorAnterior + " y figura como " + odt.getAvance());
-		}
-		if(allMaquinasBySector.isEmpty()) {
-			throw new IllegalArgumentException("No existen máquinas cargadas para el sector " + sectorHacia);
-		}
-		Maquina maquina = allMaquinasBySector.get(0);
-		if(odt.getMaquinaActual().getTipoMaquina().getOrden() >= maquina.getTipoMaquina().getOrden()) {
-			throw new IllegalArgumentException("La ODT " + odt.toString() + " no tiene máquina actual seteada.");			
 		}
 	}
 

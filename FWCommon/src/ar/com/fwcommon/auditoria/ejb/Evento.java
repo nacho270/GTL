@@ -58,7 +58,7 @@ public class Evento implements Serializable {
 	 * Devuelve la fecha y hora de un Evento.
 	 * @return fechaHora
 	 */
-	@Column(name = "A_Fecha", insertable = false, updatable = false)//, columnDefinition="TIMESTAMP DEFAULT SYSTIMESTAMP"
+	@Column(name = "A_Fecha"/*, insertable = false, updatable = false*/)//, columnDefinition="TIMESTAMP DEFAULT SYSTIMESTAMP"
 	public Timestamp getFechaHora() {
 		return fechaHora;
 	}
