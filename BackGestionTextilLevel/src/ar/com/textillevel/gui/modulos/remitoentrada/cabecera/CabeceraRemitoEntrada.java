@@ -71,9 +71,9 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 	public CabeceraRemitoEntrada() {
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createTitledBorder("Búsqueda"));
-		GridBagConstraints gc = GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,5,5), 1, 1, 1, 0);
+		GridBagConstraints gc = GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,0,5), 1, 1, 1, 0.5);
 		add(getPanFiltros(), gc);
-		gc = GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 0);
+		gc = GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0,5,5,5), 1, 1, 0, 0.5);
 		add(getPanBusquedaPorNro(), gc);
 		ButtonGroup bgOpcionProceso = new ButtonGroup();
 		bgOpcionProceso.add(getRbtBuscarRemitoPorFiltros());
@@ -84,13 +84,13 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 		if(panFiltros == null) {
 			panFiltros = new JPanel();
 			panFiltros.setLayout(new GridBagLayout());
-			GridBagConstraints gc = GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,5,5), 1, 1, 1, 0);
+			GridBagConstraints gc = GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,5,5), 1, 1, 0, 0);
 			panFiltros.add(getRbtBuscarRemitoPorFiltros(), gc);
-			gc = GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,5,5), 1, 1, 1, 0);
+			gc = GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,5,5), 1, 1, 0, 0);
 			panFiltros.add(getPanBusquedaFecha(), gc);
-			gc = GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 0);
+			gc = GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1);
 			panFiltros.add(getPanelElegirCliente(), gc);
-			gc = GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 0);
+			gc = GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0);
 			panFiltros.add(getPanProductos(), gc);
 		}
 		return panFiltros;
