@@ -29,6 +29,7 @@ public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 	private FWSoloBotonesSubirBajarModificar botonesTabla;
 	private JPanel panBotonesExtra;
 	protected boolean modoConsulta;
+	private JScrollPane scrollPane;
 
 	protected PanelTablaSubirBajarModificar() {
 		super(new GridBagLayout());
@@ -36,8 +37,8 @@ public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 		tabla = construirTabla();
 		tabla.getSelectionModel().addListSelectionListener(new TablaSelectionListener());
 		tabla.addMouseListener(new TablaMouseListener());
-		JScrollPane sp = new JScrollPane(tabla);
-		sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane = new JScrollPane(tabla);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(0, 5, 5, 5);
 		constraints.gridheight = 2;
@@ -46,7 +47,7 @@ public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 		constraints.weightx = 1;
 		constraints.gridy = 0;
 		constraints.gridx = 0;
-		add(sp, constraints);
+		add(scrollPane, constraints);
 		// Botones tabla
 		botonesTabla = new FWSoloBotonesSubirBajarModificar(tabla) {
 
@@ -355,5 +356,9 @@ public abstract class PanelTablaSubirBajarModificar<T> extends JPanel {
 			
 		}
 		return lista;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
 	}
 }
