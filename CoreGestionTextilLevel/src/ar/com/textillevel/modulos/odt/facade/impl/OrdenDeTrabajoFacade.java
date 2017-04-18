@@ -144,22 +144,20 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 
 	public List<EstadoActualMaquinaTO> getEstadoMaquinas(Integer idTipoMaquina, Date fechaDesde, Date fechaHasta, Cliente cliente) {
 		List<Maquina> maquinas = maquinaDao.getAllByIdTipoMaquina(idTipoMaquina);
-		Map<Maquina, EstadoActualMaquinaTO> mapa = new LinkedHashMap<Maquina, EstadoActualMaquinaTO>();
+		Map<Integer, EstadoActualMaquinaTO> mapa = new LinkedHashMap<Integer, EstadoActualMaquinaTO>();
 		for(Maquina m : maquinas){
-			mapa.put(m, new EstadoActualMaquinaTO(m));
+			mapa.put(m.getId(), new EstadoActualMaquinaTO(m));
 		}
-		
-		List<OrdenDeTrabajo> allODTSEnProceso = odtDAO.getAllEnProcesoByTipoMaquina(fechaDesde,fechaHasta,cliente,idTipoMaquina);
-		for(OrdenDeTrabajo odt : allODTSEnProceso){
-			Maquina m = odt.getMaquinaActual();
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina);
+		for(ODTTO odt : allODTSEnProceso){
+			Integer m = odt.getMaquinaActual();
 			EstadoActualMaquinaTO estadoActualoMaquinaTO = mapa.get(m);
-			estadoActualoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(new ODTTO(odt));
-			mapa.put(m,estadoActualoMaquinaTO);
+			estadoActualoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(odt);
+			mapa.put(m, estadoActualoMaquinaTO);
 		}
-		
 		return new ArrayList<EstadoActualMaquinaTO>(mapa.values());
 	}
-	
+
 	public EstadoGeneralODTsTO getEstadoDeProduccionActual(Date fechaDesde, Date fechaHasta, Cliente cliente) {
 		EstadoGeneralODTsTO estadoGeneral = new EstadoGeneralODTsTO();
 		List<ODTTO> odtsPendientesTO = getOdtsPendientes(fechaDesde,fechaHasta,cliente);
@@ -175,31 +173,27 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		for(TipoMaquina tm : maquinas){
 			mapa.put(tm, new EstadoActualTipoMaquinaTO(tm));
 		}
-		
-		List<OrdenDeTrabajo> allODTSEnProceso = odtDAO.getAllEnProceso(fechaDesde,fechaHasta,cliente);
-		
-		for(OrdenDeTrabajo odt : allODTSEnProceso){
-			if(odt.getProductoArticulo() != null && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.DEVOLUCION && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.REPROCESO_SIN_CARGO) {
-				TipoMaquina tm = odt.getMaquinaActual().getTipoMaquina();
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null);
+		for(ODTTO odt : allODTSEnProceso){
+			if(odt.getMaquinaActual() != null && odt.getTipoProducto() != null && odt.getTipoProducto() != ETipoProducto.DEVOLUCION && odt.getTipoProducto() != ETipoProducto.REPROCESO_SIN_CARGO) {
+				TipoMaquina tm = odt.getTipoMaquina();
 				EstadoActualTipoMaquinaTO estadoActualTipoMaquinaTO = mapa.get(tm);
 				if(estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()) != null) {
-					estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(new ODTTO(odt));
+					estadoActualTipoMaquinaTO.getOdtsPorEstado().get(odt.getAvance()).add(odt);
 					mapa.put(tm,estadoActualTipoMaquinaTO);
 				}
 			}
 		}
-		
 		return new ArrayList<EstadoActualTipoMaquinaTO>(mapa.values());
 	}
 
 	private List<ODTTO> getOdtsPendientes(Date fechaDesde, Date fechaHasta, Cliente cliente) {
-		List<OrdenDeTrabajo> odtsPendientes = odtDAO.getOrdenesDeTrabajo(fechaDesde,fechaHasta,cliente, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA);
-		odtsPendientes.addAll(odtDAO.getOrdenesDeTrabajo(fechaDesde,fechaHasta,cliente, EEstadoODT.DETENIDA));
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA, EEstadoODT.DETENIDA);
 		List<ODTTO> odtsPendientesTO = new ArrayList<ODTTO>();
-		if(odtsPendientes!=null && !odtsPendientes.isEmpty()){
-			for(OrdenDeTrabajo odt : odtsPendientes){
-				if(odt.getProductoArticulo() != null && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.DEVOLUCION && odt.getProductoArticulo().getProducto().getTipo() != ETipoProducto.REPROCESO_SIN_CARGO) {
-					odtsPendientesTO.add(new ODTTO(odt));
+		if(allODTSEnProceso!=null && !allODTSEnProceso.isEmpty()){
+			for(ODTTO odt : allODTSEnProceso){
+				if(odt.getTipoProducto() != null && odt.getTipoProducto() != ETipoProducto.DEVOLUCION && odt.getTipoProducto() != ETipoProducto.REPROCESO_SIN_CARGO) {
+					odtsPendientesTO.add(odt);
 				}
 			}
 		}

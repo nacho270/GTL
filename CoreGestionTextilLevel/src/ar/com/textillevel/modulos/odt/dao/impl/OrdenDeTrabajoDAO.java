@@ -41,6 +41,7 @@ import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedi
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
+import ar.com.textillevel.modulos.odt.to.ODTTO;
 
 @Stateless
 @SuppressWarnings("unchecked")
@@ -237,12 +238,34 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		return q.getResultList();
 	}
 
-	public List<OrdenDeTrabajo> getAllEnProceso(Date fechaDesde, Date fechaHasta, Cliente cliente) {
-		String hql = " SELECT odt FROM OrdenDeTrabajo odt WHERE odt.maquinaActual IS NOT NULL "+
-					 (fechaDesde!=null? " AND odt.fechaODT >= :fechaDesde ":" ")+
-					 (fechaHasta!=null? " AND odt.fechaODT <= :fechaHasta" : " ")+
-					 (cliente!=null?" AND odt.remito.cliente.id = :idCliente ":" ");
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, EEstadoODT... estado) {
+		String hql = " SELECT new ar.com.textillevel.modulos.odt.to.ODTTO(odt.id, odt.codigo, odt.remito.id, odt.remito.cliente, odt.productoArticulo, odt.ordenEnMaquina, maq, odt.remito.pesoTotal, odt.idAvance, SUM(pr.metros))  "
+				 + " FROM OrdenDeTrabajo odt "
+				 + " LEFT JOIN odt.maquinaActual maq "
+				 + " JOIN odt.remito re "
+				 + " JOIN odt.remito.cliente cl "
+				 + " JOIN odt.productoArticulo pa "
+				 + " JOIN odt.piezas podt "
+				 + " JOIN podt.piezaRemito pr "
+				 + " WHERE 1=1 " +
+				 (fechaDesde!=null? " AND odt.fechaODT >= :fechaDesde ":" ")+
+				 (fechaHasta!=null? " AND odt.fechaODT <= :fechaHasta" : " ")+
+				 (idTipoMaquina!=null? " AND odt.maquinaActual.tipoMaquina.id = :idTipoMaquina" : " ")+
+				 (cliente!=null?" AND cl.id = :idCliente ":" ") +
+				 (estado!=null && estado.length > 0 && estado[0] != null ?" AND odt.idEstadoODT IN (:idEstadoODT) ":" ")+
+				 " GROUP BY odt.id, odt.codigo, odt.remito.id, odt.remito.cliente, odt.productoArticulo, odt.ordenEnMaquina, odt.maquinaActual.id, odt.remito.pesoTotal, odt.idAvance ";	
 		Query q = getEntityManager().createQuery(hql);
+		if(estado!=null && estado.length > 0 && estado[0] != null){
+			ImmutableList<Integer> idsEstados = FluentIterable.from(Arrays.asList(estado))
+					.filter(Predicates.notNull())
+					.transform(new Function<EEstadoODT, Integer>() {
+						@Override
+						public Integer apply(EEstadoODT estado) {
+							return estado.getId();
+						}
+					}).toList();
+			q.setParameter("idEstadoODT", idsEstados);
+		}
 		if(fechaDesde!=null){
 			q.setParameter("fechaDesde", fechaDesde);
 		}
@@ -251,6 +274,9 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		}
 		if(cliente!=null){
 			q.setParameter("idCliente", cliente.getId());
+		}
+		if(idTipoMaquina != null) {
+			q.setParameter("idTipoMaquina", idTipoMaquina);
 		}
 		return q.getResultList();
 	}

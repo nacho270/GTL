@@ -185,7 +185,7 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 			txtTotalMetrosEntrada = new FWJTextField();
 			txtTotalMetrosEntrada.setEditable(false);
 			if(remitoEntrada.getId() != null) {
-				txtTotalMetrosEntrada.setText(String.valueOf(remitoEntrada.getTotalMetros()));
+				txtTotalMetrosEntrada.setText(String.valueOf(odt.getTotalMetrosEntrada()));
 			}
 		}
 		return txtTotalMetrosEntrada;

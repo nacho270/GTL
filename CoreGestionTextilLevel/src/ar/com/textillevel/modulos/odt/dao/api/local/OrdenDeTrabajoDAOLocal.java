@@ -10,6 +10,7 @@ import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
+import ar.com.textillevel.modulos.odt.to.ODTTO;
 
 @Local
 public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer> {
@@ -38,7 +39,7 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 	
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(Date fechaDesde, Date fechaHasta, Cliente cliente, EEstadoODT... estado);
 
-	public List<OrdenDeTrabajo> getAllEnProceso(Date fechaDesde, Date fechaHasta, Cliente cliente);
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, EEstadoODT... estado);
 
 	public List<OrdenDeTrabajo> getAllEnProcesoByTipoMaquina(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina);
 

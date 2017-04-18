@@ -3,7 +3,11 @@ package ar.com.textillevel.modulos.odt.to;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
+import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 
 public class ODTTO implements Serializable {
@@ -21,25 +25,29 @@ public class ODTTO implements Serializable {
 	private BigDecimal totalMetros;
 	private BigDecimal totalKilos;
 	private EAvanceODT avance;
+	private ETipoProducto tipoProducto;
+	private TipoMaquina tipoMaquina;
 	
 	public ODTTO() {
 
 	}
 
-	public ODTTO(OrdenDeTrabajo odt) {
-		this.id = odt.getId();
-		this.codigo = odt.getCodigo();
-		this.idRemito = odt.getRemito().getId();
-		this.nombreCliente = odt.getRemito().getCliente().getDescripcionResumida();
-		this.producto =  odt.getProductoArticulo() != null ? odt.getProductoArticulo().toString(): "";
-		this.ordenEnMaquina = odt.getOrdenEnMaquina();
-		this.nroCliente = odt.getRemito().getCliente().getNroCliente();
-		this.maquinaActual = odt.getMaquinaActual()!=null?odt.getMaquinaActual().getId():null;
-		this.totalMetros = odt.getRemito().getTotalMetros();
-		this.totalKilos = odt.getRemito().getPesoTotal();
-		this.avance = odt.getAvance();
+	public ODTTO(Integer id, String codigo, Integer idRemito, Cliente cliente, ProductoArticulo productoArticulo, Short ordenEnMaquina, Maquina maquinaActual, BigDecimal totalKilos, Byte avance, BigDecimal totalMetros) {
+		this.id = id;
+		this.codigo = codigo;
+		this.idRemito = idRemito;
+		this.nombreCliente = cliente.getDescripcionResumida();
+		this.nroCliente = cliente.getNroCliente();
+		this.producto = productoArticulo.toString();
+		this.ordenEnMaquina = ordenEnMaquina;
+		this.maquinaActual = maquinaActual == null ? null : maquinaActual.getId();
+		this.totalMetros = totalMetros;
+		this.totalKilos = totalKilos;
+		this.avance = avance == null ? null : EAvanceODT.getById(avance.byteValue());
+		this.tipoProducto = productoArticulo.getTipo();
+		this.tipoMaquina = maquinaActual == null ? null : maquinaActual.getTipoMaquina();
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -110,6 +118,14 @@ public class ODTTO implements Serializable {
 
 	public EAvanceODT getAvance() {
 		return avance;
+	}
+
+	public ETipoProducto getTipoProducto() {
+		return tipoProducto;
+	}
+
+	public TipoMaquina getTipoMaquina() {
+		return tipoMaquina;
 	}
 
 }
