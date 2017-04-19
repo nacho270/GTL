@@ -27,6 +27,7 @@ public class ODTTO implements Serializable {
 	private EAvanceODT avance;
 	private ETipoProducto tipoProducto;
 	private TipoMaquina tipoMaquina;
+	private EnumSituacionMaquina situacionMaquina;
 	
 	public ODTTO() {
 
@@ -46,8 +47,9 @@ public class ODTTO implements Serializable {
 		this.avance = avance == null ? null : EAvanceODT.getById(avance.byteValue());
 		this.tipoProducto = productoArticulo.getTipo();
 		this.tipoMaquina = maquinaActual == null ? null : maquinaActual.getTipoMaquina();
+		calcularSituacionMaquina();
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -126,6 +128,33 @@ public class ODTTO implements Serializable {
 
 	public TipoMaquina getTipoMaquina() {
 		return tipoMaquina;
+	}
+
+	public EnumSituacionMaquina getSituacionMaquina() {
+		return situacionMaquina;
+	}
+
+	public void setSituacionMaquina(EnumSituacionMaquina situacionMaquina) {
+		this.situacionMaquina = situacionMaquina;
+	}
+
+	private void calcularSituacionMaquina() {
+		if(getMaquinaActual() == null) {
+			setSituacionMaquina(EnumSituacionMaquina.SIN_MAQUINA_ASIGNADA);
+		} else if(getAvance() == EAvanceODT.POR_COMENZAR) {
+			setSituacionMaquina(EnumSituacionMaquina.CON_MAQUINA_EN_PROCESO);
+		} else if(getAvance() == EAvanceODT.FINALIZADO) {
+			setSituacionMaquina(EnumSituacionMaquina.CON_MAQUINA_TERMINADA);
+		}
+	}
+
+	public static enum EnumSituacionMaquina {
+
+		SIN_MAQUINA_ASIGNADA,
+		CON_MAQUINA_EN_PROCESO,
+		CON_MAQUINA_TERMINADA,
+		CON_MAQUINA_FUERA_DE_SECUENCIA;
+
 	}
 
 }

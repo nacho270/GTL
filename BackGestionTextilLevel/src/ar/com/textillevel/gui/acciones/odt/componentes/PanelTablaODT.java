@@ -109,13 +109,30 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 
 	@Override
 	protected void agregarElemento(ODTTO elemento) {
-		getTabla().addRow(new Object[] { "<html><b>"+ODTCodigoHelper.getInstance().formatCodigo(elemento.getCodigo()) + "</b>" +
+		getTabla().addRow(new Object[] { "<html><div style=\"font-size: 10px;font-family: sans-serif;\"><b>"+ODTCodigoHelper.getInstance().formatCodigo(elemento.getCodigo()) + "</b>" +
 													" - CL:" + elemento.getNroCliente() + " - " + GenericUtils.getDecimalFormat().format(elemento.getTotalKilos()) + " KG - " +
 											 		  GenericUtils.getDecimalFormat().format(elemento.getTotalMetros()) + " MTS" +
 										 		  "<br>" + elemento.getProducto() + 
-										 "</html>", 
+										 "</div></html>", 
 										 elemento });
-		getTabla().setBackgroundRow(getTabla().getRowCount()-1, elemento.getAvance() == EAvanceODT.POR_COMENZAR ? Color.YELLOW : Color.GREEN);
+		getTabla().setBackgroundRow(getTabla().getRowCount()-1, getColor(elemento));
+	}
+
+	private Color getColor(ODTTO elemento) {
+		switch (elemento.getSituacionMaquina()) {
+		case SIN_MAQUINA_ASIGNADA:
+		return Color.YELLOW.darker();
+
+		case CON_MAQUINA_EN_PROCESO:
+		return Color.YELLOW.darker();
+
+		case CON_MAQUINA_TERMINADA:
+		return Color.GREEN.darker();
+
+		case CON_MAQUINA_FUERA_DE_SECUENCIA:
+		return Color.CYAN.darker();
+		}
+		throw new IllegalArgumentException("Falta definir un color para " + elemento.getSituacionMaquina() + " ODT " + elemento.getCodigo());
 	}
 
 	@Override
