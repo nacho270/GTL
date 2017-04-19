@@ -1,5 +1,6 @@
 package ar.com.textillevel.gui.modulos.remitoentrada;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.gui.modulos.remitoentrada.cabecera.CabeceraRemitoEntrada;
 import ar.com.textillevel.gui.modulos.remitoentrada.cabecera.ModeloCabeceraRemitoEntrada;
+import ar.com.textillevel.gui.util.GenericUtils;
 
 public class ModuloRemitoEntrada extends ModuloTemplate<RemitoEntrada, ModeloCabeceraRemitoEntrada> {
 
@@ -20,6 +22,8 @@ public class ModuloRemitoEntrada extends ModuloTemplate<RemitoEntrada, ModeloCab
 		setTiempoRefresco(0);
 		actualizar();
 		pack();
+		Dimension d = GenericUtils.getDimensionPantalla();
+		setSize(new Dimension((int)d.getWidth()-10, (int)d.getHeight()-70));
 	}
 
 	@Override

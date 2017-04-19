@@ -703,9 +703,11 @@ public class GuiABMListaDePrecios extends GuiABMListaTemplate {
 		@Override
 		protected void botonModificarPresionado(int filaSeleccionada) {
 			VersionListaDePrecios versionSeleccionada = getTablaVersiones().getVersionSeleccionada();
-			boolean existeCotizacion = checkCotizacionVigente(versionSeleccionada);
-			if (existeCotizacion) {
-				return;
+			if(isEdicion) {
+				boolean existeCotizacion = checkCotizacionVigente(versionSeleccionada);
+				if (existeCotizacion) {
+					return;
+				}
 			}
 			DefinicionPrecio definicionSeleccionada = getElemento(getTabla().getSelectedRow());
 			JDialogAgregarModificarDefinicionPrecios<? extends RangoAncho, ?> d = createDialogForTipoArticulo(definicionSeleccionada.getTipoProducto(), true, !isEdicion);

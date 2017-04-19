@@ -219,7 +219,6 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sector, Terminal terminal) {
 		OrdenDeTrabajo odt = odtDAO.getReferenceById(idODT);
 		List<Maquina> allBySector = maquinaDao.getAllBySector(sector);
-		checkConsistenciaAvanceEnEstadoEnProceso(odt, sector, allBySector);
 		
 		Maquina maquina = allBySector.get(0); //tomo la primera
 
@@ -248,12 +247,6 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		//persist
 		odtDAO.save(odt);
 		transicionDao.save(transicion);
-	}
-
-	private void checkConsistenciaAvanceEnEstadoEnProceso(OrdenDeTrabajo odt, ESectorMaquina sector, List<Maquina> allMaquinasBySector) {
-		if(odt.getMaquinaActual() == null) {
-			throw new IllegalArgumentException("La ODT " + odt.toString() + " no tiene máquina actual seteada.");
-		}
 	}
 
 	public void registrarTransicionODT(Integer idOdt, Maquina maquina, UsuarioSistema usuarioSistema) {
