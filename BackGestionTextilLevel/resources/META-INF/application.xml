@@ -132,4 +132,30 @@
 	<module>
 		<java>guava-19.0.jar</java>
 	</module>
+	
+	<!-- LIBRERIAS ACTIVEMQ -->
+	<module>
+    <java>hawtbuf-1.11.jar</java>
+  </module>
+	<module>
+    <java>activeio-core-3.1.4.jar</java>
+  </module>
+  <module>
+    <java>activemq-broker-5.14.4.jar</java>
+  </module>
+  <module>
+    <java>activemq-client-5.14.4.jar</java>
+  </module>
+  <module>
+    <java>activemq-kahadb-store-5.14.4.jar</java>
+  </module>
+  <module>
+    <java>activemq-protobuf-1.1.jar</java>
+  </module>
+  <module>
+    <java>slf4j-api-1.7.13.jar</java>
+  </module>
+  <module>
+    <java>slf4j-log4j12-1.7.25.jar</java>
+  </module>
 </application>

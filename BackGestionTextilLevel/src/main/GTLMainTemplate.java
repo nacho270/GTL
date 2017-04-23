@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 
 import main.acciones.chat.MenuChat;
+import main.servicios.MessageListener;
 import main.servicios.Servicio;
 import main.servicios.ServiciosPool;
 import main.statusbar.CompoTest;
@@ -212,6 +213,8 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 			FWJOptionPane.showErrorMessage(this,"Error desconocido al iniciar el cliente de Chat.","Error");
 			e.printStackTrace();
 		}
+
+		MessageListener.start();
 	}
 
 	private List<Servicio> getServicios(List<Modulo> servicios) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
@@ -249,12 +252,14 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	@Override
 	protected void preSalir() {
 		ChatClient.getInstance().desconectar();
+		MessageListener.stop();
 		ServiciosPool.stopAll();
 	}
 
 	@Override
 	protected void preLogout() {
 		ChatClient.getInstance().desconectar();
+		MessageListener.stop();
 		ServiciosPool.stopAll();
 	}
 	
