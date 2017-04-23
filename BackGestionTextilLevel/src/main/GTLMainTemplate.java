@@ -1,13 +1,22 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import main.acciones.chat.MenuChat;
 import main.servicios.MessageListener;
@@ -40,7 +49,9 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	protected MenuImpresion menuImpresion;
 	protected MenuAyuda menuAyuda;
 	//private static Logger logger = Logger.getLogger(GTLMainTemplate.class);
-
+	private MessageListener messageListener;
+	private JButton btnNotificaciones;
+	
 	static {
 		initFlagTest();
 		initSkin();
@@ -48,7 +59,9 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 
 	protected GTLMainTemplate(int idAplicacion, String version) throws FWException {
 		super(idAplicacion, version);
-		construirMenues();		
+		construirMenues();
+		messageListener = MessageListener.build(this);
+		getDesktop().add(getPanelNotificaciones());
 	}
 
 	@Override
@@ -214,7 +227,7 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 			e.printStackTrace();
 		}
 
-		MessageListener.start();
+		messageListener.start();
 	}
 
 	private List<Servicio> getServicios(List<Modulo> servicios) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
@@ -252,14 +265,14 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	@Override
 	protected void preSalir() {
 		ChatClient.getInstance().desconectar();
-		MessageListener.stop();
+		messageListener.stop();
 		ServiciosPool.stopAll();
 	}
 
 	@Override
 	protected void preLogout() {
 		ChatClient.getInstance().desconectar();
-		MessageListener.stop();
+		messageListener.stop();
 		ServiciosPool.stopAll();
 	}
 	
@@ -272,4 +285,30 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 		comp.addComponent(new CompoTest(new ConfiguracionComponenteStatusBar(true, 1000l)));
 		add(comp, BorderLayout.SOUTH);
 	}
+	
+	private JButton getBtnNotificaciones() {
+		if (btnNotificaciones == null){
+			btnNotificaciones = new JButton("0");
+			btnNotificaciones.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btnNotificaciones.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnNotificaciones.setBounds(new Rectangle(new Point(55, 5), btnNotificaciones.getPreferredSize()));
+		}
+		return btnNotificaciones;
+	}
+
+	private JPanel getPanelNotificaciones() {
+		JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		pnl.setBackground(Color.WHITE);
+		pnl.setBounds(new Rectangle(new Point(5, 5), new Dimension(120, 120)));
+		JLabel label = new JLabel("Notificaciones");
+		pnl.add(label);
+		pnl.add(getBtnNotificaciones());
+		return pnl;
+	}
+
+	public void actualizarNotificaciones() {
+		// esto podria hacerse con un query para ser exacto
+		getBtnNotificaciones().setText(Integer.valueOf(getBtnNotificaciones().getText()).intValue() + 1 + "");
+	}
+
 }

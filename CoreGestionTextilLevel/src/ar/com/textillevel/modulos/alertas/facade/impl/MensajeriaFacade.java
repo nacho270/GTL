@@ -1,10 +1,11 @@
 package ar.com.textillevel.modulos.alertas.facade.impl;
 
+import java.util.concurrent.Executors;
+
 import javax.ejb.Stateless;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
-import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
@@ -22,7 +23,7 @@ public class MensajeriaFacade implements MensajeriaFacadeLocal {
 
 	@Override
 	public void enviarMensaje() {
-		Session session = null;
+		final Session session;
 		Connection connection = null;
 		try {
 			ConnectionFactory factory = new ActiveMQConnectionFactory(ACTIVEMQ_URL);
@@ -32,24 +33,26 @@ public class MensajeriaFacade implements MensajeriaFacadeLocal {
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			Topic topic = session.createTopic(TOPIC);
 
-			MessageProducer producer = session.createProducer(topic);
+			final MessageProducer producer = session.createProducer(topic);
 			producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-			TextMessage msg = session.createTextMessage();
-			msg.setText("Hooooooooooooollllllllllllllaaaaaaaaaaaaaaa");
-			producer.send(msg);
+			Executors.newSingleThreadExecutor().execute(new Runnable() {
+
+				@Override
+				public void run() {
+					for (int i = 0; i < 1000; i++) {
+						try {
+							TextMessage msg = session.createTextMessage();
+							msg.setText("Hooooooooooooollllllllllllllaaaaaaaaaaaaaaa_" + i);
+							producer.send(msg);
+							Thread.sleep(30000);
+						} catch (Exception e) {
+						}
+					}
+
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (session != null) {
-					session.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (JMSException jmsE) {
-				jmsE.printStackTrace();
-			}
 		}
 	}
 }
