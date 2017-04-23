@@ -243,6 +243,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote,OrdenDeT
 		
 		odt.setAvance(EAvanceODT.FINALIZADO);
 		odt.setMaquinaActual(maquina);
+		if(odt.getEstado() == EEstadoODT.PENDIENTE) {
+			odt.setEstadoODT(EEstadoODT.EN_PROCESO);//al tener máquina debe quedar en estado EN_PROCESO
+		}
 		
 		//persist
 		odtDAO.save(odt);

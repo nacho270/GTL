@@ -501,7 +501,9 @@ public final class ODTTOConverter {
 		transicion.setMaquina(tODT.getIdMaquina() == null ? null : maquinaFacade.getByIdEager(tODT.getIdMaquina()));
 		transicion.setTipoMaquina(tODT.getIdTipoMaquina() == null ? null : tipoMaquinaFacade.getByIdEager(tODT.getIdTipoMaquina(), 0));
 		transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
-		transicion.setUsuarioSistema(usuarioSistemaFacade.getById(tODT.getIdUsuarioSistema()));
+		if(tODT.getIdUsuarioSistema() != null) {
+			transicion.setUsuarioSistema(usuarioSistemaFacade.getById(tODT.getIdUsuarioSistema()));
+		}
 		if(tODT.getIdTerminal() != null) {
 			transicion.setTerminal(terminalFacade.getById(tODT.getIdTerminal()));
 		}
@@ -517,7 +519,9 @@ public final class ODTTOConverter {
 		CambioAvance cambio = new CambioAvance();
 		cambio.setAvance(EAvanceODT.getById(caTO.getIdAvance()));
 		cambio.setFechaHora(new Timestamp(caTO.getFechaHora()));
-		cambio.setUsuario(usuarioSistemaFacade.getById(caTO.getIdUsuarioSistema()));
+		if(caTO.getIdUsuarioSistema() != null) {
+			cambio.setUsuario(usuarioSistemaFacade.getById(caTO.getIdUsuarioSistema()));
+		}
 		if(caTO.getIdTerminal() != null) {
 			cambio.setTerminal(terminalFacade.getById(caTO.getIdTerminal()));
 		}
@@ -530,7 +534,12 @@ public final class ODTTOConverter {
 		transicion.setIdMaquina(tODT.getMaquina() == null ? null : tODT.getMaquina().getId());
 		transicion.setIdTipoMaquina(tODT.getTipoMaquina() == null ? null : tODT.getTipoMaquina().getId());
 		transicion.setFechaHoraRegistro(tODT.getFechaHoraRegistro().getTime());
-		transicion.setIdUsuarioSistema(tODT.getUsuarioSistema().getId());
+		if(tODT.getUsuarioSistema() != null) {
+			transicion.setIdUsuarioSistema(tODT.getUsuarioSistema().getId());
+		}
+		if(tODT.getTerminal() != null) {
+			transicion.setIdTerminal(tODT.getTerminal().getId());
+		}
 		transicion.setCambiosAvance(new CambioAvanceTO[tODT.getCambiosAvance().size()]);
 		int index = 0;
 		for(CambioAvance ca : tODT.getCambiosAvance()) {
@@ -543,7 +552,8 @@ public final class ODTTOConverter {
 		CambioAvanceTO cambio = new CambioAvanceTO();
 		cambio.setIdAvance(ca.getAvance().getId());
 		cambio.setFechaHora(ca.getFechaHora().getTime());
-		cambio.setIdUsuarioSistema(ca.getUsuario().getId());
+		cambio.setIdUsuarioSistema(ca.getUsuario() == null ? null : ca.getUsuario().getId());
+		cambio.setIdTerminal(ca.getTerminal() == null ? null : ca.getTerminal().getId());
 		cambio.setObservaciones(ca.getObservaciones());
 		return cambio;
 	}

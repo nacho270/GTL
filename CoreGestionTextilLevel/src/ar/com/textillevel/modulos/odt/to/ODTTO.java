@@ -54,56 +54,28 @@ public class ODTTO implements Serializable {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getCodigo() {
 		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
 	}
 
 	public Integer getIdRemito() {
 		return idRemito;
 	}
 
-	public void setIdRemito(Integer idRemito) {
-		this.idRemito = idRemito;
-	}
-
 	public String getNombreCliente() {
 		return nombreCliente;
-	}
-
-	public void setNombreCliente(String nombreCliente) {
-		this.nombreCliente = nombreCliente;
 	}
 
 	public String getProducto() {
 		return producto;
 	}
 
-	public void setProducto(String producto) {
-		this.producto = producto;
-	}
-
 	public Short getOrdenEnMaquina() {
 		return ordenEnMaquina;
 	}
 
-	public void setOrdenEnMaquina(Short ordenEnMaquina) {
-		this.ordenEnMaquina = ordenEnMaquina;
-	}
-
 	public Integer getMaquinaActual() {
 		return maquinaActual;
-	}
-
-	public void setMaquinaActual(Integer maquinaActual) {
-		this.maquinaActual = maquinaActual;
 	}
 
 	public Integer getNroCliente() {

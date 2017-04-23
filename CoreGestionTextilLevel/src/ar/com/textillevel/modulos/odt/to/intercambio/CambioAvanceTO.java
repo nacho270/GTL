@@ -20,7 +20,7 @@ public class CambioAvanceTO implements Serializable {
 	public CambioAvanceTO(CambioAvance ca) {
 		this.idAvance = ca.getAvance().getId();
 		this.fechaHora = ca.getFechaHora().getTime();
-		this.idUsuarioSistema = ca.getUsuario().getId();
+		this.idUsuarioSistema = ca.getUsuario() == null ? null : ca.getUsuario().getId();
 		this.observaciones = ca.getObservaciones();
 		if(ca.getTerminal() != null) {
 			this.idTerminal = ca.getTerminal().getId();
