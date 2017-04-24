@@ -63,7 +63,6 @@ public class PanelEstadoActualMaquina extends JPanel {
 	private final boolean mostrarBotonMaquinaAnterior;
 
 	private EstadoActualTipoMaquinaTO estadoMaquinas;
-	private List<ODTTO> odtsDisponibles;
 
 	private JPanel panelBotones;
 	private JPanel panelTablasEstadoAvance;
@@ -304,20 +303,8 @@ public class PanelEstadoActualMaquina extends JPanel {
 		}
 	}
 
-	public EstadoActualTipoMaquinaTO getEstadoMaquinas() {
+	private EstadoActualTipoMaquinaTO getEstadoMaquinas() {
 		return estadoMaquinas;
-	}
-
-	public void setEstadoMaquinas(EstadoActualTipoMaquinaTO estadoMaquinas) {
-		this.estadoMaquinas = estadoMaquinas;
-	}
-
-	public List<ODTTO> getOdtsDisponibles() {
-		return odtsDisponibles;
-	}
-
-	public void setOdtsDisponibles(List<ODTTO> odtsDisponibles) {
-		this.odtsDisponibles = odtsDisponibles;
 	}
 
 	private boolean isODTsDisponibles() {

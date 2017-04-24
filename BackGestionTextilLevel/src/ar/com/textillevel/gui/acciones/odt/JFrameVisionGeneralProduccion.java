@@ -45,6 +45,7 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
+import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.modulos.odt.to.EstadoActualTipoMaquinaTO;
 import ar.com.textillevel.modulos.odt.to.EstadoGeneralODTsTO;
@@ -150,7 +151,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 				JDialogSeleccionarMaquina dialog = new JDialogSeleccionarMaquina(JFrameVisionGeneralProduccion.this,(byte)-1,JDialogSeleccionarMaquina.MODO_SIGUIENTE);
 				dialog.setVisible(true);
 				if(dialog.isAcepto()){
-					getOdtFacade().registrarTransicionODT(eventData.getOdtTO().getId(), dialog.getMaquinaElegida(), GTLGlobalCache.getInstance().getUsuarioSistema());
+					getOdtFacade().grabarAndRegistrarAvanceEnEstadoEnProceso(eventData.getOdtTO().getId(), dialog.getMaquinaElegida(), dialog.getMaquinaElegida().getTipoMaquina().getSectorMaquina(), null, GTLGlobalCache.getInstance().getUsuarioSistema());
 					refreshView();
 				}
 			}
@@ -191,7 +192,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 					JDialogSeleccionarMaquina dialog = new JDialogSeleccionarMaquina(JFrameVisionGeneralProduccion.this,eventData.getOrdenMaquina(),JDialogSeleccionarMaquina.MODO_ANTERIOR);
 					dialog.setVisible(true);
 					if(dialog.isAcepto()){
-						getOdtFacade().registrarTransicionODT(eventData.getOdtTO().getId(), dialog.getMaquinaElegida(), GTLGlobalCache.getInstance().getUsuarioSistema());
+						getOdtFacade().grabarAndRegistrarAvanceEnEstadoEnProceso(eventData.getOdtTO().getId(), dialog.getMaquinaElegida(), dialog.getMaquinaElegida().getTipoMaquina().getSectorMaquina(), null, GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}
 				}else{
@@ -204,7 +205,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		});
 		panelTipoMaquina.addBotonIzquierdaActionListener(new BotonAIzquierdaEventListener() {
 			public void botonIzquierdaPersionado(WorkFlowODTEvent eventData) {
-				getOdtFacade().registrarAvanceODT(eventData.getOdtTO().getId(), EAvanceODT.POR_COMENZAR,false, GTLGlobalCache.getInstance().getUsuarioSistema());
+				getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_PROCESO, EAvanceODT.POR_COMENZAR, GTLGlobalCache.getInstance().getUsuarioSistema());
 				refreshView();
 			}
 		});
@@ -212,11 +213,11 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 			public void botonDerechaPersionado(WorkFlowODTEvent eventData) {
 				if(eventData.isOficina()){
 					if(FWJOptionPane.showQuestionMessage(JFrameVisionGeneralProduccion.this, "Va a pasar la Orden de Trabajo a 'Oficina'. Desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION){
-						getOdtFacade().registrarAvanceODT(eventData.getOdtTO().getId(),EAvanceODT.FINALIZADO,true,GTLGlobalCache.getInstance().getUsuarioSistema());
+						getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_OFICINA, EAvanceODT.FINALIZADO, GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}
 				}else{
-					getOdtFacade().registrarAvanceODT(eventData.getOdtTO().getId(),EAvanceODT.FINALIZADO,false,GTLGlobalCache.getInstance().getUsuarioSistema());
+					getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_PROCESO, EAvanceODT.FINALIZADO, GTLGlobalCache.getInstance().getUsuarioSistema());
 					refreshView();
 				}
 			}
@@ -234,7 +235,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 					JDialogSeleccionarMaquina dialog = new JDialogSeleccionarMaquina(JFrameVisionGeneralProduccion.this,eventData.getOrdenMaquina(),JDialogSeleccionarMaquina.MODO_SIGUIENTE);
 					dialog.setVisible(true);
 					if(dialog.isAcepto()){
-						getOdtFacade().registrarTransicionODT(eventData.getOdtTO().getId(), dialog.getMaquinaElegida(), GTLGlobalCache.getInstance().getUsuarioSistema());
+						getOdtFacade().grabarAndRegistrarAvanceEnEstadoEnProceso(eventData.getOdtTO().getId(), dialog.getMaquinaElegida(), dialog.getMaquinaElegida().getTipoMaquina().getSectorMaquina(), null, GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}
 				}

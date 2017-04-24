@@ -20,6 +20,7 @@ import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.to.EstadoActualMaquinaTO;
 import ar.com.textillevel.modulos.odt.to.EstadoGeneralODTsTO;
+import ar.com.textillevel.modulos.odt.to.InfoAsignacionMaquinaTO;
 import ar.com.textillevel.modulos.odt.to.ODTTO;
 import ar.com.textillevel.modulos.odt.to.stock.InfoBajaStock;
 import ar.com.textillevel.modulos.terminal.entidades.Terminal;
@@ -46,10 +47,6 @@ public interface OrdenDeTrabajoFacadeRemote {
 	public List<EstadoActualMaquinaTO> getEstadoMaquinas(Integer idTipoMaquina, Date fechaDesde, Date fechaHasta, Cliente cliente);
 	
 	public EstadoGeneralODTsTO getEstadoDeProduccionActual(Date fechaDesde, Date fechaHasta, Cliente cliente);
-	
-	public void registrarAvanceODT(Integer idOdt, EAvanceODT avance, boolean oficina, UsuarioSistema usuarioSistema);
-	
-	public void registrarTransicionODT(Integer idOdt, Maquina maquina, UsuarioSistema usuarioSistema);
 
 	public void detenerODT(Integer idOdt, UsuarioSistema usuarioSistema);
 
@@ -73,6 +70,8 @@ public interface OrdenDeTrabajoFacadeRemote {
 
 	public PiezaODT getPiezaODTByCodigo(String codPiezaODT);
 	
-	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, ESectorMaquina sector, Terminal terminal);
-	
+	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, Maquina maquina, ESectorMaquina sector, Terminal terminal, UsuarioSistema usuarioSistema);
+
+	public InfoAsignacionMaquinaTO getMaquinaAndProximoOrdenBySector(ESectorMaquina sector);
+
 }

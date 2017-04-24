@@ -57,4 +57,6 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajoSinSalida(Date fechaDesde, Date fechaHasta);
 
+	public List<OrdenDeTrabajo> getODTsEnMaquina(Maquina maquinaActual);
+
 }

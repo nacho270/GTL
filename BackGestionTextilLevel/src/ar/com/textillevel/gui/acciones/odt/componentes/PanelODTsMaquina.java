@@ -99,7 +99,7 @@ public class PanelODTsMaquina extends JPanel {
 		lblTitlo.setForeground(Color.RED.darker());
 		return lblTitlo;
 	}
-	
+
 	public JPanel getPanelBotones() {
 		if (panelBotones == null) {
 			panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -111,14 +111,16 @@ public class PanelODTsMaquina extends JPanel {
 	public JPanel getPanelTablasEstadoAvance() {
 		if (panelTablasEstadoAvance == null) {
 			panelTablasEstadoAvance = new JPanel(new GridBagLayout());
-			panelTablasEstadoAvance.add(getMapaTablas().get(EAvanceODT.POR_COMENZAR), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 1, 3, 1, 1));
-			
-			JPanel panBotones = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.CENTER, 0, 5));
-			panBotones.add(getBtnPasarAIzquierda());
-			panBotones.add(getBtnPasarADerecha());
-			
-			panelTablasEstadoAvance.add(panBotones, GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 0, 5, 0), 1, 1, 0, 0));
-			panelTablasEstadoAvance.add(getMapaTablas().get(EAvanceODT.FINALIZADO), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 0, 5, 5), 1, 3, 1, 1));
+			if(estadoMaquina.getMaquina().getSector().isAdmiteInterProcesamiento()) {
+				panelTablasEstadoAvance.add(getMapaTablas().get(EAvanceODT.POR_COMENZAR), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 0), 1, 3, 1, 1));
+				JPanel panBotones = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.CENTER, 0, 5));
+				panBotones.add(getBtnPasarAIzquierda());
+				panBotones.add(getBtnPasarADerecha());
+				panelTablasEstadoAvance.add(panBotones, GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 0, 5, 0), 1, 1, 0, 0));
+				panelTablasEstadoAvance.add(getMapaTablas().get(EAvanceODT.FINALIZADO), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 0, 5, 5), 1, 3, 1, 1));
+			} else {
+				panelTablasEstadoAvance.add(getMapaTablas().get(EAvanceODT.FINALIZADO), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 0, 5, 5), 1, 3, 1, 1));
+			}
 		}
 		return panelTablasEstadoAvance;
 	}
@@ -163,10 +165,14 @@ public class PanelODTsMaquina extends JPanel {
 		
 		@Override
 		protected void habilitarBotones(int rowSelected) {
-			ODTTO elemento = getElemento(rowSelected);
-			EAvanceODT tipoAvance = elemento.getAvance();
+			ODTTO elemento = null;
+			EAvanceODT tipoAvance = null;
+			if(rowSelected != -1) {
+				elemento = getElemento(rowSelected);
+				tipoAvance = elemento.getAvance();
+			}
 			getBotonSubir().setEnabled(rowSelected>0);
-			getBotonBajar().setEnabled(rowSelected<getTabla().getRowCount()-1);
+			getBotonBajar().setEnabled(rowSelected!=-1 && rowSelected<getTabla().getRowCount()-1);
 			getBtnCambiarMaquina().setEnabled(rowSelected!=-1 && tipoAvance!=null && tipoAvance == EAvanceODT.POR_COMENZAR);
 			if (tipoAvance == EAvanceODT.POR_COMENZAR) {
 				getBtnPasarADerecha().setEnabled(rowSelected!=-1);
@@ -174,8 +180,9 @@ public class PanelODTsMaquina extends JPanel {
 			} else if (tipoAvance == EAvanceODT.FINALIZADO) {
 				getBtnPasarADerecha().setEnabled(false);
 				getBtnPasarAIzquierda().setEnabled(rowSelected!=-1);
-			} else {
-				//no deberia llegar por ahora. Cuando este la automatizacion no deberian estar mas los botones
+			} else { //no deberia llegar por ahora. Cuando este la automatizacion no deberian estar mas los botones
+				getBtnPasarADerecha().setEnabled(false);
+				getBtnPasarAIzquierda().setEnabled(false);
 			}
 		}
 	}

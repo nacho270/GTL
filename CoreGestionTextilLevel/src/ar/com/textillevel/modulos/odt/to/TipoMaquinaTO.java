@@ -3,6 +3,7 @@ package ar.com.textillevel.modulos.odt.to;
 import java.io.Serializable;
 
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 
 public class TipoMaquinaTO implements Serializable {
 
@@ -11,21 +12,17 @@ public class TipoMaquinaTO implements Serializable {
 	private Integer idTipoMaquina;
 	private String tipoMaquina;
 	private Byte ordenTipoMaquina;
+	private ESectorMaquina sector;
 
 	public TipoMaquinaTO() {
 
-	}
-
-	public TipoMaquinaTO(Integer idTipoMaquina, String tipoMaquina, Byte ordenTipoMaquina) {
-		this.idTipoMaquina = idTipoMaquina;
-		this.tipoMaquina = tipoMaquina;
-		this.ordenTipoMaquina = ordenTipoMaquina;
 	}
 
 	public TipoMaquinaTO(TipoMaquina tipoMaquina) {
 		this.idTipoMaquina = tipoMaquina.getId();
 		this.ordenTipoMaquina = tipoMaquina.getOrden();
 		this.tipoMaquina = tipoMaquina.getNombre();
+		this.sector = tipoMaquina.getSectorMaquina();
 	}
 
 	public Integer getIdTipoMaquina() {
@@ -50,6 +47,14 @@ public class TipoMaquinaTO implements Serializable {
 
 	public void setOrdenTipoMaquina(Byte ordenTipoMaquina) {
 		this.ordenTipoMaquina = ordenTipoMaquina;
+	}
+
+	public ESectorMaquina getSector() {
+		return sector;
+	}
+
+	public void setSector(ESectorMaquina sector) {
+		this.sector = sector;
 	}
 
 }
