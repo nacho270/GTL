@@ -85,7 +85,6 @@
 		textillevel.backup.MySQLDumpPath=C:/AppServ/MySQL/bin/mysqldump.exe
 		
 		textillevel.activemq.url=tcp://localhost:61616
-		textillevel.activemq.topic=SALEM_TOPIC
     </attribute>
     
   </mbean>

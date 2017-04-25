@@ -30,6 +30,7 @@ import ar.com.fwcommon.boss.BossError;
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.notificaciones.NotificableMainTemplate;
 import ar.com.fwcommon.templates.main.FWMainTemplate;
 import ar.com.fwcommon.templates.main.config.IConfigClienteManager;
 import ar.com.fwcommon.templates.main.menu.MenuAyuda;
@@ -41,9 +42,11 @@ import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.gui.modulos.chat.client.ChatClient;
 import ar.com.textillevel.gui.util.ESkin;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.modulos.notificaciones.facade.api.remote.NotificacionUsuarioFacadeRemote;
 import ar.com.textillevel.skin.SkinModerno;
+import ar.com.textillevel.util.GTLBeanFactory;
 
-public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigClienteManager> {
+public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigClienteManager> implements NotificableMainTemplate {
 
 	private static final long serialVersionUID = -7589061723941536496L;
 	protected MenuImpresion menuImpresion;
@@ -60,8 +63,8 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	protected GTLMainTemplate(int idAplicacion, String version) throws FWException {
 		super(idAplicacion, version);
 		construirMenues();
-		messageListener = MessageListener.build(this);
-		getDesktop().add(getPanelNotificaciones());
+		messageListener = MessageListener.build(this, GTLGlobalCache.getInstance().getUsuarioSistema());
+		getDesktop().add(crearPanelNotificaciones());
 	}
 
 	@Override
@@ -296,7 +299,7 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 		return btnNotificaciones;
 	}
 
-	private JPanel getPanelNotificaciones() {
+	private JPanel crearPanelNotificaciones() {
 		JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		pnl.setBackground(Color.WHITE);
 		pnl.setBounds(new Rectangle(new Point(5, 5), new Dimension(120, 120)));
@@ -306,9 +309,19 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 		return pnl;
 	}
 
+	@Override
 	public void actualizarNotificaciones() {
-		// esto podria hacerse con un query para ser exacto
-		getBtnNotificaciones().setText(Integer.valueOf(getBtnNotificaciones().getText()).intValue() + 1 + "");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Integer cantidadNoLeidas = GTLBeanFactory.getInstance().getBean2(NotificacionUsuarioFacadeRemote.class).getCountNotificacionesNoLeidasByUsuario(GTLGlobalCache.getInstance().getUsuarioSistema().getId());
+				getBtnNotificaciones().setText(String.valueOf(cantidadNoLeidas));
+			}
+		}).start();
 	}
 
+	@Override
+	public void mostrarNotificacion(String text) {
+		FWJOptionPane.showInformationMessage(null, text, "Notificacion");
+	}
 }

@@ -93,13 +93,21 @@
 	<jar href="mail-1.4.7.jar"/>
 	<jar href="barcode4j.jar"/>
 	<jar href="guava-19.0.jar"/>
+  <jar href="activeio-core-3.1.4.jar"/>
+  <jar href="activemq-broker-5.14.4.jar"/>
+  <jar href="activemq-client-5.14.4.jar"/>
+  <jar href="activemq-kahadb-store-5.14.4.jar"/>
+  <jar href="activemq-protobuf-1.1.jar"/>
+  <jar href="hawtbuf-1.11.jar"/>
+  <jar href="slf4j-api-1.7.13.jar"/>
+  <jar href="slf4j-log4j12-1.7.25.jar"/>
     <property name="applicationName" value="GTL"/>
 	<property name="textillevel.chat.server.ip" value="192.168.1.13"/>
     <property name="textillevel.chat.server.port" value="7778"/>
 	<property name="textillevel.ipintercambio" value="http://192.168.1.250:8080/"/>
 	<property name="textillevel.odt.wsendpoint" value="GTL-gtlback-server/ODTService"/>
 	<property name="textillevel.entregingdoc.wsendpoint" value="GTL-gtlback-server/TerminalService"/>
-
+  <property name="textillevel.activemq.url" value="tcp://192.168.1.250:61616" />
     <property name="com.sun.management.jmxremote" value="" />
 
     <property name="swing.disableFileChooserSpeedFix" value="true"/>

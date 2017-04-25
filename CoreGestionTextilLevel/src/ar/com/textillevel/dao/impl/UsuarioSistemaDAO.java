@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.UsuarioSistemaDAOLocal;
+import ar.com.textillevel.entidades.portal.Modulo;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 
 @Stateless
@@ -94,5 +95,15 @@ public class UsuarioSistemaDAO extends GenericDAO<UsuarioSistema, Integer> imple
 		}else{
 			return lastNumero.intValue() + 1;
 		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<UsuarioSistema> getByModuloAsociado(Modulo moduloAsociado) {
+		String hql = " SELECT u FROM UsuarioSistema u JOIN FETCH u.perfil"
+				+ " WHERE u.perfil.modulos modulo WHERE modulo.id = :idModulo ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("idModulo", moduloAsociado.getId());
+		return q.getResultList();
 	}
 }
