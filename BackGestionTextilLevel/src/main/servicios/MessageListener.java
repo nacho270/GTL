@@ -32,7 +32,8 @@ public class MessageListener {
 	private Session session;
 	private NotificableMainTemplate gtlMT;
 	private UsuarioSistema usuario;
-
+	private Thread listerThread;
+	
 	private MessageListener(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {
 		this.gtlMT = gtlMT;
 		this.usuario = usuario;
@@ -47,7 +48,7 @@ public class MessageListener {
 			return;
 		}
 		isRunning = true;
-		Thread t = new Thread(new Runnable() {
+		listerThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -76,8 +77,8 @@ public class MessageListener {
 				}
 			}
 		});
-		t.setDaemon(true);
-		t.start();
+		listerThread.setDaemon(true);
+		listerThread.start();
 	}
 
 	private void escucharDestinoEnOtroThread(final ConfiguracionNotificacion conf) {
@@ -90,18 +91,20 @@ public class MessageListener {
 					Destination destination = conf.getTipoDestino() == ETipoDestinoNotificacion.TOPIC ? session.createTopic(nombreDestino) : session.createQueue(nombreDestino);
 					final MessageConsumer consumer = session.createConsumer(destination);
 
-					while (true) {
+					while (isRunning) {
 						// Bloqueante
 						Message message = consumer.receive();
-						String text = "";
-						if (message instanceof TextMessage) {
-							text = ((TextMessage) message).getText();
-						} else if (message instanceof ObjectMessage) {
-							NotificacionUsuario notifiacion = (NotificacionUsuario) ((ObjectMessage) message).getObject();
-							text = notifiacion.getTexto();
+						if (message != null) {
+							String text = "";
+							if (message instanceof TextMessage) {
+								text = ((TextMessage) message).getText();
+							} else if (message instanceof ObjectMessage) {
+								NotificacionUsuario notifiacion = (NotificacionUsuario) ((ObjectMessage) message).getObject();
+								text = notifiacion.getTexto();
+							}
+							gtlMT.mostrarNotificacion(text);
+							gtlMT.actualizarNotificaciones();
 						}
-						gtlMT.mostrarNotificacion(text);
-						gtlMT.actualizarNotificaciones();
 					}
 				} catch (JMSException e) {
 					e.printStackTrace();
@@ -111,16 +114,16 @@ public class MessageListener {
 	}
 
 	public void stop() {
-		System.out.println("Deteniendo receptor de mensajes...");
 		try {
+			isRunning = false;
 			if (session != null) {
 				session.close();
 			}
 			if (connection != null) {
 				connection.close();
 			}
-		} catch (JMSException jmsE) {
-			jmsE.printStackTrace();
+		} catch (Exception exception) {
+			exception.printStackTrace();
 		}
 	}
 }

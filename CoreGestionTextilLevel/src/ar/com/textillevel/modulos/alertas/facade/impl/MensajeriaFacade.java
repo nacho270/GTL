@@ -2,7 +2,6 @@ package ar.com.textillevel.modulos.alertas.facade.impl;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.Connection;
@@ -41,12 +40,11 @@ public class MensajeriaFacade implements MensajeriaFacadeLocal {
 	@EJB
 	private NotificacionUsuarioDAOLocal notificacionDAO;
 
-	private Connection activeMQConnection;
+	private static Connection activeMQConnection;
 	
-	private boolean didAcquireConnection = false;
-
-	@PostConstruct
-	public void initActiveMQ() {
+	private static boolean didAcquireConnection = false;
+	
+	static {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

@@ -58,8 +58,8 @@ import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.modulos.alertas.facade.api.remote.AlertaFacadeRemote;
 import ar.com.textillevel.modulos.alertas.facade.api.remote.TipoAlertaFacadeRemote;
 import ar.com.textillevel.modulos.fe.facade.api.remote.ConfiguracionFacturaElectronicaFacadeRemote;
+import ar.com.textillevel.modulos.notificaciones.facade.api.remote.ConfiguracionNotificacionFacadeRemote;
 import ar.com.textillevel.modulos.notificaciones.facade.api.remote.NotificacionUsuarioFacadeRemote;
-import ar.com.textillevel.modulos.notificaciones.facade.impl.ConfiguracionNotificacionFacade;
 import ar.com.textillevel.modulos.odt.facade.api.remote.AccionProcedimientoFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.FormulaClienteFacadeRemote;
 import ar.com.textillevel.modulos.odt.facade.api.remote.InstruccionProcedimientoFacadeRemote;
@@ -144,7 +144,7 @@ public class GTLBeanFactory extends BeanFactoryRemoteAbstract {
 		addJndiName(ModuloTerminalFacadeRemote.class);
 		addJndiName(EntregaReingresoDocumentosFacadeRemote.class);
 		addJndiName(NotificacionUsuarioFacadeRemote.class);
-		addJndiName(ConfiguracionNotificacionFacade.class);
+		addJndiName(ConfiguracionNotificacionFacadeRemote.class);
 	}
 
 	public static GTLBeanFactory getInstance() {

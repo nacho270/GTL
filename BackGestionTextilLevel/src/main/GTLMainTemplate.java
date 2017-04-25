@@ -63,7 +63,6 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	protected GTLMainTemplate(int idAplicacion, String version) throws FWException {
 		super(idAplicacion, version);
 		construirMenues();
-		messageListener = MessageListener.build(this, GTLGlobalCache.getInstance().getUsuarioSistema());
 		getDesktop().add(crearPanelNotificaciones());
 	}
 
@@ -191,6 +190,7 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 		UsuarioSistema usuarioSistema = GTLGlobalCache.getInstance().getUsuarioSistema();
 		if(usuarioSistema!=null){
 			setTitle(getTitle()+ " - USUARIO: " + usuarioSistema.getUsrName().toUpperCase());
+			messageListener = MessageListener.build(this, GTLGlobalCache.getInstance().getUsuarioSistema());
 		}
 		List<Modulo> modulosTrigger = GTLGlobalCache.getInstance().getModulosTriggerUsuarioLogueado();
 		try {
@@ -229,7 +229,7 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 			FWJOptionPane.showErrorMessage(this,"Error desconocido al iniciar el cliente de Chat.","Error");
 			e.printStackTrace();
 		}
-
+		actualizarNotificaciones();
 		messageListener.start();
 	}
 
