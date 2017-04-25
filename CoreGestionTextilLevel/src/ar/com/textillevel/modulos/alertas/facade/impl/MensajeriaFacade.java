@@ -1,7 +1,6 @@
 package ar.com.textillevel.modulos.alertas.facade.impl;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -43,21 +42,47 @@ public class MensajeriaFacade implements MensajeriaFacadeLocal {
 	private NotificacionUsuarioDAOLocal notificacionDAO;
 
 	private Connection activeMQConnection;
+	
+	private boolean didAcquireConnection = false;
 
 	@PostConstruct
-	public void initActiveMQ() throws JMSException {
-		activeMQConnection = new ActiveMQConnectionFactory(ACTIVEMQ_URL).createConnection();
-		activeMQConnection.start();
+	public void initActiveMQ() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					do {
+						try {
+							activeMQConnection = new ActiveMQConnectionFactory(ACTIVEMQ_URL).createConnection();
+						} catch (Exception e) {
+							try {
+								Thread.sleep(10000);
+							} catch (Exception e2) {
+							}
+						}
+					} while (activeMQConnection == null);
+					activeMQConnection.start();
+					didAcquireConnection = true;
+					LOGGER.info("Conexion establecida con el servicio de mensajes " + ACTIVEMQ_URL);
+				} catch (JMSException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 	@Override
 	public void generarNotificaciones(final ETipoNotificacion tipo, final Object... parms) {
-		final ConfiguracionNotificacion configuracion = configuracionNotificacionDAO.getByTipo(tipo);
-		if (configuracion == null) {
+		if (!didAcquireConnection) {
+			LOGGER.warn("No se envian notificaciones por falta de conexion con el servicio de mensajes " + ACTIVEMQ_URL);
 			return;
 		}
-		Executors.newSingleThreadExecutor().execute(new Runnable() {
-
+		final ConfiguracionNotificacion configuracion = configuracionNotificacionDAO.getByTipo(tipo);
+		if (configuracion == null) {
+			LOGGER.warn("No se envian notificaciones debido a que no ha creado una configuracion para el tipo notificacion " + tipo);
+			return;
+		}
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				List<UsuarioSistema> usuariosANotificar = usuarioSistemaDAO.getByModuloAsociado(configuracion.getModuloAsociado());
@@ -93,6 +118,6 @@ public class MensajeriaFacade implements MensajeriaFacadeLocal {
 					}
 				}
 			}
-		});
+		}).start();
 	}
 }
