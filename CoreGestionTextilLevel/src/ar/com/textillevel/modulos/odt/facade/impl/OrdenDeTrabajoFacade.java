@@ -28,6 +28,8 @@ import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.PrecioMateriaPrimaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
+import ar.com.textillevel.modulos.alertas.facade.api.local.MensajeriaFacadeLocal;
+import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
 import ar.com.textillevel.modulos.odt.dao.api.local.CambioAvanceDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.MaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
@@ -93,6 +95,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	
 	@EJB
 	private PiezaODTDAOLocal piezaODTDAO;
+	
+	@EJB
+	private MensajeriaFacadeLocal mensajeriaFacade;
 
 	public List<OrdenDeTrabajo> getOdtNoAsociadasByClient(Integer idCliente) {
 		return odtDAO.getOdtNoAsociadasByClient(idCliente);
@@ -296,7 +301,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		}
 		Maquina maquina = allByTipo.get(0); //elijo la primer máquina
 
-		OrdenDeTrabajo odt = odtDAO.getReferenceById(idOdt);
+		OrdenDeTrabajo odt = odtDAO.getById(idOdt);
 		odt.setMaquinaActual(maquina);
 		odt.setEstadoODT(EEstadoODT.EN_OFICINA);
 		odt.setAvance(EAvanceODT.FINALIZADO);
@@ -318,6 +323,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		transicion.getCambiosAvance().add(ca);
 
 		transicionDao.save(transicion);
+		
+		mensajeriaFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
 	}
 
 	
