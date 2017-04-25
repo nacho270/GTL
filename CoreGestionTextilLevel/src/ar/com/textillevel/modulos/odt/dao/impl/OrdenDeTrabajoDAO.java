@@ -457,4 +457,14 @@ delete from t_procedimiento_odt;
 		return q.getResultList();
 	}
 
+	public List<OrdenDeTrabajo> getODTsEnMaquina(Maquina maquina) {
+		String hql = " SELECT odt " +
+				     " FROM OrdenDeTrabajo odt " + 
+				     " WHERE  odt.maquinaActual = :maquina AND odt.ordenEnMaquina IS NOT NULL " +
+				     " ORDER BY odt.ordenEnMaquina ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("maquina", maquina);
+		return q.getResultList();
+	}
+
 }
