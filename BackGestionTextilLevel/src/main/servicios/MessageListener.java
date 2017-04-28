@@ -37,6 +37,7 @@ public class MessageListener {
 	private MessageListener(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {
 		this.gtlMT = gtlMT;
 		this.usuario = usuario;
+		((ActiveMQConnectionFactory) CONNECTION_FACTORY).setTrustAllPackages(true);
 	}
 
 	public static MessageListener build(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {

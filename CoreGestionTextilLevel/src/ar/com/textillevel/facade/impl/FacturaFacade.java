@@ -52,10 +52,10 @@ import ar.com.textillevel.facade.api.local.RemitoSalidaFacadeLocal;
 import ar.com.textillevel.facade.api.local.UsuarioSistemaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
-import ar.com.textillevel.modulos.alertas.facade.api.local.MensajeriaFacadeLocal;
 import ar.com.textillevel.modulos.fe.connector.AFIPConnector;
 import ar.com.textillevel.modulos.fe.connector.DatosRespuestaAFIP;
 import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
+import ar.com.textillevel.modulos.notificaciones.facade.api.local.NotificacionUsuarioFacadeLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
@@ -107,7 +107,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	private RemitoEntradaFacadeLocal remitroEntradaFacade;
 	
 	@EJB
-	private MensajeriaFacadeLocal mensajeriaFacade;
+	private NotificacionUsuarioFacadeLocal notificacionesFacadeFacade;
 	
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
 		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
@@ -247,7 +247,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		
 		if(estadoODT == EEstadoODT.EN_OFICINA) {
 			for(OrdenDeTrabajo odt : odtSet) {
-				mensajeriaFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
+				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
 			}
 		}
 	}

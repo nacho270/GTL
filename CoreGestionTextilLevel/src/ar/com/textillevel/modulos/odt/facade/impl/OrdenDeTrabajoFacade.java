@@ -28,8 +28,8 @@ import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.PrecioMateriaPrimaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
-import ar.com.textillevel.modulos.alertas.facade.api.local.MensajeriaFacadeLocal;
 import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
+import ar.com.textillevel.modulos.notificaciones.facade.api.local.NotificacionUsuarioFacadeLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.CambioAvanceDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.MaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
@@ -97,7 +97,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	private PiezaODTDAOLocal piezaODTDAO;
 	
 	@EJB
-	private MensajeriaFacadeLocal mensajeriaFacade;
+	private NotificacionUsuarioFacadeLocal notificacionesFacadeFacade;
 
 	public List<OrdenDeTrabajo> getOdtNoAsociadasByClient(Integer idCliente) {
 		return odtDAO.getOdtNoAsociadasByClient(idCliente);
@@ -324,7 +324,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 
 		transicionDao.save(transicion);
 		
-		mensajeriaFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
+		notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
 	}
 
 	

@@ -9,7 +9,12 @@ import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.UsuarioSistemaDAOLocal;
 import ar.com.textillevel.entidades.portal.Modulo;
+import ar.com.textillevel.entidades.portal.Perfil;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 
 @Stateless
 public class UsuarioSistemaDAO extends GenericDAO<UsuarioSistema, Integer> implements UsuarioSistemaDAOLocal {
@@ -100,10 +105,19 @@ public class UsuarioSistemaDAO extends GenericDAO<UsuarioSistema, Integer> imple
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<UsuarioSistema> getByModuloAsociado(Modulo moduloAsociado) {
-		String hql = " SELECT u FROM UsuarioSistema u JOIN FETCH u.perfil"
-				+ " WHERE u.perfil.modulos modulo WHERE modulo.id = :idModulo ";
-		Query q = getEntityManager().createQuery(hql);
-		q.setParameter("idModulo", moduloAsociado.getId());
+		final ImmutableList<Integer> idPerfiles = FluentIterable.from(//
+				getEntityManager() //
+						.createQuery(" SELECT p FROM Perfil p JOIN FETCH p.modulos m WHERE m.id = :idModulo ") //
+						.setParameter("idModulo", moduloAsociado.getId()) //
+						.getResultList()) //
+				.transform(new Function<Perfil, Integer>() {
+					@Override
+					public Integer apply(Perfil perfil) {
+						return perfil.getId();
+					}
+				}).toList();
+		Query q = getEntityManager().createQuery(" SELECT u FROM UsuarioSistema u WHERE u.perfil.id IN(:idPerfiles) ");
+		q.setParameter("idPerfiles", idPerfiles);
 		return q.getResultList();
 	}
 }
