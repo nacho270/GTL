@@ -56,6 +56,7 @@ public enum EValidacionException {
 	CLIENTE_SIN_LISTA_PRECIOS						(151, "El cliente no tiene lista de precios asociada."),
 	COTIZACION_LISTA_DE_PRECIOS_NUMERO_REPETIDO		(152, "El número de cotización generado ya existe."),
 	CORRECTOR_DE_CUENTAS_DATOS_INCONSISTENTES		(153, "Datos Inconsistentes. Había más movimientos que documentos recuperados. Chequear nro de sucursal de documentos viejos.."),
+	ODT_DIRTY_DATA									(154, "La ODT fue modificada recientemente, por favor, vuelva a intentar la operación"),
 	
 	_											(000, "");
 	

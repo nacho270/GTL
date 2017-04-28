@@ -20,8 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.taglibs.string.util.StringW;
+
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.acciones.odt.JFrameVisionGeneralProduccion.ModeloFiltro;
 import ar.com.textillevel.gui.acciones.odt.componentes.PanelODTsMaquina;
@@ -170,7 +173,7 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 		PanelODTsMaquina panelMaquina = new PanelODTsMaquina((Frame)getParent(),e,isUltima());
 		panelMaquina.addBotonIzquierdaActionListener(new BotonAIzquierdaEventListener() {
 			public void botonIzquierdaPersionado(WorkFlowODTEvent eventData) {
-				getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_PROCESO, EAvanceODT.POR_COMENZAR, GTLGlobalCache.getInstance().getUsuarioSistema());
+				getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_PROCESO, EAvanceODT.POR_COMENZAR, null, GTLGlobalCache.getInstance().getUsuarioSistema());
 				refreshView();
 			}
 		});
@@ -178,11 +181,11 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 			public void botonDerechaPersionado(WorkFlowODTEvent eventData) {
 				if(eventData.isOficina()){
 					if(FWJOptionPane.showQuestionMessage(JDialogVisualizarODTsPorMaquinas.this, "Va a pasar la Orden de Trabajo a 'Oficina'. Desea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
-						getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_OFICINA, EAvanceODT.FINALIZADO, GTLGlobalCache.getInstance().getUsuarioSistema());
+						getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_OFICINA, EAvanceODT.FINALIZADO, null, GTLGlobalCache.getInstance().getUsuarioSistema());
 						refreshView();
 					}
 				}else{
-					getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_PROCESO, EAvanceODT.FINALIZADO, GTLGlobalCache.getInstance().getUsuarioSistema());
+					getOdtFacade().grabarAndRegistrarCambioEstadoAndAvance(getOdtFacade().getByIdEager(eventData.getOdtTO().getId()), EEstadoODT.EN_PROCESO, EAvanceODT.FINALIZADO, null, GTLGlobalCache.getInstance().getUsuarioSistema());
 					refreshView();
 				}
 			}
@@ -192,17 +195,21 @@ public class JDialogVisualizarODTsPorMaquinas extends JDialog {
 				JDialogSeleccionarMaquina dialog = new JDialogSeleccionarMaquina(JDialogVisualizarODTsPorMaquinas.this,event.getIdTipoMaquina(),event.getIdMaquina());
 				dialog.setVisible(true);
 				if(dialog.isAcepto()){
-					getOdtFacade().grabarAndRegistrarAvanceEnEstadoEnProceso(event.getOdtTO().getId(), dialog.getMaquinaElegida(), dialog.getMaquinaElegida().getTipoMaquina().getSectorMaquina(), null, GTLGlobalCache.getInstance().getUsuarioSistema());
+					getOdtFacade().grabarAndRegistrarAvanceEnEstadoEnProceso(event.getOdtTO().getId(), dialog.getMaquinaElegida(), dialog.getMaquinaElegida().getSector(), null, GTLGlobalCache.getInstance().getUsuarioSistema());
 					refreshView();
 				}
 			}
 		});
 		panelMaquina.addBotonSubirBajarActionListener(new BotonSubirBajarActionListener() {
 			public void botonSubirBajarPresionado(BotonSubirBajarEvent event) {
-				if(event.getAccion() == BotonSubirBajarEvent.SUBIR){
-					getOdtFacade().subirODT(event.getOdt());
-				}else{
-					getOdtFacade().bajarODT(event.getOdt());
+				try {
+					if(event.getAccion() == BotonSubirBajarEvent.SUBIR){
+						getOdtFacade().subirODT(event.getOdt(), tipoMaquina.getSector());
+					}else{
+						getOdtFacade().bajarODT(event.getOdt(), tipoMaquina.getSector());
+					}
+				} catch(ValidacionException e) {
+					FWJOptionPane.showErrorMessage(JDialogVisualizarODTsPorMaquinas.this, StringW.wordWrap("No se pudo realizar la operación porque las ODTs ya fueron modificadas. Por favor, reintente nuevamente."), "Error");
 				}
 				refreshView();
 			}

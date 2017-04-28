@@ -54,9 +54,9 @@ public interface OrdenDeTrabajoFacadeRemote {
 
 	public CambioAvance actualizarObservacionesCambioAvance(Integer idCambioAvance, String observaciones);
 
-	public void bajarODT(ODTTO odt);
+	public void bajarODT(ODTTO odt, ESectorMaquina sectorFrom) throws ValidacionException;
 
-	public void subirODT(ODTTO odt);
+	public void subirODT(ODTTO odt, ESectorMaquina sectorFrom) throws ValidacionException;
 
 	public OrdenDeTrabajo grabarODT(OrdenDeTrabajo odt, UsuarioSistema usuario);
 
@@ -66,12 +66,14 @@ public interface OrdenDeTrabajoFacadeRemote {
 	public OrdenDeTrabajo actualizarODTYStock(OrdenDeTrabajo odt, Set<InfoBajaStock> infoStock, UsuarioSistema usuarioSistema);
 	
 	public OrdenDeTrabajo getODTEagerByCodigo(String codigo);
-	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, UsuarioSistema usuarioSistema);
+	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, Terminal terminal, UsuarioSistema usuarioSistema);
 
 	public PiezaODT getPiezaODTByCodigo(String codPiezaODT);
 	
 	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, Maquina maquina, ESectorMaquina sector, Terminal terminal, UsuarioSistema usuarioSistema);
 
 	public InfoAsignacionMaquinaTO getMaquinaAndProximoOrdenBySector(ESectorMaquina sector);
+	
+	public List<OrdenDeTrabajo> getAllNoFinalizadasBySector(ESectorMaquina sector);
 
 }

@@ -338,24 +338,34 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		return cambioAvanceDAO.save(ca);
 	}
 
-	public void bajarODT(ODTTO odtto) {
+	public void bajarODT(ODTTO odtto, ESectorMaquina sectorFrom) throws ValidacionException {
 		OrdenDeTrabajo odtABajar = odtDAO.getReferenceById(odtto.getId());
+		checkDirtyODT(odtABajar, sectorFrom);
 		OrdenDeTrabajo odtASubir = odtDAO.getByMaquinaYOrden(odtto.getMaquinaActual(),(short)(odtto.getOrdenEnMaquina()+1));
+		checkDirtyODT(odtASubir, sectorFrom);
 		Short ordenActual = odtABajar.getOrdenEnMaquina();
-		odtABajar.setOrdenEnMaquina((short)( ordenActual + 1));
+		odtABajar.setOrdenEnMaquina((short)(ordenActual + 1));
 		odtASubir.setOrdenEnMaquina(ordenActual);
 		odtDAO.updateODT(odtABajar);
 		odtDAO.updateODT(odtASubir);
 	}
 
-	public void subirODT(ODTTO odtto) {
+	public void subirODT(ODTTO odtto, ESectorMaquina sectorFrom) throws ValidacionException {
 		OrdenDeTrabajo odtASubir = odtDAO.getReferenceById(odtto.getId());
+		checkDirtyODT(odtASubir, sectorFrom);
 		OrdenDeTrabajo odtABajar = odtDAO.getByMaquinaYOrden(odtto.getMaquinaActual(),(short)(odtto.getOrdenEnMaquina()-1));
+		checkDirtyODT(odtABajar, sectorFrom);
 		Short ordenActual = odtASubir.getOrdenEnMaquina();
 		odtABajar.setOrdenEnMaquina(ordenActual);
-		odtASubir.setOrdenEnMaquina((short)( ordenActual -1));
+		odtASubir.setOrdenEnMaquina((short)(ordenActual -1));
 		odtDAO.updateODT(odtABajar);
 		odtDAO.updateODT(odtASubir);
+	}
+
+	private void checkDirtyODT(OrdenDeTrabajo odt, ESectorMaquina sectorFrom) throws ValidacionException {
+		if(odt==null || odt.getAvance() != EAvanceODT.POR_COMENZAR || odt.getMaquinaActual() == null || odt.getMaquinaActual().getSector() != sectorFrom) {
+			throw new ValidacionException(EValidacionException.ODT_DIRTY_DATA.getInfoValidacion());
+		}
 	}
 
 	public OrdenDeTrabajo grabarODT(OrdenDeTrabajo odt, UsuarioSistema usuario) {
@@ -405,17 +415,18 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		return odtDAO.getODTEagerByCodigo(codigo);
 	}
 
-	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, UsuarioSistema usuarioSistema) {
+	public OrdenDeTrabajo grabarAndRegistrarCambioEstadoAndAvance(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance, Terminal terminal, UsuarioSistema usuarioSistema) {
+		Maquina maquinaActual = maquinaDao.getById(odt.getMaquinaActual().getId());
 		checkConsistenciaCambioEstadoAndAvance(odt, estado, avance);
-		checkConsistenciaEstadoFinalizado(odt, estado, avance);
+		checkConsistenciaEstadoFinalizado(odt, maquinaActual, estado, avance);
 
-		Maquina maquinaActual = odt.getMaquinaActual();
 		if(odt.getEstado() != estado || avance.ordinal() != odt.getAvance().ordinal()) {
 			//cambio de avance
 			CambioAvance ca = new CambioAvance();
 			ca.setFechaHora(DateUtil.getAhora());
 			ca.setAvance(avance);
 			ca.setUsuario(usuarioSistema);
+			ca.setTerminal(terminal);
 
 			TransicionODT transicion = transicionDao.getByODT(odt.getId());
 			if(transicion == null || transicion.getTipoMaquina().getSectorMaquina() != maquinaActual.getTipoMaquina().getSectorMaquina()) {
@@ -425,6 +436,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 				transicion.setOdt(odt);
 				transicion.setTipoMaquina(maquinaActual.getTipoMaquina());
 				transicion.setUsuarioSistema(usuarioSistema);
+				transicion.setTerminal(terminal);
 			}
 			transicion.getCambiosAvance().add(ca);
 			transicionDao.save(transicion);
@@ -432,10 +444,13 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 			if(avance == EAvanceODT.FINALIZADO) {
 				odt.setOrdenEnMaquina(null); //queda en FINALIZADO => no tiene que tener orden en máquina
 				if(maquinaActual != null) { //actualizo los ordenes de las ODTs que quedaron en la misma máquina
-					actualizarOrdenesMismaMaquina(maquinaActual, odt);
+					actualizarOrdenesMismaMaquina(maquinaActual, odt, (short)1);
 				}
-			} else if(odt.getOrdenEnMaquina() == null) { //avance==POR_COMENZAR y sin orden => la pongo al final
+			} else if(avance == EAvanceODT.POR_COMENZAR && odt.getOrdenEnMaquina() == null) { //avance==POR_COMENZAR y sin orden seteado => la pongo al final
 				odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquinaActual)+1));
+			} else if(avance == EAvanceODT.EN_PROCESO) { //avance==EN_PROCESO => la pongo al principio
+				odt.setOrdenEnMaquina((short)1);
+				actualizarOrdenesMismaMaquina(maquinaActual, odt, (short)2);
 			}
 			
 			//estados en la ODT
@@ -447,9 +462,13 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		return odtDAO.getByIdEager(odtSaved.getId());
 	}
 
-	private void actualizarOrdenesMismaMaquina(Maquina maquinaActual, OrdenDeTrabajo odtExcluir) {
+	public List<OrdenDeTrabajo> getAllNoFinalizadasBySector(ESectorMaquina sector) {
+		return odtDAO.getAllNoFinalizadasBySector(sector);
+	}
+	
+	private void actualizarOrdenesMismaMaquina(Maquina maquinaActual, OrdenDeTrabajo odtExcluir, Short from) {
 		List<OrdenDeTrabajo> odts = odtDAO.getODTsEnMaquina(maquinaActual);
-		short orden = 1;
+		short orden = from;
 		for(OrdenDeTrabajo odt : odts) {
 			if(!odt.equals(odtExcluir)) {
 				odt.setOrdenEnMaquina(orden);
@@ -460,16 +479,16 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		odtDAO.save(odts);
 	}
 
-	private void checkConsistenciaEstadoFinalizado(OrdenDeTrabajo odt, EEstadoODT estado, EAvanceODT avance) {
+	private void checkConsistenciaEstadoFinalizado(OrdenDeTrabajo odt, Maquina maquinaActual, EEstadoODT estado, EAvanceODT avance) {
 		if(avance == EAvanceODT.FINALIZADO) {
-			if(estado == EEstadoODT.EN_PROCESO) {//módulo cosido, que todas las piezas tengan orden
+			if(estado == EEstadoODT.EN_PROCESO && maquinaActual.getSector() == ESectorMaquina.SECTOR_COSIDO) {//sector cosido, que todas las piezas tengan orden
 				for(PiezaODT p : odt.getPiezas()) {
 					if(p.getOrden()==null || p.getOrden() <=0) {
 						throw new IllegalArgumentException("La ODT " + odt + " no puede quedar en estado " + EEstadoODT.EN_PROCESO + "- " + EAvanceODT.FINALIZADO + " porque tiene piezas sin orden");
 					}
 				}
 			}
-			if(estado == EEstadoODT.EN_OFICINA) {//módulo asignación de metros, que todas las piezas tengan metros
+			if(estado == EEstadoODT.EN_OFICINA && maquinaActual.getSector() == ESectorMaquina.SECTOR_TERMINADO) {//sector terminado, que todas las piezas tengan metros
 				for(PiezaODT p : odt.getPiezas()) {
 					if(p.getMetros()==null || p.getMetros().floatValue() <=0f) {
 						throw new IllegalArgumentException("La ODT " + odt + " no puede quedar en estado " + EEstadoODT.EN_OFICINA + "- " + EAvanceODT.FINALIZADO + " porque tiene piezas sin metros");

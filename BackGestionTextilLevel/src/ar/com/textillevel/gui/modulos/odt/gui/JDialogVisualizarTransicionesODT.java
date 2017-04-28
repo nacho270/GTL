@@ -160,11 +160,11 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 			if(odt.getMaquinaActual() == null) {
 				btnVerPasosDelSector.setToolTipText("Ver instrucciones del sector actual de la ODT.");
 			} else {
-				btnVerPasosDelSector.setToolTipText("Ver instrucciones del sector '" + odt.getMaquinaActual().getTipoMaquina().getSectorMaquina() + "'.");
+				btnVerPasosDelSector.setToolTipText("Ver instrucciones del sector '" + odt.getMaquinaActual().getSector() + "'.");
 			}
 			btnVerPasosDelSector.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ESectorMaquina sectorMaquinaActual = odt.getMaquinaActual().getTipoMaquina().getSectorMaquina();
+					ESectorMaquina sectorMaquinaActual = odt.getMaquinaActual().getSector();
 					List<PasoSecuenciaODT> pasosDelSectorActual = new ArrayList<PasoSecuenciaODT>();
 					for(PasoSecuenciaODT paso : odt.getSecuenciaDeTrabajo().getPasos()){
 						if(paso.getSector().getSectorMaquina() == sectorMaquinaActual) {

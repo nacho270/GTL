@@ -23,9 +23,7 @@ public class EstadoActualTipoMaquinaTO implements Serializable {
 
 	private void initMap() {
 		for(EAvanceODT e : EAvanceODT.values()){
-			if(e != EAvanceODT.EN_PROCESO){
-				odtsPorEstado.put(e, new ArrayList<ODTTO>());
-			}
+			odtsPorEstado.put(e, new ArrayList<ODTTO>());
 		}
 	}
 

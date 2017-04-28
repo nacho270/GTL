@@ -40,7 +40,9 @@ import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedi
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.InstruccionProcedimientoTipoProductoODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.PasoSecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
+import ar.com.textillevel.modulos.odt.enums.EAvanceODT;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
+import ar.com.textillevel.modulos.odt.enums.ESectorMaquina;
 import ar.com.textillevel.modulos.odt.to.ODTTO;
 
 @Stateless
@@ -464,6 +466,19 @@ delete from t_procedimiento_odt;
 				     " ORDER BY odt.ordenEnMaquina ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("maquina", maquina);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<OrdenDeTrabajo> getAllNoFinalizadasBySector(ESectorMaquina sector) {
+		String hql = "SELECT odt " +
+			     " FROM OrdenDeTrabajo odt " +
+			     " JOIN odt.maquinaActual maq " + 
+			     " WHERE maq.tipoMaquina.idTipoSector = :idSector AND odt.idAvance IS NOT NULL AND odt.idAvance != :idAvanceFinalizado" +
+			     " ORDER BY odt.ordenEnMaquina ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("idSector", sector.getId());
+		q.setParameter("idAvanceFinalizado", EAvanceODT.FINALIZADO.getId());
 		return q.getResultList();
 	}
 

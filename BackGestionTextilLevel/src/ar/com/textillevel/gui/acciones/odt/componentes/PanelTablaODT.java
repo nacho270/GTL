@@ -123,8 +123,11 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 		case SIN_MAQUINA_ASIGNADA:
 		return Color.YELLOW.darker();
 
-		case CON_MAQUINA_EN_PROCESO:
+		case CON_MAQUINA_POR_COMENZAR:
 		return Color.YELLOW.darker();
+
+		case CON_MAQUINA_EN_PROCESO:
+		return Color.ORANGE;
 
 		case CON_MAQUINA_TERMINADA:
 		return Color.GREEN.darker();

@@ -7,7 +7,7 @@ public enum ESectorMaquina {
 
 	SECTOR_COSIDO  			( (byte) 1, "Sector cosido", true),
 	SECTOR_HUMEDO			( (byte) 2, "Sector húmedo", false),
-	SECTOR_SECO				( (byte) 3, "Sector seco", false),
+	SECTOR_SECO				( (byte) 3, "Sector seco", true),
 	SECTOR_ESTAMPERIA		( (byte) 4, "Sector estampería", false),
 	SECTOR_TERMINADO		( (byte) 5, "Sector terminado", true);
 

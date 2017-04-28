@@ -114,15 +114,18 @@ public class ODTTO implements Serializable {
 		if(getMaquinaActual() == null) {
 			setSituacionMaquina(EnumSituacionMaquina.SIN_MAQUINA_ASIGNADA);
 		} else if(getAvance() == EAvanceODT.POR_COMENZAR) {
+			setSituacionMaquina(EnumSituacionMaquina.CON_MAQUINA_POR_COMENZAR);
+		} else if(getAvance() == EAvanceODT.EN_PROCESO) {
 			setSituacionMaquina(EnumSituacionMaquina.CON_MAQUINA_EN_PROCESO);
 		} else if(getAvance() == EAvanceODT.FINALIZADO) {
 			setSituacionMaquina(EnumSituacionMaquina.CON_MAQUINA_TERMINADA);
-		}
+		}	
 	}
 
 	public static enum EnumSituacionMaquina {
 
 		SIN_MAQUINA_ASIGNADA,
+		CON_MAQUINA_POR_COMENZAR,		
 		CON_MAQUINA_EN_PROCESO,
 		CON_MAQUINA_TERMINADA,
 		CON_MAQUINA_FUERA_DE_SECUENCIA;
