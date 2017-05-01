@@ -73,6 +73,7 @@
 				
 				<include name="ar/com/textillevel/modulos/notificaciones/facade/api/remote/**" />
 				<include name="ar/com/textillevel/modulos/notificaciones/entidades/**" />
+				<include name="ar/com/textillevel/modulos/notificaciones/enums/**" />
 			</fileset>
 		</jar>
 	</target>
@@ -124,6 +125,7 @@
 
 				<include name="ar/com/textillevel/modulos/notificaciones/facade/api/remote/**" />
 				<include name="ar/com/textillevel/modulos/notificaciones/entidades/**" />
+				<include name="ar/com/textillevel/modulos/notificaciones/enums/**" />
 			</fileset>
 		</jar>
 	</target>
