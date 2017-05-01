@@ -12,9 +12,10 @@ import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
+import main.NotificableMainTemplate;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-import ar.com.fwcommon.notificaciones.NotificableMainTemplate;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.modulos.notificaciones.entidades.ConfiguracionNotificacion;
 import ar.com.textillevel.modulos.notificaciones.entidades.NotificacionUsuario;
@@ -99,11 +100,11 @@ public class MessageListener {
 							String text = "";
 							if (message instanceof TextMessage) {
 								text = ((TextMessage) message).getText();
+								gtlMT.mostrarNotificacion(text);
 							} else if (message instanceof ObjectMessage) {
 								NotificacionUsuario notifiacion = (NotificacionUsuario) ((ObjectMessage) message).getObject();
-								text = notifiacion.getTexto();
+								gtlMT.mostrarNotificacion(notifiacion);
 							}
-							gtlMT.mostrarNotificacion(text);
 							gtlMT.actualizarNotificaciones();
 						}
 					}

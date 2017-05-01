@@ -62,6 +62,7 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 		final String texto = String.format(tipo.getTexto(), parms);
 		NotificacionUsuario nc = new NotificacionUsuario();
 		nc.setTexto(texto);
+		nc.setTipoNotificacion(tipo);
 		for (UsuarioSistema us : usuariosANotificar) {
 			nc.setUsuarioSistema(us);
 			notificacionesDAO.save(nc);

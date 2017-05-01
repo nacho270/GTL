@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
@@ -22,6 +24,7 @@ import main.acciones.chat.MenuChat;
 import main.servicios.MessageListener;
 import main.servicios.Servicio;
 import main.servicios.ServiciosPool;
+import main.servicios.alertas.gui.JDialogVerNotificaciones;
 import main.statusbar.CompoTest;
 import main.statusbar.ConfiguracionComponenteStatusBar;
 import main.statusbar.StatusBar;
@@ -30,7 +33,6 @@ import ar.com.fwcommon.boss.BossError;
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
-import ar.com.fwcommon.notificaciones.NotificableMainTemplate;
 import ar.com.fwcommon.templates.main.FWMainTemplate;
 import ar.com.fwcommon.templates.main.config.IConfigClienteManager;
 import ar.com.fwcommon.templates.main.menu.MenuAyuda;
@@ -42,6 +44,7 @@ import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.gui.modulos.chat.client.ChatClient;
 import ar.com.textillevel.gui.util.ESkin;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.modulos.notificaciones.entidades.NotificacionUsuario;
 import ar.com.textillevel.modulos.notificaciones.facade.api.remote.NotificacionUsuarioFacadeRemote;
 import ar.com.textillevel.skin.SkinModerno;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -52,8 +55,11 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	protected MenuImpresion menuImpresion;
 	protected MenuAyuda menuAyuda;
 	//private static Logger logger = Logger.getLogger(GTLMainTemplate.class);
+
+	private static final int MAX_NOTIFICACIONES = 20;
 	private MessageListener messageListener;
 	private JButton btnNotificaciones;
+	
 	
 	static {
 		initFlagTest();
@@ -295,6 +301,17 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 			btnNotificaciones.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btnNotificaciones.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnNotificaciones.setBounds(new Rectangle(new Point(55, 5), btnNotificaciones.getPreferredSize()));
+			btnNotificaciones.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					List<NotificacionUsuario> notificaciones = GTLBeanFactory.getInstance().getBean2(NotificacionUsuarioFacadeRemote.class).getNotificacionesByUsuario(GTLGlobalCache.getInstance().getUsuarioSistema().getId(), MAX_NOTIFICACIONES);
+					if (notificaciones == null || notificaciones.isEmpty()) {
+						return;
+					}
+					new JDialogVerNotificaciones(GTLMainTemplate.frameInstance, notificaciones).setVisible(true);
+				}
+			});
 		}
 		return btnNotificaciones;
 	}
@@ -323,5 +340,11 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	@Override
 	public void mostrarNotificacion(String text) {
 		FWJOptionPane.showInformationMessage(null, text, "Notificacion");
+	}
+
+	@Override
+	public void mostrarNotificacion(final NotificacionUsuario notifiacion) {
+		// por ahora muestro el texto nomas, hay que buscar la forma de tener acciones especificas para cada tipo
+		mostrarNotificacion(notifiacion.getTexto());
 	}
 }

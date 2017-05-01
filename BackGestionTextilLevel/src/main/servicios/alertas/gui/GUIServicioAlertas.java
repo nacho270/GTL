@@ -26,6 +26,8 @@ import ar.com.textillevel.modulos.alertas.enums.EPosposicionAlerta;
 import ar.com.textillevel.modulos.alertas.facade.api.remote.AlertaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
+// ESTO DEBERIA MORIR
+@Deprecated
 public class GUIServicioAlertas extends JFrame {
 
 	private static final long serialVersionUID = -66958124736449031L;

@@ -12,9 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
 
 @Entity
 @Table(name = "T_NOTIFICACION_USUARIO")
@@ -24,6 +26,7 @@ public class NotificacionUsuario implements Serializable {
 
 	private Integer id;
 	private String texto;
+	private Integer idTipo;
 	private transient UsuarioSistema usuarioSistema;
 	private Boolean leida;
 	private Timestamp fecha;
@@ -51,6 +54,24 @@ public class NotificacionUsuario implements Serializable {
 
 	public void setTexto(String texto) {
 		this.texto = texto;
+	}
+
+	@Column(name = "A_ID_TIPO", nullable = false)
+	private Integer getIdTipo() {
+		return idTipo;
+	}
+
+	private void setIdTipo(Integer idTipo) {
+		this.idTipo = idTipo;
+	}
+
+	@Transient
+	public ETipoNotificacion getTipo() {
+		return ETipoNotificacion.getById(getIdTipo());
+	}
+
+	public void setTipoNotificacion(ETipoNotificacion tipo) {
+		setIdTipo(tipo.getId());
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
