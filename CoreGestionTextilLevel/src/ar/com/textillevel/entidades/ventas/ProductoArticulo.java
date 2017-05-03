@@ -180,4 +180,18 @@ public class ProductoArticulo implements Serializable {
 		return sb.toString();
 	}
 
+	@Transient
+	public String toStringSinProducto() {
+		StringBuilder sb = new StringBuilder("");
+		if(getTipo() == ETipoProducto.ESTAMPADO) {
+			sb.append(getDibujo() + " - " + getVariante());
+		}
+		if(getTipo() == ETipoProducto.TENIDO) {
+			sb.append(getColor());
+		}
+		sb.append((getArticulo() == null ? "":  (" - " + getArticulo())));
+		return sb.toString();
+	}
+
+	
 }

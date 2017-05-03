@@ -62,6 +62,17 @@ public class ODTCodigoHelper {
 	}
 
 	/**
+	 * Quita los 2 primeros dígitos del año en el código de la ODT
+	 * @param codigoODT
+	 */
+	public String formatCodigoSinAnioCompleto(String codigoODT) {
+		int anio = getAnioFromCodigo(codigoODT) % 100;
+		int mes = getMesFromCodigo(codigoODT);
+		int nroODT = getNroODTFromCodigo(codigoODT);
+		return armaCodigo(anio, mes, nroODT);
+	}
+
+	/**
 	 * Devuelve el codigo ODT formateado de acuerdo al separador <code>SEP_ODT</code>
 	 * @param codigoODT
 	 */
