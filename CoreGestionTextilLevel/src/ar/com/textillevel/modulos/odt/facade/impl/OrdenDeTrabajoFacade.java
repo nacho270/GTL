@@ -456,6 +456,10 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 			//estados en la ODT
 			odt.setEstadoODT(estado);
 			odt.setAvance(avance);
+			
+			if(estado == EEstadoODT.EN_OFICINA) {
+				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
+			}
 		}
 
 		OrdenDeTrabajo odtSaved = odtDAO.save(odt);
