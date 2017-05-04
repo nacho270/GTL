@@ -141,7 +141,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	}
 	
 	public OrdenDeTrabajo getByCodigoEager(String codigo) {
-		throw new RuntimeException("IMPLEMENTAR");
+		return odtDAO.getODTEagerByCodigo(codigo);
 	}
 
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(EEstadoODT estado, Date fechaDesde, Date fechaHasta) {
@@ -154,7 +154,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		for(Maquina m : maquinas){
 			mapa.put(m.getId(), new EstadoActualMaquinaTO(m));
 		}
-		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina);
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, null);
 		for(ODTTO odt : allODTSEnProceso){
 			Integer m = odt.getMaquinaActual();
 			EstadoActualMaquinaTO estadoActualoMaquinaTO = mapa.get(m);
@@ -179,7 +179,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		for(TipoMaquina tm : maquinas){
 			mapa.put(tm, new EstadoActualTipoMaquinaTO(tm));
 		}
-		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null);
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, null);
 		for(ODTTO odt : allODTSEnProceso){
 			if(odt.getMaquinaActual() != null && odt.getTipoProducto() != null && odt.getTipoProducto() != ETipoProducto.DEVOLUCION && odt.getTipoProducto() != ETipoProducto.REPROCESO_SIN_CARGO) {
 				TipoMaquina tm = odt.getTipoMaquina();
@@ -194,7 +194,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	}
 
 	private List<ODTTO> getOdtsPendientes(Date fechaDesde, Date fechaHasta, Cliente cliente) {
-		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA, EEstadoODT.DETENIDA);
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, null, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA, EEstadoODT.DETENIDA);
 		List<ODTTO> odtsPendientesTO = new ArrayList<ODTTO>();
 		if(allODTSEnProceso!=null && !allODTSEnProceso.isEmpty()){
 			for(ODTTO odt : allODTSEnProceso){
@@ -534,6 +534,11 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		Maquina maquina = maquinas.get(0); // tomo la primera 
 		int proximoOrden = odtDAO.getUltimoOrdenMaquina(maquina)+1;
 		return new InfoAsignacionMaquinaTO(maquina, (short)proximoOrden);
+	}
+
+	@Override
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina,Integer idProducto, EEstadoODT... estado) {
+		return odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, idProducto, estado);
 	}
 
 }

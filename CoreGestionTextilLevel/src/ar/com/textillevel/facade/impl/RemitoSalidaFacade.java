@@ -713,4 +713,9 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		auditoriaFacade.auditar(nombreTerminal, "Control de remito de salida: " + rsDB.getNroRemito(), EnumTipoEvento.MODIFICACION, rs);		
 	}
 
+	public List<RemitoSalida> getRemitosSalidaByODT(Integer idODT) {
+		OrdenDeTrabajo odt = odtDAO.getReferenceById(idODT);
+		return remitoSalidaDAOLocal.getRemitosByODT(odt);
+	}
+
 }

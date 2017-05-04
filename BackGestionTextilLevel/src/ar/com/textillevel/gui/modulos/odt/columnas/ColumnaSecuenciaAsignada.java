@@ -1,9 +1,9 @@
 package ar.com.textillevel.gui.modulos.odt.columnas;
 
 import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaBoolean;
-import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.to.ODTTO;
 
-public class ColumnaSecuenciaAsignada extends ColumnaBoolean<OrdenDeTrabajo> {
+public class ColumnaSecuenciaAsignada extends ColumnaBoolean<ODTTO> {
 
 	public ColumnaSecuenciaAsignada() {
 		super("Tiene secuencia");
@@ -11,8 +11,8 @@ public class ColumnaSecuenciaAsignada extends ColumnaBoolean<OrdenDeTrabajo> {
 	}
 
 	@Override
-	public Boolean getValor(OrdenDeTrabajo item) {
-		return item.getSecuenciaDeTrabajo() != null;
+	public Boolean getValor(ODTTO item) {
+		return item.isTieneSecuencia();
 	}
 
 }

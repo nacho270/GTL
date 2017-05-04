@@ -25,13 +25,13 @@ import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaCodigoODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaEstadoODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaProductoODT;
 import ar.com.textillevel.gui.modulos.odt.columnas.ColumnaSecuenciaAsignada;
-import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.modulos.odt.to.ODTTO;
 
-public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
-										   IBuilderFiltros<OrdenDeTrabajo>, 
-										   IBuilderTabla<OrdenDeTrabajo>, 
-										   IBuilderTotales<OrdenDeTrabajo>,
-										   IBuilderAccionAdicional<OrdenDeTrabajo> {
+public class BuilderAccionesODT implements IBuilderAcciones<ODTTO>,
+										   IBuilderFiltros<ODTTO>, 
+										   IBuilderTabla<ODTTO>, 
+										   IBuilderTotales<ODTTO>,
+										   IBuilderAccionAdicional<ODTTO> {
 	
 	private static BuilderAccionesODT instance = new BuilderAccionesODT();
 
@@ -39,9 +39,9 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 		return instance;
 	}
 	
-	public Acciones<OrdenDeTrabajo> construirAcciones(int idModel) throws FWException {
-		Acciones<OrdenDeTrabajo> acciones = new Acciones<OrdenDeTrabajo>();
-		List<Accion<OrdenDeTrabajo>> accionesCreacion = new ArrayList<Accion<OrdenDeTrabajo>>();
+	public Acciones<ODTTO> construirAcciones(int idModel) throws FWException {
+		Acciones<ODTTO> acciones = new Acciones<ODTTO>();
+		List<Accion<ODTTO>> accionesCreacion = new ArrayList<Accion<ODTTO>>();
 		accionesCreacion.add(new AccionCargarSecuenciaDeTrabajoODT());
 		accionesCreacion.add(new AccionImprimirODT());
 		accionesCreacion.add(new AccionBorrarSecuenciaODT());
@@ -50,12 +50,12 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 		return acciones;
 	}
 
-	public Filtros<OrdenDeTrabajo> construirFiltros(int idModel) {
+	public Filtros<ODTTO> construirFiltros(int idModel) {
 		return null;
 	}
 
-	public Tabla<OrdenDeTrabajo> construirTabla(int idModel) {
-		Tabla<OrdenDeTrabajo> tabla = new Tabla<OrdenDeTrabajo>();
+	public Tabla<ODTTO> construirTabla(int idModel) {
+		Tabla<ODTTO> tabla = new Tabla<ODTTO>();
 		tabla.setTablaColorManager(new ColorManagerItemODT());
 		tabla.addColumna(new ColumnaEstadoODT());
 		tabla.addColumna(new ColumnaCodigoODT());
@@ -65,12 +65,12 @@ public class BuilderAccionesODT implements IBuilderAcciones<OrdenDeTrabajo>,
 		return tabla;
 	}
 
-	public Totales<OrdenDeTrabajo> construirTotales(int idModel) {
+	public Totales<ODTTO> construirTotales(int idModel) {
 		return null;
 	}
 
-	public AccionesAdicionales<OrdenDeTrabajo> construirAccionAdicional(int idModel) throws FWException {
-		AccionesAdicionales<OrdenDeTrabajo> acciones = new AccionesAdicionales<OrdenDeTrabajo>();
+	public AccionesAdicionales<ODTTO> construirAccionAdicional(int idModel) throws FWException {
+		AccionesAdicionales<ODTTO> acciones = new AccionesAdicionales<ODTTO>();
 		acciones.addSingleElement(new AccionDobleClickODT());
 		return acciones;
 	}

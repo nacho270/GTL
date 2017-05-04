@@ -1,17 +1,16 @@
 package ar.com.textillevel.gui.modulos.odt.columnas;
 
 import ar.com.fwcommon.templates.modulo.model.tabla.ColumnaString;
-import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.util.ODTCodigoHelper;
+import ar.com.textillevel.modulos.odt.to.ODTTO;
 
-public class ColumnaCodigoODT extends ColumnaString<OrdenDeTrabajo>{
+public class ColumnaCodigoODT extends ColumnaString<ODTTO>{
 
 	public ColumnaCodigoODT() {
 		super("Código");
 	}
 
 	@Override
-	public String getValor(OrdenDeTrabajo item) {
-		return ODTCodigoHelper.getInstance().formatCodigo(item.getCodigo());
+	public String getValor(ODTTO item) {
+		return item.getCodigo();
 	}
 }

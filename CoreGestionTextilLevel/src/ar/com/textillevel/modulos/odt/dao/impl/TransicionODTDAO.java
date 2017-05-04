@@ -13,7 +13,12 @@ import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 public class TransicionODTDAO extends GenericDAO<TransicionODT, Integer> implements TransicionODTDAOLocal {
 
 	public TransicionODT getByODT(Integer idOdt) {
-		return (TransicionODT) getEntityManager().createQuery(" SELECT tr FROM TransicionODT tr LEFT JOIN FETCH tr.tipoMaquina tm WHERE tr.odt.id = :idOdt ORDER BY tr.fechaHoraRegistro DESC ").setParameter("idOdt", idOdt).getResultList().get(0);
+		List<TransicionODT> resultList = getEntityManager().createQuery(" SELECT tr FROM TransicionODT tr LEFT JOIN FETCH tr.tipoMaquina tm WHERE tr.odt.id = :idOdt ORDER BY tr.fechaHoraRegistro DESC ").setParameter("idOdt", idOdt).getResultList();
+		if(resultList.isEmpty()) {
+			return null;
+		} else {
+			return resultList.get(0);
+		}
 	}
 
 	public List<TransicionODT> getAllByODT(Integer idODT) {

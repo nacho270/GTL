@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Date;	
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
-
-import main.GTLGlobalCache;
-import main.acciones.facturacion.OperacionSobreRemitoSalidaHandler;
-import net.sf.jasperreports.engine.JRException;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -95,6 +91,7 @@ import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
+import ar.com.textillevel.gui.acciones.remitosalida.RemitoSalidaLinkeableLabel;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
@@ -102,6 +99,8 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
 
 public class JDialogCargaFactura extends JDialog {
 
@@ -1233,20 +1232,20 @@ public class JDialogCargaFactura extends JDialog {
 		private static final long serialVersionUID = -1820746456782160664L;
 		
 		private final List<RemitoSalida> remitos;
-		private RemitoLinkeableLabel[] remitoLinkeableLabelList;
+		private RemitoSalidaLinkeableLabel[] remitoLinkeableLabelList;
 		private static final int CANT_MAX_REMITOS_SELECTED_HARDCODE = 3;
 		
 		private PanelRemitos(List<RemitoSalida> remitos){
 			this.remitos = remitos;
 			if(remitos!=null){
-				this.remitoLinkeableLabelList = new RemitoLinkeableLabel[CANT_MAX_REMITOS_SELECTED_HARDCODE];
+				this.remitoLinkeableLabelList = new RemitoSalidaLinkeableLabel[CANT_MAX_REMITOS_SELECTED_HARDCODE];
 				for(int i = 0; i < CANT_MAX_REMITOS_SELECTED_HARDCODE; i++) {
-					LinkableLabel lblConsultaRemito = new RemitoLinkeableLabel();
-					remitoLinkeableLabelList[i] = (RemitoLinkeableLabel)lblConsultaRemito;
+					LinkableLabel lblConsultaRemito = new RemitoSalidaLinkeableLabel();
+					remitoLinkeableLabelList[i] = (RemitoSalidaLinkeableLabel)lblConsultaRemito;
 				}
 				JPanel pnlRemitos = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 				for (int i = 0; i < Math.min(getRemitos().size(), CANT_MAX_REMITOS_SELECTED_HARDCODE); i++) {
-					RemitoLinkeableLabel remitoLinkeableLabel = remitoLinkeableLabelList[i];
+					RemitoSalidaLinkeableLabel remitoLinkeableLabel = remitoLinkeableLabelList[i];
 					remitoLinkeableLabel.setRemito(getRemitos().get(i));
 					remitoLinkeableLabel.setVisible(true);
 					pnlRemitos.add(remitoLinkeableLabel);
@@ -2197,34 +2196,6 @@ public class JDialogCargaFactura extends JDialog {
 
 	public void setEdicion(boolean edicion) {
 		this.edicion = edicion;
-	}
-	
-	private class RemitoLinkeableLabel extends LinkableLabel {
-
-		private static final long serialVersionUID = -4765485631705199316L;
-
-		private RemitoSalida remito;
-
-		public RemitoLinkeableLabel() {
-			super("x");
-		}
-
-		@Override
-		public void labelClickeada(MouseEvent e) {
-			if (e.getClickCount() == 1 && remito!=null) {
-				RemitoSalida sremito = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdConPiezasYProductos(remito.getId());
-				OperacionSobreRemitoSalidaHandler handler = new OperacionSobreRemitoSalidaHandler(null, sremito, true);
-				handler.showRemitoEntradaDialog();
-			}
-		}
-
-		public void setRemito(RemitoSalida remito) {
-			this.remito = remito;
-			if(remito != null) {
-				setTexto(String.valueOf(remito.getNroRemito()));
-				refreshLabel();
-			}
-		}
 	}
 	
 	public FWJTextField getTxtNrosGenericos() {

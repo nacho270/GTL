@@ -240,8 +240,8 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		return q.getResultList();
 	}
 
-	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, EEstadoODT... estado) {
-		String hql = " SELECT new ar.com.textillevel.modulos.odt.to.ODTTO(odt.id, odt.codigo, odt.remito.id, odt.remito.cliente, odt.productoArticulo, odt.ordenEnMaquina, maq, odt.remito.pesoTotal, odt.idAvance, SUM(pr.metros))  "
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, Integer idProducto, EEstadoODT... estado) {
+		String hql = " SELECT new ar.com.textillevel.modulos.odt.to.ODTTO(odt.id, odt.codigo, odt.remito.id, odt.idEstadoODT, odt.secuenciaDeTrabajo.id, odt.remito.cliente, odt.productoArticulo, odt.ordenEnMaquina, maq, odt.remito.pesoTotal, odt.idAvance, SUM(pr.metros))  "
 				 + " FROM OrdenDeTrabajo odt "
 				 + " LEFT JOIN odt.maquinaActual maq "
 				 + " JOIN odt.remito re "
@@ -254,6 +254,8 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 				 (fechaHasta!=null? " AND odt.fechaODT <= :fechaHasta" : " ")+
 				 (idTipoMaquina!=null? " AND odt.maquinaActual.tipoMaquina.id = :idTipoMaquina" : " ")+
 				 (cliente!=null?" AND cl.id = :idCliente ":" ") +
+				 (idProducto!=null?" AND pa.producto.id = :idProducto ":" ") +
+				 
 				 (estado!=null && estado.length > 0 && estado[0] != null ?" AND odt.idEstadoODT IN (:idEstadoODT) ":" ")+
 				 " GROUP BY odt.id, odt.codigo, odt.remito.id, odt.remito.cliente, odt.productoArticulo, odt.ordenEnMaquina, odt.maquinaActual.id, odt.remito.pesoTotal, odt.idAvance ";	
 		Query q = getEntityManager().createQuery(hql);
@@ -279,6 +281,9 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		}
 		if(idTipoMaquina != null) {
 			q.setParameter("idTipoMaquina", idTipoMaquina);
+		}
+		if(idProducto != null) {
+			q.setParameter("idProducto", idProducto);
 		}
 		return q.getResultList();
 	}

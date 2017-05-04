@@ -62,4 +62,6 @@ public interface RemitoSalidaFacadeRemote {
 	
 	public RemitoSalida guardarRemito(RemitoSalida remito);
 
+	public List<RemitoSalida> getRemitosSalidaByODT(Integer idODT);
+
 }

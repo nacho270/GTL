@@ -9,9 +9,10 @@ import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.gui.modulos.odt.impresion.ImprimirODTHandler;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
+import ar.com.textillevel.modulos.odt.to.ODTTO;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public class AccionImprimirODT extends Accion<OrdenDeTrabajo> {
+public class AccionImprimirODT extends Accion<ODTTO> {
 
 	public AccionImprimirODT(){
 		setNombre("Imprimir ODT");
@@ -22,9 +23,9 @@ public class AccionImprimirODT extends Accion<OrdenDeTrabajo> {
 	}
 	
 	@Override
-	public boolean ejecutar(AccionEvent<OrdenDeTrabajo> e) throws FWException {
-		OrdenDeTrabajo odt = e.getSelectedElements().get(0);
-		odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odt.getId());
+	public boolean ejecutar(AccionEvent<ODTTO> e) throws FWException {
+		ODTTO odtto = e.getSelectedElements().get(0);
+		OrdenDeTrabajo odt = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odtto.getId());
 		ImprimirODTHandler handler = new ImprimirODTHandler(odt,e.getSource().getFrame(), null, null);
 		try {
 			handler.imprimir();
@@ -36,7 +37,8 @@ public class AccionImprimirODT extends Accion<OrdenDeTrabajo> {
 	}
 
 	@Override
-	public boolean esValida(AccionEvent<OrdenDeTrabajo> e) {
+	public boolean esValida(AccionEvent<ODTTO> e) {
 		return e.getSelectedElements().size() == 1;
 	}
+
 }

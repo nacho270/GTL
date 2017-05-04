@@ -40,7 +40,7 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 	
 	public List<OrdenDeTrabajo> getOrdenesDeTrabajo(Date fechaDesde, Date fechaHasta, Cliente cliente, EEstadoODT... estado);
 
-	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, EEstadoODT... estado);
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, Integer idProducto, EEstadoODT... estado);
 
 	public List<OrdenDeTrabajo> getAllEnProcesoByTipoMaquina(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina);
 
