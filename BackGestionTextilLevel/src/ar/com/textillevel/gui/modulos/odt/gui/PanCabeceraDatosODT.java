@@ -89,7 +89,7 @@ public class PanCabeceraDatosODT extends JPanel {
 	}
 
 	private JLabel createLabelTitulo() {
-		ODTLinkeableLabel lblTitlo = new ODTLinkeableLabel(odt);
+		ODTLinkeableLabel lblTitlo = new ODTLinkeableLabel(odt, "ORDEN DE TRABAJO N° ");
 		Font fuente = lblTitlo.getFont();
 		Font fuenteNueva = new Font(fuente.getFontName(), Font.BOLD, 25);
 		lblTitlo.setFont(fuenteNueva);

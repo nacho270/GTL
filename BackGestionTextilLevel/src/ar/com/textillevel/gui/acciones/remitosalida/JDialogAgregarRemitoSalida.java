@@ -50,9 +50,12 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
+import ar.com.textillevel.gui.acciones.FacturaLinkableLabel;
 import ar.com.textillevel.gui.acciones.JDialogCantFilasInput;
 import ar.com.textillevel.gui.acciones.RemitoEntradaBusinessDelegate;
+import ar.com.textillevel.gui.acciones.RemitoEntradaLinkeableLabel;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
+import ar.com.textillevel.gui.acciones.odt.componentes.ODTLinkeableLabel;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
@@ -78,8 +81,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 	private JTextField txtNroRemito;
 	private FWDateField txtFechaEmision;
-	private JTextField txtRemitosEntrada;
-	private JTextField txtCodODT;
 	private FWJTextField txtPesoTotal;
 	private JTextField txtProductos;
 	private RemitoSalida remitoSalida;
@@ -105,6 +106,9 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 
 	private final int CANT_PIEZAS_POR_REMITO_MAX = GenericUtils.isSistemaTest() ? 48 : 53;
+
+	private JPanel panODTs;
+	private JPanel panREAndFactura;
 
 	public JDialogAgregarRemitoSalida(Frame owner, RemitoSalida remitoSalida, boolean modoConsulta) {
 		super(owner);
@@ -150,31 +154,21 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 				}
 			}
 		}
-		getTxtCodODT().setText(StringUtil.getCadena(extractCodigos(odts), ", "));
 		Set<ProductoArticulo> productoList = new HashSet<ProductoArticulo>();
 		for(OrdenDeTrabajo odt : odts) {
 			productoList.add(odt.getProductoArticulo());
 		}
 		getTxtProductos().setText(StringUtil.getCadena(productoList, ", "));
-		getTxtRemitosEntrada().setText(StringUtil.getCadena(extractRemitosEntrada(odts), ", "));
 	}
 
-	private Set<String> extractRemitosEntrada(List<OrdenDeTrabajo> odts) {
-		Set<String> nroRemitoEntradaList = new HashSet<String>();
+	private Set<RemitoEntrada> extractRemitosEntrada(List<OrdenDeTrabajo> odts) {
+		Set<RemitoEntrada> nroRemitoEntradaList = new HashSet<RemitoEntrada>();
 		for(OrdenDeTrabajo odt : odts) {
 			if(odt.getRemito() != null) {
-				nroRemitoEntradaList.add(String.valueOf(odt.getRemito().getNroRemito()));
+				nroRemitoEntradaList.add(odt.getRemito());
 			}
 		}
 		return nroRemitoEntradaList;
-	}
-
-	private List<String> extractCodigos(List<OrdenDeTrabajo> odts) {
-		List<String> codODTList = new ArrayList<String>();
-		for(OrdenDeTrabajo odt : odts) {
-			codODTList.add(ODTCodigoHelper.getInstance().formatCodigo(odt.getCodigo()));
-		}
-		return codODTList;
 	}
 
 	private void construct() {
@@ -220,8 +214,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 			panDetalle.add(getPanelDatosFactura(), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 6, 1, 0, 0));
 
-			panDetalle.add(new JLabel("ODT(s):"), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtCodODT(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
+			panDetalle.add(getPanODTs(), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 0, 0));
 
 			panDetalle.add(new JLabel(" PESO TOTAL:"), GenericUtils.createGridBagConstraints(2, 2,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panDetalle.add(getTxtPesoTotal(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
@@ -285,8 +278,7 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			panelDatosFactura.add(getTxtCondicionVenta(), GenericUtils.createGridBagConstraints(1, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelDatosFactura.add(new JLabel("Remito Nº: "), GenericUtils.createGridBagConstraints(2, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosFactura.add(getTxtNroRemito(), GenericUtils.createGridBagConstraints(3, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelDatosFactura.add(new JLabel("Remito(s) de Entrada: "), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelDatosFactura.add(getTxtRemitosEntrada(), GenericUtils.createGridBagConstraints(1, 2,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
+			panelDatosFactura.add(getPanREAndFactura(), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 		}
 		return panelDatosFactura;
 	}
@@ -336,12 +328,37 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		return txtPesoTotal;
 	}
 
-	private JTextField getTxtCodODT() {
-		if(txtCodODT == null) {
-			txtCodODT = new JTextField();
-			txtCodODT.setEditable(false);
+	private JPanel getPanODTs() {
+		if(panODTs == null) {
+			panODTs = new JPanel(new FlowLayout());
+			panODTs.add(new JLabel("ODTs: "));
+			for(OrdenDeTrabajo odt : remitoSalida.getOdts()) {
+				ODTLinkeableLabel odtLL = new ODTLinkeableLabel(odt, "");
+				odtLL.setODT(odt);;
+				panODTs.add(odtLL);
+			}
 		}
-		return txtCodODT;
+		return panODTs;
+	}
+
+	private JPanel getPanREAndFactura() {
+		if(panREAndFactura == null) {
+			panREAndFactura = new JPanel(new FlowLayout());
+			panREAndFactura.add(new JLabel("Remito(s) de Entrada: "));
+			Set<RemitoEntrada> res = extractRemitosEntrada(remitoSalida.getOdts());
+			for(RemitoEntrada re : res) {
+				RemitoEntradaLinkeableLabel reLL = new RemitoEntradaLinkeableLabel();
+				reLL.setRemito(re);
+				panREAndFactura.add(reLL);
+			}
+			if(remitoSalida.getFactura() != null) {
+				panREAndFactura.add(new JLabel("Factura: "));
+				FacturaLinkableLabel fLL = new FacturaLinkableLabel();
+				fLL.setFactura(remitoSalida.getFactura());
+				panREAndFactura.add(fLL);
+			}
+		}
+		return panREAndFactura;
 	}
 
 	private FWDateField getTxtFechaEmision() {
@@ -1097,14 +1114,6 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			parametrosGeneralesFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		}
 		return parametrosGeneralesFacade;
-	}
-
-	private JTextField getTxtRemitosEntrada() {
-		if(txtRemitosEntrada == null) {
-			txtRemitosEntrada = new JTextField();
-			txtRemitosEntrada.setEditable(false);
-		}
-		return txtRemitosEntrada;
 	}
 
 	public List<RemitoSalida> getRemitosSalida() {

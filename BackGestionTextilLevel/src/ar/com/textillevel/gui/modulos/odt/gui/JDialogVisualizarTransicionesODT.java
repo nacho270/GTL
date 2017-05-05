@@ -144,6 +144,7 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 		if(btnVerSecuenciaCompleta == null) {
 			btnVerSecuenciaCompleta = BossEstilos.createButton("ar/com/textillevel/imagenes/b_verificar_stock.png", "ar/com/textillevel/imagenes/b_verificar_stock_des.png");
 			btnVerSecuenciaCompleta.setToolTipText("Ver todas las instrucciones");
+			btnVerSecuenciaCompleta.setEnabled(odt.getSecuenciaDeTrabajo() != null);
 			btnVerSecuenciaCompleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					abrirDialogoVisualizador(odt.getSecuenciaDeTrabajo().getPasos());
@@ -156,7 +157,7 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 	private JButton getBtnVerPasosDelSector() {
 		if (btnVerPasosDelSector == null) {
 			btnVerPasosDelSector = BossEstilos.createButton("ar/com/textillevel/imagenes/b_abrir.png", "ar/com/textillevel/imagenes/b_abrir_des.png");
-			btnVerPasosDelSector.setEnabled(odt.getMaquinaActual() != null);
+			btnVerPasosDelSector.setEnabled(odt.getMaquinaActual() != null && odt.getSecuenciaDeTrabajo() != null);
 			if(odt.getMaquinaActual() == null) {
 				btnVerPasosDelSector.setToolTipText("Ver instrucciones del sector actual de la ODT.");
 			} else {

@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,13 +24,16 @@ import ar.com.fwcommon.componentes.FWDateField;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.RemitoEntradaLinkeableLabel;
 import ar.com.textillevel.gui.acciones.remitosalida.RemitoSalidaLinkeableLabel;
+import ar.com.textillevel.gui.modulos.odt.gui.JDialogSeleccionarCrearSecuenciaDeTrabajo;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -181,15 +185,42 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 			panelDatosFactura.add(getTxtTotalPiezasEntrada(), GenericUtils.createGridBagConstraints(1, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
 			panelDatosFactura.add(new JLabel("Total Metros Entrada: "), GenericUtils.createGridBagConstraints(2, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosFactura.add(getTxtTotalMetrosEntrada(), GenericUtils.createGridBagConstraints(3, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
-			
-			if(!remitosSalida.isEmpty()) {
-				panelDatosFactura.add(getPanRS() , GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			}
-			
+
+			setInfoAdicional(panelDatosFactura, 1);
 		}
 		return panelDatosFactura;
 	}
 
+	private void setInfoAdicional(JPanel panelDatosFactura2, int currentY) {
+		int y=currentY;
+		if(!remitosSalida.isEmpty()) {
+			y++;
+			panelDatosFactura.add(getPanRS() , GenericUtils.createGridBagConstraints(0, y,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+		}
+		if(odt.getSecuenciaDeTrabajo() != null) {
+			panelDatosFactura.add(new SecuenciaODTLinkeableLabel(odt) , GenericUtils.createGridBagConstraints(y==currentY ? 0 : 1, y==currentY ? ++y : y ,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+		}
+	}
+
+	private class SecuenciaODTLinkeableLabel extends LinkableLabel {
+
+		private static final long serialVersionUID = 1L;
+
+		private OrdenDeTrabajo odt;
+
+		public SecuenciaODTLinkeableLabel(OrdenDeTrabajo odt) {
+			super("Ver Secuencia de Trabajo");
+			this.odt = odt; 
+		}
+
+		@Override
+		public void labelClickeada(MouseEvent e) {
+			JDialogSeleccionarCrearSecuenciaDeTrabajo dS = new JDialogSeleccionarCrearSecuenciaDeTrabajo(GuiUtil.getFrameForComponent(JDialogVisualizarDetalleODT.this) ,odt);
+			dS.setVisible(true);
+		}
+
+	}
+	
 	private FWJTextField getTxtTotalPiezasEntrada() {
 		if(txtTotalPiezasEntrada == null) {
 			txtTotalPiezasEntrada = new FWJTextField();
