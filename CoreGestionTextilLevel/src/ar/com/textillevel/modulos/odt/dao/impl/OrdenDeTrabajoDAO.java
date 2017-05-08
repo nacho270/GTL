@@ -124,7 +124,9 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 			odt.getMaquinaActual().getTipoMaquina().getSectorMaquina();
 		}
 		for(PiezaODT pieza : odt.getPiezas()) {
-			pieza.getPiezasSalida().size();
+			if(pieza.getPiezasSalida() != null) {
+				pieza.getPiezasSalida().size();
+			}
 		}
 		if(odt.getRemito() != null) {
 			odt.getRemito().getPiezas().size();
@@ -444,8 +446,7 @@ delete from t_procedimiento_odt;
 			throw new IllegalArgumentException("Existe más de una ODT con código " + codigo);
 		} else {
 			OrdenDeTrabajo odt = resultList.get(0);
-			getByIdEager(odt.getId());
-			return odt;
+			return getByIdEager(odt.getId());
 		}
 	}
 
