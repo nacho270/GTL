@@ -27,9 +27,10 @@ public class NotificacionUsuario implements Serializable {
 	private Integer id;
 	private String texto;
 	private Integer idTipo;
-	private transient UsuarioSistema usuarioSistema;
+	private UsuarioSistema usuarioSistema;
 	private Boolean leida;
 	private Timestamp fecha;
+	private Integer idRelacionado; // guardaria ID de odt, factura, remito, etc. Se interpreta dependiendo del tipo
 
 	public NotificacionUsuario() {
 		this.leida = false;
@@ -93,12 +94,21 @@ public class NotificacionUsuario implements Serializable {
 		this.leida = leida;
 	}
 
-	@Column(name = "A_FECHA")
+	@Column(name = "A_FECHA", nullable = false)
 	public Timestamp getFecha() {
 		return fecha;
 	}
 
 	public void setFecha(Timestamp fecha) {
 		this.fecha = fecha;
+	}
+
+	@Column(name = "A_ID_RELACIONADO") // puede ser nullable para cuando no se requiere ninguna accion
+	public Integer getIdRelacionado() {
+		return idRelacionado;
+	}
+
+	public void setIdRelacionado(Integer idRelacionado) {
+		this.idRelacionado = idRelacionado;
 	}
 }

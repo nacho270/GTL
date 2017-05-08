@@ -47,7 +47,7 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 	}
 
 	@Override
-	public void generarNotificaciones(ETipoNotificacion tipo, Object... parms) {
+	public void generarNotificaciones(ETipoNotificacion tipo, Integer idRelacionado, Object... parms) {
 		final ConfiguracionNotificacion configuracion = configuracionNotificacionDAO.getByTipo(tipo);
 		if (configuracion == null) {
 			LOGGER.warn("No se envian notificaciones debido a que no ha creado una configuracion para el tipo notificacion " + tipo);
@@ -62,6 +62,7 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 		final String texto = String.format(tipo.getTexto(), parms);
 		NotificacionUsuario nc = new NotificacionUsuario();
 		nc.setTexto(texto);
+		nc.setIdRelacionado(idRelacionado);
 		nc.setTipoNotificacion(tipo);
 		for (UsuarioSistema us : usuariosANotificar) {
 			nc.setUsuarioSistema(us);
@@ -69,5 +70,11 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 		}
 		// el usuario es transient, asique no importa que usuario se haya asignado al final
 		mensajeriaFacade.enviarNotificaciones(nc, nombreDestino, tipoDestino);
+	}
+
+	@Override
+	public NotificacionUsuario marcarComoLeida(NotificacionUsuario nc) {
+		nc.setLeida(true);
+		return notificacionesDAO.save(nc);
 	}
 }

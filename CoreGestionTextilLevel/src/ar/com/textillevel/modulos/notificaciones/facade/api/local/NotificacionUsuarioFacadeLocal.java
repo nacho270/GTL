@@ -7,6 +7,6 @@ import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
 @Local
 public interface NotificacionUsuarioFacadeLocal {
 
-	public void generarNotificaciones(ETipoNotificacion tipo, Object...parms);
+	public void generarNotificaciones(ETipoNotificacion tipo, Integer idRelacionado, Object...parms);
 
 }

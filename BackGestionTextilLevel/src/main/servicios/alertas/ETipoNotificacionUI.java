@@ -1,11 +1,11 @@
 package main.servicios.alertas;
 
-import main.servicios.alertas.gui.AccionAbrirFactura;
+import main.servicios.alertas.gui.AccionNotificacionHacerRemitoSalidaODT;
 import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
 
 public enum ETipoNotificacionUI {
 
-	ODT_EN_OFICINA(1, new AccionAbrirFactura());
+	ODT_EN_OFICINA(1, new AccionNotificacionHacerRemitoSalidaODT());
 
 	private ETipoNotificacionUI(Integer id, AccionNotificacion<?>... acciones) {
 		this.id = id;

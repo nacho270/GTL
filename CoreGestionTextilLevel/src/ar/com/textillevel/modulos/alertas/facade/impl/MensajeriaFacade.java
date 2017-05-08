@@ -66,6 +66,7 @@ public class MensajeriaFacade implements MensajeriaFacadeLocal {
 					Destination destination = tipoDestino == ETipoDestinoNotificacion.QUEUE ? session.createQueue(nombreDestino) : session.createTopic(nombreDestino);
 					final MessageProducer producer = session.createProducer(destination);
 					producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+					notificacion.setUsuarioSistema(null);
 					producer.send(session.createObjectMessage(notificacion));
 				} catch (JMSException e) {
 					LOGGER.error(e);

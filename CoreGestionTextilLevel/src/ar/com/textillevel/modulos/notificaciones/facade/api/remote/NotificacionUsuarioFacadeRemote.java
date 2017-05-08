@@ -11,5 +11,6 @@ public interface NotificacionUsuarioFacadeRemote {
 
 	public List<NotificacionUsuario> getNotificacionesByUsuario(Integer idUsuarioSistema, Integer max);
 	public Integer getCountNotificacionesNoLeidasByUsuario(Integer idUsuarioSistema);
+	public NotificacionUsuario marcarComoLeida(NotificacionUsuario nc);
 
 }

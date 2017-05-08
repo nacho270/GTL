@@ -25,7 +25,7 @@ public class NotificacionUsuarioDAO extends GenericDAO<NotificacionUsuario, Inte
 	@Override
 	public Integer getCountNotificacionesNoLeidasByUsuario(Integer idUsuarioSistema) {
 		Query q = getEntityManager().createQuery(" SELECT COUNT(n) FROM NotificacionUsuario n " //
-				+ " WHERE n.usuarioSistema.id = :idUsuarioSistema AND n.leida = :leida ");
+				+ " WHERE n.usuarioSistema.id = :idUsuarioSistema AND (n.leida IS NULL OR n.leida = :leida)");
 		q.setParameter("idUsuarioSistema", idUsuarioSistema);
 		q.setParameter("leida", Boolean.FALSE);
 		Number count = (Number) q.getSingleResult();

@@ -23,7 +23,7 @@ import ar.com.textillevel.modulos.notificaciones.enums.ETipoDestinoNotificacion;
 import ar.com.textillevel.modulos.notificaciones.facade.api.remote.ConfiguracionNotificacionFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-public class MessageListener {
+public class NotificationsListener {
 
 	private static final String URL = System.getProperty("textillevel.activemq.url", "tcp://localhost:61616");
 
@@ -35,14 +35,14 @@ public class MessageListener {
 	private UsuarioSistema usuario;
 	private Thread listerThread;
 	
-	private MessageListener(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {
+	private NotificationsListener(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {
 		this.gtlMT = gtlMT;
 		this.usuario = usuario;
 		((ActiveMQConnectionFactory) CONNECTION_FACTORY).setTrustAllPackages(true);
 	}
 
-	public static MessageListener build(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {
-		return new MessageListener(gtlMT, usuario);
+	public static NotificationsListener build(NotificableMainTemplate gtlMT, UsuarioSistema usuario) {
+		return new NotificationsListener(gtlMT, usuario);
 	}
 
 	public void start() {
@@ -66,6 +66,7 @@ public class MessageListener {
 
 					} while (connection == null);
 					connection.start();
+					System.out.println("Conectado a servicio de mensajes en " + URL);
 					session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 					final List<ConfiguracionNotificacion> configuracionesHabilitadasParaUsuario = GTLBeanFactory.getInstance().getBean2(ConfiguracionNotificacionFacadeRemote.class).getConfiguracionesHabilitadasParaUsuario(usuario);
 					if (configuracionesHabilitadasParaUsuario == null || configuracionesHabilitadasParaUsuario.isEmpty()) {

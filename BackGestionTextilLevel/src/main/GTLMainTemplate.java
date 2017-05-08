@@ -21,9 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import main.acciones.chat.MenuChat;
-import main.servicios.MessageListener;
+import main.servicios.NotificationsListener;
 import main.servicios.Servicio;
 import main.servicios.ServiciosPool;
+import main.servicios.alertas.gui.JDialogAccionNotificacion;
 import main.servicios.alertas.gui.JDialogVerNotificaciones;
 import main.statusbar.CompoTest;
 import main.statusbar.ConfiguracionComponenteStatusBar;
@@ -57,7 +58,7 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	//private static Logger logger = Logger.getLogger(GTLMainTemplate.class);
 
 	private static final int MAX_NOTIFICACIONES = 20;
-	private MessageListener messageListener;
+	private NotificationsListener messageListener;
 	private JButton btnNotificaciones;
 	
 	
@@ -196,7 +197,7 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 		UsuarioSistema usuarioSistema = GTLGlobalCache.getInstance().getUsuarioSistema();
 		if(usuarioSistema!=null){
 			setTitle(getTitle()+ " - USUARIO: " + usuarioSistema.getUsrName().toUpperCase());
-			messageListener = MessageListener.build(this, GTLGlobalCache.getInstance().getUsuarioSistema());
+			messageListener = NotificationsListener.build(this, GTLGlobalCache.getInstance().getUsuarioSistema());
 		}
 		List<Modulo> modulosTrigger = GTLGlobalCache.getInstance().getModulosTriggerUsuarioLogueado();
 		try {
@@ -310,6 +311,16 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 						return;
 					}
 					new JDialogVerNotificaciones(GTLMainTemplate.frameInstance, notificaciones).setVisible(true);
+					actualizarNotificaciones();
+					
+//					NotificacionUsuario nc = new NotificacionUsuario();
+//					nc.setUsuarioSistema(GTLGlobalCache.getInstance().getUsuarioSistema());
+//					nc.setId(1);
+//					nc.setTexto("La ODT 1234 esta en oficina");
+//					nc.setIdRelacionado(4125);
+//					nc.setTipoNotificacion(ETipoNotificacion.ODT_EN_OFICINA);
+//					new JDialogAccionNotificacion(getFrameInstance(), nc).setVisible(true);
+
 				}
 			});
 		}
@@ -345,6 +356,8 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	@Override
 	public void mostrarNotificacion(final NotificacionUsuario notifiacion) {
 		// por ahora muestro el texto nomas, hay que buscar la forma de tener acciones especificas para cada tipo
-		mostrarNotificacion(notifiacion.getTexto());
+		//mostrarNotificacion(notifiacion.getTexto());
+		new JDialogAccionNotificacion(getFrameInstance(), notifiacion).setVisible(true);
+		actualizarNotificaciones();
 	}
 }

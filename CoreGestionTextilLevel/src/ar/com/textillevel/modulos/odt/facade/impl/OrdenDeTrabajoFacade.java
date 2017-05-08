@@ -324,7 +324,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 
 		transicionDao.save(transicion);
 		
-		notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
+		notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getId(), odt.getCodigo());
 	}
 
 	
@@ -458,7 +458,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 			odt.setAvance(avance);
 			
 			if(estado == EEstadoODT.EN_OFICINA) {
-				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
+				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getId(), odt.getCodigo());
 			}
 		}
 

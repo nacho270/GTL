@@ -247,7 +247,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		
 		if(estadoODT == EEstadoODT.EN_OFICINA) {
 			for(OrdenDeTrabajo odt : odtSet) {
-				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getCodigo());
+				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getId(), odt.getCodigo());
 			}
 		}
 	}
