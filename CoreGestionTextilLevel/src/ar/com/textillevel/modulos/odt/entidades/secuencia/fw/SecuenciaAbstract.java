@@ -16,6 +16,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.IndexColumn;
+
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.util.Clonable;
@@ -57,6 +59,7 @@ public abstract class SecuenciaAbstract<P extends ProcedimientoAbstract,T extend
 	
 	@OneToMany(fetch=FetchType.EAGER,cascade={CascadeType.ALL})
 	@JoinColumn(name="F_SECUENCIA_P_ID")
+	@IndexColumn(name="A_ORDEN")
 	@org.hibernate.annotations.Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public List<T> getPasos() {
 		return pasos;
