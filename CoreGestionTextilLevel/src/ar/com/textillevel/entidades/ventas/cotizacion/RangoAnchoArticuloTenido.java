@@ -50,8 +50,13 @@ public class RangoAnchoArticuloTenido extends RangoAncho {
 	@Transient
 	protected Float buscarPrecio(ProductoArticulo productoArticulo) {
 		Articulo articulo = productoArticulo.getArticulo();
-		GrupoTipoArticuloGama grupo = getPrecioArticulo(articulo.getTipoArticulo(), articulo, GrupoTipoArticuloGama.class);
-		return grupo != null ? grupo.getPrecio(productoArticulo) : null;
+		for(GrupoTipoArticuloGama grupo : getGruposTipoArticulo(articulo.getTipoArticulo(), articulo, GrupoTipoArticuloGama.class)) {
+			Float precio = grupo.getPrecio(productoArticulo);
+			if(precio != null) {
+				return precio;
+			}
+		}
+		return null;
 	}
 
 	@Override
