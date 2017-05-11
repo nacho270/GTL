@@ -86,8 +86,11 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	@EJB
 	private AuditoriaFacadeLocal<RemitoEntrada> auditoriaFacade;
 
-	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario) {
+	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario) throws ValidacionException {
 		boolean isAlta = remitoEntrada.getId() == null;
+		if(!isAlta) {
+			checkEliminacionOrEdicionRemitoEntrada(remitoEntrada.getId(), odtList);
+		}
 		remitoEntrada = internalSave(remitoEntrada, odtList);
 		if(isAlta) {
 			auditoriaFacade.auditar(usuario, "ALTA RE Nº: " + remitoEntrada.getId() + "| " + detalleODTAuditoria(odtList), EnumTipoEvento.ALTA,remitoEntrada);
@@ -231,7 +234,9 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	public void checkEliminacionOrEdicionRemitoEntrada(Integer idRECliente, List<OrdenDeTrabajo> odts) throws ValidacionException {
 		List<RemitoSalida> remitoSalida = new ArrayList<RemitoSalida>();
 		for(OrdenDeTrabajo odt : odts) {
-			remitoSalida.addAll(remitoSalidaDAO.getRemitosByODT(odt));
+			if(odt.getId() != null) {
+				remitoSalida.addAll(remitoSalidaDAO.getRemitosByODT(odt));
+			}
 		}
 		if(!remitoSalida.isEmpty()) {
 			throw new ValidacionException(EValidacionException.REMITO_ENTRADA_IMPOSIBLE_BORRAR_O_EDITAR.getInfoValidacion(), new String[] { extractInfoRemitoSalida(remitoSalida) });
