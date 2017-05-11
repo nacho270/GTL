@@ -50,6 +50,8 @@ import ar.com.textillevel.modulos.notificaciones.facade.api.remote.NotificacionU
 import ar.com.textillevel.skin.SkinModerno;
 import ar.com.textillevel.util.GTLBeanFactory;
 
+import com.lowagie.text.Font;
+
 public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigClienteManager> implements NotificableMainTemplate {
 
 	private static final long serialVersionUID = -7589061723941536496L;
@@ -275,7 +277,9 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	@Override
 	protected void preSalir() {
 		ChatClient.getInstance().desconectar();
-		messageListener.stop();
+		if (messageListener != null) {
+			messageListener.stop();
+		}
 		ServiciosPool.stopAll();
 	}
 
@@ -330,8 +334,9 @@ public class GTLMainTemplate extends FWMainTemplate<GTLLoginManager, GTLConfigCl
 	private JPanel crearPanelNotificaciones() {
 		JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		pnl.setBackground(Color.WHITE);
-		pnl.setBounds(new Rectangle(new Point(5, 5), new Dimension(120, 120)));
-		JLabel label = new JLabel("Notificaciones");
+		pnl.setBounds(new Rectangle(new Point(5, 5), new Dimension(200, 120)));
+		JLabel label = new JLabel("Notificaciones"); 
+		label.setFont(label.getFont().deriveFont(Font.BOLD).deriveFont(14f));
 		pnl.add(label);
 		pnl.add(getBtnNotificaciones());
 		return pnl;

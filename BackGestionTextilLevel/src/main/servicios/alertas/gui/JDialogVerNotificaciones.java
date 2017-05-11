@@ -1,14 +1,19 @@
 package main.servicios.alertas.gui;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -16,6 +21,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 import main.servicios.alertas.AccionNotificacion;
 import main.servicios.alertas.ETipoNotificacionUI;
@@ -27,10 +35,17 @@ import ar.com.textillevel.modulos.notificaciones.entidades.NotificacionUsuario;
 import ar.com.textillevel.modulos.notificaciones.facade.api.remote.NotificacionUsuarioFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
+import com.google.common.collect.Maps;
+
 public class JDialogVerNotificaciones extends JDialog {
 
 	private static final long serialVersionUID = 6882152212322989005L;
 
+	private static final Color COLOR_DESELECCIONADO = Color.WHITE;
+	private static final Color COLOR_SELECCIONADO = Color.CYAN;
+
+	private static final Map<Integer, Color> COLOR_MAP = Maps.newHashMap();
+	
 	private static final int CANT_COLS = 3;
 	private static final int COL_LEIDA = 0;
 	private static final int COL_TEXTO = 1;
@@ -59,7 +74,7 @@ public class JDialogVerNotificaciones extends JDialog {
 			int x = 0;
 			ETipoNotificacionUI tipoNotificacionUI = ETipoNotificacionUI.by(nc.getTipo());
 			for (final AccionNotificacion an : tipoNotificacionUI.getAcciones()) {
-				JButton boton = new JButton(new AbstractAction(an.getTitulo()) {
+				final JButton boton = new JButton(new AbstractAction(an.getTitulo()) {
 
 					private static final long serialVersionUID = 2368144073667152535L;
 
@@ -75,6 +90,27 @@ public class JDialogVerNotificaciones extends JDialog {
 						llenarTabla();
 					}
 				});
+				
+				boton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						int y = Integer.valueOf(boton.getActionCommand());
+						COLOR_MAP.put(y, COLOR_SELECCIONADO);
+						((DefaultTableModel) getTablaNotificaciones().getModel()).fireTableRowsUpdated(y, y);
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						int y = Integer.valueOf(boton.getActionCommand());
+						COLOR_MAP.put(y, COLOR_DESELECCIONADO);
+						((DefaultTableModel) getTablaNotificaciones().getModel()).fireTableRowsUpdated(y, y);
+					}
+				});
+				
+				Dimension preferredSize = boton.getPreferredSize();
+				preferredSize.height = getTablaNotificaciones().getRowHeight() - 1;
+				boton.setPreferredSize(preferredSize);
+				boton.setActionCommand(String.valueOf(y));
 				getPanelBotones().add(boton, GenericUtils.createGridBagConstraints(x++, y, //
 						GridBagConstraints.CENTER, GridBagConstraints.NONE, //
 						new Insets(5, 5, 5, 5), 1, 1, 0, 0));
@@ -85,23 +121,40 @@ public class JDialogVerNotificaciones extends JDialog {
 
 	private void llenarTabla() {
 		getTablaNotificaciones().removeAllRows();
+		COLOR_MAP.clear();
+		int i = 0;
 		for(final NotificacionUsuario nc : notificaciones) {
 			getTablaNotificaciones().addRow(new Object[]{nc.getLeida(), nc.getTexto() , nc});
+			COLOR_MAP.put(i, COLOR_DESELECCIONADO);
+			((DefaultTableModel) getTablaNotificaciones().getModel()).fireTableRowsUpdated(i, i);
 		}
 	}
 
 	private void setUpComponentes() {
-		add(getPanelBotones(), BorderLayout.EAST);
-		add(new JScrollPane(getTablaNotificaciones()),BorderLayout.CENTER);
+		setLayout(new GridBagLayout());
 		JPanel pnlSur = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		pnlSur.add(getBtnAceptar());
-		add(pnlSur, BorderLayout.SOUTH);
+
+		JScrollPane jspTabla = new JScrollPane(getTablaNotificaciones());
+		JScrollPane jspBotones = new JScrollPane(getPanelBotones());
+
+		jspBotones.getVerticalScrollBar().setModel(jspTabla.getVerticalScrollBar().getModel());
+		
+		add(jspTabla, GenericUtils.createGridBagConstraints(0, 0, //
+				GridBagConstraints.WEST, GridBagConstraints.BOTH, //
+				new Insets(5, 5, 5, 5), 1, 1, 1, 1));
+		add(jspBotones, GenericUtils.createGridBagConstraints(1, 0, //
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, //
+				new Insets(5, 5, 5, 5), 1, 1, 0.2, 1));
+		add(pnlSur, GenericUtils.createGridBagConstraints(0, 1, //
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, //
+				new Insets(5, 5, 5, 5), 2, 1, 0, 0));
 	}
 
 	private void setUpScreen() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Notificaciones");
-		setSize(new Dimension(700,400));
+		setSize(new Dimension(630,400));
 		setResizable(true);
 		GuiUtil.centrarEnFramePadre(this);
 		setModal(true);
@@ -124,7 +177,7 @@ public class JDialogVerNotificaciones extends JDialog {
 		if (tablaNotificaciones == null) {
 			tablaNotificaciones = new FWJTable(0, CANT_COLS);
 			tablaNotificaciones.setCheckColumn(COL_LEIDA, "Leida", 50, true);
-			tablaNotificaciones.setStringColumn(COL_TEXTO, "Notificación", 500, 500, true);
+			tablaNotificaciones.setStringColumn(COL_TEXTO, "Notificación", 414, 414, true);
 //			tablaNotificaciones.setStringColumn(COL_ACCIONES, "Acciones", 280, 280, true);
 			tablaNotificaciones.setStringColumn(COL_OBJ, "", 0);
 			tablaNotificaciones.setAllowHidingColumns(false);
@@ -134,6 +187,17 @@ public class JDialogVerNotificaciones extends JDialog {
 //			tablaNotificaciones.setHeaderAlignment(COL_ACCIONES, FWJTable.CENTER_ALIGN);
 			tablaNotificaciones.setHeaderAlignment(COL_TEXTO, FWJTable.CENTER_ALIGN);
 
+			tablaNotificaciones.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+				
+				private static final long serialVersionUID = 3567985007339292748L;
+
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		            final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		            c.setBackground(COLOR_MAP.get(row));
+		            return c;				
+				}
+			});
 			
 //			TableColumn columnaAcciones = tablaNotificaciones.getColumnModel().getColumn(2);
 ////			tablaNotificaciones.setRowHeight(renderer.getTableCellRendererComponent(tablaNotificaciones, null, true, true, 0, 0).getPreferredSize().height);
@@ -142,16 +206,17 @@ public class JDialogVerNotificaciones extends JDialog {
 //			columnaAcciones.setCellRenderer(new PanelAccionesRenderer());
 //			//columnaAcciones.setCellEditor(new PanelAccionesEditor());
 //			columnaAcciones.setCellEditor(new PanelAccionesEditor());
-
-
 		}
 		return tablaNotificaciones;
 	}
 
 	public JPanel getPanelBotones() {
 		if (panelBotones == null) {
-			panelBotones = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP, 5, 5));
-			panelBotones.add(new JLabel(""));
+			panelBotones = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP, 5, 1));
+			// groncho pad
+			for (int i = 0; i <13; i++) {
+				panelBotones.add(new JLabel(""));
+			}
 		}
 		return panelBotones;
 	}
