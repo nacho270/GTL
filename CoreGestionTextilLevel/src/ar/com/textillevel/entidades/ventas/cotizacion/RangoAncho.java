@@ -211,7 +211,7 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	public <G extends GrupoTipoArticulo> List<G> getGruposTipoArticulo(TipoArticulo ta, Articulo articulo, Class<G> clazz) {
 		List<G> result = new ArrayList<G>();
 		for(G pta : getGruposTipoArticulo(clazz)) {
-			if((articulo == null || pta.getArticulo().equals(articulo)) && pta.getTipoArticulo().equals(ta)) {
+			if(pta.getArticulo() != null && pta.getArticulo().equals(articulo) && pta.getTipoArticulo().equals(ta)) {
 				result.add(pta);
 			}
 		}
