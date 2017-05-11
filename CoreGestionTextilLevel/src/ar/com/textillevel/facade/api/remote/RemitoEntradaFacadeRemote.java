@@ -18,7 +18,7 @@ import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
 @Remote
 public interface RemitoEntradaFacadeRemote {
 
-	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario);
+	public RemitoEntrada save(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, String usuario) throws ValidacionException;
 
 	public RemitoEntrada saveWithTransiciones(RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, List<TransicionODT> transiciones, String usuario);
 

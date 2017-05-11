@@ -45,6 +45,7 @@ import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.fwcommon.componentes.error.FWRuntimeException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.StringUtil;
@@ -574,9 +575,15 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 					}
 					if(validar()) {
 						List<OrdenDeTrabajo> odtCapturedList = capturarSetearDatos();
-						RemitoEntrada remitoEntradaSaved = getRemitoEntradaFacade().save(remitoEntrada, odtCapturedList, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-						setRemitoEntrada(remitoEntradaSaved);
-						FWJOptionPane.showInformationMessage(JDialogAgregarRemitoEntrada.this, "El remito se ha grabado con éxito.", "Atención");
+						RemitoEntrada remitoEntradaSaved;
+						try {
+							remitoEntradaSaved = getRemitoEntradaFacade().save(remitoEntrada, odtCapturedList, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+							setRemitoEntrada(remitoEntradaSaved);
+							FWJOptionPane.showInformationMessage(JDialogAgregarRemitoEntrada.this, "El remito se ha grabado con éxito.", "Atención");
+						} catch (ValidacionException e1) {
+							FWJOptionPane.showInformationMessage(JDialogAgregarRemitoEntrada.this, StringW.wordWrap(e1.getMensajeError()), "Atención");
+							return;
+						}
 
 						//si hay ODTs => pregunto si las quiere imprimir
 						if(!odtCapturedList.isEmpty()) {
