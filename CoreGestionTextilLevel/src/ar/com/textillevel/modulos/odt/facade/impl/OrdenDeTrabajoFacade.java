@@ -209,16 +209,18 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	public void grabarAndRegistrarAvanceEnEstadoEnProceso(Integer idODT, Maquina maquina, ESectorMaquina sector, Terminal terminal, UsuarioSistema usuarioSistema) {
 		OrdenDeTrabajo odt = odtDAO.getReferenceById(idODT);
 	
+		Timestamp ahora = DateUtil.getAhora();
 		TransicionODT transicion = new TransicionODT();
-		transicion.setFechaHoraRegistro(DateUtil.getAhora());
+		transicion.setFechaHoraRegistro(ahora);
 		transicion.setMaquina(maquina);
 		transicion.setOdt(odt);
 		transicion.setTipoMaquina(maquina.getTipoMaquina());
 		transicion.setTerminal(terminal);
 		transicion.setUsuarioSistema(usuarioSistema);
+		odt.resetFechasProcesamiento();
 
 		CambioAvance ca = new CambioAvance();
-		ca.setFechaHora(DateUtil.getAhora());
+		ca.setFechaHora(ahora);
 		ca.setAvance(EAvanceODT.POR_COMENZAR);
 		ca.setTerminal(terminal);
 		ca.setUsuario(usuarioSistema);
@@ -226,17 +228,21 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 
 		if(sector.isAdmiteInterProcesamiento()) {
 			odt.setAvance(EAvanceODT.POR_COMENZAR);
+			odt.setFechaPorComenzarUltSector(ahora);
 			odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquina) + 1));
 			odt.setEstadoODT(EEstadoODT.EN_PROCESO);
 		} else {
 			ca = new CambioAvance();
-			ca.setFechaHora(DateUtil.getAhora());
+			ca.setFechaHora(ahora);
 			ca.setAvance(EAvanceODT.FINALIZADO);
 			ca.setTerminal(terminal);
 			ca.setUsuario(usuarioSistema);
 			transicion.getCambiosAvance().add(ca);
 			odt.setAvance(EAvanceODT.FINALIZADO);
 			odt.setOrdenEnMaquina(null);
+			odt.setFechaPorComenzarUltSector(ahora);
+			odt.setFechaEnProcesoUltSector(ahora);
+			odt.setFechaFinalizadoUltSector(ahora);
 		}
 		odt.setMaquinaActual(maquina);
 		if(odt.getEstado() == EEstadoODT.PENDIENTE) {
@@ -279,55 +285,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		odt.setAvance(null);
 		odt.setOrdenEnMaquina(null);
 		odt = odtDAO.save(odt);
-		
-		TransicionODT transicion = new TransicionODT();
-		transicion.setFechaHoraRegistro(DateUtil.getAhora());
-		transicion.setMaquina(null);
-		transicion.setOdt(odt);
-		transicion.setTipoMaquina(null);
-		transicion.setUsuarioSistema(usuarioSistema);
-		
-		transicionDao.save(transicion);
 	}
 
-	public void cambiarODTAOficina(Integer idOdt, UsuarioSistema usuarioSistema) {
-		TipoMaquina tp = tipoMaquinaDAO.getTipoMaquinaConOrdenMayor();
-		if(tp == null) {//si no hay tipos de máquinas configuradas salgo
-			return;
-		}
-		List<Maquina> allByTipo = maquinaDao.getAllByTipo(tp);
-		if(allByTipo.isEmpty()) {//si no hay máquinas configuradas salgo
-			return;
-		}
-		Maquina maquina = allByTipo.get(0); //elijo la primer máquina
-
-		OrdenDeTrabajo odt = odtDAO.getById(idOdt);
-		odt.setMaquinaActual(maquina);
-		odt.setEstadoODT(EEstadoODT.EN_OFICINA);
-		odt.setAvance(EAvanceODT.FINALIZADO);
-		odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquina)+1));
-		odt = odtDAO.save(odt);
-
-		TransicionODT transicion = new TransicionODT();
-		Timestamp ahora = DateUtil.getAhora();
-		transicion.setFechaHoraRegistro(ahora);
-		transicion.setMaquina(maquina);
-		transicion.setOdt(odt);
-		transicion.setTipoMaquina(tp);
-		transicion.setUsuarioSistema(usuarioSistema);
-
-		CambioAvance ca = new CambioAvance();
-		ca.setAvance(EAvanceODT.FINALIZADO);
-		ca.setFechaHora(ahora);
-		ca.setUsuario(usuarioSistema);
-		transicion.getCambiosAvance().add(ca);
-
-		transicionDao.save(transicion);
-		
-		notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getId(), odt.getCodigo());
-	}
-
-	
 	public List<TransicionODT> getHistoricoTransiciones(Integer idODT) {
 		return transicionDao.getAllByODT(idODT);
 	}
@@ -419,11 +378,12 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		Maquina maquinaActual = maquinaDao.getById(odt.getMaquinaActual().getId());
 		checkConsistenciaCambioEstadoAndAvance(odt, estado, avance);
 		checkConsistenciaEstadoFinalizado(odt, maquinaActual, estado, avance);
+		Timestamp ahora = DateUtil.getAhora();
 
 		if(odt.getEstado() != estado || avance.ordinal() != odt.getAvance().ordinal()) {
 			//cambio de avance
 			CambioAvance ca = new CambioAvance();
-			ca.setFechaHora(DateUtil.getAhora());
+			ca.setFechaHora(ahora);
 			ca.setAvance(avance);
 			ca.setUsuario(usuarioSistema);
 			ca.setTerminal(terminal);
@@ -431,12 +391,15 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 			TransicionODT transicion = transicionDao.getByODT(odt.getId());
 			if(transicion == null || transicion.getTipoMaquina().getSectorMaquina() != maquinaActual.getTipoMaquina().getSectorMaquina()) {
 				transicion = new TransicionODT();
-				transicion.setFechaHoraRegistro(DateUtil.getAhora());
+				transicion.setFechaHoraRegistro(ahora);
 				transicion.setMaquina(maquinaActual);
 				transicion.setOdt(odt);
 				transicion.setTipoMaquina(maquinaActual.getTipoMaquina());
 				transicion.setUsuarioSistema(usuarioSistema);
 				transicion.setTerminal(terminal);
+				odt.resetFechasProcesamiento();
+				odt.setFechaPorComenzarUltSector(ahora);
+				
 			}
 			transicion.getCambiosAvance().add(ca);
 			transicionDao.save(transicion);
@@ -446,18 +409,20 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 				if(maquinaActual != null) { //actualizo los ordenes de las ODTs que quedaron en la misma máquina
 					actualizarOrdenesMismaMaquina(maquinaActual, odt, (short)1);
 				}
+				odt.setFechaFinalizadoUltSector(ahora);
 			} else if(avance == EAvanceODT.POR_COMENZAR && odt.getOrdenEnMaquina() == null) { //avance==POR_COMENZAR y sin orden seteado => la pongo al final
 				odt.setOrdenEnMaquina((short)(odtDAO.getUltimoOrdenMaquina(maquinaActual)+1));
 			} else if(avance == EAvanceODT.EN_PROCESO) { //avance==EN_PROCESO => la pongo al principio
 				odt.setOrdenEnMaquina((short)1);
 				actualizarOrdenesMismaMaquina(maquinaActual, odt, (short)2);
+				odt.setFechaEnProcesoUltSector(ahora);
 			}
 			
 			//estados en la ODT
 			odt.setEstadoODT(estado);
 			odt.setAvance(avance);
 			
-			if(estado == EEstadoODT.EN_OFICINA) {
+			if(estado == EEstadoODT.EN_OFICINA && avance == EAvanceODT.FINALIZADO) {
 				notificacionesFacadeFacade.generarNotificaciones(ETipoNotificacion.ODT_EN_OFICINA, odt.getId(), odt.getCodigo());
 			}
 		}

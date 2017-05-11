@@ -24,6 +24,10 @@ public class ODTEagerTO implements Serializable {
 	private Integer idMaquinaActual; // Maquina esta federada
 	private Short ordenEnMaquina;
 	private Integer idMaquinaPrincipal; // Maquina esta federada
+	private Long longPorComenzarUltSector;
+	private Long longEnProcesoUltSector;
+	private Long longFinalizadoUltSector;
+	
 	private List<TransicionODTTO> transiciones;
 
 	public ODTEagerTO() {
@@ -34,6 +38,9 @@ public class ODTEagerTO implements Serializable {
 		this.id = odt.getId();
 		this.codigo = odt.getCodigo();
 		this.timestampFechaODT = odt.getFechaODT().getTime();
+		this.longPorComenzarUltSector = odt.getFechaPorComenzarUltSector() == null ? null : odt.getFechaPorComenzarUltSector().getTime();
+		this.longEnProcesoUltSector = odt.getFechaEnProcesoUltSector() == null ? null : odt.getFechaEnProcesoUltSector().getTime();
+		this.longFinalizadoUltSector = odt.getFechaFinalizadoUltSector() == null ? null : odt.getFechaFinalizadoUltSector().getTime();
 		this.idEstadoODT = odt.getEstado().getId();
 		if (odt.getProductoArticulo() != null) {
 			this.idProductoArticulo = odt.getProductoArticulo().getId();
@@ -164,6 +171,30 @@ public class ODTEagerTO implements Serializable {
 
 	public void setIdMaquinaPrincipal(Integer idMaquinaPrincipal) {
 		this.idMaquinaPrincipal = idMaquinaPrincipal;
+	}
+
+	public Long getLongPorComenzarUltSector() {
+		return longPorComenzarUltSector;
+	}
+
+	public void setLongPorComenzarUltSector(Long longPorComenzarUltSector) {
+		this.longPorComenzarUltSector = longPorComenzarUltSector;
+	}
+
+	public Long getLongEnProcesoUltSector() {
+		return longEnProcesoUltSector;
+	}
+
+	public void setLongEnProcesoUltSector(Long longEnProcesoUltSector) {
+		this.longEnProcesoUltSector = longEnProcesoUltSector;
+	}
+
+	public Long getLongFinalizadoUltSector() {
+		return longFinalizadoUltSector;
+	}
+
+	public void setLongFinalizadoUltSector(Long longFinalizadoUltSector) {
+		this.longFinalizadoUltSector = longFinalizadoUltSector;
 	}
 
 	public List<TransicionODTTO> getTransiciones() {

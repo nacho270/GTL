@@ -16,6 +16,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -70,6 +72,8 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	private OrdenDeTrabajoFacadeRemote odtFacade;
 	private final ModeloFiltro datosFiltro;
 	private EModoVisualizacionEstadoProduccion modoVisualizacion;
+	private boolean refrescando=false;
+	private static final long CINCO_MINUTOS = 300000;
 	
 	public JFrameVisionGeneralProduccion(Frame padre){
 		datosFiltro = new ModeloFiltro();
@@ -77,6 +81,17 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		setUpComponentes();
 		setUpScreen();
 		refreshView();
+		
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if(!refrescando) {
+					refreshView();
+				}
+			}
+		}, CINCO_MINUTOS/5, CINCO_MINUTOS);
+
 	}
 
 	private void setUpScreen() {
@@ -138,6 +153,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 	}
 	
 	private void refreshView(){
+		refrescando = true;
 		setEstadoActual(getOdtFacade().getEstadoDeProduccionActual(getDatosFiltro().getFechaDesde(),getDatosFiltro().getFechaHasta(),getDatosFiltro().getCliente()));
 		
 		getPanelCentral().removeAll();
@@ -182,6 +198,7 @@ public class JFrameVisionGeneralProduccion extends JFrame{
 		getJsp().invalidate();
 		getJsp().updateUI();
 		invalidate();
+		refrescando = false;
 	}
 
 	private PanelEstadoActualMaquina crearPanelTipoMaquina(EstadoActualTipoMaquinaTO e, boolean ultima) {

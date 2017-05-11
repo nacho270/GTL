@@ -2,7 +2,9 @@ package ar.com.textillevel.modulos.odt.to;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
@@ -31,13 +33,16 @@ public class ODTTO implements Serializable {
 	private TipoMaquina tipoMaquina;
 	private EEstadoODT estado;
 	private boolean tieneSecuencia;
+	private Timestamp fechaPorComenzarUltSector;
+	private Timestamp fechaEnProcesoUltSector;
+	private Timestamp fechaFinalizadoUltSector;
 	private EnumSituacionMaquina situacionMaquina;
 	
 	public ODTTO() {
 
 	}
 
-	public ODTTO(Integer id, String codigo, Integer idRemito, Integer idEstado, Integer idSecuencia, Cliente cliente, ProductoArticulo productoArticulo, Short ordenEnMaquina, Maquina maquinaActual, BigDecimal totalKilos, Byte avance, BigDecimal totalMetros) {
+	public ODTTO(Integer id, String codigo, Integer idRemito, Integer idEstado, Integer idSecuencia, Cliente cliente, ProductoArticulo productoArticulo, Short ordenEnMaquina, Maquina maquinaActual, BigDecimal totalKilos, Byte avance, java.util.Date fechaPorComenzarUltSector, java.util.Date fechaEnProcesoUltSector, java.util.Date fechaFinalizadoUltSector, BigDecimal totalMetros) {
 		this.id = id;
 		this.codigo = codigo;
 		this.idRemito = idRemito;
@@ -53,11 +58,14 @@ public class ODTTO implements Serializable {
 		this.avance = avance == null ? null : EAvanceODT.getById(avance.byteValue());
 		this.tipoProducto = productoArticulo.getTipo();
 		this.tipoMaquina = maquinaActual == null ? null : maquinaActual.getTipoMaquina();
+		this.fechaPorComenzarUltSector = fechaPorComenzarUltSector == null ? null : new Timestamp(fechaPorComenzarUltSector.getTime());
+		this.fechaEnProcesoUltSector = fechaEnProcesoUltSector == null ? null : new Timestamp(fechaEnProcesoUltSector.getTime());
+		this.fechaFinalizadoUltSector = fechaFinalizadoUltSector == null ? null : new Timestamp(fechaFinalizadoUltSector.getTime());
 		calcularSituacionMaquina();
 	}
 
 	public ODTTO(OrdenDeTrabajo odt) {
-		this(odt.getId(), odt.getCodigo(), odt.getRemito() == null ? null : odt.getRemito().getId(), odt.getEstado().getId(), odt.getSecuenciaDeTrabajo() == null ? null : odt.getSecuenciaDeTrabajo().getId(), odt.getRemito().getCliente(), odt.getProductoArticulo(), odt.getOrdenEnMaquina(), odt.getMaquinaActual(), odt.getRemito().getPesoTotal(), odt.getAvance() == null ? null : odt.getAvance().getId(), odt.getTotalMetrosEntrada());
+		this(odt.getId(), odt.getCodigo(), odt.getRemito() == null ? null : odt.getRemito().getId(), odt.getEstado().getId(), odt.getSecuenciaDeTrabajo() == null ? null : odt.getSecuenciaDeTrabajo().getId(), odt.getRemito().getCliente(), odt.getProductoArticulo(), odt.getOrdenEnMaquina(), odt.getMaquinaActual(), odt.getRemito().getPesoTotal(), odt.getAvance() == null ? null : odt.getAvance().getId(), odt.getFechaPorComenzarUltSector(), odt.getFechaEnProcesoUltSector(), odt.getFechaFinalizadoUltSector(), odt.getTotalMetrosEntrada());
 	}
 	
 	public Integer getId() {
@@ -126,6 +134,33 @@ public class ODTTO implements Serializable {
 
 	public void setSituacionMaquina(EnumSituacionMaquina situacionMaquina) {
 		this.situacionMaquina = situacionMaquina;
+	}
+
+	private Timestamp getFechaPorComenzarUltSector() {
+		return fechaPorComenzarUltSector;
+	}
+
+	private Timestamp getFechaEnProcesoUltSector() {
+		return fechaEnProcesoUltSector;
+	}
+
+	private Timestamp getFechaFinalizadoUltSector() {
+		return fechaFinalizadoUltSector;
+	}
+
+	public String getInfoTiempoProceso() {
+		if(getFechaFinalizadoUltSector() != null) {
+			if(getFechaPorComenzarUltSector() != null) {
+				return "TF: " + DateUtil.msegToSegMinHsOrDias(getFechaFinalizadoUltSector().getTime() - getFechaPorComenzarUltSector().getTime());
+			} else if(getFechaEnProcesoUltSector() != null) {
+				return "TF: " + DateUtil.msegToSegMinHsOrDias(getFechaFinalizadoUltSector().getTime() - getFechaEnProcesoUltSector().getTime());
+			}
+		} else if(getFechaEnProcesoUltSector() != null) {
+			return "TE: " + DateUtil.msegToSegMinHsOrDias(DateUtil.getAhora().getTime() - getFechaEnProcesoUltSector().getTime());
+		} else if(getFechaPorComenzarUltSector() != null) {
+			return "TE: " + DateUtil.msegToSegMinHsOrDias(DateUtil.getAhora().getTime() - getFechaPorComenzarUltSector().getTime());
+		}
+		return "";
 	}
 
 	private void calcularSituacionMaquina() {

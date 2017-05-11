@@ -131,19 +131,12 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 	public RemitoSalida save(RemitoSalida remitoSalida, String usuario) {
 		boolean isAlta = remitoSalida.getId() == null;
 		remitoSalida = remitoSalidaDAOLocal.save(remitoSalida);
-		cambiarEstadoODTs(remitoSalida.getOdts(), usuario);
 		if(isAlta) {
 			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		} else {
 			auditoriaFacade.auditar(usuario, "Modificación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.MODIFICACION, remitoSalida);
 		}
 		return remitoSalida;
-	}
-
-	private void cambiarEstadoODTs(List<OrdenDeTrabajo> odts, String usuario) {
-		for(OrdenDeTrabajo odt : odts) {
-			odtFacade.cambiarODTAOficina(odt.getId(), usuSistemaFacade.getByNombre(usuario));
-		}
 	}
 
 	public Integer getLastNroRemito() {

@@ -49,7 +49,9 @@ public class OrdenDeTrabajo implements Serializable {
 	private Short ordenEnMaquina;
 	private SecuenciaODT secuenciaDeTrabajo;
 	private Maquina maquinaPrincipal;
-	
+	private Timestamp fechaPorComenzarUltSector;
+	private Timestamp fechaEnProcesoUltSector;
+	private Timestamp fechaFinalizadoUltSector;
 	private List<TransicionODT> transiciones;
 	
 	private boolean noLocal=false;
@@ -251,6 +253,33 @@ public class OrdenDeTrabajo implements Serializable {
 		this.maquinaPrincipal = maquinaPrincipal;
 	}
 
+	@Column(name="A_FECHA_POR_COMENZAR_ULT_SECTOR",nullable=true)
+	public Timestamp getFechaPorComenzarUltSector() {
+		return fechaPorComenzarUltSector;
+	}
+
+	public void setFechaPorComenzarUltSector(Timestamp fechaPorComenzarUltSector) {
+		this.fechaPorComenzarUltSector = fechaPorComenzarUltSector;
+	}
+
+	@Column(name="A_FECHA_EN_PROCESO_ULT_SECTOR",nullable=true)
+	public Timestamp getFechaEnProcesoUltSector() {
+		return fechaEnProcesoUltSector;
+	}
+
+	public void setFechaEnProcesoUltSector(Timestamp fechaEnProcesoUltSector) {
+		this.fechaEnProcesoUltSector = fechaEnProcesoUltSector;
+	}
+
+	@Column(name="A_FECHA_FINALIZADO_ULT_SECTOR",nullable=true)
+	public Timestamp getFechaFinalizadoUltSector() {
+		return fechaFinalizadoUltSector;
+	}
+
+	public void setFechaFinalizadoUltSector(Timestamp fechaFinalizadoUltSector) {
+		this.fechaFinalizadoUltSector = fechaFinalizadoUltSector;
+	}
+	
 	@Transient
 	public PiezaODT getPiezaByPiezaPadreRE(PiezaRemito piezaEntrada) {
 		for(PiezaODT pODT : getPiezas()) {
@@ -285,8 +314,10 @@ public class OrdenDeTrabajo implements Serializable {
 	}
 
 	@Transient
-	public boolean puedeDarSalida() {
-		return getEstado() == EEstadoODT.EN_OFICINA;
+	public void resetFechasProcesamiento() {
+		setFechaPorComenzarUltSector(null);
+		setFechaEnProcesoUltSector(null);
+		setFechaFinalizadoUltSector(null);
 	}
 
 }

@@ -11,8 +11,8 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 @Local
 public interface OrdenDeTrabajoFacadeLocal {
+
 	public void cambiarODTAFacturada(Integer idOdt, UsuarioSistema usuarioSistema);
-	public void cambiarODTAOficina(Integer idOdt, UsuarioSistema usuarioSistema);
 	public List<OrdenDeTrabajo> getOdtEagerByRemitoList(Integer idRE);
 
 	//METODOS WEB SERVICE

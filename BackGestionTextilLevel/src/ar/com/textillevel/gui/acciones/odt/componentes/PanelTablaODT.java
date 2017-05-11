@@ -112,7 +112,7 @@ public abstract class PanelTablaODT extends PanelTablaSubirBajarModificar<ODTTO>
 		getTabla().addRow(new Object[] { "<html><div style=\"font-size: 10px;font-family: sans-serif;\"><b>"+ODTCodigoHelper.getInstance().formatCodigo(elemento.getCodigo()) + "</b>" +
 													" - CL:" + elemento.getNroCliente() + " - " + GenericUtils.getDecimalFormat().format(elemento.getTotalKilos()) + " KG - " +
 											 		  GenericUtils.getDecimalFormat().format(elemento.getTotalMetros()) + " MTS" +
-										 		  "<br>" + elemento.getProducto() + 
+										 		  "<br>" + elemento.getProducto() + " <b>" + elemento.getInfoTiempoProceso() + "</b>" +
 										 "</div></html>", 
 										 elemento });
 		getTabla().setBackgroundRow(getTabla().getRowCount()-1, getColor(elemento));

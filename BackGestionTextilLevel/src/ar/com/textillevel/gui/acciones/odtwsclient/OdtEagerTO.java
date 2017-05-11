@@ -23,6 +23,12 @@ public class OdtEagerTO  implements java.io.Serializable {
 
     private java.lang.Integer idProductoArticulo;
 
+    private java.lang.Long longEnProcesoUltSector;
+
+    private java.lang.Long longFinalizadoUltSector;
+
+    private java.lang.Long longPorComenzarUltSector;
+
     private java.lang.Short ordenEnMaquina;
 
     private ar.com.textillevel.gui.acciones.odtwsclient.PiezaODTTO[] piezas;
@@ -46,6 +52,9 @@ public class OdtEagerTO  implements java.io.Serializable {
            java.lang.Integer idMaquinaActual,
            java.lang.Integer idMaquinaPrincipal,
            java.lang.Integer idProductoArticulo,
+           java.lang.Long longEnProcesoUltSector,
+           java.lang.Long longFinalizadoUltSector,
+           java.lang.Long longPorComenzarUltSector,
            java.lang.Short ordenEnMaquina,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaODTTO[] piezas,
            ar.com.textillevel.gui.acciones.odtwsclient.RemitoEntradaTO remito,
@@ -59,6 +68,9 @@ public class OdtEagerTO  implements java.io.Serializable {
            this.idMaquinaActual = idMaquinaActual;
            this.idMaquinaPrincipal = idMaquinaPrincipal;
            this.idProductoArticulo = idProductoArticulo;
+           this.longEnProcesoUltSector = longEnProcesoUltSector;
+           this.longFinalizadoUltSector = longFinalizadoUltSector;
+           this.longPorComenzarUltSector = longPorComenzarUltSector;
            this.ordenEnMaquina = ordenEnMaquina;
            this.piezas = piezas;
            this.remito = remito;
@@ -205,6 +217,66 @@ public class OdtEagerTO  implements java.io.Serializable {
      */
     public void setIdProductoArticulo(java.lang.Integer idProductoArticulo) {
         this.idProductoArticulo = idProductoArticulo;
+    }
+
+
+    /**
+     * Gets the longEnProcesoUltSector value for this OdtEagerTO.
+     * 
+     * @return longEnProcesoUltSector
+     */
+    public java.lang.Long getLongEnProcesoUltSector() {
+        return longEnProcesoUltSector;
+    }
+
+
+    /**
+     * Sets the longEnProcesoUltSector value for this OdtEagerTO.
+     * 
+     * @param longEnProcesoUltSector
+     */
+    public void setLongEnProcesoUltSector(java.lang.Long longEnProcesoUltSector) {
+        this.longEnProcesoUltSector = longEnProcesoUltSector;
+    }
+
+
+    /**
+     * Gets the longFinalizadoUltSector value for this OdtEagerTO.
+     * 
+     * @return longFinalizadoUltSector
+     */
+    public java.lang.Long getLongFinalizadoUltSector() {
+        return longFinalizadoUltSector;
+    }
+
+
+    /**
+     * Sets the longFinalizadoUltSector value for this OdtEagerTO.
+     * 
+     * @param longFinalizadoUltSector
+     */
+    public void setLongFinalizadoUltSector(java.lang.Long longFinalizadoUltSector) {
+        this.longFinalizadoUltSector = longFinalizadoUltSector;
+    }
+
+
+    /**
+     * Gets the longPorComenzarUltSector value for this OdtEagerTO.
+     * 
+     * @return longPorComenzarUltSector
+     */
+    public java.lang.Long getLongPorComenzarUltSector() {
+        return longPorComenzarUltSector;
+    }
+
+
+    /**
+     * Sets the longPorComenzarUltSector value for this OdtEagerTO.
+     * 
+     * @param longPorComenzarUltSector
+     */
+    public void setLongPorComenzarUltSector(java.lang.Long longPorComenzarUltSector) {
+        this.longPorComenzarUltSector = longPorComenzarUltSector;
     }
 
 
@@ -376,6 +448,15 @@ public class OdtEagerTO  implements java.io.Serializable {
             ((this.idProductoArticulo==null && other.getIdProductoArticulo()==null) || 
              (this.idProductoArticulo!=null &&
               this.idProductoArticulo.equals(other.getIdProductoArticulo()))) &&
+            ((this.longEnProcesoUltSector==null && other.getLongEnProcesoUltSector()==null) || 
+             (this.longEnProcesoUltSector!=null &&
+              this.longEnProcesoUltSector.equals(other.getLongEnProcesoUltSector()))) &&
+            ((this.longFinalizadoUltSector==null && other.getLongFinalizadoUltSector()==null) || 
+             (this.longFinalizadoUltSector!=null &&
+              this.longFinalizadoUltSector.equals(other.getLongFinalizadoUltSector()))) &&
+            ((this.longPorComenzarUltSector==null && other.getLongPorComenzarUltSector()==null) || 
+             (this.longPorComenzarUltSector!=null &&
+              this.longPorComenzarUltSector.equals(other.getLongPorComenzarUltSector()))) &&
             ((this.ordenEnMaquina==null && other.getOrdenEnMaquina()==null) || 
              (this.ordenEnMaquina!=null &&
               this.ordenEnMaquina.equals(other.getOrdenEnMaquina()))) &&
@@ -425,6 +506,15 @@ public class OdtEagerTO  implements java.io.Serializable {
         }
         if (getIdProductoArticulo() != null) {
             _hashCode += getIdProductoArticulo().hashCode();
+        }
+        if (getLongEnProcesoUltSector() != null) {
+            _hashCode += getLongEnProcesoUltSector().hashCode();
+        }
+        if (getLongFinalizadoUltSector() != null) {
+            _hashCode += getLongFinalizadoUltSector().hashCode();
+        }
+        if (getLongPorComenzarUltSector() != null) {
+            _hashCode += getLongPorComenzarUltSector().hashCode();
         }
         if (getOrdenEnMaquina() != null) {
             _hashCode += getOrdenEnMaquina().hashCode();
@@ -516,6 +606,27 @@ public class OdtEagerTO  implements java.io.Serializable {
         elemField.setFieldName("idProductoArticulo");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idProductoArticulo"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("longEnProcesoUltSector");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "longEnProcesoUltSector"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("longFinalizadoUltSector");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "longFinalizadoUltSector"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("longPorComenzarUltSector");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "longPorComenzarUltSector"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

@@ -1063,4 +1063,21 @@ public class DateUtil {
 		return new Timestamp(fecha.getTime().getTime());
 	}
 
+	public static String msegToSegMinHsOrDias(long mseg) {
+		float seg = mseg/1000f;
+		if(seg < 60) {
+			return NumUtil.setDecimales(seg, 1) + " s";
+		}
+		float min = seg/60;
+		if(min < 60) {
+			return NumUtil.setDecimales(min, 1) + " m";
+		}
+		float hs = min/60;
+		if(hs < 24) {
+			return NumUtil.setDecimales(hs, 1) + " h";
+		}
+		float dias = hs/24;
+		return NumUtil.setDecimales(dias, 1) + " d";
+	}
+
 }

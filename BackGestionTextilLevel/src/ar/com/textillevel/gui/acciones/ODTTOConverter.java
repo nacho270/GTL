@@ -102,6 +102,11 @@ public final class ODTTOConverter {
 		odt.setCodigo(odtEagerTO.getCodigo());
 		odt.setEstadoODT(EEstadoODT.getById(odtEagerTO.getIdEstadoODT()));
 		odt.setFechaODT(new Timestamp(odtEagerTO.getTimestampFechaODT()));
+		
+		odt.setFechaPorComenzarUltSector(odtEagerTO.getLongPorComenzarUltSector() == null ? null : new Timestamp(odtEagerTO.getLongPorComenzarUltSector()));
+		odt.setFechaEnProcesoUltSector(odtEagerTO.getLongEnProcesoUltSector() == null ? null : new Timestamp(odtEagerTO.getLongEnProcesoUltSector()));
+		odt.setFechaFinalizadoUltSector(odtEagerTO.getLongFinalizadoUltSector() == null ? null : new Timestamp(odtEagerTO.getLongFinalizadoUltSector()));
+		
 		if(setearIDEnNULL) {// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 			odt.setId(null);
 		} else {
@@ -459,6 +464,9 @@ public final class ODTTOConverter {
 		odtto.setRemito(null);		// Ya la estoy agregando al remitoTO de arriba
 		odtto.setCodigo(odt.getCodigo());
 		odtto.setTimestampFechaODT(odt.getFechaODT().getTime());
+		odtto.setLongPorComenzarUltSector(odt.getFechaPorComenzarUltSector() == null ? null : odt.getFechaPorComenzarUltSector().getTime());
+		odtto.setLongEnProcesoUltSector(odt.getFechaEnProcesoUltSector() == null ? null : odt.getFechaEnProcesoUltSector().getTime());
+		odtto.setLongFinalizadoUltSector(odt.getFechaFinalizadoUltSector() == null ? null : odt.getFechaFinalizadoUltSector().getTime());
 		if (odt.getAvance() != null) {
 			odtto.setIdAvance(odt.getAvance().getId());
 		}
