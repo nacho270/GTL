@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
@@ -35,6 +36,9 @@ public class IngresoRemitoSalidaNormalHandler {
 	}
 
 	public void gestionarIngresoRemitoSalida() {
+		if(!checkODTs()) {
+			return;
+		}
 		ParametrosGeneralesFacadeRemote paramGeneralesFacadeRemote = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		RemitoSalidaFacadeRemote remitoSalidaFacadeRemote = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class);
 		DocumentoContableFacadeRemote docContableFacadeRemote = GTLBeanFactory.getInstance().getBean2(DocumentoContableFacadeRemote.class);
@@ -95,6 +99,16 @@ public class IngresoRemitoSalidaNormalHandler {
 		} else { //se canceló o es un reproceso
 			return;
 		}
+	}
+
+	private boolean checkODTs() {
+		for(OrdenDeTrabajo odt : odtList) {
+			if(odt.yaTuvoSalidaCompletamente()) {
+				FWJOptionPane.showErrorMessage(owner, "La ODT " + odt.getCodigo() + " ya tuvo salida.", "Error");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private Integer getProximoNroRemitoSalida(ParametrosGenerales parametrosGenerales, RemitoSalidaFacadeRemote remitoSalidaFacadeRemote) {

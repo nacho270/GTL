@@ -320,4 +320,14 @@ public class OrdenDeTrabajo implements Serializable {
 		setFechaFinalizadoUltSector(null);
 	}
 
+	@Transient
+	public boolean yaTuvoSalidaCompletamente() {
+		for(PiezaODT p : getPiezas()) {
+			if(p.getPiezasSalida().isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
