@@ -324,12 +324,13 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 
 		private static final long serialVersionUID = 1L;
 
-		private static final int CANT_COLS = 5;
+		private static final int CANT_COLS = 6;
 		private static final int COL_NRO_ORDEN_PIEZA_ODT = 0;
 		private static final int COL_METROS_PIEZA_ENT = 1;
 		private static final int COL_METROS_PIEZA_ODT = 2;
 		private static final int COL_ES_DE_2DA = 3;
-		private static final int COL_OBJ = 4;
+		private static final int COL_SALIDA = 4;
+		private static final int COL_OBJ = 5;
 
 		public PanelTablaPieza(OrdenDeTrabajo odt) {
 			getBotonAgregar().setVisible(false);
@@ -350,6 +351,7 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 			row[COL_METROS_PIEZA_ENT] = elemento.getOrdenSubpieza() == null ||  elemento.getOrdenSubpieza().intValue() == 0 ?  elemento.getPiezaRemito().getMetros().toString() : "";
 			row[COL_METROS_PIEZA_ODT] = elemento.getMetros() == null ? null : elemento.getMetros().toString();
 			row[COL_ES_DE_2DA] = elemento.getEsDeSegunda() != null && elemento.getEsDeSegunda();
+			row[COL_SALIDA] = !elemento.getPiezasSalida().isEmpty();
 			row[COL_OBJ] = elemento;
 			return row;
 		}
@@ -367,6 +369,8 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 			tablaPiezaEntrada.setHeaderAlignment(COL_ES_DE_2DA, FWJTable.CENTER_ALIGN);
 			tablaPiezaEntrada.setStringColumn(COL_OBJ, "", 0, 0, true);
 			tablaPiezaEntrada.setSelectionMode(FWJTable.SINGLE_SELECTION);
+			tablaPiezaEntrada.setCheckColumn(COL_SALIDA, "EN SALIDA", 90, true);
+			tablaPiezaEntrada.setHeaderAlignment(COL_SALIDA, FWJTable.CENTER_ALIGN);
 			return tablaPiezaEntrada;
 		}
 

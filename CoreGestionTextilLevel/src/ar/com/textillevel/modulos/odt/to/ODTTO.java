@@ -50,13 +50,13 @@ public class ODTTO implements Serializable {
 		this.tieneSecuencia = idSecuencia != null;
 		this.nombreCliente = cliente.getDescripcionResumida();
 		this.nroCliente = cliente.getNroCliente();
-		this.producto = productoArticulo.toString();
+		this.producto = productoArticulo == null ? "" : productoArticulo.toString();
 		this.ordenEnMaquina = ordenEnMaquina;
 		this.maquinaActual = maquinaActual == null ? null : maquinaActual.getId();
 		this.totalMetros = totalMetros;
 		this.totalKilos = totalKilos;
 		this.avance = avance == null ? null : EAvanceODT.getById(avance.byteValue());
-		this.tipoProducto = productoArticulo.getTipo();
+		this.tipoProducto = productoArticulo == null ? null : productoArticulo.getTipo();
 		this.tipoMaquina = maquinaActual == null ? null : maquinaActual.getTipoMaquina();
 		this.fechaPorComenzarUltSector = fechaPorComenzarUltSector == null ? null : new Timestamp(fechaPorComenzarUltSector.getTime());
 		this.fechaEnProcesoUltSector = fechaEnProcesoUltSector == null ? null : new Timestamp(fechaEnProcesoUltSector.getTime());

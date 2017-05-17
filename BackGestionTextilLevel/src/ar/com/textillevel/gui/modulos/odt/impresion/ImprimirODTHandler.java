@@ -138,7 +138,9 @@ public class ImprimirODTHandler {
 		}
 		internalImprimir(1);
 		if(formaImpresion == EFormaImpresionODT.ENCABEZADO_SECUENCIA || formaImpresion == EFormaImpresionODT.AMBOS){
-			odt.setEstadoODT(EEstadoODT.IMPRESA);
+			if(odt.getEstado().ordinal() < EEstadoODT.IMPRESA.ordinal()) {
+				odt.setEstadoODT(EEstadoODT.IMPRESA);
+			}
 			GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).grabarODT(odt, GTLGlobalCache.getInstance().getUsuarioSistema());
 		}
 	}
