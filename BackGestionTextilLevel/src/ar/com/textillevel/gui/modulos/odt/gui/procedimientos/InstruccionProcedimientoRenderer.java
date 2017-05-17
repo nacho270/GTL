@@ -260,13 +260,14 @@ public class InstruccionProcedimientoRenderer {
 		}
 
 		public void visit(InstruccionProcedimientoTipoProductoODT instruccion) {
-			if(instruccion.getFormula() == null){
-				setResumenHTML("");
-				return;
-			}
-			ResumenHTMLProductosFormulaVisitor v = new ResumenHTMLProductosFormulaVisitor(mostrarOtrasMPConMismoColorIndex);
-			instruccion.getFormula().accept(v);
-			setResumenHTML(v.getResumenHTML());
+			setResumenHTML("");
+//			if(instruccion.getFormula() == null){
+//				setResumenHTML("");
+//				return;
+//			}
+//			ResumenHTMLProductosFormulaVisitor v = new ResumenHTMLProductosFormulaVisitor(mostrarOtrasMPConMismoColorIndex);
+//			instruccion.getFormula().accept(v);
+//			setResumenHTML(v.getResumenHTML());
 		}
 
 		public String getResumenHTML() {

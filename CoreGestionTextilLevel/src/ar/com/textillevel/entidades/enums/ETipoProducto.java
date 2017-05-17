@@ -13,6 +13,7 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoDevolucion;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDoblado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampadoSobreCrudo;
+import ar.com.textillevel.entidades.ventas.productos.ProductoFraccionado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoImpermeabilizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoLavado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoLavadoEspecialYTermofijado;
@@ -51,7 +52,8 @@ public enum ETipoProducto {
 	ESTAMPADO_SOBRE_CRUDO(17, "Estampado sobre crudo", EUnidad.METROS, ProductoEstampadoSobreCrudo.class.getName(), ESectorMaquina.SECTOR_ESTAMPERIA),
 	LAVADO_Y_TERMOFIJADO(18, "Lavado y termofijado", EUnidad.KILOS, ProductoLavadoYTermofijado.class.getName(), ESectorMaquina.SECTOR_HUMEDO),
 	LAVADO_ESPECIAL_Y_TERMOFIJADO(19, "Lavado y termofijado (Sacando cascarillas)", EUnidad.KILOS, ProductoLavadoEspecialYTermofijado.class.getName(), ESectorMaquina.SECTOR_HUMEDO),
-	VENTA_TELA_CRUDA(20, "Venta tela cruda", EUnidad.METROS, ProductoVentaTelaCruda.class.getName(), null);
+	VENTA_TELA_CRUDA(20, "Venta tela cruda", EUnidad.METROS, ProductoVentaTelaCruda.class.getName(), null),
+	FRACCIONADO(21, "Fraccionado", EUnidad.METROS, ProductoFraccionado.class.getName(), ESectorMaquina.SECTOR_TERMINADO);
 
 	private Integer id;
 	private String descripcion;

@@ -79,7 +79,6 @@ public class ODTDatosMostradoHelper {
 
 	public String getDescCliente() {
 		return String.valueOf(odt.getRemito().getCliente().getNroCliente());
-		//TODO: Ver caso 01
 	}
 
 }

@@ -7,6 +7,9 @@ from t_factura f
 inner join t_movimiento m on m.f_factura_p_id = f.p_id
 where f.a_id_estado_factura=3;
 
+update t_factura set a_id_estado_factura=2 where p_id=3510;
+
+
 
 2) la factura dice que es de un cliente pero figura para otro => ¿qué hacemos?
 
@@ -16,9 +19,12 @@ inner join t_movimiento m on m.f_factura_p_id = f.p_id
 inner join t_cuenta cta on cta.p_id = m.f_cuenta_p_id
 where f.f_cliente_p_id != cta.f_cliente_p_id;
 
+update t_factura set f_cliente_p_id=115 where p_id=1451;
+
+
 -- revisar las cuentas
 
-select cl.a_nrocliente, sum(X.DEB),sum(X.HAB), cast((sum(X.HAB)-sum(X.DEB)) as decimal(19,2)) AS CALC, cta.a_saldo as REG_CTA, abs(abs(cta.a_saldo) - abs(cast((sum(X.HAB)-sum(X.DEB)) as decimal(19,2))) ) as DIFF
+select cl.a_razon_social, cl.a_nrocliente, sum(X.DEB),sum(X.HAB), cast((sum(X.HAB)-sum(X.DEB)) as decimal(19,2)) AS CALC, cta.a_saldo as REG_CTA, abs(abs(cta.a_saldo) - abs(cast((sum(X.HAB)-sum(X.DEB)) as decimal(19,2))) ) as DIFF
 from (
 
   select f_cliente_p_id as CLI, sum(m.a_monto) AS DEB, 0 as HAB
@@ -47,7 +53,7 @@ from (
 ) X
 inner join t_cuenta cta on cta.f_cliente_p_id = X.CLI
 inner join t_cliente cl on cl.p_id = X.CLI
-group by cl.a_nrocliente
+group by cl.a_razon_social, cl.a_nrocliente
 having abs(abs(cta.a_saldo) - abs(cast((sum(X.HAB)-sum(X.DEB)) as decimal(19,2)))) > 0;
 
 

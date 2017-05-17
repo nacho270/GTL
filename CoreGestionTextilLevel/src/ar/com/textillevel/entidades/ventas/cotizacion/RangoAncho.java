@@ -210,9 +210,18 @@ public abstract class RangoAncho implements Serializable, Comparable<RangoAncho>
 	@Transient
 	public <G extends GrupoTipoArticulo> List<G> getGruposTipoArticulo(TipoArticulo ta, Articulo articulo, Class<G> clazz) {
 		List<G> result = new ArrayList<G>();
-		for(G pta : getGruposTipoArticulo(clazz)) {
+		List<G> grupos = getGruposTipoArticulo(clazz);
+		for(G pta : grupos) {
 			if(pta.getArticulo() != null && pta.getArticulo().equals(articulo) && pta.getTipoArticulo().equals(ta)) {
 				result.add(pta);
+			}
+		}
+		if(result.isEmpty()) {//busco el default (i.e. el que no tiene artículo pero coincide en ancho)
+			for(G pta : grupos) {
+				if(pta.getArticulo() == null) {
+					result.add(pta);
+					break;
+				}
 			}
 		}
 		return result;

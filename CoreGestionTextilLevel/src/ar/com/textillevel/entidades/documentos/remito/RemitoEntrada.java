@@ -176,4 +176,9 @@ public class RemitoEntrada extends Remito {
 		return null;
 	}
 
+	@Transient
+	public boolean isRemito01() {
+		return getArticuloStock() != null && getProveedor() == null && getPrecioMatPrima() == null;
+	}
+
 }

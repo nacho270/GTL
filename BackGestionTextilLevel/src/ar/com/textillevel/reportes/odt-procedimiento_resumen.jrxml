@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odt-procedimiento_resumen" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="RESUMEN_SECTOR_ESTAMPADO" class="java.lang.String"/>
 	<parameter name="RESUMEN_SECTOR_HUMEDO" class="java.lang.String"/>
-	<parameter name="RESUMEN_SECTOR_SECO" class="java.lang.String"/>
 	<parameter name="RESUMEN_QUIMICOS" class="java.lang.String"/>
 	<parameter name="RESUMEN_ALGODON" class="java.lang.String"/>
 	<parameter name="RESUMEN_POLIESTER" class="java.lang.String"/>
 	<parameter name="COLOR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Javier Romero\\git\\GTL\\BackGestionTextilLevel\\src\\ar\\com\\textillevel\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="con" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<detail>
-		<band height="93" splitType="Stretch">
+		<band height="100" splitType="Stretch">
 			<staticText>
 				<reportElement x="183" y="42" width="176" height="20"/>
 				<box>
@@ -66,20 +72,6 @@
 				<text><![CDATA[QUIMICOS]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="69" width="157" height="20"/>
-				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement markup="html">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="378" y="69" width="164" height="20"/>
 				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
@@ -106,66 +98,33 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["SECTOR HUMEDO [" + $P{COLOR} + "]"]]></textFieldExpression>
 			</textField>
-		</band>
-		<band height="50">
-			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="0" width="536" height="20"/>
-				<box>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="69" width="157" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="13" isBold="true"/>
+				<textElement markup="html">
+					<font size="9"/>
 				</textElement>
-				<text><![CDATA[SECTOR SECO]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="6" y="27" width="536" height="20"/>
-				<box leftPadding="2">
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement markup="html"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_SECO}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="50">
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="4" y="26" width="538" height="20">
-					<printWhenExpression><![CDATA[new Boolean($P{RESUMEN_SECTOR_ESTAMPADO} != null && !$P{RESUMEN_SECTOR_ESTAMPADO}.isEmpty())]]></printWhenExpression>
-				</reportElement>
-				<box leftPadding="2">
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement markup="html"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="4" y="0" width="538" height="20">
-					<printWhenExpression><![CDATA[new Boolean($P{RESUMEN_SECTOR_ESTAMPADO} != null && !$P{RESUMEN_SECTOR_ESTAMPADO}.isEmpty())]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SECTOR ESTAMPADO]]></text>
-			</staticText>
+		<band height="77">
+			<subreport>
+				<reportElement x="11" y="5" width="526" height="69"/>
+				<subreportParameter name="con">
+					<subreportParameterExpression><![CDATA[$P{con}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="RESUMEN_SECTOR_ESTAMPADO">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{con}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_resumen_estampado.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

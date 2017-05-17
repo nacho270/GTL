@@ -831,6 +831,10 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 
 		
 		private void actualizarTotales() {
+			if(getCmbArticulo().getSelectedItem() == null) {
+				return;
+			}
+			
 			BigDecimal tm = new BigDecimal(0);
 			int piezas = 0;
 			BigDecimal pt = new BigDecimal(0);

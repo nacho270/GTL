@@ -9,6 +9,7 @@ import ar.com.textillevel.entidades.ventas.productos.ProductoDevolucion;
 import ar.com.textillevel.entidades.ventas.productos.ProductoDoblado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoEstampadoSobreCrudo;
+import ar.com.textillevel.entidades.ventas.productos.ProductoFraccionado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoImpermeabilizado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoLavado;
 import ar.com.textillevel.entidades.ventas.productos.ProductoLavadoEspecialYTermofijado;
@@ -47,6 +48,7 @@ public interface IProductoVisitor {
 	public void visit(ProductoLavadoYTermofijado productoLavadoYTermofijado);
 	public void visit(ProductoLavadoEspecialYTermofijado productoLavadoEspecialYTermofijado);
 	public void visit(ProductoVentaTelaCruda productoVentaTelaCruda);
+	public void visit(ProductoFraccionado productoFraccionado);
 
 
 }

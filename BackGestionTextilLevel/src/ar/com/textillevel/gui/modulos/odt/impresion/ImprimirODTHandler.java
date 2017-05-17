@@ -198,7 +198,7 @@ public class ImprimirODTHandler {
 		private final BigDecimal kilos;
 		private final String gramaje;
 		private final Integer nroRemito;
-		private final String cliente; // String para el caso 01/74 //TODO:
+		private final String cliente; // String para el caso 01/74 
 		private final Integer nroCliente;
 		private final Integer cantidadPiezas;
 		private final String articulo;
@@ -209,14 +209,15 @@ public class ImprimirODTHandler {
 		private SecuenciaODTTO secuencia;
 		private List<DummyPiezaTablaImpresion> piezasDummy1;
 		private List<DummyPiezaTablaImpresion> piezasDummy2;
-//		private String resumenSectorSeco;
+		private String resumenSectorSeco;
 //		private String resumenSectorHumedo;
 //		private String resumenSectorEstampado;
 		private String resumenQuimicos;
 		private String resumenAlgodon;
 		private String resumenPoliester;
 		private String fechaRemitoEntrada;
-
+		private boolean is01;
+		
 		// private String maquina;
 		
 		public static class DummyPiezaTablaImpresion implements Serializable{
@@ -363,6 +364,7 @@ public class ImprimirODTHandler {
 			this.nroRemito = odt.getRemito().getNroRemito();
 			this.cliente = odtDatosHelper.getDescCliente();
 			this.nroCliente = odt.getRemito().getCliente().getNroCliente();
+			this.is01 = odt.getRemito().isRemito01();
 			this.cantidadPiezas = odt.getPiezas().size(); // esto es lo mismo que las piezas remito?
 			this.articulo = odtDatosHelper.getDescArticulo();
 			if (odt.getRemito() != null && odt.getRemito().getFechaEmision() != null) {
@@ -393,7 +395,11 @@ public class ImprimirODTHandler {
 					if(odt.getSecuenciaDeTrabajo()!=null){
 						this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos(), true);
 						this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos(), true);
-						this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
+						this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+								//InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
+						if(formaImp == EFormaImpresionODT.AMBOS || formaImp == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
+							this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+						}
 					}
 				}
 		}
@@ -437,7 +443,7 @@ public class ImprimirODTHandler {
 			mapa.put("KILOS", GenericUtils.getDecimalFormat().format(this.kilos.doubleValue()));
 			mapa.put("GRAMAJE", this.gramaje);
 			mapa.put("NRO_REMITO", this.nroRemito);
-			mapa.put("CLIENTE", this.cliente);
+			mapa.put("CLIENTE", (is01 ? "01/":"") + String.valueOf(cliente));
 			mapa.put("PIEZAS", this.cantidadPiezas);
 			mapa.put("ARTICULO", this.articulo);
 			mapa.put("FECHA_REMITO_ENTRADA", this.fechaRemitoEntrada);
@@ -472,7 +478,7 @@ public class ImprimirODTHandler {
 //			mapa.put("MAQUINA", this.codigo);
 			mapa.put("ANCHO_CRUDO", this.anchoCrudo);
 			mapa.put("ANCHO_FINAL", this.anchoFinal);
-			mapa.put("NRO_CLIENTE", String.valueOf(nroCliente));
+			mapa.put("NRO_CLIENTE", (is01 ? "01/":"") + String.valueOf(nroCliente));
 			mapa.put("FECHA_REMITO_ENTRADA", this.fechaRemitoEntrada);
 			if(piezasDummy1!=null && piezasDummy2 != null){
 				mapa.put("piezasDS1", new JRBeanCollectionDataSource(piezasDummy1));
@@ -484,9 +490,9 @@ public class ImprimirODTHandler {
 //			if(resumenSectorHumedo != null){
 //				mapa.put("RESUMEN_SECTOR_HUMEDO", resumenSectorHumedo);
 //			}
-//			if(resumenSectorSeco != null){
-//				mapa.put("RESUMEN_SECTOR_SECO", resumenSectorSeco);
-//			}
+			if(resumenSectorSeco != null){
+				mapa.put("RESUMEN_SECTOR_SECO", resumenSectorSeco);
+			}
 			if(resumenQuimicos!=null){
 				mapa.put("RESUMEN_QUIMICOS", resumenQuimicos);
 			}
