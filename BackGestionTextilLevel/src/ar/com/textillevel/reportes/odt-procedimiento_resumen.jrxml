@@ -113,18 +113,5 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="77">
-			<subreport>
-				<reportElement x="11" y="5" width="526" height="69"/>
-				<subreportParameter name="con">
-					<subreportParameterExpression><![CDATA[$P{con}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="RESUMEN_SECTOR_ESTAMPADO">
-					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[$P{con}]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_resumen_estampado.jasper"]]></subreportExpression>
-			</subreport>
-		</band>
 	</detail>
 </jasperReport>
