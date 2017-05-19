@@ -506,4 +506,36 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		return odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, idProducto, estado);
 	}
 
+	@Override
+	public OrdenDeTrabajo borrarPiezasSinSalida(OrdenDeTrabajo odt, UsuarioSistema usuarioSistema) {
+		//chequeos
+		checkBorradoPiezasSinSalida(odt);
+		//borro las piezas que no tuvieron salida
+		List<PiezaODT> borrarPiezasList = new ArrayList<PiezaODT>();
+		for(PiezaODT p : odt.getPiezas()) {
+			if(!p.tieneSalida()) {
+				borrarPiezasList.add(p);
+			}
+		}
+		odt.getPiezas().removeAll(borrarPiezasList);
+		//cambio a estado facturada
+		odt.setEstadoODT(EEstadoODT.FACTURADA);
+		auditoriaFacade.auditar(usuarioSistema.getUsrName(), "ELIM PIEZAS SIN SALIDA ODT " + odt.getCodigo() + " #PIEZAS: " + borrarPiezasList.size(), EnumTipoEvento.MODIFICACION, odt);
+		return odtDAO.save(odt);
+	}
+
+	private void checkBorradoPiezasSinSalida(OrdenDeTrabajo odt) {
+		if(odt.getEstado() != EEstadoODT.EN_OFICINA && odt.getEstado() != EEstadoODT.ANTERIOR) {
+			throw new IllegalArgumentException("La ODT debe estar en estado " + EEstadoODT.EN_OFICINA + " o bien en " + EEstadoODT.ANTERIOR);
+		}
+		int cantPiezasConSalida = odt.contarDeAcuerdoASalida(true);
+		if(cantPiezasConSalida == 0) {
+			throw new IllegalArgumentException("Para ejecutar esta operación alguna pieza de la ODT tuvo que haber tenido salida.");
+		}
+		int cantPiezasSinSalida = odt.contarDeAcuerdoASalida(false);
+		if(cantPiezasSinSalida == 0) {
+			throw new IllegalArgumentException("Para ejecutar esta operación la ODT tiene que tener al menos una pieza SIN salida.");
+		}
+	}
+
 }

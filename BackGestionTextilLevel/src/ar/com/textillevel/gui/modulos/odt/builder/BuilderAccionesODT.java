@@ -15,6 +15,7 @@ import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
 import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
 import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
 import ar.com.fwcommon.templates.modulo.model.totales.Totales;
+import ar.com.textillevel.gui.modulos.odt.acciones.AccionBorrarPiezasSinSalidaODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionBorrarSecuenciaODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionCargarSecuenciaDeTrabajoODT;
 import ar.com.textillevel.gui.modulos.odt.acciones.AccionDarSalidaPiezasODT;
@@ -46,6 +47,7 @@ public class BuilderAccionesODT implements IBuilderAcciones<ODTTO>,
 		accionesCreacion.add(new AccionImprimirODT());
 		accionesCreacion.add(new AccionBorrarSecuenciaODT());
 		accionesCreacion.add(new AccionDarSalidaPiezasODT());
+		accionesCreacion.add(new AccionBorrarPiezasSinSalidaODT());
 		acciones.addElementGroup("Acciones",accionesCreacion);
 		return acciones;
 	}

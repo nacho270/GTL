@@ -322,12 +322,16 @@ public class OrdenDeTrabajo implements Serializable {
 
 	@Transient
 	public boolean yaTuvoSalidaCompletamente() {
+		return contarDeAcuerdoASalida(false) == 0;
+	}
+
+	@Transient
+	public int contarDeAcuerdoASalida(boolean conSalida) {
+		int cant = 0;
 		for(PiezaODT p : getPiezas()) {
-			if(p.getPiezasSalida().isEmpty()) {
-				return false;
-			}
+			cant += (conSalida && p.tieneSalida() || !conSalida && !p.tieneSalida()) ? 1 : 0;
 		}
-		return true;
+		return cant;
 	}
 
 }
