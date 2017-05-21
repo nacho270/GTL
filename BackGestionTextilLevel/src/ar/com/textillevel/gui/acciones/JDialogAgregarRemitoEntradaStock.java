@@ -94,11 +94,7 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 	private JRadioButton rbtOpcionConPiezasODT;
 	private JRadioButton rbtOpcionSinPiezasODT;
 
-	private JTextField txtLocalidad;
-	private JTextField txtDireccion;
 	private JPanel panelDatosFactura;
-	private JTextField txtCUIT;
-	private JTextField txtCondicionIVA;
 	private boolean modoConsulta;
 	private List<OrdenDeTrabajo> odtList;	
 
@@ -133,17 +129,6 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 		} else {
 			getTxtFechaEmision().setFecha(DateUtil.getHoy());
 		}
-		getTxtCuit().setText(cliente.getCuit());
-		if(cliente.getDireccionReal() != null) {
-			getTxtDireccion().setText(cliente.getDireccionReal().getDireccion());
-			if(cliente.getDireccionReal().getLocalidad() != null) {
-				getTxtLocalidad().setText(cliente.getDireccionReal().getLocalidad().getNombreLocalidad());
-			}
-		}
-		if(cliente.getPosicionIva() != null) {
-			getTxtCondicionIVA().setText(cliente.getPosicionIva().getDescripcion());
-		}
-		
 		getCmbArticulo().setSelectedItem(remitoEntrada.getArticuloStock());
 		for(OrdenDeTrabajo odt : odtList) {
 			getPanTablaPieza().agregarODTEnMenu(odt);
@@ -255,28 +240,8 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 			panelDatosCliente.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 			panelDatosCliente.add(new JLabel("Señor/es: "), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosCliente.add(getTxtRazonSocial(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
-			panelDatosCliente.add(new JLabel("Direccion: "), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelDatosCliente.add(getTxtDireccion(), GenericUtils.createGridBagConstraints(1, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelDatosCliente.add(new JLabel("Localidad: "), GenericUtils.createGridBagConstraints(2, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelDatosCliente.add(getTxtLocalidad(), GenericUtils.createGridBagConstraints(3, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		return panelDatosCliente;
-	}
-
-	private JTextField getTxtLocalidad() {
-		if(txtLocalidad == null) {
-			txtLocalidad = new JTextField();
-			txtLocalidad.setEditable(false);
-		}
-		return txtLocalidad;
-	}
-
-	private JTextField getTxtDireccion() {
-		if(txtDireccion == null) {
-			txtDireccion = new JTextField();
-			txtDireccion.setEditable(false);
-		}
-		return txtDireccion;
 	}
 
 	private JPanel getPanelDatosFactura() {
@@ -284,10 +249,6 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 			panelDatosFactura = new JPanel();
 			panelDatosFactura.setLayout(new GridBagLayout());
 			panelDatosFactura.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-			panelDatosFactura.add(new JLabel("IVA: "), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelDatosFactura.add(getTxtCondicionIVA(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panelDatosFactura.add(new JLabel("C.U.I.T: "), GenericUtils.createGridBagConstraints(2, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panelDatosFactura.add(getTxtCuit(), GenericUtils.createGridBagConstraints(3, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelDatosFactura.add(new JLabel("Artículo/Tela: "), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosFactura.add(getCmbArticulo(), GenericUtils.createGridBagConstraints(1, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panelDatosFactura.add(new JLabel("Remito Nº: "), GenericUtils.createGridBagConstraints(2, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
@@ -313,22 +274,6 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 			GuiUtil.llenarCombo(cmbArticulo, getArticuloFacade().getAllOrderByName(), true);
 		}
 		return cmbArticulo;
-	}
-
-	private JTextField getTxtCuit() {
-		if(txtCUIT == null) {
-			txtCUIT = new JTextField();
-			txtCUIT.setEditable(false);
-		}
-		return txtCUIT;
-	}
-
-	private JTextField getTxtCondicionIVA() {
-		if(txtCondicionIVA == null) {
-			txtCondicionIVA = new JTextField();
-			txtCondicionIVA.setEditable(false);
-		}
-		return txtCondicionIVA;
 	}
 
 	private JButton getBtnSelProductos() {

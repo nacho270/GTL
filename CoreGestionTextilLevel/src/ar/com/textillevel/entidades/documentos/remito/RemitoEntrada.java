@@ -38,7 +38,9 @@ public class RemitoEntrada extends Remito {
 	private Tarima tarima;
 	private Boolean enPalet;
 	private String control;
-
+	private String observacionesODT;
+	private String articuloCliente;
+	
 	public RemitoEntrada() {
 		this.productoArticuloList = new ArrayList<ProductoArticulo>();
 	}
@@ -141,6 +143,24 @@ public class RemitoEntrada extends Remito {
 		this.control = control;
 	}
 	
+	@Column(name="A_OBSERVACIONES_ODT")
+	public String getObservacionesODT() {
+		return observacionesODT;
+	}
+
+	public void setObservacionesODT(String observacionesODT) {
+		this.observacionesODT = observacionesODT;
+	}
+
+	@Column(name="A_ARTICULO_CLIENTE")
+	public String getArticuloCliente() {
+		return articuloCliente;
+	}
+
+	public void setArticuloCliente(String articuloCliente) {
+		this.articuloCliente = articuloCliente;
+	}
+	
 	@Transient
 	public void recalcularOrdenes() {
 		int ordenPieza = 1;
@@ -180,5 +200,4 @@ public class RemitoEntrada extends Remito {
 	public boolean isRemito01() {
 		return getArticuloStock() != null && getProveedor() == null && getPrecioMatPrima() == null;
 	}
-
 }
