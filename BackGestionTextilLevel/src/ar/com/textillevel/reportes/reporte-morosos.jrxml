@@ -2,6 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte-morosos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<parameter name="TOTAL_DEUDA" class="java.lang.String"/>
 	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="IS_TEST" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[new java.lang.Boolean(false)]]></defaultValueExpression>
+	</parameter>
 	<field name="razonSocial" class="java.lang.String"/>
 	<field name="montoDeuda" class="java.lang.String"/>
 	<title>
@@ -25,6 +28,12 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TITULO}]]></textFieldExpression>
 			</textField>
+			<image hAlign="Center">
+				<reportElement x="6" y="0" width="56" height="30">
+					<printWhenExpression><![CDATA[new Boolean($P{IS_TEST}.equals(java.lang.Boolean.FALSE))]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA["ar/com/textillevel/imagenes/logotl-impresion-recibo.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>

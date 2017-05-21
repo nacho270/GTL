@@ -194,6 +194,7 @@ public class JDialogInformeClientesMorosos extends JDialog {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("TOTAL_DEUDA", getTxtTotalDeuda().getText());
 		map.put("TITULO", getTipoInforme()==ETipoInformeDeuda.CLIENTE?"DE CLIENTES":"CON PROVEEDORES");
+		map.put("IS_TEST", GenericUtils.isSistemaTest());
 		return map;
 	}
 	
