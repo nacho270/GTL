@@ -59,6 +59,7 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionremito.ImpresionRemitoEntradaFichaHandler;
+import ar.com.textillevel.gui.acciones.odt.componentes.ODTLinkeableLabel;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.panels.PanComboConElementoOtro;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -120,6 +121,8 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
 	private TarimaFacadeRemote tarimaFacade;
 	private CondicionDeVenta condicionDeVenta;
+
+	private JPanel panODTs;
 
 	public JDialogAgregarRemitoEntrada(Frame owner, RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, boolean modoConsulta) {
 		super(owner);
@@ -348,10 +351,27 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			panSelProductos.setLayout(new GridBagLayout());
 			panSelProductos.add(getBtnSelProductos(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panSelProductos.add(getTxtProductos(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			if(modoConsulta && !odtList.isEmpty()) {
+				panSelProductos.add(getPanODTs(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 2, 1, 0, 0));
+			}
 		}
 		return panSelProductos;
 	}
 
+	private JPanel getPanODTs() {
+		if(panODTs == null) {
+			panODTs = new JPanel(new FlowLayout());
+			panODTs.add(new JLabel("ODTs: "));
+			for(OrdenDeTrabajo odt : odtList) {
+				ODTLinkeableLabel odtLL = new ODTLinkeableLabel(odt, "");
+				odtLL.setODT(odt);;
+				panODTs.add(odtLL);
+			}
+		}
+		return panODTs;
+	}
+	
+	
 	private JTextField getTxtProductos() {
 		if(txtProductos == null) {
 			txtProductos = new JTextField();

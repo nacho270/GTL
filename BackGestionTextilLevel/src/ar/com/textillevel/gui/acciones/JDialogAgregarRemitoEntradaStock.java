@@ -36,8 +36,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-import main.GTLGlobalCache;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWDateField;
@@ -57,10 +55,12 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.facade.api.remote.ArticuloFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
+import ar.com.textillevel.gui.acciones.odt.componentes.ODTLinkeableLabel;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JDialogAgregarRemitoEntradaStock extends JDialog {
 
@@ -90,6 +90,7 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 
 	private JPanel panelDatosCliente; 
 
+	private JPanel panODTs;
 	private JPanel panOpcionPiezasODT;
 	private JRadioButton rbtOpcionConPiezasODT;
 	private JRadioButton rbtOpcionSinPiezasODT;
@@ -102,6 +103,7 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 	private ArticuloFacadeRemote articuloFacade;
 
 	private JComboBox cmbArticulo;
+
 
 	public JDialogAgregarRemitoEntradaStock(Frame owner, RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, boolean modoConsulta) {
 		super(owner);
@@ -195,8 +197,13 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 
 			panDetalle.add(getBtnSelProductos(), GenericUtils.createGridBagConstraints(0, 4,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panDetalle.add(getTxtProductos(), GenericUtils.createGridBagConstraints(1, 4, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 5, 1, 1, 0));
-
-			panDetalle.add(getPanTablaPieza(), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 6, 1, 1, 1));
+			
+			boolean modoConsultaYExistenODTs = modoConsulta && !odtList.isEmpty();
+			if(modoConsultaYExistenODTs) {
+				panDetalle.add(getPanODTs(), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 2, 1, 0, 0));
+			}
+			
+			panDetalle.add(getPanTablaPieza(), GenericUtils.createGridBagConstraints(0, modoConsultaYExistenODTs ? 6 : 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 6, 1, 1, 1));
 		}
 	
 		GuiUtil.setEstadoPanel(panDetalle, !modoConsulta);
@@ -204,6 +211,19 @@ public class JDialogAgregarRemitoEntradaStock extends JDialog {
 		return panDetalle;
 	}
 
+	private JPanel getPanODTs() {
+		if(panODTs == null) {
+			panODTs = new JPanel(new FlowLayout());
+			panODTs.add(new JLabel("ODTs: "));
+			for(OrdenDeTrabajo odt : odtList) {
+				ODTLinkeableLabel odtLL = new ODTLinkeableLabel(odt, "");
+				odtLL.setODT(odt);;
+				panODTs.add(odtLL);
+			}
+		}
+		return panODTs;
+	}
+	
 	private JPanel getPanOpcionPiezasODT() {
 		if(panOpcionPiezasODT == null) {
 			panOpcionPiezasODT = new JPanel();

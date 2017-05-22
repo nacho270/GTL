@@ -9,6 +9,9 @@ public class AccionDobleClickRemitoEntrada extends AccionAdicional<RemitoEntrada
 
 	@Override
 	protected void update(AccionEvent<RemitoEntrada> e) {
+		if(e.getSelectedElements().isEmpty()) {
+			return;
+		}
 		OperacionSobreRemitoEntradaHandler handler = new OperacionSobreRemitoEntradaHandler(e.getSource().getFrame(), e.getSelectedElements().get(0), true);
 		handler.showRemitoEntradaDialog();
 	}

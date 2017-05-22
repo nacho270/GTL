@@ -13,6 +13,9 @@ public class AccionDobleClickODT extends AccionAdicional<ODTTO> {
 
 	@Override
 	protected void update(AccionEvent<ODTTO> e) {
+		if(e.getSelectedElements().isEmpty()) {
+			return;
+		}
 		ODTTO odtto = e.getSelectedElements().get(0);
 		OrdenDeTrabajo ordenDeTrabajo = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class).getByIdEager(odtto.getId());
 		JDialogVisualizarDetalleODT v = new JDialogVisualizarDetalleODT(e.getSource().getFrame(), ordenDeTrabajo);
