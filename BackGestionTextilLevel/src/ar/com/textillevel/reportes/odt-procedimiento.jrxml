@@ -337,23 +337,23 @@
 			</staticText>
 			<subreport>
 				<reportElement x="16" y="38" width="549" height="41"/>
-				<subreportParameter name="RESUMEN_SECTOR_HUMEDO">
-					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_HUMEDO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="RESUMEN_ALGODON">
-					<subreportParameterExpression><![CDATA[$P{RESUMEN_ALGODON}]]></subreportParameterExpression>
+				<subreportParameter name="RESUMEN_POLIESTER">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_POLIESTER}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="con">
 					<subreportParameterExpression><![CDATA[$P{con}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="RESUMEN_QUIMICOS">
-					<subreportParameterExpression><![CDATA[$P{RESUMEN_QUIMICOS}]]></subreportParameterExpression>
+				<subreportParameter name="RESUMEN_ALGODON">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_ALGODON}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="RESUMEN_POLIESTER">
-					<subreportParameterExpression><![CDATA[$P{RESUMEN_POLIESTER}]]></subreportParameterExpression>
+				<subreportParameter name="RESUMEN_SECTOR_HUMEDO">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_HUMEDO}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="RESUMEN_SECTOR_ESTAMPADO">
 					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_ESTAMPADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="RESUMEN_QUIMICOS">
+					<subreportParameterExpression><![CDATA[$P{RESUMEN_QUIMICOS}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="COLOR">
 					<subreportParameterExpression><![CDATA[$P{COLOR}]]></subreportParameterExpression>
@@ -362,18 +362,28 @@
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_resumen.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="65">
-			<subreport>
-				<reportElement x="16" y="10" width="549" height="45"/>
-				<subreportParameter name="con">
-					<subreportParameterExpression><![CDATA[$P{con}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="RESUMEN_SECTOR_SECO">
-					<subreportParameterExpression><![CDATA[$P{RESUMEN_SECTOR_SECO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[$P{con}]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "odt-procedimiento_resumen_seco.jasper"]]></subreportExpression>
-			</subreport>
+		<band height="99">
+			<staticText>
+				<reportElement x="200" y="0" width="146" height="29"/>
+				<textElement>
+					<font size="20" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[SECTOR SECO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="179" y="29" width="200" height="58"/>
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_SECTOR_SECO}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="50">
 			<subreport>

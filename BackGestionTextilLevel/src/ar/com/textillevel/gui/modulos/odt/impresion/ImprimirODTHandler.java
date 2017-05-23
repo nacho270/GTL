@@ -49,7 +49,7 @@ public class ImprimirODTHandler {
 	private static final String ARCHIVO_JASPER_PROCEDIMIENTO = "/ar/com/textillevel/reportes/odt-procedimiento.jasper";
 	private static final String ARCHIVO_JASPER_RESUMEN_ARTICULO = "/ar/com/textillevel/reportes/odt-procedimiento_resumen_x_articulo.jasper";
 //	private Frame frameOwner;
-//	private Dialog dialogOwner;
+	private Window dialogOwner;
 	private final OrdenDeTrabajo odt;
 	private EFormaImpresionODT formaImpresion;
 	private FormulaCliente formulaCliente;
@@ -113,7 +113,7 @@ public class ImprimirODTHandler {
 	
 	public ImprimirODTHandler(OrdenDeTrabajo odt, Dialog dialogOwner) {
 		this.odt = odt;
-//		this.dialogOwner = dialogOwner;
+		this.dialogOwner = dialogOwner;
 		formaImpresion = seleccionarFormaImpresion(dialogOwner);
 	}
 
@@ -181,10 +181,12 @@ public class ImprimirODTHandler {
 				Integer cantidadAImprimir = Integer.valueOf(cantidad);
 				JasperHelper.imprimirReporte(jasperPrint, true, true, cantidadAImprimir);
 				
-				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_PROCEDIMIENTO);
-				JasperPrint jasperPrint2 = JasperHelper.fillReport(reporte, odtto.getMapaParametrosSecuencia(this.odt.getSecuenciaDeTrabajo().getPasos()), Collections.singletonList(odtto));
-				cantidadAImprimir = Integer.valueOf(cantidad);
-				JasperHelper.imprimirReporte(jasperPrint2, true, true, cantidadAImprimir);
+				if (FWJOptionPane.showQuestionMessage(dialogOwner, "Continuar?", "Ingrese la siguiente hoja") == FWJOptionPane.YES_OPTION) {
+					reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_PROCEDIMIENTO);
+					JasperPrint jasperPrint2 = JasperHelper.fillReport(reporte, odtto.getMapaParametrosSecuencia(this.odt.getSecuenciaDeTrabajo().getPasos()), Collections.singletonList(odtto));
+					cantidadAImprimir = Integer.valueOf(cantidad);
+					JasperHelper.imprimirReporte(jasperPrint2, true, true, cantidadAImprimir);
+				}
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
@@ -397,10 +399,10 @@ public class ImprimirODTHandler {
 					if(odt.getSecuenciaDeTrabajo()!=null){
 						this.resumenAlgodon = InstruccionProcedimientoRenderer.getResumenAlgodon(odt.getSecuenciaDeTrabajo().getPasos(), true);
 						this.resumenPoliester = InstruccionProcedimientoRenderer.getResumenPoliester(odt.getSecuenciaDeTrabajo().getPasos(), true);
-						this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+						this.resumenQuimicos = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_HUMEDO,odt.getSecuenciaDeTrabajo().getPasos(), true, false);
 								//InstruccionProcedimientoRenderer.getResumenQuimicos(odt.getSecuenciaDeTrabajo().getPasos());
 						if(formaImp == EFormaImpresionODT.AMBOS || formaImp == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
-							this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos(), true);
+							this.resumenSectorSeco = InstruccionProcedimientoRenderer.getResumenSectorHTML(ESectorMaquina.SECTOR_SECO,odt.getSecuenciaDeTrabajo().getPasos(), true, false);
 						}
 					}
 				}
