@@ -17,6 +17,7 @@ import javax.persistence.Transient;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
@@ -40,7 +41,8 @@ public class RemitoEntrada extends Remito {
 	private String control;
 	private String observacionesODT;
 	private String articuloCliente;
-	
+	private Integer idSituacionODT;
+
 	public RemitoEntrada() {
 		this.productoArticuloList = new ArrayList<ProductoArticulo>();
 	}
@@ -200,4 +202,29 @@ public class RemitoEntrada extends Remito {
 	public boolean isRemito01() {
 		return getArticuloStock() != null && getProveedor() == null && getPrecioMatPrima() == null;
 	}
+
+	@Transient
+	public ESituacionODTRE getSituacionODT() {
+		if(getIdSituacionODT() == null) {
+			return ESituacionODTRE.CON_ODT;
+		}
+		return ESituacionODTRE.getById(getIdSituacionODT());
+	}
+
+	@Column(name = "A_ID_SITUACION_ODT", nullable=true)
+	private Integer getIdSituacionODT() {
+		return idSituacionODT;
+	}
+
+	private void setIdSituacionODT(Integer idSituacionODT) {
+		this.idSituacionODT = idSituacionODT;
+	}
+
+	public void setSituacion(ESituacionODTRE situacion) {
+		if (situacion == null) {
+			this.setIdSituacionODT(null);
+		}
+		setIdSituacionODT(situacion.getId());
+	}
+
 }

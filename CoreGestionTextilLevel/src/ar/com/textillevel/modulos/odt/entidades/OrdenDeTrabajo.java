@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,12 +17,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import org.hibernate.annotations.Cascade;
-
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.secuencia.odt.SecuenciaODT;
 import ar.com.textillevel.modulos.odt.entidades.workflow.TransicionODT;
@@ -41,6 +40,7 @@ public class OrdenDeTrabajo implements Serializable {
 	private RemitoEntrada remito;
 	private List<PiezaODT> piezas;
 	private ProductoArticulo productoArticulo;
+	private ProductoArticuloParcial productoParcial;
 	private String codigo;
 	private Timestamp fechaODT;
 	private Integer idEstadoODT;
@@ -59,7 +59,8 @@ public class OrdenDeTrabajo implements Serializable {
 
 	public OrdenDeTrabajo() {
 		this.piezas = new ArrayList<PiezaODT>();
-		this.setEstadoODT(EEstadoODT.PENDIENTE); 
+		this.setEstadoODT(EEstadoODT.PENDIENTE);
+		setProductoParcial(new ProductoArticuloParcial());
 	}
 
 	@Id
@@ -95,7 +96,7 @@ public class OrdenDeTrabajo implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name="F_PRODUCTO_ARTICULO_P_ID", nullable=false)
+	@JoinColumn(name="F_PRODUCTO_ARTICULO_P_ID", nullable=true)
 	public ProductoArticulo getProductoArticulo() {
 		return productoArticulo;
 	}
@@ -104,6 +105,14 @@ public class OrdenDeTrabajo implements Serializable {
 		this.productoArticulo = productoArticulo;
 	}
 	
+	public ProductoArticuloParcial getProductoParcial() {
+		return productoParcial;
+	}
+
+	public void setProductoParcial(ProductoArticuloParcial productoParcial) {
+		this.productoParcial = productoParcial;
+	}
+
 	@Column(name="A_CODIGO", nullable=false)
 	public String getCodigo() {
 		return codigo;
@@ -229,7 +238,7 @@ public class OrdenDeTrabajo implements Serializable {
 	@Override
 	@Transient
 	public String toString() {
-		return ODTCodigoHelper.getInstance().formatCodigo(getCodigo()) + "-" + getProductoArticulo() + (remito == null ? "" : (" - Remito : " + remito.getNroRemito()));
+		return ODTCodigoHelper.getInstance().formatCodigo(getCodigo()) + "-" + getIProductoParaODT() + (remito == null ? "" : (" - Remito : " + remito.getNroRemito()));
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
@@ -332,6 +341,17 @@ public class OrdenDeTrabajo implements Serializable {
 			cant += (conSalida && p.tieneSalida() || !conSalida && !p.tieneSalida()) ? 1 : 0;
 		}
 		return cant;
+	}
+
+	@Transient
+	public IProductoParaODT getIProductoParaODT() {
+		if(getProductoArticulo() != null) {
+			return getProductoArticulo();
+		} else if(getProductoParcial() != null && getProductoParcial().getArticulo() != null && getProductoParcial().getProducto() != null) {
+			return getProductoParcial();
+		} else {
+			return null;
+		}
 	}
 
 }

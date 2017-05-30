@@ -30,7 +30,7 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFactu
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRemitoSalidaProveedor;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Proveedor;
-import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 @Entity
@@ -170,12 +170,12 @@ public class RemitoSalida extends Remito implements Serializable {
 	}
 
 	@Transient
-	public List<ProductoArticulo> getProductoList() {
-		Set<ProductoArticulo> productoSet = new HashSet<ProductoArticulo>();
+	public List<IProductoParaODT> getProductoList() {
+		Set<IProductoParaODT> productoSet = new HashSet<IProductoParaODT>();
 		for(OrdenDeTrabajo odt : getOdts()) {
-			productoSet.add(odt.getProductoArticulo());
+			productoSet.add(odt.getIProductoParaODT());
 		}
-		return new ArrayList<ProductoArticulo>(productoSet);
+		return new ArrayList<IProductoParaODT>(productoSet);
 	}
 
 	@Override

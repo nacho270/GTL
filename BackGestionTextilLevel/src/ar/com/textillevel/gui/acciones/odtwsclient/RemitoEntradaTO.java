@@ -13,6 +13,8 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
     private java.math.BigDecimal anchoFinal;
 
+    private java.lang.String articuloCliente;
+
     private java.lang.String control;
 
     private java.lang.Long dateFechaEmision;
@@ -31,9 +33,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
     private java.lang.Integer idProveedor;
 
+    private java.lang.Integer idSituacionODT;
+
     private java.lang.Integer idTarima;
 
     private java.lang.Integer nroRemito;
+
+    private java.lang.String observacionesODT;
 
     private ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts;
 
@@ -49,6 +55,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
     public RemitoEntradaTO(
            java.math.BigDecimal anchoCrudo,
            java.math.BigDecimal anchoFinal,
+           java.lang.String articuloCliente,
            java.lang.String control,
            java.lang.Long dateFechaEmision,
            java.lang.Boolean enPalet,
@@ -58,14 +65,17 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            java.lang.Integer idCondicionDeVenta,
            java.lang.Integer idPrecioMatPrima,
            java.lang.Integer idProveedor,
+           java.lang.Integer idSituacionODT,
            java.lang.Integer idTarima,
            java.lang.Integer nroRemito,
+           java.lang.String observacionesODT,
            ar.com.textillevel.gui.acciones.odtwsclient.OdtEagerTO[] odts,
            java.math.BigDecimal pesoTotal,
            ar.com.textillevel.gui.acciones.odtwsclient.PiezaRemitoTO[] piezas,
            java.lang.Integer[] productoArticuloIdsList) {
            this.anchoCrudo = anchoCrudo;
            this.anchoFinal = anchoFinal;
+           this.articuloCliente = articuloCliente;
            this.control = control;
            this.dateFechaEmision = dateFechaEmision;
            this.enPalet = enPalet;
@@ -75,8 +85,10 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            this.idCondicionDeVenta = idCondicionDeVenta;
            this.idPrecioMatPrima = idPrecioMatPrima;
            this.idProveedor = idProveedor;
+           this.idSituacionODT = idSituacionODT;
            this.idTarima = idTarima;
            this.nroRemito = nroRemito;
+           this.observacionesODT = observacionesODT;
            this.odts = odts;
            this.pesoTotal = pesoTotal;
            this.piezas = piezas;
@@ -121,6 +133,26 @@ public class RemitoEntradaTO  implements java.io.Serializable {
      */
     public void setAnchoFinal(java.math.BigDecimal anchoFinal) {
         this.anchoFinal = anchoFinal;
+    }
+
+
+    /**
+     * Gets the articuloCliente value for this RemitoEntradaTO.
+     * 
+     * @return articuloCliente
+     */
+    public java.lang.String getArticuloCliente() {
+        return articuloCliente;
+    }
+
+
+    /**
+     * Sets the articuloCliente value for this RemitoEntradaTO.
+     * 
+     * @param articuloCliente
+     */
+    public void setArticuloCliente(java.lang.String articuloCliente) {
+        this.articuloCliente = articuloCliente;
     }
 
 
@@ -305,6 +337,26 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
 
     /**
+     * Gets the idSituacionODT value for this RemitoEntradaTO.
+     * 
+     * @return idSituacionODT
+     */
+    public java.lang.Integer getIdSituacionODT() {
+        return idSituacionODT;
+    }
+
+
+    /**
+     * Sets the idSituacionODT value for this RemitoEntradaTO.
+     * 
+     * @param idSituacionODT
+     */
+    public void setIdSituacionODT(java.lang.Integer idSituacionODT) {
+        this.idSituacionODT = idSituacionODT;
+    }
+
+
+    /**
      * Gets the idTarima value for this RemitoEntradaTO.
      * 
      * @return idTarima
@@ -341,6 +393,26 @@ public class RemitoEntradaTO  implements java.io.Serializable {
      */
     public void setNroRemito(java.lang.Integer nroRemito) {
         this.nroRemito = nroRemito;
+    }
+
+
+    /**
+     * Gets the observacionesODT value for this RemitoEntradaTO.
+     * 
+     * @return observacionesODT
+     */
+    public java.lang.String getObservacionesODT() {
+        return observacionesODT;
+    }
+
+
+    /**
+     * Sets the observacionesODT value for this RemitoEntradaTO.
+     * 
+     * @param observacionesODT
+     */
+    public void setObservacionesODT(java.lang.String observacionesODT) {
+        this.observacionesODT = observacionesODT;
     }
 
 
@@ -465,6 +537,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
             ((this.anchoFinal==null && other.getAnchoFinal()==null) || 
              (this.anchoFinal!=null &&
               this.anchoFinal.equals(other.getAnchoFinal()))) &&
+            ((this.articuloCliente==null && other.getArticuloCliente()==null) || 
+             (this.articuloCliente!=null &&
+              this.articuloCliente.equals(other.getArticuloCliente()))) &&
             ((this.control==null && other.getControl()==null) || 
              (this.control!=null &&
               this.control.equals(other.getControl()))) &&
@@ -492,12 +567,18 @@ public class RemitoEntradaTO  implements java.io.Serializable {
             ((this.idProveedor==null && other.getIdProveedor()==null) || 
              (this.idProveedor!=null &&
               this.idProveedor.equals(other.getIdProveedor()))) &&
+            ((this.idSituacionODT==null && other.getIdSituacionODT()==null) || 
+             (this.idSituacionODT!=null &&
+              this.idSituacionODT.equals(other.getIdSituacionODT()))) &&
             ((this.idTarima==null && other.getIdTarima()==null) || 
              (this.idTarima!=null &&
               this.idTarima.equals(other.getIdTarima()))) &&
             ((this.nroRemito==null && other.getNroRemito()==null) || 
              (this.nroRemito!=null &&
               this.nroRemito.equals(other.getNroRemito()))) &&
+            ((this.observacionesODT==null && other.getObservacionesODT()==null) || 
+             (this.observacionesODT!=null &&
+              this.observacionesODT.equals(other.getObservacionesODT()))) &&
             ((this.odts==null && other.getOdts()==null) || 
              (this.odts!=null &&
               java.util.Arrays.equals(this.odts, other.getOdts()))) &&
@@ -527,6 +608,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         if (getAnchoFinal() != null) {
             _hashCode += getAnchoFinal().hashCode();
         }
+        if (getArticuloCliente() != null) {
+            _hashCode += getArticuloCliente().hashCode();
+        }
         if (getControl() != null) {
             _hashCode += getControl().hashCode();
         }
@@ -554,11 +638,17 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         if (getIdProveedor() != null) {
             _hashCode += getIdProveedor().hashCode();
         }
+        if (getIdSituacionODT() != null) {
+            _hashCode += getIdSituacionODT().hashCode();
+        }
         if (getIdTarima() != null) {
             _hashCode += getIdTarima().hashCode();
         }
         if (getNroRemito() != null) {
             _hashCode += getNroRemito().hashCode();
+        }
+        if (getObservacionesODT() != null) {
+            _hashCode += getObservacionesODT().hashCode();
         }
         if (getOdts() != null) {
             for (int i=0;
@@ -617,6 +707,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         elemField.setFieldName("anchoFinal");
         elemField.setXmlName(new javax.xml.namespace.QName("", "anchoFinal"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "decimal"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("articuloCliente");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "articuloCliente"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
@@ -684,6 +781,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("idSituacionODT");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "idSituacionODT"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("idTarima");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idTarima"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
@@ -694,6 +798,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         elemField.setFieldName("nroRemito");
         elemField.setXmlName(new javax.xml.namespace.QName("", "nroRemito"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("observacionesODT");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "observacionesODT"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

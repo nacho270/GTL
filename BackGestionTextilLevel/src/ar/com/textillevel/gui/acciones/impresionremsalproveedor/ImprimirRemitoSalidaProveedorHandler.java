@@ -11,23 +11,23 @@ import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRemitoSalidaProveedor;
-import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler.PiezaRemitoTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ImprimirRemitoSalidaProveedorHandler {
@@ -276,7 +276,7 @@ public class ImprimirRemitoSalidaProveedorHandler {
 		
 		private String getProceso(RemitoSalida remito) {
 			Set<String> procesos = new HashSet<String>();
-			for(ProductoArticulo p : remito.getProductoList()) {
+			for(IProductoParaODT p : remito.getProductoList()) {
 				procesos.add(p.toString());
 			}
 			return StringUtil.getCadena(procesos, ", ");

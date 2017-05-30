@@ -50,6 +50,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO;
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
@@ -143,9 +144,9 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 			getTxtCondicionVenta().setText(odts.get(0).getRemito().getCondicionDeVenta().getNombre());
 		}
 		getTxtCodODT().setText(StringUtil.getCadena(extractCodigos(odts), ", "));
-		Set<ProductoArticulo> productoList = new HashSet<ProductoArticulo>();
+		Set<IProductoParaODT> productoList = new HashSet<IProductoParaODT>();
 		for(OrdenDeTrabajo odt : odts) {
-			productoList.add(odt.getProductoArticulo());
+			productoList.add(odt.getIProductoParaODT());
 		}
 		getTxtProductos().setText(StringUtil.getCadena(productoList, ", "));
 		getTxtRemitosEntrada().setText(StringUtil.getCadena(extractRemitosEntrada(odts), ", "));
@@ -783,7 +784,7 @@ public class JDialogAgregarRemitoSalidaStock extends JDialog {
 				return "Debe ingresar el número de pieza";
 			}
 			Articulo articulo = (Articulo)getTabla().getValueAt(fila, COL_ARTICULO);
-			if(!articulo.equals(odt.getProductoArticulo().getArticulo())) {
+			if(!articulo.equals(odt.getIProductoParaODT().getArticulo())) {
 				return "La tela del proceso de la ODT asignada debe ser la misma que la de la pieza original. ";
 			}
 			return null;

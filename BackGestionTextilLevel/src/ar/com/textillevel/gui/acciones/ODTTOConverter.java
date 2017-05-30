@@ -7,11 +7,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
 import ar.com.textillevel.entidades.ventas.materiaprima.Formulable;
 import ar.com.textillevel.entidades.ventas.materiaprima.Pigmento;
 import ar.com.textillevel.entidades.ventas.materiaprima.Quimico;
@@ -22,6 +27,7 @@ import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.MateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProductoArticuloFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ProveedorFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
@@ -68,13 +74,11 @@ import ar.com.textillevel.modulos.odt.facade.api.remote.TransicionODTFacadeRemot
 import ar.com.textillevel.modulos.terminal.facade.api.remote.TerminalFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-
 public final class ODTTOConverter {
 
 	private static final MaquinaFacadeRemote maquinaFacade = GTLBeanFactory.getInstance().getBean2(MaquinaFacadeRemote.class);
 	private static final ProductoArticuloFacadeRemote productoArticuloFacade = GTLBeanFactory.getInstance().getBean2(ProductoArticuloFacadeRemote.class);
+	private static final ProductoFacadeRemote productoFacade = GTLBeanFactory.getInstance().getBean2(ProductoFacadeRemote.class);
 	private static final PrecioMateriaPrimaFacadeRemote precioMPFacade = GTLBeanFactory.getInstance().getBean2(PrecioMateriaPrimaFacadeRemote.class);
 	private static final ClienteFacadeRemote clienteFacade = GTLBeanFactory.getInstance().getBean2(ClienteFacadeRemote.class);
 	private static final ProveedorFacadeRemote proveedorFacade = GTLBeanFactory.getInstance().getBean2(ProveedorFacadeRemote.class);
@@ -107,6 +111,13 @@ public final class ODTTOConverter {
 		odt.setFechaEnProcesoUltSector(odtEagerTO.getLongEnProcesoUltSector() == null ? null : new Timestamp(odtEagerTO.getLongEnProcesoUltSector()));
 		odt.setFechaFinalizadoUltSector(odtEagerTO.getLongFinalizadoUltSector() == null ? null : new Timestamp(odtEagerTO.getLongFinalizadoUltSector()));
 		
+		odt.setProductoParcial(new ProductoArticuloParcial());
+		if(odtEagerTO.getIdProducto() != null) {
+			odt.getProductoParcial().setProducto(productoFacade.getById(odtEagerTO.getIdProducto()));
+		}
+		if(odtEagerTO.getIdArticulo() != null) {
+			odt.getProductoParcial().setArticulo(articuloFacade.getById(odtEagerTO.getIdArticulo()));
+		}
 		if(setearIDEnNULL) {// Para que quede claro que no quiero ID del otro lado porque se tiene que persistir de cero
 			odt.setId(null);
 		} else {
@@ -158,7 +169,9 @@ public final class ODTTOConverter {
 		remitoEntrada.setControl(remitoTO.getControl());
 		remitoEntrada.setFechaEmision(new Date(remitoTO.getDateFechaEmision()));
 		remitoEntrada.setPesoTotal(remitoTO.getPesoTotal());
-		remitoEntrada.setControl(remitoTO.getControl());
+		remitoEntrada.setObservacionesODT(remitoTO.getObservacionesODT());
+		remitoEntrada.setArticuloCliente(remitoTO.getArticuloCliente());
+		remitoEntrada.setSituacion(ESituacionODTRE.getById(remitoTO.getIdSituacionODT()));
 		if (remitoTO.getIdCliente() != null) {
 			remitoEntrada.setCliente(clienteFacade.getById(remitoTO.getIdCliente()));
 		}
@@ -433,6 +446,9 @@ public final class ODTTOConverter {
 		remitoTO.setIdTarima(re.getTarima() != null ? re.getTarima().getId() : null);
 		remitoTO.setNroRemito(re.getNroRemito());
 		remitoTO.setPesoTotal(re.getPesoTotal());
+		remitoTO.setObservacionesODT(re.getObservacionesODT());
+		remitoTO.setArticuloCliente(re.getArticuloCliente());
+		remitoTO.setIdSituacionODT(re.getSituacionODT().getId());
 		if (re.getProductoArticuloList() != null && !re.getProductoArticuloList().isEmpty()) {
 			remitoTO.setProductoArticuloIdsList(
 					FluentIterable.from(re.getProductoArticuloList()).transform(new Function<ProductoArticulo, Integer>() {
@@ -485,6 +501,12 @@ public final class ODTTOConverter {
 		}
 		if (odt.getSecuenciaDeTrabajo() != null) {
 			odtto.setSecuenciaDeTrabajo(secuenciaTOWsFromEntity(odt.getSecuenciaDeTrabajo()));
+		}
+		if(odt.getProductoParcial() != null && odt.getProductoParcial().getProducto() != null) {
+			odtto.setIdProducto(odt.getProductoParcial().getProducto().getId());
+		}
+		if(odt.getProductoParcial() != null && odt.getProductoParcial().getArticulo() != null) {
+			odtto.setIdArticulo(odt.getProductoParcial().getArticulo().getId());
 		}
 		List<TransicionODT> transiciones = transicionODTFacade.getAllEagerByODT(odt.getId());
 		if(!transiciones.isEmpty()) {

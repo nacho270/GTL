@@ -1,8 +1,8 @@
 package ar.com.textillevel.gui.modulos.odt.util;
 
 import java.math.BigDecimal;
-
 import ar.com.textillevel.entidades.enums.ETipoProducto;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.articulos.Color;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -33,30 +33,34 @@ public class ODTDatosMostradoHelper {
 		if(getColor() != null) {
 			return getColor().getNombre();
 		} else {
-			return "";
+			return "A definir";
 		}
 	}
 
 	public Color getColor() {
-		if(odt.getProductoArticulo().getTipo() == ETipoProducto.TENIDO) {
-			return odt.getProductoArticulo().getColor();
-		} else if(odt.getProductoArticulo().getTipo() == ETipoProducto.ESTAMPADO) {
-			return odt.getProductoArticulo().getVariante().getColorFondo();
+		ETipoProducto tipo = odt.getIProductoParaODT().getTipo();
+		if(tipo == ETipoProducto.TENIDO) {
+			return odt.getProductoArticulo() == null ? null : odt.getProductoArticulo().getColor();
+		} else if(tipo == ETipoProducto.ESTAMPADO) {
+			return odt.getProductoArticulo() == null ? null : odt.getProductoArticulo().getVariante().getColorFondo();
 		} else {
 			return null;
 		}
 	}
 
 	public String getDescArticulo() {
-		return odt.getProductoArticulo().getArticulo() != null ? odt.getProductoArticulo().getArticulo().getNombre() : odt.getProductoArticulo().getArticulo().getDescripcion();
+		IProductoParaODT productoParaODT = odt.getIProductoParaODT();
+		return productoParaODT.getArticulo() != null ? productoParaODT.getArticulo().getNombre() : productoParaODT.getArticulo().getDescripcion();
 	}
 
 	public String getDescTipoArticulo() {
-		return odt.getProductoArticulo().getArticulo() == null ? "" : odt.getProductoArticulo().getArticulo().getTipoArticulo().getSigla();
+		IProductoParaODT productoParaODT = odt.getIProductoParaODT();
+		return productoParaODT.getArticulo() == null ? "" : productoParaODT.getArticulo().getTipoArticulo().getSigla();
 	}
 
 	public String getDescAnchoArticulo() {
-		return odt.getProductoArticulo().getArticulo() == null ? "" : odt.getProductoArticulo().getArticulo().getAncho().toString();
+		IProductoParaODT productoParaODT = odt.getIProductoParaODT();
+		return productoParaODT.getArticulo() == null ? "" : productoParaODT.getArticulo().getAncho().toString();
 	}
 
 	public String getDescGramaje() {

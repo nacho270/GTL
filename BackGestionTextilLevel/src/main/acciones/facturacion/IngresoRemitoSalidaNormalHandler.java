@@ -50,7 +50,7 @@ public class IngresoRemitoSalidaNormalHandler {
 		remitoSalida.setCliente(clienteElegido);
 		remitoSalida.setNroRemito(lastNroRemito);
 		boolean esReproceso = false;
-		if(odtList.size()==1 && (odtList.get(0).getProductoArticulo().getTipo()==ETipoProducto.REPROCESO_SIN_CARGO || odtList.get(0).getProductoArticulo().getTipo()==ETipoProducto.DEVOLUCION)) {
+		if(odtList.size()==1 && odtList.get(0).getIProductoParaODT() != null && (odtList.get(0).getIProductoParaODT().getTipo()==ETipoProducto.REPROCESO_SIN_CARGO || odtList.get(0).getIProductoParaODT().getTipo()==ETipoProducto.DEVOLUCION)) {
 			esReproceso = true;
 		}else{
 			remitoSalida.setNroFactura(docContableFacadeRemote.getProximoNroDocumentoContable(clienteElegido.getPosicionIva(), ETipoDocumento.FACTURA));

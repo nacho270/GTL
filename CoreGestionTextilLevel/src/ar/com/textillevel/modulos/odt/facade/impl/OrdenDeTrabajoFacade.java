@@ -19,11 +19,15 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
 import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
+import ar.com.textillevel.dao.api.local.RemitoEntradaDAOLocal;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.PrecioMateriaPrimaFacadeLocal;
@@ -95,6 +99,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	
 	@EJB
 	private PiezaODTDAOLocal piezaODTDAO;
+	
+	@EJB
+	private RemitoEntradaDAOLocal remitoDAO;
 	
 	@EJB
 	private NotificacionUsuarioFacadeLocal notificacionesFacadeFacade;
@@ -535,6 +542,33 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		int cantPiezasSinSalida = odt.contarDeAcuerdoASalida(false);
 		if(cantPiezasSinSalida == 0) {
 			throw new IllegalArgumentException("Para ejecutar esta operación la ODT tiene que tener al menos una pieza SIN salida.");
+		}
+	}
+
+	public OrdenDeTrabajo asignarProductoArticuloODT(OrdenDeTrabajo odt, ProductoArticulo productoArticulo, UsuarioSistema usuarioSistema) {
+		OrdenDeTrabajo odtDB = odtDAO.getById(odt.getId());
+		checkAsignarProductoArticuloODT(odtDB);
+		//limpio el PA parcial
+		if(odtDB.getProductoParcial() != null) {
+			odtDB.getProductoParcial().setArticulo(null);
+			odtDB.getProductoParcial().setProducto(null);
+		}
+		//actualizo el PA y sit ODT en el RE
+		RemitoEntrada re = remitoDAO.getById(odtDB.getRemito().getId());
+		if(!re.getProductoArticuloList().contains(productoArticulo)) {
+			re.getProductoArticuloList().add(productoArticulo);
+			remitoDAO.save(re);
+		}
+		re.setSituacion(ESituacionODTRE.CON_ODT);
+		//seteo el PA
+		odtDB.setProductoArticulo(productoArticulo);
+		auditoriaFacade.auditar(usuarioSistema.getUsrName(), "ASIG. PROD. ART. ODT " + odt.getCodigo() + " PA: " + productoArticulo.getId(), EnumTipoEvento.MODIFICACION, odt);
+		return odtDAO.save(odtDB);
+	}
+
+	private void checkAsignarProductoArticuloODT(OrdenDeTrabajo odt) {
+		if(odt.getProductoArticulo() != null) {
+			throw new IllegalArgumentException("La ODT ya tenía un producto articulo seteado: " + odt.getProductoArticulo());
 		}
 	}
 

@@ -50,7 +50,7 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 				}
 			}
 		}
-		remitoSalida.getProductoList().size();
+		remitoSalida.getOdts().size();
 		if (remitoSalida.getProveedor() != null) {
 			remitoSalida.getProveedor().getNombreCorto();
 			remitoSalida.getItems().size();

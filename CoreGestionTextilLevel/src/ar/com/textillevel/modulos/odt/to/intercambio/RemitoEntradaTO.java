@@ -33,6 +33,10 @@ public class RemitoEntradaTO implements Serializable {
 	private Integer idTarima; // Tarima esta federada
 	private Boolean enPalet;
 	private String control;
+	private String observacionesODT;
+	private String articuloCliente;
+	private Integer idSituacionODT;
+	
 
 	// Replica de ODTTO
 	private List<ODTEagerTO> odts;
@@ -50,6 +54,9 @@ public class RemitoEntradaTO implements Serializable {
 		this.anchoFinal = re.getAnchoFinal();
 		this.enPalet = re.getEnPalet();
 		this.control = re.getControl();
+		this.observacionesODT = re.getObservacionesODT();
+		this.articuloCliente = re.getArticuloCliente();
+		this.idSituacionODT = re.getSituacionODT().getId();
 
 		if (re.getCliente() != null) {
 			this.idCliente = re.getCliente().getId();
@@ -218,4 +225,29 @@ public class RemitoEntradaTO implements Serializable {
 	public void setOdts(List<ODTEagerTO> odts) {
 		this.odts = odts;
 	}
+
+	public String getObservacionesODT() {
+		return observacionesODT;
+	}
+
+	public void setObservacionesODT(String observacionesODT) {
+		this.observacionesODT = observacionesODT;
+	}
+
+	public String getArticuloCliente() {
+		return articuloCliente;
+	}
+
+	public void setArticuloCliente(String articuloCliente) {
+		this.articuloCliente = articuloCliente;
+	}
+
+	public Integer getIdSituacionODT() {
+		return idSituacionODT;
+	}
+
+	public void setIdSituacionODT(Integer idSituacionODT) {
+		this.idSituacionODT = idSituacionODT;
+	}
+
 }

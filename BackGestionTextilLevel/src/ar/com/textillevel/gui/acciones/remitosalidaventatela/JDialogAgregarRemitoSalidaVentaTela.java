@@ -52,6 +52,7 @@ import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO;
 import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO.EnumTipoPiezaRE;
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
@@ -256,9 +257,9 @@ public class JDialogAgregarRemitoSalidaVentaTela extends JDialog {
 			}
 		}
 		getTxtCodODT().setText(StringUtil.getCadena(extractCodigos(odts), ", "));
-		Set<ProductoArticulo> productoList = new HashSet<ProductoArticulo>();
+		Set<IProductoParaODT> productoList = new HashSet<IProductoParaODT>();
 		for(OrdenDeTrabajo odt : odts) {
-			productoList.add(odt.getProductoArticulo());
+			productoList.add(odt.getIProductoParaODT());
 		}
 		getTxtProductos().setText(StringUtil.getCadena(productoList, ", "));
 		getTxtRemitosEntrada().setText(StringUtil.getCadena(extractRemitosEntrada(odts), ", "));

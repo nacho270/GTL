@@ -89,10 +89,9 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 	}
 
 	private void setDatos() {
-		remitoEntrada.getProductoArticuloList().clear();
 		Cliente cliente = remitoEntrada.getCliente();
 		getTxtFechaEmision().setFecha(remitoEntrada.getFechaEmision());
-		getTxtProducto().setText(odt.getCodigo() + " / " + odt.getProductoArticulo().toString());
+		getTxtProducto().setText(odt.toString());
 		if(cliente.getDireccionReal() != null) {
 			getTxtNroCliente().setText(cliente.getNroCliente()+"");
 		}

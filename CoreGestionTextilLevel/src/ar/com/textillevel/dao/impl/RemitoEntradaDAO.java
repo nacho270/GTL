@@ -123,11 +123,10 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto) {
 		Query query = getEntityManager().createQuery("SELECT re " + 
 													"FROM RemitoEntrada re "
-													+ (producto == null ? "" : " LEFT JOIN FETCH re.productoArticuloList AS pa ")	
 													+ "WHERE 1=1 "
+													+ (producto == null ? "" : " AND exists (SELECT 1 FROM OrdenDeTrabajo odt left join odt.productoArticulo pa WHERE odt.remito.id = re.id AND (pa.producto = :producto OR odt.productoParcial.producto = :producto)) ")
 													+ "AND re.fechaEmision between :fechaDesde AND :fechaHasta "
 													+ (idCliente == null ? "" : " AND re.cliente.id = :idCliente ")
-													+ (producto == null ? ""  : " AND pa.producto = :producto ")
 													+ "ORDER BY re.fechaEmision ");
 		if(idCliente != null) {
 			query.setParameter("idCliente", idCliente);

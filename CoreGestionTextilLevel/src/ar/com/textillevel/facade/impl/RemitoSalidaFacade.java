@@ -37,6 +37,7 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaCreditoProv
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
+import ar.com.textillevel.entidades.documentos.remito.enums.EEstadoControlPiezaRemitoSalida;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemOtro;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemPrecioMateriaPrima;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRelacionContenedor;
@@ -558,7 +559,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				if(odt == null) {
 					articulo = prto.getArticulo();
 				} else {
-					articulo = odt.getProductoArticulo().getArticulo();
+					articulo = odt.getIProductoParaODT().getArticulo();
 				}
 				BigDecimal cant = articuloCantMap.get(articulo);
 				if(cant == null) {
@@ -700,10 +701,19 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 
 	public void marcarRemitoSalidaComoControlado(RemitoSalida rs, String nombreTerminal) {
 		RemitoSalida rsDB = getById(rs.getId());
+		checkMarcarComoControlado(rsDB);
 		rsDB.setControlado(true);
 		rsDB.setTerminalControl(nombreTerminal);
 		remitoSalidaDAOLocal.save(rsDB);
 		auditoriaFacade.auditar(nombreTerminal, "Control de remito de salida: " + rsDB.getNroRemito(), EnumTipoEvento.MODIFICACION, rs);		
+	}
+
+	private void checkMarcarComoControlado(RemitoSalida rs) {
+		for(PiezaRemito pr : rs.getPiezas()) {
+			if(pr.getEstadoControl() == null || pr.getEstadoControl() == EEstadoControlPiezaRemitoSalida.PENDIENTE) {
+				throw new IllegalArgumentException("No se puede marcar como controlado el remito ya que aún faltan controlar piezas.");
+			}
+		}
 	}
 
 	public List<RemitoSalida> getRemitosSalidaByODT(Integer idODT) {

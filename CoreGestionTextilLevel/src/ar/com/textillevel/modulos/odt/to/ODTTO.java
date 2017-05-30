@@ -8,6 +8,7 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.TipoMaquina;
@@ -37,12 +38,13 @@ public class ODTTO implements Serializable {
 	private Timestamp fechaEnProcesoUltSector;
 	private Timestamp fechaFinalizadoUltSector;
 	private EnumSituacionMaquina situacionMaquina;
+	private boolean isParcial;
 	
 	public ODTTO() {
 
 	}
 
-	public ODTTO(Integer id, String codigo, Integer idRemito, Integer idEstado, Integer idSecuencia, Cliente cliente, ProductoArticulo productoArticulo, Short ordenEnMaquina, Maquina maquinaActual, BigDecimal totalKilos, Byte avance, java.util.Date fechaPorComenzarUltSector, java.util.Date fechaEnProcesoUltSector, java.util.Date fechaFinalizadoUltSector, BigDecimal totalMetros) {
+	public ODTTO(Integer id, String codigo, Integer idRemito, Integer idEstado, Integer idSecuencia, Cliente cliente, ProductoArticulo productoArticulo, ProductoArticuloParcial productoParcial, Short ordenEnMaquina, Maquina maquinaActual, BigDecimal totalKilos, Byte avance, java.util.Date fechaPorComenzarUltSector, java.util.Date fechaEnProcesoUltSector, java.util.Date fechaFinalizadoUltSector, BigDecimal totalMetros) {
 		this.id = id;
 		this.codigo = codigo;
 		this.idRemito = idRemito;
@@ -50,13 +52,14 @@ public class ODTTO implements Serializable {
 		this.tieneSecuencia = idSecuencia != null;
 		this.nombreCliente = cliente.getDescripcionResumida();
 		this.nroCliente = cliente.getNroCliente();
-		this.producto = productoArticulo == null ? "" : productoArticulo.toString();
+		this.producto = calcularProductoDescr(productoArticulo, productoParcial);
 		this.ordenEnMaquina = ordenEnMaquina;
 		this.maquinaActual = maquinaActual == null ? null : maquinaActual.getId();
 		this.totalMetros = totalMetros;
 		this.totalKilos = totalKilos;
 		this.avance = avance == null ? null : EAvanceODT.getById(avance.byteValue());
-		this.tipoProducto = productoArticulo == null ? null : productoArticulo.getTipo();
+		this.tipoProducto = calcularTipoProducto(productoArticulo, productoParcial);
+		this.isParcial = productoArticulo == null && productoParcial != null && productoParcial.getProducto() != null;
 		this.tipoMaquina = maquinaActual == null ? null : maquinaActual.getTipoMaquina();
 		this.fechaPorComenzarUltSector = fechaPorComenzarUltSector == null ? null : new Timestamp(fechaPorComenzarUltSector.getTime());
 		this.fechaEnProcesoUltSector = fechaEnProcesoUltSector == null ? null : new Timestamp(fechaEnProcesoUltSector.getTime());
@@ -64,8 +67,28 @@ public class ODTTO implements Serializable {
 		calcularSituacionMaquina();
 	}
 
+	private ETipoProducto calcularTipoProducto(ProductoArticulo productoArticulo, ProductoArticuloParcial productoParcial) {
+		if(productoArticulo != null) {
+			return productoArticulo.getTipo();
+		}
+		if(productoParcial != null && productoParcial.getProducto() != null) {
+			return productoParcial.getTipo();
+		}
+		return null;
+	}
+
+	private String calcularProductoDescr(ProductoArticulo productoArticulo, ProductoArticuloParcial productoParcial) {
+		if(productoArticulo != null) {
+			return productoArticulo.toString();
+		}
+		if(productoParcial != null && productoParcial.getProducto() != null) {
+			return productoParcial.toString();
+		}
+		return null;
+	}
+
 	public ODTTO(OrdenDeTrabajo odt) {
-		this(odt.getId(), odt.getCodigo(), odt.getRemito() == null ? null : odt.getRemito().getId(), odt.getEstado().getId(), odt.getSecuenciaDeTrabajo() == null ? null : odt.getSecuenciaDeTrabajo().getId(), odt.getRemito().getCliente(), odt.getProductoArticulo(), odt.getOrdenEnMaquina(), odt.getMaquinaActual(), odt.getRemito().getPesoTotal(), odt.getAvance() == null ? null : odt.getAvance().getId(), odt.getFechaPorComenzarUltSector(), odt.getFechaEnProcesoUltSector(), odt.getFechaFinalizadoUltSector(), odt.getTotalMetrosEntrada());
+		this(odt.getId(), odt.getCodigo(), odt.getRemito() == null ? null : odt.getRemito().getId(), odt.getEstado().getId(), odt.getSecuenciaDeTrabajo() == null ? null : odt.getSecuenciaDeTrabajo().getId(), odt.getRemito().getCliente(), odt.getProductoArticulo(), odt.getProductoParcial(), odt.getOrdenEnMaquina(), odt.getMaquinaActual(), odt.getRemito().getPesoTotal(), odt.getAvance() == null ? null : odt.getAvance().getId(), odt.getFechaPorComenzarUltSector(), odt.getFechaEnProcesoUltSector(), odt.getFechaFinalizadoUltSector(), odt.getTotalMetrosEntrada());
 	}
 	
 	public Integer getId() {
@@ -146,6 +169,10 @@ public class ODTTO implements Serializable {
 
 	private Timestamp getFechaFinalizadoUltSector() {
 		return fechaFinalizadoUltSector;
+	}
+
+	public boolean isParcial() {
+		return isParcial;
 	}
 
 	public String getInfoTiempoProceso() {

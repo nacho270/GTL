@@ -93,7 +93,7 @@ public class AccionDarSalidaPiezasODT extends Accion<ODTTO> {
 			return false; //las ODTs deben ser todas del mismo cliente
 		}
 		for(ODTTO odt : selectedElements) {
-			if(odt.getEstado() != EEstadoODT.EN_OFICINA) {
+			if(odt.getEstado() != EEstadoODT.EN_OFICINA || odt.isParcial()) {
 				return false;
 			}
 		}

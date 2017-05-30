@@ -13,5 +13,6 @@ public interface ProductoFacadeRemote {
 	public void remove(Producto producto);
 	public List<Producto> getAllOrderByName();
 	public void saveAll(List<? extends Producto> prods);
+	public Producto getById(Integer idProducto);
 
 }

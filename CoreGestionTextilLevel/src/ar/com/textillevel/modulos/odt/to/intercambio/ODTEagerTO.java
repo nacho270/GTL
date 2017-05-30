@@ -27,6 +27,8 @@ public class ODTEagerTO implements Serializable {
 	private Long longPorComenzarUltSector;
 	private Long longEnProcesoUltSector;
 	private Long longFinalizadoUltSector;
+	private Integer idProducto; //de producto parcial
+	private Integer idArticulo; //de producto parcial
 	
 	private List<TransicionODTTO> transiciones;
 
@@ -44,6 +46,12 @@ public class ODTEagerTO implements Serializable {
 		this.idEstadoODT = odt.getEstado().getId();
 		if (odt.getProductoArticulo() != null) {
 			this.idProductoArticulo = odt.getProductoArticulo().getId();
+		}
+		if(odt.getProductoParcial() != null && odt.getProductoParcial().getProducto() != null) {
+			this.idProducto = odt.getProductoParcial().getProducto().getId();
+		}
+		if(odt.getProductoParcial() != null && odt.getProductoParcial().getArticulo() != null) {
+			this.idArticulo = odt.getProductoParcial().getArticulo().getId();
 		}
 		if (odt.getAvance() != null) {
 			this.idAvance = odt.getAvance().getId();
@@ -203,6 +211,22 @@ public class ODTEagerTO implements Serializable {
 
 	public void setTransiciones(List<TransicionODTTO> transiciones) {
 		this.transiciones = transiciones;
+	}
+
+	public Integer getIdProducto() {
+		return idProducto;
+	}
+
+	public void setIdProducto(Integer idProducto) {
+		this.idProducto = idProducto;
+	}
+
+	public Integer getIdArticulo() {
+		return idArticulo;
+	}
+
+	public void setIdArticulo(Integer idArticulo) {
+		this.idArticulo = idArticulo;
 	}
 
 }

@@ -208,13 +208,19 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 	}
 
 	public void eliminarRemitoEntrada01OrCompraDeTela(Integer idRemitoEntrada, String usrName) throws ValidacionException {
+		List<OrdenDeTrabajo> odts = odtDAO.getODTAsociadas(idRemitoEntrada);
+		String detalleODTs = detalleODTAuditoria(odts); //solo para auditoria
 		RemitoEntrada remitoEntrada = remitoEntradaDAO.getById(idRemitoEntrada);
 		if(remitoEntrada.getArticuloStock() == null && remitoEntrada.getPrecioMatPrima() == null) {
 			throw new ValidacionException(EValidacionException.REMITO_ENTRADA_NO_ES_01_NI_COMPRA_TELA.getInfoValidacion());
 		}
 		undoRemitoEntrada01OrCompraTela(remitoEntrada.getId());
-		//TODO: Falta eliminar las ODTs
+		for(OrdenDeTrabajo odt : odts) {
+			transicionODTDAO.deleteTransicionesFromODT(odt.getId());
+			odtDAO.removeById(odt.getId());
+		}
 		remitoEntradaDAO.removeById(remitoEntrada.getId());
+		auditoriaFacade.auditar(usrName, "BAJA RE (01) Nº: " + idRemitoEntrada + "|" + detalleODTs, EnumTipoEvento.BAJA, remitoEntrada);
 	}
 
 	private void undoRemitoEntrada01OrCompraTela(Integer idRE) throws ValidacionException {

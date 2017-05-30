@@ -25,7 +25,7 @@ import ar.com.textillevel.entidades.ventas.productos.Producto;
 
 @Entity
 @Table(name = "T_PRODUCTO_ARTICULO")
-public class ProductoArticulo implements Serializable {
+public class ProductoArticulo implements Serializable, IProductoParaODT {
 
 	private static final long serialVersionUID = 4968495793348305923L;
 
@@ -63,6 +63,7 @@ public class ProductoArticulo implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="F_ARTICULO_P_ID", nullable=true) //Devolucion y reproceso sin cargo no tienen artículo!!!
 	@Fetch(FetchMode.JOIN)
+	@Override
 	public Articulo getArticulo() {
 		return articulo;
 	}
@@ -125,6 +126,7 @@ public class ProductoArticulo implements Serializable {
 	}
 
 	@Transient
+	@Override
 	public ETipoProducto getTipo() {
 		return getProducto().getTipo();
 	}
@@ -181,6 +183,7 @@ public class ProductoArticulo implements Serializable {
 	}
 
 	@Transient
+	@Override
 	public String toStringSinProducto() {
 		StringBuilder sb = new StringBuilder("");
 		if(getTipo() == ETipoProducto.ESTAMPADO) {

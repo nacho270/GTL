@@ -12,14 +12,6 @@ import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -29,13 +21,20 @@ import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
-import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.util.ODTCodigoHelper;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ImprimirRemitoHandler {
@@ -281,7 +280,7 @@ public class ImprimirRemitoHandler {
 		
 		private String getProceso(RemitoSalida remito) {
 			Set<String> procesos = new HashSet<String>();
-			for(ProductoArticulo p : remito.getProductoList()) {
+			for(IProductoParaODT p : remito.getProductoList()) {
 				procesos.add(p.toString());
 			}
 			return StringUtil.getCadena(procesos, ", ");
@@ -422,7 +421,7 @@ public class ImprimirRemitoHandler {
 
 		private String getProceso(RemitoSalida remito) {
 			Set<String> procesos = new HashSet<String>();
-			for(ProductoArticulo p : remito.getProductoList()) {
+			for(IProductoParaODT p : remito.getProductoList()) {
 				procesos.add(p.toString());
 			}
 			return StringUtil.getCadena(procesos, ", ");
@@ -430,8 +429,8 @@ public class ImprimirRemitoHandler {
 
 		private String extractArticulo(RemitoSalida remito) {
 			Set<String> articulos = new HashSet<String>();
- 			List<ProductoArticulo> productoList = remito.getProductoList();
-			for(ProductoArticulo p : productoList) {
+ 			List<IProductoParaODT> productoList = remito.getProductoList();
+			for(IProductoParaODT p : productoList) {
 				if(p.getArticulo() != null) {
 					articulos.add(p.getArticulo().getNombre());
 				}

@@ -13,6 +13,8 @@ public class OdtEagerTO  implements java.io.Serializable {
 
     private java.lang.Integer id;
 
+    private java.lang.Integer idArticulo;
+
     private java.lang.Byte idAvance;
 
     private java.lang.Integer idEstadoODT;
@@ -20,6 +22,8 @@ public class OdtEagerTO  implements java.io.Serializable {
     private java.lang.Integer idMaquinaActual;
 
     private java.lang.Integer idMaquinaPrincipal;
+
+    private java.lang.Integer idProducto;
 
     private java.lang.Integer idProductoArticulo;
 
@@ -47,10 +51,12 @@ public class OdtEagerTO  implements java.io.Serializable {
     public OdtEagerTO(
            java.lang.String codigo,
            java.lang.Integer id,
+           java.lang.Integer idArticulo,
            java.lang.Byte idAvance,
            java.lang.Integer idEstadoODT,
            java.lang.Integer idMaquinaActual,
            java.lang.Integer idMaquinaPrincipal,
+           java.lang.Integer idProducto,
            java.lang.Integer idProductoArticulo,
            java.lang.Long longEnProcesoUltSector,
            java.lang.Long longFinalizadoUltSector,
@@ -63,10 +69,12 @@ public class OdtEagerTO  implements java.io.Serializable {
            ar.com.textillevel.gui.acciones.odtwsclient.TransicionODTTO[] transiciones) {
            this.codigo = codigo;
            this.id = id;
+           this.idArticulo = idArticulo;
            this.idAvance = idAvance;
            this.idEstadoODT = idEstadoODT;
            this.idMaquinaActual = idMaquinaActual;
            this.idMaquinaPrincipal = idMaquinaPrincipal;
+           this.idProducto = idProducto;
            this.idProductoArticulo = idProductoArticulo;
            this.longEnProcesoUltSector = longEnProcesoUltSector;
            this.longFinalizadoUltSector = longFinalizadoUltSector;
@@ -117,6 +125,26 @@ public class OdtEagerTO  implements java.io.Serializable {
      */
     public void setId(java.lang.Integer id) {
         this.id = id;
+    }
+
+
+    /**
+     * Gets the idArticulo value for this OdtEagerTO.
+     * 
+     * @return idArticulo
+     */
+    public java.lang.Integer getIdArticulo() {
+        return idArticulo;
+    }
+
+
+    /**
+     * Sets the idArticulo value for this OdtEagerTO.
+     * 
+     * @param idArticulo
+     */
+    public void setIdArticulo(java.lang.Integer idArticulo) {
+        this.idArticulo = idArticulo;
     }
 
 
@@ -197,6 +225,26 @@ public class OdtEagerTO  implements java.io.Serializable {
      */
     public void setIdMaquinaPrincipal(java.lang.Integer idMaquinaPrincipal) {
         this.idMaquinaPrincipal = idMaquinaPrincipal;
+    }
+
+
+    /**
+     * Gets the idProducto value for this OdtEagerTO.
+     * 
+     * @return idProducto
+     */
+    public java.lang.Integer getIdProducto() {
+        return idProducto;
+    }
+
+
+    /**
+     * Sets the idProducto value for this OdtEagerTO.
+     * 
+     * @param idProducto
+     */
+    public void setIdProducto(java.lang.Integer idProducto) {
+        this.idProducto = idProducto;
     }
 
 
@@ -433,6 +481,9 @@ public class OdtEagerTO  implements java.io.Serializable {
             ((this.id==null && other.getId()==null) || 
              (this.id!=null &&
               this.id.equals(other.getId()))) &&
+            ((this.idArticulo==null && other.getIdArticulo()==null) || 
+             (this.idArticulo!=null &&
+              this.idArticulo.equals(other.getIdArticulo()))) &&
             ((this.idAvance==null && other.getIdAvance()==null) || 
              (this.idAvance!=null &&
               this.idAvance.equals(other.getIdAvance()))) &&
@@ -445,6 +496,9 @@ public class OdtEagerTO  implements java.io.Serializable {
             ((this.idMaquinaPrincipal==null && other.getIdMaquinaPrincipal()==null) || 
              (this.idMaquinaPrincipal!=null &&
               this.idMaquinaPrincipal.equals(other.getIdMaquinaPrincipal()))) &&
+            ((this.idProducto==null && other.getIdProducto()==null) || 
+             (this.idProducto!=null &&
+              this.idProducto.equals(other.getIdProducto()))) &&
             ((this.idProductoArticulo==null && other.getIdProductoArticulo()==null) || 
              (this.idProductoArticulo!=null &&
               this.idProductoArticulo.equals(other.getIdProductoArticulo()))) &&
@@ -492,6 +546,9 @@ public class OdtEagerTO  implements java.io.Serializable {
         if (getId() != null) {
             _hashCode += getId().hashCode();
         }
+        if (getIdArticulo() != null) {
+            _hashCode += getIdArticulo().hashCode();
+        }
         if (getIdAvance() != null) {
             _hashCode += getIdAvance().hashCode();
         }
@@ -503,6 +560,9 @@ public class OdtEagerTO  implements java.io.Serializable {
         }
         if (getIdMaquinaPrincipal() != null) {
             _hashCode += getIdMaquinaPrincipal().hashCode();
+        }
+        if (getIdProducto() != null) {
+            _hashCode += getIdProducto().hashCode();
         }
         if (getIdProductoArticulo() != null) {
             _hashCode += getIdProductoArticulo().hashCode();
@@ -575,6 +635,13 @@ public class OdtEagerTO  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("idArticulo");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "idArticulo"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("idAvance");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idAvance"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "byte"));
@@ -598,6 +665,13 @@ public class OdtEagerTO  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("idMaquinaPrincipal");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idMaquinaPrincipal"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("idProducto");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "idProducto"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

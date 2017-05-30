@@ -101,7 +101,7 @@ public class PanCabeceraDatosODT extends JPanel {
 	private FWJTextField getTxtProducto() {
 		if(txtProducto == null) {
 			txtProducto = new FWJTextField();
-			txtProducto.setText(odt.getProductoArticulo().toString());
+			txtProducto.setText(odt.getIProductoParaODT().toString());
 			txtProducto.setEditable(false);
 		}
 		return txtProducto;

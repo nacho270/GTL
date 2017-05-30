@@ -3,7 +3,6 @@ package ar.com.textillevel.gui.acciones;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -13,12 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
-import ar.com.textillevel.gui.util.panels.PanSeleccionProductoArticulo;
+import ar.com.textillevel.gui.util.panels.PanSeleccionProductoArticuloParcial;
 
-public class JDialogSeleccionarProducto extends JDialog {
+public class JDialogSeleccionarProductoParcial extends JDialog {
 
 	private static final long serialVersionUID = 7364390484648139031L;
 
@@ -26,41 +24,22 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private JButton btnCancelar;
 
 	private boolean acepto;
-	private List<ProductoArticulo> productoSelectedList;
+	private List<ProductoArticuloParcial> productoSelectedList;
 	private List<Articulo> articuloFilterList;
 	private JPanel pnlBotones;
-	private Cliente cliente;
 
-	private PanSeleccionProductoArticulo panPA;
+	private PanSeleccionProductoArticuloParcial panPA;
 
-	public JDialogSeleccionarProducto(Frame owner, Cliente cliente, List<ProductoArticulo> productoSelectedList) {
+	public JDialogSeleccionarProductoParcial(JDialog owner, List<ProductoArticuloParcial> productoSelectedList, List<Articulo> articuloFilterList) {
 		super(owner);
-		this.cliente = cliente;
-		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
-		setUpComponentes();
-		setUpScreen();
-	}
-	
-	
-	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList) {
-		super(owner);
-		this.cliente = cliente;
-		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
-		setUpComponentes();
-		setUpScreen();
-	}
-
-	public JDialogSeleccionarProducto(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList, List<Articulo> articuloFilterList) {
-		super(owner);
-		this.cliente = cliente;
-		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
+		this.productoSelectedList = new ArrayList<ProductoArticuloParcial>(productoSelectedList);
 		this.articuloFilterList = articuloFilterList;
 		setUpComponentes();
 		setUpScreen();
 	}
 
 	private void setUpScreen(){
-		setTitle("Selección de Productos");
+		setTitle("Selección de Productos Parciales");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(new Dimension(400, 550));
 		setResizable(false);
@@ -112,18 +91,14 @@ public class JDialogSeleccionarProducto extends JDialog {
 		return acepto;
 	}
 
-	private PanSeleccionProductoArticulo getPanPA() {
+	private PanSeleccionProductoArticuloParcial getPanPA() {
 		if(panPA == null) {
-			if(articuloFilterList != null && !articuloFilterList.isEmpty()) {
-				panPA = new PanSeleccionProductoArticulo(this, cliente, productoSelectedList, articuloFilterList);
-			} else {
-				panPA = new PanSeleccionProductoArticulo(this, cliente, productoSelectedList);
-			}
+			panPA = new PanSeleccionProductoArticuloParcial(this, productoSelectedList, articuloFilterList);
 		}
 		return panPA;
 	}
 
-	public List<ProductoArticulo> getProductoSelectedList() {
+	public List<ProductoArticuloParcial> getProductoSelectedList() {
 		return getPanPA().getProductoSelectedList();
 	}
 

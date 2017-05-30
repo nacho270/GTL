@@ -10,6 +10,7 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.entidades.maquinas.Maquina;
@@ -79,4 +80,7 @@ public interface OrdenDeTrabajoFacadeRemote {
 	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, Integer idProducto, EEstadoODT... estado);
 
 	public OrdenDeTrabajo borrarPiezasSinSalida(OrdenDeTrabajo odt, UsuarioSistema usuarioSistema);
+
+	public OrdenDeTrabajo asignarProductoArticuloODT(OrdenDeTrabajo odt, ProductoArticulo productoArticulo, UsuarioSistema usuarioSistema);
+
 }

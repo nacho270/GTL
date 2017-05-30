@@ -22,7 +22,9 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
@@ -33,7 +35,7 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 
 	private static final long serialVersionUID = 5722108060830162182L;
 
-	private List<ProductoArticulo> productoList;
+	private List<? extends IProductoParaODT> productoList;
 	private List<OrdenDeTrabajo> odtList;
 	private JPanel pnlBotones;
 	private JButton btnCancelar;
@@ -43,7 +45,7 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 	private OrdenDeTrabajo selectedODT;
 	private boolean acepto;
 
-	public JDialogSeleccionarCrearODT(Frame owner, List<ProductoArticulo> productoList, List<OrdenDeTrabajo> odtList) {
+	public JDialogSeleccionarCrearODT(Frame owner, List<? extends IProductoParaODT> productoList, List<OrdenDeTrabajo> odtList) {
 		super(owner);
 		setAcepto(false);
 		this.productoList = productoList;
@@ -141,9 +143,9 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 
 		private JComboBox cmbProducto;
 		private String ultimoCodigo;
-		private List<ProductoArticulo> productoList;
+		private List<? extends IProductoParaODT> productoList;
 
-		public PanelTablaODT(List<ProductoArticulo> productoList) {
+		public PanelTablaODT(List<? extends IProductoParaODT> productoList) {
 			this.productoList = productoList;
 			GuiUtil.llenarCombo(getCmbProducto(), productoList, true);
 			getBotonEliminar().setVisible(false);
@@ -162,7 +164,16 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 		private void capturarSetearDatos() {
 			for(int row = 0; row < getTabla().getRowCount(); row++) {
 				OrdenDeTrabajo elemento = getElemento(row);
-				elemento.setProductoArticulo((ProductoArticulo)getTabla().getValueAt(row, COL_PRODUCTO));
+				IProductoParaODT valueAt = (IProductoParaODT)getTabla().getValueAt(row, COL_PRODUCTO);
+				setIProductoParaODT(elemento, valueAt);
+			}
+		}
+
+		private void setIProductoParaODT(OrdenDeTrabajo elemento, IProductoParaODT valueAt) {
+			if(valueAt instanceof ProductoArticulo) {
+				elemento.setProductoArticulo((ProductoArticulo)valueAt);
+			} else {
+				elemento.setProductoParcial((ProductoArticuloParcial)valueAt);
 			}
 		}
 
@@ -170,7 +181,7 @@ public class JDialogSeleccionarCrearODT extends JDialog {
 		protected void agregarElemento(OrdenDeTrabajo elemento) {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_ODT] = ODTCodigoHelper.getInstance().formatCodigo(elemento.getCodigo());
-			row[COL_PRODUCTO] = elemento.getProductoArticulo();
+			row[COL_PRODUCTO] = elemento.getIProductoParaODT();
 			row[COL_OBJ] = elemento;
 			getTabla().addRow(row);
 		}

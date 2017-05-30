@@ -39,4 +39,8 @@ public class ProductoFacade implements ProductoFacadeRemote {
 		}
 	}
 
+	public Producto getById(Integer idProducto) {
+		return productoDao.getById(idProducto);
+	}
+
 }

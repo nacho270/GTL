@@ -1,5 +1,6 @@
 package ar.com.textillevel.gui.acciones;
 
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -8,11 +9,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,8 +39,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-import main.GTLGlobalCache;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWDateField;
@@ -54,8 +56,12 @@ import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.Tarima;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
+import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionremito.ImpresionRemitoEntradaFichaHandler;
@@ -66,6 +72,7 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JDialogAgregarRemitoEntrada extends JDialog {
 
@@ -105,10 +112,16 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 
 	private JPanel panOpcionPiezasODT;
 	private JRadioButton rbtOpcionConPiezasODT;
+	private JRadioButton rbtOpcionConPiezasODTParcial;
 	private JRadioButton rbtOpcionSinPiezasODT;
 
 	private FWJTextField txtObservacionesODT;
 	private FWJTextField txtArticuloCliente;
+	
+	private CardLayout situacionODTCardLayout;
+	private JPanel panelSituacionODT;
+	
+	private JPanel panSelProductosConODTParcial;
 	
 	private JPanel panelDatosFactura;
 	private JPanel panelDatosMisc;
@@ -123,23 +136,33 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private CondicionDeVenta condicionDeVenta;
 
 	private JPanel panODTs;
+	private JPanel panODTsParcial;
+
+	private JButton btnSelProductosConODTParcial;
+	private JTextField txtProductosConODTParcial;
+
+	private List<ProductoArticuloParcial> productoArticuloParcialList;
+
 
 	public JDialogAgregarRemitoEntrada(Frame owner, RemitoEntrada remitoEntrada, List<OrdenDeTrabajo> odtList, boolean modoConsulta) {
 		super(owner);
 		this.owner = owner;
 		this.remitoEntrada = remitoEntrada;
-		this.odtList = odtList;
+		this.odtList = new ArrayList<OrdenDeTrabajo>(odtList);
 		this.condicionDeVenta = remitoEntrada.getCliente().getCondicionVenta();
 		setSize(new Dimension(730, 750));
+		this.modoConsulta = modoConsulta;
+		ESituacionODTRE situacionODT = remitoEntrada.getSituacionODT();
+		if(situacionODT == ESituacionODTRE.CON_ODT_PARCIAL) {
+			this.productoArticuloParcialList = extractProductoArticulosParcial(odtList);
+		}
+		construct();
+		setDatos();
 		if(modoConsulta) {
 			setTitle("Consulta de Remito de Entrada");
 		} else {
 			setTitle(remitoEntrada.getId() == null ? "Alta de Remito de Entrada" : "Edición de Remito de Entrada");
-			getRbtOpcionConPiezasODT().setSelected(true);
 		}
-		this.modoConsulta = modoConsulta;
-		construct();
-		setDatos();
 		setModal(true);
 	}
 
@@ -227,11 +250,12 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			panDetalle.add(getPanelDatosCliente(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
 			panDetalle.add(getPanelDatosFactura(), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
 			panDetalle.add(getPanDatosMisc(), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
-			panDetalle.add(getPanSelProductos(), GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
-			panDetalle.add(getPanOpcionPiezasODT(), GenericUtils.createGridBagConstraints(0, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.3, 0));
-			panDetalle.add(new JLabel("Control:"), GenericUtils.createGridBagConstraints(1, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtControl(), GenericUtils.createGridBagConstraints(2, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.4, 0));
-			panDetalle.add(getPanTarimaEnPalet(), GenericUtils.createGridBagConstraints(3, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.3, 0));
+			panDetalle.add(getPanOpcionPiezasODT(), GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 1, 1, 0.3, 0));
+			panDetalle.add(new JLabel("Control:"), GenericUtils.createGridBagConstraints(1, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getTxtControl(), GenericUtils.createGridBagConstraints(2, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.4, 0));
+			panDetalle.add(getPanTarimaEnPalet(), GenericUtils.createGridBagConstraints(3, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.3, 0));
+
+			panDetalle.add(getPanelSituacionODT(), GenericUtils.createGridBagConstraints(0, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
 			panDetalle.add(getPanTablaPieza(), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 4, 1, 1, 1));
 		}
 		GuiUtil.setEstadoPanel(panDetalle, !modoConsulta);
@@ -242,10 +266,12 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		if(panOpcionPiezasODT == null) {
 			panOpcionPiezasODT = new JPanel();
 			panOpcionPiezasODT.setLayout(new GridBagLayout());
-			panOpcionPiezasODT.add(getRbtOpcionConPiezasODT(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
-			panOpcionPiezasODT.add(getRbtOpcionSinPiezasODT(), GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panOpcionPiezasODT.add(getRbtOpcionConPiezasODT(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 1, 1, 0, 0));
+			panOpcionPiezasODT.add(getRbtOpcionConPiezasODTParcial(), GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 1, 1, 0, 0));
+			panOpcionPiezasODT.add(getRbtOpcionSinPiezasODT(), GenericUtils.createGridBagConstraints(2, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 1, 1, 0, 0));
 			ButtonGroup bgOpcionProceso = new ButtonGroup();
 			bgOpcionProceso.add(getRbtOpcionConPiezasODT());
+			bgOpcionProceso.add(getRbtOpcionConPiezasODTParcial());
 			bgOpcionProceso.add(getRbtOpcionSinPiezasODT());
 			panOpcionPiezasODT.setBorder(BorderFactory.createTitledBorder(""));
 		}
@@ -255,15 +281,65 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private JRadioButton getRbtOpcionConPiezasODT() {
 		if (rbtOpcionConPiezasODT == null) {
 			rbtOpcionConPiezasODT = new JRadioButton();
-			rbtOpcionConPiezasODT.setText("Con Piezas ODT");
+			rbtOpcionConPiezasODT.setText("Con ODT");
+			rbtOpcionConPiezasODT.setSelected(remitoEntrada.getSituacionODT() == ESituacionODTRE.CON_ODT);
+			
+			rbtOpcionConPiezasODT.addItemListener(new ItemListener() {
+				
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					getPanelSituacionODT().setVisible(true);
+					getSituacionODTCardLayout().show(getPanelSituacionODT(), ESituacionODTRE.CON_ODT.toString());
+					getPanTablaPieza().clearODTs();
+					getProductoArticuloParcialList().clear();
+					odtList.clear();
+				}
+				
+			});
 		}
 		return rbtOpcionConPiezasODT;
+	}
+	
+	private JRadioButton getRbtOpcionConPiezasODTParcial() {
+		if (rbtOpcionConPiezasODTParcial == null) {
+			rbtOpcionConPiezasODTParcial = new JRadioButton();
+			rbtOpcionConPiezasODTParcial.setText("Con ODT Sin Color");
+			rbtOpcionConPiezasODTParcial.setSelected(remitoEntrada.getSituacionODT() == ESituacionODTRE.CON_ODT_PARCIAL);
+			rbtOpcionConPiezasODTParcial.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					getPanelSituacionODT().setVisible(true);
+					getSituacionODTCardLayout().show(getPanelSituacionODT(), ESituacionODTRE.CON_ODT_PARCIAL.toString());
+					getPanTablaPieza().clearODTs();
+					remitoEntrada.getProductoArticuloList().clear();
+					odtList.clear();
+				}
+
+			});
+		}
+		return rbtOpcionConPiezasODTParcial;
 	}
 
 	private JRadioButton getRbtOpcionSinPiezasODT() {
 		if (rbtOpcionSinPiezasODT == null) {
 			rbtOpcionSinPiezasODT = new JRadioButton();
-			rbtOpcionSinPiezasODT.setText("Sin Piezas ODT");
+			rbtOpcionSinPiezasODT.setSelected(remitoEntrada.getSituacionODT() == ESituacionODTRE.SIN_ODT);
+			rbtOpcionSinPiezasODT.setText("Sin ODT");
+			
+			rbtOpcionSinPiezasODT.addItemListener(new ItemListener() {
+				
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					getPanelSituacionODT().setVisible(false);
+					getPanTablaPieza().clearODTs();
+					getProductoArticuloParcialList().clear();
+					remitoEntrada.getProductoArticuloList().clear();
+					odtList.clear();
+				}
+				
+			});
+			
 		}
 		return rbtOpcionSinPiezasODT;
 	}
@@ -345,13 +421,68 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		return btnSelProductos;
 	}
 
+	private JPanel getPanSelProductosConODTParcial() {
+		if(panSelProductosConODTParcial == null) {
+			panSelProductosConODTParcial = new JPanel();
+			panSelProductosConODTParcial.setLayout(new GridBagLayout());
+			panSelProductosConODTParcial.add(getBtnSelProductosConODTParcial(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panSelProductosConODTParcial.add(getTxtProductosConODTParcial(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			if(modoConsulta) {
+				panSelProductosConODTParcial.add(getPanODTsParcial(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 2, 1, 0, 0));
+			}
+		}
+		return panSelProductosConODTParcial;
+	}
+	
+	private JTextField getTxtProductosConODTParcial() {
+		if(txtProductosConODTParcial == null) {
+			txtProductosConODTParcial = new JTextField();
+			txtProductosConODTParcial.setEditable(false);
+			txtProductosConODTParcial.setText(StringUtil.getCadena(getProductoArticuloParcialList(), ", "));
+		}
+		return txtProductosConODTParcial;
+	}
+
+	private JButton getBtnSelProductosConODTParcial() {
+		if(btnSelProductosConODTParcial == null) {
+			btnSelProductosConODTParcial = new JButton("PRODUCTOS (PARCIALES): ");
+			btnSelProductosConODTParcial.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					JDialogSeleccionarProductoParcial dialogSeleccionarProducto = new JDialogSeleccionarProductoParcial(JDialogAgregarRemitoEntrada.this, extractProductoArticulosParcial(odtList), new ArrayList<Articulo>(0));
+					GuiUtil.centrar(dialogSeleccionarProducto);
+					dialogSeleccionarProducto.setVisible(true);
+					if(dialogSeleccionarProducto.isAcepto()) {
+						getProductoArticuloParcialList().clear();
+						List<ProductoArticuloParcial> productoSelectedList = dialogSeleccionarProducto.getProductoSelectedList();
+						getTxtProductosConODTParcial().setText(StringUtil.getCadena(productoSelectedList, ", "));
+						getProductoArticuloParcialList().addAll(dialogSeleccionarProducto.getProductoSelectedList());
+					}
+				}
+
+			});
+
+		}
+		return btnSelProductosConODTParcial;
+	}
+	
+	private List<ProductoArticuloParcial> extractProductoArticulosParcial(List<OrdenDeTrabajo> odtList) {
+		List<ProductoArticuloParcial> all = new ArrayList<ProductoArticuloParcial>();
+		for(OrdenDeTrabajo odt : odtList) {
+			if(odt.getProductoParcial() != null) {
+				all.add(odt.getProductoParcial());
+			}
+		}
+		return all;
+	}
+
 	private JPanel getPanSelProductos() {
 		if(panSelProductos == null) {
 			panSelProductos = new JPanel();
 			panSelProductos.setLayout(new GridBagLayout());
 			panSelProductos.add(getBtnSelProductos(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panSelProductos.add(getTxtProductos(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			if(modoConsulta && !odtList.isEmpty()) {
+			if(modoConsulta) {
 				panSelProductos.add(getPanODTs(), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 0), 2, 1, 0, 0));
 			}
 		}
@@ -364,11 +495,24 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			panODTs.add(new JLabel("ODTs: "));
 			for(OrdenDeTrabajo odt : odtList) {
 				ODTLinkeableLabel odtLL = new ODTLinkeableLabel(odt, "");
-				odtLL.setODT(odt);;
+				odtLL.setODT(odt);
 				panODTs.add(odtLL);
 			}
 		}
 		return panODTs;
+	}
+
+	private JPanel getPanODTsParcial() {
+		if(panODTsParcial == null) {
+			panODTsParcial = new JPanel(new FlowLayout());
+			panODTsParcial.add(new JLabel("ODTs: "));
+			for(OrdenDeTrabajo odt : odtList) {
+				ODTLinkeableLabel odtLL = new ODTLinkeableLabel(odt, "");
+				odtLL.setODT(odt);
+				panODTsParcial.add(odtLL);
+			}
+		}
+		return panODTsParcial;
 	}
 	
 	
@@ -621,7 +765,22 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		}
 		
 		getPanTablaPieza().capturarSetearDatos();
-		return getPanTablaPieza().getODTs();
+		
+		List<OrdenDeTrabajo> odTs = getPanTablaPieza().getODTs();
+		if(rbtOpcionConPiezasODT.isSelected()) {
+			remitoEntrada.setSituacion(ESituacionODTRE.CON_ODT);
+			return odTs;
+		}
+		if(rbtOpcionConPiezasODTParcial.isSelected()) {
+			remitoEntrada.setSituacion(ESituacionODTRE.CON_ODT_PARCIAL);
+			remitoEntrada.getProductoArticuloList().clear();
+			return odTs;
+		}
+		if(rbtOpcionSinPiezasODT.isSelected()) {
+			remitoEntrada.setSituacion(ESituacionODTRE.SIN_ODT);
+			remitoEntrada.getProductoArticuloList().clear();
+		}
+		return Collections.emptyList();
 	}
 
 	private boolean validar() {
@@ -752,6 +911,13 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			}
 		}
 
+		public void clearODTs() {
+			List<PiezaRemito> elementos = getElementos();
+			odtPiezaMap.clear();
+			getTabla().removeAllRows();
+			agregarElementos(elementos);
+		}
+		
 		private void cargarMapODTs() {
 			odtPiezaMap = new HashMap<PiezaRemito, OrdenDeTrabajo>();
 			for(OrdenDeTrabajo odt : odtList) {
@@ -803,7 +969,8 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 				btnSelODTs.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, remitoEntrada.getProductoArticuloList(), odtList);
+						List<? extends IProductoParaODT> productosParaODT = rbtOpcionConPiezasODT.isSelected() ? remitoEntrada.getProductoArticuloList() : getProductoArticuloParcialList(); 
+						JDialogSeleccionarCrearODT dialogSeleccionarCrearODT = new JDialogSeleccionarCrearODT(owner, productosParaODT, odtList);
 						GuiUtil.centrarEnFramePadre(dialogSeleccionarCrearODT);
 						dialogSeleccionarCrearODT.setVisible(true);
 						if(dialogSeleccionarCrearODT.isAcepto()){
@@ -1133,5 +1300,34 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			}
 		}
 		return txtArticuloCliente;
+	}
+
+	private JPanel getPanelSituacionODT() {
+		if(panelSituacionODT == null) {
+			panelSituacionODT = new JPanel();
+			panelSituacionODT.setLayout(getSituacionODTCardLayout());
+			panelSituacionODT.setVisible(true);
+			panelSituacionODT.add(ESituacionODTRE.CON_ODT.toString(), getPanSelProductos());
+			panelSituacionODT.add(ESituacionODTRE.CON_ODT_PARCIAL.toString(), getPanSelProductosConODTParcial());
+			getSituacionODTCardLayout().show(panelSituacionODT, remitoEntrada.getSituacionODT().toString());
+			if(remitoEntrada.getSituacionODT() == ESituacionODTRE.SIN_ODT) {
+				getPanelSituacionODT().setVisible(false);
+			}
+		}
+		return panelSituacionODT;
+	}
+
+	private List<ProductoArticuloParcial> getProductoArticuloParcialList() {
+		if(productoArticuloParcialList == null) {
+			productoArticuloParcialList = new ArrayList<ProductoArticuloParcial>();
+		}
+		return productoArticuloParcialList;
+	}
+
+	private CardLayout getSituacionODTCardLayout() {
+		if(situacionODTCardLayout == null) {
+			situacionODTCardLayout = new CardLayout(5, 2);
+		}
+		return situacionODTCardLayout;
 	}
 }
