@@ -47,9 +47,12 @@ public class GuiBackTextilLevel extends GTLMainTemplate {
 			}
 //			System.getProperties().setProperty("textillevel.email.user", "administracion@textillevel.com");
 //			System.getProperties().setProperty("textillevel.email.pass", "tlevel4215");
+			
+			//descomentar estas 3 líneas para probar en forma local				
 //			System.getProperties().setProperty("textillevel.odt.wsendpoint", "GTL-gtlback-server/ODTService");
 //			System.getProperties().setProperty("textillevel.entregingdoc.wsendpoint", "GTL-gtlback-server/TerminalService");
 //			System.getProperties().setProperty("textillevel.ipintercambio", "http://localhost:8080/");
+
 			GuiBackTextilLevel guiBackTextilLevel = new GuiBackTextilLevel(-1, VERSION);
 			EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 			queue.push(new EventQueueProxy(guiBackTextilLevel));
