@@ -144,7 +144,7 @@ public class ODTService implements ODTServiceRemote {
 		//Construyo entity RemitoEntrada
 		RemitoEntrada re = new RemitoEntrada();
 		re.setAnchoCrudo(remitoEntrada.getAnchoCrudo());
-		re.setAnchoFinal(remitoEntrada.getAnchoCrudo());
+		re.setAnchoFinal(remitoEntrada.getAnchoFinal());
 		re.setArticuloStock(remitoEntrada.getIdArticuloStock() == null ? null : artDAO.getReferenceById(remitoEntrada.getIdArticuloStock()));
 		re.setCliente(clienteDAO.getReferenceById(remitoEntrada.getIdCliente()));
 		re.setCondicionDeVenta(condVentaDAO.getReferenceById(remitoEntrada.getIdCondicionDeVenta()));
@@ -295,22 +295,24 @@ public class ODTService implements ODTServiceRemote {
 			((InstruccionProcedimientoTipoProductoODT) instruccion).setTipoProducto(ETipoProducto.getById(instruccionTO.getIdTipoProducto()));
 			FormulaClienteExplotada formula;
 			FormulaClienteExplotadaTO formulaTO = instruccionTO.getFormula();
-			if (formulaTO.getTipo().equals("TEN")) {
-				formula = new FormulaTenidoClienteExplotada();
-				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getAnilinas()) {
-					((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
+			if(formulaTO != null) {
+				if (formulaTO.getTipo().equals("TEN")) {
+					formula = new FormulaTenidoClienteExplotada();
+					for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getAnilinas()) {
+						((FormulaTenidoClienteExplotada) formula).getMateriasPrimas().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Anilina.class));
+					}
+				} else {
+					formula = new FormulaEstampadoClienteExplotada();
+					for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getPigmentos()) {
+						((FormulaEstampadoClienteExplotada) formula).getPigmentos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
+					}
+					for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getQuimicos()) {
+						((FormulaEstampadoClienteExplotada) formula).getQuimicos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
+					}
 				}
-			} else {
-				formula = new FormulaEstampadoClienteExplotada();
-				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getPigmentos()) {
-					((FormulaEstampadoClienteExplotada) formula).getPigmentos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Pigmento.class));
-				}
-				for(MateriaPrimaCantidadExplotadaTO mpcto : formulaTO.getQuimicos()) {
-					((FormulaEstampadoClienteExplotada) formula).getQuimicos().add(materiaPrimaCantidadExplotadaFromTO(mpcto, Quimico.class));
-				}
+				formula.setFormulaDesencadenante(formulaDAO.getReferenceById(formulaTO.getIdFormulaDesencadenante()));
+				((InstruccionProcedimientoTipoProductoODT) instruccion).setFormula(formula);
 			}
-			formula.setFormulaDesencadenante(formulaDAO.getReferenceById(formulaTO.getIdFormulaDesencadenante()));
-			((InstruccionProcedimientoTipoProductoODT) instruccion).setFormula(formula);
 		}
 		instruccion.setObservaciones(instruccionTO.getObservaciones());
 		instruccion.setSectorMaquina(ESectorMaquina.getById(instruccionTO.getIdTipoSector()));
@@ -326,7 +328,9 @@ public class ODTService implements ODTServiceRemote {
 			transicion.setMaquina(tODT.getIdMaquina() == null ? null : maqDAO.getReferenceById(tODT.getIdMaquina()));
 			transicion.setTipoMaquina(tODT.getIdTipoMaquina() == null ? null : tmDAO.getReferenceById(tODT.getIdTipoMaquina()));
 			transicion.setFechaHoraRegistro(new Timestamp(tODT.getFechaHoraRegistro()));
-			transicion.setUsuarioSistema(usDAO.getReferenceById(tODT.getIdUsuarioSistema()));
+			if(tODT.getIdUsuarioSistema() != null) {
+				transicion.setUsuarioSistema(usDAO.getReferenceById(tODT.getIdUsuarioSistema()));
+			}
 			if(tODT.getIdTerminal() != null) {
 				transicion.setTerminal(terminalDAO.getReferenceById(tODT.getIdTerminal()));
 			}
@@ -344,7 +348,9 @@ public class ODTService implements ODTServiceRemote {
 		CambioAvance cambio = new CambioAvance();
 		cambio.setAvance(EAvanceODT.getById(caTO.getIdAvance()));
 		cambio.setFechaHora(new Timestamp(caTO.getFechaHora()));
-		cambio.setUsuario(usDAO.getReferenceById(caTO.getIdUsuarioSistema()));
+		if(caTO.getIdUsuarioSistema() != null) {
+			cambio.setUsuario(usDAO.getReferenceById(caTO.getIdUsuarioSistema()));
+		}
 		if(caTO.getIdTerminal() != null) {
 			cambio.setTerminal(terminalDAO.getReferenceById(caTO.getIdTerminal()));
 		}

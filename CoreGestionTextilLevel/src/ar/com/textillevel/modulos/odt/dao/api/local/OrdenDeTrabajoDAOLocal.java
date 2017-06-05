@@ -23,8 +23,6 @@ public interface OrdenDeTrabajoDAOLocal extends DAOLocal<OrdenDeTrabajo, Integer
 	 */
 	public List<OrdenDeTrabajo> getOdtNoAsociadasByClient(Integer idCliente);
 
-	public String getUltimoCodigoODT();
-
 	public List<OrdenDeTrabajo> getOdtEagerByRemitoList(Integer idRemito);
 
 	/**

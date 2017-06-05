@@ -61,7 +61,6 @@ import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.ProductoArticuloParcial;
-import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.TarimaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionremito.ImpresionRemitoEntradaFichaHandler;
@@ -449,7 +448,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			btnSelProductosConODTParcial.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					JDialogSeleccionarProductoParcial dialogSeleccionarProducto = new JDialogSeleccionarProductoParcial(JDialogAgregarRemitoEntrada.this, extractProductoArticulosParcial(odtList), new ArrayList<Articulo>(0));
+					JDialogSeleccionarProductoParcial dialogSeleccionarProducto = new JDialogSeleccionarProductoParcial(JDialogAgregarRemitoEntrada.this, extractProductoArticulosParcial(odtList), null);
 					GuiUtil.centrar(dialogSeleccionarProducto);
 					dialogSeleccionarProducto.setVisible(true);
 					if(dialogSeleccionarProducto.isAcepto()) {

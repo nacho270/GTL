@@ -649,7 +649,9 @@ public final class ODTTOConverter {
 			instruccion.setTipo("IPTPODT");
 			instruccion.setIdTipoArticulo(instODTTP.getTipoArticulo().getId());
 			instruccion.setIdTipoProducto(instODTTP.getTipoProducto().getId());
-			instruccion.setFormula(formulaClienteExplotadaTOWSFromEntity(instODTTP.getFormula()));
+			if(instODTTP.getFormula() != null) {
+				instruccion.setFormula(formulaClienteExplotadaTOWSFromEntity(instODTTP.getFormula()));
+			}
 		}
 		return instruccion;
 	}

@@ -33,7 +33,7 @@ public class ODTEagerTO implements Serializable {
 	private List<TransicionODTTO> transiciones;
 
 	public ODTEagerTO() {
-
+		this.transiciones = new ArrayList<TransicionODTTO>();
 	}
 
 	public ODTEagerTO(OrdenDeTrabajo odt, List<TransicionODT> transiciones) {
@@ -77,11 +77,9 @@ public class ODTEagerTO implements Serializable {
 				this.piezas.add(new PiezaODTTO(po));
 			}
 		}
-		if(!transiciones.isEmpty()) {
-			this.transiciones = new ArrayList<TransicionODTTO>();
-			for(TransicionODT tODT : transiciones) {
-				getTransiciones().add(new TransicionODTTO(tODT));
-			}
+		this.transiciones = new ArrayList<TransicionODTTO>();
+		for(TransicionODT tODT : transiciones) {
+			getTransiciones().add(new TransicionODTTO(tODT));
 		}
 	}
 

@@ -80,21 +80,6 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 		return resultList;
 	}
 
-	public String getUltimoCodigoODT() {
-		Query query = getEntityManager().createQuery(" SELECT odt.codigo " +
-													 " FROM OrdenDeTrabajo odt " +
-				 									 " ORDER BY CAST(substring(odt.codigo, 1, 4) AS integer) DESC, " +
-				 									 "		    CAST(substring(odt.codigo, 5, 2) AS integer) DESC, " +
-				 									 "		    CAST(substring(odt.codigo, 7, length(odt.codigo)+6) AS integer) DESC");
-		query.setMaxResults(1);
-		List<String> resultList = query.getResultList();
-		if(resultList.isEmpty()) {
-			return null;
-		} else {
-			return resultList.get(0);
-		}
-	}
-
 	public List<OrdenDeTrabajo> getOdtEagerByRemitoList(Integer idRemito) {
 		Query query = getEntityManager().createQuery("SELECT odt " +
 													 "FROM OrdenDeTrabajo odt " +

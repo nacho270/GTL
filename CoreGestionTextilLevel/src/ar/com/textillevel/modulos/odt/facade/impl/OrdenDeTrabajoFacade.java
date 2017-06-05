@@ -35,6 +35,7 @@ import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
 import ar.com.textillevel.modulos.notificaciones.facade.api.local.NotificacionUsuarioFacadeLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.CambioAvanceDAOLocal;
+import ar.com.textillevel.modulos.odt.dao.api.local.CodigoODTDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.MaquinaDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.OrdenDeTrabajoDAOLocal;
 import ar.com.textillevel.modulos.odt.dao.api.local.PiezaODTDAOLocal;
@@ -66,6 +67,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 
 	@EJB
 	private OrdenDeTrabajoDAOLocal odtDAO;
+
+	@EJB
+	private CodigoODTDAOLocal codigoODTDAO;
 	
 	@EJB
 	private PiezaRemitoDAOLocal piezaRemitoDAO;
@@ -111,7 +115,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	}
 
 	public String getUltimoCodigoODT() {
-		String ultimoCodigoODT = odtDAO.getUltimoCodigoODT();
+		String ultimoCodigoODT = codigoODTDAO.getUltimoCodigoODT();
 		if(ultimoCodigoODT == null) {
 			ParametrosGenerales parametrosGenerales = paramGeneralesDAO.getParametrosGenerales();
 			if(parametrosGenerales == null || parametrosGenerales.getNroComienzoODT() == null) {
