@@ -30,13 +30,13 @@ public class ModuloODTModel extends ModuloModel<ODTTO, ModeloCabeceraODT> {
 
 	public ModuloODTModel(Integer id) throws FWException {
 		super(id, BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance(), BuilderAccionesODT.getInstance());
-		setTitulo("Administrar Ordenes de trabajo");
+		setTitulo("Administrar Órdenes de trabajo");
 	}
 
 	@Override
 	public List<ODTTO> buscarItems(ModeloCabeceraODT modeloCabecera) {
 		if(modeloCabecera.isBuscarPorFiltros()) {
-			return getODTFacade().getAllODTTOByParams(modeloCabecera.getFechaDesde(), modeloCabecera.getFechaHasta(), modeloCabecera.getCliente(), null, modeloCabecera.getProducto() == null ? null : modeloCabecera.getProducto().getId(), modeloCabecera.getEstadoODT());
+			return getODTFacade().getAllODTTOByParams(modeloCabecera.getFechaDesde(), modeloCabecera.getFechaHasta(), modeloCabecera.getCliente(), null, modeloCabecera.getProducto() == null ? null : modeloCabecera.getProducto().getId(), modeloCabecera.isConProductoParcial(), modeloCabecera.getEstadoODT());
 		} else {
 			String codigo = modeloCabecera.getCodigoODT();
 			if(StringUtil.isNullOrEmpty(codigo)) {

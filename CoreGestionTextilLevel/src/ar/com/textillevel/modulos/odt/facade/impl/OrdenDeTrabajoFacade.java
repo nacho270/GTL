@@ -165,7 +165,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		for(Maquina m : maquinas){
 			mapa.put(m.getId(), new EstadoActualMaquinaTO(m));
 		}
-		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, null);
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, null, false);
 		for(ODTTO odt : allODTSEnProceso){
 			Integer m = odt.getMaquinaActual();
 			EstadoActualMaquinaTO estadoActualoMaquinaTO = mapa.get(m);
@@ -190,7 +190,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 		for(TipoMaquina tm : maquinas){
 			mapa.put(tm, new EstadoActualTipoMaquinaTO(tm));
 		}
-		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, null);
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, null, false);
 		for(ODTTO odt : allODTSEnProceso){
 			if(odt.getMaquinaActual() != null && odt.getTipoProducto() != null && odt.getTipoProducto() != ETipoProducto.DEVOLUCION && odt.getTipoProducto() != ETipoProducto.REPROCESO_SIN_CARGO) {
 				TipoMaquina tm = odt.getTipoMaquina();
@@ -205,7 +205,7 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	}
 
 	private List<ODTTO> getOdtsPendientes(Date fechaDesde, Date fechaHasta, Cliente cliente) {
-		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, null, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA, EEstadoODT.DETENIDA);
+		List<ODTTO> allODTSEnProceso = odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, null, null, false, EEstadoODT.PENDIENTE, EEstadoODT.COMPLETA, EEstadoODT.IMPRESA, EEstadoODT.DETENIDA);
 		List<ODTTO> odtsPendientesTO = new ArrayList<ODTTO>();
 		if(allODTSEnProceso!=null && !allODTSEnProceso.isEmpty()){
 			for(ODTTO odt : allODTSEnProceso){
@@ -513,8 +513,8 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	}
 
 	@Override
-	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina,Integer idProducto, EEstadoODT... estado) {
-		return odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, idProducto, estado);
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina,Integer idProducto, boolean conProductoParcial, EEstadoODT... estado) {
+		return odtDAO.getAllODTTOByParams(fechaDesde, fechaHasta, cliente, idTipoMaquina, idProducto, conProductoParcial, estado);
 	}
 
 	@Override

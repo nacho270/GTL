@@ -16,6 +16,7 @@ import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,6 +58,7 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 	private JPanel panProductos; 
 	private JComboBox cmbProductos;
 	private JComboBox cmbEstadoODT;
+	private JCheckBox chkConProductoParcial;
 	
 	private FWJTextField txtCodigo;
 
@@ -105,10 +107,11 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 			panProductos.add(getCmbProductos());
 			panProductos.add(new JLabel("ESTADO:"));
 			panProductos.add(getCmbEstadoODT());
+			panProductos.add(getChkConProductoParcial());
 		}
 		return panProductos;
 	}
-	
+
 	private JComboBox getCmbEstadoODT() {
 		if(cmbEstadoODT == null){
 			cmbEstadoODT = new JComboBox();
@@ -132,6 +135,23 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 		}
 		return cmbEstadoODT;
 	}	
+
+	private JCheckBox getChkConProductoParcial() {
+		if(chkConProductoParcial == null) {
+			chkConProductoParcial = new JCheckBox("Sin Color");
+			chkConProductoParcial.setSelected(false);
+			chkConProductoParcial.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					notificar();
+				}
+
+			});
+		}
+		return chkConProductoParcial;
+	}
+
 	private JComboBox getCmbProductos() {
 		if(cmbProductos == null) {
 			cmbProductos = new JComboBox();
@@ -171,10 +191,10 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 		} else {
 			model.setEstadoODT((EEstadoODT)getCmbEstadoODT().getSelectedItem());
 		}
+		model.setConProductoParcial(getChkConProductoParcial().isSelected());
 		return model;
 	}
-	
-	
+
 	private PanelDatePicker getPanelFechaDesde() {
 		if(panelFechaDesde == null){
 			panelFechaDesde = new PanelDatePicker() {

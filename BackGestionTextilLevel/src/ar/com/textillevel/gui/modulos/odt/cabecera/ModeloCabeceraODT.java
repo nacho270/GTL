@@ -14,6 +14,7 @@ public class ModeloCabeceraODT {
 	private Cliente cliente;
 	private Producto producto;
 	private String codigoODT;
+	private boolean conProductoParcial;
 	private boolean buscarPorFiltros;
 
 	public ModeloCabeceraODT() {
@@ -74,6 +75,14 @@ public class ModeloCabeceraODT {
 
 	public void setBuscarPorFiltros(boolean buscarPorFiltros) {
 		this.buscarPorFiltros = buscarPorFiltros;
+	}
+
+	public boolean isConProductoParcial() {
+		return conProductoParcial;
+	}
+
+	public void setConProductoParcial(boolean conProductoParcial) {
+		this.conProductoParcial = conProductoParcial;
 	}
 
 }

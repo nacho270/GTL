@@ -77,7 +77,7 @@ public interface OrdenDeTrabajoFacadeRemote {
 	
 	public List<OrdenDeTrabajo> getAllNoFinalizadasBySector(ESectorMaquina sector);
 
-	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, Integer idProducto, EEstadoODT... estado);
+	public List<ODTTO> getAllODTTOByParams(Date fechaDesde, Date fechaHasta, Cliente cliente, Integer idTipoMaquina, Integer idProducto, boolean conProductoParcial, EEstadoODT... estado);
 
 	public OrdenDeTrabajo borrarPiezasSinSalida(OrdenDeTrabajo odt, UsuarioSistema usuarioSistema);
 
