@@ -23,6 +23,7 @@ import ar.com.textillevel.dao.api.local.RemitoSalidaDAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.PiezaRemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
@@ -276,8 +277,8 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		return StringUtil.getCadena(infoList, ", ");
 	}
 
-	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto) {
-		return remitoEntradaDAO.getRemitoEntradaByFechasAndCliente(fechaDesde, fechaHasta, idCliente, producto);
+	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto, ESituacionODTRE eSituacionODTRE) {
+		return remitoEntradaDAO.getRemitoEntradaByFechasAndCliente(fechaDesde, fechaHasta, idCliente, producto, eSituacionODTRE);
 	}
 
 	public List<RemitoEntrada> getRemitoEntradaConPiezasNoAsociadasList() {

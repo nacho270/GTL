@@ -29,7 +29,7 @@ public class ModuloRemitoEntradaModel extends ModuloModel<RemitoEntrada, ModeloC
 	public List<RemitoEntrada> buscarItems(ModeloCabeceraRemitoEntrada modeloCabecera) {
 		if(modeloCabecera.isBuscarPorFiltros()) {
 			Cliente cliente = modeloCabecera.getCliente();
-			return getRemitoEntradaFacade().getRemitoEntradaByFechasAndCliente(modeloCabecera.getFechaDesde(), modeloCabecera.getFechaHasta(), cliente == null ? null : cliente.getId(), modeloCabecera.getProducto());
+			return getRemitoEntradaFacade().getRemitoEntradaByFechasAndCliente(modeloCabecera.getFechaDesde(), modeloCabecera.getFechaHasta(), cliente == null ? null : cliente.getId(), modeloCabecera.getProducto(), modeloCabecera.getSituacionODT());
 		} else {
 			Integer nroRemito = modeloCabecera.getNroRemito();
 			if(nroRemito == null || nroRemito == 0) {

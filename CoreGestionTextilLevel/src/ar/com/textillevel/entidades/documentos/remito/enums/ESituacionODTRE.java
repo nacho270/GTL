@@ -5,9 +5,9 @@ import java.util.Map;
 
 public enum ESituacionODTRE {
 
-	CON_ODT								(0,"CON_ODT"), 
-	CON_ODT_PARCIAL						(1,"CON_ODT_PARCIAL"), 
-	SIN_ODT								(2,"SIN_ODT");
+	CON_ODT								(0,"CON ODT"), 
+	CON_ODT_PARCIAL						(1,"CON ODT SIN COLOR"), 
+	SIN_ODT								(2,"SIN ODT");
 
 	private ESituacionODTRE(Integer id, String descripcion) {
 		this.id = id;

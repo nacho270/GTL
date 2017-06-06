@@ -14,6 +14,7 @@ import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.RemitoEntradaDAOLocal;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoTela;
 import ar.com.textillevel.entidades.ventas.DetallePiezaFisicaTO;
@@ -120,19 +121,23 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 		}
 	}
 
-	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto) {
+	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto, ESituacionODTRE eSituacionODT) {
 		Query query = getEntityManager().createQuery("SELECT re " + 
 													"FROM RemitoEntrada re "
 													+ "WHERE 1=1 "
 													+ (producto == null ? "" : " AND exists (SELECT 1 FROM OrdenDeTrabajo odt left join odt.productoArticulo pa WHERE odt.remito.id = re.id AND (pa.producto = :producto OR odt.productoParcial.producto = :producto)) ")
 													+ "AND re.fechaEmision between :fechaDesde AND :fechaHasta "
 													+ (idCliente == null ? "" : " AND re.cliente.id = :idCliente ")
+													+ (eSituacionODT == null ? "" : "AND re.idSituacionODT = :idSituacionODT ")
 													+ "ORDER BY re.fechaEmision ");
 		if(idCliente != null) {
 			query.setParameter("idCliente", idCliente);
 		}
 		if(producto != null) {
 			query.setParameter("producto", producto);
+		}
+		if(eSituacionODT != null) {
+			query.setParameter("idSituacionODT", eSituacionODT.getId());
 		}
 		query.setParameter("fechaDesde", fechaDesde);
 		query.setParameter("fechaHasta", fechaHasta);

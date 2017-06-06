@@ -26,6 +26,7 @@ import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
@@ -35,6 +36,7 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada> {
 
@@ -56,7 +58,9 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 	
 	private JPanel panProductos; 
 	private JComboBox cmbProductos;
+	private JComboBox cmbSituacionODT;
 	private FWJNumericTextField txtNroRemito;
+	
 
 	private ProductoFacadeRemote productoFacade;
 	
@@ -95,13 +99,16 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 		}
 		return panFiltros;
 	}
-	
+
 	private JPanel getPanProductos() {
 		if(panProductos == null) {
 			panProductos = new JPanel();
 			panProductos.setLayout(new FlowLayout(FlowLayout.CENTER,5,2));
 			panProductos.add(new JLabel("PRODUCTO:"));
 			panProductos.add(getCmbProductos());
+			panProductos.add(new JLabel("ODT:"));
+			panProductos.add(getCmbSituacionODT());
+			
 		}
 		return panProductos;
 	}
@@ -125,7 +132,27 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 		}
 		return cmbProductos;
 	}
-	
+
+	private JComboBox getCmbSituacionODT() {
+		if(cmbSituacionODT == null) {
+			cmbSituacionODT = new JComboBox();
+			GuiUtil.llenarCombo(cmbSituacionODT, Arrays.asList(ESituacionODTRE.values()), true);
+			cmbSituacionODT.insertItemAt("TODOS", 0);
+			cmbSituacionODT.setSelectedIndex(0);
+			cmbSituacionODT.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						notificar();
+					}
+				}
+			});
+			
+		}
+		return cmbSituacionODT;
+	}
+
 	@Override
 	public ModeloCabeceraRemitoEntrada getModel() {
 		if (model == null) {
@@ -140,10 +167,14 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 		} else {
 			model.setProducto((Producto)getCmbProductos().getSelectedItem());
 		}
+		if(getCmbSituacionODT().getSelectedIndex() == 0) {
+			model.setSituacionODT(null);;
+		} else {
+			model.setSituacionODT((ESituacionODTRE)getCmbSituacionODT().getSelectedItem());
+		}
 		return model;
 	}
-	
-	
+
 	private PanelDatePicker getPanelFechaDesde() {
 		if(panelFechaDesde == null){
 			panelFechaDesde = new PanelDatePicker() {

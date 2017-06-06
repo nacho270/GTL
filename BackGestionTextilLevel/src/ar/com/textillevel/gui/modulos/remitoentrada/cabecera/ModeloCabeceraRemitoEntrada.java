@@ -1,6 +1,8 @@
 package ar.com.textillevel.gui.modulos.remitoentrada.cabecera;
 
 import java.sql.Date;
+
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 
@@ -11,6 +13,7 @@ public class ModeloCabeceraRemitoEntrada {
 	private Cliente cliente;
 	private Producto producto;
 	private Integer nroRemito;
+	private ESituacionODTRE situacionODT;
 	private boolean buscarPorFiltros;
 
 	public ModeloCabeceraRemitoEntrada() {
@@ -63,6 +66,14 @@ public class ModeloCabeceraRemitoEntrada {
 
 	public boolean isBuscarPorFiltros() {
 		return buscarPorFiltros;
+	}
+
+	public ESituacionODTRE getSituacionODT() {
+		return situacionODT;
+	}
+
+	public void setSituacionODT(ESituacionODTRE situacionODT) {
+		this.situacionODT = situacionODT;
 	}
 
 }

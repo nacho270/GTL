@@ -367,7 +367,7 @@ public class JDialogConsultarRemitosEntrada extends JDialog {
 		if(getRbtBuscarRemitoPorCliente().isSelected()) {
 			if(getCliente() != null) {
 				getPanTablaRemitosEntrada().getTabla().removeAllRows();
-				List<RemitoEntrada> remitoEntradaList = getRemitoEntradaFacade().getRemitoEntradaByFechasAndCliente(new Date(getPanelFechaDesde().getDate().getTime()), DateUtil.getManiana(new Date(getPanelFechaHasta().getDate().getTime())), getCliente().getId(), null);
+				List<RemitoEntrada> remitoEntradaList = getRemitoEntradaFacade().getRemitoEntradaByFechasAndCliente(new Date(getPanelFechaDesde().getDate().getTime()), DateUtil.getManiana(new Date(getPanelFechaHasta().getDate().getTime())), getCliente().getId(), null, null);
 				getPanTablaRemitosEntrada().agregarElementos(remitoEntradaList);
 			}
 		} else {

@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.documentos.remito.proveedor.RemitoEntradaProveedor;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
@@ -34,7 +35,7 @@ public interface RemitoEntradaFacadeRemote {
 
 	public void eliminarRemitoEntrada(Integer idRE, String usuario) throws ValidacionException;
 
-	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto);
+	public List<RemitoEntrada> getRemitoEntradaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente, Producto producto, ESituacionODTRE eSituacionODTRE);
 
 	public void checkEliminacionOrEdicionRemitoEntrada(Integer idRECliente, List<OrdenDeTrabajo> odts) throws ValidacionException;
 
