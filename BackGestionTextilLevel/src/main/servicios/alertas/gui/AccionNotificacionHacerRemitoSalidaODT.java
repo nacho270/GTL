@@ -16,10 +16,10 @@ public class AccionNotificacionHacerRemitoSalidaODT implements AccionNotificacio
 	}
 
 	@Override
-	public void ejecutar(Integer idODT) {
+	public boolean ejecutar(Integer idODT) {
 		OrdenDeTrabajoFacadeRemote odtFacade = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class);
 		OrdenDeTrabajo odt = odtFacade.getByIdEager(idODT);
 		IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(null, odt.getRemito().getCliente(), Collections.singletonList(odt));
-		handler.gestionarIngresoRemitoSalida();
+		return handler.gestionarIngresoRemitoSalida();
 	}
 }

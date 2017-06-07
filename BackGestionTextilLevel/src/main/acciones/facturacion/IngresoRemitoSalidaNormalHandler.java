@@ -35,9 +35,9 @@ public class IngresoRemitoSalidaNormalHandler {
 		this.odtList = odts;
 	}
 
-	public void gestionarIngresoRemitoSalida() {
+	public boolean gestionarIngresoRemitoSalida() {
 		if(!checkODTs()) {
-			return;
+			return false;
 		}
 		ParametrosGeneralesFacadeRemote paramGeneralesFacadeRemote = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		RemitoSalidaFacadeRemote remitoSalidaFacadeRemote = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class);
@@ -76,7 +76,9 @@ public class IngresoRemitoSalidaNormalHandler {
 					JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(owner, Collections.singletonList(remitoSalidaSaved), remitoSalidaSaved.getNroFactura(), cantTubosIngresada, false,remitoSalidaSaved.getCliente());
 					dialogCargaFactura.setVisible(true);
 				}
-			}  //lógica de remitos múltiples
+			}  
+			return true;
+			//lógica de remitos múltiples
 		} else if(dialogAgregarRemitoSalida.getRemitosSalida() != null && !esReproceso) {
 			List<RemitoSalida> remitosSalida = dialogAgregarRemitoSalida.getRemitosSalida();
 			remitosSalida = remitoSalidaFacadeRemote.getByIdsConPiezasYProductos(extractIds(remitosSalida));
@@ -96,8 +98,9 @@ public class IngresoRemitoSalidaNormalHandler {
 				JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(owner, remitosSalida, remitoEjemplo.getNroFactura(), cantTubosIngresada, false, remitoEjemplo.getCliente());
 				dialogCargaFactura.setVisible(true);
 			}
+			return true;
 		} else { //se canceló o es un reproceso
-			return;
+			return false;
 		}
 	}
 

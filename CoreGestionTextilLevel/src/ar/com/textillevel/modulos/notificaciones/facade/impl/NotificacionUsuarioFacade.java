@@ -77,4 +77,9 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 		nc.setLeida(true);
 		return notificacionesDAO.save(nc);
 	}
+
+	@Override
+	public void marcarComoLeidaATodosLosUsuarios(NotificacionUsuario nc) {
+		notificacionesDAO.marcarComoLeidaATodosLosUsuarios(nc.getIdRelacionado(), nc.getTipo());	
+	}
 }

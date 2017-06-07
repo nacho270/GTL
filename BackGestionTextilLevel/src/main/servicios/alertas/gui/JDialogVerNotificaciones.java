@@ -80,8 +80,11 @@ public class JDialogVerNotificaciones extends JDialog {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						an.ejecutar(nc.getIdRelacionado());
+						boolean accionRealizada = an.ejecutar(nc.getIdRelacionado());
 						notificacionFacade.marcarComoLeida(nc);
+						if (accionRealizada) {
+							notificacionFacade.marcarComoLeidaATodosLosUsuarios(nc);
+						}
 						for (NotificacionUsuario noti : notificaciones) {
 							if (noti.getId().equals(nc.getId())) {
 								noti.setLeida(true);

@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.modulos.notificaciones.dao.api.local.NotificacionUsuarioDAOLocal;
 import ar.com.textillevel.modulos.notificaciones.entidades.NotificacionUsuario;
+import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
 
 @Stateless
 public class NotificacionUsuarioDAO extends GenericDAO<NotificacionUsuario, Integer> implements NotificacionUsuarioDAOLocal {
@@ -33,5 +34,14 @@ public class NotificacionUsuarioDAO extends GenericDAO<NotificacionUsuario, Inte
 			return 0;
 		}
 		return count.intValue();
+	}
+
+	@Override
+	public void marcarComoLeidaATodosLosUsuarios(Integer idRelacionado, ETipoNotificacion tipo) {
+		Query q = getEntityManager().createQuery(" UPDATE NotificacionUsuario nc SET nc.leida = true "
+				+ " WHERE nc.idRelacionado = :idRelacionado AND nc.idTipo = :idTipo ");
+		q.setParameter("idRelacionado", idRelacionado);
+		q.setParameter("idTipo", tipo.getId());
+		q.executeUpdate();
 	}
 }
