@@ -4,6 +4,8 @@ import java.util.Collections;
 
 import main.acciones.facturacion.IngresoRemitoSalidaNormalHandler;
 import main.servicios.alertas.AccionNotificacion;
+import ar.com.textillevel.modulos.notificaciones.enums.ETipoNotificacion;
+import ar.com.textillevel.modulos.notificaciones.facade.api.remote.NotificacionUsuarioFacadeRemote;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -20,6 +22,10 @@ public class AccionNotificacionHacerRemitoSalidaODT implements AccionNotificacio
 		OrdenDeTrabajoFacadeRemote odtFacade = GTLBeanFactory.getInstance().getBean2(OrdenDeTrabajoFacadeRemote.class);
 		OrdenDeTrabajo odt = odtFacade.getByIdEager(idODT);
 		IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(null, odt.getRemito().getCliente(), Collections.singletonList(odt));
-		return handler.gestionarIngresoRemitoSalida();
+		boolean accionRealizada = handler.gestionarIngresoRemitoSalida();
+		if (accionRealizada) {
+			GTLBeanFactory.getInstance().getBean2(NotificacionUsuarioFacadeRemote.class).marcarComoLeidaATodosLosUsuarios(idODT, ETipoNotificacion.ODT_EN_OFICINA);
+		}
+		return accionRealizada;
 	}
 }

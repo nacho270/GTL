@@ -82,4 +82,9 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 	public void marcarComoLeidaATodosLosUsuarios(NotificacionUsuario nc) {
 		notificacionesDAO.marcarComoLeidaATodosLosUsuarios(nc.getIdRelacionado(), nc.getTipo());	
 	}
+
+	@Override
+	public void marcarComoLeidaATodosLosUsuarios(Integer idRelacionado, ETipoNotificacion tipo) {
+		notificacionesDAO.marcarComoLeidaATodosLosUsuarios(idRelacionado, tipo);	
+	}
 }
