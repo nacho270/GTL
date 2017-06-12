@@ -138,9 +138,11 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		return chequeDAO.getChequesByCliente(idCliente, estadoCheque);
 	}
 
-	public CorreccionFactura rechazarCheque (Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback {
-		//Genero una nota de débito al proveedor que tiene asignado el cheque
+	public CorreccionFactura rechazarCheque (Cheque chequeElegido, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback {
+		Cheque cheque = chequeDAO.getById(chequeElegido.getId());
+		checkPrecondicionesRechazar(cheque);
 		
+		//Genero una nota de débito al proveedor que tiene asignado el cheque
 		if(gastos==null){
 			gastos = BigDecimal.ZERO;
 		}
@@ -207,6 +209,20 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		CorreccionFactura correccionNueva = correccionFacade.guardarCorreccionYGenerarMovimiento(correccion,usuario);
 		auditoriaFacade.auditar(usuario, "Rechazo del cheque N°: " + cheque.getNumeracion() + ". Motivo: " + motivoRechazo, EnumTipoEvento.ANULACION, cheque);
 		return correccionNueva;
+	}
+
+	private void checkPrecondicionesRechazar(Cheque cheque) throws ValidacionException {
+		EEstadoCheque estadoActual = cheque.getEstadoCheque();
+		boolean estadoPosible = estadoActual == EEstadoCheque.PENDIENTE_COBRAR || 
+								estadoActual == EEstadoCheque.EN_CARTERA ||
+								estadoActual == EEstadoCheque.SALIDA_BANCO ||
+								estadoActual == EEstadoCheque.SALIDA_CLIENTE ||
+								estadoActual == EEstadoCheque.SALIDA_PERSONA ||
+								estadoActual == EEstadoCheque.SALIDA_PROVEEDOR;
+		
+		if(!estadoPosible) {
+			throw new ValidacionException(EValidacionException.CHEQUE_ESTADO_INVALIDO_PARA_RECHAZAR.getInfoValidacion(), Collections.singletonList(estadoActual.toString()));
+		}
 	}
 
 	private boolean esHoy(java.sql.Date fecha){

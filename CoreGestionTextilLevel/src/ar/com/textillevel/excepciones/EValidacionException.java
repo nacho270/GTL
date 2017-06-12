@@ -57,6 +57,7 @@ public enum EValidacionException {
 	COTIZACION_LISTA_DE_PRECIOS_NUMERO_REPETIDO		(152, "El número de cotización generado ya existe."),
 	CORRECTOR_DE_CUENTAS_DATOS_INCONSISTENTES		(153, "Datos Inconsistentes. Había más movimientos que documentos recuperados. Chequear nro de sucursal de documentos viejos.."),
 	ODT_DIRTY_DATA									(154, "La ODT fue modificada recientemente, por favor, vuelva a intentar la operación"),
+	CHEQUE_ESTADO_INVALIDO_PARA_RECHAZAR			(155, "No se puede rechazar un cheque en estado '{0}'."),
 	
 	_											(000, "");
 	
