@@ -22,114 +22,89 @@
 		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
 	</target>
 
+	<target name="sign-local" depends="create-client-jar-LOCAL" description="Firma ${client.jar.name}">
+		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
+	</target>
+
 	<target name="sign-B" depends="create-client-jar-B" description="Firma ${client.jar.name}">
 		<signjar jar="${client.jar.name}" keystore="${keystore}" alias="jdc" storepass="qwerty"/>
 	</target>
 
 	<target name="create-client-jar-B" description="Crea ${client.jar.name} en la raíz del proyecto" >
 		<jar jarfile="${client.jar.name}" duplicate="preserve">
-			<fileset dir="bin">
-				<include name="ar/**" />
-				<include name="main/**" />
-				<include name="jndi.properties" />
-				<include name="organizacionMenues.xml" />
-			</fileset>
-
 			<fileset dir="resources-b">
 				<include name="JNLP-INF/**" />
 			</fileset>
-	
-			<fileset dir="../FWCommon/bin">
-				<include name="ar/**" />
-				<include name="fwcommon.properties" />
-				<exclude name="**/*.hbm.xml" />
-			</fileset>
 
-			<fileset dir="../CoreGestionTextilLevel/bin">
-				<include name="ar/com/textillevel/entidades/**" />
-				<include name="ar/com/textillevel/facade/api/remote/**" />
-				<include name="ar/com/textillevel/util/**" />
-				<include name="ar/com/textillevel/modulos/chat/mensajes/**" />
-				<include name="ar/com/textillevel/modulos/personal/entidades/**" />
-				<include name="ar/com/textillevel/modulos/personal/utils/**" />
-				<include name="ar/com/textillevel/modulos/personal/enums/**" />
-				<include name="ar/com/textillevel/modulos/personal/facade/api/remote/**" />
-				
-				<include name="ar/com/textillevel/modulos/odt/entidades/**" />
-				<include name="ar/com/textillevel/modulos/odt/to/**" />
-				<include name="ar/com/textillevel/modulos/odt/util/**" />
-				<include name="ar/com/textillevel/modulos/odt/enums/**" />
-				<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
-				
-				<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
-				<include name="ar/com/textillevel/modulos/alertas/enums/**" />
-				<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
+			<multirootfileset refid="clases-common-cliente-back"/>
 
-				<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
-				<include name="ar/com/textillevel/modulos/fe/to/**" />
-				
-				<include name="ar/com/textillevel/modulos/terminal/entidades/**" />
-				<include name="ar/com/textillevel/modulos/terminal/facade/api/remote/**" />
-				
-				<include name="ar/com/textillevel/modulos/notificaciones/facade/api/remote/**" />
-				<include name="ar/com/textillevel/modulos/notificaciones/entidades/**" />
-				<include name="ar/com/textillevel/modulos/notificaciones/enums/**" />
-			</fileset>
 		</jar>
 	</target>
 
 	<target name="create-client-jar-A" description="Crea ${client.jar.name} en la raíz del proyecto" >
 		<jar jarfile="${client.jar.name}" duplicate="preserve">
-			<fileset dir="bin">
-				<include name="ar/**" />
-				<include name="main/**" />
-				<include name="jndi.properties" />
-				<include name="organizacionMenues.xml" />
-			</fileset>
 
 			<fileset dir="resources">
 				<include name="JNLP-INF/**" />
 			</fileset>
 
-			<fileset dir="../FWCommon/bin">
-				<include name="ar/**" />
-				<include name="fwcommon.properties" />
-				<exclude name="**/*.hbm.xml" />
-			</fileset>
-
-			<fileset dir="../CoreGestionTextilLevel/bin">
-				<include name="ar/com/textillevel/entidades/**" />
-				<include name="ar/com/textillevel/facade/api/remote/**" />
-				<include name="ar/com/textillevel/util/**" />
-				<include name="ar/com/textillevel/modulos/chat/mensajes/**" />
-				<include name="ar/com/textillevel/modulos/personal/entidades/**" />
-				<include name="ar/com/textillevel/modulos/personal/utils/**" />
-				<include name="ar/com/textillevel/modulos/personal/enums/**" />
-				<include name="ar/com/textillevel/modulos/personal/facade/api/remote/**" />
-				
-				<include name="ar/com/textillevel/modulos/odt/entidades/**" />
-				<include name="ar/com/textillevel/modulos/odt/to/**" />
-				<include name="ar/com/textillevel/modulos/odt/enums/**" />
-				<include name="ar/com/textillevel/modulos/odt/util/**" />
-				<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
-				
-				<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
-				<include name="ar/com/textillevel/modulos/alertas/enums/**" />
-				<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
-				
-				<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
-				<include name="ar/com/textillevel/modulos/fe/to/**" />
-
-				<include name="ar/com/textillevel/modulos/terminal/entidades/**" />
-				<include name="ar/com/textillevel/modulos/terminal/facade/api/remote/**" />
-
-				<include name="ar/com/textillevel/modulos/notificaciones/facade/api/remote/**" />
-				<include name="ar/com/textillevel/modulos/notificaciones/entidades/**" />
-				<include name="ar/com/textillevel/modulos/notificaciones/enums/**" />
-			</fileset>
+			<multirootfileset refid="clases-common-cliente-back"/>		
 		</jar>
 	</target>
 
+	<target name="create-client-jar-LOCAL" description="Crea ${client.jar.name} en la raíz del proyecto" >
+		<jar jarfile="${client.jar.name}" duplicate="preserve">
+
+			<fileset dir="resources-local">
+				<include name="JNLP-INF/**" />
+			</fileset>
+
+			<multirootfileset refid="clases-common-cliente-back"/>
+			
+		</jar>
+	</target>	
+	
+	<multirootfileset basedirs="bin,../FWCommon/bin,../CoreGestionTextilLevel/bin" id="clases-common-cliente-back" >
+			<include name="ar/**" />
+			<include name="main/**" />
+			<include name="jndi.properties" />
+			<include name="organizacionMenues.xml" />
+
+			<include name="ar/**" />
+			<include name="fwcommon.properties" />
+			<exclude name="**/*.hbm.xml" />
+
+			<include name="ar/com/textillevel/entidades/**" />
+			<include name="ar/com/textillevel/facade/api/remote/**" />
+			<include name="ar/com/textillevel/util/**" />
+			<include name="ar/com/textillevel/modulos/chat/mensajes/**" />
+			<include name="ar/com/textillevel/modulos/personal/entidades/**" />
+			<include name="ar/com/textillevel/modulos/personal/utils/**" />
+			<include name="ar/com/textillevel/modulos/personal/enums/**" />
+			<include name="ar/com/textillevel/modulos/personal/facade/api/remote/**" />
+			
+			<include name="ar/com/textillevel/modulos/odt/entidades/**" />
+			<include name="ar/com/textillevel/modulos/odt/to/**" />
+			<include name="ar/com/textillevel/modulos/odt/enums/**" />
+			<include name="ar/com/textillevel/modulos/odt/util/**" />
+			<include name="ar/com/textillevel/modulos/odt/facade/api/remote/**" />
+			
+			<include name="ar/com/textillevel/modulos/alertas/facade/api/remote/**" />
+			<include name="ar/com/textillevel/modulos/alertas/enums/**" />
+			<include name="ar/com/textillevel/modulos/alertas/entidades/**" />
+			
+			<include name="ar/com/textillevel/modulos/fe/facade/api/remote/**" />
+			<include name="ar/com/textillevel/modulos/fe/to/**" />
+
+			<include name="ar/com/textillevel/modulos/terminal/entidades/**" />
+			<include name="ar/com/textillevel/modulos/terminal/facade/api/remote/**" />
+
+			<include name="ar/com/textillevel/modulos/notificaciones/facade/api/remote/**" />
+			<include name="ar/com/textillevel/modulos/notificaciones/entidades/**" />
+			<include name="ar/com/textillevel/modulos/notificaciones/enums/**" />
+	</multirootfileset>	
+	
+	
 	<target name="deploy-ambiente-comun">
 		<mkdir dir="${ear.dir}" />
 			<mkdir dir="${ear.dir}/META-INF" />

@@ -108,12 +108,13 @@ public class JDialogEditarVariante extends JDialog {
 	private void setDatos() {
 		getTxtNombreVariante().setText(varianteEstampado.getNombre());
 		getChkFondoSeEstampaEnCilindro().setSelected(varianteEstampado.fondoSeEstampaEnCilindro());
+		GuiUtil.llenarCombo(getCmbGama(), GTLBeanFactory.getInstance().getBean2(GamaColorFacadeRemote.class).getAllOrderByName(), true);
 		getCmbGama().setSelectedItem(varianteEstampado.getGama());
-		getCmbColorParaFondo().setSelectedItem(varianteEstampado.getColorFondo());
 		getTxtCobertura().setText(varianteEstampado.getPorcentajeCobertura() == null ? null : varianteEstampado.getPorcentajeCobertura().toString());
 		if(varianteEstampado.getImagenEstampado() !=null){
 			putImageInLabel(varianteEstampado.getImagenEstampado());
 		}
+		getCmbColorParaFondo().setSelectedItem(varianteEstampado.getColorFondo());
 
 		Collections.sort(varianteEstampado.getColores(), new Comparator<ColorCilindro>() {
 
@@ -572,14 +573,13 @@ public class JDialogEditarVariante extends JDialog {
 	private JComboBox getCmbGama() {
 		if(cmbGama == null) {
 			cmbGama = new JComboBox();
-			GuiUtil.llenarCombo(cmbGama, GTLBeanFactory.getInstance().getBean2(GamaColorFacadeRemote.class).getAllOrderByName(), true);
 
 			cmbGama.addItemListener(new ItemListener() {
 
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED) {
 						GamaColor gama = (GamaColor)getCmbGama().getSelectedItem();
-						GuiUtil.llenarCombo(cmbColorParaFondo, gama.getColores(), true);
+						GuiUtil.llenarCombo(getCmbColorParaFondo(), gama.getColores(), true);
 					}
 				}
 
