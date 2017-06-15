@@ -18,7 +18,7 @@ import main.GTLGlobalCache;
 public class AccionBorrarPiezasSinSalidaODT extends Accion<ODTTO> {
 	
 	public AccionBorrarPiezasSinSalidaODT(){
-		setNombre("Permite borrar piezas que no tuvieron salida");
+		setNombre("Borrar piezas sin salida");
 		setDescripcion("Permite borrar piezas que no tuvieron salida"); 
 		setTooltip(crearTooltip(getNombre(), getDescripcion(), null));
 		setImagenActivo("ar/com/textillevel/imagenes/b_borrar_piezas_sin_salida.png");

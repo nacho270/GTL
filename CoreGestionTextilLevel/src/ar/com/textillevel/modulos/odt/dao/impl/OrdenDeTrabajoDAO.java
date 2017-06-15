@@ -244,7 +244,8 @@ public class OrdenDeTrabajoDAO extends GenericDAO<OrdenDeTrabajo, Integer> imple
 				 (idProducto!=null?" AND (pa.producto.id = :idProducto OR  odt.productoParcial.producto.id = :idProducto) ":" ") +
 				 (conProductoParcial ? " AND odt.productoParcial.producto is NOT NULL " : " ") + 
 				 (estado!=null && estado.length > 0 && estado[0] != null ?" AND odt.idEstadoODT IN (:idEstadoODT) ":" ")+
-				 " GROUP BY odt.id, odt.codigo, odt.remito.id, odt.remito.cliente, odt.productoArticulo, odt.productoParcial, odt.ordenEnMaquina, odt.maquinaActual.id, odt.remito.pesoTotal, odt.idAvance, odt.fechaPorComenzarUltSector, odt.fechaEnProcesoUltSector, odt.fechaFinalizadoUltSector ";	
+				 " GROUP BY odt.id, odt.codigo, odt.remito.id, odt.remito.cliente, odt.productoArticulo, odt.productoParcial, odt.ordenEnMaquina, odt.maquinaActual.id, odt.remito.pesoTotal, odt.idAvance, odt.fechaPorComenzarUltSector, odt.fechaEnProcesoUltSector, odt.fechaFinalizadoUltSector " +
+				 " ORDER BY odt.id DESC";	
 		Query q = getEntityManager().createQuery(hql);
 		if(estado!=null && estado.length > 0 && estado[0] != null){
 			ImmutableList<Integer> idsEstados = FluentIterable.from(Arrays.asList(estado))

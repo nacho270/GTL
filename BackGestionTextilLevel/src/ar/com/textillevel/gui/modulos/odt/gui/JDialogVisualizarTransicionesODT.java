@@ -85,7 +85,7 @@ public class JDialogVisualizarTransicionesODT extends JDialog {
 				to.setDetalle("En Máquina '" + t.getMaquina().getNombre() + "'");
 				to.setEstado(ca.getAvance().getDescripcion());
 				to.setFechaHora(ca.getFechaHora());
-				to.setUsuario(ca.getUsuario() == null ? ca.getTerminal().getNombre() : ca.getUsuario().getUsrName());
+				to.setUsuario(ca.getUsuario() == null ? (ca.getTerminal() == null ? "" : ca.getTerminal().getNombre()) : ca.getUsuario().getUsrName());
 				to.setObservaciones(ca.getObservaciones());
 				to.setId(ca.getId());
 				transicionesTO.add(to);

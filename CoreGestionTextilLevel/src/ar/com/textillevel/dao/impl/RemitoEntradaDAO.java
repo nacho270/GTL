@@ -129,7 +129,7 @@ public class RemitoEntradaDAO extends GenericDAO<RemitoEntrada, Integer> impleme
 													+ "AND re.fechaEmision between :fechaDesde AND :fechaHasta "
 													+ (idCliente == null ? "" : " AND re.cliente.id = :idCliente ")
 													+ (eSituacionODT == null ? "" : "AND re.idSituacionODT = :idSituacionODT ")
-													+ "ORDER BY re.fechaEmision ");
+													+ "ORDER BY re.fechaEmision DESC");
 		if(idCliente != null) {
 			query.setParameter("idCliente", idCliente);
 		}

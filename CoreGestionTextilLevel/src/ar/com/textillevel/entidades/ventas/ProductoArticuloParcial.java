@@ -41,7 +41,7 @@ public class ProductoArticuloParcial implements Serializable, IProductoParaODT {
 
 	@Override
 	public String toString() {
-		return getProducto() + " - " + getArticulo();
+		return getProducto() + " - " + getArticulo() + " [A DEFINIR]";
 	}
 
 	@Override
