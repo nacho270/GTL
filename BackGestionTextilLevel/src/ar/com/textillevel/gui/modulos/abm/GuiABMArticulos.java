@@ -279,12 +279,11 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 
 		private static final long serialVersionUID = 1L;
 
-		private static final int CANT_COLS = 5;
+		private static final int CANT_COLS = 4;
 		private static final int COL_NOMBRE = 0;
 		private static final int COL_DESCR = 1;
 		private static final int COL_ANCHO = 2;
-		private static final int COL_GRAMAJE = 3;
-		private static final int COL_OBJ = 4;
+		private static final int COL_OBJ = 3;
 		private TipoArticulo tipoArticulo;
 
 		public PanelTablaArticulos() {
@@ -302,7 +301,6 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 					getTabla().setValueAt(articulo.getNombre(), filaSeleccionada, COL_NOMBRE);
 					getTabla().setValueAt(articulo.getDescripcion(), filaSeleccionada, COL_DESCR);
 					getTabla().setValueAt(articulo.getAncho() == null ? "" : articulo.getAncho().toString(), filaSeleccionada, COL_ANCHO);
-					getTabla().setValueAt(articulo.getGramaje() == null ? "" : articulo.getGramaje().toString(), filaSeleccionada, COL_GRAMAJE);
 				}
 			}
 		}
@@ -316,8 +314,6 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_ANCHO, "ANCHO", 100, 100, true);
 			tabla.setHeaderAlignment(COL_ANCHO, FWJTable.CENTER_ALIGN);
-			tabla.setStringColumn(COL_GRAMAJE, "GRAMAJE", 120, 120, true);
-			tabla.setHeaderAlignment(COL_GRAMAJE, FWJTable.CENTER_ALIGN);
 			tabla.setStringColumn(COL_OBJ, "", 0, 0, true);
 			return tabla;
 		}
@@ -333,7 +329,6 @@ public class GuiABMArticulos extends GuiABMListaTemplate {
 			row[COL_NOMBRE] = elemento.getNombre();
 			row[COL_DESCR] = elemento.getDescripcion();
 			row[COL_ANCHO] = elemento.getAncho() == null ? "" : elemento.getAncho().toString();
-			row[COL_GRAMAJE] = elemento.getGramaje() == null ? "" : elemento.getGramaje().toString();
 			row[COL_OBJ] = elemento;
 			getTabla().addRow(row);
 		}

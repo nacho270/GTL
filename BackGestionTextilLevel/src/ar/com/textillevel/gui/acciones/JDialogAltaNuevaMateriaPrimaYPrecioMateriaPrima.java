@@ -28,10 +28,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import main.GTLGlobalCache;
 import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTextArea;
@@ -58,6 +56,7 @@ import ar.com.textillevel.facade.api.remote.TipoAnilinaFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.MateriaPrimaFactory;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JDialogAltaNuevaMateriaPrimaYPrecioMateriaPrima extends JDialog {
 
@@ -102,7 +101,6 @@ public class JDialogAltaNuevaMateriaPrimaYPrecioMateriaPrima extends JDialog {
 	// tela
 	private JPanel pnlTela;
 	private JComboBox cmbArticulo;
-	private JTextField txtGramaje;
 	
 	//cilindro
 	private JPanel pnlCilindro;
@@ -500,8 +498,6 @@ public class JDialogAltaNuevaMateriaPrimaYPrecioMateriaPrima extends JDialog {
 			getPnlControlesExtra().setVisible(true);
 			getCardLayout().show(getPnlControlesExtra(), PNL_TELA);
 			getTxtDescripcion().setText(((Articulo) getCmbArticulo().getSelectedItem()).getDescripcion());
-			BigDecimal gramaje = ((Articulo) getCmbArticulo().getSelectedItem()).getGramaje();
-			getTxtGramaje().setText(String.valueOf(gramaje == null ? "" : gramaje));
 			getTxtDescripcion().setEditable(false);
 			getCmbUnidades().setSelectedItem(EUnidad.METROS);
 			getCmbUnidades().setEnabled(false);
@@ -660,8 +656,6 @@ public class JDialogAltaNuevaMateriaPrimaYPrecioMateriaPrima extends JDialog {
 			pnlTela.setLayout(new GridBagLayout());
 			pnlTela.add(new JLabel("Artículo: "), createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			pnlTela.add(getCmbArticulo(), createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlTela.add(new JLabel("Gramaje: "), createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 0, 1, 0, 0));
-			pnlTela.add(getTxtGramaje(), createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 0, 1, 0, 0));
 		}
 		return pnlTela;
 	}
@@ -674,23 +668,12 @@ public class JDialogAltaNuevaMateriaPrimaYPrecioMateriaPrima extends JDialog {
 
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						BigDecimal gramaje = ((Articulo) cmbArticulo.getSelectedItem()).getGramaje();
-						getTxtGramaje().setText(String.valueOf(gramaje == null ? "" : gramaje));
 						getTxtDescripcion().setText(((Articulo) cmbArticulo.getSelectedItem()).getDescripcion());
 					}
 				}
 			});
 		}
 		return cmbArticulo;
-	}
-
-	private JTextField getTxtGramaje() {
-		if (txtGramaje == null) {
-			txtGramaje = new JTextField();
-			txtGramaje.setEditable(false);
-			txtGramaje.setPreferredSize(new Dimension(120, 20));
-		}
-		return txtGramaje;
 	}
 	
 	private JComboBox getCmbAnchoCilindro() {

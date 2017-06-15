@@ -26,7 +26,6 @@ public class Articulo implements Serializable {
 	private Integer id;
 	private String nombre;
 	private String descripcion;
-	private BigDecimal gramaje;
 	private BigDecimal ancho;
 	private TipoArticulo tipoArticulo;
 
@@ -57,15 +56,6 @@ public class Articulo implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	@Column(name="A_GRAMAJE")
-	public BigDecimal getGramaje() {
-		return gramaje;
-	}
-
-	public void setGramaje(BigDecimal gramaje) {
-		this.gramaje = gramaje;
 	}
 
 	@Column(name="A_ANCHO")

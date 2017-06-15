@@ -36,8 +36,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-import main.GTLGlobalCache;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWDateField;
@@ -64,6 +62,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 
@@ -384,7 +383,6 @@ public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 			if(modoConsulta || remitoEntrada.getId() != null) {
 				txtPesoTotal.setText(remitoEntrada.getPesoTotal().toString());
 			}
-			txtPesoTotal.setEditable(false);
 		}
 		return txtPesoTotal;
 	}
@@ -872,22 +870,17 @@ public class JDialogAgregarRemitoEntradaCompraTela extends JDialog {
 		private void actualizarTotales() {
 			BigDecimal tm = new BigDecimal(0);
 			int piezas = 0;
-			BigDecimal pt = new BigDecimal(0);
 			PrecioMateriaPrima pmpSeleccionada = (PrecioMateriaPrima)getCmbPMP().getSelectedItem();
 			if(pmpSeleccionada != null) {
-				Tela telaSeleccionada = (Tela)pmpSeleccionada.getMateriaPrima();
-				BigDecimal gramaje = telaSeleccionada.getArticulo().getGramaje();
 				for(PiezaRemito pe : remitoEntrada.getPiezas()) {
 					tm = tm.add(pe.getTotalMetros());
 					if(piezaValida(pe)) {
 						piezas++;
 					}
-					pt = pt.add(pe.getTotalMetros().multiply(gramaje));
 				}
 			}
 			getTxtMetros().setText(tm.toString());
 			getTxtPiezas().setText(String.valueOf(piezas));
-			getTxtPesoTotal().setText(pt.toString());
 		}
 
 		private boolean piezaValida(PiezaRemito pe) {

@@ -199,6 +199,11 @@ public class RemitoEntrada extends Remito {
 	}
 
 	@Transient
+	public float getGramaje() {
+		return getPesoTotal().floatValue() / getTotalMetros().floatValue();		
+	}
+
+	@Transient
 	public boolean isRemito01() {
 		return getArticuloStock() != null && getProveedor() == null && getPrecioMatPrima() == null;
 	}

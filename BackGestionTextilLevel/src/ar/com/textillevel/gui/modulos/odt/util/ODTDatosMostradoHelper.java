@@ -68,7 +68,7 @@ public class ODTDatosMostradoHelper {
 	}
 
 	public float getGramaje() {
-		return odt.getRemito().getPesoTotal().floatValue() / odt.getRemito().getTotalMetros().floatValue();
+		return odt.getRemito().getGramaje();
 	}
 
 	public String getDescAnchoFinal() {

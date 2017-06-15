@@ -84,7 +84,6 @@ public class JDialogDetalleStock extends JDialog {
 
 	// columnas tela
 	private static final int COL_ARTICULO = 6;
-	private static final int COL_GRAMAJE = 7;
 
 	private DecimalFormat df;
 
@@ -130,7 +129,6 @@ public class JDialogDetalleStock extends JDialog {
 			row[COL_TIPO_ANILINA] = ((Anilina) materiaPrima).getTipoAnilina().getDescripcion();
 		} else if (getTipoMateriaPrima() == ETipoMateriaPrima.TELA) {
 			row[COL_ARTICULO] = ((Tela) materiaPrima).getArticulo().getDescripcion();
-			row[COL_GRAMAJE] = ((Tela) materiaPrima).getArticulo().getGramaje();
 		}
 
 		getTablaPreciosMateriaPrima().addRow(row);
@@ -339,7 +337,6 @@ public class JDialogDetalleStock extends JDialog {
 			tabla.setStringColumn(COL_TIPO_ANILINA, "Tipo anilina", 120, 120, true);
 		} else if (getTipoMateriaPrima() == ETipoMateriaPrima.TELA) {
 			tabla.setStringColumn(COL_ARTICULO, "Artículo", 120, 120, true);
-			tabla.setIntColumn(COL_GRAMAJE, "Gramaje", 80, true);
 		}
 	}
 

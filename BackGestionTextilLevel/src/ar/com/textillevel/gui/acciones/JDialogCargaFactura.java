@@ -70,6 +70,7 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaSe
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTelaCruda;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTubo;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
@@ -182,6 +183,8 @@ public class JDialogCargaFactura extends JDialog {
 	private boolean edicion;
 
 	private DocumentoContableFacadeRemote docContableFacade;
+	
+	private Map<Integer, Float> gramajes = new HashMap<Integer, Float>();
 	
 	/**
 	 * Constructor para consulta de correcciones
@@ -508,14 +511,14 @@ public class JDialogCargaFactura extends JDialog {
 						}
 						incrementarCantEnMap(mapTotalPorTelaCruda, articulo, pr.getMetros());
 					} else {
-						incrementarCantEnMap(mapTotalPorProducto, producto, getTotalMetros(pr.getMetros(), producto));
+						incrementarCantEnMap(mapTotalPorProducto, producto, getTotalMetros(pr));
 					}
 				} else {//Son piezas de stock inicial
 					ProductoArticulo p = getProducto(pr);
 					if(p == null) { //Es una pieza de stock inicial pero sin ODT
 						incrementarCantEnMap(mapTotalStockInicial, pr.getPmpDescuentoStock(), pr.getMetros());
 					} else { //Tiene ODT
-						incrementarCantEnMap(mapTotalPorProducto, p, getTotalMetros(pr.getMetros(), p));
+						incrementarCantEnMap(mapTotalPorProducto, p, getTotalMetros(pr));
 					}
 				}
 			}
@@ -574,18 +577,13 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		map.put(elem, total);
 	}
-	
-	private BigDecimal getTotalMetros(BigDecimal metros, ProductoArticulo producto) {
-		if (producto.getTipo().getUnidad() == EUnidad.KILOS) {
-			if(producto.getArticulo() == null) {
-				return metros;
-			}
-			if(producto.getArticulo().getGramaje() == null) {
-				throw new IllegalArgumentException("Falta definir el gramaje para la tela " + producto.getArticulo() + ".");
-			}
-			return metros.multiply(producto.getArticulo().getGramaje());
-		} else  {
-			return metros;
+
+	private BigDecimal getTotalMetros(PiezaRemito pr) {
+		Float gramajeRE = getGramajeRE(pr);
+		if(gramajeRE == null) {
+			return pr.getMetros();
+		} else {
+			return pr.getMetros().multiply(new BigDecimal(gramajeRE.floatValue())); 
 		}
 	}
 
@@ -595,6 +593,22 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		PiezaODT piezaODT = pr.getPiezasPadreODT().get(0);
 		return piezaODT.getOdt().getProductoArticulo();
+	}
+
+	private Float getGramajeRE(PiezaRemito pr) {
+		if(pr.getPiezaPadreODT() != null) {
+			return getGramajeFromDB(pr.getPiezaPadreODT().getOdt().getRemito().getId());
+		} else {
+			return null;
+		}
+	}
+
+	private Float getGramajeFromDB(Integer idRE) {
+		if(gramajes.get(idRE) == null) {
+			RemitoEntrada re = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class).getByIdEagerConPiezasODTYRemito(idRE);
+			gramajes.put(idRE, re.getGramaje());
+		}
+		return gramajes.get(idRE);
 	}
 
 	private void calcularSubTotal() {

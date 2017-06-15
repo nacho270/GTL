@@ -24,7 +24,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import ar.com.fwcommon.componentes.FWJNumericTextField;
@@ -93,7 +92,6 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 	// tela
 	private JPanel pnlTela;
 	private JComboBox cmbArticulo;
-	private JTextField txtGramaje;
 	
 	//cilindro
 	private JPanel pnlCilindro;
@@ -405,8 +403,6 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 				getCmbTipoAnilina().setSelectedItem(((Anilina) getMateriaPrimaActual()).getTipoAnilina());
 			} else if(getMateriaPrimaActual() instanceof Tela) {
 				getPnlControlesExtra().setVisible(true);
-				BigDecimal gramaje = ((Tela)getMateriaPrimaActual()).getArticulo().getGramaje();
-				getTxtGramaje().setText(String.valueOf(gramaje==null?"":gramaje));
 				getCmbArticulo().setSelectedItem(((Tela)getMateriaPrimaActual()).getArticulo());
 			}else if(getMateriaPrimaActual() instanceof Cilindro){
 				getPnlControlesExtra().setVisible(true);
@@ -452,7 +448,6 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 //		getTxtPuntoPedido().setText("");
 		getTxtColor().setText("               ");
 		getTxtColor().setBackground(getTabDetalle().getBackground());
-		getTxtGramaje().setText("");
 		getCmbAnchoCilindro().setSelectedIndex(0);
 		getTxtMeshCilindro().setText("");
 		getTxtDiametroCilindro().setText("");
@@ -564,8 +559,6 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			getPnlControlesExtra().setVisible(true);
 			getCardLayout().show(getPnlControlesExtra(), PNL_TELA);
 			getTxtDescripcion().setText(((Articulo)getCmbArticulo().getSelectedItem()).getDescripcion());
-			BigDecimal gramaje = ((Articulo)getCmbArticulo().getSelectedItem()).getGramaje();
-			getTxtGramaje().setText(String.valueOf(gramaje==null?"":gramaje));
 			getTxtDescripcion().setEditable(false);
 			getCmbUnidades().setSelectedItem(EUnidad.METROS);
 			getCmbUnidades().setEnabled(false);
@@ -721,8 +714,6 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			pnlTela.setLayout(new GridBagLayout());
 			pnlTela.add(new JLabel("Artículo: "), createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			pnlTela.add(getCmbArticulo(), createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlTela.add(new JLabel("Gramaje: "), createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 0, 1, 0, 0));
-			pnlTela.add(getTxtGramaje(), createGridBagConstraints(1,1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 0, 1, 0, 0));
 		}
 		return pnlTela;
 	}
@@ -734,23 +725,12 @@ public class GuiABMMateriaPrima extends GuiABMListaTemplate {
 			cmbArticulo.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if(e.getStateChange() == ItemEvent.SELECTED){
-						BigDecimal gramaje = ((Articulo)cmbArticulo.getSelectedItem()).getGramaje();
-						getTxtGramaje().setText(String.valueOf(gramaje==null?"":gramaje));
 						getTxtDescripcion().setText(((Articulo)cmbArticulo.getSelectedItem()).getDescripcion() );
 					}
 				}
 			});
 		}
 		return cmbArticulo;
-	}
-
-	private JTextField getTxtGramaje() {
-		if(txtGramaje == null){
-			txtGramaje = new JTextField();
-			txtGramaje.setEditable(false);
-			txtGramaje.setPreferredSize(new Dimension(120, 20));
-		}
-		return txtGramaje;
 	}
 
 	private JComboBox getCmbAnchoCilindro() {

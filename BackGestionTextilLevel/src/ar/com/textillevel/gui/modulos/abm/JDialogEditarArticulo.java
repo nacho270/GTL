@@ -32,7 +32,6 @@ public class JDialogEditarArticulo extends JDialog {
 	private JButton btnCancelar;
 	private FWJTextField txtNombre;
 	private FWJTextField txtDescripcion;
-	private FWJTextField txtGramaje;
 	private FWJTextField txtAncho;
 
 	private Articulo articulo;
@@ -53,7 +52,6 @@ public class JDialogEditarArticulo extends JDialog {
 	private void setDatos() {
 		getTxtNombre().setText(articulo.getNombre());
 		getTxtDescripcion().setText(articulo.getDescripcion());
-		getTxtGramaje().setText(articulo.getGramaje() == null ? "" : articulo.getGramaje().toString());
 		getTxtAncho().setText(articulo.getAncho() == null ? "" : articulo.getAncho().toString());
 	}
 
@@ -80,10 +78,8 @@ public class JDialogEditarArticulo extends JDialog {
 			pnlDatos.add(getTxtNombre(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			pnlDatos.add(new JLabel(" DESCRIPCION:"), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			pnlDatos.add(getTxtDescripcion(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(new JLabel(" GRAMAJE:"), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(getTxtGramaje(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(new JLabel(" ANCHO:"), GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			pnlDatos.add(getTxtAncho(), GenericUtils.createGridBagConstraints(1, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			pnlDatos.add(new JLabel(" ANCHO:"), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			pnlDatos.add(getTxtAncho(), GenericUtils.createGridBagConstraints(1, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 		}
 		return pnlDatos;
 	}		
@@ -98,10 +94,6 @@ public class JDialogEditarArticulo extends JDialog {
 						if(!StringUtil.isNullOrEmpty(getTxtAncho().getText())) {
 							BigDecimal ancho = new BigDecimal(getTxtAncho().getText().trim().replace(',', '.'));
 							articulo.setAncho(ancho);
-						}
-						if(!StringUtil.isNullOrEmpty(getTxtGramaje().getText())) {
-							BigDecimal gramaje = new BigDecimal(getTxtGramaje().getText().trim().replace(',', '.'));
-							articulo.setGramaje(gramaje);
 						}
 						articulo.setNombre(getTxtNombre().getText().trim().toUpperCase());
 						articulo.setDescripcion(getTxtDescripcion().getText().trim().toUpperCase());
@@ -122,12 +114,6 @@ public class JDialogEditarArticulo extends JDialog {
 			getTxtAncho().requestFocus();
 			return false;
 		}
-		String gramajeStr = getTxtGramaje().getText();
-		if(StringUtil.isNullOrEmpty(gramajeStr) || !GenericUtils.esNumerico(gramajeStr)) {
-			FWJOptionPane.showErrorMessage(JDialogEditarArticulo.this, "Debe ingresar un gramaje válido.", "Error");
-			getTxtGramaje().requestFocus();
-			return false;
-		}
 		return true;
 	}
 
@@ -143,13 +129,6 @@ public class JDialogEditarArticulo extends JDialog {
 			});
 		}
 		return btnCancelar;
-	}
-
-	private FWJTextField getTxtGramaje() {
-		if(txtGramaje == null) {
-			txtGramaje = new FWJTextField();
-		}
-		return txtGramaje;
 	}
 
 	private FWJTextField getTxtAncho() {
