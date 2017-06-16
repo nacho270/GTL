@@ -29,7 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
-import main.GTLGlobalCache;
+import org.apache.taglibs.string.util.StringW;
+
 import ar.com.fwcommon.boss.BossError;
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -39,6 +40,7 @@ import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.fwcommon.componentes.VerticalFlowLayout;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
@@ -49,6 +51,7 @@ import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOr
 import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOrdenDePagoPersonaCheque;
 import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOrdenDePagoPersonaEfectivo;
 import ar.com.textillevel.entidades.gente.Persona;
+import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
@@ -57,6 +60,7 @@ import ar.com.textillevel.gui.modulos.cheques.gui.JDialogAgregarCheque;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 
@@ -619,12 +623,26 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 						if(!isEdicion()){
 							orden.setUsuarioCreador(usuario);
 						}
-						setOrdenDePago(isEdicion()?getOrdenFacade().editarOrden(orden,usuario):getOrdenFacade().guardarOrden(orden,usuario));
-						FWJOptionPane.showInformationMessage(this, "Se ha guardado correctamente la órden de pago", "Información");
-						if(FWJOptionPane.showQuestionMessage(this, "¿Desea imprimir la Orden?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-							imprimirOrden();
+						try {
+							setOrdenDePago(isEdicion()?getOrdenFacade().editarOrden(orden,usuario):getOrdenFacade().guardarOrden(orden,usuario));
+							FWJOptionPane.showInformationMessage(this, "Se ha guardado correctamente la órden de pago", "Información");
+							if(FWJOptionPane.showQuestionMessage(this, "¿Desea imprimir la Orden?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+								imprimirOrden();
+							}
+							dispose();
+						} catch (ValidacionException e) {
+							if(e.getCodigoError() == EValidacionException.ORDEN_DE_PAGO_PERSONA_DUPLICADA.getCodigo()) { //manejo el error del número de orden repetido
+								FWJOptionPane.showErrorMessage(this, StringW.wordWrap("No se pudo grabar la orden de pago debido a que ya existe otra con el mismo número. Por favor, reintente la operación presionando nuevamente 'GUARDAR'."), "Error");
+								//refresh del nuevo orden
+								Integer proximo = getOrdenFacade().getProximoNumeroOrden();
+								getTxtNroOrden().setText(String.valueOf(proximo));
+								return;
+							} else {
+								FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
+								e.printStackTrace();
+								return;
+							}
 						}
-						dispose();
 					}catch(FWException cle){
 						BossError.gestionarError(cle);
 					}
@@ -710,7 +728,7 @@ public class JDialogCargaOrdenDePagoAPersona extends JDialog {
 		this.estadoPantalla = estadoPantalla;
 	}
 	
-	public OrdenDePagoPersonaFacadeRemote getOrdenFacade() {
+	private OrdenDePagoPersonaFacadeRemote getOrdenFacade() {
 		if(ordenFacade == null){
 			ordenFacade = GTLBeanFactory.getInstance().getBean2(OrdenDePagoPersonaFacadeRemote.class);
 		}

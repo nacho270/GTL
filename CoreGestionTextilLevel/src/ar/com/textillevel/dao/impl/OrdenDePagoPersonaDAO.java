@@ -14,7 +14,7 @@ import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 public class OrdenDePagoPersonaDAO extends GenericDAO<OrdenDePagoAPersona, Integer> implements OrdenDePagoPersonaDAOLocal {
 
 	public Integer getUltimoNumeroOrden() {
-		String hql = "SELECT MAX(o.id) FROM OrdenDePagoAPersona o ";
+		String hql = "SELECT MAX(o.nroOrden) FROM OrdenDePagoAPersona o ";
 		Query query = getEntityManager().createQuery(hql);
 		return NumUtil.toInteger(query.getSingleResult());
 	}

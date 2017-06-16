@@ -58,6 +58,7 @@ public enum EValidacionException {
 	CORRECTOR_DE_CUENTAS_DATOS_INCONSISTENTES		(153, "Datos Inconsistentes. Había más movimientos que documentos recuperados. Chequear nro de sucursal de documentos viejos.."),
 	ODT_DIRTY_DATA									(154, "La ODT fue modificada recientemente, por favor, vuelva a intentar la operación"),
 	CHEQUE_ESTADO_INVALIDO_PARA_RECHAZAR			(155, "No se puede rechazar un cheque en estado '{0}'."),
+	ORDEN_DE_PAGO_PERSONA_DUPLICADA					(156, "Ya existe una orden de pago con orden '{0}'."),
 	
 	_											(000, "");
 	

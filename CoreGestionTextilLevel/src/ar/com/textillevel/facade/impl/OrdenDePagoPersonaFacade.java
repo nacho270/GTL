@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 
 import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.OrdenDePagoPersonaDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
@@ -12,12 +13,14 @@ import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOrdenDePagoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.formapago.FormaPagoOrdenDePagoPersonaCheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
+import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.ChequeFacadeLocal;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
 import ar.com.textillevel.facade.api.local.OrdenDePagoPersonaFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
+import edu.emory.mathcs.backport.java.util.Collections;
 
 @Stateless
 public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote, OrdenDePagoPersonaFacadeLocal {
@@ -45,17 +48,35 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote,
 		return nro+1;
 	}
 
-	public OrdenDePagoAPersona guardarOrden(OrdenDePagoAPersona orden, String usrName) throws FWException {
+	public OrdenDePagoAPersona guardarOrden(OrdenDePagoAPersona orden, String usrName) throws FWException, ValidacionException {
 		orden = guardarInterno(orden, usrName);
 		auditoriaFacade.auditar(usrName, "Creacion de Orden de Pago a persona Nº: " + orden.getNroOrden(), EnumTipoEvento.ALTA, orden);
 		return orden;
 	}
 
-	private OrdenDePagoAPersona guardarInterno(OrdenDePagoAPersona orden, String usrName) throws FWException {
+	@SuppressWarnings("unchecked")
+	private OrdenDePagoAPersona guardarInterno(OrdenDePagoAPersona orden, String usrName) throws FWException, ValidacionException {
+		checkUnicidadNroOrden(orden.getNroOrden());
 		guardarCheques(orden, usrName);
-		orden = ordenDao.save(orden);
-		cuentaFacade.crearMovimientoHaberPersona(orden);
+		try {
+			orden = ordenDao.save(orden);
+			cuentaFacade.crearMovimientoHaberPersona(orden);
+		} catch(Exception e) {
+			if(e.getMessage().contains("ConstraintViolationException")) {
+				throw new ValidacionException(EValidacionException.getEnum(EValidacionException.ORDEN_DE_PAGO_PERSONA_DUPLICADA.getCodigo()).getInfoValidacion(), Collections.singletonList(orden.getNroOrden().toString()));
+			} else {
+				throw e;
+			}
+		}
 		return orden;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void checkUnicidadNroOrden(Integer nroOrden) throws ValidacionException {
+		OrdenDePagoAPersona odp = getOrdenByNro(nroOrden);
+		if(odp != null) {
+			throw new ValidacionException(EValidacionException.getEnum(EValidacionException.ORDEN_DE_PAGO_PERSONA_DUPLICADA.getCodigo()).getInfoValidacion(), Collections.singletonList(nroOrden.toString()));
+		}
 	}
 
 	private void guardarCheques(OrdenDePagoAPersona orden, String usrName) throws FWException {
