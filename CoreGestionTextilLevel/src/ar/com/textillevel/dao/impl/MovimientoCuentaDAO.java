@@ -176,6 +176,9 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 					movimiento.getFactura().getRemitos().size();
 					for(RemitoSalida r : movimiento.getFactura().getRemitos()){
 						r.getCliente().getCelular();
+						if (r.getOdts() != null) {
+							r.getOdts().size();
+						}
 					}
 					if(movimiento.getFactura().getCliente()!=null){
 						movimiento.getFactura().getCliente().getCelular();

@@ -246,17 +246,18 @@ public class JFrameVerMovimientos extends JFrame {
 
 		private static final long serialVersionUID = -2675346740708514360L;
 
-		private static final int CANT_COLS_TBL_MOVS = 10;
+		private static final int CANT_COLS_TBL_MOVS = 11;
 		private static final int COL_PAGOS = 0;
-		private static final int COL_DESCR = 1;
-		private static final int COL_DEBE = 2;
-		private static final int COL_HABER = 3;
-		private static final int COL_SALDO = 4;
-		private static final int COL_OBJ = 5;
-		private static final int COL_VERIFICADO = 6;
-		private static final int COL_USUARIO_VERIFICADOR = 7;
-		private static final int COL_OBSERVACIONES = 8;
-		private static final int COL_ENTREGADO = 9;
+		private static final int COL_ODT = 1;
+		private static final int COL_DESCR = 2;
+		private static final int COL_DEBE = 3;
+		private static final int COL_HABER = 4;
+		private static final int COL_SALDO = 5;
+		private static final int COL_OBJ = 6;
+		private static final int COL_VERIFICADO = 7;
+		private static final int COL_USUARIO_VERIFICADOR = 8;
+		private static final int COL_OBSERVACIONES = 9;
+		private static final int COL_ENTREGADO = 10;
 
 		@Override
 		protected void agregarElemento(MovimientoCuenta mov) {
@@ -266,6 +267,7 @@ public class JFrameVerMovimientos extends JFrame {
 		public void agregarTransporte(BigDecimal transporteCuenta) {
 			Object[] row = new Object[CANT_COLS_TBL_MOVS];
 			row[COL_PAGOS] = "";
+			row[COL_ODT] = "";
 			row[COL_DESCR] = "TRANSPORTE CUENTA";
 			row[COL_DEBE] = "";
 			row[COL_HABER] = "";
@@ -282,6 +284,7 @@ public class JFrameVerMovimientos extends JFrame {
 		protected FWJTable construirTabla() {
 			FWJTable tabla = new FWJTable(0, CANT_COLS_TBL_MOVS);
 			tabla.setStringColumn(COL_PAGOS, "Pagos", 100);
+			tabla.setStringColumn(COL_ODT, "ODT", 90, 90, true);
 			tabla.setStringColumn(COL_DESCR, "Descripción", 160, 260, true);
 			tabla.setFloatColumn(COL_DEBE, "Debe", 80, true);
 			tabla.setFloatColumn(COL_HABER, "Haber", 80, true);
@@ -293,6 +296,7 @@ public class JFrameVerMovimientos extends JFrame {
 			tabla.setMultilineColumn(COL_ENTREGADO, "Entregado", 250, true, true);
 			tabla.setReorderingAllowed(false);
 			tabla.setHeaderAlignment(COL_PAGOS, FWJTable.CENTER_ALIGN);
+			tabla.setHeaderAlignment(COL_ODT, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_DESCR, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_DEBE, FWJTable.CENTER_ALIGN);
 			tabla.setHeaderAlignment(COL_HABER, FWJTable.CENTER_ALIGN);
@@ -593,9 +597,9 @@ public class JFrameVerMovimientos extends JFrame {
 		CellRenderer cellRenderer = (CellRenderer) tablaMov.getColumnModel().getColumn(0).getCellRenderer();
 		for (InfoSecondPass isp : rowsPagosSaldoAFavor) {
 			for (int i = isp.getFila() + 1; i < tablaMov.getRowCount(); i++) {
-				if (tablaMov.getValueAt(i, 5) instanceof MovimientoCuenta) {
+				if (tablaMov.getValueAt(i, 6) instanceof MovimientoCuenta) {
 					PintarRecibosSecondPassVisitor prspv = new PintarRecibosSecondPassVisitor(isp, i, cellRenderer);
-					((MovimientoCuenta) tablaMov.getValueAt(i, 5)).aceptarVisitor(prspv);
+					((MovimientoCuenta) tablaMov.getValueAt(i, 6)).aceptarVisitor(prspv);
 				}
 			}
 		}
@@ -606,9 +610,9 @@ public class JFrameVerMovimientos extends JFrame {
 		CellRenderer cellRenderer = (CellRenderer) getPanelTablaMovimientos().getTabla().getColumnModel().getColumn(0).getCellRenderer();
 		PintarFilaReciboVisitor pfrv = new PintarFilaReciboVisitor(tabla, mapaColores, cellRenderer, infoCuentaTO);
 		for (int i = 0; i < tabla.getRowCount(); i++) {
-			if (tabla.getValueAt(i, 5) instanceof MovimientoCuenta) {
+			if (tabla.getValueAt(i, 6) instanceof MovimientoCuenta) {
 				pfrv.setFilaActual(i);
-				((MovimientoCuenta) tabla.getValueAt(i, 5)).aceptarVisitor(pfrv);
+				((MovimientoCuenta) tabla.getValueAt(i, 6)).aceptarVisitor(pfrv);
 			}
 		}
 	}
@@ -619,9 +623,9 @@ public class JFrameVerMovimientos extends JFrame {
 		cellRenderer.clear();
 		PintarFilaReciboVisitor pfrv = new PintarFilaReciboVisitor(tabla, mapaColores, cellRenderer);
 		for (int i = 0; i < tabla.getRowCount(); i++) {
-			if (tabla.getValueAt(i, 5) instanceof MovimientoCuenta) {
+			if (tabla.getValueAt(i, 6) instanceof MovimientoCuenta) {
 				pfrv.setFilaActual(i);
-				((MovimientoCuenta) tabla.getValueAt(i, 5)).aceptarVisitor(pfrv);
+				((MovimientoCuenta) tabla.getValueAt(i, 6)).aceptarVisitor(pfrv);
 			}
 		}
 	}

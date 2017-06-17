@@ -9,6 +9,7 @@ import java.util.Map;
 
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeBanco;
@@ -26,6 +27,8 @@ import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
 import ar.com.textillevel.gui.acciones.InfoSecondPass;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.util.ODTCodigoHelper;
 
 public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 
@@ -48,7 +51,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 	public void visit(MovimientoHaber movimiento) {
 		Integer idRecibo = null;
 		getTabla().addRow(getFilaMovimientoHaber(movimiento, getCantCols()));
-		getTabla().setForegroundCell(getTabla().getRowCount() - 1, 3, Color.GREEN.darker());
+		getTabla().setForegroundCell(getTabla().getRowCount() - 1, 4, Color.GREEN.darker());
 		if (movimiento.getRecibo() != null) {
 			idRecibo = movimiento.getRecibo().getId();
 			mapaColores.put(idRecibo, GenericUtils.getRandomColor());
@@ -63,23 +66,23 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 	private void pintarCeldaSaldo() {
 		double saldo = Double.valueOf(getSaldo());
 		if(GenericUtils.esCero(saldo)){
-			getTabla().setForegroundCell(getTabla().getRowCount() - 1, 4, Color.BLACK);
+			getTabla().setForegroundCell(getTabla().getRowCount() - 1, 5, Color.BLACK);
 		}else if ( saldo > 0) {
-			getTabla().setForegroundCell(getTabla().getRowCount() - 1, 4, Color.GREEN.darker());
+			getTabla().setForegroundCell(getTabla().getRowCount() - 1, 5, Color.GREEN.darker());
 		} else if (saldo < 0) {
-			getTabla().setForegroundCell(getTabla().getRowCount() - 1, 4, Color.RED);
+			getTabla().setForegroundCell(getTabla().getRowCount() - 1, 5, Color.RED);
 		}
 	}
 
 	public void visit(MovimientoDebe movimiento) {
 		getTabla().addRow(getFilaMovimientoDebe(movimiento, getCantCols()));
-		getTabla().setForegroundCell(getTabla().getRowCount() - 1, 2, Color.RED);
+		getTabla().setForegroundCell(getTabla().getRowCount() - 1, 3, Color.RED);
 		pintarCeldaSaldo();
 	}
 
 	public void visit(MovimientoInternoCuenta movimiento) {
 		getTabla().addRow(getFilaMovimientoDebe(movimiento, getCantCols()));
-		getTabla().setForegroundCell(getTabla().getRowCount() - 1, 2, Color.RED);
+		getTabla().setForegroundCell(getTabla().getRowCount() - 1, 3, Color.RED);
 		pintarCeldaSaldo();
 	}
 
@@ -97,17 +100,28 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 				descripcion = descripcion.substring(0, indexOfFC);
 			}
 		}
-		row[1] = descripcion;
-		row[2] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
-		row[3] = null;
+		if(((MovimientoDebe) movimiento).getFactura() != null){
+			List<String> odts = new ArrayList<String>();
+			for(RemitoSalida rs : ((MovimientoDebe) movimiento).getFactura().getRemitos()) {
+				for (OrdenDeTrabajo odt : rs.getOdts()) {
+					odts.add(ODTCodigoHelper.getInstance().formatCodigo(odt.getCodigo()));
+				}
+			}
+			row[1] = StringUtil.getCadena(odts, " - ");
+		} else {
+			row[1] = "";
+		}
+		row[2] = descripcion;
+		row[3] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
+		row[4] = null;
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue() * -1));
-		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
-		row[5] = movimiento;
+		row[5] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
+		row[6] = movimiento;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
 		if(((MovimientoDebe) movimiento).getFactura() != null){
-			row[6] = ((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA;
-			row[7] = (((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA) ? ((MovimientoDebe) movimiento).getFactura().getUsuarioConfirmacion() : "";
+			row[7] = ((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA;
+			row[8] = (((MovimientoDebe) movimiento).getFactura().getEstadoFactura() == EEstadoFactura.VERIFICADA) ? ((MovimientoDebe) movimiento).getFactura().getUsuarioConfirmacion() : "";
 			Factura f = ((MovimientoDebe) movimiento).getFactura();
 			for (RemitoSalida r : f.getRemitos()) {
 				sb.append("<div style=\"padding:2px 0px;\">");
@@ -128,44 +142,45 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		}else{
 			Boolean verificada = ((MovimientoDebe) movimiento).getNotaDebito().getVerificada();
 			if(verificada!=null && verificada == true){
-				row[6] = verificada;
-				row[7] = verificada ? ((MovimientoDebe) movimiento).getNotaDebito().getUsuarioVerificador() : "";
+				row[7] = verificada;
+				row[8] = verificada ? ((MovimientoDebe) movimiento).getNotaDebito().getUsuarioVerificador() : "";
 			}else{
-				row[6] = false;
-				row[7] = "";
+				row[7] = false;
+				row[8] = "";
 			}
 			sb.append("<div style=\"padding:2px 0px;\">&nbsp;</div>");
 		}
-		row[8] = movimiento.getObservaciones();
+		row[9] = movimiento.getObservaciones();
 		sb.append("</html>");
-		row[9] = sb.toString();
+		row[10] = sb.toString();
 		return row;
 	}
 
 	private Object[] getFilaMovimientoHaber(MovimientoHaber movimiento, Integer size) {
 		Object[] row = new Object[size];
 		row[0] = "";
-		row[1] = movimiento.getDescripcionResumen();
-		row[2] = null;
-		row[3] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
+		row[1] = "";
+		row[2] = movimiento.getDescripcionResumen();
+		row[3] = null;
+		row[4] = GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto());
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue() * -1));
-		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
-		row[5] = movimiento;
+		row[5] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
+		row[6] = movimiento;
 		if((movimiento).getRecibo() != null){
-			row[6] = (movimiento).getRecibo().getEstadoRecibo() == EEstadoRecibo.ACEPTADO;
-			row[7] = (movimiento).getRecibo().getEstadoRecibo() == EEstadoRecibo.ACEPTADO ? (movimiento).getRecibo().getUsuarioConfirmacion() : "";
+			row[7] = (movimiento).getRecibo().getEstadoRecibo() == EEstadoRecibo.ACEPTADO;
+			row[8] = (movimiento).getRecibo().getEstadoRecibo() == EEstadoRecibo.ACEPTADO ? (movimiento).getRecibo().getUsuarioConfirmacion() : "";
 		}else{
 			Boolean verificada = (movimiento).getNotaCredito().getVerificada();
 			if(verificada!= null && verificada == true ){
-				row[6] = verificada;
-				row[7] = verificada ? (movimiento).getNotaCredito().getUsuarioVerificador() : "";
+				row[7] = verificada;
+				row[8] = verificada ? (movimiento).getNotaCredito().getUsuarioVerificador() : "";
 			}else{
-				row[6] = false;
-				row[7] = "";
+				row[7] = false;
+				row[8] = "";
 			}
 		}
-		row[8] = movimiento.getObservaciones();
-		row[9] = "<html><div style=\"padding:2px 0px;\">&nbsp;</div></html>";
+		row[9] = movimiento.getObservaciones();
+		row[10] = "<html><div style=\"padding:2px 0px;\">&nbsp;</div></html>";
 		return row;
 	}
 

@@ -43,7 +43,7 @@ public class PintarFilaReciboVisitor implements IFilaMovimientoVisitor {
 		if (movimiento.getRecibo() != null) {
 			Integer idRecibo = movimiento.getRecibo().getId();
 			Color colorFilaRecibo = mapaColores.get(idRecibo);
-			getTabla().setBackgroundCell(getFilaActual(), 1, colorFilaRecibo);
+			getTabla().setBackgroundCell(getFilaActual(), 2, colorFilaRecibo);
 		}
 	}
 
