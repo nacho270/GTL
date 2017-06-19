@@ -31,7 +31,7 @@ public class AccionConfirmarCuentaVisitor implements IFilaMovimientoVisitor{
 	public void visit(MovimientoDebe movimiento) {
 		if(movimiento.getFactura()!=null){
 			getFrameMovimientos().confirmarFactura(movimiento.getFactura());
-		}else{
+		}else if (movimiento.getNotaDebito() != null){
 			getFrameMovimientos().confirmarNotaDebito(movimiento.getNotaDebito());
 		}
 	}

@@ -46,6 +46,7 @@ import ar.com.textillevel.entidades.documentos.remito.proveedor.RelacionContened
 import ar.com.textillevel.entidades.documentos.remito.proveedor.visitor.IItemRemitoSalidaVisitor;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoInformeProduccion;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.stock.MovimientoStockResta;
@@ -59,6 +60,7 @@ import ar.com.textillevel.entidades.ventas.materiaprima.Tela;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.local.CuentaArticuloFacadeLocal;
+import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
 import ar.com.textillevel.facade.api.local.FacturaFacadeLocal;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
@@ -128,10 +130,20 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 
 	@EJB
 	private UsuarioSistemaFacadeLocal usuSistemaFacade;
+	
+	@EJB
+	private CuentaFacadeLocal cuentaFacade;
 
 	public RemitoSalida save(RemitoSalida remitoSalida, String usuario) {
 		boolean isAlta = remitoSalida.getId() == null;
 		remitoSalida = remitoSalidaDAOLocal.save(remitoSalida);
+		List<OrdenDeTrabajo> odts = remitoSalida.getOdts();
+		boolean esReproceso = odts.size() == 1 && odts.get(0).getIProductoParaODT() != null
+				&& (odts.get(0).getIProductoParaODT().getTipo() == ETipoProducto.REPROCESO_SIN_CARGO ||
+						odts.get(0).getIProductoParaODT().getTipo()==ETipoProducto.DEVOLUCION);
+		if (esReproceso) {
+			cuentaFacade.crearMovimientoDebeSinDocumento(remitoSalida.getCliente().getId(), remitoSalida.getNroRemito());
+		}
 		if(isAlta) {
 			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		} else {

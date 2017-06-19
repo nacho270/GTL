@@ -70,12 +70,15 @@ public class HabilitarBotonesCuentaVisitor implements IFilaMovimientoVisitor {
 			}
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(movimiento.getFactura().getCaeAFIP() == null);
 			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(GenericUtils.isSistemaTest() || movimiento.getFactura().getCaeAFIP() != null);
-		} else {
+		} else if(movimiento.getNotaDebito() != null) {
 			getFrameMovimientos().getBtnAnular().setEnabled(movimiento.getNotaDebito().getAnulada() == false && GenericUtils.isSistemaTest());
 			getFrameMovimientos().getBtnConfirmar().setEnabled(movimiento.getNotaDebito().getAnulada() == false && !(movimiento.getNotaDebito().getVerificada() != null && movimiento.getNotaDebito().getVerificada() == true));
 			getFrameMovimientos().getBtnEliminarFactura().setEnabled(movimiento.getNotaDebito().getCaeAFIP() == null);
 			getFrameMovimientos().getBtnEditar().setEnabled(true);
 			getFrameMovimientos().getBtnEnviarDocumentoContablePorEmail().setEnabled(GenericUtils.isSistemaTest() || movimiento.getNotaDebito().getCaeAFIP() != null);
+		} else {
+			getFrameMovimientos().getBtnAnular().setEnabled(false);
+			getFrameMovimientos().getBtnConfirmar().setEnabled(false);
 		}
 		getFrameMovimientos().getBtnAgregarObservaciones().setEnabled(true);
 	}

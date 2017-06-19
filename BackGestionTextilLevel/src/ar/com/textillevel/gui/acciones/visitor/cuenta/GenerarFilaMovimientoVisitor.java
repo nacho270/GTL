@@ -139,7 +139,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 //			for (int i = 0; i<3; i++) {
 //				sb.append("<div style=\"padding:2px 0px;\">" +i + " - " + "SI - 08/09/2016 21:30:39 - Terminal local</div>");
 //			}
-		}else{
+		}else if (((MovimientoDebe) movimiento).getNotaDebito() != null){
 			Boolean verificada = ((MovimientoDebe) movimiento).getNotaDebito().getVerificada();
 			if(verificada!=null && verificada == true){
 				row[7] = verificada;
@@ -149,6 +149,9 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 				row[8] = "";
 			}
 			sb.append("<div style=\"padding:2px 0px;\">&nbsp;</div>");
+		} else {
+			row[7] = false;
+			row[8] = "";
 		}
 		row[9] = movimiento.getObservaciones();
 		sb.append("</html>");

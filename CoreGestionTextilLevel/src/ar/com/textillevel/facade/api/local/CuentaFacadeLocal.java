@@ -67,4 +67,5 @@ public interface CuentaFacadeLocal {
 	public CuentaTO getCuentaTO(Cliente cliente, int cantMovimientos);
 	public CuentaTO getCuentaTO(Proveedor proveedor, int cantidadMovimientos);
 
+	public void crearMovimientoDebeSinDocumento(Integer idCliente, Integer nroRemito);
 }

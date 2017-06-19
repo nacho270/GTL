@@ -597,9 +597,9 @@ public class JFrameVerMovimientos extends JFrame {
 		CellRenderer cellRenderer = (CellRenderer) tablaMov.getColumnModel().getColumn(0).getCellRenderer();
 		for (InfoSecondPass isp : rowsPagosSaldoAFavor) {
 			for (int i = isp.getFila() + 1; i < tablaMov.getRowCount(); i++) {
-				if (tablaMov.getValueAt(i, 6) instanceof MovimientoCuenta) {
+				if (tablaMov.getValueAt(i, PanelTablaMovimientos.COL_OBJ) instanceof MovimientoCuenta) {
 					PintarRecibosSecondPassVisitor prspv = new PintarRecibosSecondPassVisitor(isp, i, cellRenderer);
-					((MovimientoCuenta) tablaMov.getValueAt(i, 6)).aceptarVisitor(prspv);
+					((MovimientoCuenta) tablaMov.getValueAt(i, PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(prspv);
 				}
 			}
 		}
@@ -610,9 +610,9 @@ public class JFrameVerMovimientos extends JFrame {
 		CellRenderer cellRenderer = (CellRenderer) getPanelTablaMovimientos().getTabla().getColumnModel().getColumn(0).getCellRenderer();
 		PintarFilaReciboVisitor pfrv = new PintarFilaReciboVisitor(tabla, mapaColores, cellRenderer, infoCuentaTO);
 		for (int i = 0; i < tabla.getRowCount(); i++) {
-			if (tabla.getValueAt(i, 6) instanceof MovimientoCuenta) {
+			if (tabla.getValueAt(i, PanelTablaMovimientos.COL_OBJ) instanceof MovimientoCuenta) {
 				pfrv.setFilaActual(i);
-				((MovimientoCuenta) tabla.getValueAt(i, 6)).aceptarVisitor(pfrv);
+				((MovimientoCuenta) tabla.getValueAt(i, PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(pfrv);
 			}
 		}
 	}
@@ -623,9 +623,9 @@ public class JFrameVerMovimientos extends JFrame {
 		cellRenderer.clear();
 		PintarFilaReciboVisitor pfrv = new PintarFilaReciboVisitor(tabla, mapaColores, cellRenderer);
 		for (int i = 0; i < tabla.getRowCount(); i++) {
-			if (tabla.getValueAt(i, 6) instanceof MovimientoCuenta) {
+			if (tabla.getValueAt(i, PanelTablaMovimientos.COL_OBJ) instanceof MovimientoCuenta) {
 				pfrv.setFilaActual(i);
-				((MovimientoCuenta) tabla.getValueAt(i, 6)).aceptarVisitor(pfrv);
+				((MovimientoCuenta) tabla.getValueAt(i, PanelTablaMovimientos.COL_OBJ)).aceptarVisitor(pfrv);
 			}
 		}
 	}

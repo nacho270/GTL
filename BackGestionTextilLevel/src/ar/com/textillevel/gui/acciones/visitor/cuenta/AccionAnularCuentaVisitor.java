@@ -31,7 +31,7 @@ public class AccionAnularCuentaVisitor implements IFilaMovimientoVisitor {
 	public void visit(MovimientoDebe movimiento) {
 		if(movimiento.getFactura()!=null){
 			getFrameMovimientos().anularFactura(movimiento.getFactura());
-		}else{
+		}else if (movimiento.getNotaDebito() != null){
 			getFrameMovimientos().anularCorreccion(movimiento.getNotaDebito());
 		}
 	}

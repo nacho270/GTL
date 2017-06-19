@@ -186,7 +186,7 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 				}else if(movimiento.getFactura().getCliente()!=null){
 					movimiento.getFactura().getCliente().getCelular();
 				}
-			}else{
+			}else if (movimiento.getNotaDebito() != null){
 				movimiento.getNotaDebito().getNroFactura();
 			}
 		}

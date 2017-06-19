@@ -31,7 +31,7 @@ public class EditarDocumentoVisitor implements IFilaMovimientoVisitor{
 	public void visit(MovimientoDebe movimiento) {
 		if(movimiento.getFactura() != null){
 			frameMovimientos.editarFactura(movimiento.getFactura());
-		}else{
+		}else if (movimiento.getNotaDebito() != null){
 			frameMovimientos.editarCorreccion(movimiento.getNotaDebito());
 		}
 	}

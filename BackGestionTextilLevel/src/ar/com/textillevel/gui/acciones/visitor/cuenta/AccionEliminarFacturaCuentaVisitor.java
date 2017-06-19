@@ -31,7 +31,7 @@ private final JFrameVerMovimientos frameMovimientos;
 	public void visit(MovimientoDebe movimiento) {
 		if(movimiento.getFactura()!=null){
 			frameMovimientos.eliminarFactura(movimiento.getFactura());
-		}else{
+		}else if(movimiento.getNotaDebito() != null){
 			frameMovimientos.eliminarCorreccion(movimiento.getNotaDebito());
 		}
 	}

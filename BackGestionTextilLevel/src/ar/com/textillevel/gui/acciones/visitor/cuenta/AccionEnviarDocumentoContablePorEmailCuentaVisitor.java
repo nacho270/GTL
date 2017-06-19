@@ -31,7 +31,7 @@ public class AccionEnviarDocumentoContablePorEmailCuentaVisitor implements IFila
 	public void visit(MovimientoDebe movimiento) {
 		if(movimiento.getFactura()!=null){
 			getFrameMovimientos().enviarFacturaORemitoPorMail(movimiento.getFactura());
-		}else{
+		}else if (movimiento.getNotaDebito() != null){
 			getFrameMovimientos().enviarDocumentoContablePorEmail(movimiento.getNotaDebito());
 		}
 	}
