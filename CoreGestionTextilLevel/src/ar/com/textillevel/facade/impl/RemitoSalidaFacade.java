@@ -143,6 +143,10 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 						odts.get(0).getIProductoParaODT().getTipo()==ETipoProducto.DEVOLUCION);
 		if (esReproceso) {
 			cuentaFacade.crearMovimientoDebeSinDocumento(remitoSalida.getCliente().getId(), remitoSalida.getNroRemito());
+			for (OrdenDeTrabajo odt : odts) {
+				odt.setEstadoODT(EEstadoODT.FACTURADA);
+				odtDAO.save(odt);
+			}
 		}
 		if(isAlta) {
 			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
