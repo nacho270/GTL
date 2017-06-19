@@ -536,8 +536,9 @@ public class OrdenDeTrabajoFacade implements OrdenDeTrabajoFacadeRemote, OrdenDe
 	}
 
 	private void checkBorradoPiezasSinSalida(OrdenDeTrabajo odt) {
-		if(odt.getEstado() != EEstadoODT.EN_OFICINA && odt.getEstado() != EEstadoODT.ANTERIOR) {
-			throw new IllegalArgumentException("La ODT debe estar en estado " + EEstadoODT.EN_OFICINA + " o bien en " + EEstadoODT.ANTERIOR);
+		EEstadoODT eODT = odt.getEstado();
+		if(eODT != EEstadoODT.EN_OFICINA && eODT != EEstadoODT.ANTERIOR && eODT != EEstadoODT.EN_PROCESO &&  eODT != EEstadoODT.FACTURADA) {
+			throw new IllegalArgumentException("La ODT debe estar en estado " + EEstadoODT.EN_OFICINA + ", " + EEstadoODT.ANTERIOR + ", " + EEstadoODT.EN_PROCESO + " o bien " + EEstadoODT.FACTURADA);
 		}
 		int cantPiezasConSalida = odt.contarDeAcuerdoASalida(true);
 		if(cantPiezasConSalida == 0) {

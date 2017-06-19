@@ -55,7 +55,7 @@ public class AccionBorrarPiezasSinSalidaODT extends Accion<ODTTO> {
 			return false;
 		}
 		ODTTO odtto = selectedElements.get(0);
-		return odtto.getEstado() == EEstadoODT.EN_OFICINA || odtto.getEstado() == EEstadoODT.ANTERIOR;
+		return odtto.getEstado() == EEstadoODT.EN_OFICINA || odtto.getEstado() == EEstadoODT.EN_PROCESO || odtto.getEstado() == EEstadoODT.FACTURADA || odtto.getEstado() == EEstadoODT.ANTERIOR;
 	}
 
 }

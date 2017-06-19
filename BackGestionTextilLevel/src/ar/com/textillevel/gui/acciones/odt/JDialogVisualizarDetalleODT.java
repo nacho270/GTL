@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.Collections;
 import java.util.List;
 
@@ -177,7 +178,7 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 			panelDatosFactura.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 			panelDatosFactura.add(new JLabel("Remito de Entrada Nº: "), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosFactura.add(getRemitoLinkeableLabel(), GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
-			panelDatosFactura.add(new JLabel("Fecha:"), GenericUtils.createGridBagConstraints(2, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panelDatosFactura.add(new JLabel("Fecha de Ingreso:"), GenericUtils.createGridBagConstraints(2, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panelDatosFactura.add(getTxtFechaEmision(), GenericUtils.createGridBagConstraints(3, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
 			
 			panelDatosFactura.add(new JLabel("Total Piezas Entrada: "), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
@@ -253,9 +254,7 @@ public class JDialogVisualizarDetalleODT extends JDialog {
 	private FWDateField getTxtFechaEmision() {
 		if(txtFechaEmision == null) {
 			txtFechaEmision = new FWDateField();
-			if(remitoEntrada.getId() != null) {
-				txtFechaEmision.setFecha(remitoEntrada.getFechaEmision());
-			}
+			txtFechaEmision.setFecha(new Date(odt.getFechaODT().getTime()));
 			txtFechaEmision.setEditable(false);
 		}
 		return txtFechaEmision;
