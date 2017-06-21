@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Transient;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,7 +19,9 @@ import javax.swing.JScrollPane;
 
 import ar.com.fwcommon.componentes.FWCheckBoxList;
 import ar.com.fwcommon.componentes.FWJOptionPane;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -29,7 +32,7 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
-	private FWCheckBoxList<Factura> checkBoxList;
+	private FWCheckBoxList<FacturaWrapper> checkBoxList;
 	private boolean acepto;
 	private List<Factura> facturaSelectedList;
 	private List<Factura> allFacturaList;
@@ -55,7 +58,7 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 	private void chequearFacturasAnteriores() {
 		for(Factura f : facturaSelectedList){
 			for(int i = 0; i < getClCheckBoxList().getItemCount(); i++){
-				if(((Factura)getClCheckBoxList().getItemAt(i)).getId().equals(f.getId())){
+				if(((FacturaWrapper)getClCheckBoxList().getItemAt(i)).getId().equals(f.getId())){
 					getClCheckBoxList().setSelectedIndex(i);
 				}
 			}
@@ -65,7 +68,7 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 	private void setDatos() {
 	//	getClCheckBoxList().setValues(facturaSelectedList.toArray(new Object[facturaSelectedList.size()]));
 		List<Factura> facturaListByClientAndEstado = getFacturaFacade().getAllFacturasByCliente(getIdCliente());
-		getClCheckBoxList().setValues(facturaListByClientAndEstado.toArray(new Object[facturaListByClientAndEstado.size()]));
+		getClCheckBoxList().setValues(toWrapper(facturaListByClientAndEstado).toArray(new Object[facturaListByClientAndEstado.size()]));
 	}
 
 	private void setUpScreen() {
@@ -129,7 +132,7 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 						return false;
 					}
 					return true;
-				}
+				}	
 			});
 		}
 		return btnAceptar;
@@ -148,29 +151,37 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 		return btnCancelar;
 	}
 
-	private FWCheckBoxList<Factura> getClCheckBoxList() {
+	private FWCheckBoxList<FacturaWrapper> getClCheckBoxList() {
 		if (checkBoxList == null) {
-			checkBoxList = new FWCheckBoxList<Factura>() {
+			checkBoxList = new FWCheckBoxList<FacturaWrapper>() {
 
 				private static final long serialVersionUID = -8028977693425752374L;
 
 				@Override
 				public void itemListaSeleccionado(Object item, boolean seleccionado) {
 					if (seleccionado) {
-						Factura prod = (Factura) item;
-						if (!facturaSelectedList.contains(prod)) {
-							facturaSelectedList.add(prod);
+						FacturaWrapper prod = (FacturaWrapper) item;
+						if (!facturaSelectedList.contains(prod.getF())) {
+							facturaSelectedList.add(prod.getF());
 						}
 					} else {
-						facturaSelectedList.remove(item);
+						facturaSelectedList.remove(((FacturaWrapper) item).getF());
 					}
 				}
 
 			};
 			allFacturaList = getFacturaFacade().getFacturaImpagaListByClient(getIdCliente());
-			checkBoxList.setValues(allFacturaList.toArray(new Object[allFacturaList.size()]));
+			checkBoxList.setValues(toWrapper(allFacturaList).toArray(new Object[allFacturaList.size()]));
 		}
 		return checkBoxList;
+	}
+
+	private List<FacturaWrapper> toWrapper(List<Factura> facturas) {
+		List<FacturaWrapper> result = new ArrayList<FacturaWrapper>();
+		for(Factura f : facturas) {
+			result.add(new FacturaWrapper(f));
+		}
+		return result;
 	}
 
 	public boolean isAcepto() {
@@ -195,4 +206,36 @@ public class JDialogSeleccionarFacturasImpagasCliente extends JDialog {
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
 	}
+
+	private static class FacturaWrapper {
+		
+		private Factura f;
+
+		public FacturaWrapper(Factura f) {
+			this.f = f;
+		}
+		
+		public Integer getId() {
+			return getF().getId();
+		}
+
+		public Factura getF() {
+			return f;
+		}
+
+		public String toString() {
+			return "Factura - " + f.getNroFactura() + " / REM. SALIDA: " + extractNros();
+		}
+
+		@Transient
+		private String extractNros() {
+			List<String> nros = new ArrayList<String>();
+			for(RemitoSalida r : getF().getRemitos()) {
+				nros.add(r.getNroRemito()+"");
+			}
+			return StringUtil.getCadena(nros, " - ");
+		}
+
+	}
+
 }
