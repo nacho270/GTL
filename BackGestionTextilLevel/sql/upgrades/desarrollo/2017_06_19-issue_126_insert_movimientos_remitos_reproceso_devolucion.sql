@@ -20,4 +20,4 @@ update t_orden_de_trabajo odt
     inner join t_producto_articulo pa on pa.p_id = odt.F_PROducto_articulo_p_id
     inner join t_producto p on p.p_id = pa.f_producto_p_id
 set a_id_estado = 7
-where p.tipo in ('REPROCESOSC', 'DEVOLUCION');
+where p.tipo in ('REPROCESOSC', 'DEVOLUCION') and exists (select 1 from t_remito_salida_odt rsodt where rsodt.f_odt_p_id = odt.p_id);
