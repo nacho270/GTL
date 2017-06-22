@@ -594,29 +594,62 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 
 		private JPanel getDinamicPanTotal() {
 			if(panDinamicTotal == null) {
-				panDinamicTotal = new JPanel();
-				panDinamicTotal.setLayout(new GridLayout(2,impuestosMap.keySet().size() + 3));
-				for(Integer i : impuestosMap.keySet()) {
-					panDinamicTotal.add(new JLabel(impuestosMap.get(i).toString()));
-				}
-				panDinamicTotal.add(new JLabel("Total " + tipoImpuesto));
-				panDinamicTotal.add(new JLabel("Total Neto Gravado"));
-				panDinamicTotal.add(new JLabel("Total Neto No Gravado"));
-				panDinamicTotal.add(new JLabel("Total Perc. IVA"));
-				panDinamicTotal.add(new JLabel("Total General"));
+				List<JLabel> labels = new ArrayList<JLabel>();
+				List<JTextField> textfields = new ArrayList<JTextField>();
 
+				//agrego los labels + textfields en el mismo orden
 				for(Integer i : impuestosMap.keySet()) {
+					labels.add(new JLabel(impuestosMap.get(i).toString()));
 					JTextField txt = new JTextField();
 					txt.setEditable(false);
-					panDinamicTotal.add(txt);
+					textfields.add(txt);
 					impuestosTxtMap.put(i, txt);
 				}
 
-				panDinamicTotal.add(getTxtTotalImpuestos());
-				panDinamicTotal.add(getTxtTotalNetoGravado());
-				panDinamicTotal.add(getTxtTotalNetoNoGravado());
-				panDinamicTotal.add(getTxtTotalPercIVA());
-				panDinamicTotal.add(getTxtTotalGral());
+				labels.add(new JLabel("Total " + tipoImpuesto));
+				textfields.add(getTxtTotalImpuestos());
+				labels.add(new JLabel("Total Neto Gravado"));
+				textfields.add(getTxtTotalNetoGravado());
+				labels.add(new JLabel("Total Neto No Gravado"));
+				textfields.add(getTxtTotalNetoNoGravado());
+				labels.add(new JLabel("Total Perc. IVA"));
+				textfields.add(getTxtTotalPercIVA());
+				labels.add(new JLabel("Total General"));
+				textfields.add(getTxtTotalGral());
+
+				//hago split en filas de N columnas sobre el panDinamicTotal
+				int N = 9;
+				panDinamicTotal = new JPanel();
+				
+				int completar = labels.size() <= N ? N :  N - ((impuestosMap.keySet().size() + 5) % N);
+				if(completar == N) {
+					completar = 0;
+				}
+				//rellenos con labels vacios y textfields que no se ven
+				for(int c=0; c<completar;c++) {
+					labels.add(new JLabel(""));
+					JTextField tmp = new JTextField();
+					tmp.setVisible(false);
+					textfields.add(tmp);
+				}
+
+				int rows = labels.size() <= N ? 1 : labels.size() / N;
+				int NaUsar = labels.size() <= N ? labels.size() : N;
+
+				panDinamicTotal.setLayout(new GridLayout(2*rows, NaUsar));
+				boolean putLabels = true; 
+				for(int x=0; x<rows; x++) {
+					for(int y=0; y<NaUsar; y++) {
+						if(x*NaUsar+y < labels.size() ) {
+							panDinamicTotal.add(labels.get(x*NaUsar+y));
+						}
+					}
+					for(int y=0; y<NaUsar; y++) {
+						if(x*NaUsar+y < textfields.size() ) {
+							panDinamicTotal.add(textfields.get(x*NaUsar+y));
+						}
+					}
+				}
 				panDinamicTotal.setBorder(BorderFactory.createTitledBorder("TOTALES"));
 			}
 			return panDinamicTotal;
