@@ -2,6 +2,7 @@ package ar.com.textillevel.gui.acciones.visitor.cuenta;
 
 import java.awt.Frame;
 
+import main.acciones.facturacion.OperacionSobreRemitoSalidaHandler;
 import ar.com.fwcommon.boss.BossError;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.util.GuiUtil;
@@ -18,9 +19,11 @@ import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVi
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ReciboFacadeRemote;
+import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
 import ar.com.textillevel.gui.acciones.JDialogCargaRecibo;
 import ar.com.textillevel.gui.acciones.JFrameVerMovimientos;
@@ -63,6 +66,10 @@ public class ConsultaDocumentoVisitor implements IFilaMovimientoVisitor{
 			}
 		}else if(movimiento.getNotaDebito() != null){
 			consultarCorreccion(movimiento.getNotaDebito());
+		} else {
+			RemitoSalida rsEager = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdConPiezasYProductos(movimiento.getRemitoSalida().getId());
+			OperacionSobreRemitoSalidaHandler handler = new OperacionSobreRemitoSalidaHandler(padre, rsEager, true);
+			handler.showRemitoEntradaDialog();
 		}
 	}
 	

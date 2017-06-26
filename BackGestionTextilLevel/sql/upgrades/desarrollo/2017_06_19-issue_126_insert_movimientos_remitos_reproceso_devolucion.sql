@@ -1,8 +1,8 @@
 -- creo movimientos
 
-insert into t_movimiento (tipo, a_monto, a_fecha_hora, a_descripcion, f_cuenta_p_id)
+insert into t_movimiento (tipo, a_monto, a_fecha_hora, a_descripcion, f_cuenta_p_id, f_remito_salida_p_id)
 select 'MD', 0, remito.a_fecha_emision, CONCAT(DATE_FORMAT(remito.a_fecha_emision, "%d/%m/%Y"),
-  ' - DEVOLUCION - RTO ', remito.a_nro_remito), c.p_id
+  ' - DEVOLUCION - RTO ', remito.a_nro_remito), c.p_id, remito.p_id
 from (
   select r.* from t_remito r
     inner join t_remito_salida_odt rsodt on rsodt.F_REMITO_SALIDA_P_ID = r.P_ID

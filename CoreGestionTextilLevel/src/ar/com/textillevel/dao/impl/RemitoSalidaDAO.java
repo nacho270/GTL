@@ -51,6 +51,12 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 			}
 		}
 		remitoSalida.getOdts().size();
+		for (OrdenDeTrabajo odt : remitoSalida.getOdts()) {
+			odt.getPiezas().size();
+			for (PiezaODT podt : odt.getPiezas()) {
+				podt.getPiezasSalida().size();
+			}
+		}
 		if (remitoSalida.getProveedor() != null) {
 			remitoSalida.getProveedor().getNombreCorto();
 			remitoSalida.getItems().size();
@@ -58,8 +64,7 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		if (remitoSalida.getFactura() != null) {
 			remitoSalida.getFactura().getFechaEmision();
 		}
-		for (CorreccionFacturaProveedor cfp : remitoSalida
-				.getCorreccionesProvGeneradas()) {
+		for (CorreccionFacturaProveedor cfp : remitoSalida.getCorreccionesProvGeneradas()) {
 			cfp.getFacturas().size();
 		}
 	}

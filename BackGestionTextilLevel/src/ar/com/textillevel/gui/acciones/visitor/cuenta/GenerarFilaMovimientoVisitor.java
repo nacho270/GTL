@@ -108,6 +108,12 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 				}
 			}
 			row[1] = StringUtil.getCadena(odts, " - ");
+		} else if (((MovimientoDebe) movimiento).getRemitoSalida() != null) {
+			List<String> odts = new ArrayList<String>();
+			for (OrdenDeTrabajo odt : ((MovimientoDebe) movimiento).getRemitoSalida().getOdts()) {
+				odts.add(ODTCodigoHelper.getInstance().formatCodigo(odt.getCodigo()));
+			}
+			row[1] = StringUtil.getCadena(odts, " - ");
 		} else {
 			row[1] = "";
 		}

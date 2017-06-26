@@ -58,6 +58,7 @@ import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -213,12 +214,13 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		return nd;
 	}
 	
-	public void crearMovimientoDebeSinDocumento(Integer idCliente, Integer nroRemito) {
-		CuentaCliente cuenta = getCuentaClienteByIdCliente(idCliente);
+	public void crearMovimientoDebeRemitoSalida(RemitoSalida remitoSalida) {
+		CuentaCliente cuenta = getCuentaClienteByIdCliente(remitoSalida.getCliente().getId());
 		MovimientoDebe md = new MovimientoDebe();
 		md.setMonto(BigDecimal.ZERO);
 		md.setCuenta(cuenta);
-		String descripcionResumen = DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - DEVOLUCION - RTO " + nroRemito;
+		md.setRemitoSalida(remitoSalida);
+		String descripcionResumen = DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - DEVOLUCION - RTO " + remitoSalida.getNroRemito();
 		md.setDescripcionResumen(descripcionResumen);
 		md.setFechaHora(DateUtil.getAhora());
 		movimientoDao.save(md);

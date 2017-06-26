@@ -17,6 +17,7 @@ import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.gente.Proveedor;
 
@@ -67,5 +68,5 @@ public interface CuentaFacadeLocal {
 	public CuentaTO getCuentaTO(Cliente cliente, int cantMovimientos);
 	public CuentaTO getCuentaTO(Proveedor proveedor, int cantidadMovimientos);
 
-	public void crearMovimientoDebeSinDocumento(Integer idCliente, Integer nroRemito);
+	public void crearMovimientoDebeRemitoSalida(RemitoSalida remitoSalida);
 }
