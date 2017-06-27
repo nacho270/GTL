@@ -32,8 +32,10 @@ public class ODTDatosMostradoHelper {
 	public String getDescColor() {
 		if(getColor() != null) {
 			return getColor().getNombre();
+		} else if(odt.getProductoParcial() == null) {
+			return  "";
 		} else {
-			return "A definir";
+			return  "A definir";
 		}
 	}
 
