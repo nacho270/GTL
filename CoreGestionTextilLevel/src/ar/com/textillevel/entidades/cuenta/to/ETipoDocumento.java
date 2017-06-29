@@ -1,5 +1,8 @@
 package ar.com.textillevel.entidades.cuenta.to;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.com.textillevel.entidades.enums.ETipoFactura;
 
 public enum ETipoDocumento {
@@ -39,6 +42,9 @@ public enum ETipoDocumento {
 		return idTipoDocAFIP;
 	}
 
+	public Integer getIdTipoDocAFIP() {
+		return idTipoDocAFIP;
+	}
 	public String getDescripcion() {
 		return toString().replace("_", " ");
 	}
@@ -54,5 +60,15 @@ public enum ETipoDocumento {
 			}
 		}
 		return null;
+	}
+
+	public static ETipoDocumento[] getTiposDocumentoConAFIP() {
+		List<ETipoDocumento> tiposDocumento = new ArrayList<>();
+		for (ETipoDocumento tipo : values()) {
+			if (tipo.idTipoDocAFIP != null) {
+				tiposDocumento.add(tipo);
+			}
+		}
+		return tiposDocumento.toArray(new ETipoDocumento[tiposDocumento.size()]);
 	}
 }
