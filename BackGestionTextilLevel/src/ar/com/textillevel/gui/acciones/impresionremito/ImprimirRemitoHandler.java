@@ -354,7 +354,7 @@ public class ImprimirRemitoHandler {
 			parameters.put("POSICION_IVA", remito.getCliente().getPosicionIva() == null ? "" : remito.getCliente().getPosicionIva().getDescripcion());
 			parameters.put("CUIT", remito.getCliente().getCuit());
 			parameters.put("PROCESO", getProceso(remito));
-			parameters.put("REMITO_ENT", String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
+			parameters.put("REMITO_ENT", remito.getOdts().isEmpty() ? "" : String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
 			parameters.put("ODT", extractODTs(remito.getOdts()));
 			parameters.put("TOT_PIEZAS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " " + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size())));
 			parameters.put("TOT_KILOS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));

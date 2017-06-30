@@ -409,7 +409,7 @@ public class JDialogConsultarRemitosSalida extends JDialog {
 			}
 			if(getCliente() != null) {
 				getPanTablaRemitosSalida().getTabla().removeAllRows();
-				List<RemitoSalida> remitoSalidaList = getRemitoSalidaFacade().getRemitoSalidaByFechasAndCliente(new Date(getPanelFechaDesde().getDate().getTime()), DateUtil.getManiana(new Date(getPanelFechaHasta().getDate().getTime())), getCliente().getId());
+				List<RemitoSalida> remitoSalidaList = getRemitoSalidaFacade().getRemitoSalidaByParams(new Date(getPanelFechaDesde().getDate().getTime()), DateUtil.getManiana(new Date(getPanelFechaHasta().getDate().getTime())), getCliente().getId(), null);
 				getPanTablaRemitosSalida().agregarElementos(remitoSalidaList);
 			}
 			if(getProveedor() != null) {

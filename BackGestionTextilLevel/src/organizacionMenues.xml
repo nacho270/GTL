@@ -159,8 +159,8 @@
 						class="ar.com.textillevel.gui.modulos.remitoentrada.ModuloRemitoEntrada"
 						nombre="Consultar remitos de entrada" id="26" action="false"/>
 					<newItem
-						class="main.acciones.facturacion.ConsultarRemitoSalidaAction"
-						nombre="Consultar remito de salida" id="27" action="true"/>
+						class="ar.com.textillevel.gui.modulos.remitosalida.ModuloRemitoSalida"
+						nombre="Consultar remitos de salida" id="27" action="false"/>
 					<newItem
 						class="main.acciones.facturacion.ConsultarReciboAction"
 						nombre="Consultar recibo" id="28" action="true"/>

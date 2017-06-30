@@ -402,8 +402,8 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		return ret;
 	}
 
-	public List<RemitoSalida> getRemitoSalidaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente) {
-		return remitoSalidaDAOLocal.getRemitoSalidaByFechasAndCliente(fechaDesde, fechaHasta, idCliente);
+	public List<RemitoSalida> getRemitoSalidaByParams(Date fechaDesde, Date fechaHasta, Integer idCliente, Integer idProveedor) {
+		return remitoSalidaDAOLocal.getRemitoSalidaByParams(fechaDesde, fechaHasta, idCliente, idProveedor);
 	}
 
 	public List<RemitoSalida> getRemitoSalidaByFechasAndProveedor(Date fechaDesde, Date fechaHasta, Integer idProveedor) {

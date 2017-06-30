@@ -11,7 +11,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -30,10 +29,8 @@ import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.productos.Producto;
 import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
-import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
-import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
-import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
+import ar.com.textillevel.gui.util.panels.PanSelectorEntityCliente;
 import ar.com.textillevel.modulos.odt.enums.EEstadoODT;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -48,12 +45,9 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 	private JRadioButton rbtBuscarODTPorFiltros;
 	private JRadioButton rbtBuscarODTPorCodigo;
 
-	private JPanel panCliente;
 	private JPanel panFiltros;
 	
-	private FWJTextField txtNroCliente;
-	private LinkableLabel lblElegirCliente;
-	private LinkableLabel lblBorrarCliente;
+	private PanSelectorEntityCliente panSelectorCliente;
 	
 	private JPanel panProductos; 
 	private JComboBox cmbProductos;
@@ -92,7 +86,7 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 			gc = GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,5,5), 1, 1, 0, 0);
 			panFiltros.add(getPanBusquedaFecha(), gc);
 			gc = GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1);
-			panFiltros.add(getPanelElegirCliente(), gc);
+			panFiltros.add(getPanSelectorCliente(), gc);
 			gc = GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0);
 			panFiltros.add(getPanProductos(), gc);
 		}
@@ -234,76 +228,24 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 		return pan;
 	}
 
-	private JPanel getPanelElegirCliente(){
-		if(panCliente == null) {
-			panCliente = new JPanel();
+	private PanSelectorEntityCliente getPanSelectorCliente() {
+		if(panSelectorCliente == null) {
 			
-			JPanel labelPanels = new JPanel();
-			labelPanels.setLayout(new GridBagLayout());
-			GridBagConstraints gc = GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,5,0,5), 1, 1, 1, 0);
-			labelPanels.add(getLblelegirCliente(), gc);
-			gc = GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0,5,5,5), 1, 1, 1, 0);
-			labelPanels.add(getLblBorrarCliente(), gc);
+			panSelectorCliente = new PanSelectorEntityCliente() {
 
-			panCliente.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
-			panCliente.add(new JLabel("Cliente: "));
-			panCliente.add(getTxtNroCliente());
-			panCliente.add(labelPanels);
-			
-		}
-		return panCliente;
-	}
-	
-	private FWJTextField getTxtNroCliente() {
-		if (txtNroCliente == null) {
-			txtNroCliente = new FWJTextField();
-			txtNroCliente.setEditable(false);
-			txtNroCliente.setPreferredSize(new Dimension(50, 20));
-		}
-		return txtNroCliente;
-	}
-	
-	private LinkableLabel getLblelegirCliente() {
-		if (lblElegirCliente == null) {
-			lblElegirCliente = new LinkableLabel("Elegir cliente") {
-
-				private static final long serialVersionUID = 580819185565135378L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void labelClickeada(MouseEvent e) {
-					if (e.getClickCount() == 1) {
-						JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_ID);
-						GuiUtil.centrar(dialogSeleccionarCliente);
-						dialogSeleccionarCliente.setVisible(true);
-						Cliente clienteElegido = dialogSeleccionarCliente.getCliente();
-						if (clienteElegido != null) {
-							model.setCliente(clienteElegido);
-							getTxtNroCliente().setText(String.valueOf(clienteElegido.getNroCliente()));
-							notificar();
-						}
-					}
+				public void entitySelected(Cliente entity) {
+					model.setCliente(entity);
+					notificar();
 				}
+			
 			};
 		}
-		return lblElegirCliente;
+		return panSelectorCliente;
 	}
 
-	private LinkableLabel getLblBorrarCliente() {
-		if (lblBorrarCliente == null) {
-			lblBorrarCliente = new LinkableLabel("Borrar Cliente") {
-
-				private static final long serialVersionUID = 6524961686671880843L;
-
-				@Override
-				public void labelClickeada(MouseEvent e) {
-						model.setCliente(null);
-						getTxtNroCliente().setText(null);
-						notificar();
-				}
-			};
-		}
-		return lblBorrarCliente;
-	}
 	
 	private JRadioButton getRbtBuscarODTPorFiltros() {
 		if(rbtBuscarODTPorFiltros == null) {
@@ -341,7 +283,7 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 					setEnabledBusquedaPorFiltroComponents(false);
 					setEnabledBusquedaPorNro(true);
 					model.setBuscarPorFiltros(false);
-					getTxtNroCliente().setText(null);
+					getPanSelectorCliente().clear();
 					getTxtCodigo().requestFocus();
 					notificar();
 				}
@@ -357,8 +299,7 @@ public class CabeceraODT extends Cabecera<ModeloCabeceraODT> {
 	}
 
 	private void setEnabledBusquedaPorFiltroComponents(boolean enabled) {
-		getLblelegirCliente().setVisible(enabled);
-		getLblBorrarCliente().setVisible(enabled);
+		getPanSelectorCliente().setEnabledOperations(enabled);
 		getPanelFechaDesde().setEnabled(enabled);
 		getPanelFechaHasta().setEnabled(enabled);
 		getCmbProductos().setEnabled(enabled);

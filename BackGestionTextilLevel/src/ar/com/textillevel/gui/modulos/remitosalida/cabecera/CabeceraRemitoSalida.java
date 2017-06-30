@@ -1,4 +1,4 @@
-package ar.com.textillevel.gui.modulos.remitoentrada.cabecera;
+package ar.com.textillevel.gui.modulos.remitosalida.cabecera;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -7,38 +7,30 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
 import ar.com.fwcommon.util.DateUtil;
-import ar.com.fwcommon.util.GuiUtil;
-import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.ventas.productos.Producto;
-import ar.com.textillevel.facade.api.remote.ProductoFacadeRemote;
+import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.panels.PanSelectorEntityCliente;
-import ar.com.textillevel.util.GTLBeanFactory;
+import ar.com.textillevel.gui.util.panels.PanSelectorEntityProveedor;
 
-public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada> {
+public class CabeceraRemitoSalida extends Cabecera<ModeloCabeceraRemitoSalida> {
 
 	private static final long serialVersionUID = 4798710431798792144L;
 
-	private ModeloCabeceraRemitoEntrada model;
+	private ModeloCabeceraRemitoSalida model;
 	private PanelDatePicker panelFechaDesde;
 	private PanelDatePicker panelFechaHasta;
 	
@@ -46,23 +38,13 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 	private JRadioButton rbtBuscarRemitoPorNro;
 
 	private JPanel panFiltros;
+	
 	private PanSelectorEntityCliente panSelectorCliente;
-	
-	private JPanel panProductos; 
-	private JComboBox cmbProductos;
-	private JComboBox cmbSituacionODT;
-	private FWJNumericTextField txtNroRemito;
-	private ProductoFacadeRemote productoFacade;
-	
-	
-	private ProductoFacadeRemote getProductoFacade() {
-		if(productoFacade == null) {
-			productoFacade = GTLBeanFactory.getInstance().getBean2(ProductoFacadeRemote.class);
-		}
-		return productoFacade;
-	}
+	private PanSelectorEntityProveedor panSelectorProveedor;
 
-	public CabeceraRemitoEntrada() {
+	private FWJNumericTextField txtNroRemito;
+	
+	public CabeceraRemitoSalida() {
 		setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createTitledBorder("Búsqueda"));
 		GridBagConstraints gc = GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,0,5), 1, 1, 1, 0.5);
@@ -84,84 +66,22 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 			panFiltros.add(getPanBusquedaFecha(), gc);
 			gc = GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1);
 			panFiltros.add(getPanSelectorCliente(), gc);
-			gc = GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0);
-			panFiltros.add(getPanProductos(), gc);
+			gc = GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1);
+			panFiltros.add(getPanSelectorProveedor(), gc);
 		}
 		return panFiltros;
 	}
 
-	private JPanel getPanProductos() {
-		if(panProductos == null) {
-			panProductos = new JPanel();
-			panProductos.setLayout(new FlowLayout(FlowLayout.CENTER,5,2));
-			panProductos.add(new JLabel("PRODUCTO:"));
-			panProductos.add(getCmbProductos());
-			panProductos.add(new JLabel("ODT:"));
-			panProductos.add(getCmbSituacionODT());
-			
-		}
-		return panProductos;
-	}
-	
-	private JComboBox getCmbProductos() {
-		if(cmbProductos == null) {
-			cmbProductos = new JComboBox();
-			GuiUtil.llenarCombo(cmbProductos, getProductoFacade().getAllOrderByName(), true);
-			cmbProductos.insertItemAt("TODOS", 0);
-			cmbProductos.setSelectedIndex(0);
-			cmbProductos.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if(e.getStateChange() == ItemEvent.SELECTED) {
-						notificar();
-					}
-				}
-			});
-			
-		}
-		return cmbProductos;
-	}
-
-	private JComboBox getCmbSituacionODT() {
-		if(cmbSituacionODT == null) {
-			cmbSituacionODT = new JComboBox();
-			GuiUtil.llenarCombo(cmbSituacionODT, Arrays.asList(ESituacionODTRE.values()), true);
-			cmbSituacionODT.insertItemAt("TODOS", 0);
-			cmbSituacionODT.setSelectedIndex(0);
-			cmbSituacionODT.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if(e.getStateChange() == ItemEvent.SELECTED) {
-						notificar();
-					}
-				}
-			});
-			
-		}
-		return cmbSituacionODT;
-	}
 
 	@Override
-	public ModeloCabeceraRemitoEntrada getModel() {
+	public ModeloCabeceraRemitoSalida getModel() {
 		if (model == null) {
-			model = new ModeloCabeceraRemitoEntrada();
+			model = new ModeloCabeceraRemitoSalida();
 		}
 		Date fechaDesde = getPanelFechaDesde().getDate();
 		Date fechaHasta = getPanelFechaHasta().getDate();
 		model.setFechaDesde(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null);
 		model.setFechaHasta(fechaHasta!=null?DateUtil.getManiana(new java.sql.Date(fechaHasta.getTime())):null);
-		if(getCmbProductos().getSelectedIndex() == 0) {
-			model.setProducto(null);
-		} else {
-			model.setProducto((Producto)getCmbProductos().getSelectedItem());
-		}
-		if(getCmbSituacionODT().getSelectedIndex() == 0) {
-			model.setSituacionODT(null);;
-		} else {
-			model.setSituacionODT((ESituacionODTRE)getCmbSituacionODT().getSelectedItem());
-		}
 		return model;
 	}
 
@@ -214,6 +134,8 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 				@Override
 				public void entitySelected(Cliente entity) {
 					model.setCliente(entity);
+					model.setProveedor(null);
+					getPanSelectorProveedor().clear();
 					notificar();
 				}
 			
@@ -221,7 +143,26 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 		}
 		return panSelectorCliente;
 	}
-	
+
+	private PanSelectorEntityProveedor getPanSelectorProveedor() {
+		if(panSelectorProveedor == null) {
+			
+			panSelectorProveedor = new PanSelectorEntityProveedor() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void entitySelected(Proveedor entity) {
+					model.setProveedor(entity);
+					model.setCliente(null);
+					getPanSelectorCliente().clear();
+					notificar();
+				}
+			
+			};
+		}
+		return panSelectorProveedor;
+	}
 	
 	private JRadioButton getRbtBuscarRemitoPorFiltros() {
 		if(rbtBuscarRemitoPorFiltros == null) {
@@ -260,6 +201,9 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 					setEnabledBusquedaPorNro(true);
 					model.setBuscarPorFiltros(false);
 					getPanSelectorCliente().clear();
+					model.setCliente(null);
+					getPanSelectorProveedor().clear();
+					model.setProveedor(null);
 					getTxtNroRemito().requestFocus();
 					notificar();
 				}
@@ -276,9 +220,9 @@ public class CabeceraRemitoEntrada extends Cabecera<ModeloCabeceraRemitoEntrada>
 
 	private void setEnabledBusquedaPorFiltroComponents(boolean enabled) {
 		getPanSelectorCliente().setEnabledOperations(enabled);
+		getPanSelectorProveedor().setEnabledOperations(enabled);
 		getPanelFechaDesde().setEnabled(enabled);
 		getPanelFechaHasta().setEnabled(enabled);
-		getCmbProductos().setEnabled(enabled);
 	}
 
 	private FWJNumericTextField getTxtNroRemito() {

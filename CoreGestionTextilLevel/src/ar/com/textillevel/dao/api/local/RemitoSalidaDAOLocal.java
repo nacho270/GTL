@@ -35,7 +35,7 @@ public interface RemitoSalidaDAOLocal extends DAOLocal<RemitoSalida, Integer> {
 	 * @return los remitos de salidas asociados a una odt
 	 */
 	public List<RemitoSalida> getRemitosByODT(OrdenDeTrabajo odt);
-	public List<RemitoSalida> getRemitoSalidaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente);
+	public List<RemitoSalida> getRemitoSalidaByParams(Date fechaDesde, Date fechaHasta, Integer idCliente, Integer idProveedor);
 	public List<RemitoSalida> getRemitoSalidaByFechasAndProveedor(Date fechaDesde, Date fechaHasta, Integer idProveedor);
 	public List<RemitoSalida> getRemitosConNumerosDeFacturaMenorA(Integer nroDesde, Date fechaDesde);
 	public List<RemitoSalida> getRemitosSalidaSinFacturaPorCliente(Cliente cliente);

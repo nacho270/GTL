@@ -246,7 +246,8 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 		if(panODTs == null) {
 			panODTs = new JPanel(new FlowLayout());
 			panODTs.add(new JLabel("ODTs: "));
-			for(OrdenDeTrabajo odt : remitoSalida.getOdts()) {
+			Set<OrdenDeTrabajo> odtsUnique = new HashSet<OrdenDeTrabajo>(remitoSalida.getOdts()); //por las dudas quito los duplicados
+			for(OrdenDeTrabajo odt : odtsUnique) {
 				ODTLinkeableLabel odtLL = new ODTLinkeableLabel(odt, "");
 				odtLL.setODT(odt);;
 				panODTs.add(odtLL);

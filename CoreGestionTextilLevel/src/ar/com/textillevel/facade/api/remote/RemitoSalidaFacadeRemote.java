@@ -42,7 +42,7 @@ public interface RemitoSalidaFacadeRemote {
 
 	public Map<Date, List<Map<String, BigDecimal>>> getInformeProduccion(Date fechaDesde, Date fechaHasta, Cliente cliente, ETipoInformeProduccion tipoInforme);
 
-	public List<RemitoSalida> getRemitoSalidaByFechasAndCliente(Date fechaDesde,Date fechaHasta, Integer idCliente);
+	public List<RemitoSalida> getRemitoSalidaByParams(Date fechaDesde,Date fechaHasta, Integer idCliente, Integer idProveedor);
 
 	public List<RemitoSalida> getRemitoSalidaByFechasAndProveedor(Date fechaDesde,Date fechaHasta, Integer idProveedor);
 

@@ -115,17 +115,24 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		return remitos;
 	}
 
-	public List<RemitoSalida> getRemitoSalidaByFechasAndCliente(Date fechaDesde, Date fechaHasta, Integer idCliente) {
+	public List<RemitoSalida> getRemitoSalidaByParams(Date fechaDesde, Date fechaHasta, Integer idCliente, Integer idProveedor) {
 		String hql = "SELECT r " +
 					 "FROM RemitoSalida r " +
-					 "JOIN FETCH r.cliente AS cliente " +					 
+					 (idCliente == null ? "" : "JOIN FETCH r.cliente AS cliente ") +					 
+					 (idProveedor == null ? "" : "JOIN FETCH r.proveedor AS proveedor ") +
 					 "WHERE  r.fechaEmision BETWEEN :fechaDesde AND :fechaHasta " +
-					 " AND cliente.id = :idCliente " + 
+					 (idCliente == null ? "" : " AND cliente.id = :idCliente ") +
+					 (idProveedor == null ? "" : " AND proveedor.id = :idProveedor ") + 
 					 "ORDER BY r.fechaEmision ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("fechaDesde", fechaDesde);
 		q.setParameter("fechaHasta", fechaHasta);
-		q.setParameter("idCliente", idCliente);
+		if(idCliente != null) {
+			q.setParameter("idCliente", idCliente);
+		}
+		if(idProveedor != null) {
+			q.setParameter("idProveedor", idProveedor);
+		}
 		List<RemitoSalida> lista = q.getResultList();
 		return lista;
 	}
