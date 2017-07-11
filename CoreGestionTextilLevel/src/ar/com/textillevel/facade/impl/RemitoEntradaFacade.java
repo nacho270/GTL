@@ -133,6 +133,7 @@ public class RemitoEntradaFacade implements RemitoEntradaFacadeRemote, RemitoEnt
 		List<OrdenDeTrabajo> odtsYaAsociadas = odtDAO.getODTAsociadas(remitoEntrada.getId());
 		for(OrdenDeTrabajo odt : odtsYaAsociadas) {
 			if(!odtList.contains(odt)) {
+				transicionODTDAO.deleteTransicionesFromODT(odt.getId());								
 				odtDAO.removeById(odt.getId());
 				if(persistCodigoODT) {
 					codigoODTDAO.removeByCodigo(odt.getCodigo()); // borro de la tabla de códigos
