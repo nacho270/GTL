@@ -511,14 +511,14 @@ public class JDialogCargaFactura extends JDialog {
 						}
 						incrementarCantEnMap(mapTotalPorTelaCruda, articulo, pr.getMetros());
 					} else {
-						incrementarCantEnMap(mapTotalPorProducto, producto, getTotalMetros(pr));
+						incrementarCantEnMap(mapTotalPorProducto, producto, getTotalMetros(pr, producto));
 					}
 				} else {//Son piezas de stock inicial
 					ProductoArticulo p = getProducto(pr);
 					if(p == null) { //Es una pieza de stock inicial pero sin ODT
 						incrementarCantEnMap(mapTotalStockInicial, pr.getPmpDescuentoStock(), pr.getMetros());
 					} else { //Tiene ODT
-						incrementarCantEnMap(mapTotalPorProducto, p, getTotalMetros(pr));
+						incrementarCantEnMap(mapTotalPorProducto, p, getTotalMetros(pr, p));
 					}
 				}
 			}
@@ -578,12 +578,16 @@ public class JDialogCargaFactura extends JDialog {
 		map.put(elem, total);
 	}
 
-	private BigDecimal getTotalMetros(PiezaRemito pr) {
-		Float gramajeRE = getGramajeRE(pr);
-		if(gramajeRE == null) {
+	private BigDecimal getTotalMetros(PiezaRemito pr, ProductoArticulo producto) {
+		if (producto.getTipo().getUnidad() == EUnidad.KILOS) {
+			Float gramajeRE = getGramajeRE(pr);
+			if(gramajeRE == null) {
+				return pr.getMetros();
+			} else {
+				return pr.getMetros().multiply(new BigDecimal(gramajeRE.floatValue())); 
+			}
+		} else {//estampado se cobra por METROS
 			return pr.getMetros();
-		} else {
-			return pr.getMetros().multiply(new BigDecimal(gramajeRE.floatValue())); 
 		}
 	}
 

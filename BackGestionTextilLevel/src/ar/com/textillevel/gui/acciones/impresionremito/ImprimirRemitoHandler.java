@@ -43,7 +43,7 @@ public class ImprimirRemitoHandler {
 
 	private final JDialog owner;	
 	private final Integer nroSucursal;
-	private static final String ARCHIVO_JASPER = "/aadminr/com/textillevel/reportes/remito_entrada.jasper";
+	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/remito_entrada.jasper";
 	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
 	private static final String ARCHIVO_JASPER_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_con_formato.jasper";
 	private static final String ARCHIVO_JASPER_B_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato.jasper";
@@ -122,7 +122,7 @@ public class ImprimirRemitoHandler {
 		if(!GenericUtils.isSistemaTest()){
 			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
 		} else {
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B_CON_FORMATO);
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B);
 		}
 		
 		for(RemitoSalida rs : remitos) {
