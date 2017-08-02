@@ -19,14 +19,14 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="32" y="0" width="36" height="16"/>
-				<textElement textAlignment="Right">
+				<reportElement x="29" y="0" width="36" height="16"/>
+				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{metros}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="90" y="0" width="42" height="16"/>
+				<reportElement x="82" y="0" width="51" height="16"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>

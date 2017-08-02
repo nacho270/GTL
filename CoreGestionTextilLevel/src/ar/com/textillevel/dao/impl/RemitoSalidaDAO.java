@@ -118,8 +118,8 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 	public List<RemitoSalida> getRemitoSalidaByParams(Date fechaDesde, Date fechaHasta, Integer idCliente, Integer idProveedor) {
 		String hql = "SELECT r " +
 					 "FROM RemitoSalida r " +
-					 (idCliente == null ? "" : "JOIN FETCH r.cliente AS cliente ") +					 
-					 (idProveedor == null ? "" : "JOIN FETCH r.proveedor AS proveedor ") +
+					 "LEFT JOIN FETCH r.cliente AS cliente " +					 
+					 "LEFT JOIN FETCH r.proveedor AS proveedor " +
 					 "WHERE  r.fechaEmision BETWEEN :fechaDesde AND :fechaHasta " +
 					 (idCliente == null ? "" : " AND cliente.id = :idCliente ") +
 					 (idProveedor == null ? "" : " AND proveedor.id = :idProveedor ") + 

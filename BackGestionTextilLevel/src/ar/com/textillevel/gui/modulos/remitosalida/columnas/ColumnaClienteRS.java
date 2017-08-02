@@ -11,7 +11,7 @@ public class ColumnaClienteRS extends ColumnaString<RemitoSalida> {
 
 	@Override
 	public String getValor(RemitoSalida item) {
-		return item.getCliente().getNroCliente()+"";
+		return item.getCliente() == null ? "" : (item.getCliente().getNroCliente()+"");
 	}
 
 }

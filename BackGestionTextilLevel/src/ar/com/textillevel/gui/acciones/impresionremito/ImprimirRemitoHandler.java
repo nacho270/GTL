@@ -25,7 +25,6 @@ import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
-import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.util.ODTCodigoHelper;
 import main.GTLGlobalCache;
@@ -42,9 +41,9 @@ public class ImprimirRemitoHandler {
 	private final RemitoSalida remito;
 	private List<RemitoSalida> remitos;
 
-	private final JDialog owner;
+	private final JDialog owner;	
 	private final Integer nroSucursal;
-	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/remito_entrada.jasper";
+	private static final String ARCHIVO_JASPER = "/aadminr/com/textillevel/reportes/remito_entrada.jasper";
 	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
 	private static final String ARCHIVO_JASPER_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_con_formato.jasper";
 	private static final String ARCHIVO_JASPER_B_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato.jasper";
@@ -123,7 +122,7 @@ public class ImprimirRemitoHandler {
 		if(!GenericUtils.isSistemaTest()){
 			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
 		} else {
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B);
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B_CON_FORMATO);
 		}
 		
 		for(RemitoSalida rs : remitos) {
@@ -206,40 +205,19 @@ public class ImprimirRemitoHandler {
 		}
 		
 		private List<PiezaRemito> reescribirOrdenPiezas(List<PiezaRemito> piezas) {
-			int ordenPiezaActual = 1;
-			int ordenSubPiezaActual = 1;
-			PiezaRemito prAnt = null;
 			PiezaRemito pr = null;
 			for(int i = 0; i < piezas.size(); i++) {
 				pr = piezas.get(i);
-				ordenPiezaActual = pr.getOrdenPieza() + 1;
-				if((i - 1) > 0) {
-					prAnt = piezas.get(i - 1);
-				}
-				if(prAnt == null) {
-					pr.setOrdenPiezaCalculado(StringUtil.getCadena(extractOrdenes(pr.getPiezasPadreODT()), ","));
+				String nroPieza = null;
+				boolean noPasoPorModulosGTLLite = pr.getPiezasPadreODT().isEmpty() || pr.getPiezasPadreODT().get(0).getOrden() == null;
+				if(noPasoPorModulosGTLLite) {//[flujo viejo] empieza desde cero el orden, esto es para los remitos viejos que no pasan por GTLLITE
+					nroPieza = String.valueOf(pr.getOrdenPieza()+1); 
 				} else {
-					if(prAnt.getPiezaEntrada().getId().equals(pr.getPiezaEntrada().getId())) {
-						pr.setOrdenPiezaCalculado(String.valueOf(ordenPiezaActual) + "-" + ordenSubPiezaActual);
-						ordenSubPiezaActual ++;
-					} else {
-						pr.setOrdenPiezaCalculado(String.valueOf(ordenPiezaActual));
-						ordenSubPiezaActual = 1;
-					}
+					nroPieza = pr.getPiezasPadreODT().get(0).toString();
 				}
-				
+				pr.setOrdenPiezaCalculado(nroPieza);
 			}
 			return piezas;
-		}
-
-		private Integer[] extractOrdenes(List<PiezaODT> piezasPadreODT) {
-			Integer[] ordenes = new Integer[piezasPadreODT.size()];
-			int i = 0;
-			for(PiezaODT podt : piezasPadreODT) {
-				ordenes[i] = podt.getPiezaRemito().getOrdenPieza();
-				i++;
-			}
-			return ordenes;
 		}
 
 		private void cargarMap(RemitoSalida remito, Integer nroSucursal, Integer nroCopia) {
@@ -368,40 +346,19 @@ public class ImprimirRemitoHandler {
 		}
 
 		private List<PiezaRemito> reescribirOrdenPiezas(List<PiezaRemito> piezas) {
-			int ordenPiezaActual = 1;
-			int ordenSubPiezaActual = 1;
-			PiezaRemito prAnt = null;
 			PiezaRemito pr = null;
 			for(int i = 0; i < piezas.size(); i++) {
 				pr = piezas.get(i);
-				ordenPiezaActual = pr.getOrdenPieza() + 1;
-				if((i - 1) > 0) {
-					prAnt = piezas.get(i - 1);
-				}
-				if(prAnt == null) {
-					pr.setOrdenPiezaCalculado(StringUtil.getCadena(extractOrdenes(pr.getPiezasPadreODT()), ","));
+				String nroPieza = null;
+				boolean noPasoPorModulosGTLLite = pr.getPiezasPadreODT().isEmpty() || pr.getPiezasPadreODT().get(0).getOrden() == null;
+				if(noPasoPorModulosGTLLite) {//[flujo viejo] empieza desde cero el orden, esto es para los remitos viejos que no pasan por GTLLITE
+					nroPieza = String.valueOf(pr.getOrdenPieza()+1); 
 				} else {
-					if(prAnt.getPiezaEntrada().getId().equals(pr.getPiezaEntrada().getId())) {
-						pr.setOrdenPiezaCalculado(String.valueOf(ordenPiezaActual) + "-" + ordenSubPiezaActual);
-						ordenSubPiezaActual ++;
-					} else {
-						pr.setOrdenPiezaCalculado(String.valueOf(ordenPiezaActual));
-						ordenSubPiezaActual = 1;
-					}
+					nroPieza = pr.getPiezasPadreODT().get(0).toString();
 				}
-				
+				pr.setOrdenPiezaCalculado(nroPieza);
 			}
 			return piezas;
-		}
-
-		private Integer[] extractOrdenes(List<PiezaODT> piezasPadreODT) {
-			Integer[] ordenes = new Integer[piezasPadreODT.size()];
-			int i = 0;
-			for(PiezaODT podt : piezasPadreODT) {
-				ordenes[i] = podt.getPiezaRemito().getOrdenPieza();
-				i++;
-			}
-			return ordenes;
 		}
 
 		private String extractODTs(List<OrdenDeTrabajo> odts) {

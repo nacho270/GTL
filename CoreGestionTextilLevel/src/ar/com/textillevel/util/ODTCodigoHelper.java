@@ -76,7 +76,7 @@ public class ODTCodigoHelper {
 	 * Devuelve el codigo ODT formateado de acuerdo al separador <code>SEP_ODT</code>
 	 * @param codigoODT
 	 */
-	public String formatCodigo2DigitosAnio(String codigoODT) {
+	public static String formatCodigo2DigitosAnio(String codigoODT) {
 		return codigoODT.substring(2, OFFSET_ANIO) + SEP_ODT + codigoODT.substring(OFFSET_ANIO, OFFSET_MES) + SEP_ODT + StringUtil.fillLeftWithZeros(codigoODT.substring(OFFSET_MES), 2);
 	}
 
@@ -100,6 +100,10 @@ public class ODTCodigoHelper {
 
 	private static String armaCodigo(int anio, int mes, int nroODT) {
 		return anio + StringUtil.fillLeftWithZeros(String.valueOf(mes), OFFSET_MES - OFFSET_ANIO) + StringUtil.fillLeftWithZeros(String.valueOf(nroODT), 2);
+	}
+
+	public static void main(String[] args) {
+		System.out.println(formatCodigo2DigitosAnio("201704121"));
 	}
 
 }
