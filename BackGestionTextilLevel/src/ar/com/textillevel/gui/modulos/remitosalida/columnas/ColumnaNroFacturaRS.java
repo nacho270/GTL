@@ -12,7 +12,7 @@ public class ColumnaNroFacturaRS extends ColumnaString<RemitoSalida> {
 
 	@Override
 	public String getValor(RemitoSalida item) {
-		if(item.getNroFactura() == null) {
+		if(item.getNroSucursal() == null || item.getNroFactura() == null) {
 			return "";
 		} else {
 			String nro = StringUtil.fillLeftWithZeros(String.valueOf(item.getNroSucursal()), 4) + "-";

@@ -47,6 +47,7 @@ import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.IProductoParaODT;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
@@ -121,7 +122,13 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 
 	private void setDatos() {
 		Cliente cliente = remitoSalida.getCliente();
-		getTxtRazonSocial().setText(cliente.getRazonSocial());
+		if(cliente != null) {
+			getTxtRazonSocial().setText(cliente.getRazonSocial());
+		}
+		Proveedor proveedor = remitoSalida.getProveedor();
+		if(proveedor != null) {
+			getTxtRazonSocial().setText(proveedor.getRazonSocial());
+		}
 		if(modoConsulta || remitoSalida.getId() != null) {
 			getTxtFechaEmision().setFecha(remitoSalida.getFechaEmision());
 		} else {
