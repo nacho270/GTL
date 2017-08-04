@@ -69,7 +69,7 @@ public class PiezaODT implements Serializable, Comparable<PiezaODT> {
 	}
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="F_ODT_P_ID", nullable=false, insertable=false,updatable=false)
+	@JoinColumn(name="F_ODT_P_ID", nullable=false/*, insertable=false,updatable=false*/)
 	public OrdenDeTrabajo getOdt() {
 		return odt;
 	}

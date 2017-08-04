@@ -84,7 +84,7 @@ public class OrdenDeTrabajo implements Serializable {
 		this.remito = remito;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="odt")
 	@JoinColumn(name="F_ODT_P_ID", nullable=false)
 	@Cascade(value=org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	public List<PiezaODT> getPiezas() {

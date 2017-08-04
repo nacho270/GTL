@@ -940,6 +940,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 						}
 						if(noExistePieza(elemento, odt)) {
 							PiezaODT piezaODT = new PiezaODT();
+							piezaODT.setOdt(odt);
 							piezaODT.setPiezaRemito(elemento);
 							odt.getPiezas().add(piezaODT);
 						}
