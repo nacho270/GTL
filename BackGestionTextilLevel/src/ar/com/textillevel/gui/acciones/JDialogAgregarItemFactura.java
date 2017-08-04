@@ -311,7 +311,7 @@ public class JDialogAgregarItemFactura extends JDialog {
 
 	private PanSeleccionProductoArticulo getPanSeleccionProducto() {
 		if (panSeleccionarProducto == null) {
-			panSeleccionarProducto = new PanSeleccionProductoArticulo(this, cliente, new ArrayList<ProductoArticulo>());
+			panSeleccionarProducto = new PanSeleccionProductoArticulo(this, cliente, new ArrayList<ProductoArticulo>(), true);
 		}
 		return panSeleccionarProducto;
 	}

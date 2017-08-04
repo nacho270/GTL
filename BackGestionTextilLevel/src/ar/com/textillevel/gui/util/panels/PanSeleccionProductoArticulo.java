@@ -72,24 +72,27 @@ public class PanSeleccionProductoArticulo extends JPanel {
 	private List<GamaColor> allGamas;
 	private List<DibujoEstampado> allDibujos;
 	private Cliente cliente;
+	private boolean requiereProductoCotizado;
 
-	public PanSeleccionProductoArticulo(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList) {
+	public PanSeleccionProductoArticulo(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList, boolean requiereProductoCotizado) {
 		this.owner = owner;
 		this.cliente = cliente;
 		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
 		this.allGamas = GTLBeanFactory.getInstance().getBean2(GamaColorFacadeRemote.class).getAllOrderByName();
 		this.allDibujos = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllOrderByNombre();
+		this.requiereProductoCotizado = requiereProductoCotizado;
 		setUpComponentes();
 		setDatos();
 	}
 
-	public PanSeleccionProductoArticulo(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList, List<Articulo> articuloFilterList) {
+	public PanSeleccionProductoArticulo(JDialog owner, Cliente cliente, List<ProductoArticulo> productoSelectedList, List<Articulo> articuloFilterList, boolean requiereProductoCotizado) {
 		this.owner = owner;
 		this.cliente = cliente;
 		this.productoSelectedList = new ArrayList<ProductoArticulo>(productoSelectedList);
 		this.articuloFilterList = articuloFilterList;
 		this.allGamas = GTLBeanFactory.getInstance().getBean2(GamaColorFacadeRemote.class).getAllOrderByName();
 		this.allDibujos = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllOrderByNombre();
+		this.requiereProductoCotizado = requiereProductoCotizado;
 		setUpComponentes();
 		setDatos();
 	}
@@ -304,12 +307,20 @@ public class PanSeleccionProductoArticulo extends JPanel {
 					ProductoArticulo pa = (ProductoArticulo)item;
 					ProductosAndPreciosHelper helper = new ProductosAndPreciosHelper(owner, cliente);
 					if(seleccionado) {
-						BigDecimal precio = helper.getPrecio(pa);
-						if(precio == null) {
-							getFWCheckBoxList().setAllSelectedItems(false);
+						if(requiereProductoCotizado) {//si requiere que el producto está cotizado se busca el precio
+							BigDecimal precio = helper.getPrecio(pa);
+							if(precio == null) {
+								getFWCheckBoxList().setAllSelectedItems(false);
+							} else {
+								if(!productoSelectedList.contains(pa)) {
+									pa.setPrecioCalculado(precio.floatValue());
+									productoSelectedList.add(pa);
+									getPanProdArtSel().limpiar();
+									getPanProdArtSel().agregarElementos(productoSelectedList);
+								}
+							}
 						} else {
 							if(!productoSelectedList.contains(pa)) {
-								pa.setPrecioCalculado(precio.floatValue());
 								productoSelectedList.add(pa);
 								getPanProdArtSel().limpiar();
 								getPanProdArtSel().agregarElementos(productoSelectedList);

@@ -115,9 +115,9 @@ public class JDialogSeleccionarProducto extends JDialog {
 	private PanSeleccionProductoArticulo getPanPA() {
 		if(panPA == null) {
 			if(articuloFilterList != null && !articuloFilterList.isEmpty()) {
-				panPA = new PanSeleccionProductoArticulo(this, cliente, productoSelectedList, articuloFilterList);
+				panPA = new PanSeleccionProductoArticulo(this, cliente, productoSelectedList, articuloFilterList, false);
 			} else {
-				panPA = new PanSeleccionProductoArticulo(this, cliente, productoSelectedList);
+				panPA = new PanSeleccionProductoArticulo(this, cliente, productoSelectedList, false);
 			}
 		}
 		return panPA;
