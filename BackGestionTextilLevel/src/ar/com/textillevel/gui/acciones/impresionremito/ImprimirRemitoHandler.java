@@ -12,6 +12,14 @@ import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -27,13 +35,6 @@ import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.util.ODTCodigoHelper;
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ImprimirRemitoHandler {
@@ -47,7 +48,9 @@ public class ImprimirRemitoHandler {
 	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
 	private static final String ARCHIVO_JASPER_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_con_formato.jasper";
 	private static final String ARCHIVO_JASPER_B_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato.jasper";
+	private static final String ARCHIVO_JASPER_B_CON_FORMATO_IMPRIMIR = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato_imprimir.jasper";
 
+	
 	public ImprimirRemitoHandler(RemitoSalida remito, Integer nroSucursal, JDialog owner) {
 		this.remito = remito;
 		this.nroSucursal = nroSucursal;
@@ -122,7 +125,7 @@ public class ImprimirRemitoHandler {
 		if(!GenericUtils.isSistemaTest()){
 			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
 		} else {
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B);
+			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B_CON_FORMATO_IMPRIMIR);
 		}
 		
 		for(RemitoSalida rs : remitos) {
@@ -223,13 +226,7 @@ public class ImprimirRemitoHandler {
 		private void cargarMap(RemitoSalida remito, Integer nroSucursal, Integer nroCopia) {
 			this.parameters  = new HashMap();
 			String tipoCopia;
-			if (nroCopia == 1) {
-				tipoCopia = "ORIGINAL";
-			} else if (nroCopia == 2) {
-				tipoCopia = "DUPLICADO";
-			} else {
-				tipoCopia = "TRIPLICADO";
-			}
+			tipoCopia = determinarTipoCopia(nroCopia);
 			parameters.put("FECHA_REMITO", DateUtil.dateToString(remito.getFechaEmision()));
 			parameters.put("NRO_REMITO", String.valueOf(remito.getNroRemito()));
 			parameters.put("RAZON_SOCIAL", remito.getCliente().getRazonSocial());
@@ -241,15 +238,27 @@ public class ImprimirRemitoHandler {
 			parameters.put("PROCESO", getProceso(remito));
 			parameters.put("REMITO_ENT", String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
 			//parameters.put("ODT", extractODTs(remito.getOdts()));
-			parameters.put("TOT_PIEZAS", "TOTAL PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size()))+")");
-			parameters.put("TOT_KILOS", "TOTAL KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
-			parameters.put("TOT_METROS", "TOTAL METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			parameters.put("TOT_PIEZAS", "TOT. PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size())).trim()+")");
+			parameters.put("TOT_KILOS", "TOT. KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
+			parameters.put("TOT_METROS", "TOT. METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
 			parameters.put("TIPO_COPIA", tipoCopia);
 			try {
 				parameters.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.REMITO_SALIDA, remito.getNroRemito(), GenericUtils.isSistemaTest())));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+
+		private String determinarTipoCopia(Integer nroCopia) {
+			String tipoCopia = "";
+			if (nroCopia == 1) {
+				tipoCopia = "ORIGINAL";
+			} else if (nroCopia == 2) {
+				tipoCopia = "DUPLICADO";
+			} else {
+				tipoCopia = "TRIPLICADO";
+			}
+			return tipoCopia;
 		}
 		
 		public Map getParameters() {
