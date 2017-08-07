@@ -12,14 +12,6 @@ import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -35,6 +27,13 @@ import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.util.ODTCodigoHelper;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ImprimirRemitoHandler {
@@ -45,6 +44,7 @@ public class ImprimirRemitoHandler {
 	private final JDialog owner;	
 	private final Integer nroSucursal;
 	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/remito_entrada.jasper";
+	@SuppressWarnings("unused")
 	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
 	private static final String ARCHIVO_JASPER_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_con_formato.jasper";
 	private static final String ARCHIVO_JASPER_B_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato.jasper";
@@ -168,7 +168,8 @@ public class ImprimirRemitoHandler {
 		return remito;
 	}
 
-	public static class RemitoEntradaBTO{
+	public static class RemitoEntradaBTO {
+
 		private Map parameters;
 		private final List<PiezaRemitoTO> piezas1;
 		private final List<PiezaRemitoTO> piezas2;
@@ -181,7 +182,7 @@ public class ImprimirRemitoHandler {
 			this.piezas1 = new ArrayList<PiezaRemitoTO>();
 			this.piezas2 = new ArrayList<PiezaRemitoTO>();
 			this.piezas3 = new ArrayList<PiezaRemitoTO>();
-			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezas()));
+			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezasImprimibles()));
 		}
 		
 		private void populateListaPiezas(List<PiezaRemito> piezas) {
@@ -238,7 +239,8 @@ public class ImprimirRemitoHandler {
 			parameters.put("PROCESO", getProceso(remito));
 			parameters.put("REMITO_ENT", String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
 			//parameters.put("ODT", extractODTs(remito.getOdts()));
-			parameters.put("TOT_PIEZAS", "TOT. PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size())).trim()+")");
+			int cantidadDePiezasImprimibles = remito.getCantidadDePiezasImprimibles();
+			parameters.put("TOT_PIEZAS", "TOT. PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(cantidadDePiezasImprimibles)) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(cantidadDePiezasImprimibles)).trim()+")");
 			parameters.put("TOT_KILOS", "TOT. KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
 			parameters.put("TOT_METROS", "TOT. METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
 			parameters.put("TIPO_COPIA", tipoCopia);
@@ -343,7 +345,8 @@ public class ImprimirRemitoHandler {
 			parameters.put("PROCESO", getProceso(remito));
 			parameters.put("REMITO_ENT", remito.getOdts().isEmpty() ? "" : String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
 			parameters.put("ODT", extractODTs(remito.getOdts()));
-			parameters.put("TOT_PIEZAS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPiezas().size())) + " " + GenericUtils.convertirNumeroATexto(Double.valueOf(remito.getPiezas().size())));
+			int cantidadDePiezasImprimibles = remito.getCantidadDePiezasImprimibles();
+			parameters.put("TOT_PIEZAS", fixPrecioCero(GenericUtils.getDecimalFormat().format(cantidadDePiezasImprimibles)) + " " + GenericUtils.convertirNumeroATexto(Double.valueOf(cantidadDePiezasImprimibles)));
 			parameters.put("TOT_KILOS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
 			parameters.put("TOT_METROS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
 			try {
@@ -351,7 +354,7 @@ public class ImprimirRemitoHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezas()));
+			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezasImprimibles()));
 		}
 
 		private List<PiezaRemito> reescribirOrdenPiezas(List<PiezaRemito> piezas) {

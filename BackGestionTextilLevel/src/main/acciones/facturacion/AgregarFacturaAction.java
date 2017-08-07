@@ -56,7 +56,7 @@ public class AgregarFacturaAction implements Action {
 				List<RemitoSalida> remitosSeleccionados = d.getRemitosSeleccionados();
 				Integer nroPiezas = 0;
 				for(RemitoSalida r : remitosSeleccionados){
-					nroPiezas += r.getCantidadPiezas();
+					nroPiezas += r.getCantidadPiezasParaEstimarTubos();
 				}
 				JDialogQuestionNumberInput dialogQuestionNumberInput = new JDialogQuestionNumberInput(frame, "Confirmación", "¿Confirma la carga de la factura?", "Cantidad de tubos:", nroPiezas);
 				GuiUtil.centrar(dialogQuestionNumberInput);

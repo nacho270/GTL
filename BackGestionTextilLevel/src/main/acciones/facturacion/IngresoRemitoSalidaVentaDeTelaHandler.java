@@ -71,7 +71,7 @@ public class IngresoRemitoSalidaVentaDeTelaHandler {
 		}
 		remitoSalidaSaved = remitoSalidaFacadeRemote.getByIdConPiezasYProductos(remitoSalidaSaved.getId());
 		if (remitoSalidaSaved != null) {
-			JDialogQuestionNumberInput dialogQuestionNumberInput = new JDialogQuestionNumberInput(owner, "Confirmación", "¿Desea Cargar una factura?", "Cantidad de tubos:", remitoSalidaSaved.getCantidadPiezas());
+			JDialogQuestionNumberInput dialogQuestionNumberInput = new JDialogQuestionNumberInput(owner, "Confirmación", "¿Desea Cargar una factura?", "Cantidad de tubos:", remitoSalidaSaved.getCantidadPiezasParaEstimarTubos());
 			GuiUtil.centrar(dialogQuestionNumberInput);
 			dialogQuestionNumberInput.setVisible(true);
 			if(dialogQuestionNumberInput.isAcepto()){

@@ -123,7 +123,7 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 					 "WHERE  r.fechaEmision BETWEEN :fechaDesde AND :fechaHasta " +
 					 (idCliente == null ? "" : " AND cliente.id = :idCliente ") +
 					 (idProveedor == null ? "" : " AND proveedor.id = :idProveedor ") + 
-					 "ORDER BY r.fechaEmision ";
+					 "ORDER BY r.fechaEmision DESC";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("fechaDesde", fechaDesde);
 		q.setParameter("fechaHasta", fechaHasta);

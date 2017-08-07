@@ -65,7 +65,7 @@ public class IngresoRemitoSalidaNormalHandler {
 		if(remitoSalidaSaved != null) {
 			remitoSalidaSaved = remitoSalidaFacadeRemote.getByIdConPiezasYProductos(remitoSalidaSaved.getId());
 			if (remitoSalidaSaved != null && !esReproceso) {
-				JDialogQuestionNumberInput dialogQuestionNumberInput = new JDialogQuestionNumberInput(owner, "Confirmación", "¿Desea Cargar una factura?", "Cantidad de tubos:", remitoSalida.getCantidadPiezas());
+				JDialogQuestionNumberInput dialogQuestionNumberInput = new JDialogQuestionNumberInput(owner, "Confirmación", "¿Desea Cargar una factura?", "Cantidad de tubos:", remitoSalida.getCantidadPiezasParaEstimarTubos());
 				GuiUtil.centrar(dialogQuestionNumberInput);
 				dialogQuestionNumberInput.setVisible(true);
 				if(dialogQuestionNumberInput.isAcepto()){
@@ -84,7 +84,7 @@ public class IngresoRemitoSalidaNormalHandler {
 			remitosSalida = remitoSalidaFacadeRemote.getByIdsConPiezasYProductos(extractIds(remitosSalida));
 			Integer cantPiezas = 0;
 			for(RemitoSalida rs : remitosSalida) {
-				cantPiezas += rs.getCantidadPiezas();
+				cantPiezas += rs.getCantidadPiezasParaEstimarTubos();
 			}
 			JDialogQuestionNumberInput dialogQuestionNumberInput = new JDialogQuestionNumberInput(owner, "Confirmación", "¿Desea Cargar una factura?", "Cantidad de tubos:", cantPiezas);
 			GuiUtil.centrar(dialogQuestionNumberInput);

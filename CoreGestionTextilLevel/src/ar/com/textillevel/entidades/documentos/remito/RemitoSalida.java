@@ -193,6 +193,15 @@ public class RemitoSalida extends Remito implements Serializable {
 		return getPiezas().size();
 	}
 
+	@Transient
+	public Integer getCantidadPiezasParaEstimarTubos() {
+		int cant = 0;
+		for(PiezaRemito pr : getPiezas()) {
+			cant += (pr.getMetros() == null || pr.getMetros().equals(BigDecimal.ZERO)) ? 0 : 1; //para los tubos no se cuentan las piezas con metros == 0 
+		}
+		return cant;
+	}
+
 	@Override
 	@Transient
 	public BigDecimal getTotalMetros() {
@@ -270,6 +279,22 @@ public class RemitoSalida extends Remito implements Serializable {
 
 	public void setTerminalControl(String terminalControl) {
 		this.terminalControl = terminalControl;
+	}
+
+	@Transient
+	public List<PiezaRemito> getPiezasImprimibles() {
+		List<PiezaRemito> piezasImprimibles = new ArrayList<PiezaRemito>();
+		for(PiezaRemito pr : getPiezas()) {
+			if(pr.getMetros() != null && !pr.getMetros().equals(BigDecimal.ZERO)) { // sólo se imprimen las piezas cuyos metros != 0
+				piezasImprimibles.add(pr);
+			}
+		}
+		return piezasImprimibles;
+	}
+	
+	@Transient
+	public int getCantidadDePiezasImprimibles() {
+		return getPiezasImprimibles().size();
 	}
 
 }

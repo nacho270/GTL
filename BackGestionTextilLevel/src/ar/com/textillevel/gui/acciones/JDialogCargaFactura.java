@@ -1432,10 +1432,10 @@ public class JDialogCargaFactura extends JDialog {
 		return panel;
 	}
 
-	private Integer getCantidadPiezasRemito(){
+	private Integer getCantidadPiezasRemito() {
 		Integer suma = 0;
 		for(RemitoSalida r : getRemitos()){
-			suma += r.getCantidadPiezas();
+			suma += r.getCantidadPiezasParaEstimarTubos();
 		}
 		return suma;
 	}
