@@ -213,37 +213,33 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		getCmbCondicionVenta().setEnabled(!consulta);
 		getPanelTotales().setVisible(true);
-		
+
 		if(getCorrecionFactura().getAnulada()==true){
-			setConsulta(consulta);
 			GenericUtils.ponerFondoAnulada(getTablaProductos().getScrollPane());
 			getPanelBotonesFactura().setVisible(false);
 			getBtnGuardar().setVisible(false);
 			getBtnImprimir().setVisible(false);
-			getPanelFecha().setSelectedDate(correccion.getFechaEmision());
 			getPanelFecha().setEnabled(false);
 			getCmbCondicionVenta().setEnabled(false);
 			getTxtPorcentajeIVA().setText("");
 		}else{
-			BigDecimal montoSubtotal = getCorrecionFactura().getMontoSubtotal();
-			if(montoSubtotal!=null){
-				montoSubtotal = montoSubtotal.multiply(new BigDecimal(getCorrecionFactura() instanceof NotaCredito?-1:1));
-				getTxtSubTotal().setText(getDecimalFormat().format(montoSubtotal));
-			}
-			updateTotalesCorrecion();
-			
-			llenarTablaProductos();
-			GuiUtil.setEstadoPanel(getPanelTablaProductos(), !consulta);
 			getBtnQuitarProducto().setEnabled(false);
 			getBtnGuardar().setVisible(!consulta);
-			setConsulta(consulta);
 			getLblTipoFactura().setVisible(false);
-			setTitle("Consultar " + getTipoCorrecion().getDescripcion());
-			getPanelFecha().setSelectedDate(correccion.getFechaEmision());
 			getPanelFecha().setEnabled(!consulta);
 			getBtnImprimir().setVisible(consulta);
 		}
-		
+		setConsulta(consulta);
+		setTitle("Consultar " + getTipoCorrecion().getDescripcion());
+		getPanelFecha().setSelectedDate(correccion.getFechaEmision());
+		GuiUtil.setEstadoPanel(getPanelTablaProductos(), !consulta);
+		llenarTablaProductos();
+		BigDecimal montoSubtotal = getCorrecionFactura().getMontoSubtotal();
+		if(montoSubtotal!=null){
+			montoSubtotal = montoSubtotal.multiply(new BigDecimal(getCorrecionFactura() instanceof NotaCredito?-1:1));
+			getTxtSubTotal().setText(getDecimalFormat().format(montoSubtotal));
+		}
+		updateTotalesCorrecion();
 		
 		setEdicion(!consulta);
 	}
@@ -320,15 +316,15 @@ public class JDialogCargaFactura extends JDialog {
 			getPanelFecha().setSelectedDate(factura.getFechaEmision());
 			getPanelFecha().setEnabled(false);
 			getCmbCondicionVenta().setEnabled(false);
+			GuiUtil.setEstadoPanel(getPanelTablaProductos(), !consulta);
 			getTxtPorcentajeIVA().setText("");
-			//getLblConsultaRemito().setVisible(false);
+			calcularSubTotal();
+			llenarDatosCliente(getCliente());
+			llenarTablaProductos();
 		}else{
 			llenarDatosCliente(getCliente());
 			if(getCliente().getPosicionIva() == EPosicionIVA.EXPORTACION){
 				getBtnImprimir().setVisible(false);
-			}
-			if(factura.getRemitos()!=null){
-				//getPnlNroRemito().setText(String.valueOf(factura.getRemito().getNroRemito()));
 			}
 			if (factura.getMontoImpuestos() != null) {
 				getTxtImpuestos().setText(String.valueOf(factura.getMontoImpuestos().doubleValue()));
@@ -337,7 +333,6 @@ public class JDialogCargaFactura extends JDialog {
 			llenarTablaProductos();
 			getCmbCondicionVenta().setSelectedItem(factura.getCondicionDeVenta());
 			getCmbCondicionVenta().setEnabled(!consulta);
-			// GuiUtil.setEstadoPanel(getPanelAcciones(), false);
 			if(consulta){
 				GuiUtil.setEstadoPanel(getPanelBotonesFactura(), false);
 			}
@@ -345,10 +340,7 @@ public class JDialogCargaFactura extends JDialog {
 			calcularSubTotal();
 			setConsulta(consulta);
 			getBtnGuardar().setVisible(!consulta);
-			//getBtnImprimir().setVisible(false);
-			//setCliente(factura.getRemito().getCliente());
 			setTitle("Consultar factura");
-			//getTxtFechaHoy().setText(DateUtil.dateToString(factura.getFechaEmision(), DateUtil.SHORT_DATE));
 			getPanelFecha().setSelectedDate(factura.getFechaEmision());
 			getPanelFecha().setEnabled(!consulta);
 			setEdicion(!consulta);
