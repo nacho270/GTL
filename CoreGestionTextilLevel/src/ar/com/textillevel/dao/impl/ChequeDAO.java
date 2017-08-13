@@ -12,6 +12,7 @@ import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
+import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
@@ -127,6 +128,21 @@ public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOL
 		String hql = "SELECT c FROM Cheque c WHERE c.numero = :nroCheque";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroCheque", nroCheque);
+		List<Cheque> list = q.getResultList();
+		if(!list.isEmpty()){
+			return list.get(0);
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Cheque getChequeByNumeroCuitYBanco(String nroCheque, String cuit, Banco banco) {
+		String hql = "SELECT c FROM Cheque c WHERE c.numero = :nroCheque"
+				+ 	 "	AND c.cuit = :cuit AND c.banco.id = :idBanco";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("nroCheque", nroCheque);
+		q.setParameter("cuit", cuit);
+		q.setParameter("idBanco", banco.getId());
 		List<Cheque> list = q.getResultList();
 		if(!list.isEmpty()){
 			return list.get(0);

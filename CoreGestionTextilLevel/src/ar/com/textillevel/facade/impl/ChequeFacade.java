@@ -20,6 +20,7 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ImpuestoItemDAOLocal;
+import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
@@ -109,8 +110,8 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		return cheque;
 	}
 
-	public Cheque getChequeByNumero(String nroCheque) {
-		return chequeDAO.getChequeByNumero(nroCheque);
+	public Cheque getChequeByNumeroCuitYBanco(String nroCheque, String cuit, Banco banco) {
+		return chequeDAO.getChequeByNumeroCuitYBanco(nroCheque, cuit, banco);
 	}
 	
 	public Cheque getChequebyId(Integer idCheque) {

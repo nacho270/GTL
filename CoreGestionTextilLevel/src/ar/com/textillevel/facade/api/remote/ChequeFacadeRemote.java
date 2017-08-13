@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
@@ -23,7 +24,7 @@ public interface ChequeFacadeRemote {
 	public List<Cheque> getChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha);
 	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha);
 	public Cheque grabarCheque(Cheque cheque, String usuario) throws FWException;
-	public Cheque getChequeByNumero(String nroCheque);
+	public Cheque getChequeByNumeroCuitYBanco(String nroCheque, String cuit, Banco banco);
 	public Integer getUltimoNumeroInternoCheque(Character letra);
 	public List<Cheque> getChequesByCliente(Integer idCliente, EEstadoCheque estadoCheque);
 	public CorreccionFactura rechazarCheque(Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback;

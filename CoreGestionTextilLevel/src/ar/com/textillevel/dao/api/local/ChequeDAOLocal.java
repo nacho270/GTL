@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import ar.com.fwcommon.dao.api.local.DAOLocal;
+import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
@@ -22,6 +23,8 @@ public interface ChequeDAOLocal extends DAOLocal<Cheque, Integer>{
 	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha);
 
 	public Cheque getChequeByNumero(String nroCheque);
+
+	public Cheque getChequeByNumeroCuitYBanco(String nroCheque, String cuit, Banco banco);
 
 	public Integer getUltimoNumeroInternoCheque(Character letra);
 	
