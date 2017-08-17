@@ -664,7 +664,7 @@ public class JDialogAgregarCheque extends JDialog {
 			return false;
 		}
 
-		if(isModificacion() == false && getChequeFacade().getChequeByNumeroCuitYBanco(getTxtNroCheque().getText().trim(),
+		if( (isModificacion() == false || isParaAgregar()) && getChequeFacade().getChequeByNumeroCuitYBanco(getTxtNroCheque().getText().trim(),
 				getTxtCUIT().getText().trim(), banco)!=null){
 			FWJOptionPane.showErrorMessage(this, "Ya existe un cheque con el número ingresado", "Error");
 			getTxtNroCheque().requestFocus();
