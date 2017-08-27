@@ -4,6 +4,7 @@ import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.gui.modulos.dibujos.gui.JDialogAgregarModificarDibujoEstampado;
 
 public class AccionConsultarDibujo extends Accion<DibujoEstampado> {
 
@@ -17,6 +18,8 @@ public class AccionConsultarDibujo extends Accion<DibujoEstampado> {
 	
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
+		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), true);
+		dialog.setVisible(true);
 		return false;
 	}
 

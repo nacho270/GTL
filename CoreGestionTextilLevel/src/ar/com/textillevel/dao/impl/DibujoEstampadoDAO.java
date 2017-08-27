@@ -41,10 +41,11 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<DibujoEstampado> getByNroCliente(Integer nroCliente) {
-		Query query = getEntityManager().createQuery("SELECT de FROM DibujoEstampado de " +
-													 "LEFT JOIN FETCH de.variantes var " +
-													 "LEFT JOIN de.cliente cl " +
-													 (nroCliente != null ? " WHERE cl.nroCliente = :nroCliente" : ""));
+		Query query = getEntityManager().createQuery(" SELECT de FROM DibujoEstampado de " +
+													 " LEFT JOIN FETCH de.variantes var " +
+													 " LEFT JOIN FETCH de.cliente cl " +
+													 (nroCliente != null ? " WHERE cl.nroCliente = :nroCliente" : "") +
+													 " ORDER BY de.nroDibujo ASC ");
 		if (nroCliente != null) {
 			query.setParameter("nroCliente", nroCliente);
 		}

@@ -21,4 +21,6 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public List<DibujoEstampado> getByNroCliente(Integer nroCliente);
 
+	public void quitarCliente(DibujoEstampado dibujoEstampado);
+
 }

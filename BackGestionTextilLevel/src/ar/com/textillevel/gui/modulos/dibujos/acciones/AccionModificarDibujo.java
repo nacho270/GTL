@@ -4,6 +4,9 @@ import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
+import ar.com.textillevel.gui.modulos.dibujos.gui.JDialogAgregarModificarDibujoEstampado;
+import ar.com.textillevel.util.GTLBeanFactory;
 
 public class AccionModificarDibujo extends Accion<DibujoEstampado>{
 
@@ -17,7 +20,13 @@ public class AccionModificarDibujo extends Accion<DibujoEstampado>{
 	
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
-		return true;
+		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), false);
+		dialog.setVisible(true);
+		if (dialog.isAcepto()) {
+			GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual());
+			return true;
+		}
+		return false;
 	}
 
 	@Override

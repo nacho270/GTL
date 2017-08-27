@@ -1,9 +1,12 @@
 package ar.com.textillevel.gui.modulos.dibujos.acciones;
 
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
+import ar.com.textillevel.util.GTLBeanFactory;
 
 public class AccionQuitarClienteDibujo extends Accion<DibujoEstampado> {
 
@@ -17,6 +20,9 @@ public class AccionQuitarClienteDibujo extends Accion<DibujoEstampado> {
 
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
+		if (FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea quitarle el cliente al dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+			GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).quitarCliente(e.getSelectedElements().get(0));
+		}
 		return true;
 	}
 
