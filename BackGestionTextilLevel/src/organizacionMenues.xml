@@ -72,7 +72,7 @@
 					class="ar.com.textillevel.gui.modulos.abm.GuiABMGamas"
 					nombre="Administrar Gamas de colores" id="13" />
 					<newItem
-					class="ar.com.textillevel.gui.modulos.abm.GuiABMDibujoEstampado"
+					class="ar.com.textillevel.gui.modulos.dibujos.ModuloDibujos"
 					nombre="Administrar Dibujos de Estampados" id="14" />
 					<newItem
 					class="ar.com.textillevel.gui.modulos.abm.GuiABMBancos"

@@ -49,6 +49,7 @@ import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
 
+@Deprecated
 public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 
 	private static final long serialVersionUID = 5817318509804786243L;

@@ -8,10 +8,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -21,6 +23,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import ar.com.fwcommon.util.ImageUtil;
+import ar.com.textillevel.entidades.gente.Cliente;
 
 @Entity
 @Table(name="T_DIBUJO")
@@ -32,6 +35,7 @@ public class DibujoEstampado implements Serializable, Comparable<DibujoEstampado
 	private String nombre;
 	private Integer nroDibujo;
 	private BigDecimal anchoCilindro;
+	private Cliente cliente;
 	private List<VarianteEstampado> variantes;
 	private byte[] bytesFotos;
 	
@@ -117,6 +121,16 @@ public class DibujoEstampado implements Serializable, Comparable<DibujoEstampado
 		this.anchoCilindro = anchoCilindro;
 	}
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "F_CLIENTE_P_ID", nullable = true)
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
 	@Override
 	public String toString() {
 		return getNroDibujo() + " - " + getNombre();
@@ -159,5 +173,4 @@ public class DibujoEstampado implements Serializable, Comparable<DibujoEstampado
 	public int compareTo(DibujoEstampado o) {
 		return getNombre().compareToIgnoreCase(o.getNombre());
 	}
-
 }

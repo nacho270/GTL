@@ -19,4 +19,6 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro);
 
+	public List<DibujoEstampado> getByNroCliente(Integer nroCliente);
+
 }

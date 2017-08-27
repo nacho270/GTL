@@ -1,5 +1,7 @@
 package ar.com.textillevel.dao.api.local;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import ar.com.fwcommon.dao.api.local.DAOLocal;
@@ -11,5 +13,7 @@ public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integ
 	public DibujoEstampado getByIdEager(Integer idDibujoEstampado);
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro);
+
+	public List<DibujoEstampado> getByNroCliente(Integer nroCliente);
 
 }

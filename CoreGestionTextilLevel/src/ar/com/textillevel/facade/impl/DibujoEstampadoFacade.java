@@ -34,4 +34,9 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	public DibujoEstampado getByIdEager(Integer idDibujoEstampado) {
 		return dibujoEstampadoDAOLocal.getByIdEager(idDibujoEstampado);
 	}
+
+	@Override
+	public List<DibujoEstampado> getByNroCliente(Integer nroCliente) {
+		return dibujoEstampadoDAOLocal.getByNroCliente(nroCliente);
+	}
 }
