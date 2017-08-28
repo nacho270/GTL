@@ -19,6 +19,7 @@ import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 
@@ -28,6 +29,7 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 
 	private FWJNumericTextField txtBusquedaCliente;
 	private JComboBox cmbTipoBusquedaCliente;
+	private JComboBox cmbEstadoDibujo;
 	private ModeloCabeceraDibjuos modeloCabeceraDibujos;
 
 	@Override
@@ -36,7 +38,8 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 			modeloCabeceraDibujos = new ModeloCabeceraDibjuos();
 		}
 		Integer nroCliente = getTxtBusquedaCliente().getValueWithNull();
-		modeloCabeceraDibujos.setNroCliente(nroCliente.equals(0) ? null: nroCliente);
+		modeloCabeceraDibujos.setNroCliente(nroCliente.equals(0) ? null : nroCliente);
+		modeloCabeceraDibujos.setEstadoDibujo(getCmbEstadoDibujo().getSelectedItem().equals("TODOS") ?null:(EEstadoDibujo)getCmbEstadoDibujo().getSelectedItem());
 		return modeloCabeceraDibujos;
 	}
 
@@ -48,14 +51,16 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 		panelCliente.add(new JLabel("Cliente: "));
 		panelCliente.add(getCmbTipoBusquedaCliente());
 		panelCliente.add(getTxtBusquedaCliente());
-		add(panelCliente, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER,
-				GridBagConstraints.LINE_END, new Insets(15, 5, 0, 5), 0, 0));
+		panelCliente.add(new JLabel("Estado dibujo: "));
+		panelCliente.add(getCmbEstadoDibujo());
+		add(panelCliente, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.LINE_END, new Insets(15, 5, 0, 5), 0, 0));
 	}
 
 	private void refrescar() {
 		try {
 			ModeloCabeceraDibjuos model = getModel();
 			model.setNroCliente(getTxtBusquedaCliente().getValueWithNull());
+			model.setEstadoDibujo(getCmbEstadoDibujo().getSelectedItem().equals("TODOS") ?null:(EEstadoDibujo)getCmbEstadoDibujo().getSelectedItem());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -102,5 +107,26 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 			});
 		}
 		return cmbTipoBusquedaCliente;
+	}
+
+	private JComboBox getCmbEstadoDibujo() {
+		if (cmbEstadoDibujo == null) {
+			cmbEstadoDibujo = new JComboBox();
+			cmbEstadoDibujo.addItem("TODOS");
+			for (EEstadoDibujo e : EEstadoDibujo.values()) {
+				cmbEstadoDibujo.addItem(e);
+			}
+			cmbEstadoDibujo.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if(e.getStateChange() == ItemEvent.SELECTED) {
+						refrescar();
+						notificar();
+					}
+				}
+			});
+		}
+		return cmbEstadoDibujo;
 	}
 }

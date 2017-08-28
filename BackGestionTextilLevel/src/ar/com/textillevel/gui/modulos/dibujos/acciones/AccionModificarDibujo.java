@@ -20,7 +20,7 @@ public class AccionModificarDibujo extends Accion<DibujoEstampado>{
 	
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
-		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), false);
+		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), false, null);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual());

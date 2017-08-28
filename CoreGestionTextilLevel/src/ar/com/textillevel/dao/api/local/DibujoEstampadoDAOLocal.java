@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import ar.com.fwcommon.dao.api.local.DAOLocal;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 
 @Local
 public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integer>{
@@ -14,6 +15,6 @@ public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integ
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro);
 
-	public List<DibujoEstampado> getByNroCliente(Integer nroCliente);
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo);
 
 }

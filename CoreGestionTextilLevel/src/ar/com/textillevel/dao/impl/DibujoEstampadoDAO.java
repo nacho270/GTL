@@ -1,5 +1,6 @@
 package ar.com.textillevel.dao.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -8,6 +9,7 @@ import javax.persistence.Query;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 
 @Stateless
@@ -40,22 +42,30 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<DibujoEstampado> getByNroCliente(Integer nroCliente) {
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo) {
 		Query query = getEntityManager().createQuery(" SELECT de FROM DibujoEstampado de " +
-													 " LEFT JOIN FETCH de.variantes var " +
-													 " LEFT JOIN FETCH de.cliente cl " +
-													 (nroCliente != null ? " WHERE cl.nroCliente = :nroCliente" : "") +
+													 " WHERE 1 = 1" +
+													 (nroCliente != null ? " AND de.cliente.nroCliente = :nroCliente" : "") +
+													 (estadoDibujo != null ? " AND de.idEstado = :idEstado" : "") +
 													 " ORDER BY de.nroDibujo ASC ");
 		if (nroCliente != null) {
 			query.setParameter("nroCliente", nroCliente);
 		}
+		if (estadoDibujo != null) {
+			query.setParameter("idEstado", estadoDibujo.getId());
+		}
 		List<DibujoEstampado> resultList = query.getResultList();
 		if (resultList.isEmpty()) {
-			return null;
+			return Collections.emptyList();
 		}
 		for (DibujoEstampado de : resultList) {
-			for (VarianteEstampado variante : de.getVariantes()) {
-				variante.getColores().size();
+			if (de.getCliente() != null) {
+				de.getCliente().getCodigoPostal();
+			}
+			if(de.getVariantes() != null) {
+				for (VarianteEstampado variante : de.getVariantes()) {
+					variante.getColores().size();
+				}
 			}
 		}
 		return resultList;

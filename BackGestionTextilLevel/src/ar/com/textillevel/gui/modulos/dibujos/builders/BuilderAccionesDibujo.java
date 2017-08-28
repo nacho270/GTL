@@ -21,6 +21,7 @@ import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionModificarDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionQuitarClienteDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.columnas.ColumnaAnchoCilindroDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.columnas.ColumnaClienteDibujo;
+import ar.com.textillevel.gui.modulos.dibujos.columnas.ColumnaEstadoDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.columnas.ColumnaNombreDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.columnas.ColumnaNumeroDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.columnas.ColumnaVariantesDibujo;
@@ -59,6 +60,7 @@ public class BuilderAccionesDibujo implements IBuilderAcciones<DibujoEstampado>,
 		tabla.addColumna(new ColumnaAnchoCilindroDibujo());
 		tabla.addColumna(new ColumnaClienteDibujo());
 		tabla.addColumna(new ColumnaVariantesDibujo());
+		tabla.addColumna(new ColumnaEstadoDibujo());
 		return tabla;
 	}
 

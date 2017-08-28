@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 
 @Remote
 public interface DibujoEstampadoFacadeRemote {
@@ -19,8 +21,8 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro);
 
-	public List<DibujoEstampado> getByNroCliente(Integer nroCliente);
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo);
 
-	public void quitarCliente(DibujoEstampado dibujoEstampado);
+	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente);
 
 }

@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -43,7 +44,9 @@ import ar.com.fwcommon.componentes.PanelTabla;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.ImageUtil;
 import ar.com.fwcommon.util.StringUtil;
+import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -76,6 +79,7 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
+	private Integer cantidadColores;
 	private boolean acepto = false;
 	private boolean consulta;
 	private DibujoEstampado dibujoActual;
@@ -83,18 +87,23 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	private Frame padre;
 
 	public JDialogAgregarModificarDibujoEstampado(Frame padre) {
-		this(padre, new DibujoEstampado(), false);
+		this(padre, new DibujoEstampado(), false, null);
 	}
 
-	public JDialogAgregarModificarDibujoEstampado(Frame padre, DibujoEstampado dibujo, boolean consulta) {
+	public JDialogAgregarModificarDibujoEstampado(Frame padre, Integer maximaCantidadColores) {
+		this(padre, new DibujoEstampado(), false, maximaCantidadColores);
+	}
+
+	public JDialogAgregarModificarDibujoEstampado(Frame padre, DibujoEstampado dibujo, boolean consulta, Integer cantidadColores) {
 		super(padre);
 		this.padre = padre;
 		this.dibujoActual = dibujo;
 		this.consulta = consulta;
+		this.cantidadColores = cantidadColores;
 		setUpComponentes();
 		setUpScreen();
 		cargarDatos();
-		if(isConsulta()) {
+		if (isConsulta()) {
 			GuiUtil.setEstadoPanel(getPanDetalle(), false);
 			getBtnAceptar().setEnabled(false);
 		}
@@ -116,30 +125,49 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 				salir();
 			}
 		});
-		
+
 		add(getPanDetalle(), BorderLayout.CENTER);
-		add(getPanelBotones(),BorderLayout.SOUTH);
+		add(getPanelBotones(), BorderLayout.SOUTH);
 	}
-	
+
 	private void cargarDatos() {
 		getPanelTablaVariante().setDibujo(getDibujoActual());
 		if (getDibujoActual().getId() == null) {
 			return;
 		}
 		dibujoActual = getDibujoEstampadoFacadeRemote().getByIdEager(getDibujoActual().getId());
-		if(getDibujoActual() != null) {
+		if (getDibujoActual() != null) {
 			getTxtNombre().setText(getDibujoActual().getNombre());
 			getTxtNroDibujo().setValue(getDibujoActual().getNroDibujo().longValue());
 			getTxtAnchoCilindro().setText(getDibujoActual().getAnchoCilindro().toString());
-			if(getDibujoActual().getImagenEstampado()!=null){
+			if (getDibujoActual().getImagenEstampado() != null) {
 				getLblImagen().setIcon(getDibujoActual().getImagenEstampado());
 				getLblImagen().setVerticalTextPosition(JLabel.CENTER);
-			}else{
+			} else {
 				getLblImagen().setIcon(null);
 				getLblImagen().setPreferredSize(new Dimension(ANCHO_IMAGEN, ALTO_IMAGEN));
 				getLblImagen().setVerticalTextPosition(JLabel.CENTER);
 			}
 			getPanelTablaVariante().setDibujo(getDibujoActual());
+		}
+	}
+
+	public void seleccionDibujoExistente(Cliente cliente) {
+		List<DibujoEstampado> dibujosCliente = getDibujoEstampadoFacadeRemote().getByNroClienteYEstado(cliente.getNroCliente(), EEstadoDibujo.SALIDA);
+		if (dibujosCliente != null && !dibujosCliente.isEmpty()) {
+			for (Iterator<DibujoEstampado> it = dibujosCliente.iterator(); it.hasNext();) {
+				DibujoEstampado de = it.next();
+				if (de.getCantidadColores() > cantidadColores) {
+					it.remove();
+				}
+			}
+			if (dibujosCliente.size() > 0) {
+				Object opcion = JOptionPane.showInputDialog(this, "Seleccione un dibujo si lo desea utilizar:", "Dibujos disponibles", JOptionPane.INFORMATION_MESSAGE, null, dibujosCliente.toArray(), dibujosCliente.get(0));
+				if (opcion != null) {
+					setDibujoActual((DibujoEstampado) opcion);
+					setAcepto(true);
+				}
+			}
 		}
 	}
 
@@ -159,8 +187,8 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		return panDetalle;
 	}
 
-	private JPanel getPanelBotones(){
-		if(panelBotones == null){
+	private JPanel getPanelBotones() {
+		if (panelBotones == null) {
 			panelBotones = new JPanel();
 			panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
 			panelBotones.add(getBtnAceptar());
@@ -168,10 +196,10 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		}
 		return panelBotones;
 	}
-	
+
 	private void salir() {
 		if (!isConsulta()) {
-			int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Alta de cheque");
+			int ret = FWJOptionPane.showQuestionMessage(this, "Va a salir sin grabar, desea continuar?", "Alta de dibujo");
 			if (ret == FWJOptionPane.YES_OPTION) {
 				setAcepto(false);
 				dispose();
@@ -213,12 +241,12 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
 	private void capturarSetearDatos() {
 		getDibujoActual().setNombre(getTxtNombre().getText().trim().toUpperCase());
-		getDibujoActual().setImagenEstampado((ImageIcon)getLblImagen().getIcon());
+		getDibujoActual().setImagenEstampado((ImageIcon) getLblImagen().getIcon());
 		getDibujoActual().setNroDibujo(getTxtNroDibujo().getValue());
 		getDibujoActual().setAnchoCilindro(new BigDecimal(getTxtAnchoCilindro().getText().replace(',', '.')));
 		getPanelTablaVariante().capturarSetearVariantes();
 	}
-	
+
 	private PanelTablaVariante getPanelTablaVariante() {
 		if (panelTablaVariante == null) {
 			panelTablaVariante = new PanelTablaVariante();
@@ -372,7 +400,11 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
 	private FWJNumericTextField getTxtNroDibujo() {
 		if (txtNroDibujo == null) {
-			txtNroDibujo = new FWJNumericTextField();
+			if (cantidadColores == null) {
+				txtNroDibujo = new FWJNumericTextField();
+			} else {
+				txtNroDibujo = new FWJNumericTextField(0l, ((cantidadColores + 1) * 1000) - 1);
+			}
 			txtNroDibujo.setMaxLength(4);
 		}
 		return txtNroDibujo;

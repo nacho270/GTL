@@ -25,7 +25,7 @@ public class ModuloDibujosModel extends ModuloModel<DibujoEstampado, ModeloCabec
 
 	@Override
 	public List<DibujoEstampado> buscarItems(ModeloCabeceraDibjuos modeloCabecera) {
-		return getDibujoFacade().getByNroCliente(modeloCabecera.getNroCliente());
+		return getDibujoFacade().getByNroClienteYEstado(modeloCabecera.getNroCliente(), modeloCabecera.getEstadoDibujo());
 	}
 
 	private DibujoEstampadoFacadeRemote getDibujoFacade() {

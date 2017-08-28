@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;	
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +35,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
+
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -76,11 +79,14 @@ import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
+import ar.com.textillevel.entidades.enums.ETipoMateriaPrima;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
@@ -93,6 +99,7 @@ import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.acciones.remitosalida.RemitoSalidaLinkeableLabel;
+import ar.com.textillevel.gui.modulos.dibujos.gui.JDialogAgregarModificarDibujoEstampado;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
@@ -100,8 +107,8 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
+
+import com.google.common.collect.Lists;
 
 public class JDialogCargaFactura extends JDialog {
 
@@ -1606,11 +1613,15 @@ public class JDialogCargaFactura extends JDialog {
 						if (isFactura()) {
 							if(validarFecha()){
 								if (getFactura().getItems().size() > 0) {
-									okImprimir = guardarFactura();
-									if (okImprimir) {
-										FWJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con éxito", "Alta de factura");
-									} else {
-										dispose();
+									try {
+										okImprimir = guardarFactura();
+										if (okImprimir) {
+											FWJOptionPane.showInformationMessage(JDialogCargaFactura.this,"La factura se ha guardado con éxito", "Alta de factura");
+										} else {
+											dispose();
+											return;
+										}
+									}catch (FaltanCargarDibujosException f) {
 										return;
 									}
 								} else {
@@ -1756,9 +1767,50 @@ public class JDialogCargaFactura extends JDialog {
 		// getFactura().setMontoImpuestos(new
 		// BigDecimal(getTxtImpuestos().getText().trim().replace(',',
 		// '.')));
+
+		// si es factura sin remito, analizo si puso cilindros
+		boolean cilindrosValidos = true;
+		List<DibujoEstampado> dibujosAPersistir = Lists.newArrayList();
+		if (getRemitos() == null || getRemitos().isEmpty()) {
+			int contador = 0;
+			for (ItemFactura itf : getFactura().getItems()) {
+				if ( (itf instanceof ItemFacturaPrecioMateriaPrima) &&
+						((ItemFacturaPrecioMateriaPrima)itf).getPrecioMateriaPrima().getMateriaPrima().getTipo() == ETipoMateriaPrima.CILINDRO) {
+					contador += itf.getCantidad().intValue();
+				}
+			}
+			if (contador > 0) {
+				FWJOptionPane.showWarningMessage(JDialogCargaFactura.this, "Se han detectado " + contador + " cilindro/s. Debe cargar los dibujos.", "Advertencia");
+				do {
+					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador);
+					dialog.seleccionDibujoExistente(getFactura().getCliente());
+					if (dialog.isAcepto()) {
+						DibujoEstampado de = dialog.getDibujoActual();
+						de.setEstado(EEstadoDibujo.EN_STOCK);
+						dibujosAPersistir.add(de);
+						contador -= de.getCantidadColores();
+					} else {
+						dialog.setVisible(true);
+						if (dialog.isAcepto()) {
+							DibujoEstampado de = dialog.getDibujoActual();
+							de.setCliente(getFactura().getCliente());
+							dibujosAPersistir.add(de);
+							contador -= de.getCantidadColores();
+						} else {
+							cilindrosValidos = false;
+						}
+					}
+				}while(contador > 0 && cilindrosValidos);
+			}
+		}
+		if (!cilindrosValidos) {
+			FWJOptionPane.showErrorMessage(this, "Debe cargar todos los cilindros para guardar esta factura.", "Error");
+			throw new FaltanCargarDibujosException();
+		}
+		
 		String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
 		try {
-			setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(),usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(), usuario));
+			setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(),dibujosAPersistir,usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(),dibujosAPersistir, usuario));
 		} catch (ValidacionException e) {
 			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
@@ -1769,6 +1821,12 @@ public class JDialogCargaFactura extends JDialog {
 		return true;
 	}
 
+	private class FaltanCargarDibujosException extends RuntimeException {
+
+		private static final long serialVersionUID = -2248855494604124346L;
+		
+	}
+	
 	private JButton getBtnImprimir() {
 		if (btnImprimir == null) {
 			btnImprimir = new JButton("Imprimir");

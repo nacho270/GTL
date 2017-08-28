@@ -301,7 +301,7 @@ public class CorrectorCuentasClientesFacade implements CorrectorCuentasClientesF
 		try {
 			if(prw.isFactura()) {
 //				if(!movimientosYaRegistrados.contains(prw.getFactura().getId())) {
-					prw.setFactura(facturaFacade.guardarFacturaYGenerarMovimiento(prw.getFactura(), usrName));
+					prw.setFactura(facturaFacade.guardarFacturaYGenerarMovimiento(prw.getFactura(), null, usrName));
 					movimientosYaRegistrados.add(prw.getFactura().getId());
 					String obs = observacionesPagosMDMap.get(prw);
 					if(!StringUtil.isNullOrEmpty(obs)) {
