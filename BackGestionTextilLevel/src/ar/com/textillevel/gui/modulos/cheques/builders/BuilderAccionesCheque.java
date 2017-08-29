@@ -16,6 +16,7 @@ import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionAgregarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionConsultarCheque;
+import ar.com.textillevel.gui.modulos.cheques.acciones.AccionConsultarOperacionesSobreCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionEliminarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionModificarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionPonerChequeRechazadoEnCartera;
@@ -58,6 +59,7 @@ public class BuilderAccionesCheque implements IBuilderAcciones<Cheque>,
 		accionesCreacion.add(new AccionPonerChequeRechazadoEnDevuelto());
 //		accionesCreacion.add(new AccionDarSalidaCheque());
 		accionesCreacion.add(new AccionPonerChequeSalidaEnCartera());
+		accionesCreacion.add(new AccionConsultarOperacionesSobreCheque());
 		acciones.addElementGroup("Acciones",accionesCreacion);
 		return acciones;
 	}

@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.ReciboDAOLocal;
+import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.recibo.pagos.PagoRecibo;
@@ -24,6 +25,7 @@ import ar.com.textillevel.entidades.documentos.recibo.to.ResumenReciboTO;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
 
 @Stateless
+@SuppressWarnings("unchecked")
 public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOLocal {
 
 	public Integer getLastNroRecibo() {
@@ -53,7 +55,6 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		return (Date) query.getSingleResult();
 	}
 
-	@SuppressWarnings("unchecked")
 	public Recibo getByNroReciboEager(Integer nroRecibo) {
 		Query query = getEntityManager().createQuery("SELECT r " + "FROM Recibo r " + "WHERE r.nroRecibo = :nroRecibo");
 		query.setParameter("nroRecibo", nroRecibo);
@@ -73,7 +74,6 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Recibo getByIdEager(Integer id) {
 		Query query = getEntityManager().createQuery("SELECT r " + "FROM Recibo r " + "WHERE r.id = :id");
 		query.setParameter("id", id);
@@ -92,7 +92,6 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<Integer, List<Integer>> getMapaRecibosYPagosRecibos() {
 		Map<Integer, List<Integer>> ret = new HashMap<Integer, List<Integer>>();
 		String hql = "SELECT r FROM Recibo r JOIN FETCH r.pagoReciboList ";
@@ -111,7 +110,6 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
 	public InfoCuentaTO getInfoReciboYPagosRecibidos(Integer nroCliente) {
 		InfoCuentaTO infoCuentaTO = new InfoCuentaTO();
 		Query query = getEntityManager().createNativeQuery("SELECT PR.F_NOTA_DEBITO_P_ID, PR.F_FACTURA_P_ID,R.P_ID " +
@@ -176,7 +174,6 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<ResumenReciboTO> getResumenReciboList(Integer idCliente, Date fechaDesde, Date fechaHasta) {
 		Map<Integer, ResumenReciboTO> resumenReciboMap = new HashMap<Integer, ResumenReciboTO>();
 		Query query = getEntityManager().createNativeQuery(
@@ -261,12 +258,23 @@ public class ReciboDAO extends GenericDAO<Recibo, Integer> implements ReciboDAOL
 		return !query.getResultList().isEmpty();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Recibo> getAllNoAnuladosByIdCliente(Integer idCliente) {
 		Query query = getEntityManager().createQuery("FROM Recibo AS r WHERE r.idEstadoRecibo != :idRechazado AND r.cliente.id = :idCliente ORDER BY r.nroRecibo");
 		query.setParameter("idCliente", idCliente);
 		query.setParameter("idRechazado", EEstadoRecibo.RECHAZADO.getId());		
 		return query.getResultList();
+	}
+
+	@Override
+	public Recibo getReciboByCheque(Cheque ch) {
+		Query query = getEntityManager().createQuery("SELECT r FROM Recibo AS r JOIN FETCH r.pagos PAG WHERE PAG.cheque = :cheque");
+		query.setParameter("cheque", ch);
+		List<Recibo> result = query.getResultList();
+		if(result.isEmpty()) {
+			return null;
+		} else {
+			return result.get(0);
+		}
 	}
 
 }

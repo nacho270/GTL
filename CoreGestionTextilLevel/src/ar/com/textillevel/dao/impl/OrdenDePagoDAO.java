@@ -7,6 +7,7 @@ import javax.persistence.Query;
 
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.OrdenDePagoDAOLocal;
+import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.ordendepago.pagos.PagoOrdenDePago;
@@ -16,6 +17,7 @@ import ar.com.textillevel.entidades.documentos.ordendepago.pagos.PagoOrdenDePago
 import ar.com.textillevel.entidades.documentos.ordendepago.pagos.visitor.IPagoOrdenPagoVisitor;
 
 @Stateless
+@SuppressWarnings("unchecked")
 public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements OrdenDePagoDAOLocal{
 
 	public Integer getNewNumeroOrdenDePago() {
@@ -28,7 +30,6 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 		return n.intValue()+1;
 	}
 
-	@SuppressWarnings("unchecked")
 	public OrdenDePago getOrdenDePagoByNroOrdenEager(Integer nroOrden) {
 		String hql = "SELECT o FROM OrdenDePago o WHERE o.nroOrden = :nroOrden ";
 		Query q = getEntityManager().createQuery(hql);
@@ -40,7 +41,6 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 		return doEager(l.get(0));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public OrdenDePago getByIdEager(Integer idODP) {
 		String hql = "SELECT o FROM OrdenDePago o WHERE o.id = :id ";
 		Query q = getEntityManager().createQuery(hql);
@@ -64,7 +64,6 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 		return orden;
 	}
 
-	@SuppressWarnings("unchecked")
 	public InfoCuentaTO getInfoOrdenDePagoYPagosRecibidos(Integer idProveedor) {
 		InfoCuentaTO infoCuentaTO = new InfoCuentaTO();
 		Query query = getEntityManager().createNativeQuery("SELECT PODP.F_NOTA_DEBITO_P_ID, PODP.F_FACTURA_PROV_P_ID,ODP.P_ID " +
@@ -102,7 +101,6 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<OrdenDePago> getAllByIdProveedor(Integer idProveedor) {
 		String hql = "SELECT o FROM OrdenDePago o WHERE o.proveedor.id = :idProveedor ";
 		Query q = getEntityManager().createQuery(hql);
@@ -110,7 +108,6 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 		return q.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
 	public OrdenDePago getByNumero(String numero) {
 		String hql = "SELECT o FROM OrdenDePago o WHERE o.nroOrden = :nroOrden ";
 		Query q = getEntityManager().createQuery(hql);
@@ -120,5 +117,19 @@ public class OrdenDePagoDAO extends GenericDAO<OrdenDePago, Integer> implements 
 			return null;
 		}
 		return l.get(0);
+	}
+
+	public OrdenDePago getByCheque(Cheque ch) {
+		String hql = "SELECT o FROM OrdenDePago o JOIN FETCH o.formasDePago AS formas WHERE formas.cheque = :cheque";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("cheque", ch);
+		List<OrdenDePago> l = q.getResultList();
+		if(l.isEmpty()){
+			return null;
+		} else if(l.size() > 1) {
+			throw new IllegalArgumentException("Existe más de una Orden de Pago donde se usó el cheque " + ch);
+		} else {
+			return l.get(0);
+		}
 	}
 }

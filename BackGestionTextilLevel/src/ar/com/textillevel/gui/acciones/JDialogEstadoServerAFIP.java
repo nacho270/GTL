@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import main.GTLGlobalCache;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTextField;
@@ -42,8 +41,8 @@ import ar.com.textillevel.modulos.fe.cliente.responses.MonedaResponse;
 import ar.com.textillevel.modulos.fe.to.EstadoAFIPWrapper;
 import ar.com.textillevel.modulos.fe.to.EstadoServidorAFIP;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
-@SuppressWarnings("rawtypes")
 public class JDialogEstadoServerAFIP extends JDialog {
 
 	private static final long serialVersionUID = 5177698652696680802L;
@@ -391,7 +390,7 @@ public class JDialogEstadoServerAFIP extends JDialog {
 						@Override
 						protected void agregarRegistros(FWJTable tabla, FECompConsultaResponse object) {
 							if (object.getResultGet() == null) {
-								if (object.getErrors().length > 0) {
+								if (object.getErrors()!= null && object.getErrors().length > 0) {
 									tabla.addRow(new Object[] { "Error", object.getErrors()[0] });
 								}
 								return;

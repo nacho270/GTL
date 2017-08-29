@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import ar.com.fwcommon.dao.api.local.DAOLocal;
+import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 
@@ -22,5 +23,7 @@ public interface OrdenDePagoDAOLocal extends DAOLocal<OrdenDePago, Integer> {
 	public OrdenDePago getByIdEager(Integer idODP);
 
 	public OrdenDePago getByNumero(String numero);
+	
+	public OrdenDePago getByCheque(Cheque ch);
 
 }

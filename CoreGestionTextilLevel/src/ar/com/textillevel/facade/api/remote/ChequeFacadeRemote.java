@@ -12,6 +12,7 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRoll
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
+import ar.com.textillevel.entidades.cheque.to.OperacionSobreChequeTO;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
@@ -47,4 +48,7 @@ public interface ChequeFacadeRemote {
 	
 	/* BORRA LOS CHEQUES PASADO COMO PARAMETROS */
 	public void eliminarCheques(List<Cheque> cheques, String usuario) throws ValidacionException;
+
+	public List<OperacionSobreChequeTO> getOperacionSobreChequeTOList(Cheque ch);
+
 }

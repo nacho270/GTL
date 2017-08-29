@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -17,12 +18,18 @@ import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ImpuestoItemDAOLocal;
+import ar.com.textillevel.dao.api.local.OrdenDeDepositoDAOLocal;
+import ar.com.textillevel.dao.api.local.OrdenDePagoDAOLocal;
+import ar.com.textillevel.dao.api.local.OrdenDePagoPersonaDAOLocal;
+import ar.com.textillevel.dao.api.local.ReciboDAOLocal;
 import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
+import ar.com.textillevel.entidades.cheque.to.OperacionSobreChequeTO;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
@@ -32,6 +39,10 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionC
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionResumen;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
+import ar.com.textillevel.entidades.documentos.ordendedeposito.OrdenDeDeposito;
+import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
+import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
+import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.enums.EUnidad;
@@ -39,11 +50,11 @@ import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.ChequeFacadeLocal;
+import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
-import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 
 @Stateless
 public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
@@ -52,7 +63,10 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	private ChequeDAOLocal chequeDAO;
 	
 	@EJB
-	private CorreccionFacadeRemote correccionFacade;
+	private ReciboDAOLocal reciboDAO;
+
+	@EJB
+	private CorreccionFacadeLocal correccionFacade;
 	
 	@EJB
 	private CorreccionFacturaProveedorFacadeLocal correccionProveedorFacade;
@@ -67,7 +81,17 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	private AuditoriaFacadeLocal<Cheque> auditoriaFacade;
 
 	@EJB
-	private ImpuestoItemDAOLocal impuestoItemDAO; 
+	private ImpuestoItemDAOLocal impuestoItemDAO;
+	
+	@EJB
+	private OrdenDeDepositoDAOLocal ordenDao;
+	
+	@EJB
+	private OrdenDePagoDAOLocal ordenDePagoDao;
+	
+	@EJB
+	private OrdenDePagoPersonaDAOLocal ordenDePagoPersonaDao;
+	
 	
 	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
 		return chequeDAO.getChequesPorFechaYPaginado(nroCliente, eEstadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows, tipoFecha);
@@ -382,4 +406,33 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		}
 		return cheque;
 	}
+
+	public List<OperacionSobreChequeTO> getOperacionSobreChequeTOList(Cheque ch) {
+		List<OperacionSobreChequeTO> operaciones = new ArrayList<OperacionSobreChequeTO>();
+		NotaDebito nd = correccionFacade.getNotaDebitoByCheque(ch);//ND
+		if(nd != null) {
+			String suc = nd.getNroSucursal() == null ? null : StringUtil.fillLeftWithZeros(String.valueOf(nd.getNroSucursal()), 4);
+			String nro = StringUtil.fillLeftWithZeros(String.valueOf(nd.getNroFactura()), 8);
+			operaciones.add(new OperacionSobreChequeTO(nd.getFechaEmision(), EEstadoCheque.RECHAZADO, ETipoDocumento.NOTA_DEBITO, nd.getId(), suc == null ? nro : (suc + "- " + nro)));
+		}
+		OrdenDeDeposito odd = ordenDao.getOrdenDepositoByCheque(ch); //ORDEN DE DEPÓSITO
+		if(odd != null) {
+			operaciones.add(new OperacionSobreChequeTO(new Timestamp(odd.getFecha().getTime()), EEstadoCheque.SALIDA_BANCO, ETipoDocumento.ORDEN_DE_DEPOSITO, odd.getNroOrden(), odd.getNroOrden()+""));
+		}
+		Recibo r = reciboDAO.getReciboByCheque(ch);
+		if(r != null) {//RECIBO
+			operaciones.add(new OperacionSobreChequeTO(r.getFechaEmision(), EEstadoCheque.EN_CARTERA, ETipoDocumento.RECIBO, r.getNroRecibo(), r.getNroRecibo() + ""));
+		}
+		OrdenDePago odp = ordenDePagoDao.getByCheque(ch);
+		if(odp != null) {//ORDEN DE PAGO
+			operaciones.add(new OperacionSobreChequeTO(odp.getFechaEmision(), EEstadoCheque.SALIDA_PROVEEDOR, ETipoDocumento.ORDEN_PAGO, odp.getNroOrden(), odp.getNroOrden()+""));
+		}
+		OrdenDePagoAPersona odpp = ordenDePagoPersonaDao.getByCheque(ch);
+		if(odpp != null) {//ORDEN DE PAGO A PERSONA
+			operaciones.add(new OperacionSobreChequeTO(odpp.getFechaHoraEntregada(), EEstadoCheque.SALIDA_PERSONA, ETipoDocumento.ORDEN_PAGO_PERSONA, odpp.getNroOrden(), odpp.getNroOrden()+""));
+		}
+		Collections.sort(operaciones);
+		return operaciones;
+	}
+
 }

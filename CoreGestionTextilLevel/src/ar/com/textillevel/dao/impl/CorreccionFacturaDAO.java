@@ -119,10 +119,17 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		String hql = " SELECT nd FROM NotaDebito nd WHERE nd.chequeRechazado.id = :idCheque  ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCheque", cheque.getId());
-		NotaDebito nota = (NotaDebito) q.getSingleResult();
-		nota.getChequeRechazado().getNombreProveedorSalida();
-		nota.getItems().size();
-		return nota;
+		List<NotaDebito> resultList = q.getResultList();
+		if(resultList.isEmpty()) {
+			return null;
+		} else if(resultList.size() > 1) {
+			throw new IllegalArgumentException("El cheque " + cheque + " está relacionado con más de una ND.");
+		} else {
+			NotaDebito nota = (NotaDebito) resultList.get(0);
+			nota.getChequeRechazado().getNombreProveedorSalida();
+			nota.getItems().size();
+			return nota;
+		}
 	}
 
 	private void doEager(CorreccionFactura c) {
