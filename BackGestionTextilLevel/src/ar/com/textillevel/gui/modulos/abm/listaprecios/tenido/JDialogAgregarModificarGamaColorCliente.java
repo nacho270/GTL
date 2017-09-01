@@ -60,12 +60,14 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 	private GamaColorClienteFacadeRemote gamaClienteFacade;
 	private GamaColorFacadeRemote gamaColorFacade;
 	private ColorFacadeRemote colorFacade;
+	private boolean llenarConLasGamasConfiguradas;
 	
-	public JDialogAgregarModificarGamaColorCliente(Dialog padre, Cliente cliente ) {
+	public JDialogAgregarModificarGamaColorCliente(Dialog padre, Cliente cliente, boolean llenarConLasGamasConfiguradas) {
 		super(padre);
 		setCliente(cliente);
-		this.gamasActuales = getGamaClienteFacade().getByCliente(cliente.getId());
-		this.gamasDefault = getGamaColorFacade().getAllOrderByName();
+		this.llenarConLasGamasConfiguradas = llenarConLasGamasConfiguradas;
+		this.gamasActuales = llenarConLasGamasConfiguradas ? getGamaClienteFacade().getByCliente(cliente.getId()) : new ArrayList<GamaColorCliente>();
+		this.gamasDefault = llenarGamasDefault();
 		if (this.gamasActuales == null || this.gamasActuales.isEmpty()) {
 			this.gamasActuales = copiaInicialDeGamas();
 		}
@@ -73,6 +75,29 @@ public class JDialogAgregarModificarGamaColorCliente extends JDialog {
 		setUpScreen();
 		getListaGamas().setSelectedIndex(0);
 		seleccionarColores();
+	}
+
+	private List<GamaColor> llenarGamasDefault() {
+		if(llenarConLasGamasConfiguradas) {
+			return getGamaColorFacade().getAllOrderByName();
+		} else {
+			List<GamaColor> result = new ArrayList<GamaColor>(); 
+			List<GamaColor> allGamas = getGamaColorFacade().getAllOrderByName();
+			List<GamaColorCliente> gamasClientes = getGamaClienteFacade().getByCliente(cliente.getId());
+			for(GamaColor gc : allGamas) {
+				boolean noExiste = true;
+				for(GamaColorCliente gcc : gamasClientes) {
+					if(gcc.getGamaOriginal().equals(gc)) {
+						noExiste = false;
+						break;
+					}
+				}
+				if(noExiste) {
+					result.add(gc);
+				}
+			}
+			return result;
+		}
 	}
 
 	private List<GamaColorCliente> copiaInicialDeGamas() {

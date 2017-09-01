@@ -50,6 +50,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 	private JComboBox cmbGama;
 	private LinkableLabel linkableLabelEditarGamaCliente;
 	private JButton btnAgregarTodos;
+	private JButton btnAgregarGamasFaltantes;
 	private JPanel panelDatosPropios;
 
 	private List<GamaColorCliente> gamas;
@@ -67,7 +68,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		if (definicionAModificar.getId() == null) {
 			if (gamas == null || gamas.isEmpty()) {
 				FWJOptionPane.showWarningMessage(this, "El cliente no cuenta con gamas definidas. Debe ingresarlas.", "Advertencia");
-				JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(this, getCliente());
+				JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(this, getCliente(), true);
 				d.setVisible(true);
 				if (d.isAcepto()) {
 					gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
@@ -91,6 +92,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			panelDatosPropios.add(getCmbGama(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(5,5,5,5), 1, 1, 1, 1));
 			panelDatosPropios.add(getLinkableLabelEditarGamaCliente(), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 0, 0));
 			panelDatosPropios.add(getBtnAgregarTodos(), GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
+			panelDatosPropios.add(getBtnAgregarFaltantes(), GenericUtils.createGridBagConstraints(4, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5,5,5,5), 1, 1, 1, 1));
 		}
 		return panelDatosPropios;
 	}
@@ -128,7 +130,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 				@Override
 				public void labelClickeada(MouseEvent e) {
 					if (editable) {
-						JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(JDialogAgregarModificarDefinicionPreciosTenido.this, getCliente());
+						JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(JDialogAgregarModificarDefinicionPreciosTenido.this, getCliente(), true);
 						d.setVisible(true);
 						if (d.isAcepto()) {
 							gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
@@ -285,7 +287,7 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 		return null;
 	}
 
-	public JButton getBtnAgregarTodos() {
+	private JButton getBtnAgregarTodos() {
 		if(btnAgregarTodos == null){
 			btnAgregarTodos = new JButton("Agregar todas las gamas");
 			btnAgregarTodos.addActionListener(new ActionListener() {
@@ -313,6 +315,23 @@ public class JDialogAgregarModificarDefinicionPreciosTenido extends JDialogAgreg
 			});
 		}
 		return btnAgregarTodos;
+	}
+
+	private JButton getBtnAgregarFaltantes() {
+		if(btnAgregarGamasFaltantes == null){
+			btnAgregarGamasFaltantes = new JButton("Agregar gamas faltantes");
+			btnAgregarGamasFaltantes.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JDialogAgregarModificarGamaColorCliente d = new JDialogAgregarModificarGamaColorCliente(JDialogAgregarModificarDefinicionPreciosTenido.this, getCliente(), false);
+					d.setVisible(true);
+					if(d.isAcepto()) {
+						gamas = getGamaClienteFacade().getByCliente(getCliente().getId());
+						GuiUtil.llenarCombo(cmbGama, getGamas(), true);
+					}
+				}
+			});
+		}
+		return btnAgregarGamasFaltantes;
 	}
 
 	private Float ingresarPrecio(GamaColorCliente gcc) throws SaltarException, Exception {
