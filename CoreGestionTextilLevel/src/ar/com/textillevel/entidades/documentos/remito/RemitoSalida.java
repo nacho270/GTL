@@ -285,7 +285,7 @@ public class RemitoSalida extends Remito implements Serializable {
 	public List<PiezaRemito> getPiezasImprimibles() {
 		List<PiezaRemito> piezasImprimibles = new ArrayList<PiezaRemito>();
 		for(PiezaRemito pr : getPiezas()) {
-			if(pr.getMetros() != null && !pr.getMetros().equals(BigDecimal.ZERO)) { // sólo se imprimen las piezas cuyos metros != 0
+			if(pr.getMetros() != null && pr.getMetros().floatValue() > 0f) { // sólo se imprimen las piezas cuyos metros != 0
 				piezasImprimibles.add(pr);
 			}
 		}
