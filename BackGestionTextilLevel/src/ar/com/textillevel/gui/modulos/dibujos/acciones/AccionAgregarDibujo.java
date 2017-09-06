@@ -11,7 +11,7 @@ import ar.com.textillevel.util.GTLBeanFactory;
 public class AccionAgregarDibujo extends Accion<DibujoEstampado>{
 
 	public AccionAgregarDibujo(){
-		setNombre("Agregar Cheque");
+		setNombre("Agregar Dibujo");
 		setDescripcion("Permite dar de alta un dibujo"); 
 		setTooltip(crearTooltip(getNombre(), getDescripcion(), null));
 		setImagenActivo("ar/com/fwcommon/imagenes/b_agregar.png");
