@@ -15,13 +15,15 @@ public class OperacionSobreChequeTO implements Serializable, Comparable<Operacio
 	private ETipoDocumento tipoDocumento;
 	private Integer idDocumento;
 	private String nroDocumento;
+	private String usrOperacion;
 
-	public OperacionSobreChequeTO(Timestamp fechaOp, EEstadoCheque pasoAEstado, ETipoDocumento tipoDocumento, Integer idDocumento, String nroDocumento) { 
+	public OperacionSobreChequeTO(Timestamp fechaOp, EEstadoCheque pasoAEstado, ETipoDocumento tipoDocumento, Integer idDocumento, String nroDocumento, String usrOperacion) { 
 		this.fechaOp = fechaOp;
 		this.pasoAEstado = pasoAEstado;
 		this.tipoDocumento = tipoDocumento;
 		this.idDocumento = idDocumento;
 		this.nroDocumento = nroDocumento;
+		this.usrOperacion = usrOperacion;
 	}
 
 	public Timestamp getFechaOp() {
@@ -62,6 +64,14 @@ public class OperacionSobreChequeTO implements Serializable, Comparable<Operacio
 
 	public void setNroDocumento(String nroDocumento) {
 		this.nroDocumento = nroDocumento;
+	}
+
+	public String getUsrOperacion() {
+		return usrOperacion;
+	}
+
+	public void setUsrOperacion(String usrOperacion) {
+		this.usrOperacion = usrOperacion;
 	}
 
 	@Override

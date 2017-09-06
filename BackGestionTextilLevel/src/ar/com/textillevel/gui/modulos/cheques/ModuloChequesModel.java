@@ -22,7 +22,7 @@ public class ModuloChequesModel extends ModuloModel<Cheque, ModeloCabeceraCheque
 	}
 
 	public ModuloChequesModel(Integer id) throws FWException {
-		super(id, BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance());
+		super(id, BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance(), BuilderAccionesCheque.getInstance());
 		setTitulo("Administrar cheques");
 	}
 

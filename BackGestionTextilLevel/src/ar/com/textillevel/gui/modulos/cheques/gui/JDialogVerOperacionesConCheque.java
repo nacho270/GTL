@@ -131,6 +131,7 @@ public class JDialogVerOperacionesConCheque extends JDialog {
 
 		private OperacionSobreChequeTO op;
 		private JTextField txtFecha;
+		private JTextField txtUsuario;
 		private JLabel lblEstado;
 		private OperacionSobreChequeTOLinkableLabel linkeableDocLabel;
 
@@ -144,8 +145,10 @@ public class JDialogVerOperacionesConCheque extends JDialog {
 			setBorder(BorderFactory.createEtchedBorder());
 			add(new JLabel("Fecha: "), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
 			add(getTxtFecha(), GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 1, 0));
-			add(getLblEstado(), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
-			add(getLinkeableLabel(), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
+			add(new JLabel("Usuario: "), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			add(getTxtUsuario(), GenericUtils.createGridBagConstraints(1, 1,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 1, 0));
+			add(getLblEstado(), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
+			add(getLinkeableLabel(), GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 2, 1, 0, 0));
 		}
 
 		private JTextField getTxtFecha() {
@@ -155,6 +158,15 @@ public class JDialogVerOperacionesConCheque extends JDialog {
 				txtFecha.setText(DateUtil.dateToString(op.getFechaOp(), DateUtil.SHORT_DATE_WITH_HOUR));
 			}
 			return txtFecha;
+		}
+		
+		private JTextField getTxtUsuario() {
+			if(txtUsuario == null) {
+				txtUsuario = new JTextField();
+				txtUsuario.setEditable(false);
+				txtUsuario.setText(op.getUsrOperacion());
+			}
+			return txtUsuario;
 		}
 
 		private JLabel getLblEstado() {

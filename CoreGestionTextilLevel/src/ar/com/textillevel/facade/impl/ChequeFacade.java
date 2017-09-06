@@ -413,23 +413,23 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		if(nd != null) {
 			String suc = nd.getNroSucursal() == null ? null : StringUtil.fillLeftWithZeros(String.valueOf(nd.getNroSucursal()), 4);
 			String nro = StringUtil.fillLeftWithZeros(String.valueOf(nd.getNroFactura()), 8);
-			operaciones.add(new OperacionSobreChequeTO(nd.getFechaEmision(), EEstadoCheque.RECHAZADO, ETipoDocumento.NOTA_DEBITO, nd.getId(), suc == null ? nro : (suc + "- " + nro)));
+			operaciones.add(new OperacionSobreChequeTO(nd.getFechaEmision(), EEstadoCheque.RECHAZADO, ETipoDocumento.NOTA_DEBITO, nd.getId(), suc == null ? nro : (suc + "- " + nro), nd.getUsuarioVerificador()));
 		}
 		OrdenDeDeposito odd = ordenDao.getOrdenDepositoByCheque(ch); //ORDEN DE DEPÓSITO
 		if(odd != null) {
-			operaciones.add(new OperacionSobreChequeTO(new Timestamp(odd.getFecha().getTime()), EEstadoCheque.SALIDA_BANCO, ETipoDocumento.ORDEN_DE_DEPOSITO, odd.getNroOrden(), odd.getNroOrden()+""));
+			operaciones.add(new OperacionSobreChequeTO(new Timestamp(odd.getFecha().getTime()), EEstadoCheque.SALIDA_BANCO, ETipoDocumento.ORDEN_DE_DEPOSITO, odd.getNroOrden(), odd.getNroOrden()+"", odd.getPersonaResponsable()));
 		}
 		Recibo r = reciboDAO.getReciboByCheque(ch);
 		if(r != null) {//RECIBO
-			operaciones.add(new OperacionSobreChequeTO(r.getFechaEmision(), EEstadoCheque.EN_CARTERA, ETipoDocumento.RECIBO, r.getNroRecibo(), r.getNroRecibo() + ""));
+			operaciones.add(new OperacionSobreChequeTO(r.getFechaEmision(), EEstadoCheque.EN_CARTERA, ETipoDocumento.RECIBO, r.getNroRecibo(), r.getNroRecibo() + "", r.getUsuarioConfirmacion()));
 		}
 		OrdenDePago odp = ordenDePagoDao.getByCheque(ch);
 		if(odp != null) {//ORDEN DE PAGO
-			operaciones.add(new OperacionSobreChequeTO(odp.getFechaEmision(), EEstadoCheque.SALIDA_PROVEEDOR, ETipoDocumento.ORDEN_PAGO, odp.getNroOrden(), odp.getNroOrden()+""));
+			operaciones.add(new OperacionSobreChequeTO(odp.getFechaEmision(), EEstadoCheque.SALIDA_PROVEEDOR, ETipoDocumento.ORDEN_PAGO, odp.getNroOrden(), odp.getNroOrden()+"", odp.getUsuarioCreador()));
 		}
 		OrdenDePagoAPersona odpp = ordenDePagoPersonaDao.getByCheque(ch);
 		if(odpp != null) {//ORDEN DE PAGO A PERSONA
-			operaciones.add(new OperacionSobreChequeTO(odpp.getFechaHoraEntregada(), EEstadoCheque.SALIDA_PERSONA, ETipoDocumento.ORDEN_PAGO_PERSONA, odpp.getNroOrden(), odpp.getNroOrden()+""));
+			operaciones.add(new OperacionSobreChequeTO(odpp.getFechaHoraEntregada(), EEstadoCheque.SALIDA_PERSONA, ETipoDocumento.ORDEN_PAGO_PERSONA, odpp.getNroOrden(), odpp.getNroOrden()+"", odpp.getUsuarioCreador()));
 		}
 		Collections.sort(operaciones);
 		return operaciones;

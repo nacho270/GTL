@@ -7,6 +7,8 @@ import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.acciones.Acciones;
 import ar.com.fwcommon.templates.modulo.model.acciones.IBuilderAcciones;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.AccionesAdicionales;
+import ar.com.fwcommon.templates.modulo.model.accionesmouse.IBuilderAccionAdicional;
 import ar.com.fwcommon.templates.modulo.model.filtros.Filtros;
 import ar.com.fwcommon.templates.modulo.model.filtros.IBuilderFiltros;
 import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
@@ -17,6 +19,7 @@ import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionAgregarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionConsultarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionConsultarOperacionesSobreCheque;
+import ar.com.textillevel.gui.modulos.cheques.acciones.AccionDobleClickCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionEliminarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionModificarCheque;
 import ar.com.textillevel.gui.modulos.cheques.acciones.AccionPonerChequeRechazadoEnCartera;
@@ -39,7 +42,8 @@ import ar.com.textillevel.gui.modulos.cheques.columnas.ColumnaNumeroCuentaCheque
 public class BuilderAccionesCheque implements IBuilderAcciones<Cheque>,
 											  IBuilderFiltros<Cheque>, 
 											  IBuilderTabla<Cheque>, 
-											  IBuilderTotales<Cheque>{
+											  IBuilderTotales<Cheque>,
+											  IBuilderAccionAdicional<Cheque> {
 	
 	private static BuilderAccionesCheque instance = new BuilderAccionesCheque();
 
@@ -88,4 +92,11 @@ public class BuilderAccionesCheque implements IBuilderAcciones<Cheque>,
 	public Totales<Cheque> construirTotales(int idModel) {
 		return null;
 	}
+
+	public AccionesAdicionales<Cheque> construirAccionAdicional(int idModel) throws FWException {
+		AccionesAdicionales<Cheque> acciones = new AccionesAdicionales<Cheque>();
+		acciones.addSingleElement(new AccionDobleClickCheque());
+		return acciones;
+	}
+
 }
