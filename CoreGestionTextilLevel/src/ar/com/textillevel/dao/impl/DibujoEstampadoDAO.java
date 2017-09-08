@@ -8,14 +8,15 @@ import javax.persistence.Query;
 
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
+import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 
 @Stateless
+@SuppressWarnings("unchecked")
 public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> implements DibujoEstampadoDAOLocal {
 
-	@SuppressWarnings("unchecked")
 	public DibujoEstampado getByIdEager(Integer idDibujoEstampado) {
 		Query query = getEntityManager().createQuery("FROM DibujoEstampado AS de " +
 				 									 "LEFT JOIN FETCH de.variantes var " +
@@ -41,7 +42,6 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo) {
 		Query query = getEntityManager().createQuery(" SELECT de FROM DibujoEstampado de " +
 													 " WHERE 1 = 1" +
@@ -69,6 +69,16 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 			}
 		}
 		return resultList;
+	}
+
+	@Override
+	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente) {
+		Query query = getEntityManager().createQuery("FROM DibujoEstampado AS de " + 
+													 "LEFT JOIN FETCH de.cliente cl " + 
+													 "WHERE cl IS NULL OR cl.id = :idCliente " + 
+													 "ORDER BY de.nroDibujo");
+		query.setParameter("idCliente", cliente.getId());
+		return query.getResultList();
 	}
 
 }

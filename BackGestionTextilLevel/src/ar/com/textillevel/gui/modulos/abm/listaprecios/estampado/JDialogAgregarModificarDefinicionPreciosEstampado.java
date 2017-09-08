@@ -393,7 +393,7 @@ public class JDialogAgregarModificarDefinicionPreciosEstampado extends JDialogAg
 			cmbDibujo = new JComboBox();
 			List<DibujoEstampado> dibujos = new ArrayList<DibujoEstampado>();
 			dibujos.add(null);
-			dibujos.addAll(GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllOrderByNombre());
+			dibujos.addAll(GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllByClienteAndClienteDefault(getCliente()));
 			GuiUtil.llenarCombo(cmbDibujo, dibujos, true);
 		}
 		return cmbDibujo;

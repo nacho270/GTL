@@ -48,4 +48,9 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 		dibujoEstampado.setCliente(cliente);
 		dibujoEstampadoDAOLocal.save(dibujoEstampado);
 	}
+
+	@Override
+	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente) {
+		return dibujoEstampadoDAOLocal.getAllByClienteAndClienteDefault(cliente);
+	}
 }

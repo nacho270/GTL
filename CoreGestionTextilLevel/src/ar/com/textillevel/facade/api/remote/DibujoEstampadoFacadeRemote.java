@@ -25,4 +25,7 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente);
 
+	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente);
+
+
 }
