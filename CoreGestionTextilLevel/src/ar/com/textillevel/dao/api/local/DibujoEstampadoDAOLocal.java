@@ -20,4 +20,8 @@ public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integ
 
 	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente);
 
+	public void fixHuecosNroDibujo(Integer nroDibujo);
+
+	public void remove2(DibujoEstampado dibujoEstampado);
+
 }

@@ -1,10 +1,14 @@
 package ar.com.textillevel.gui.modulos.dibujos.acciones;
 
+import org.apache.taglibs.string.util.StringW;
+
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -20,12 +24,28 @@ public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
+		DibujoEstampadoFacadeRemote dibujoFacade = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class);
+		DibujoEstampado dibujoEstampado = e.getSelectedElements().get(0);
 		try {
 			if (FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).remove(e.getSelectedElements().get(0));
+				dibujoFacade.remove(dibujoEstampado, false);
 			}
-		} catch (Exception e2) {
-			FWJOptionPane.showErrorMessage(e.getSource().getFrame(), "No se ha podido eliminar el dibujo debido a que se esta utilizando.", "Error");
+		} catch (ValidacionException e2) {
+			if(e2.getCodigoError() == EValidacionException.DIBUJO_USADO_EN_LISTAS_DE_PRECIOS.getCodigo()) {
+				if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), StringW.wordWrap(e2.getMensajeError()), "Confirmación") == FWJOptionPane.YES_OPTION) {
+					try {
+						dibujoFacade.remove(dibujoEstampado, true);
+					} catch (ValidacionException e1) {
+						FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMensajeError()), "Error");
+						return false;
+					}
+				} else {
+					return false;
+				}
+			} else {
+				FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e2.getMensajeError()), "Error");
+				return false;
+			}
 		}
 		return true;
 	}

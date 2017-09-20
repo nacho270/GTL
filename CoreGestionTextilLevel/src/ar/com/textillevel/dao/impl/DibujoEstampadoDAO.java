@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
+import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.entidades.gente.Cliente;
@@ -39,6 +40,12 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 		query.setParameter("idDibujo", idDibujo == null ? -1 : idDibujo);
 		query.setParameter("nro", nro);
 		return !query.getResultList().isEmpty();
+	}
+
+	public void fixHuecosNroDibujo(Integer nroDibujo) {
+		Query query = getEntityManager().createQuery("UPDATE DibujoEstampado de SET de.nroDibujo = (de.nroDibujo - 1) WHERE de.nroDibujo > :nroDibujo AND de.nroDibujo < ((:nroDibujo - MOD(:nroDibujo , 1000)) + 1000)");
+		query.setParameter("nroDibujo", nroDibujo);
+		query.executeUpdate();
 	}
 
 	@Override
@@ -79,6 +86,15 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 													 "ORDER BY de.nroDibujo");
 		query.setParameter("idCliente", cliente.getId());
 		return query.getResultList();
+	}
+
+	@Override
+	public void remove2(DibujoEstampado dibujoEstampado)  {
+		try {
+			remove(getEntityManager().contains(dibujoEstampado) ? dibujoEstampado : getEntityManager().merge(dibujoEstampado));
+		} catch (FWException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

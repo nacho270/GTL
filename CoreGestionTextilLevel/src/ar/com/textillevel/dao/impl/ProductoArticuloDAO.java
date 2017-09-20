@@ -11,11 +11,12 @@ import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.textillevel.dao.api.local.ProductoArticuloDAOLocal;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 
 @Stateless
+@SuppressWarnings("unchecked")
 public class ProductoArticuloDAO extends GenericDAO<ProductoArticulo, Integer> implements ProductoArticuloDAOLocal {
 
-	@SuppressWarnings("unchecked")
 	public ProductoArticulo getProductoArticulo(ProductoArticulo pa) {
 		Map<String, Object> mapParams = new HashMap<String, Object>();
 		String hql = " SELECT pa " +
@@ -44,6 +45,15 @@ public class ProductoArticuloDAO extends GenericDAO<ProductoArticulo, Integer> i
 			return resultQueryList.get(0);
 		}
 		throw new RuntimeException("Existen 2 ProductoArticulo : " + pa);
+	}
+
+	public List<ProductoArticulo> getProductosArticuloByDibujo(DibujoEstampado dibujo) {
+		String hql = " SELECT pa " +
+				 	 " FROM ProductoArticulo pa " +
+				 	 " WHERE pa.dibujo = :dibujo ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("dibujo", dibujo);
+		return q.getResultList();
 	}
 
 }

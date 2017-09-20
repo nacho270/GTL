@@ -35,6 +35,7 @@ import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.componentes.PanelTabla;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.templates.GuiABMListaTemplate;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.ImageUtil;
@@ -164,7 +165,11 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 	public void botonEliminarPresionado(int nivelNodoSeleccionado) {
 		if(lista.getSelectedIndex() >= 0) {
 			if(FWJOptionPane.showQuestionMessage(GuiABMDibujoEstampado.this, "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-				getDibujoEstampadoFacadeRemote().remove(getDibujoActual());
+				try {
+					getDibujoEstampadoFacadeRemote().remove(getDibujoActual(), false);
+				} catch (ValidacionException e) {
+					e.printStackTrace();
+				}
 				lista.setSelectedIndex(-1);
 			}
 		}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
@@ -15,7 +16,7 @@ public interface DibujoEstampadoFacadeRemote {
 	
 	public DibujoEstampado save(DibujoEstampado dibujoEstampado);
 
-	public void remove(DibujoEstampado dibujoEstampado);
+	public void remove(DibujoEstampado dibujoEstampado, boolean force) throws ValidacionException ;
 
 	public DibujoEstampado getByIdEager(Integer idDibujoEstampado);
 

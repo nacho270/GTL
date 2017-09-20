@@ -59,6 +59,8 @@ public enum EValidacionException {
 	ODT_DIRTY_DATA									(154, "La ODT fue modificada recientemente, por favor, vuelva a intentar la operación"),
 	CHEQUE_ESTADO_INVALIDO_PARA_RECHAZAR			(155, "No se puede rechazar un cheque en estado '{0}'."),
 	ORDEN_DE_PAGO_PERSONA_DUPLICADA					(156, "Ya existe una orden de pago con orden '{0}'."),
+	DIBUJO_IMPOSIBLE_ELIMINAR					    (157, "No se ha podido eliminar el dibujo debido a que se esta utilizando."),
+	DIBUJO_USADO_EN_LISTAS_DE_PRECIOS			    (158, "El dibujo está siendo usado en algunas listas de precios ¿Desea borrarlo de todas maneras?."),
 	
 	_											(000, "");
 	
