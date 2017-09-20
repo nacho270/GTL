@@ -7,6 +7,7 @@ import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
@@ -44,7 +45,7 @@ public class AccionQuitarClienteDibujo extends Accion<DibujoEstampado> {
 
 	@Override
 	public boolean esValida(AccionEvent<DibujoEstampado> e) {
-		return e.getSelectedElements().size() == 1 && e.getSelectedElements().get(0).getCliente() != null;
+		return e.getSelectedElements().size() == 1 && e.getSelectedElements().get(0).getCliente() != null && e.getSelectedElements().get(0).getEstado() == EEstadoDibujo.EN_STOCK;
 	}
 
 }

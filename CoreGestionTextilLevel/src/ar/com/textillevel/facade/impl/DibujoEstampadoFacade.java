@@ -77,6 +77,7 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	@Override
 	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente) {
 		dibujoEstampado = dibujoEstampadoDAOLocal.getById(dibujoEstampado.getId());
+		gaDAOLocal.deleteGruposArtEstampadoByDibujo(dibujoEstampado); //en realidad intenta borrar para todos los clientes pero sólo tendría que estar asignado a una sola lista de precios		
 		dibujoEstampado.setCliente(cliente);
 		dibujoEstampadoDAOLocal.save(dibujoEstampado);
 	}
