@@ -10,6 +10,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -28,6 +30,7 @@ import javax.imageio.stream.ImageInputStream;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,6 +58,7 @@ import ar.com.textillevel.gui.util.dialogs.JFileChooserImage;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
+import static ar.com.textillevel.gui.util.GenericUtils.createGridBagConstraints;
 
 public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
@@ -75,6 +79,7 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	private JButton btnQuitarImagen;
 	private String pathAnterior;
 	private FWJNumericTextField txtNroDibujo;
+	private JComboBox cmbComienzoNroDibujo;
 	private JTextField txtAnchoCilindro;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -85,6 +90,8 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	private DibujoEstampado dibujoActual;
 	private DibujoEstampadoFacadeRemote dibujoEstampadoFacadeRemote;
 	private Frame padre;
+	private boolean esModificacion;
+	private Integer nroDibujoOriginal;
 
 	public JDialogAgregarModificarDibujoEstampado(Frame padre) {
 		this(padre, new DibujoEstampado(), false, null);
@@ -100,6 +107,8 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		this.dibujoActual = dibujo;
 		this.consulta = consulta;
 		this.cantidadColores = cantidadColores;
+		this.esModificacion = getDibujoActual().getId() != null;
+		this.nroDibujoOriginal = getDibujoActual().getNroDibujo();
 		setUpComponentes();
 		setUpScreen();
 		cargarDatos();
@@ -132,24 +141,54 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
 	private void cargarDatos() {
 		getPanelTablaVariante().setDibujo(getDibujoActual());
-		if (getDibujoActual().getId() == null) {
-			return;
-		}
-		dibujoActual = getDibujoEstampadoFacadeRemote().getByIdEager(getDibujoActual().getId());
-		if (getDibujoActual() != null) {
-			getTxtNombre().setText(getDibujoActual().getNombre());
-			getTxtNroDibujo().setValue(getDibujoActual().getNroDibujo().longValue());
-			getTxtAnchoCilindro().setText(getDibujoActual().getAnchoCilindro().toString());
-			if (getDibujoActual().getImagenEstampado() != null) {
-				getLblImagen().setIcon(getDibujoActual().getImagenEstampado());
-				getLblImagen().setVerticalTextPosition(JLabel.CENTER);
-			} else {
-				getLblImagen().setIcon(null);
-				getLblImagen().setPreferredSize(new Dimension(ANCHO_IMAGEN, ALTO_IMAGEN));
-				getLblImagen().setVerticalTextPosition(JLabel.CENTER);
+		Integer nroDibujo = null;
+		if (getDibujoActual().getId() != null) {
+			dibujoActual = getDibujoEstampadoFacadeRemote().getByIdEager(getDibujoActual().getId());
+			nroDibujo = getDibujoActual().getNroDibujo();
+			if (getDibujoActual() != null) {
+				getTxtNombre().setText(getDibujoActual().getNombre());
+				getTxtNroDibujo().setValue(nroDibujo.longValue());
+				getTxtAnchoCilindro().setText(getDibujoActual().getAnchoCilindro().toString());
+				if (getDibujoActual().getImagenEstampado() != null) {
+					getLblImagen().setIcon(getDibujoActual().getImagenEstampado());
+					getLblImagen().setVerticalTextPosition(JLabel.CENTER);
+				} else {
+					getLblImagen().setIcon(null);
+					getLblImagen().setPreferredSize(new Dimension(ANCHO_IMAGEN, ALTO_IMAGEN));
+					getLblImagen().setVerticalTextPosition(JLabel.CENTER);
+				}
+				getPanelTablaVariante().setDibujo(getDibujoActual());
 			}
-			getPanelTablaVariante().setDibujo(getDibujoActual());
 		}
+		if(esModificacion) {
+			getCmbComienzoNroDibujo().setSelectedItem(getNroComienzoDibujo(nroDibujo));
+		}
+
+		getCmbComienzoNroDibujo().addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					Integer nro = (Integer)getCmbComienzoNroDibujo().getSelectedItem();
+					if(esModificacion) {
+						if(nro == getNroComienzoDibujo(nroDibujoOriginal)) {
+							getTxtNroDibujo().setText(nroDibujoOriginal.toString());
+						} else {
+							if(FWJOptionPane.showQuestionMessage(JDialogAgregarModificarDibujoEstampado.this, StringW.wordWrap("¿Está seguro que desea cambiar el número de dibujo?"), "Atención") == FWJOptionPane.YES_OPTION) {
+								getTxtNroDibujo().setText(getDibujoEstampadoFacadeRemote().getProximoNroDibujo(nro).toString());
+							}
+						}
+					} else {
+						getTxtNroDibujo().setText(getDibujoEstampadoFacadeRemote().getProximoNroDibujo(nro).toString());
+					}
+				}
+			}
+
+		});
+		
+	}
+
+	private int getNroComienzoDibujo(Integer nroDibujo) {
+		return (nroDibujo - nroDibujo % 1000)/1000;
 	}
 
 	public void seleccionDibujoExistente(Cliente cliente) {
@@ -176,13 +215,14 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 			panDetalle = new JPanel();
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(new JLabel("NOMBRE:"), createGridBagConstraints(0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtNombre(), createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panDetalle.add(getTxtNombre(), createGridBagConstraints(1, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 1, 0));
 			panDetalle.add(new JLabel("NÚMERO: "), createGridBagConstraints(0, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtNroDibujo(), createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
+			panDetalle.add(getCmbComienzoNroDibujo(), createGridBagConstraints(1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getTxtNroDibujo(), createGridBagConstraints(2, 1, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			panDetalle.add(new JLabel("ANCHO DEL CILINDRO: "), createGridBagConstraints(0, 2, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtAnchoCilindro(), createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
-			panDetalle.add(getPanelTablaVariante(), createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 5, 5, 5), 2, 1, 1, 0.5));
-			panDetalle.add(getPanelImagen(), createGridBagConstraints(0, 4, GridBagConstraints.SOUTH, GridBagConstraints.VERTICAL, new Insets(10, 5, 5, 5), 2, 1, 0, 0.5));
+			panDetalle.add(getTxtAnchoCilindro(), createGridBagConstraints(1, 2, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 1, 0));
+			panDetalle.add(getPanelTablaVariante(), createGridBagConstraints(0, 3, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 5, 5, 5), 3, 1, 1, 0.5));
+			panDetalle.add(getPanelImagen(), createGridBagConstraints(0, 4, GridBagConstraints.SOUTH, GridBagConstraints.VERTICAL, new Insets(10, 5, 5, 5), 3, 1, 0, 0.5));
 		}
 		return panDetalle;
 	}
@@ -398,6 +438,19 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		// return true;
 	}
 
+	private JComboBox getCmbComienzoNroDibujo() {
+		if (cmbComienzoNroDibujo == null) {
+			cmbComienzoNroDibujo = new JComboBox();
+			List<Integer> nros = new ArrayList<Integer>();
+			for(int i=1;i<8;i++) {
+				nros.add(i);
+			}
+			GuiUtil.llenarCombo(cmbComienzoNroDibujo, nros, true);
+			cmbComienzoNroDibujo.setSelectedIndex(-1);
+		}
+		return cmbComienzoNroDibujo;
+	}
+
 	private FWJNumericTextField getTxtNroDibujo() {
 		if (txtNroDibujo == null) {
 			if (cantidadColores == null) {
@@ -406,6 +459,7 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 				txtNroDibujo = new FWJNumericTextField(0l, ((cantidadColores + 1) * 1000) - 1);
 			}
 			txtNroDibujo.setMaxLength(4);
+			txtNroDibujo.setEditable(false);
 		}
 		return txtNroDibujo;
 	}
@@ -621,20 +675,6 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		this.dibujoActual = dibujoActual;
 	}
 
-	private GridBagConstraints createGridBagConstraints(int x, int y, int posicion, int fill, Insets insets, int cantX, int cantY, double weightx, double weighty) {
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = posicion;
-		gbc.fill = fill;
-		gbc.insets = insets;
-		gbc.gridx = x;
-		gbc.gridy = y;
-		gbc.gridwidth = cantX;
-		gbc.gridheight = cantY;
-		gbc.weightx = weightx;
-		gbc.weighty = weighty;
-		return gbc;
-	}
-
 	public boolean isAcepto() {
 		return acepto;
 	}
@@ -646,4 +686,9 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	public void setAcepto(boolean acepto) {
 		this.acepto = acepto;
 	}
+
+	public Integer getNroDibujoOriginal() {
+		return nroDibujoOriginal;
+	}
+
 }

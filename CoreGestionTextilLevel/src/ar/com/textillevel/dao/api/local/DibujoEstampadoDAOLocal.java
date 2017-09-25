@@ -24,4 +24,6 @@ public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integ
 
 	public void remove2(DibujoEstampado dibujoEstampado);
 
+	public Integer getUltNro(Integer nroComienzo);
+
 }

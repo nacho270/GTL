@@ -1,6 +1,10 @@
 package ar.com.textillevel.gui.modulos.dibujos.acciones;
 
+import org.apache.taglibs.string.util.StringW;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
@@ -23,8 +27,13 @@ public class AccionAgregarDibujo extends Accion<DibujoEstampado>{
 		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame());
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
-			GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual());
-			return true;
+			try {
+				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual(), dialog.getNroDibujoOriginal());
+				return true;
+			} catch (ValidacionException e1) {
+				e1.printStackTrace();
+				FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMessage()), "Error");
+			}
 		}
 		return false;
 	}

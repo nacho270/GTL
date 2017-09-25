@@ -38,11 +38,20 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	}
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro) {
-		return dibujoEstampadoDAOLocal.existsNroDibujo(idDibujo, nro); 
+		return dibujoEstampadoDAOLocal.existsNroDibujo(idDibujo, nro);
 	}
-	
-	public DibujoEstampado save(DibujoEstampado dibujoEstampado) {
-		return dibujoEstampadoDAOLocal.save(dibujoEstampado);
+
+	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal) throws ValidacionException {
+		if(dibujoEstampado.getId() == null) { //es nuevo, no se hacen validaciones 
+			return dibujoEstampadoDAOLocal.save(dibujoEstampado);
+		} else {
+			checkEdicionDibujo(dibujoEstampado);
+			DibujoEstampado dibResult = dibujoEstampadoDAOLocal.save(dibujoEstampado);
+			if(!dibujoEstampado.getNroDibujo().equals(nroDibujoOriginal)) {
+				dibujoEstampadoDAOLocal.fixHuecosNroDibujo(nroDibujoOriginal);
+			}
+			return dibResult;
+		}
 	}
 
 	public void remove(DibujoEstampado dibujoEstampado, boolean force) throws ValidacionException {
@@ -91,6 +100,20 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 		List<ProductoArticulo> paList = paDAOLocal.getProductosArticuloByDibujo(dibujo);
 		if(!paList.isEmpty()) {
 			throw new ValidacionException(EValidacionException.DIBUJO_IMPOSIBLE_ELIMINAR.getInfoValidacion());
+		}
+		checkEdicionDibujo(dibujo);
+	}
+
+	private void checkEdicionDibujo(DibujoEstampado dibujo) throws ValidacionException {
+		//TODO: verificar el tema que exista en un RE o un RS. Implementar cuando esté la salida de dibujos
+	}
+
+	public Integer getProximoNroDibujo(Integer nroComienzo) {
+		Integer ultNro = dibujoEstampadoDAOLocal.getUltNro(nroComienzo);
+		if(ultNro == null) {
+			return nroComienzo*1000;
+		} else {
+			return ultNro + 1;
 		}
 	}
 

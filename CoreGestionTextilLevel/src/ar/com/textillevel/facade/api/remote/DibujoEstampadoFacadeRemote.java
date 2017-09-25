@@ -14,7 +14,7 @@ public interface DibujoEstampadoFacadeRemote {
 	
 	public List<DibujoEstampado> getAllOrderByNombre();
 	
-	public DibujoEstampado save(DibujoEstampado dibujoEstampado);
+	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal) throws ValidacionException;
 
 	public void remove(DibujoEstampado dibujoEstampado, boolean force) throws ValidacionException ;
 
@@ -27,6 +27,8 @@ public interface DibujoEstampadoFacadeRemote {
 	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente);
 
 	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente);
+
+	public Integer getProximoNroDibujo(Integer nroComienzo);
 
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.dao.impl.GenericDAO;
+import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
@@ -94,6 +95,21 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 			remove(getEntityManager().contains(dibujoEstampado) ? dibujoEstampado : getEntityManager().merge(dibujoEstampado));
 		} catch (FWException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Integer getUltNro(Integer nroComienzo) {
+		Query query = getEntityManager().createQuery("SELECT MAX(de.nroDibujo) " +
+													 "FROM DibujoEstampado AS de " + 
+													 "WHERE de.nroDibujo < :umbral");
+		Integer umbral = (nroComienzo+1)*1000;
+		query.setParameter("umbral", umbral);
+		Integer res = NumUtil.toInteger(query.getSingleResult());
+		if(res > nroComienzo*1000) {
+			return res;
+		} else {
+			return null;
 		}
 	}
 

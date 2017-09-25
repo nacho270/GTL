@@ -1,6 +1,10 @@
 package ar.com.textillevel.gui.modulos.dibujos.acciones;
 
+import org.apache.taglibs.string.util.StringW;
+
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
@@ -17,14 +21,17 @@ public class AccionModificarDibujo extends Accion<DibujoEstampado>{
 		setImagenActivo("ar/com/textillevel/imagenes/b_modificar_cheque.png");
 		setImagenInactivo("ar/com/textillevel/imagenes/b_modificar_cheque_des.png");
 	}
-	
+
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
 		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), false, null);
 		dialog.setVisible(true);
-		if (dialog.isAcepto()) {
-			GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual());
+		try {
+			GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual(), dialog.getNroDibujoOriginal());
 			return true;
+		} catch (ValidacionException e1) {
+			e1.printStackTrace();
+			FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMessage()), "Error");
 		}
 		return false;
 	}

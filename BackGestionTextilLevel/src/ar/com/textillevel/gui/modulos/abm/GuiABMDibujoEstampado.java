@@ -30,6 +30,8 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
+import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
+
 import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
@@ -47,8 +49,6 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.dialogs.JDialogEditarVariante;
 import ar.com.textillevel.gui.util.dialogs.JFileChooserImage;
 import ar.com.textillevel.util.GTLBeanFactory;
-
-import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
 
 @Deprecated
 public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
@@ -179,8 +179,14 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 	public boolean botonGrabarPresionado(int nivelNodoSeleccionado) {
 		if(validar()) {
 			capturarSetearDatos();
-			DibujoEstampado dibujoRefresh = getDibujoEstampadoFacadeRemote().save(getDibujoActual());
-			lista.setSelectedValue(dibujoRefresh, true);
+			DibujoEstampado dibujoRefresh;
+			try {
+				dibujoRefresh = getDibujoEstampadoFacadeRemote().save(getDibujoActual(), getDibujoActual().getNroDibujo());
+				lista.setSelectedValue(dibujoRefresh, true);
+			} catch (ValidacionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		}
 		return false;
