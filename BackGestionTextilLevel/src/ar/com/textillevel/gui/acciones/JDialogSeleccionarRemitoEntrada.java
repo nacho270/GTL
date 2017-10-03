@@ -54,6 +54,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private JPanel panReferenciaRemExternos;
 	private Cliente cliente;
 	private List<OrdenDeTrabajo> odtSelectedList;
+	private DibujoEstampado dibujoEstampadoElegido;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 	private Multimap<Integer, Integer> mapaRemitoFilas = TreeMultimap.create();
 	private Multimap<Integer, Integer> mapaFilasRemito = TreeMultimap.create();
@@ -283,5 +284,9 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			tabbedPane = new JTabbedPane();
 		}
 		return tabbedPane;
+	}
+
+	public DibujoEstampado getDibujoEstampadoElegido() {
+		return dibujoEstampadoElegido;
 	}
 }

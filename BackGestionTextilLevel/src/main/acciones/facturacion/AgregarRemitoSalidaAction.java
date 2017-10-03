@@ -52,11 +52,11 @@ public class AgregarRemitoSalidaAction implements Action {
 			GuiUtil.centrar(dialogSeleccionarODTs);
 			dialogSeleccionarODTs.setVisible(true);
 			List<OrdenDeTrabajo> odtList = dialogSeleccionarODTs.getOdtList();
-			if (odtList == null || odtList.isEmpty()) {
-				return;
-			} else {
+			if (odtList != null && !odtList.isEmpty()) {
 				IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(frame, clienteElegido, odtList);
 				handler.gestionarIngresoRemitoSalida();
+			} else if(dialogSeleccionarODTs.getDibujoEstampadoElegido() != null) {
+				
 			}
 		}
 	}
