@@ -114,9 +114,11 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 	}
 
 	@Override
-	public List<DibujoEstampado> getAllByEstado(EEstadoDibujo estado) {
-		Query query = getEntityManager().createQuery("FROM DibujoEstampado de WHERE de.idEstado = :idEstado");
+	public List<DibujoEstampado> getAllByEstadoYCliente(EEstadoDibujo estado, Cliente cliente) {
+		Query query = getEntityManager().createQuery("FROM DibujoEstampado de " + //
+													 " WHERE de.idEstado = :idEstado AND de.cliente.id = :idCliente");
 		query.setParameter("idEstado", estado.getId());
+		query.setParameter("idCliente", cliente.getId());
 		List<DibujoEstampado> resultList = query.getResultList();
 		if (resultList.isEmpty()) {
 			return null;

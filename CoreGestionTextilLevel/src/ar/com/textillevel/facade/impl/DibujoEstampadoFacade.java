@@ -118,8 +118,8 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	}
 
 	@Override
-	public List<DibujoEstampado> getAllByEstado(EEstadoDibujo estado) {
-		return dibujoEstampadoDAOLocal.getAllByEstado(estado);
+	public List<DibujoEstampado> getAllByEstadoYCliente(EEstadoDibujo estado, Cliente cliente) {
+		return dibujoEstampadoDAOLocal.getAllByEstadoYCliente(estado, cliente);
 	}
 
 }

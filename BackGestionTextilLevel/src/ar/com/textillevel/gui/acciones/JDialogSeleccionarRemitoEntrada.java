@@ -74,7 +74,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	}
 
 	private void llenarTablaDibujos() {
-		List<DibujoEstampado> dibujos = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllByEstado(EEstadoDibujo.SALIDA);
+		List<DibujoEstampado> dibujos = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllByEstadoYCliente(EEstadoDibujo.EN_STOCK, cliente);
 		getTablaDibujos().setNumRows(0);
 		if(dibujos == null) {
 			return;
