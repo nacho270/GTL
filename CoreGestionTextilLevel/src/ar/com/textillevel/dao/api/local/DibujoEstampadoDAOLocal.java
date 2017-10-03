@@ -26,4 +26,6 @@ public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integ
 
 	public Integer getUltNro(Integer nroComienzo);
 
+	public List<DibujoEstampado> getAllByEstado(EEstadoDibujo estado);
+
 }

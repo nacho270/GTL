@@ -30,5 +30,7 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public Integer getProximoNroDibujo(Integer nroComienzo);
 
+	public List<DibujoEstampado> getAllByEstado(EEstadoDibujo salida);
+
 
 }

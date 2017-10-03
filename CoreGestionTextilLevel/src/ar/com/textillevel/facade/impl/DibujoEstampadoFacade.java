@@ -117,4 +117,9 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 		}
 	}
 
+	@Override
+	public List<DibujoEstampado> getAllByEstado(EEstadoDibujo estado) {
+		return dibujoEstampadoDAOLocal.getAllByEstado(estado);
+	}
+
 }

@@ -23,14 +23,19 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.textillevel.entidades.documentos.remito.to.DetallePiezaRemitoEntradaSinSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
+import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
+import ar.com.textillevel.util.GTLBeanFactory;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
@@ -44,6 +49,8 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private JButton btnCancelar;
 	private JPanel pnlBotones;
 	private FWJTable tablaODTs;
+	private FWJTable tablaDibujos;
+	private JTabbedPane tabbedPane;
 	private JPanel panReferenciaRemExternos;
 	private Cliente cliente;
 	private List<OrdenDeTrabajo> odtSelectedList;
@@ -56,12 +63,28 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		this.cliente = cliente;
 		this.odtSelectedList = new ArrayList<OrdenDeTrabajo>();
 		setModal(true);
-		setSize(new Dimension(520, 550));
+		setSize(new Dimension(550, 550));
 		setTitle("Seleccionar Órdenes de Trabajo");
 		construct();
 		llenarTablaODTs();
+		llenarTablaDibujos();
 		if(!GenericUtils.isSistemaTest()) {
 			getPanReferenciaRemitosExternos().setVisible(false);
+		}
+	}
+
+	private void llenarTablaDibujos() {
+		List<DibujoEstampado> dibujos = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).getAllByEstado(EEstadoDibujo.SALIDA);
+		getTablaDibujos().setNumRows(0);
+		if(dibujos == null) {
+			return;
+		}
+		int row = 0;
+		for(DibujoEstampado d : dibujos) {
+			getTablaDibujos().addRow();
+			getTablaDibujos().setValueAt(d.toString(), row, 0);
+			getTablaDibujos().setValueAt(d, row, 1);
+			row ++;
 		}
 	}
 
@@ -103,10 +126,20 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(new JLabel(" RAZON SOCIAL:"), createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
 			panDetalle.add(getTxtRazSoc(), createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 2, 1, 1, 0));
+			JPanel pnlOdt = new JPanel(new GridBagLayout());
 			JScrollPane scrollPane = new JScrollPane(getTablaOdts());
 			scrollPane.setBorder(BorderFactory.createTitledBorder("Ordenes de Trabajo"));
-			panDetalle.add(scrollPane, createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 3, 1, 0, 1));
-			panDetalle.add(getPanReferenciaRemitosExternos(), createGridBagConstraints(0, 2,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
+			pnlOdt.add(scrollPane, createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
+			pnlOdt.add(getPanReferenciaRemitosExternos(), createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
+			getTabbedPane().addTab("ODT", pnlOdt);
+			
+			JPanel pnlDibujos = new JPanel();
+			JScrollPane scrollPaneDibujos = new JScrollPane(getTablaDibujos());
+			scrollPaneDibujos.setBorder(BorderFactory.createTitledBorder("Dibujos"));
+			pnlDibujos.add(scrollPaneDibujos, createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
+
+			getTabbedPane().addTab("Dibujos", pnlDibujos);
+			panDetalle.add(getTabbedPane(),  createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 3, 1, 1, 1));
 		}
 		return panDetalle;
 	}
@@ -121,16 +154,19 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		return panReferenciaRemExternos;
 	}
 
+	private FWJTable getTablaDibujos() {
+		if(tablaDibujos == null) {
+			tablaDibujos = new FWJTable(0, 2);
+			tablaDibujos.setStringColumn(0, "Dibujo", 460, 460, true);
+			tablaDibujos.setStringColumn(1, "", 0, 0, true);
+			tablaDibujos.setAlignment(0, FWJTable.CENTER_ALIGN);
+		}
+		return tablaDibujos;
+	}
+
 	private FWJTable getTablaOdts() {
 		if(tablaODTs == null) {
-			tablaODTs = new FWJTable(0, 2) {
-
-				private static final long serialVersionUID = -2960448130069418277L;
-
-				public void newRowSelected(int newRow, int oldRow) {
-					getBtnAceptar().setEnabled(newRow != -1);
-				}
-			};
+			tablaODTs = new FWJTable(0, 2);
 			tablaODTs.setStringColumn(0, "ODT", 460, 460, true);
 			tablaODTs.setStringColumn(1, "", 0, 0, true);
 			tablaODTs.setAlignment(0, FWJTable.CENTER_ALIGN);
@@ -184,43 +220,46 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					int[] selectedRows = getTablaOdts().getSelectedRows();
-					if(selectedRows.length == 0){
-						return;
-					}
-					List<Integer> selectedRowsList = new ArrayList<Integer>();
-					for(int r : selectedRows) {
-						selectedRowsList.add(r);
-					}
-					List<DetallePiezaRemitoEntradaSinSalida> ids = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
-					/*
-					if(GenericUtils.isSistemaTest()) {
-						for(int row : selectedRows) {
-							Collection<Integer> idsRemitos = mapaFilasRemito.get(row);
-							for(int idR : idsRemitos) {
-								Collection<Integer> filasRemito = mapaRemitoFilas.get(idR);
-								if(GenericUtils.restaConjuntosOrdenada(filasRemito, selectedRowsList).size() > 0) {
-									FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "Solo puede dar salida a remitos completos."
-											+ "\nEl remito de la fila " + (row + 1) + " no ha sido seleccionado en su totalidad.", "Error");
-									return;
+					if(getTabbedPane().getSelectedIndex() == 0) {
+						int[] selectedRows = getTablaOdts().getSelectedRows();
+						if(selectedRows.length == 0){
+							return;
+						}
+						List<Integer> selectedRowsList = new ArrayList<Integer>();
+						for(int r : selectedRows) {
+							selectedRowsList.add(r);
+						}
+						List<DetallePiezaRemitoEntradaSinSalida> ids = new ArrayList<DetallePiezaRemitoEntradaSinSalida>();
+						/*
+						if(GenericUtils.isSistemaTest()) {
+							for(int row : selectedRows) {
+								Collection<Integer> idsRemitos = mapaFilasRemito.get(row);
+								for(int idR : idsRemitos) {
+									Collection<Integer> filasRemito = mapaRemitoFilas.get(idR);
+									if(GenericUtils.restaConjuntosOrdenada(filasRemito, selectedRowsList).size() > 0) {
+										FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "Solo puede dar salida a remitos completos."
+												+ "\nEl remito de la fila " + (row + 1) + " no ha sido seleccionado en su totalidad.", "Error");
+										return;
+									}
 								}
 							}
 						}
+						*/
+						for(int selectedRow : selectedRows) {
+							ids.add((DetallePiezaRemitoEntradaSinSalida)getTablaOdts().getValueAt(selectedRow, 1));
+						}
+						try {
+							odtSelectedList.addAll(remitoBusinessDelegate.getODTByIdsEager(ids));
+						} catch (RemoteException e1) {
+							FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
+							e1.printStackTrace();
+						}
+						dispose();
+					} else {
+						
 					}
-					*/
-					for(int selectedRow : selectedRows) {
-						ids.add((DetallePiezaRemitoEntradaSinSalida)getTablaOdts().getValueAt(selectedRow, 1));
-					}
-					try {
-						odtSelectedList.addAll(remitoBusinessDelegate.getODTByIdsEager(ids));
-					} catch (RemoteException e1) {
-						FWJOptionPane.showErrorMessage(JDialogSeleccionarRemitoEntrada.this, "No se pudo establecer comunicacion con " + System.getProperty("textillevel.ipintercambio"), "Error");
-						e1.printStackTrace();
-					}
-					dispose();
 				}
 			});
-			btnAceptar.setEnabled(false);
 		}
 		return btnAceptar;
 	}
@@ -239,4 +278,10 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		return odtSelectedList;
 	}
 
+	public JTabbedPane getTabbedPane() {
+		if (tabbedPane == null) {
+			tabbedPane = new JTabbedPane();
+		}
+		return tabbedPane;
+	}
 }
