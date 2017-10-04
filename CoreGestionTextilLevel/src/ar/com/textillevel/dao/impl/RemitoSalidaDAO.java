@@ -236,4 +236,32 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		}
 		return null;
 	}
+
+	@Override
+	public RemitoSalida getByIdConDibujo(Integer id) {
+		String hql = "SELECT rs FROM Remito rs WHERE rs.id = :id";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("id", id);
+		List<RemitoSalida> remitos = q.getResultList();
+		if(remitos != null && remitos.size()>0){
+			RemitoSalida remitoSalida = remitos.get(0);
+			doEagerDibujo(remitoSalida);
+			return remitoSalida;
+		}
+		return null;
+	}
+	
+	private void doEagerDibujo(RemitoSalida remitoSalida) {
+		remitoSalida.getDibujoEstampado().getAnchoCilindro();
+		if (remitoSalida.getProveedor() != null) {
+			remitoSalida.getProveedor().getNombreCorto();
+			remitoSalida.getItems().size();
+		}
+		if (remitoSalida.getFactura() != null) {
+			remitoSalida.getFactura().getFechaEmision();
+		}
+		for (CorreccionFacturaProveedor cfp : remitoSalida.getCorreccionesProvGeneradas()) {
+			cfp.getFacturas().size();
+		}
+	}
 }

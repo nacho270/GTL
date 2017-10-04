@@ -31,6 +31,7 @@ import ar.com.textillevel.entidades.documentos.remito.proveedor.ItemRemitoSalida
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.IProductoParaODT;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 @Entity
@@ -49,13 +50,13 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Integer idTipoRemitoSalida;
 	private Boolean anulado;
 	private Factura factura;
+	private DibujoEstampado dibujoEstampado;
 	private Integer nroSucursal;
 	private Boolean entregado;
 	private Timestamp fechaHoraEntregado;
 	private String terminalEntrega;
 	private Boolean controlado;
 	private String terminalControl;
-	
 
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
@@ -220,6 +221,16 @@ public class RemitoSalida extends Remito implements Serializable {
 
 	public void setFactura(Factura factura) {
 		this.factura = factura;
+	}
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="F_DIBUJO_ESTAMPADO_P_ID", nullable=true)
+	public DibujoEstampado getDibujoEstampado() {
+		return dibujoEstampado;
+	}
+
+	public void setDibujoEstampado(DibujoEstampado dibujoEstampado) {
+		this.dibujoEstampado = dibujoEstampado;
 	}
 	
 	@Column(name = "A_NRO_SUCURSAL", nullable = true)

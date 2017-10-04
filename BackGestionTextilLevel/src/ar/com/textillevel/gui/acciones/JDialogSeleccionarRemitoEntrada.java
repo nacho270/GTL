@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
@@ -161,6 +162,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			tablaDibujos.setStringColumn(0, "Dibujo", 460, 460, true);
 			tablaDibujos.setStringColumn(1, "", 0, 0, true);
 			tablaDibujos.setAlignment(0, FWJTable.CENTER_ALIGN);
+			tablaDibujos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
 		return tablaDibujos;
 	}
@@ -257,7 +259,12 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 						}
 						dispose();
 					} else {
-						
+						int[] selectedRows = getTablaDibujos().getSelectedRows();
+						if(selectedRows.length == 0){
+							return;
+						}
+						dibujoEstampadoElegido = (DibujoEstampado) getTablaDibujos().getValueAt(selectedRows[0], 1);
+						dispose();
 					}
 				}
 			});

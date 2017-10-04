@@ -7,6 +7,7 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.remitosalida.JDialogAgregarRemitoSalida;
+import ar.com.textillevel.gui.acciones.remitosalida.JDialogAgregarRemitoSalidaDibujo;
 import ar.com.textillevel.gui.acciones.remitosalidaventatela.JDialogAgregarRemitoSalidaVentaTela;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -24,13 +25,22 @@ public class OperacionSobreRemitoSalidaHandler {
 	}
 
 	public void showRemitoEntradaDialog() {
-		if(remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA) {
+		if(remitoSalida.getDibujoEstampado() != null) {
+			handleRemitoSalidaDibujo();
+		}else if(remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA) {
 			handleConsultaRemitoSalidaVentaTela();
 		} else if(remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.CLIENTE_SALIDA_01) {
 			handleConsultaRemitoSalida01();
 		} else {
 			handleConsultaRemitoSalidaNormal();
 		}
+	}
+
+	private void handleRemitoSalidaDibujo() {
+		remitoSalida = getRemitoSalidaFacade().getByIdConDibujo(remitoSalida.getId());
+		JDialogAgregarRemitoSalidaDibujo dialogoRS = new JDialogAgregarRemitoSalidaDibujo(owner, remitoSalida, modoConsulta);
+		GuiUtil.centrar(dialogoRS);
+		dialogoRS.setVisible(true);		
 	}
 
 	private void handleConsultaRemitoSalidaVentaTela() {

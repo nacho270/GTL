@@ -41,5 +41,6 @@ public interface RemitoSalidaDAOLocal extends DAOLocal<RemitoSalida, Integer> {
 	public List<RemitoSalida> getRemitosSalidaSinFacturaPorCliente(Cliente cliente);
 	public void borrarAsociacionNotaCredito(NotaCreditoProveedor ncp);
 	public List<RemitoSalida> getRemitosByNroRemitoConPiezasYProductos(Integer nroRemito);
+	public RemitoSalida getByIdConDibujo(Integer id);
 
 }

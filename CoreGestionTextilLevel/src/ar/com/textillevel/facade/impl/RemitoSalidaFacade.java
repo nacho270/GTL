@@ -20,6 +20,7 @@ import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
+import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaProveedorDAOLocal;
 import ar.com.textillevel.dao.api.local.PiezaRemitoDAOLocal;
@@ -54,6 +55,7 @@ import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO;
 import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO.EnumTipoPiezaRE;
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.materiaprima.IBC;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.Tela;
@@ -133,6 +135,9 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 	
 	@EJB
 	private CuentaFacadeLocal cuentaFacade;
+
+	@EJB
+	private DibujoEstampadoDAOLocal dibujoDao;
 
 	public RemitoSalida save(RemitoSalida remitoSalida, String usuario) {
 		boolean isAlta = remitoSalida.getId() == null;
@@ -735,6 +740,24 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 	public List<RemitoSalida> getRemitosSalidaByODT(Integer idODT) {
 		OrdenDeTrabajo odt = odtDAO.getReferenceById(idODT);
 		return remitoSalidaDAOLocal.getRemitosByODT(odt);
+	}
+
+	@Override
+	public RemitoSalida saveRemitoSalidaDibujo(RemitoSalida remitoSalida, DibujoEstampado dibujoEstampado, String usuario) {
+		boolean isAlta = remitoSalida.getId() == null;
+		remitoSalida = remitoSalidaDAOLocal.save(remitoSalida);
+		dibujoDao.save(dibujoEstampado);
+		if(isAlta) {
+			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
+		} else {
+			auditoriaFacade.auditar(usuario, "Modificación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.MODIFICACION, remitoSalida);
+		}
+		return remitoSalida;		
+	}
+
+	@Override
+	public RemitoSalida getByIdConDibujo(Integer id) {
+		return remitoSalidaDAOLocal.getByIdConDibujo(id);
 	}
 
 }
