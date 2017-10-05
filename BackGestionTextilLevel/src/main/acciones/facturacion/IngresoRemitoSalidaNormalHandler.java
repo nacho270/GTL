@@ -15,7 +15,6 @@ import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.enums.ETipoRemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
-import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
@@ -31,7 +30,7 @@ public class IngresoRemitoSalidaNormalHandler {
 	private final Frame owner;
 	private List<OrdenDeTrabajo> odtList;
 	private Cliente clienteElegido;
-	private DibujoEstampado dibujoEstampado;
+	private List<DibujoEstampado> dibujosEstampado;
 
 	public IngresoRemitoSalidaNormalHandler(Frame owner, Cliente clienteElegido, List<OrdenDeTrabajo> odts) {
 		this.owner = owner;
@@ -39,10 +38,10 @@ public class IngresoRemitoSalidaNormalHandler {
 		this.odtList = odts;
 	}
 	
-	public IngresoRemitoSalidaNormalHandler(Frame owner, Cliente clienteElegido, DibujoEstampado dibujoEstampado) {
+	public IngresoRemitoSalidaNormalHandler(Frame owner, List<DibujoEstampado> dibujosEstampado, Cliente clienteElegido) {
 		this.owner = owner;
 		this.clienteElegido = clienteElegido;
-		this.dibujoEstampado = dibujoEstampado;
+		this.dibujosEstampado = dibujosEstampado;
 	}
 
 	public boolean gestionarIngresoRemitoSalida() {
@@ -122,13 +121,12 @@ public class IngresoRemitoSalidaNormalHandler {
 			remitoSalida.setNroOrden(0);
 			remitoSalida.setTipoRemitoSalida(ETipoRemitoSalida.CLIENTE);
 			remitoSalida.setCliente(clienteElegido);
-			remitoSalida.setDibujoEstampado(dibujoEstampado);
+			remitoSalida.getDibujoEstampados().addAll(dibujosEstampado);
 			remitoSalida.setNroRemito(lastNroRemito);
 			JDialogAgregarRemitoSalidaDibujo dialog = new JDialogAgregarRemitoSalidaDibujo(owner, remitoSalida, false);
 			dialog.setVisible(true);
 			if(dialog.isAcepto()) {
-				dibujoEstampado.setEstado(EEstadoDibujo.SALIDA);
-				GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).saveRemitoSalidaDibujo(dialog.getRemitoSalida(), dibujoEstampado, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+				GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).saveRemitoSalidaDibujo(dialog.getRemitoSalida(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				FWJOptionPane.showInformationMessage(null, "El remito " + lastNroRemito + " ha sido creado exitosamente.", "Informacion");
 				return true;
 			}

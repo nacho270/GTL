@@ -14,7 +14,6 @@ import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.enums.ETipoInformeProduccion;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
-import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 
 @Remote
 public interface RemitoSalidaFacadeRemote {
@@ -65,7 +64,7 @@ public interface RemitoSalidaFacadeRemote {
 
 	public List<RemitoSalida> getRemitosSalidaByODT(Integer idODT);
 
-	public RemitoSalida saveRemitoSalidaDibujo(RemitoSalida remitoSalida, DibujoEstampado dibujoEstampado, String usrName);
+	public RemitoSalida saveRemitoSalidaDibujo(RemitoSalida remitoSalida, String usrName);
 
 	public RemitoSalida getByIdConDibujo(Integer id);
 

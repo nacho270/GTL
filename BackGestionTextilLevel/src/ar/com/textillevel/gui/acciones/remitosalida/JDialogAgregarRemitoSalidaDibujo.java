@@ -14,16 +14,20 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 
 import ar.com.fwcommon.componentes.FWDateField;
+import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.FWJTextField;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.gente.Proveedor;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
 import ar.com.textillevel.gui.util.GenericUtils;
@@ -35,9 +39,9 @@ public class JDialogAgregarRemitoSalidaDibujo extends JDialog {
 
 	private static final int MAX_LONGITUD_RAZ_SOCIAL = 50;
 
+	private FWJTable tablaDibujos;
 	private JPanel panDetalle;
 	private FWJTextField txtRazonSocial;
-	private FWJTextField txtDibujo;
 	private JPanel pnlBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
@@ -55,7 +59,7 @@ public class JDialogAgregarRemitoSalidaDibujo extends JDialog {
 		super(owner);
 		this.remitoSalida = remitoSalida;
 		this.modoConsulta = modoConsulta;
-		setSize(new Dimension(400, 250));
+		setSize(new Dimension(400, 400));
 		setResizable(false);
 		GuiUtil.centrar(this);
 		if (modoConsulta) {
@@ -79,15 +83,30 @@ public class JDialogAgregarRemitoSalidaDibujo extends JDialog {
 			panDetalle = new JPanel();
 			panDetalle.setLayout(new GridBagLayout());
 			panDetalle.add(getPanelDatosCliente(), GenericUtils.createGridBagConstraints(0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 6, 1, 0, 0));
-			panDetalle.add(new JLabel(" FECHA:"), GenericUtils.createGridBagConstraints(2, 2, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtFechaEmision(), GenericUtils.createGridBagConstraints(3, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
-			panDetalle.add(new JLabel(" DIBUJO:"), GenericUtils.createGridBagConstraints(2, 3, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtDibujo(), GenericUtils.createGridBagConstraints(3, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
-
+			panDetalle.add(new JLabel(" FECHA:"), GenericUtils.createGridBagConstraints(0, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getTxtFechaEmision(), GenericUtils.createGridBagConstraints(1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
+			
+			JScrollPane scrollPaneDibujos = new JScrollPane(getTablaDibujos());
+			scrollPaneDibujos.setBorder(BorderFactory.createTitledBorder("Dibujos"));
+			panDetalle.add(scrollPaneDibujos, GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 4, 1, 1, 1));
 		}
 		getTxtFechaEmision().setEnabled(!modoConsulta);
 
 		return panDetalle;
+	}
+	
+	private FWJTable getTablaDibujos() {
+		if(tablaDibujos == null) {
+			tablaDibujos = new FWJTable(0, 2);
+			tablaDibujos.setStringColumn(0, "Dibujo", 347, 347, true);
+			tablaDibujos.setStringColumn(1, "", 0, 0, true);
+			tablaDibujos.setAlignment(0, FWJTable.CENTER_ALIGN);
+			tablaDibujos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tablaDibujos.setAllowHidingColumns(false);
+			tablaDibujos.setAllowSorting(false);
+			tablaDibujos.setReorderingAllowed(false);
+		}
+		return tablaDibujos;
 	}
 
 	private JPanel getPanelDatosCliente() {
@@ -132,7 +151,18 @@ public class JDialogAgregarRemitoSalidaDibujo extends JDialog {
 			getTxtFechaEmision().setFecha(DateUtil.getHoy());
 		}
 		getTxtNroRemito().setText(remitoSalida.getNroRemito().toString());
-		getTxtDibujo().setText(remitoSalida.getDibujoEstampado().toString());
+		
+		getTablaDibujos().setNumRows(0);
+		if(remitoSalida.getDibujoEstampados() == null) {
+			return;
+		}
+		int row = 0;
+		for(DibujoEstampado d : remitoSalida.getDibujoEstampados()) {
+			getTablaDibujos().addRow();
+			getTablaDibujos().setValueAt(d.toString(), row, 0);
+			getTablaDibujos().setValueAt(d, row, 1);
+			row ++;
+		}
 	}
 
 	private FWDateField getTxtFechaEmision() {
@@ -240,13 +270,5 @@ public class JDialogAgregarRemitoSalidaDibujo extends JDialog {
 
 	public void setModoConsulta(boolean modoConsulta) {
 		this.modoConsulta = modoConsulta;
-	}
-
-	public FWJTextField getTxtDibujo() {
-		if(txtDibujo == null) {
-			txtDibujo = new FWJTextField();
-			txtDibujo.setEditable(false);
-		}
-		return txtDibujo;
 	}
 }

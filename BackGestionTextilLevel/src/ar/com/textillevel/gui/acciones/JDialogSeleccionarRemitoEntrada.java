@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
@@ -38,6 +37,7 @@ import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.util.GTLBeanFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 
@@ -55,7 +55,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 	private JPanel panReferenciaRemExternos;
 	private Cliente cliente;
 	private List<OrdenDeTrabajo> odtSelectedList;
-	private DibujoEstampado dibujoEstampadoElegido;
+	private List<DibujoEstampado> dibujoEstampadoElegidos;
 	private RemitoEntradaBusinessDelegate remitoBusinessDelegate = new RemitoEntradaBusinessDelegate();
 	private Multimap<Integer, Integer> mapaRemitoFilas = TreeMultimap.create();
 	private Multimap<Integer, Integer> mapaFilasRemito = TreeMultimap.create();
@@ -162,7 +162,6 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			tablaDibujos.setStringColumn(0, "Dibujo", 460, 460, true);
 			tablaDibujos.setStringColumn(1, "", 0, 0, true);
 			tablaDibujos.setAlignment(0, FWJTable.CENTER_ALIGN);
-			tablaDibujos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
 		return tablaDibujos;
 	}
@@ -263,7 +262,10 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 						if(selectedRows.length == 0){
 							return;
 						}
-						dibujoEstampadoElegido = (DibujoEstampado) getTablaDibujos().getValueAt(selectedRows[0], 1);
+						dibujoEstampadoElegidos = Lists.newArrayList();
+						for(int i =0; i<selectedRows.length; i++) {
+							dibujoEstampadoElegidos.add((DibujoEstampado) getTablaDibujos().getValueAt(selectedRows[i], 1));
+						}
 						dispose();
 					}
 				}
@@ -293,7 +295,7 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 		return tabbedPane;
 	}
 
-	public DibujoEstampado getDibujoEstampadoElegido() {
-		return dibujoEstampadoElegido;
+	public List<DibujoEstampado> getDibujoEstampadoElegidos() {
+		return dibujoEstampadoElegidos;
 	}
 }

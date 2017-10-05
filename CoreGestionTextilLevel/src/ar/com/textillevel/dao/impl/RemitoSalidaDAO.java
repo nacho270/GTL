@@ -252,7 +252,6 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 	}
 	
 	private void doEagerDibujo(RemitoSalida remitoSalida) {
-		remitoSalida.getDibujoEstampado().getAnchoCilindro();
 		if (remitoSalida.getProveedor() != null) {
 			remitoSalida.getProveedor().getNombreCorto();
 			remitoSalida.getItems().size();
@@ -262,6 +261,9 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		}
 		for (CorreccionFacturaProveedor cfp : remitoSalida.getCorreccionesProvGeneradas()) {
 			cfp.getFacturas().size();
+		}
+		if(remitoSalida.getDibujoEstampados() != null) {
+			remitoSalida.getDibujoEstampados().size();
 		}
 	}
 }

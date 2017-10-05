@@ -55,8 +55,8 @@ public class AgregarRemitoSalidaAction implements Action {
 			if (odtList != null && !odtList.isEmpty()) {
 				IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(frame, clienteElegido, odtList);
 				handler.gestionarIngresoRemitoSalida();
-			} else if(dialogSeleccionarODTs.getDibujoEstampadoElegido() != null) {
-				IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(frame, clienteElegido, dialogSeleccionarODTs.getDibujoEstampadoElegido());
+			} else if(dialogSeleccionarODTs.getDibujoEstampadoElegidos() != null) {
+				IngresoRemitoSalidaNormalHandler handler = new IngresoRemitoSalidaNormalHandler(frame, dialogSeleccionarODTs.getDibujoEstampadoElegidos(), clienteElegido);
 				handler.gestionarIngresoRemitoSalida();
 			}
 		}

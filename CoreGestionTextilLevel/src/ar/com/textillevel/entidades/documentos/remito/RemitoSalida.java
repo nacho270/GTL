@@ -50,7 +50,7 @@ public class RemitoSalida extends Remito implements Serializable {
 	private Integer idTipoRemitoSalida;
 	private Boolean anulado;
 	private Factura factura;
-	private DibujoEstampado dibujoEstampado;
+	private List<DibujoEstampado> dibujoEstampados;
 	private Integer nroSucursal;
 	private Boolean entregado;
 	private Timestamp fechaHoraEntregado;
@@ -60,6 +60,7 @@ public class RemitoSalida extends Remito implements Serializable {
 
 	public RemitoSalida() {
 		this.odts = new ArrayList<OrdenDeTrabajo>();
+		this.dibujoEstampados = new ArrayList<DibujoEstampado>();
 		this.items = new ArrayList<ItemRemitoSalidaProveedor>();
 		this.correccionesProvGeneradas = new ArrayList<CorreccionFacturaProveedor>();
 		setPesoTotal(new BigDecimal(0));
@@ -223,14 +224,14 @@ public class RemitoSalida extends Remito implements Serializable {
 		this.factura = factura;
 	}
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="F_DIBUJO_ESTAMPADO_P_ID", nullable=true)
-	public DibujoEstampado getDibujoEstampado() {
-		return dibujoEstampado;
+	@OneToMany(fetch=FetchType.LAZY)
+	@JoinColumn(name="F_REMITO_SALIDA_P_ID", nullable=true)
+	public List<DibujoEstampado> getDibujoEstampados() {
+		return dibujoEstampados;
 	}
 
-	public void setDibujoEstampado(DibujoEstampado dibujoEstampado) {
-		this.dibujoEstampado = dibujoEstampado;
+	public void setDibujoEstampados(List<DibujoEstampado> dibujoEstampados) {
+		this.dibujoEstampados = dibujoEstampados;
 	}
 	
 	@Column(name = "A_NRO_SUCURSAL", nullable = true)

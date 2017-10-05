@@ -25,7 +25,7 @@ public class OperacionSobreRemitoSalidaHandler {
 	}
 
 	public void showRemitoEntradaDialog() {
-		if(remitoSalida.getDibujoEstampado() != null) {
+		if(remitoSalida.getDibujoEstampados() != null) {
 			handleRemitoSalidaDibujo();
 		}else if(remitoSalida.getTipoRemitoSalida() == ETipoRemitoSalida.CLIENTE_VENTA_DE_TELA) {
 			handleConsultaRemitoSalidaVentaTela();

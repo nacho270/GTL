@@ -56,6 +56,7 @@ import ar.com.textillevel.entidades.to.remitosalida.PiezaRemitoSalidaTO.EnumTipo
 import ar.com.textillevel.entidades.to.remitosalida.RemitoSalidaConBajaStockTO;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.materiaprima.IBC;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.entidades.ventas.materiaprima.Tela;
@@ -743,10 +744,13 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 	}
 
 	@Override
-	public RemitoSalida saveRemitoSalidaDibujo(RemitoSalida remitoSalida, DibujoEstampado dibujoEstampado, String usuario) {
+	public RemitoSalida saveRemitoSalidaDibujo(RemitoSalida remitoSalida, String usuario) {
 		boolean isAlta = remitoSalida.getId() == null;
 		remitoSalida = remitoSalidaDAOLocal.save(remitoSalida);
-		dibujoDao.save(dibujoEstampado);
+		for(DibujoEstampado de : remitoSalida.getDibujoEstampados()) {
+			de.setEstado(EEstadoDibujo.SALIDA);
+			dibujoDao.save(de);
+		}
 		if(isAlta) {
 			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		} else {
