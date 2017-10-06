@@ -39,7 +39,8 @@ public class DibujoEstampado implements Serializable, Comparable<DibujoEstampado
 	private List<VarianteEstampado> variantes;
 	private byte[] bytesFotos;
 	private Integer idEstado;
-	
+	private Integer idFactura; //ID FC desde donde se ingresó el dibujo (si es que corresponde)
+
 	public DibujoEstampado() {
 		this.idEstado = EEstadoDibujo.EN_STOCK.getId();
 		this.variantes = new ArrayList<VarianteEstampado>();
@@ -149,7 +150,16 @@ public class DibujoEstampado implements Serializable, Comparable<DibujoEstampado
 	public void setEstado(EEstadoDibujo estado){
 		setIdEstado(estado.getId());
 	}
-	
+
+	@Column(name = "A_FACTURA_P_ID", nullable=true)
+	public Integer getIdFactura() {
+		return idFactura;
+	}
+
+	public void setIdFactura(Integer idFactura) {
+		this.idFactura = idFactura;
+	}
+
 	@Override
 	public String toString() {
 		return getNroDibujo() + " - " + getNombre();

@@ -10,6 +10,7 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaCreditoProv
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 
 @Local
@@ -42,5 +43,6 @@ public interface RemitoSalidaDAOLocal extends DAOLocal<RemitoSalida, Integer> {
 	public void borrarAsociacionNotaCredito(NotaCreditoProveedor ncp);
 	public List<RemitoSalida> getRemitosByNroRemitoConPiezasYProductos(Integer nroRemito);
 	public RemitoSalida getByIdConDibujo(Integer id);
+	public RemitoSalida getRemitoSalidaByDibujoEstampado(DibujoEstampado dibujo);
 
 }

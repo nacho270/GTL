@@ -14,6 +14,7 @@ import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 
@@ -266,4 +267,16 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 			remitoSalida.getDibujoEstampados().size();
 		}
 	}
+
+	public RemitoSalida getRemitoSalidaByDibujoEstampado(DibujoEstampado dibujo) {
+		String hql = "SELECT rs FROM Remito rs WHERE :dibujo IN ELEMENTS(rs.dibujoEstampados)";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("dibujo", dibujo);
+		List<RemitoSalida> remitos = q.getResultList();
+		if(!remitos.isEmpty()){
+			return remitos.get(0);
+		}
+		return null;
+	}
+
 }

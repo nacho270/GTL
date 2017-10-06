@@ -10,6 +10,8 @@ import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.GrupoArticuloDAOLocal;
 import ar.com.textillevel.dao.api.local.PrecioBaseEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoArticuloDAOLocal;
+import ar.com.textillevel.dao.api.local.RemitoSalidaDAOLocal;
+import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
@@ -32,6 +34,9 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 
 	@EJB
 	private GrupoArticuloDAOLocal gaDAOLocal;
+	
+	@EJB
+	private RemitoSalidaDAOLocal remitoSalidaDAOLocal;
 
 	public List<DibujoEstampado> getAllOrderByNombre() {
 		return dibujoEstampadoDAOLocal.getAllOrderBy("nroDibujo");
@@ -105,7 +110,10 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	}
 
 	private void checkEdicionDibujo(DibujoEstampado dibujo) throws ValidacionException {
-		//TODO: verificar el tema que exista en un RE o un RS. Implementar cuando esté la salida de dibujos
+		RemitoSalida rs = remitoSalidaDAOLocal.getRemitoSalidaByDibujoEstampado(dibujo);
+		if(rs != null) {
+			throw new ValidacionException(EValidacionException.DIBUJO_IMPOSIBLE_ELIMINAR.getInfoValidacion());
+		}
 	}
 
 	public Integer getProximoNroDibujo(Integer nroComienzo) {

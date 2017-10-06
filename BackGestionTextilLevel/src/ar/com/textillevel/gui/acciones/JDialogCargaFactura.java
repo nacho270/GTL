@@ -1794,6 +1794,7 @@ public class JDialogCargaFactura extends JDialog {
 						if (dialog.isAcepto()) {
 							DibujoEstampado de = dialog.getDibujoActual();
 							de.setCliente(getFactura().getCliente());
+							de.setIdFactura(getFactura().getId());
 							dibujosAPersistir.add(de);
 							contador -= de.getCantidadColores();
 						} else {
