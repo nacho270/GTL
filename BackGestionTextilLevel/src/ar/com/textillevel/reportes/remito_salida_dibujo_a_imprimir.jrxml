@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remito_entrada" pageWidth="595" pageHeight="878" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="502"/>
+	<style name="table" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="FECHA_REMITO" class="java.lang.String"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
+	<parameter name="DOMICILIO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Documents and Settings\\Administrador\\Escritorio\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="USUARIO" class="java.lang.String"/>
+	<parameter name="LOCALIDAD" class="java.lang.String"/>
+	<parameter name="POSICION_IVA" class="java.lang.String"/>
+	<parameter name="CUIT" class="java.lang.String"/>
+	<parameter name="ARTICULO" class="java.lang.String"/>
+	<parameter name="PROCESO" class="java.lang.String"/>
+	<parameter name="REMITO_ENT" class="java.lang.String"/>
+	<parameter name="TOT_PIEZAS" class="java.lang.String"/>
+	<parameter name="TOT_KILOS" class="java.lang.String"/>
+	<parameter name="TOT_METROS" class="java.lang.String"/>
+	<parameter name="ODT" class="java.lang.String"/>
+	<parameter name="IMAGEN" class="java.lang.Object"/>
+	<field name="piezasDS1" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<field name="piezasDS2" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<field name="piezasDS3" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="185" splitType="Stretch">
+			<elementGroup>
+				<elementGroup>
+					<elementGroup/>
+				</elementGroup>
+			</elementGroup>
+			<textField>
+				<reportElement x="469" y="70" width="113" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA_REMITO}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement x="229" y="149" width="137" height="34"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMAGEN}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="197" splitType="Stretch">
+			<textField>
+				<reportElement x="91" y="53" width="179" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOMICILIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="53" width="177" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{LOCALIDAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="94" width="186" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{POSICION_IVA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="425" y="94" width="151" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CUIT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="89" y="14" width="472" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="18">
+			<subreport>
+				<reportElement x="51" y="0" width="172" height="17"/>
+				<dataSourceExpression><![CDATA[$F{piezasDS1}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "remito_salida_dibujo_a_imprimir_dibujos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="136">
+			<textField>
+				<reportElement x="74" y="2" width="267" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_PIEZAS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="74" y="21" width="99" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOT_METROS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="79" width="71" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
