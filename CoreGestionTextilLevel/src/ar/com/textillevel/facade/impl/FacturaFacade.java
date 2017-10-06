@@ -153,6 +153,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 		auditoriaFacade.auditar(usuario, "Creación de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.ALTA, f);
 		if (dibujos != null && !dibujos.isEmpty()) {
 			for(DibujoEstampado de : dibujos) {
+				de.setIdFactura(f.getId());
 				dibujoDaoLocal.save(de);
 			}
 		}

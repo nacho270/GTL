@@ -32,5 +32,6 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public List<DibujoEstampado> getAllByEstadoYCliente(EEstadoDibujo salida, Cliente cliente);
 
+	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados) throws ValidacionException;
 
 }

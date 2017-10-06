@@ -18,7 +18,7 @@ public class AccionConsultarDibujo extends Accion<DibujoEstampado> {
 	
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
-		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), true, null);
+		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), e.getSelectedElements().get(0), true, null, null);
 		dialog.setVisible(true);
 		return false;
 	}

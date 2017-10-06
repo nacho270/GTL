@@ -1,10 +1,8 @@
 package ar.com.textillevel.facade.impl;
 
 import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.GrupoArticuloDAOLocal;
@@ -128,6 +126,20 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	@Override
 	public List<DibujoEstampado> getAllByEstadoYCliente(EEstadoDibujo estado, Cliente cliente) {
 		return dibujoEstampadoDAOLocal.getAllByEstadoYCliente(estado, cliente);
+	}
+
+	@Override
+	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados) throws ValidacionException {
+		Cliente cl = null;
+		Integer idFactura = null;
+		for(DibujoEstampado de : dibujosCombinados) {
+			cl = de.getCliente(); //deberían ser lo mismo así q puedo setearlo en cada vuelta del for
+			idFactura = de.getIdFactura();
+			remove(de, true);
+		}
+		dibujoActual.setCliente(cl);
+		dibujoActual.setIdFactura(idFactura);
+		save(dibujoActual, null);
 	}
 
 }

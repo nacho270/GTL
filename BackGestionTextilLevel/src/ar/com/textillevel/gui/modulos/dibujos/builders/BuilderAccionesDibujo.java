@@ -15,6 +15,7 @@ import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
 import ar.com.fwcommon.templates.modulo.model.totales.Totales;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionAgregarDibujo;
+import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionCombinarDibujos;
 import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionConsultarDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionEliminarDibujo;
 import ar.com.textillevel.gui.modulos.dibujos.acciones.AccionModificarDibujo;
@@ -45,6 +46,7 @@ public class BuilderAccionesDibujo implements IBuilderAcciones<DibujoEstampado>,
 		accionesCreacion.add(new AccionEliminarDibujo());
 		accionesCreacion.add(new AccionConsultarDibujo());
 		accionesCreacion.add(new AccionQuitarClienteDibujo());
+		accionesCreacion.add(new AccionCombinarDibujos());
 		acciones.addElementGroup("Acciones",accionesCreacion);
 		return acciones;
 	}

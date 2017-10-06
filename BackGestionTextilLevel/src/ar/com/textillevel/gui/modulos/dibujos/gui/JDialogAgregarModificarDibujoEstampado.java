@@ -94,14 +94,14 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	private Integer nroDibujoOriginal;
 
 	public JDialogAgregarModificarDibujoEstampado(Frame padre) {
-		this(padre, new DibujoEstampado(), false, null);
+		this(padre, new DibujoEstampado(), false, null, null);
 	}
 
-	public JDialogAgregarModificarDibujoEstampado(Frame padre, Integer maximaCantidadColores) {
-		this(padre, new DibujoEstampado(), false, maximaCantidadColores);
+	public JDialogAgregarModificarDibujoEstampado(Frame padre, Integer maximaCantidadColores, Integer nroDibujoForce) {
+		this(padre, new DibujoEstampado(), false, maximaCantidadColores, nroDibujoForce);
 	}
 
-	public JDialogAgregarModificarDibujoEstampado(Frame padre, DibujoEstampado dibujo, boolean consulta, Integer cantidadColores) {
+	public JDialogAgregarModificarDibujoEstampado(Frame padre, DibujoEstampado dibujo, boolean consulta, Integer cantidadColores, Integer nroDibujoForce) {
 		super(padre);
 		this.padre = padre;
 		this.dibujoActual = dibujo;
@@ -115,6 +115,9 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		if (isConsulta()) {
 			GuiUtil.setEstadoPanel(getPanDetalle(), false);
 			getBtnAceptar().setEnabled(false);
+		} else if(nroDibujoForce != null) {//es un combinar dibujos => no se puede cambiar la cant de cilindros
+			getCmbComienzoNroDibujo().setSelectedItem(nroDibujoForce);
+			getCmbComienzoNroDibujo().setEnabled(false);
 		}
 	}
 

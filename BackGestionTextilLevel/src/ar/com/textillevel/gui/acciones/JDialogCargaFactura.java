@@ -1782,7 +1782,7 @@ public class JDialogCargaFactura extends JDialog {
 			if (contador > 0) {
 				FWJOptionPane.showWarningMessage(JDialogCargaFactura.this, "Se han detectado " + contador + " cilindro/s. Debe cargar los dibujos.", "Advertencia");
 				do {
-					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador);
+					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador, null);
 					dialog.seleccionDibujoExistente(getFactura().getCliente());
 					if (dialog.isAcepto()) {
 						DibujoEstampado de = dialog.getDibujoActual();
@@ -1794,7 +1794,6 @@ public class JDialogCargaFactura extends JDialog {
 						if (dialog.isAcepto()) {
 							DibujoEstampado de = dialog.getDibujoActual();
 							de.setCliente(getFactura().getCliente());
-							de.setIdFactura(getFactura().getId());
 							dibujosAPersistir.add(de);
 							contador -= de.getCantidadColores();
 						} else {
