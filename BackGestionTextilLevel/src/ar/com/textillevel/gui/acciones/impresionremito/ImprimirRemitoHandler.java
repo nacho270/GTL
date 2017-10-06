@@ -12,6 +12,14 @@ import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -22,18 +30,12 @@ import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.ventas.IProductoParaODT;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.JasperHelper;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.util.GestorTerminalBarcode;
 import ar.com.textillevel.util.ODTCodigoHelper;
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ImprimirRemitoHandler {
@@ -44,12 +46,14 @@ public class ImprimirRemitoHandler {
 	private final JDialog owner;	
 	private final Integer nroSucursal;
 	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/remito_entrada.jasper";
-	@SuppressWarnings("unused")
-	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
+//	private static final String ARCHIVO_JASPER_B = "/ar/com/textillevel/reportes/remito_entrada_b.jasper";
 	private static final String ARCHIVO_JASPER_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_con_formato.jasper";
 	private static final String ARCHIVO_JASPER_B_CON_FORMATO = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato.jasper";
 	private static final String ARCHIVO_JASPER_B_CON_FORMATO_IMPRIMIR = "/ar/com/textillevel/reportes/remito_entrada_b_con_formato_imprimir.jasper";
 
+	// jasper para RS de dibujo
+	private static final String ARCHIVO_JASPER_RS_DIBUJO_A_IMPRIMIR = "/ar/com/textillevel/reportes/remito_salida_dibujo_a_imprimir.jasper";
+	private static final String ARCHIVO_JASPER_RS_DIBUJO_B_IMPRIMIR = "/ar/com/textillevel/reportes/remito_salida_dibujo_b_imprimir.jasper";
 	
 	public ImprimirRemitoHandler(RemitoSalida remito, Integer nroSucursal, JDialog owner) {
 		this.remito = remito;
@@ -80,6 +84,7 @@ public class ImprimirRemitoHandler {
 		} while (!ok);
 	}
 
+	// Envio de mails
 	public static List<JasperPrint> getJasperPrints(List<RemitoSalida> remitos, int nroSuc) {
 		List<JasperPrint> prints = new ArrayList<JasperPrint>();
 		Collections.sort(remitos, new Comparator<RemitoSalida>() {
@@ -110,38 +115,59 @@ public class ImprimirRemitoHandler {
 	}
 	
 	private void internalImprimir(String cantImprimirStr) {
-		boolean hayMasDeUnRemito = remitos != null && !remitos.isEmpty();
-		if(!hayMasDeUnRemito) {
-			remitos = new ArrayList<RemitoSalida>();
-			remitos.add(getRemito());
-		}
-		Collections.sort(remitos, new Comparator<RemitoSalida>() {
-			public int compare(RemitoSalida o1, RemitoSalida o2) {
-				return o1.getNroRemito().compareTo(o2.getNroRemito());
-			}
-		});
-
-		JasperReport reporte = null;
-		if(!GenericUtils.isSistemaTest()){
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
-		} else {
-			reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B_CON_FORMATO_IMPRIMIR);
-		}
-		
-		for(RemitoSalida rs : remitos) {
+		if(remito != null && remito.getDibujoEstampados() != null && !remito.getDibujoEstampados().isEmpty()) {
+			JasperReport reporte = null;
 			JasperPrint jasperPrint = null;
 			Integer cantidadAImprimir = Integer.valueOf(cantImprimirStr);
-			if(!GenericUtils.isSistemaTest()) {
-				RemitoEntradaTO remitoEntrada = new RemitoEntradaTO(rs, nroSucursal);
-				jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
-				for(int i = 0; i < cantidadAImprimir; i ++) {
-					imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
-				}
-			} else {
-				for(int i = 0; i < cantidadAImprimir; i ++) {
-					RemitoEntradaBTO remitoEntrada = new RemitoEntradaBTO(rs, nroSucursal, (i + 1));
+			if(!GenericUtils.isSistemaTest()){
+				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RS_DIBUJO_A_IMPRIMIR);
+					RemitoEntradaTO remitoEntrada = new RemitoEntradaTO(remito, nroSucursal);
 					jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
-					imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
+					for(int i = 0; i < cantidadAImprimir; i ++) {
+						imprimirReporte(jasperPrint, remito, i+1, cantidadAImprimir);
+					}
+			} else {
+				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RS_DIBUJO_B_IMPRIMIR);
+				for(int i = 0; i < cantidadAImprimir; i ++) {
+					RemitoEntradaBTO remitoEntrada = new RemitoEntradaBTO(remito, nroSucursal, (i + 1));
+					jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
+					imprimirReporte(jasperPrint, remito, i+1, cantidadAImprimir);
+				}
+			}
+		} else {
+			boolean hayMasDeUnRemito = remitos != null && !remitos.isEmpty();
+			if(!hayMasDeUnRemito) {
+				remitos = new ArrayList<RemitoSalida>();
+				remitos.add(getRemito());
+			}
+			Collections.sort(remitos, new Comparator<RemitoSalida>() {
+				public int compare(RemitoSalida o1, RemitoSalida o2) {
+					return o1.getNroRemito().compareTo(o2.getNroRemito());
+				}
+			});
+
+			JasperReport reporte = null;
+			if(!GenericUtils.isSistemaTest()){
+				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER);
+			} else {
+				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_B_CON_FORMATO_IMPRIMIR);
+			}
+			
+			for(RemitoSalida rs : remitos) {
+				JasperPrint jasperPrint = null;
+				Integer cantidadAImprimir = Integer.valueOf(cantImprimirStr);
+				if(!GenericUtils.isSistemaTest()) {
+					RemitoEntradaTO remitoEntrada = new RemitoEntradaTO(rs, nroSucursal);
+					jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
+					for(int i = 0; i < cantidadAImprimir; i ++) {
+						imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
+					}
+				} else {
+					for(int i = 0; i < cantidadAImprimir; i ++) {
+						RemitoEntradaBTO remitoEntrada = new RemitoEntradaBTO(rs, nroSucursal, (i + 1));
+						jasperPrint = JasperHelper.fillReport(reporte, remitoEntrada.getParameters(), Collections.singletonList(remitoEntrada));
+						imprimirReporte(jasperPrint, rs, i+1, cantidadAImprimir);
+					}
 				}
 			}
 		}
@@ -172,19 +198,31 @@ public class ImprimirRemitoHandler {
 
 		private Map parameters;
 		private final List<PiezaRemitoTO> piezas1;
-		private final List<PiezaRemitoTO> piezas2;
-		private final List<PiezaRemitoTO> piezas3;
+		private List<PiezaRemitoTO> piezas2;
+		private List<PiezaRemitoTO> piezas3;
 		private static final int CANT_PIEZAS_SPLIT = 16;
 		private static final int CANT_MAX_PIEZAS = 48;
 		
 		public RemitoEntradaBTO(RemitoSalida remito, Integer nroSucursal, Integer nroCopia) {
 			cargarMap(remito, nroSucursal, nroCopia);
 			this.piezas1 = new ArrayList<PiezaRemitoTO>();
-			this.piezas2 = new ArrayList<PiezaRemitoTO>();
-			this.piezas3 = new ArrayList<PiezaRemitoTO>();
-			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezasImprimibles()));
+			if(remito.getDibujoEstampados() == null || remito.getDibujoEstampados().isEmpty()) {
+				this.piezas2 = new ArrayList<PiezaRemitoTO>();
+				this.piezas3 = new ArrayList<PiezaRemitoTO>();
+				populateListaPiezas(reescribirOrdenPiezas(remito.getPiezasImprimibles()));
+			} else {
+				populateDibujos(remito);
+			}
 		}
 		
+		private void populateDibujos(RemitoSalida remito) {
+			for(DibujoEstampado de : remito.getDibujoEstampados()) {
+				PiezaRemitoTO p = new PiezaRemitoTO();
+				p.setDibujo(de.getNombre());
+				piezas1.add(p);
+			}
+		}
+
 		private void populateListaPiezas(List<PiezaRemito> piezas) {
 			populateSingleListaPiezas(piezas1, 0, CANT_PIEZAS_SPLIT, piezas);
 			populateSingleListaPiezas(piezas2, CANT_PIEZAS_SPLIT, 2*CANT_PIEZAS_SPLIT, piezas);
@@ -236,13 +274,16 @@ public class ImprimirRemitoHandler {
 //			parameters.put("ARTICULO", extractArticulo(remito));
 			parameters.put("POSICION_IVA", remito.getCliente().getPosicionIva() == null ? "" : remito.getCliente().getPosicionIva().getDescripcion());
 			parameters.put("CUIT", remito.getCliente().getCuit());
-			parameters.put("PROCESO", getProceso(remito));
-			parameters.put("REMITO_ENT", String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
-			//parameters.put("ODT", extractODTs(remito.getOdts()));
-			int cantidadDePiezasImprimibles = remito.getCantidadDePiezasImprimibles();
-			parameters.put("TOT_PIEZAS", "TOT. PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(cantidadDePiezasImprimibles)) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(cantidadDePiezasImprimibles)).trim()+")");
-			parameters.put("TOT_KILOS", "TOT. KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
-			parameters.put("TOT_METROS", "TOT. METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			
+			if(remito.getDibujoEstampados() == null || remito.getDibujoEstampados().isEmpty()) {
+				parameters.put("PROCESO", getProceso(remito));
+				parameters.put("REMITO_ENT", String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
+				//parameters.put("ODT", extractODTs(remito.getOdts()));
+				int cantidadDePiezasImprimibles = remito.getCantidadDePiezasImprimibles();
+				parameters.put("TOT_PIEZAS", "TOT. PIEZAS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(cantidadDePiezasImprimibles)) + " (" + GenericUtils.convertirNumeroATexto(Double.valueOf(cantidadDePiezasImprimibles)).trim()+")");
+				parameters.put("TOT_KILOS", "TOT. KILOS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
+				parameters.put("TOT_METROS", "TOT. METROS: " + GenericUtils.fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			}
 			parameters.put("TIPO_COPIA", tipoCopia);
 			try {
 				parameters.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.REMITO_SALIDA, remito.getNroRemito(), GenericUtils.isSistemaTest())));
@@ -339,22 +380,38 @@ public class ImprimirRemitoHandler {
 			parameters.put("LOCALIDAD", remito.getCliente().getDireccionFiscal().getLocalidad().getNombreLocalidad());
 			parameters.put("SUBREPORT_DIR", "ar/com/textillevel/reportes/");
 			parameters.put("USUARIO", String.valueOf(GTLGlobalCache.getInstance().getUsuarioSistema().getCodigoUsuario()));
-			parameters.put("ARTICULO", extractArticulo(remito));
 			parameters.put("POSICION_IVA", remito.getCliente().getPosicionIva() == null ? "" : remito.getCliente().getPosicionIva().getDescripcion());
 			parameters.put("CUIT", remito.getCliente().getCuit());
-			parameters.put("PROCESO", getProceso(remito));
-			parameters.put("REMITO_ENT", remito.getOdts().isEmpty() ? "" : String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
-			parameters.put("ODT", extractODTs(remito.getOdts()));
-			int cantidadDePiezasImprimibles = remito.getCantidadDePiezasImprimibles();
-			parameters.put("TOT_PIEZAS", fixPrecioCero(GenericUtils.getDecimalFormat().format(cantidadDePiezasImprimibles)) + " " + GenericUtils.convertirNumeroATexto(Double.valueOf(cantidadDePiezasImprimibles)));
-			parameters.put("TOT_KILOS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
-			parameters.put("TOT_METROS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+
+			if(remito.getDibujoEstampados() == null || remito.getDibujoEstampados().isEmpty()) {
+				parameters.put("ARTICULO", extractArticulo(remito));
+				parameters.put("PROCESO", getProceso(remito));
+				parameters.put("REMITO_ENT", remito.getOdts().isEmpty() ? "" : String.valueOf(remito.getOdts().get(0).getRemito().getNroRemito()));
+				parameters.put("ODT", extractODTs(remito.getOdts()));
+				int cantidadDePiezasImprimibles = remito.getCantidadDePiezasImprimibles();
+				parameters.put("TOT_PIEZAS", fixPrecioCero(GenericUtils.getDecimalFormat().format(cantidadDePiezasImprimibles)) + " " + GenericUtils.convertirNumeroATexto(Double.valueOf(cantidadDePiezasImprimibles)));
+				parameters.put("TOT_KILOS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getPesoTotal().doubleValue())));
+				parameters.put("TOT_METROS", fixPrecioCero(GenericUtils.getDecimalFormat().format(remito.getTotalMetros())));
+			}
 			try {
 				parameters.put("IMAGEN", GenericUtils.createBarCode(GestorTerminalBarcode.crear(ETipoDocumento.REMITO_SALIDA, remito.getNroRemito(), GenericUtils.isSistemaTest())));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			populateListaPiezas(reescribirOrdenPiezas(remito.getPiezasImprimibles()));
+			if(remito.getDibujoEstampados() == null || remito.getDibujoEstampados().isEmpty()) {
+				populateListaPiezas(reescribirOrdenPiezas(remito.getPiezasImprimibles()));
+			} else {
+				populateDibujos(remito);
+			}
+		}
+
+		private void populateDibujos(RemitoSalida remito) {
+			this.piezas1 = new ArrayList<PiezaRemitoTO>();
+			for(DibujoEstampado de : remito.getDibujoEstampados()) {
+				PiezaRemitoTO p = new PiezaRemitoTO();
+				p.setDibujo(de.getNombre());
+				piezas1.add(p);
+			}
 		}
 
 		private List<PiezaRemito> reescribirOrdenPiezas(List<PiezaRemito> piezas) {
@@ -468,6 +525,7 @@ public class ImprimirRemitoHandler {
 		private String numero;
 		private String metros;
 		private String observaciones;
+		private String dibujo;
 
 		public String getNumero() {
 			return numero;
@@ -491,6 +549,14 @@ public class ImprimirRemitoHandler {
 
 		public void setObservaciones(String observaciones) {
 			this.observaciones = observaciones;
+		}
+
+		public String getDibujo() {
+			return dibujo;
+		}
+
+		public void setDibujo(String dibujo) {
+			this.dibujo = dibujo;
 		}
 
 	}
