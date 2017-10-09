@@ -5,12 +5,14 @@ import org.apache.taglibs.string.util.StringW;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 
@@ -24,17 +26,28 @@ public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
+		String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
 		DibujoEstampadoFacadeRemote dibujoFacade = GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class);
 		DibujoEstampado dibujoEstampado = e.getSelectedElements().get(0);
 		try {
 			if (FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-				dibujoFacade.remove(dibujoEstampado, false);
+				try {
+					dibujoFacade.remove(dibujoEstampado, false, true, usuario);
+				} catch (ValidacionExceptionSinRollback e1) {
+					FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMensajeError()), "Error");
+					return false;
+				}
 			}
 		} catch (ValidacionException e2) {
 			if(e2.getCodigoError() == EValidacionException.DIBUJO_USADO_EN_LISTAS_DE_PRECIOS.getCodigo()) {
 				if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), StringW.wordWrap(e2.getMensajeError()), "Confirmación") == FWJOptionPane.YES_OPTION) {
 					try {
-						dibujoFacade.remove(dibujoEstampado, true);
+						try {
+							dibujoFacade.remove(dibujoEstampado, true, true, usuario);
+						} catch (ValidacionExceptionSinRollback e1) {
+							FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMensajeError()), "Error");
+							return false;
+						}
 					} catch (ValidacionException e1) {
 						FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMensajeError()), "Error");
 						return false;

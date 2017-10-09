@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
@@ -16,7 +17,7 @@ public interface DibujoEstampadoFacadeRemote {
 	
 	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal) throws ValidacionException;
 
-	public void remove(DibujoEstampado dibujoEstampado, boolean force) throws ValidacionException ;
+	public void remove(DibujoEstampado dibujoEstampado, boolean force, boolean generarNC, String user) throws ValidacionException, ValidacionExceptionSinRollback;
 
 	public DibujoEstampado getByIdEager(Integer idDibujoEstampado);
 
@@ -32,6 +33,6 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public List<DibujoEstampado> getAllByEstadoYCliente(EEstadoDibujo salida, Cliente cliente);
 
-	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados) throws ValidacionException;
+	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados, String user) throws ValidacionException;
 
 }

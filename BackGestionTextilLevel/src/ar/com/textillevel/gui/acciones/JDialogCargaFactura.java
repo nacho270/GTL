@@ -1774,8 +1774,7 @@ public class JDialogCargaFactura extends JDialog {
 		if (getRemitos() == null || getRemitos().isEmpty()) {
 			int contador = 0;
 			for (ItemFactura itf : getFactura().getItems()) {
-				if ( (itf instanceof ItemFacturaPrecioMateriaPrima) &&
-						((ItemFacturaPrecioMateriaPrima)itf).getPrecioMateriaPrima().getMateriaPrima().getTipo() == ETipoMateriaPrima.CILINDRO) {
+				if ( (itf instanceof ItemFacturaPrecioMateriaPrima) && ((ItemFacturaPrecioMateriaPrima)itf).getPrecioMateriaPrima().getMateriaPrima().getTipo() == ETipoMateriaPrima.CILINDRO) {
 					contador += itf.getCantidad().intValue();
 				}
 			}

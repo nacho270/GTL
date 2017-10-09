@@ -13,6 +13,7 @@ import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.modulos.dibujos.gui.JDialogAgregarModificarDibujoEstampado;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class AccionCombinarDibujos extends Accion<DibujoEstampado> {
 
@@ -35,7 +36,7 @@ public class AccionCombinarDibujos extends Accion<DibujoEstampado> {
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			try {
-				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).combinarDibujos(dialog.getDibujoActual(), dibujosCombinados);
+				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).combinarDibujos(dialog.getDibujoActual(), dibujosCombinados, GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				return true;
 			} catch (ValidacionException e1) {
 				e1.printStackTrace();

@@ -1,9 +1,12 @@
 package ar.com.textillevel.facade.impl;
 
 import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
+import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.GrupoArticuloDAOLocal;
 import ar.com.textillevel.dao.api.local.PrecioBaseEstampadoDAOLocal;
@@ -16,6 +19,7 @@ import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
 import ar.com.textillevel.excepciones.EValidacionException;
+import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 
 @Stateless
@@ -35,6 +39,9 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	
 	@EJB
 	private RemitoSalidaDAOLocal remitoSalidaDAOLocal;
+	
+	@EJB
+	private CorreccionFacadeLocal correccionFacade;
 
 	public List<DibujoEstampado> getAllOrderByNombre() {
 		return dibujoEstampadoDAOLocal.getAllOrderBy("nroDibujo");
@@ -57,7 +64,7 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 		}
 	}
 
-	public void remove(DibujoEstampado dibujoEstampado, boolean force) throws ValidacionException {
+	public void remove(DibujoEstampado dibujoEstampado, boolean force, boolean generarNC, String user) throws ValidacionException, ValidacionExceptionSinRollback {
 		List<PrecioBaseEstampado> allPrecioBaseByDibujo = pbeDAOLocal.getAllByDibujo(dibujoEstampado);
 		if(!allPrecioBaseByDibujo.isEmpty()) {
 			if(force) {//force
@@ -67,6 +74,9 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 			}
 		}
 		deleteDibujo(dibujoEstampado);
+		if(generarNC && dibujoEstampado.getCliente() != null && dibujoEstampado.getIdFactura() != null) {//genero una NC para un cliente si corresponde
+			correccionFacade.generarNCPorBorradoDibujo(dibujoEstampado, user);
+		}
 	}
 
 	private void deleteDibujo(DibujoEstampado dibujoEstampado) throws ValidacionException {
@@ -129,13 +139,17 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	}
 
 	@Override
-	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados) throws ValidacionException {
+	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados, String user) throws ValidacionException {
 		Cliente cl = null;
 		Integer idFactura = null;
 		for(DibujoEstampado de : dibujosCombinados) {
 			cl = de.getCliente(); //deberían ser lo mismo así q puedo setearlo en cada vuelta del for
 			idFactura = de.getIdFactura();
-			remove(de, true);
+			try {
+				remove(de, true, false, user);
+			} catch (ValidacionExceptionSinRollback e) {
+				e.printStackTrace(); //no va a pasar xq no fuerza el remove
+			}
 		}
 		dibujoActual.setCliente(cl);
 		dibujoActual.setIdFactura(idFactura);
