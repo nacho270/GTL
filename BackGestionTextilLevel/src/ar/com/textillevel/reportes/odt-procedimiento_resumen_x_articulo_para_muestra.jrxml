@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odt-procedimiento_resumen" pageWidth="555" pageHeight="802" columnWidth="515" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="RESUMEN_QUIMICOS" class="java.lang.String"/>
+	<parameter name="RESUMEN_ALGODON" class="java.lang.String"/>
+	<parameter name="RESUMEN_POLIESTER" class="java.lang.String"/>
+	<parameter name="NRO_CLIENTE" class="java.lang.String"/>
+	<parameter name="KILOS" class="java.lang.String"/>
+	<parameter name="COLOR" class="java.lang.String"/>
+	<parameter name="USUARIO" class="java.lang.String"/>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="187" y="11" width="112" height="29"/>
+				<textElement>
+					<font size="20" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[RESÚMEN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="104" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="155" y="80" width="163" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_POLIESTER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="80" width="144" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="336" y="80" width="151" height="20"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_ALGODON}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="155" y="53" width="163" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[POLIESTER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="53" width="144" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QUIMICOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="53" width="151" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALGODON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="2" width="144" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="149" y="2" width="100" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_CLIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="311" y="2" width="81" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL KG.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="396" y="2" width="100" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="149" y="27" width="162" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{COLOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="27" width="144" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COLOR:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="403" y="27" width="100" height="20"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="318" y="27" width="81" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[USUARIO:]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

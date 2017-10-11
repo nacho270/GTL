@@ -375,7 +375,7 @@ public class ImprimirODTHandler {
 				this.fechaRemitoEntrada = new SimpleDateFormat("dd/MM").format(odt.getRemito().getFechaEmision());
 			}
 			if(formulaCliente != null){
-				this.color = odtDatosHelper.getDescColor() + " (" + formulaCliente.getCodigoFormula() + ")"; 
+				this.color = odtDatosHelper.getDescColor() + " (" + formulaCliente.getCodigoFormula().replaceAll("0", "") + ")"; 
 			} else {
 				this.color = odtDatosHelper.getDescColor();
 			}

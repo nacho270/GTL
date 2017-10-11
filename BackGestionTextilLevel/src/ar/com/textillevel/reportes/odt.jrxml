@@ -45,7 +45,7 @@
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{NRO_ODT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="85" y="58" width="85" height="20"/>
+				<reportElement x="85" y="52" width="85" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -59,7 +59,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="67" y="93" width="46" height="20"/>
+				<reportElement x="67" y="89" width="46" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -73,7 +73,7 @@
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{PIEZAS}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="329" y="86" width="78" height="28"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="322" y="86" width="82" height="28"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -93,15 +93,15 @@
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{NRO_REMITO}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="453" y="90" width="119" height="20"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="438" y="82" width="134" height="28"/>
 				<textElement>
-					<font size="13" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{COLOR}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="57" y="122" width="81" height="42"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="57" y="118" width="81" height="42"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -115,7 +115,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{MAQUINA}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="411" y="123" width="58" height="20"/>
+				<reportElement x="414" y="123" width="58" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
@@ -123,7 +123,7 @@
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="519" y="122" width="53" height="20"/>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font size="13" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{ANCHO_FINAL}]]></textFieldExpression>

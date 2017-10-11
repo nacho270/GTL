@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odt-procedimiento_resumen" pageWidth="612" pageHeight="1008" columnWidth="515" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="424"/>
+	<property name="ireport.y" value="416"/>
 	<parameter name="RESUMEN_QUIMICOS" class="java.lang.String"/>
 	<parameter name="RESUMEN_ALGODON" class="java.lang.String"/>
 	<parameter name="RESUMEN_POLIESTER" class="java.lang.String"/>
@@ -13,7 +13,7 @@
 	<detail>
 		<band height="747" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="200" y="713" width="162" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="200" y="680" width="162" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="0.0"/>
@@ -27,7 +27,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_POLIESTER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="18" y="713" width="148" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="18" y="680" width="148" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="0.0"/>
@@ -41,7 +41,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_QUIMICOS}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="401" y="713" width="153" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="401" y="680" width="153" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="0.0"/>
@@ -55,56 +55,56 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{RESUMEN_ALGODON}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="16" y="686" width="22" height="20"/>
+				<reportElement x="16" y="653" width="22" height="20"/>
 				<textElement textAlignment="Right">
 					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CL:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="42" y="686" width="38" height="20"/>
+				<reportElement x="42" y="653" width="38" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{NRO_CLIENTE}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="401" y="686" width="27" height="20"/>
+				<reportElement x="401" y="653" width="27" height="20"/>
 				<textElement textAlignment="Right">
 					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[KG:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="432" y="686" width="50" height="20"/>
+				<reportElement x="432" y="653" width="50" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{KILOS}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="144" y="686" width="224" height="20"/>
-				<textElement>
-					<font size="13" isBold="true"/>
+				<reportElement x="186" y="653" width="199" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{COLOR}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="86" y="686" width="54" height="20"/>
+				<reportElement x="129" y="653" width="54" height="20"/>
 				<textElement textAlignment="Right">
 					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[COLOR:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="529" y="686" width="36" height="20"/>
+				<reportElement x="529" y="653" width="36" height="20"/>
 				<textElement>
 					<font size="13" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{USUARIO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="491" y="686" width="34" height="20"/>
+				<reportElement x="491" y="653" width="34" height="20"/>
 				<textElement textAlignment="Right">
 					<font size="13" isBold="true"/>
 				</textElement>

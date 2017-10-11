@@ -68,6 +68,7 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		for (CorreccionFacturaProveedor cfp : remitoSalida.getCorreccionesProvGeneradas()) {
 			cfp.getFacturas().size();
 		}
+		doEagerDibujo(remitoSalida);
 	}
 
 	public RemitoSalida getByNroRemitoConPiezasYProductos(Integer nroRemito) {

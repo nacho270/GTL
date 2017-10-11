@@ -135,12 +135,14 @@ public class JDialogSeleccionarRemitoEntrada extends JDialog {
 			pnlOdt.add(getPanReferenciaRemitosExternos(), createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
 			getTabbedPane().addTab("ODT", pnlOdt);
 			
-			JPanel pnlDibujos = new JPanel();
-			JScrollPane scrollPaneDibujos = new JScrollPane(getTablaDibujos());
-			scrollPaneDibujos.setBorder(BorderFactory.createTitledBorder("Dibujos"));
-			pnlDibujos.add(scrollPaneDibujos, createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
-
-			getTabbedPane().addTab("Dibujos", pnlDibujos);
+			if(!GenericUtils.isSistemaTest()) {
+				JPanel pnlDibujos = new JPanel();
+				JScrollPane scrollPaneDibujos = new JScrollPane(getTablaDibujos());
+				scrollPaneDibujos.setBorder(BorderFactory.createTitledBorder("Dibujos"));
+				pnlDibujos.add(scrollPaneDibujos, createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 1, 1, 1, 1));
+				getTabbedPane().addTab("Dibujos", pnlDibujos);
+			}
+			
 			panDetalle.add(getTabbedPane(),  createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 3, 1, 1, 1));
 		}
 		return panDetalle;

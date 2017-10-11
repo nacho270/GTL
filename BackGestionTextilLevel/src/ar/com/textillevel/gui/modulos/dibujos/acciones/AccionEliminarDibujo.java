@@ -9,6 +9,7 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRoll
 import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
+import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -65,6 +66,7 @@ public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 
 	@Override
 	public boolean esValida(AccionEvent<DibujoEstampado> e) {
-		return e.getSelectedElements().size() == 1;
+		return e.getSelectedElements().size() == 1 && e.getSelectedElements().get(0).getEstado() != EEstadoDibujo.SALIDA;
 	}
+
 }

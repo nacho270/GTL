@@ -20,6 +20,7 @@ import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogCargaFactura;
 import ar.com.textillevel.gui.acciones.JDialogQuestionNumberInput;
+import ar.com.textillevel.gui.acciones.impresionremito.ImprimirRemitoHandler;
 import ar.com.textillevel.gui.acciones.remitosalida.JDialogAgregarRemitoSalida;
 import ar.com.textillevel.gui.acciones.remitosalida.JDialogAgregarRemitoSalidaDibujo;
 import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
@@ -127,7 +128,11 @@ public class IngresoRemitoSalidaNormalHandler {
 			dialog.setVisible(true);
 			if(dialog.isAcepto()) {
 				GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).saveRemitoSalidaDibujo(dialog.getRemitoSalida(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-				FWJOptionPane.showInformationMessage(null, "El remito " + lastNroRemito + " ha sido creado exitosamente.", "Informacion");
+				FWJOptionPane.showInformationMessage(owner, "El remito " + lastNroRemito + " ha sido creado exitosamente.", "Informacion");
+				if(FWJOptionPane.showQuestionMessage(owner, "Desea imprimir?", "Pregunta") == FWJOptionPane.YES_OPTION) {
+					ImprimirRemitoHandler imprimirRemitoHandler = new ImprimirRemitoHandler(dialog.getRemitoSalida(), GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getNroSucursal(), null);
+					imprimirRemitoHandler.imprimir();
+				}
 				return true;
 			}
 			return false;
