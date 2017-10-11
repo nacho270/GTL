@@ -101,6 +101,7 @@ import ar.com.textillevel.gui.acciones.impresionfactura.ImpresionFacturaHandler;
 import ar.com.textillevel.gui.acciones.remitosalida.RemitoSalidaLinkeableLabel;
 import ar.com.textillevel.gui.modulos.dibujos.gui.JDialogAgregarModificarDibujoEstampado;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.NroDibujoEstampadoTracker;
 import ar.com.textillevel.gui.util.ProductosAndPreciosHelper;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
@@ -1772,6 +1773,7 @@ public class JDialogCargaFactura extends JDialog {
 		boolean cilindrosValidos = true;
 		List<DibujoEstampado> dibujosAPersistir = Lists.newArrayList();
 		if (getRemitos() == null || getRemitos().isEmpty()) {
+			
 			int contador = 0;
 			for (ItemFactura itf : getFactura().getItems()) {
 				if ( (itf instanceof ItemFacturaPrecioMateriaPrima) && ((ItemFacturaPrecioMateriaPrima)itf).getPrecioMateriaPrima().getMateriaPrima().getTipo() == ETipoMateriaPrima.CILINDRO) {
@@ -1779,17 +1781,19 @@ public class JDialogCargaFactura extends JDialog {
 				}
 			}
 			if (contador > 0) {
+				NroDibujoEstampadoTracker nroDibujoTracker = new NroDibujoEstampadoTracker();
 				FWJOptionPane.showWarningMessage(JDialogCargaFactura.this, "Se han detectado " + contador + " cilindro/s. Debe cargar los dibujos.", "Advertencia");
 				do {
-					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador, null);
+					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador, null, nroDibujoTracker);
 					dialog.seleccionDibujoExistente(getFactura().getCliente());
+					dialog.setVisible(true);
 					if (dialog.isAcepto()) {
 						DibujoEstampado de = dialog.getDibujoActual();
 						de.setEstado(EEstadoDibujo.EN_STOCK);
 						dibujosAPersistir.add(de);
 						contador -= de.getCantidadColores();
+						nroDibujoTracker.putNro(de.getNroDibujo());
 					} else {
-						dialog.setVisible(true);
 						if (dialog.isAcepto()) {
 							DibujoEstampado de = dialog.getDibujoActual();
 							de.setCliente(getFactura().getCliente());
@@ -1800,6 +1804,7 @@ public class JDialogCargaFactura extends JDialog {
 						}
 					}
 				}while(contador > 0 && cilindrosValidos);
+				nroDibujoTracker.clear(); //por las dudas!
 			}
 		}
 		if (!cilindrosValidos) {

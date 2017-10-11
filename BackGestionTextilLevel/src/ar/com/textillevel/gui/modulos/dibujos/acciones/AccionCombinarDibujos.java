@@ -32,7 +32,7 @@ public class AccionCombinarDibujos extends Accion<DibujoEstampado> {
 		dibujosCombinados.add(d1);		
 		DibujoEstampado d2 = e.getSelectedElements().get(1);
 		dibujosCombinados.add(d2);		
-		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), null, d1.getCantidadColores() + d2.getCantidadColores());
+		JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(e.getSource().getFrame(), null, d1.getCantidadColores() + d2.getCantidadColores(), null);
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			try {

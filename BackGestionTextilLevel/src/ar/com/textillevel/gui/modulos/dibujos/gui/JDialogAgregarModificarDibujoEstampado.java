@@ -1,5 +1,7 @@
 package ar.com.textillevel.gui.modulos.dibujos.gui;
 
+import static ar.com.textillevel.gui.util.GenericUtils.createGridBagConstraints;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -39,6 +41,8 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
+import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
+
 import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
@@ -53,12 +57,10 @@ import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.articulos.VarianteEstampado;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
+import ar.com.textillevel.gui.util.NroDibujoEstampadoTracker;
 import ar.com.textillevel.gui.util.dialogs.JDialogEditarVariante;
 import ar.com.textillevel.gui.util.dialogs.JFileChooserImage;
 import ar.com.textillevel.util.GTLBeanFactory;
-
-import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
-import static ar.com.textillevel.gui.util.GenericUtils.createGridBagConstraints;
 
 public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
@@ -92,23 +94,25 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	private Frame padre;
 	private boolean esModificacion;
 	private Integer nroDibujoOriginal;
+	private NroDibujoEstampadoTracker nroDibujoTracker;
 
 	public JDialogAgregarModificarDibujoEstampado(Frame padre) {
-		this(padre, new DibujoEstampado(), false, null, null);
+		this(padre, new DibujoEstampado(), false, null, null, null);
 	}
 
-	public JDialogAgregarModificarDibujoEstampado(Frame padre, Integer maximaCantidadColores, Integer nroDibujoForce) {
-		this(padre, new DibujoEstampado(), false, maximaCantidadColores, nroDibujoForce);
+	public JDialogAgregarModificarDibujoEstampado(Frame padre, Integer maximaCantidadColores, Integer nroDibujoForce, NroDibujoEstampadoTracker nroDibujoTracker) {
+		this(padre, new DibujoEstampado(), false, maximaCantidadColores, nroDibujoForce, nroDibujoTracker);
 	}
 
-	public JDialogAgregarModificarDibujoEstampado(Frame padre, DibujoEstampado dibujo, boolean consulta, Integer cantidadColores, Integer nroDibujoForce) {
-		super(padre);
+	public JDialogAgregarModificarDibujoEstampado(Frame padre, DibujoEstampado dibujo, boolean consulta, Integer cantidadColores, Integer nroDibujoForce, NroDibujoEstampadoTracker nroDibujoTracker) {
+		super(padre, true);
 		this.padre = padre;
 		this.dibujoActual = dibujo;
 		this.consulta = consulta;
 		this.cantidadColores = cantidadColores;
 		this.esModificacion = getDibujoActual().getId() != null;
 		this.nroDibujoOriginal = getDibujoActual().getNroDibujo();
+		this.nroDibujoTracker = nroDibujoTracker;
 		setUpComponentes();
 		setUpScreen();
 		cargarDatos();
@@ -177,17 +181,22 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 							getTxtNroDibujo().setText(nroDibujoOriginal.toString());
 						} else {
 							if(FWJOptionPane.showQuestionMessage(JDialogAgregarModificarDibujoEstampado.this, StringW.wordWrap("¿Está seguro que desea cambiar el número de dibujo?"), "Atención") == FWJOptionPane.YES_OPTION) {
-								getTxtNroDibujo().setText(getDibujoEstampadoFacadeRemote().getProximoNroDibujo(nro).toString());
+								getTxtNroDibujo().setText(getProxNroDibujo(nro).toString());
 							}
 						}
 					} else {
-						getTxtNroDibujo().setText(getDibujoEstampadoFacadeRemote().getProximoNroDibujo(nro).toString());
+						getTxtNroDibujo().setText(getProxNroDibujo(nro).toString());
 					}
 				}
 			}
 
+
 		});
 		
+	}
+
+	private Integer getProxNroDibujo(Integer nro) {
+		return getDibujoEstampadoFacadeRemote().getProximoNroDibujo(nro) + getNroDibujoTracker().getCantidadByNro(nro);
 	}
 
 	private int getNroComienzoDibujo(Integer nroDibujo) {
@@ -326,7 +335,7 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 			btnAgregarImagen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JFileChooserImage jFC = new JFileChooserImage();
-					jFC.addFilter("Solo imagenes", new String[] { "gif", "jpg", "png" });
+					jFC.addFilter("Solo imágenes", new String[] { "gif", "jpg", "png" });
 					try {
 						File file = new File(getPathAnterior());
 						jFC.setCurrentDirectory(file.getParentFile());
@@ -445,13 +454,17 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		if (cmbComienzoNroDibujo == null) {
 			cmbComienzoNroDibujo = new JComboBox();
 			List<Integer> nros = new ArrayList<Integer>();
-			for(int i=1;i<8;i++) {
+			for(int i=1;i<=Math.min(nvl(this.cantidadColores), 7);i++) {
 				nros.add(i);
 			}
 			GuiUtil.llenarCombo(cmbComienzoNroDibujo, nros, true);
 			cmbComienzoNroDibujo.setSelectedIndex(-1);
 		}
 		return cmbComienzoNroDibujo;
+	}
+
+	private int nvl(Integer value) {
+		return value == null ? Integer.MAX_VALUE : value;
 	}
 
 	private FWJNumericTextField getTxtNroDibujo() {
@@ -692,6 +705,13 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
 	public Integer getNroDibujoOriginal() {
 		return nroDibujoOriginal;
+	}
+
+	private NroDibujoEstampadoTracker getNroDibujoTracker() {
+		if(this.nroDibujoTracker == null) {
+			this.nroDibujoTracker = new NroDibujoEstampadoTracker();
+		}
+		return nroDibujoTracker;
 	}
 
 }
