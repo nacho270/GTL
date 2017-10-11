@@ -114,6 +114,9 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("odt", odt);
 		List<RemitoSalida> remitos = q.getResultList();
+		for(RemitoSalida rs : remitos) {
+			doEager(rs);
+		}
 		return remitos;
 	}
 
