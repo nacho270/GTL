@@ -216,8 +216,13 @@ public class PanTablaFormulasTenido extends PanelTablaFormula<FormulaTenidoClien
 					ok = true;
 					break;
 				}
-				ImprimirODTHandler impHandler = new ImprimirODTHandler(odtDummy, owner, EFormaImpresionODT.RESUMEN_ARTIULOS, formula);
-				impHandler.imprimir();
+				String[] values = {"ODT", "MUESTRA"};
+				Object selected = JOptionPane.showInputDialog(null, "ES ODT O MUESTRA?", "Opciones", JOptionPane.DEFAULT_OPTION, null, values, "ODT");
+				if (selected != null ){//null if the user cancels. 
+				    String selectedString = selected.toString();
+				    ImprimirODTHandler impHandler = new ImprimirODTHandler(odtDummy, owner, EFormaImpresionODT.RESUMEN_ARTIULOS, formula, selectedString.equalsIgnoreCase(values[1]));
+					impHandler.imprimir();
+				}
 			}
 		} while(!ok);
 	}

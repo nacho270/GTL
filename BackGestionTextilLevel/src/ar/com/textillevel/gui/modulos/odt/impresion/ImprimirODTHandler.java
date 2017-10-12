@@ -47,13 +47,16 @@ public class ImprimirODTHandler {
 	private static final String ARCHIVO_JASPER = "/ar/com/textillevel/reportes/odt.jasper";
 	private static final String ARCHIVO_JASPER_SECUENCIA = "/ar/com/textillevel/reportes/odt-secuencia.jasper";
 	private static final String ARCHIVO_JASPER_PROCEDIMIENTO = "/ar/com/textillevel/reportes/odt-procedimiento.jasper";
-	private static final String ARCHIVO_JASPER_RESUMEN_ARTICULO = "/ar/com/textillevel/reportes/odt-procedimiento_resumen_x_articulo.jasper";
-//	private Frame frameOwner;
+	private static final String ARCHIVO_JASPER_RESUMEN_ARTICULO_ODT = "/ar/com/textillevel/reportes/odt-procedimiento_resumen_x_articulo.jasper";
+	private static final String ARCHIVO_JASPER_RESUMEN_ARTICULO_MUESTRA = "/ar/com/textillevel/reportes/odt-procedimiento_resumen_x_articulo_para_muestra.jasper";
+
+	//	private Frame frameOwner;
 	private Window dialogOwner;
 	private final OrdenDeTrabajo odt;
 	private EFormaImpresionODT formaImpresion;
 	private FormulaCliente formulaCliente;
-
+	private boolean muestra = false;
+	
 	public ImprimirODTHandler(OrdenDeTrabajo odt, Frame frameOwner, EFormaImpresionODT formaImpresionForzada, FormulaCliente formulaCliente) {
 		this.odt = odt;
 		this.formulaCliente = formulaCliente;
@@ -69,6 +72,22 @@ public class ImprimirODTHandler {
 		}
 	}
 
+	public ImprimirODTHandler(OrdenDeTrabajo odt, Frame frameOwner, EFormaImpresionODT formaImpresionForzada, FormulaCliente formulaCliente, Boolean muestra) {
+		this.odt = odt;
+		this.formulaCliente = formulaCliente;
+//		this.frameOwner = frameOwner;
+		if(formaImpresionForzada == null) {
+			formaImpresion = seleccionarFormaImpresion(frameOwner);
+			if(formaImpresion == null){
+				return;
+			}
+		} else {
+			this.muestra = muestra;
+			formaImpresion = formaImpresionForzada;
+			validar(frameOwner, formaImpresion);
+		}
+	}
+	
 	private EFormaImpresionODT seleccionarFormaImpresion(Window parent) {
 		EFormaImpresionODT forma = null;
 		boolean valida = false;
@@ -155,7 +174,11 @@ public class ImprimirODTHandler {
 			}else if(formaImpresion == EFormaImpresionODT.ENCABEZADO_PROCEDIMIENTO){
 				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_PROCEDIMIENTO);
 			} else if(formaImpresion == EFormaImpresionODT.RESUMEN_ARTIULOS){
-				reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_ARTICULO);
+				if (muestra) {
+					reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_ARTICULO_MUESTRA);
+				} else{
+					reporte = JasperHelper.loadReporte(ARCHIVO_JASPER_RESUMEN_ARTICULO_ODT);
+				}
 			}
 			ODTTO odtto = new ODTTO(this.odt,formaImpresion, this.formulaCliente);
 			try {
