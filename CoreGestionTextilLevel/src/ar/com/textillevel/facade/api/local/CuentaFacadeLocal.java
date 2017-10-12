@@ -68,5 +68,6 @@ public interface CuentaFacadeLocal {
 	public CuentaTO getCuentaTO(Cliente cliente, int cantMovimientos);
 	public CuentaTO getCuentaTO(Proveedor proveedor, int cantidadMovimientos);
 
-	public void crearMovimientoDebeRemitoSalida(RemitoSalida remitoSalida);
+	public void crearMovimientoDebeRemitoSalidaDevolucion(RemitoSalida remitoSalida);
+	public void crearMovimientoDebeRemitoSalidaDibujo(RemitoSalida remitoSalida);
 }

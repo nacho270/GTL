@@ -64,9 +64,14 @@ import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.gente.IAgendable;
 import ar.com.textillevel.entidades.gente.Proveedor;
+import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.CuentaFacadeRemote;
+
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 
 @Stateless
 public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
@@ -214,13 +219,27 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		return nd;
 	}
 	
-	public void crearMovimientoDebeRemitoSalida(RemitoSalida remitoSalida) {
+	public void crearMovimientoDebeRemitoSalidaDevolucion(RemitoSalida remitoSalida) {
+		crearMovimientoDebeRemitoSalida(remitoSalida, DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - DEVOLUCION - RTO " + remitoSalida.getNroRemito());
+	}
+	
+	public void crearMovimientoDebeRemitoSalidaDibujo(RemitoSalida remitoSalida) {
+		final String dibujos = FluentIterable.from(remitoSalida.getDibujoEstampados()).transform(new Function<DibujoEstampado, String>() {
+			@Override
+			public String apply(DibujoEstampado dibujo) {
+				return dibujo.toString();
+			}
+		}).join(Joiner.on(','));
+		crearMovimientoDebeRemitoSalida(remitoSalida, DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - RTO " + remitoSalida.getNroRemito() + " - DIBUJO(s): " + dibujos);
+	}
+	
+	private void crearMovimientoDebeRemitoSalida(RemitoSalida remitoSalida, String descripcion) {
 		CuentaCliente cuenta = getCuentaClienteByIdCliente(remitoSalida.getCliente().getId());
 		MovimientoDebe md = new MovimientoDebe();
 		md.setMonto(BigDecimal.ZERO);
 		md.setCuenta(cuenta);
 		md.setRemitoSalida(remitoSalida);
-		String descripcionResumen = DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - DEVOLUCION - RTO " + remitoSalida.getNroRemito();
+		String descripcionResumen = descripcion;
 		md.setDescripcionResumen(descripcionResumen);
 		md.setFechaHora(DateUtil.getAhora());
 		movimientoDao.save(md);

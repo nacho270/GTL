@@ -148,7 +148,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				&& (odts.get(0).getIProductoParaODT().getTipo() == ETipoProducto.REPROCESO_SIN_CARGO ||
 						odts.get(0).getIProductoParaODT().getTipo()==ETipoProducto.DEVOLUCION);
 		if (esReproceso) {
-			cuentaFacade.crearMovimientoDebeRemitoSalida(remitoSalida);
+			cuentaFacade.crearMovimientoDebeRemitoSalidaDevolucion(remitoSalida);
 			for (OrdenDeTrabajo odt : odts) {
 				odt.setEstadoODT(EEstadoODT.FACTURADA);
 				odtDAO.save(odt);
@@ -752,6 +752,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 			dibujoDao.save(de);
 		}
 		if(isAlta) {
+			cuentaFacade.crearMovimientoDebeRemitoSalidaDibujo(remitoSalida);
 			auditoriaFacade.auditar(usuario, "Creacion del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.ALTA, remitoSalida);
 		} else {
 			auditoriaFacade.auditar(usuario, "Modificación del remito de salida N°: " + remitoSalida.getNroRemito(), EnumTipoEvento.MODIFICACION, remitoSalida);
