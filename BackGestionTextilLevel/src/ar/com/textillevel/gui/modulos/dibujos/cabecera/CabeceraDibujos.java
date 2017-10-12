@@ -11,6 +11,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,6 +30,7 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 
 	private FWJNumericTextField txtBusquedaCliente;
 	private JComboBox cmbTipoBusquedaCliente;
+	private JCheckBox chkIncluir01;
 	private JComboBox cmbEstadoDibujo;
 	private ModeloCabeceraDibjuos modeloCabeceraDibujos;
 
@@ -40,6 +42,7 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 		Integer nroCliente = getTxtBusquedaCliente().getValueWithNull();
 		modeloCabeceraDibujos.setNroCliente(nroCliente.equals(0) ? null : nroCliente);
 		modeloCabeceraDibujos.setEstadoDibujo(getCmbEstadoDibujo().getSelectedItem().equals("TODOS") ?null:(EEstadoDibujo)getCmbEstadoDibujo().getSelectedItem());
+		modeloCabeceraDibujos.setIncluir01(getChkIncluir01().isSelected());
 		return modeloCabeceraDibujos;
 	}
 
@@ -51,6 +54,8 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 		panelCliente.add(new JLabel("Cliente: "));
 		panelCliente.add(getCmbTipoBusquedaCliente());
 		panelCliente.add(getTxtBusquedaCliente());
+		panelCliente.add(new JLabel("Incluir 01?"));
+		panelCliente.add(getChkIncluir01());
 		panelCliente.add(new JLabel("Estado dibujo: "));
 		panelCliente.add(getCmbEstadoDibujo());
 		add(panelCliente, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.LINE_END, new Insets(15, 5, 0, 5), 0, 0));
@@ -61,6 +66,7 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 			ModeloCabeceraDibjuos model = getModel();
 			model.setNroCliente(getTxtBusquedaCliente().getValueWithNull());
 			model.setEstadoDibujo(getCmbEstadoDibujo().getSelectedItem().equals("TODOS") ?null:(EEstadoDibujo)getCmbEstadoDibujo().getSelectedItem());
+			model.setIncluir01(getChkIncluir01().isSelected());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -128,5 +134,13 @@ public class CabeceraDibujos extends Cabecera<ModeloCabeceraDibjuos> {
 			});
 		}
 		return cmbEstadoDibujo;
+	}
+
+	private JCheckBox getChkIncluir01() {
+		if (chkIncluir01 == null) {
+			chkIncluir01 = new JCheckBox();
+			chkIncluir01.setSelected(true);
+		}
+		return chkIncluir01;
 	}
 }

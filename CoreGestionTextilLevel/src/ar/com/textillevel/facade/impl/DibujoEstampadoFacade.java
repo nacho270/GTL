@@ -92,8 +92,8 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	}
 
 	@Override
-	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo) {
-		return dibujoEstampadoDAOLocal.getByNroClienteYEstado(nroCliente, estadoDibujo);
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo, Boolean incluir01) {
+		return dibujoEstampadoDAOLocal.getByNroClienteYEstado(nroCliente, estadoDibujo, incluir01);
 	}
 
 	@Override

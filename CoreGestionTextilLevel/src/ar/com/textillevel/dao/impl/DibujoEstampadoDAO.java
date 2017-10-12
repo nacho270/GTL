@@ -50,12 +50,22 @@ public class DibujoEstampadoDAO extends GenericDAO<DibujoEstampado, Integer> imp
 	}
 
 	@Override
-	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo) {
-		Query query = getEntityManager().createQuery(" SELECT de FROM DibujoEstampado de " +
-													 " WHERE 1 = 1" +
-													 (nroCliente != null ? " AND de.cliente.nroCliente = :nroCliente" : "") +
-													 (estadoDibujo != null ? " AND de.idEstado = :idEstado" : "") +
-													 " ORDER BY de.nroDibujo ASC ");
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo, Boolean incluir01) {
+		final StringBuilder sb = new StringBuilder(" SELECT de FROM DibujoEstampado de LEFT JOIN FETCH de.cliente WHERE 1 = 1 ");
+		if(estadoDibujo != null){
+			sb.append(" AND de.idEstado = :idEstado");
+		}
+		if (incluir01) {
+			if(nroCliente != null){
+				sb.append(" AND( de.cliente IS NULL OR de.cliente.nroCliente = :nroCliente ) ");
+			} else {
+				sb.append(" AND de.cliente IS NULL ");
+			}
+		} else if(nroCliente != null){
+			sb.append(" AND de.cliente.nroCliente = :nroCliente");
+		}
+		sb.append(" ORDER BY de.nroDibujo ASC ");
+		Query query = getEntityManager().createQuery(sb.toString());
 		if (nroCliente != null) {
 			query.setParameter("nroCliente", nroCliente);
 		}

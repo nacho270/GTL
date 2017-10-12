@@ -41,8 +41,6 @@ import javax.swing.JTextField;
 
 import org.apache.taglibs.string.util.StringW;
 
-import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
-
 import ar.com.fwcommon.componentes.FWJNumericTextField;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
@@ -61,6 +59,8 @@ import ar.com.textillevel.gui.util.NroDibujoEstampadoTracker;
 import ar.com.textillevel.gui.util.dialogs.JDialogEditarVariante;
 import ar.com.textillevel.gui.util.dialogs.JFileChooserImage;
 import ar.com.textillevel.util.GTLBeanFactory;
+
+import com.sun.media.imageioimpl.plugins.bmp.BMPImageReader;
 
 public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
@@ -204,7 +204,7 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 	}
 
 	public void seleccionDibujoExistente(Cliente cliente) {
-		List<DibujoEstampado> dibujosCliente = getDibujoEstampadoFacadeRemote().getByNroClienteYEstado(cliente.getNroCliente(), EEstadoDibujo.SALIDA);
+		List<DibujoEstampado> dibujosCliente = getDibujoEstampadoFacadeRemote().getByNroClienteYEstado(cliente.getNroCliente(), EEstadoDibujo.SALIDA, false);
 		if (dibujosCliente != null && !dibujosCliente.isEmpty()) {
 			for (Iterator<DibujoEstampado> it = dibujosCliente.iterator(); it.hasNext();) {
 				DibujoEstampado de = it.next();

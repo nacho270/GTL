@@ -5,6 +5,7 @@ import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 public class ModeloCabeceraDibjuos {
 
 	private Integer nroCliente;
+	private boolean incluir01;
 	private EEstadoDibujo estadoDibujo;
 
 	public Integer getNroCliente() {
@@ -21,6 +22,14 @@ public class ModeloCabeceraDibjuos {
 
 	public void setEstadoDibujo(EEstadoDibujo estadoDibujo) {
 		this.estadoDibujo = estadoDibujo;
+	}
+
+	public boolean isIncluir01() {
+		return incluir01;
+	}
+
+	public void setIncluir01(boolean incluir01) {
+		this.incluir01 = incluir01;
 	}
 
 }

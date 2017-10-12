@@ -23,7 +23,7 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro);
 
-	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo);
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo, Boolean incluir01);
 
 	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente);
 

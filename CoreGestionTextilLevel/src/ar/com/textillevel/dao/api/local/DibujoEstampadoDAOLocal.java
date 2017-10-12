@@ -16,7 +16,7 @@ public interface DibujoEstampadoDAOLocal extends DAOLocal<DibujoEstampado, Integ
 
 	public boolean existsNroDibujo(Integer idDibujo, Integer nro);
 
-	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo);
+	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo, Boolean incluir01);
 
 	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente);
 
