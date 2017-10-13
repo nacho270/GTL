@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -28,11 +29,14 @@ import ar.com.fwcommon.componentes.VerticalFlowLayout;
 import ar.com.fwcommon.templates.modulo.cabecera.Cabecera;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.StringUtil;
+import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.gente.Persona;
 import ar.com.textillevel.entidades.gente.Proveedor;
+import ar.com.textillevel.facade.api.remote.BancoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
@@ -57,10 +61,13 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 	private JComboBox cmbEstadoCheque;
 	private JComboBox cmbTipoBusquedaCliente;
 	private JComboBox cmbTipoFecha;
+	private JComboBox cmbBancos;
 	private FWJTextField txtBusquedaCliente;
 	private final JButton btnBuscar;
 	private ModeloCabeceraCheques modeloCabeceraCheques;
 	private JCheckBox chkUsarFecha;
+	private FWJTextField txtMontoDesde;
+	private FWJTextField txtMontoHasta;
 
 	@Override
 	public ModeloCabeceraCheques getModel() {
@@ -75,6 +82,11 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 			modeloCabeceraCheques.setFechaDesde(null);
 			modeloCabeceraCheques.setFechaHasta(null);
 		}
+		if (! StringUtil.isNullOrEmpty(getTxtMontoDesde().getText()) && !StringUtil.isNullOrEmpty(getTxtMontoHasta().getText())) {
+			modeloCabeceraCheques.setMontoDesde(Double.valueOf(getTxtMontoDesde().getText().trim().replace(",", ".")));
+			modeloCabeceraCheques.setMontoHasta(Double.valueOf(getTxtMontoHasta().getText().trim().replace(",", ".")));
+		}
+		modeloCabeceraCheques.setIdBanco(getCmbBancos().getSelectedItem().equals("TODOS") ? null : ((Banco) getCmbBancos().getSelectedItem()).getId());
 		modeloCabeceraCheques.setEstadoCheque(getCmbEstadoCheque().getSelectedItem().equals("TODOS") ?null:(EEstadoCheque)getCmbEstadoCheque().getSelectedItem());
 		modeloCabeceraCheques.setTipoFecha((EnumTipoFecha)getCmbTipoFecha().getSelectedItem());
 		if(((String)getCmbTipoBusquedaCliente().getSelectedItem()).equalsIgnoreCase("NUMERACION INTERNA")){
@@ -118,23 +130,33 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 		JPanel panelAbajo = new JPanel();
 		panelAbajo.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
 		
+		JPanel panelMasAbajo = new JPanel();
+		panelMasAbajo.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
+		
 		panel2.setBorder(BorderFactory.createEtchedBorder());
 		panelArriba.add(new JLabel("Cliente: "));
 		panelArriba.add(getCmbTipoBusquedaCliente());
 		panelArriba.add(getTxtBusquedaCliente());
 		panelArriba.add(new JLabel("Estado cheque: "));
 		panelArriba.add(getCmbEstadoCheque());
+		panelArriba.add(new JLabel("Banco: "));
+		panelArriba.add(getCmbBancos());
 		panelAbajo.add(new JLabel("Tipo de fecha: "));
 		panelAbajo.add(getCmbTipoFecha());
 		panelAbajo.add(getDPFechaDesde());
 		panelAbajo.add(getDPFechaHasta());
 		panelAbajo.add(getChkUsarFecha());
 		btnBuscar = new JButton("Buscar");
-		panelAbajo.add(btnBuscar);
+		panelMasAbajo.add(new JLabel("Monto desde: "));
+		panelMasAbajo.add(getTxtMontoDesde());
+		panelMasAbajo.add(new JLabel("Monto Hasta: "));
+		panelMasAbajo.add(getTxtMontoHasta());
+		panelMasAbajo.add(btnBuscar);
 		
 		panel2.add(panelArriba);
 		panel2.add(panelAbajo);
-		
+		panel2.add(panelMasAbajo);
+
 		btnBuscar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent evt) {
@@ -156,6 +178,25 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 						}else {
 							if(!GenericUtils.esNumerico(getTxtBusquedaCliente().getText())){
 								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "Solo puede ingresar números para esta busqueda", "Error");
+								return;
+							}
+						}
+						if(StringUtil.isNullOrEmpty(getTxtMontoDesde().getText()) ^ StringUtil.isNullOrEmpty(getTxtMontoHasta().getText())) {
+							FWJOptionPane.showErrorMessage(CabeceraCheques.this, "Debe ingresar ambos montos para realizar utilizarlos como criterio", "Error");
+							return;
+						} else if(!StringUtil.isNullOrEmpty(getTxtMontoDesde().getText()) && !StringUtil.isNullOrEmpty(getTxtMontoHasta().getText())) {
+							if (!GenericUtils.esNumerico(getTxtMontoDesde().getText().trim())) {
+								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "El campo 'monto desde' es numerico", "Error");
+								return;
+							}
+							if (!GenericUtils.esNumerico(getTxtMontoHasta().getText().trim())) {
+								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "El campo 'monto hasta' es numerico", "Error");
+								return;
+							}
+							Double montoDesde = Double.valueOf(getTxtMontoDesde().getText().trim().replace(",", "."));
+							Double montoHasta = Double.valueOf(getTxtMontoHasta().getText().trim().replace(",", "."));
+							if(montoDesde > montoHasta) {
+								FWJOptionPane.showErrorMessage(CabeceraCheques.this, "El 'monto desde' debe ser mayor al 'monto hasta'", "Error");
 								return;
 							}
 						}
@@ -345,5 +386,33 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 			chkUsarFecha.setSelected(true);
 		}
 		return chkUsarFecha;
+	}
+
+	public JComboBox getCmbBancos() {
+		if (cmbBancos == null) {
+			cmbBancos = new JComboBox();
+			List<Banco> bancos = GTLBeanFactory.getInstance().getBean2(BancoFacadeRemote.class).getAllOrderByName();
+			cmbBancos.addItem("TODOS");
+			for(Banco b : bancos) {
+				cmbBancos.addItem(b);
+			}
+		}
+		return cmbBancos;
+	}
+
+	public FWJTextField getTxtMontoDesde() {
+		if (txtMontoDesde == null) {
+			txtMontoDesde = new FWJTextField();
+			txtMontoDesde.setPreferredSize(new Dimension(100, 20));
+		}
+		return txtMontoDesde;
+	}
+
+	public FWJTextField getTxtMontoHasta() {
+		if (txtMontoHasta == null) {
+			txtMontoHasta = new FWJTextField();
+			txtMontoHasta.setPreferredSize(new Dimension(100, 20));
+		}
+		return txtMontoHasta;
 	}
 }

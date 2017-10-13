@@ -17,6 +17,9 @@ public class ModeloCabeceraCheques {
 	private String nombrePersona;
 	private EnumTipoFecha tipoFecha;
 	private String numeroCheque;
+	private Integer idBanco;
+	private Double montoDesde;
+	private Double montoHasta;
 
 	public Integer getPaginaActual() {
 		return paginaActual;
@@ -98,5 +101,29 @@ public class ModeloCabeceraCheques {
 	
 	public void setNombrePersona(String nombrePersona) {
 		this.nombrePersona = nombrePersona;
+	}
+
+	public Integer getIdBanco() {
+		return idBanco;
+	}
+
+	public void setIdBanco(Integer idBanco) {
+		this.idBanco = idBanco;
+	}
+
+	public Double getMontoDesde() {
+		return montoDesde;
+	}
+
+	public void setMontoDesde(Double montoDesde) {
+		this.montoDesde = montoDesde;
+	}
+
+	public Double getMontoHasta() {
+		return montoHasta;
+	}
+
+	public void setMontoHasta(Double montoHasta) {
+		this.montoHasta = montoHasta;
 	}
 }
