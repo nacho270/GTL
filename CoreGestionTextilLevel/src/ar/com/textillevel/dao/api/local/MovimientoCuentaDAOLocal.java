@@ -15,6 +15,7 @@ import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaber;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberProveedor;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
@@ -24,7 +25,7 @@ import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 public interface MovimientoCuentaDAOLocal extends DAOLocal<MovimientoCuenta, Integer> {
 
 	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta, 
-																	boolean ultimosMovimientos/*, boolean masAntiguoPrimero*/);
+																	boolean ultimosMovimientos/*, boolean masAntiguoPrimero*/, ETipoDocumento filtroTipoDocumento);
 	public void borrarMovimientoFactura(Integer id);
 	public MovimientoHaber getMovimientoHaberByRecibo(Integer idRecibo);
 	public MovimientoHaber getMovimientoHaberByNC(Integer idNC);	

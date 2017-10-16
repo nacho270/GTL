@@ -272,7 +272,7 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 	}
 
 	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer nroCliente, Date fechaDesde, Date fechaHasta, 
-			boolean incluirFacturasPagadas/*, boolean masAntiguoPrimero*/) {
+			boolean incluirFacturasPagadas/*, boolean masAntiguoPrimero*/, ETipoDocumento filtroTipoDocumento) {
 		Cliente clienteByNumero = clienteDao.getClienteByNumero(nroCliente);
 		if(clienteByNumero==null){
 			return null;
@@ -281,7 +281,7 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		if(cuentaCliente == null){
 			return null;
 		}
-		return movimientoDao.getMovimientosByIdClienteYFecha(cuentaCliente.getId(), fechaDesde, fechaHasta, incluirFacturasPagadas/*, masAntiguoPrimero*/);
+		return movimientoDao.getMovimientosByIdClienteYFecha(cuentaCliente.getId(), fechaDesde, fechaHasta, incluirFacturasPagadas/*, masAntiguoPrimero*/, filtroTipoDocumento);
 	}
 
 	public Map<Integer, List<Integer>> getMapaRecibosYPagosRecibos() {

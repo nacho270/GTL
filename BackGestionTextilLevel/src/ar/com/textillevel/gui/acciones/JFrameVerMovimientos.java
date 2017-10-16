@@ -150,6 +150,7 @@ public class JFrameVerMovimientos extends JFrame {
 	private JLabel lblCondicionVenta;
 	private JCheckBox chkUltimosMovimientos;
 	// private JComboBox cmbOrdenMovimientos;
+	private JComboBox cmbFiltroTipoDocumento;
 
 	private GenerarFilaMovimientoVisitor filaMovimientoVisitor;
 	private IFilaMovimientoVisitor consultaDocumentoMovimientoVisitor;
@@ -454,6 +455,8 @@ public class JFrameVerMovimientos extends JFrame {
 			JPanel panelFiltros = new JPanel();
 			panelFiltros.setLayout(new FlowLayout());
 			panelFiltros.add(getChkUltimosMovimientos());
+			panelFiltros.add(new JLabel("Tipo documento: "));
+			panelFiltros.add(getCmbFiltroTipoDocumento());
 			// panelFiltros.add(getCmbOrdenMovimientos());
 
 			panel.add(panelCliente);
@@ -503,10 +506,11 @@ public class JFrameVerMovimientos extends JFrame {
 					java.sql.Date fechaDesde = getChkUltimosMovimientos().isSelected()?null:new java.sql.Date(getDPFechaDesde().getDate().getTime());
 					java.sql.Date fechaHasta = getChkUltimosMovimientos().isSelected()?null:DateUtil.getManiana(new java.sql.Date(getDPFechaHasta().getDate().getTime() + DateUtil.ONE_DAY));
 					List<MovimientoCuenta> movs = null;
+					ETipoDocumento filtroTipoDocumento = getCmbFiltroTipoDocumento().getSelectedItem().equals("TODOS") ? null : (ETipoDocumento) getCmbFiltroTipoDocumento().getSelectedItem();
 					if(getChkUltimosMovimientos().isSelected()){
-						movs = getCuentaFacade().getMovimientosByIdClienteYFecha(idCliente, null,null,true/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
+						movs = getCuentaFacade().getMovimientosByIdClienteYFecha(idCliente, null,null,true,filtroTipoDocumento/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
 					}else{
-						movs = getCuentaFacade().getMovimientosByIdClienteYFecha(idCliente, fechaDesde,fechaHasta,false/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
+						movs = getCuentaFacade().getMovimientosByIdClienteYFecha(idCliente, fechaDesde,fechaHasta,false,filtroTipoDocumento/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
 					}
 					
 //					ESTO ES LO QUE HICIMOS EL SABADO EN LA FABRICA Y DIEGO DESPUES DIJO QUE NO FUNCIONO
@@ -538,11 +542,13 @@ public class JFrameVerMovimientos extends JFrame {
 						getBtnListadoPDF().setEnabled(habilitarBotonesImpresion);
 						llenarTablaMovimientos(movs,transporteCuenta);
 						setSaldoCuenta();
-						Map<Integer, Color> mapaColores = filaMovimientoVisitor.getMapaColores();
-						InfoCuentaTO infoCuentaTO = getCuentaFacade().getInfoReciboYPagosRecibidos(idCliente);
-						pintarRecibos(mapaColores);
-						pintarFacturasPagadas(mapaColores, infoCuentaTO);
-						pintarRecibosSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
+						if(filtroTipoDocumento == null) {
+							Map<Integer, Color> mapaColores = filaMovimientoVisitor.getMapaColores();
+							InfoCuentaTO infoCuentaTO = getCuentaFacade().getInfoReciboYPagosRecibidos(idCliente);
+							pintarRecibos(mapaColores);
+							pintarFacturasPagadas(mapaColores, infoCuentaTO);
+							pintarRecibosSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
+						}
 						getBtnEnviarExtractoCuentaPorEmail().setEnabled(true);
 					} else {
 						getBtnAgregarRecibo().setEnabled(false);
@@ -2067,6 +2073,18 @@ public class JFrameVerMovimientos extends JFrame {
 				}
 			}).setVisible(true);
 		}
+	}
+
+	private JComboBox getCmbFiltroTipoDocumento() {
+		if (cmbFiltroTipoDocumento == null) {
+			cmbFiltroTipoDocumento = new JComboBox();
+			cmbFiltroTipoDocumento.addItem("TODOS");
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.FACTURA);
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.NOTA_DEBITO);
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.RECIBO);
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.NOTA_CREDITO);
+		}
+		return cmbFiltroTipoDocumento;
 	}
 
 	// private JComboBox getCmbOrdenMovimientos() {

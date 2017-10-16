@@ -26,11 +26,14 @@ import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberPersona;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoInternoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
+
+import com.google.common.collect.Lists;
 
 @Stateless
 public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> implements MovimientoCuentaDAOLocal {
@@ -56,7 +59,8 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 	private static final int CANT_MAX_MOVS = 20;
 	
 	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta, 
-																boolean ultimosMovimientos/*, boolean masAntiguoPrimero*/) {
+																boolean ultimosMovimientos/*, boolean masAntiguoPrimero*/,
+																ETipoDocumento filtroTipoDocumento) {
 		
 		List<MovimientoCuenta> movsRet = new ArrayList<MovimientoCuenta>();
 		
@@ -119,7 +123,14 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 //				movsRet.add(m);
 //			}
 //		}
-		return movsRet;
+		if(filtroTipoDocumento == null) {
+			return movsRet;
+		}
+		MovimientosFilterVisitor mfv = new MovimientosFilterVisitor(filtroTipoDocumento);
+		for (MovimientoCuenta mc : movsRet) {
+			mc.aceptarVisitor(mfv);
+		}
+		return mfv.movimientosFiltrados;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -157,6 +168,67 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("id", id);
 		return q.executeUpdate();
+	}
+	
+	private static class MovimientosFilterVisitor implements IFilaMovimientoVisitor {
+
+		private final ETipoDocumento tipoDocumento;
+		private final List<MovimientoCuenta> movimientosFiltrados = Lists.newArrayList();
+		
+		public MovimientosFilterVisitor(ETipoDocumento tipoDocumento) {
+			this.tipoDocumento = tipoDocumento;
+		}
+
+		@Override
+		public void visit(MovimientoHaber movimiento) {
+			if ( (tipoDocumento == ETipoDocumento.RECIBO && movimiento.getRecibo() != null) || 
+				 (tipoDocumento == ETipoDocumento.NOTA_CREDITO && movimiento.getNotaCredito() != null)) {
+				movimientosFiltrados.add(movimiento);
+			}
+		}
+
+		@Override
+		public void visit(MovimientoDebe movimiento) {
+			if ( (tipoDocumento == ETipoDocumento.FACTURA && movimiento.getFactura() != null) ||
+				 (tipoDocumento == ETipoDocumento.NOTA_DEBITO && movimiento.getNotaDebito() != null) ) {
+				movimientosFiltrados.add(movimiento);
+			}
+		}
+
+		@Override
+		public void visit(MovimientoInternoCuenta movimiento) {
+			
+		}
+
+		@Override
+		public void visit(MovimientoHaberProveedor movimiento) {
+			
+		}
+
+		@Override
+		public void visit(MovimientoDebeProveedor movimiento) {
+			
+		}
+
+		@Override
+		public void visit(MovimientoHaberBanco movimiento) {
+			
+		}
+
+		@Override
+		public void visit(MovimientoDebeBanco movimiento) {
+			
+		}
+
+		@Override
+		public void visit(MovimientoDebePersona movimientoDebePersona) {
+			
+		}
+
+		@Override
+		public void visit(MovimientoHaberPersona movimientoHaberPersona) {
+			
+		}
 	}
 
 	private static class MovimientosLazyInitializer implements IFilaMovimientoVisitor {

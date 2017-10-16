@@ -13,6 +13,7 @@ import ar.com.textillevel.entidades.cuenta.CuentaCliente;
 import ar.com.textillevel.entidades.cuenta.CuentaPersona;
 import ar.com.textillevel.entidades.cuenta.CuentaProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 
 @Remote
@@ -20,7 +21,7 @@ public interface CuentaFacadeRemote {
 
 	public CuentaCliente getCuentaClienteByNroCliente(Integer nroCliente);
 	public CuentaCliente getCuentaClienteByIdCliente(Integer idCliente);
-	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer nroCliente, Date fechaDesde, Date fechaHasta, boolean incluirFacturasPagadas/*, boolean masAntiguoPrimero*/);
+	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer nroCliente, Date fechaDesde, Date fechaHasta, boolean incluirFacturasPagadas/*, boolean masAntiguoPrimero*/, ETipoDocumento filtroTipoDocumento);
 	public Map<Integer, List<Integer>> getMapaRecibosYPagosRecibos();
 
 	public InfoCuentaTO getInfoReciboYPagosRecibidos(Integer nroCliente);
