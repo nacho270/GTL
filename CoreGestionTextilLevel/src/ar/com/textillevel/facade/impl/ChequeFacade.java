@@ -92,23 +92,41 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	@EJB
 	private OrdenDePagoPersonaDAOLocal ordenDePagoPersonaDao;
 	
-	
-	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
-		return chequeDAO.getChequesPorFechaYPaginado(nroCliente, eEstadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows, tipoFecha);
+	/* BUSQUEDAS */
+	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getChequesPorFechaYPaginado(nroCliente, eEstadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows, tipoFecha, idBanco, montoDesde, montoHasta);
 	}
 	
-	public List<Cheque> getChequesPorFechaYPaginado(String numeracionCheque, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
-		return chequeDAO.getChequesPorFechaYPaginado(numeracionCheque, estadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows,tipoFecha);
+	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta){
+		return chequeDAO.getCantidadDeCheques(nroCliente, eEstadoCheque,  fechaDesde,  fechaHasta, tipoFecha, idBanco, montoDesde, montoHasta);
 	}
 	
-	public List<Cheque> getChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows , EnumTipoFecha tipoFecha) {
-		return chequeDAO.getChequesPorFechaYPaginadoPorProveedor(nombreProveedor, estadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows, tipoFecha);
+	public List<Cheque> getChequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getChequesPorNumeroDeCheque(numeroCheque, eEstadoCheque,fechaDesde,fechaHasta,tipoFecha,paginaActual,maxRows, idBanco, montoDesde, montoHasta);
+	}
+	
+	public Integer getCantidadDechequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getCantidadDechequesPorNumeroDeCheque(numeroCheque, eEstadoCheque,fechaDesde,fechaHasta,tipoFecha, idBanco, montoDesde, montoHasta);
+	}
+	
+	public List<Cheque> getChequesPorFechaYPaginado(String numeracionCheque, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getChequesPorFechaYPaginado(numeracionCheque, estadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows,tipoFecha, idBanco, montoDesde, montoHasta);
+	}
+	
+	public Integer getCantidadDeCheques(String numeracionCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getCantidadDeCheques(numeracionCheque, eEstadoCheque, fechaDesde, fechaHasta, tipoFecha, idBanco, montoDesde, montoHasta);
+	}
+	
+	public List<Cheque> getChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows , EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getChequesPorFechaYPaginadoPorProveedor(nombreProveedor, estadoCheque, fechaDesde,  fechaHasta,  paginaActual,  maxRows, tipoFecha, idBanco, montoDesde, montoHasta);
 	}
 
-	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha){
-		return chequeDAO.getCantidadDeCheques(nroCliente, eEstadoCheque,  fechaDesde,  fechaHasta, tipoFecha);
+	public Integer getCantidadDeChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		return chequeDAO.getCantidadDeChequesPorFechaYPaginadoPorProveedor(nombreProveedor, estadoCheque, fechaDesde, fechaHasta,tipoFecha, idBanco, montoDesde, montoHasta);
 	}
 
+	/* FIN BUSQUEDAS */
+	
 	public Cheque grabarCheque(Cheque cheque, String usuario) {
 		boolean mod = cheque.getId()!=null;
 		Cheque chequeAnt = null;
@@ -348,22 +366,6 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		Date fechaInicio = DateUtil.sumarDias(DateUtil.getHoy(), -1*diasEnQueVencen);
 		Date fechaFin = DateUtil.sumarDias(DateUtil.getHoy(), -1*diasEnQueVencen + diasAntes);
 		return chequeDAO.getListaDeChequesProximosAVencer( fechaInicio,  fechaFin);
-	}
-
-	public Integer getCantidadDeCheques(String numeracionCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
-		return chequeDAO.getCantidadDeCheques(numeracionCheque, eEstadoCheque, fechaDesde, fechaHasta, tipoFecha);
-	}
-
-	public Integer getCantidadDeChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
-		return chequeDAO.getCantidadDeChequesPorFechaYPaginadoPorProveedor(nombreProveedor, estadoCheque, fechaDesde, fechaHasta,tipoFecha);
-	}
-
-	public Integer getCantidadDechequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
-		return chequeDAO.getCantidadDechequesPorNumeroDeCheque(numeroCheque, eEstadoCheque,fechaDesde,fechaHasta,tipoFecha);
-	}
-
-	public List<Cheque> getChequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
-		return chequeDAO.getChequesPorNumeroDeCheque(numeroCheque, eEstadoCheque,fechaDesde,fechaHasta,tipoFecha,paginaActual,maxRows);
 	}
 
 	/** BUSQUEDA DESDE LA CARGA DE ORDEN DE PAGO */

@@ -21,14 +21,19 @@ import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 @Stateless
 public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOLocal{
 
+	/* BUSQUEDAS */
+
 	@SuppressWarnings("unchecked")
-	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
+	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
 		String hql = " SELECT c FROM Cheque c LEFT JOIN FETCH c.proveedorSalida LEFT JOIN FETCH c.clienteSalida LEFT JOIN FETCH c.personaSalida LEFT JOIN FETCH c.bancoSalida " 
-				+ " WHERE 1=1 "+
-				(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
+				+ " WHERE 1=1 "
+				+(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
 				+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + "<= :fechaHasta ":"")
 				+(nroCliente!=null?" AND c.cliente.nroCliente = :nroCliente ":"")
 				+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+				+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+				+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+				+(montoHasta!=null?" AND c.importe <= :montoHasta":"")
 				+ " ORDER BY c.id";
 		Query q = getEntityManager().createQuery(hql);
 		if(fechaDesde!=null){
@@ -43,19 +48,66 @@ public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOL
 		if(nroCliente!=null){
 			q.setParameter("nroCliente", nroCliente);
 		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+		}
 		q.setFirstResult(maxRows * (paginaActual - 1));
 		q.setMaxResults(maxRows);
 		return q.getResultList();
 	}
 	
+	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		String hql = "SELECT COUNT(*) FROM Cheque c "+ " WHERE 1=1 "+
+				(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
+				+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
+				+(nroCliente!=null?" AND c.cliente.nroCliente = :nroCliente ":"")
+				+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+				+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+				+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+				+(montoHasta!=null?" AND c.importe <= :montoHasta":"");
+		
+		Query q = getEntityManager().createQuery(hql);
+		if(fechaDesde!=null){
+			q.setParameter("fechaDesde", fechaDesde);
+		}
+		if(fechaHasta!=null){
+			q.setParameter("fechaHasta", fechaHasta);
+		}
+		if(eEstadoCheque!=null){
+			q.setParameter("idEstado", eEstadoCheque.getId());
+		}
+		if(nroCliente!=null){
+			q.setParameter("nroCliente", nroCliente);
+		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+		}
+		return NumUtil.toInteger(q.getSingleResult());
+	}
+
 	@SuppressWarnings("unchecked")
-	public List<Cheque> getChequesPorFechaYPaginado(String numeracionCheque, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
+	public List<Cheque> getChequesPorFechaYPaginado(String numeracionCheque, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
 		String hql = " SELECT c FROM Cheque c  LEFT JOIN FETCH c.proveedorSalida LEFT JOIN FETCH c.clienteSalida LEFT JOIN FETCH c.personaSalida LEFT JOIN FETCH c.bancoSalida  " 
 				+ " WHERE 1=1 "+
 				(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
 				+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
 				+(numeracionCheque!=null?" AND c.numeracion.letra = :letra AND c.numeracion.numero = :numeroCheque ":"")
 				+(estadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+				+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+				+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+				+(montoHasta!=null?" AND c.importe <= :montoHasta":"")
 				+ " ORDER BY c.id";
 			Query q = getEntityManager().createQuery(hql);
 			if(fechaDesde!=null){
@@ -71,17 +123,29 @@ public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOL
 				q.setParameter("letra", new Character(numeracionCheque.substring(0, 1).toCharArray()[0]));
 				q.setParameter("numeroCheque", Integer.valueOf(numeracionCheque.substring(1, numeracionCheque.length())));
 			}
+			if(idBanco != null) {
+				q.setParameter("idBanco", idBanco);
+			}
+			if(montoDesde != null) {
+				q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+			}
+			if(montoHasta != null) {
+				q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+			}
 			q.setFirstResult(maxRows * (paginaActual - 1));
 			q.setMaxResults(maxRows);
 			return q.getResultList();
 		}
 
-	public Integer getCantidadDeCheques(String numeracionCheque,  EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
+	public Integer getCantidadDeCheques(String numeracionCheque,  EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
 		String hql = "SELECT COUNT(*) FROM Cheque c "+ " WHERE 1=1 "+
 				(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
 				+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + "<= :fechaHasta ":"")
 				+(numeracionCheque!=null?" AND c.numeracion.letra = :letra AND c.numeracion.numero = :numeroCheque ":"")
-				+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"");
+				+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+				+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+				+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+				+(montoHasta!=null?" AND c.importe <= :montoHasta":"");
 		
 		Query q = getEntityManager().createQuery(hql);
 		if(fechaDesde!=null){
@@ -97,15 +161,110 @@ public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOL
 			q.setParameter("letra", new Character(numeracionCheque.substring(0, 1).toCharArray()[0]));
 			q.setParameter("numeroCheque", Integer.valueOf(numeracionCheque.substring(1, numeracionCheque.length())));
 		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+		}
 		return NumUtil.toInteger(q.getSingleResult());
 	}
 
-	public Integer getCantidadDeCheques(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
-		String hql = "SELECT COUNT(*) FROM Cheque c "+ " WHERE 1=1 "+
-				(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
-				+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
-				+(nroCliente!=null?" AND c.cliente.nroCliente = :nroCliente ":"")
-				+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"");
+	@SuppressWarnings("unchecked")
+	public List<Cheque> getChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		String hql = " SELECT c FROM Cheque c LEFT JOIN FETCH c.proveedorSalida LEFT JOIN FETCH c.clienteSalida LEFT JOIN FETCH c.personaSalida LEFT JOIN FETCH c.bancoSalida  " 
+			+ " WHERE 1=1 "
+			+(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
+			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
+			+(nombreProveedor!=null?" AND ( (c.proveedorSalida IS NOT NULL AND c.proveedorSalida.razonSocial LIKE :nombreProveedorSalida) OR " +
+									"	    (c.clienteSalida IS NOT NULL AND c.clienteSalida.razonSocial LIKE :nombreProveedorSalida) OR" +
+									"		(c.personaSalida IS NOT NULL AND CONCAT(TRIM(c.personaSalida.nombres),' ',TRIM(c.personaSalida.apellido)) LIKE :nombreProveedorSalida)) " +
+									"":"")
+			+(estadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+			+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+			+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+			+(montoHasta!=null?" AND c.importe <= :montoHasta":"")
+			+ " ORDER BY c.id";
+		Query q = getEntityManager().createQuery(hql);
+		if(fechaDesde!=null){
+			q.setParameter("fechaDesde", fechaDesde);
+		}
+		if(fechaHasta!=null){
+			q.setParameter("fechaHasta", fechaHasta);
+		}
+		if(estadoCheque!=null){
+			q.setParameter("idEstado", estadoCheque.getId());
+		}
+		if(nombreProveedor!=null){
+			q.setParameter("nombreProveedorSalida","%"+nombreProveedor.trim()+"%");
+		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+		}
+		q.setFirstResult(maxRows * (paginaActual - 1));
+		q.setMaxResults(maxRows);
+		return q.getResultList();
+	}
+	
+	public Integer getCantidadDeChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		String hql = " SELECT COUNT(*) FROM Cheque c LEFT JOIN c.proveedorSalida LEFT JOIN c.clienteSalida LEFT JOIN c.personaSalida LEFT JOIN c.bancoSalida  " 
+			+ " WHERE 1=1 "
+			+(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
+			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
+			+(nombreProveedor!=null?" AND ( (c.proveedorSalida IS NOT NULL AND c.proveedorSalida.razonSocial LIKE :nombreProveedorSalida) OR " +
+									"	    (c.clienteSalida IS NOT NULL AND c.clienteSalida.razonSocial LIKE :nombreProveedorSalida) OR" +
+									"		(c.personaSalida IS NOT NULL AND CONCAT(TRIM(c.personaSalida.nombres),' ',TRIM(c.personaSalida.apellido)) LIKE :nombreProveedorSalida)) " +
+									"":"")
+			+(estadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+			+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+			+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+			+(montoHasta!=null?" AND c.importe <= :montoHasta":"");
+		
+		Query q = getEntityManager().createQuery(hql);
+		if(fechaDesde!=null){
+			q.setParameter("fechaDesde", fechaDesde);
+		}
+		if(fechaHasta!=null){
+			q.setParameter("fechaHasta", fechaHasta);
+		}
+		if(estadoCheque!=null){
+			q.setParameter("idEstado", estadoCheque.getId());
+		}
+		if(nombreProveedor!=null){
+			q.setParameter("nombreProveedorSalida","%"+nombreProveedor+"%");
+		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+		}
+		return NumUtil.toInteger(q.getSingleResult());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Cheque> getChequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer paginaActual, Integer maxRows, Integer idBanco, Double montoDesde, Double montoHasta) {
+		String hql = " SELECT c FROM Cheque c  LEFT JOIN FETCH c.proveedorSalida LEFT JOIN FETCH c.clienteSalida LEFT JOIN FETCH c.personaSalida LEFT JOIN FETCH c.bancoSalida " 
+			+ " WHERE 1=1 "+
+			(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
+			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
+			+(numeroCheque!=null?" AND c.numero = :numeroCheque ":"")
+			+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+			+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+			+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+			+(montoHasta!=null?" AND c.importe <= :montoHasta":"");
 		
 		Query q = getEntityManager().createQuery(hql);
 		if(fechaDesde!=null){
@@ -117,11 +276,60 @@ public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOL
 		if(eEstadoCheque!=null){
 			q.setParameter("idEstado", eEstadoCheque.getId());
 		}
-		if(nroCliente!=null){
-			q.setParameter("nroCliente", nroCliente);
+		if(numeroCheque!=null){
+			q.setParameter("numeroCheque",numeroCheque);
+		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
+		}
+		q.setFirstResult(maxRows * (paginaActual - 1));
+		q.setMaxResults(maxRows);
+		return q.getResultList();
+	}
+
+	public Integer getCantidadDechequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
+		String hql = " SELECT COUNT(*) FROM Cheque c  " 
+			+ " WHERE 1=1 "+
+			(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
+			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
+			+(numeroCheque!=null?" AND c.numero = :numeroCheque ":"")
+			+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"")
+			+(idBanco!=null?" AND c.banco.id = :idBanco":"")
+			+(montoDesde!=null?" AND c.importe >= :montoDesde":"")
+			+(montoHasta!=null?" AND c.importe <= :montoHasta":"");
+		
+		Query q = getEntityManager().createQuery(hql);
+		if(fechaDesde!=null){
+			q.setParameter("fechaDesde", fechaDesde);
+		}
+		if(fechaHasta!=null){
+			q.setParameter("fechaHasta", fechaHasta);
+		}
+		if(eEstadoCheque!=null){
+			q.setParameter("idEstado", eEstadoCheque.getId());
+		}
+		if(numeroCheque!=null){
+			q.setParameter("numeroCheque",numeroCheque);
+		}
+		if(idBanco != null) {
+			q.setParameter("idBanco", idBanco);
+		}
+		if(montoDesde != null) {
+			q.setParameter("montoDesde", BigDecimal.valueOf(montoDesde));
+		}
+		if(montoHasta != null) {
+			q.setParameter("montoHasta", BigDecimal.valueOf(montoHasta));
 		}
 		return NumUtil.toInteger(q.getSingleResult());
 	}
+
+	/* FIN BUSQUEDAS */
 	
 	@SuppressWarnings("unchecked")
 	public Cheque getChequeByNumero(String nroCheque) {
@@ -194,114 +402,6 @@ public class ChequeDAO extends GenericDAO<Cheque, Integer> implements ChequeDAOL
 		return q.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Cheque> getChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha) {
-		String hql = " SELECT c FROM Cheque c LEFT JOIN FETCH c.proveedorSalida LEFT JOIN FETCH c.clienteSalida LEFT JOIN FETCH c.personaSalida LEFT JOIN FETCH c.bancoSalida  " 
-			+ " WHERE 1=1 "
-			+(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
-			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
-			+(nombreProveedor!=null?" AND ( (c.proveedorSalida IS NOT NULL AND c.proveedorSalida.razonSocial LIKE :nombreProveedorSalida) OR " +
-									"	    (c.clienteSalida IS NOT NULL AND c.clienteSalida.razonSocial LIKE :nombreProveedorSalida) OR" +
-									"		(c.personaSalida IS NOT NULL AND CONCAT(TRIM(c.personaSalida.nombres),' ',TRIM(c.personaSalida.apellido)) LIKE :nombreProveedorSalida)) " +
-									"":"")
-			+(estadoCheque!=null?" AND c.idEstado = :idEstado ":"")
-			+ " ORDER BY c.id";
-		Query q = getEntityManager().createQuery(hql);
-		if(fechaDesde!=null){
-			q.setParameter("fechaDesde", fechaDesde);
-		}
-		if(fechaHasta!=null){
-			q.setParameter("fechaHasta", fechaHasta);
-		}
-		if(estadoCheque!=null){
-			q.setParameter("idEstado", estadoCheque.getId());
-		}
-		if(nombreProveedor!=null){
-			q.setParameter("nombreProveedorSalida","%"+nombreProveedor.trim()+"%");
-		}
-		q.setFirstResult(maxRows * (paginaActual - 1));
-		q.setMaxResults(maxRows);
-		return q.getResultList();
-	}
-	
-	public Integer getCantidadDeChequesPorFechaYPaginadoPorProveedor(String nombreProveedor, EEstadoCheque estadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
-		String hql = " SELECT COUNT(*) FROM Cheque c LEFT JOIN c.proveedorSalida LEFT JOIN c.clienteSalida LEFT JOIN c.personaSalida LEFT JOIN c.bancoSalida  " 
-			+ " WHERE 1=1 "
-			+(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
-			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
-			+(nombreProveedor!=null?" AND ( (c.proveedorSalida IS NOT NULL AND c.proveedorSalida.razonSocial LIKE :nombreProveedorSalida) OR " +
-									"	    (c.clienteSalida IS NOT NULL AND c.clienteSalida.razonSocial LIKE :nombreProveedorSalida) OR" +
-									"		(c.personaSalida IS NOT NULL AND CONCAT(TRIM(c.personaSalida.nombres),' ',TRIM(c.personaSalida.apellido)) LIKE :nombreProveedorSalida)) " +
-									"":"")
-			+(estadoCheque!=null?" AND c.idEstado = :idEstado ":"");
-		
-		Query q = getEntityManager().createQuery(hql);
-		if(fechaDesde!=null){
-			q.setParameter("fechaDesde", fechaDesde);
-		}
-		if(fechaHasta!=null){
-			q.setParameter("fechaHasta", fechaHasta);
-		}
-		if(estadoCheque!=null){
-			q.setParameter("idEstado", estadoCheque.getId());
-		}
-		if(nombreProveedor!=null){
-			q.setParameter("nombreProveedorSalida","%"+nombreProveedor+"%");
-		}
-		return NumUtil.toInteger(q.getSingleResult());
-	}
-
-	public Integer getCantidadDechequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha) {
-		String hql = " SELECT COUNT(*) FROM Cheque c  " 
-			+ " WHERE 1=1 "+
-			(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
-			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
-			+(numeroCheque!=null?" AND c.numero = :numeroCheque ":"")
-			+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"");
-		
-		Query q = getEntityManager().createQuery(hql);
-		if(fechaDesde!=null){
-			q.setParameter("fechaDesde", fechaDesde);
-		}
-		if(fechaHasta!=null){
-			q.setParameter("fechaHasta", fechaHasta);
-		}
-		if(eEstadoCheque!=null){
-			q.setParameter("idEstado", eEstadoCheque.getId());
-		}
-		if(numeroCheque!=null){
-			q.setParameter("numeroCheque",numeroCheque);
-		}
-		return NumUtil.toInteger(q.getSingleResult());
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Cheque> getChequesPorNumeroDeCheque(String numeroCheque, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, EnumTipoFecha tipoFecha, Integer paginaActual, Integer maxRows) {
-		String hql = " SELECT c FROM Cheque c  LEFT JOIN FETCH c.proveedorSalida LEFT JOIN FETCH c.clienteSalida LEFT JOIN FETCH c.personaSalida LEFT JOIN FETCH c.bancoSalida " 
-			+ " WHERE 1=1 "+
-			(fechaDesde!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) + ">= :fechaDesde ":"")
-			+(fechaHasta!=null?" AND "+(tipoFecha == EnumTipoFecha.FECHA_ENTRADA?" c.fechaEntrada ": " c.fechaSalida " ) +  "<= :fechaHasta ":"")
-			+(numeroCheque!=null?" AND c.numero = :numeroCheque ":"")
-			+(eEstadoCheque!=null?" AND c.idEstado = :idEstado ":"");
-		
-		Query q = getEntityManager().createQuery(hql);
-		if(fechaDesde!=null){
-			q.setParameter("fechaDesde", fechaDesde);
-		}
-		if(fechaHasta!=null){
-			q.setParameter("fechaHasta", fechaHasta);
-		}
-		if(eEstadoCheque!=null){
-			q.setParameter("idEstado", eEstadoCheque.getId());
-		}
-		if(numeroCheque!=null){
-			q.setParameter("numeroCheque",numeroCheque);
-		}
-		q.setFirstResult(maxRows * (paginaActual - 1));
-		q.setMaxResults(maxRows);
-		return q.getResultList();
-	}
-	
 	/** BUSQUEDA DESDE LA CARGA DE ORDEN DE PAGO */
 	@SuppressWarnings("unchecked")
 	public List<Cheque> getChequesPorNumeracionNumeroFechaEImporte(List<NumeracionCheque> numerosInternos, String numeroCheque, Date fechaDesde, Date fechaHasta, BigDecimal importeDesde, BigDecimal importeHasta, List<Cheque> excluidos) {

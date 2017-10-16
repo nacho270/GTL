@@ -64,6 +64,7 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 	private JComboBox cmbBancos;
 	private FWJTextField txtBusquedaCliente;
 	private final JButton btnBuscar;
+	private final JButton btnResetFiltros;
 	private ModeloCabeceraCheques modeloCabeceraCheques;
 	private JCheckBox chkUsarFecha;
 	private FWJTextField txtMontoDesde;
@@ -85,6 +86,9 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 		if (! StringUtil.isNullOrEmpty(getTxtMontoDesde().getText()) && !StringUtil.isNullOrEmpty(getTxtMontoHasta().getText())) {
 			modeloCabeceraCheques.setMontoDesde(Double.valueOf(getTxtMontoDesde().getText().trim().replace(",", ".")));
 			modeloCabeceraCheques.setMontoHasta(Double.valueOf(getTxtMontoHasta().getText().trim().replace(",", ".")));
+		} else {
+			modeloCabeceraCheques.setMontoDesde(null);
+			modeloCabeceraCheques.setMontoHasta(null);
 		}
 		modeloCabeceraCheques.setIdBanco(getCmbBancos().getSelectedItem().equals("TODOS") ? null : ((Banco) getCmbBancos().getSelectedItem()).getId());
 		modeloCabeceraCheques.setEstadoCheque(getCmbEstadoCheque().getSelectedItem().equals("TODOS") ?null:(EEstadoCheque)getCmbEstadoCheque().getSelectedItem());
@@ -147,11 +151,13 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 		panelAbajo.add(getDPFechaHasta());
 		panelAbajo.add(getChkUsarFecha());
 		btnBuscar = new JButton("Buscar");
+		btnResetFiltros = new JButton("Resetear filtros");
 		panelMasAbajo.add(new JLabel("Monto desde: "));
 		panelMasAbajo.add(getTxtMontoDesde());
 		panelMasAbajo.add(new JLabel("Monto Hasta: "));
 		panelMasAbajo.add(getTxtMontoHasta());
 		panelMasAbajo.add(btnBuscar);
+		panelMasAbajo.add(btnResetFiltros);
 		
 		panel2.add(panelArriba);
 		panel2.add(panelAbajo);
@@ -209,6 +215,23 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 				}
 			}
 		});
+		
+		btnResetFiltros.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getCmbTipoBusquedaCliente().setSelectedIndex(0);
+				getTxtBusquedaCliente().setText(null);
+				getCmbEstadoCheque().setSelectedIndex(0);
+				getCmbBancos().setSelectedIndex(0);
+				getCmbTipoFecha().setSelectedIndex(0);
+				getDPFechaDesde().setSelectedDate(DateUtil.restarDias(DateUtil.getHoy(), 7));
+				getDPFechaDesde().setSelectedDate(DateUtil.getHoy());
+				getChkUsarFecha().setSelected(true);
+				getTxtMontoDesde().setText(null);
+				getTxtMontoHasta().setText(null);
+			}
+		});
+
 		add(panel2, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.LINE_END, new Insets(15, 5, 0, 5), 0, 0));
 		add(getPaginador(), new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.LINE_END, new Insets(15, 5, 0, 5), 0, 0));
 	}
@@ -256,19 +279,19 @@ public class CabeceraCheques extends Cabecera<ModeloCabeceraCheques> {
 		Date fechaHasta = getModel().getFechaHasta();
 		if(getModel().getNroCliente()!=null){
 			return getChequeFacade().getCantidadDeCheques(getModel().getNroCliente(), getModel().getEstadoCheque(),
-					(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null),(fechaHasta!=null? new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha());
+					(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null),(fechaHasta!=null? new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha(), getModel().getIdBanco(), getModel().getMontoDesde(), getModel().getMontoHasta());
 		}else if( getModel().getNumeracionCheque()!=null){
 			return getChequeFacade().getCantidadDeCheques(getModel().getNumeracionCheque(), getModel().getEstadoCheque(),
-					(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null),(fechaHasta!=null? new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha());
+					(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null),(fechaHasta!=null? new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha(), getModel().getIdBanco(), getModel().getMontoDesde(), getModel().getMontoHasta());
 		}else if(getModel().getNumeroCheque()!=null){
 			return getChequeFacade().getCantidadDechequesPorNumeroDeCheque(getModel().getNumeroCheque(), getModel().getEstadoCheque(),
-					(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null), (fechaHasta!=null?new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha());
+					(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null), (fechaHasta!=null?new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha(), getModel().getIdBanco(), getModel().getMontoDesde(), getModel().getMontoHasta());
 		}else if(getModel().getNombrePersona()!=null){
 			return getChequeFacade().getCantidadDeChequesPorFechaYPaginadoPorProveedor(getModel().getNombrePersona(), getModel().getEstadoCheque(),
-					(fechaDesde != null?new java.sql.Date(fechaDesde.getTime()):null), (fechaHasta!=null?new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha());
+					(fechaDesde != null?new java.sql.Date(fechaDesde.getTime()):null), (fechaHasta!=null?new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha(), getModel().getIdBanco(), getModel().getMontoDesde(), getModel().getMontoHasta());
 		}else{
 			return getChequeFacade().getCantidadDeChequesPorFechaYPaginadoPorProveedor(getModel().getNombreProveedor(), getModel().getEstadoCheque(),
-					(fechaDesde != null?new java.sql.Date(fechaDesde.getTime()):null), (fechaHasta!=null?new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha());
+					(fechaDesde != null?new java.sql.Date(fechaDesde.getTime()):null), (fechaHasta!=null?new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),getModel().getTipoFecha(), getModel().getIdBanco(), getModel().getMontoDesde(), getModel().getMontoHasta());
 		}
 	}
 

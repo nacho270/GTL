@@ -32,15 +32,15 @@ public class ModuloChequesModel extends ModuloModel<Cheque, ModeloCabeceraCheque
 		Date fechaHasta = modeloCabecera.getFechaHasta();
 		if(modeloCabecera.getNroCliente()!=null){
 			return getChequeFacade().getChequesPorFechaYPaginado(modeloCabecera.getNroCliente(), modeloCabecera.getEstadoCheque(),(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null),(fechaHasta!=null? new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),
-					modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha());
+					modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha(), modeloCabecera.getIdBanco(), modeloCabecera.getMontoDesde(), modeloCabecera.getMontoHasta());
 		}else if(modeloCabecera.getNumeracionCheque()!=null){ //SI ES POR NUMERACION, NO FILTRO POR FECHA
-			return getChequeFacade().getChequesPorFechaYPaginado(modeloCabecera.getNumeracionCheque(), modeloCabecera.getEstadoCheque(), null,null, modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha());
+			return getChequeFacade().getChequesPorFechaYPaginado(modeloCabecera.getNumeracionCheque(), modeloCabecera.getEstadoCheque(), null,null, modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha(), modeloCabecera.getIdBanco(), modeloCabecera.getMontoDesde(), modeloCabecera.getMontoHasta());
 		}else if(modeloCabecera.getNumeroCheque()!=null){
-			return getChequeFacade().getChequesPorNumeroDeCheque(modeloCabecera.getNumeroCheque(), modeloCabecera.getEstadoCheque(), null, null, modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha());
+			return getChequeFacade().getChequesPorNumeroDeCheque(modeloCabecera.getNumeroCheque(), modeloCabecera.getEstadoCheque(), null, null, modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha(), modeloCabecera.getIdBanco(), modeloCabecera.getMontoDesde(), modeloCabecera.getMontoHasta());
 		}else{
 			String nombre = modeloCabecera.getNombreProveedor()==null?modeloCabecera.getNombrePersona():modeloCabecera.getNombreProveedor();
 			return getChequeFacade().getChequesPorFechaYPaginadoPorProveedor(nombre, modeloCabecera.getEstadoCheque(),(fechaDesde!=null?new java.sql.Date(fechaDesde.getTime()):null),(fechaHasta!=null? new java.sql.Date(DateUtil.getManiana(fechaHasta).getTime()):null),
-					modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha());
+					modeloCabecera.getPaginaActual(), CabeceraCheques.MAX_ROWS, modeloCabecera.getTipoFecha(), modeloCabecera.getIdBanco(), modeloCabecera.getMontoDesde(), modeloCabecera.getMontoHasta());
 		}
 	}
 
