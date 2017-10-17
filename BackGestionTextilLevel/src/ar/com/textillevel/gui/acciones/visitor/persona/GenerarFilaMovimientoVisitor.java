@@ -154,7 +154,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		}
 		return row;
 	}
-	
+
 	private Object[] getFilaMovimientoDebePersona(MovimientoDebePersona movimiento, Integer size) {
 		Object[] row = new Object[size];
 		row[0] = "";
@@ -165,9 +165,16 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		setSaldo(getSaldo() - (movimiento.getMonto().doubleValue() ));
 		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":getDecimalFormat().format( Double.valueOf(getSaldo()).floatValue());
 		row[5] = movimiento;
-		row[6] = movimiento.getFacturaPersona().getUsuarioVerificador()!=null;
-		row[7] = movimiento.getFacturaPersona().getUsuarioVerificador();
-		row[8] = movimiento.getFacturaPersona().getUsuarioCreador();
+		if(movimiento.getFacturaPersona() != null) {
+			row[6] = movimiento.getFacturaPersona().getUsuarioVerificador()!=null;
+			row[7] = movimiento.getFacturaPersona().getUsuarioVerificador();
+			row[8] = movimiento.getFacturaPersona().getUsuarioCreador();
+		} else {
+			row[6] = movimiento.getNotaDebitoPersona().getUsuarioConfirmacion()!=null;
+			row[7] = movimiento.getNotaDebitoPersona().getUsuarioConfirmacion();
+			row[8] = "";
+		}
+		
 		row[9] = movimiento.getObservaciones();
 		row[10] = "";
 		return row;

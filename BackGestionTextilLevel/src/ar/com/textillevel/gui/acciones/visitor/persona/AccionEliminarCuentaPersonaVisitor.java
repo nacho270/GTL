@@ -48,7 +48,12 @@ public class AccionEliminarCuentaPersonaVisitor implements IFilaMovimientoVisito
 	}
 
 	public void visit(MovimientoDebePersona movimientoDebePersona) {
-		frameMovimientos.eliminarFactura(movimientoDebePersona.getFacturaPersona());
+		if(movimientoDebePersona.getFacturaPersona() != null) {
+			frameMovimientos.eliminarFactura(movimientoDebePersona.getFacturaPersona());
+		}
+		if(movimientoDebePersona.getNotaDebitoPersona() != null) {
+			frameMovimientos.eliminarCorreccion(movimientoDebePersona.getNotaDebitoPersona());
+		}
 	}
 
 	public void visit(MovimientoHaberPersona movimientoHaberPersona) {

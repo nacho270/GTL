@@ -191,7 +191,7 @@ public class CorreccionFacturaProveedorFacade implements CorreccionFacturaProvee
 				correccionDao.removeById(nd.getId());
 			}
 			correccionDAO.removeById(ndp.getId());
-			auditoriaFacade.auditar(usuario, "borrado de nota de débito de proveedor "+" Nº: " + ndp.getNroCorreccion(), EnumTipoEvento.BAJA, ndp);
+			auditoriaFacade.auditar(usuario, "borrado de nota de débito de proveedor Nº: " + ndp.getNroCorreccion(), EnumTipoEvento.BAJA, ndp);
 			return;
 		}
 		if(cfp instanceof NotaCreditoProveedor) {
@@ -202,7 +202,7 @@ public class CorreccionFacturaProveedorFacade implements CorreccionFacturaProvee
 			remitoSalidaDAO.borrarAsociacionNotaCredito(ncp);
 			cuentaFacade.borrarMovimientoNotaCreditoProveedor(ncp);
 			correccionDAO.removeById(ncp.getId());
-			auditoriaFacade.auditar(usuario, "borrado de nota de crédito de proveedor "+" Nº: " + ncp.getNroCorreccion(), EnumTipoEvento.BAJA, ncp);
+			auditoriaFacade.auditar(usuario, "borrado de nota de crédito de proveedor Nº: " + ncp.getNroCorreccion(), EnumTipoEvento.BAJA, ncp);
 		}
 	}
 

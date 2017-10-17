@@ -17,6 +17,7 @@ import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.BancoDAOLocal;
 import ar.com.textillevel.dao.api.local.ClienteDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
+import ar.com.textillevel.dao.api.local.CorreccionFacturaPersonaDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionFacturaProveedorDAOLocal;
 import ar.com.textillevel.dao.api.local.CuentaDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
@@ -56,6 +57,7 @@ import ar.com.textillevel.entidades.documentos.factura.to.InfoCuentaTO;
 import ar.com.textillevel.entidades.documentos.ordendedeposito.OrdenDeDeposito;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
+import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
@@ -100,6 +102,9 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 	@EJB
 	private CorreccionFacturaProveedorDAOLocal correccionProveedorDao;
 	
+	@EJB
+	private CorreccionFacturaPersonaDAOLocal correccionPersonaDao;
+
 	@EJB
 	private ProveedorDAOLocal proveedorDAO;
 	
@@ -343,6 +348,16 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		}
 	}
 
+	public void borrarMovimientoNotaDebitoPersona(NotaDebitoPersona ndp) {
+		int cantsMovsBorrados = movimientoDao.borrarMovimientoNotaDebitoPersona(ndp.getId());
+		if(cantsMovsBorrados > 0) {//actualizo la cuenta sólo si hubo movimientos que borrar
+			CuentaPersona cuenta = getCuentaPersonaByIdPersona(ndp.getPersona().getId());
+			double saldo = cuenta.getSaldo().doubleValue() + ndp.getMontoTotal().doubleValue();
+			cuenta.setSaldo(new BigDecimal(saldo));
+			cuentaDao.save(cuenta);
+		}
+	}
+
 	public void borrarMovimientoNotaCreditoCliente(NotaCredito nc){
 		movimientoDao.borrarMovimientoNotaCreditoCliente(nc.getId());
 		CuentaCliente cuenta = getCuentaClienteByIdCliente(nc.getCliente().getId());
@@ -420,6 +435,32 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		movimientoDao.save(mdp);
 	}
 
+	public void crearMovimientoDebePersona(NotaDebitoPersona notaDebito, String obsMovimiento) {
+		CuentaPersona cuenta = getCuentaPersonaByIdPersona(notaDebito.getPersona().getId());
+		double saldo = cuenta.getSaldo().doubleValue();
+		if(saldo > 0) { //La nota de débito se paga con el saldo a favor que tiene el proveedor
+			double montoFaltante = notaDebito.getMontoFaltantePorPagar().doubleValue();
+			if(saldo >= montoFaltante) {
+				notaDebito.setMontoFaltantePorPagar(new BigDecimal(0f));
+			}else{
+				notaDebito.setMontoFaltantePorPagar(new BigDecimal(montoFaltante - saldo));
+			}
+		}
+		notaDebito = (NotaDebitoPersona)correccionPersonaDao.save(notaDebito); 
+		cuenta.setSaldo(new BigDecimal(cuenta.getSaldo().doubleValue() - notaDebito.getMontoTotal().doubleValue()));
+		cuentaDao.save(cuenta);
+
+		MovimientoDebePersona mdp = new MovimientoDebePersona();
+		mdp.setMonto(notaDebito.getMontoTotal());
+		mdp.setCuenta(cuenta);
+		mdp.setNotaDebitoPersona(notaDebito);
+		mdp.setDescripcionResumen(DateUtil.dateToString(notaDebito.getFechaIngreso(),DateUtil.SHORT_DATE) +" - ND " + notaDebito.getNroCorreccion());
+		mdp.setFechaHora(new Timestamp(notaDebito.getFechaIngreso().getTime()));
+		mdp.setObservaciones(obsMovimiento);
+		movimientoDao.save(mdp);
+	}
+	
+	
 //	ESTO ES LO QUE HICIMOS EL SABADO EN LA FABRICA Y DIEGO DESPUES DIJO QUE NO FUNCIONO (NO SE USA)
 //	VUELVO A PONER LO ANTERIOR
 	public BigDecimal getTransporteCuenta(Integer idCliente, Date fechaTope,boolean menorEstricto) throws ValidacionException {

@@ -39,7 +39,6 @@ import javax.swing.JTable;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableCellRenderer;
 
-import main.GTLGlobalCache;
 import ar.com.fwcommon.boss.BossError;
 import ar.com.fwcommon.boss.BossEstilos;
 import ar.com.fwcommon.componentes.FWFileSelector;
@@ -55,10 +54,13 @@ import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cuenta.CuentaPersona;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
+import ar.com.textillevel.entidades.documentos.pagopersona.CorreccionFacturaPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
+import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.gente.Persona;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
+import ar.com.textillevel.facade.api.remote.CorreccionFacturaPersonaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CuentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaPersonaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
@@ -76,6 +78,7 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarPersona;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class JFrameVerMovimientosPersona extends JFrame {
 
@@ -124,6 +127,10 @@ public class JFrameVerMovimientosPersona extends JFrame {
 	private JButton btnImprimirListado;
 	private JButton btnListadoPDF;
 	private JButton btnAgregarObservaciones;
+	private JButton btnAgregarND;
+
+	private CorreccionFacturaPersonaFacadeRemote correccionFacade;
+
 	
 	public JFrameVerMovimientosPersona(Frame padre) {
 		setUpComponentes();
@@ -608,6 +615,27 @@ public class JFrameVerMovimientosPersona extends JFrame {
 		return btnAgregarFactura;
 	}
 	
+	private JButton getBtnAgregarND() {
+		if(btnAgregarND == null){
+			btnAgregarND = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_agregar.png", "ar/com/fwcommon/imagenes/b_agregar.png");
+			btnAgregarND.setEnabled(true);
+			btnAgregarND.setToolTipText("Agregar Nota de Débito de persona");
+			btnAgregarND.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					NotaDebitoPersona ndp = new NotaDebitoPersona();
+					ndp.setPersona(getPersonaElegida());
+					ndp.setFechaIngreso(DateUtil.getHoy());
+					JDialogEditarNDPersona dialog = new JDialogEditarNDPersona(JFrameVerMovimientosPersona.this, ndp, false);
+					dialog.setVisible(true);
+					if(dialog.getND() != null) { //aceptó!
+						buscarMovimientos();
+					}
+				}
+			});
+		}
+		return btnAgregarND;
+	}	
+	
 	public JButton getBtnAgregarObservaciones() {
 		if(btnAgregarObservaciones == null){
 			btnAgregarObservaciones = BossEstilos.createButton("ar/com/textillevel/imagenes/b_obs.png", "ar/com/textillevel/imagenes/b_obs_des.png");
@@ -751,6 +779,7 @@ public class JFrameVerMovimientosPersona extends JFrame {
 			panelAcciones.add(getBtnEliminar());
 			panelAcciones.add(getBtnEditar());
 			panelAcciones.add(getBtnConfirmar());
+			panelAcciones.add(getBtnAgregarND());
 			panelAcciones.add(getBtnAgregarObservaciones());
 			panelAcciones.add(getBtnExportarAExcel());
 			panelAcciones.add(getBtnImprimirListado());
@@ -1104,25 +1133,29 @@ public class JFrameVerMovimientosPersona extends JFrame {
 	}
 
 	public void confirmarOrden(OrdenDePagoAPersona ordenDePago) {
-		getOrdenFacade().confirmarOrden(ordenDePago,getUsuarioAdministrador().getUsrName());
+		getOrdenFacade().confirmarOrden(ordenDePago, getUsuarioAdministrador().getUsrName());
 	}
 
 	public void confirmarFactura(FacturaPersona factura) {
-		getFacturaFacade().confirmarFactura(factura,getUsuarioAdministrador().getUsrName());
+		getFacturaFacade().confirmarFactura(factura, getUsuarioAdministrador().getUsrName());
 	}
 	
-	public OrdenDePagoPersonaFacadeRemote getOrdenFacade() {
+	public void confirmarND(NotaDebitoPersona notaDebitoPersona) {
+		getCorreccionFacade().confirmarND(notaDebitoPersona, getUsuarioAdministrador().getUsrName());
+	}
+	
+	private OrdenDePagoPersonaFacadeRemote getOrdenFacade() {
 		if(ordenFacade == null){
 			ordenFacade = GTLBeanFactory.getInstance().getBean2(OrdenDePagoPersonaFacadeRemote.class);
 		}
 		return ordenFacade;
 	}
 	
-	public UsuarioSistema getUsuarioAdministrador() {
+	private UsuarioSistema getUsuarioAdministrador() {
 		return usuarioAdministrador;
 	}
 
-	public void setUsuarioAdministrador(UsuarioSistema usuarioAdministrador) {
+	private void setUsuarioAdministrador(UsuarioSistema usuarioAdministrador) {
 		this.usuarioAdministrador = usuarioAdministrador;
 	}
 
@@ -1146,11 +1179,27 @@ public class JFrameVerMovimientosPersona extends JFrame {
 		}
 	}
 
-	
-	public FacturaPersonaFacadeRemote getFacturaFacade() {
+	public void eliminarCorreccion(CorreccionFacturaPersona correccionFacturaPersona) {
+		if(FWJOptionPane.showQuestionMessage(this, "Esta seguro que desea eliminar la Nota de Débito?", "Pregunta")==FWJOptionPane.YES_OPTION) {
+			getCorreccionFacade().eliminarCorreccion(correccionFacturaPersona, getUsuarioAdministrador().getUsrName());
+			FWJOptionPane.showInformationMessage(this, "La Nota de Débito ha sido eliminada", "Información");
+			buscarMovimientos();
+		}
+	}
+
+	private FacturaPersonaFacadeRemote getFacturaFacade() {
 		if(facturaFacade == null){
 			facturaFacade = GTLBeanFactory.getInstance().getBean2(FacturaPersonaFacadeRemote.class);
 		}
 		return facturaFacade;
 	}
+
+	private CorreccionFacturaPersonaFacadeRemote getCorreccionFacade() {
+		if(correccionFacade == null){
+			correccionFacade = GTLBeanFactory.getInstance().getBean2(CorreccionFacturaPersonaFacadeRemote.class);
+		}
+		return correccionFacade;
+	}
+
+
 }

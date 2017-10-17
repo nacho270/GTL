@@ -15,6 +15,7 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProve
 import ar.com.textillevel.entidades.documentos.ordendedeposito.OrdenDeDeposito;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
+import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
@@ -70,4 +71,7 @@ public interface CuentaFacadeLocal {
 
 	public void crearMovimientoDebeRemitoSalidaDevolucion(RemitoSalida remitoSalida);
 	public void crearMovimientoDebeRemitoSalidaDibujo(RemitoSalida remitoSalida);
+	
+	public void crearMovimientoDebePersona(NotaDebitoPersona ndp, String obsMovimiento);
+	public void borrarMovimientoNotaDebitoPersona(NotaDebitoPersona ndp);	
 }

@@ -58,5 +58,6 @@ public interface MovimientoCuentaDAOLocal extends DAOLocal<MovimientoCuenta, Int
 	public MovimientoCuenta getMovimientoDebeProveedorByFactura(FacturaProveedor factura);
 	public MovimientoHaberProveedor getMovimientoHaberProveedorByODP(Integer idOdp);
 	public List<MovimientoCuenta> getAllMovimientosByIdCliente(Integer idCuenta);
+	public int borrarMovimientoNotaDebitoPersona(Integer id);
 	
 }

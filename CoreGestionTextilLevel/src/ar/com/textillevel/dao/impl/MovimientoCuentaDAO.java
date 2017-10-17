@@ -9,6 +9,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
+import com.google.common.collect.Lists;
+
 import ar.com.fwcommon.dao.impl.GenericDAO;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.textillevel.dao.api.local.MovimientoCuentaDAOLocal;
@@ -32,8 +34,6 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedo
 import ar.com.textillevel.entidades.documentos.pagopersona.FacturaPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
-
-import com.google.common.collect.Lists;
 
 @Stateless
 public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> implements MovimientoCuentaDAOLocal {
@@ -296,7 +296,12 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		}
 
 		public void visit(MovimientoDebePersona movimientoDebePersona) {
-			movimientoDebePersona.getFacturaPersona().getImpuestos().size();
+			if(movimientoDebePersona.getFacturaPersona() != null) {
+				movimientoDebePersona.getFacturaPersona().getImpuestos().size();
+			}
+			if(movimientoDebePersona.getNotaDebitoPersona() != null) {
+				movimientoDebePersona.getNotaDebitoPersona().getItemsCorreccion().size();
+			}
 		}
 
 		public void visit(MovimientoHaberPersona movimientoHaberPersona) {
@@ -608,6 +613,13 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCuenta", idCuenta);
 		return q.getResultList();
+	}
+
+	public int borrarMovimientoNotaDebitoPersona(Integer id) {
+		String hql = " DELETE FROM MovimientoDebePersona m WHERE m.notaDebitoPersona.id = :id ";
+		Query q = getEntityManager().createQuery(hql);
+		q.setParameter("id", id);
+		return q.executeUpdate();
 	}
 
 }

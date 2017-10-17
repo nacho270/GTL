@@ -41,16 +41,22 @@ import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionR
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
 import ar.com.textillevel.entidades.documentos.ordendedeposito.OrdenDeDeposito;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
+import ar.com.textillevel.entidades.documentos.pagopersona.ItemCorreccionFactPersCheque;
+import ar.com.textillevel.entidades.documentos.pagopersona.ItemCorreccionFacturaPersona;
+import ar.com.textillevel.entidades.documentos.pagopersona.ItemCorreccionPersResumen;
+import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
 import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
+import ar.com.textillevel.entidades.gente.Persona;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.ChequeFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
+import ar.com.textillevel.facade.api.local.CorreccionFacturaPersonaFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaProveedorFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
@@ -70,6 +76,9 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	
 	@EJB
 	private CorreccionFacturaProveedorFacadeLocal correccionProveedorFacade;
+	
+	@EJB
+	private CorreccionFacturaPersonaFacadeLocal correccionPersonaFacade;	
 
 	@EJB
 	private FacturaDAOLocal facturaDao;
@@ -192,6 +201,8 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		
 		if(cheque.getEstadoCheque() == EEstadoCheque.SALIDA_PROVEEDOR) {
 			generarNotaDebitoProveedor(cheque, usuario, gastos, debeDiscriminarIVA);
+		} else if(cheque.getEstadoCheque() == EEstadoCheque.SALIDA_PERSONA) {
+			generarNotaDebitoPersona(cheque, usuario, gastos, debeDiscriminarIVA);
 		}
 		EEstadoCheque estadoAnterior = cheque.getEstadoCheque();
 		cheque.setEstadoCheque(EEstadoCheque.RECHAZADO);
@@ -276,6 +287,55 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 			   cal.get(GregorianCalendar.YEAR)== DateUtil.getAnio(fecha);
 	}
 
+	private void generarNotaDebitoPersona(Cheque cheque, String usuario, BigDecimal gastos, boolean debeDiscriminarIVA) {
+		Persona personaSalida = cheque.getPersonaSalida();
+		
+		if(gastos==null){
+			gastos = BigDecimal.ZERO;
+		}
+		
+		NotaDebitoPersona ndp = new NotaDebitoPersona();
+		ndp.setVerificada(false);
+		ndp.setNroCorreccion("");
+		ndp.setFechaIngreso(DateUtil.getHoy());
+		ndp.setMontoTotal(cheque.getImporte());
+		ndp.setMontoTotal(ndp.getMontoTotal().add(gastos));
+		
+		ndp.setMontoFaltantePorPagar(ndp.getMontoTotal());
+		ndp.setPersona(personaSalida);
+
+		ItemCorreccionFactPersCheque icch = new ItemCorreccionFactPersCheque();
+		String descrMotivoGeneracion = "Rechazo de Cheque: " + cheque.toString();
+		icch.setDescripcion(descrMotivoGeneracion);
+		icch.setFactorConversionMoneda(new BigDecimal(1));
+		icch.setImporte(cheque.getImporte());
+		icch.setCheque(cheque);
+
+		ItemCorreccionFacturaPersona itr = new ItemCorreccionPersResumen();
+		itr.setImporte(gastos);
+
+		if (debeDiscriminarIVA) {
+			ImpuestoItemProveedor impuestoIVA21 = impuestoItemDAO.getByTipoYPorcentaje(ETipoImpuesto.IVA, 21d);
+			if (impuestoIVA21 != null) {
+				itr.setImpuestos(Collections.singletonList(impuestoIVA21));
+				ndp.setMontoTotal(ndp.getMontoTotal().add(itr.getImporte().multiply(new BigDecimal(0.21d)))); //monto total + gastos * IVA
+				ndp.setMontoFaltantePorPagar(ndp.getMontoTotal());
+			}
+		}
+		
+		NumberFormat df = DecimalFormat.getNumberInstance(new Locale("es_AR"));
+		df.setMaximumFractionDigits(2);
+		df.setMinimumFractionDigits(2);
+		df.setGroupingUsed(true);
+		
+		//Gastos: $xx - Imp.: $yy 
+		itr.setDescripcion("Gastos: " + df.format(gastos.doubleValue()) + "  - Imp.: " + df.format(itr.getImporteTotalConImpuestos().doubleValue()-gastos.doubleValue()));
+
+		ndp.getItemsCorreccion().add(icch);
+		ndp.getItemsCorreccion().add(itr);
+
+		correccionPersonaFacade.guardarCorreccionYGenerarMovimiento(ndp, usuario, descrMotivoGeneracion);
+	}
 	
 	private void generarNotaDebitoProveedor(Cheque cheque, String usuario, BigDecimal gastos, boolean debeDiscriminarIVA) {
 		Proveedor proveedorSalida = cheque.getProveedorSalida();

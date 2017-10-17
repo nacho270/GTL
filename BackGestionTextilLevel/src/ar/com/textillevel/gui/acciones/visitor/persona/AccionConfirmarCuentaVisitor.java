@@ -51,7 +51,12 @@ public class AccionConfirmarCuentaVisitor implements IFilaMovimientoVisitor{
 	}
 
 	public void visit(MovimientoDebePersona movimientoDebePersona) {
-		((JFrameVerMovimientosPersona)padre).confirmarFactura(movimientoDebePersona.getFacturaPersona());
+		if(movimientoDebePersona.getFacturaPersona() != null) {
+			((JFrameVerMovimientosPersona)padre).confirmarFactura(movimientoDebePersona.getFacturaPersona());
+		}
+		if(movimientoDebePersona.getNotaDebitoPersona() != null) {
+			((JFrameVerMovimientosPersona)padre).confirmarND(movimientoDebePersona.getNotaDebitoPersona());
+		}
 	}
 
 	public void visit(MovimientoHaberPersona movimientoHaberPersona) {

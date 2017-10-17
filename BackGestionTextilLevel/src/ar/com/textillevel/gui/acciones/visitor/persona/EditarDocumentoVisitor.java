@@ -10,10 +10,13 @@ import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberPersona;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoInternoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
+import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
+import ar.com.textillevel.facade.api.remote.CorreccionFacturaPersonaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
 import ar.com.textillevel.gui.acciones.JDialogAgregarFacturaPersona;
 import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDePagoAPersona;
+import ar.com.textillevel.gui.acciones.JDialogEditarNDPersona;
 import ar.com.textillevel.gui.acciones.JFrameVerMovimientosPersona;
 import ar.com.textillevel.util.GTLBeanFactory;
 
@@ -54,7 +57,13 @@ public class EditarDocumentoVisitor implements IFilaMovimientoVisitor{
 	}
 
 	public void visit(MovimientoDebePersona movimientoDebePersona) {
-		new JDialogAgregarFacturaPersona(frameMovimientos, movimientoDebePersona.getFacturaPersona(), false).setVisible(true);
+		if(movimientoDebePersona.getFacturaPersona() != null) {
+			new JDialogAgregarFacturaPersona(frameMovimientos, movimientoDebePersona.getFacturaPersona(), false).setVisible(true);
+		}
+		if(movimientoDebePersona.getNotaDebitoPersona() != null) {
+			NotaDebitoPersona ndp = GTLBeanFactory.getInstance().getBean2(CorreccionFacturaPersonaFacadeRemote.class).getNDPersonaByIdEager(movimientoDebePersona.getNotaDebitoPersona().getId());
+			new JDialogEditarNDPersona(frameMovimientos, ndp, false).setVisible(true);
+		}
 	}
 
 	public void visit(MovimientoHaberPersona movimientoHaberPersona) {
