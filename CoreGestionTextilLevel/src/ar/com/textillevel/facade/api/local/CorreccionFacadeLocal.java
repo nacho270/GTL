@@ -1,6 +1,9 @@
 package ar.com.textillevel.facade.api.local;
 
+import java.util.List;
+
 import javax.ejb.Local;
+
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.textillevel.entidades.cheque.Cheque;
@@ -16,7 +19,7 @@ public interface CorreccionFacadeLocal {
 
 	public CorreccionFactura guardarCorreccionYGenerarMovimiento(CorreccionFactura correccion, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
 
-	public NotaDebito getNotaDebitoByCheque(Cheque cheque);
+	public List<NotaDebito> getNotasDebitoByCheque(Cheque cheque);
 
 	public CorreccionFacturaMobTO getCorreccionMobById(Integer idCorreccion);
 

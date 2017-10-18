@@ -179,16 +179,18 @@ public class CorreccionFacturaProveedorFacade implements CorreccionFacturaProvee
 			}
 			cuentaFacade.borrarMovimientoNotaDebitoProveedor(ndp);
 			ItemCorreccionCheque itemCheque = obtenerItemCorreccionChequeSiLoTiene(ndp);
-			if(itemCheque!=null){
+			if(itemCheque!=null) {
 				Cheque c = itemCheque.getCheque();
-				NotaDebito nd = correccionClienteFacade.getNotaDebitoByCheque(c);
-				c.setEstadoCheque(nd.getEstadoAnteriorCheque());
-				chequeDao.save(c);
-				if(correccionDao.notaDebitoSeUsaEnRecibo(nd)){
-					throw new ValidacionException(EValidacionException.NOTA_DEBITO_SE_USA_EN_RECIBO.getInfoValidacion());
+				List<NotaDebito> notasDebitoByCheque = correccionClienteFacade.getNotasDebitoByCheque(c);
+				for(NotaDebito nd : notasDebitoByCheque) {
+					c.setEstadoCheque(nd.getEstadoAnteriorCheque());
+					chequeDao.save(c);
+					if(correccionDao.notaDebitoSeUsaEnRecibo(nd)){
+						throw new ValidacionException(EValidacionException.NOTA_DEBITO_SE_USA_EN_RECIBO.getInfoValidacion());
+					}
+					cuentaFacade.borrarMovimientoNotaDebitoCliente(nd);
+					correccionDao.removeById(nd.getId());
 				}
-				cuentaFacade.borrarMovimientoNotaDebitoCliente(nd);
-				correccionDao.removeById(nd.getId());
 			}
 			correccionDAO.removeById(ndp.getId());
 			auditoriaFacade.auditar(usuario, "borrado de nota de débito de proveedor Nº: " + ndp.getNroCorreccion(), EnumTipoEvento.BAJA, ndp);

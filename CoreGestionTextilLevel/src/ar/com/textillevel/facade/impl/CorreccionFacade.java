@@ -212,8 +212,8 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		return correccion;
 	}
 
-	public NotaDebito getNotaDebitoByCheque(Cheque cheque) {
-		return correccionDao.getNotaDebitoByCheque(cheque);
+	public List<NotaDebito> getNotasDebitoByCheque(Cheque cheque) {
+		return correccionDao.getNotasDebitoByCheque(cheque);
 	}
 
 	public CorreccionFacturaMobTO getCorreccionMobById(Integer idCorreccion) {

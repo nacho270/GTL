@@ -20,7 +20,8 @@ public enum ETipoDocumento {
 	NOTA_CREDITO_PROV(11,null, null),
 	NOTA_DEBITO_PROV(12,null, null),
 	ORDEN_PAGO_PERSONA(13, null, "333"),
-	ORDEN_DE_DEPOSITO(14, null, null);
+	ORDEN_DE_DEPOSITO(14, null, null),
+	NOTA_DEBITO_PERSONA(15, null, null);
 
 	private int id;
 	private Integer idTipoDocAFIP;

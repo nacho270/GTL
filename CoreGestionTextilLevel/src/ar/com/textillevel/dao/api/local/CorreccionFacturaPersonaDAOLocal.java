@@ -3,6 +3,7 @@ package ar.com.textillevel.dao.api.local;
 import javax.ejb.Local;
 
 import ar.com.fwcommon.dao.api.local.DAOLocal;
+import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.pagopersona.CorreccionFacturaPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.gente.Persona;
@@ -13,5 +14,7 @@ public interface CorreccionFacturaPersonaDAOLocal extends DAOLocal<CorreccionFac
 	public NotaDebitoPersona getNDByIdEager(Integer idND);
 
 	public boolean existeNroNDParaPersona(Integer nroND, Persona persona);
+
+	public NotaDebitoPersona getByCheque(Cheque ch);
 
 }

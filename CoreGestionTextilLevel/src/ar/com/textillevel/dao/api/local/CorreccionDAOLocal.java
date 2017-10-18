@@ -24,7 +24,7 @@ public interface CorreccionDAOLocal extends DAOLocal<CorreccionFactura, Integer>
 	public boolean notaDebitoSeUsaEnRecibo(NotaDebito nd);
 	public boolean notaCreditoSeUsaEnRecibo(NotaCredito nc);
 	public List<NotaCredito> getAllNotaCreditoList(Integer idCliente, Integer nroSucursal);
-	public NotaDebito getNotaDebitoByCheque(Cheque cheque);
+	public List<NotaDebito> getNotasDebitoByCheque(Cheque cheque);
 	public CorreccionFactura getCorreccionById(Integer idCorreccion);
 
 }

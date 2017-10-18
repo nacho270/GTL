@@ -20,6 +20,7 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRoll
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
+import ar.com.textillevel.dao.api.local.CorreccionFacturaPersonaDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ImpuestoItemDAOLocal;
 import ar.com.textillevel.dao.api.local.OrdenDeDepositoDAOLocal;
@@ -100,6 +101,9 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 	
 	@EJB
 	private OrdenDePagoPersonaDAOLocal ordenDePagoPersonaDao;
+
+	@EJB
+	private CorreccionFacturaPersonaDAOLocal correccionFacturaPersonaDAO;
 	
 	/* BUSQUEDAS */
 	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
@@ -471,8 +475,8 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 
 	public List<OperacionSobreChequeTO> getOperacionSobreChequeTOList(Cheque ch) {
 		List<OperacionSobreChequeTO> operaciones = new ArrayList<OperacionSobreChequeTO>();
-		NotaDebito nd = correccionFacade.getNotaDebitoByCheque(ch);//ND
-		if(nd != null) {
+		List<NotaDebito> notasDebito = correccionFacade.getNotasDebitoByCheque(ch);
+		for(NotaDebito nd : notasDebito) {//ND
 			String suc = nd.getNroSucursal() == null ? null : StringUtil.fillLeftWithZeros(String.valueOf(nd.getNroSucursal()), 4);
 			String nro = StringUtil.fillLeftWithZeros(String.valueOf(nd.getNroFactura()), 8);
 			operaciones.add(new OperacionSobreChequeTO(nd.getFechaEmision(), EEstadoCheque.RECHAZADO, ETipoDocumento.NOTA_DEBITO, nd.getId(), suc == null ? nro : (suc + "- " + nro), nd.getUsuarioVerificador()));
@@ -491,7 +495,11 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		}
 		OrdenDePagoAPersona odpp = ordenDePagoPersonaDao.getByCheque(ch);
 		if(odpp != null) {//ORDEN DE PAGO A PERSONA
-			operaciones.add(new OperacionSobreChequeTO(odpp.getFechaHoraEntregada(), EEstadoCheque.SALIDA_PERSONA, ETipoDocumento.ORDEN_PAGO_PERSONA, odpp.getNroOrden(), odpp.getNroOrden()+"", odpp.getUsuarioCreador()));
+			operaciones.add(new OperacionSobreChequeTO(new Timestamp(odpp.getFecha().getTime()), EEstadoCheque.SALIDA_PERSONA, ETipoDocumento.ORDEN_PAGO_PERSONA, odpp.getNroOrden(), odpp.getNroOrden()+"", odpp.getUsuarioCreador()));
+		}
+		NotaDebitoPersona ndp = correccionFacturaPersonaDAO.getByCheque(ch);
+		if(ndp != null) {//ND A PERSONA
+			operaciones.add(new OperacionSobreChequeTO(new Timestamp(ndp.getFechaIngreso().getTime()), EEstadoCheque.SALIDA_PERSONA, ETipoDocumento.NOTA_DEBITO_PERSONA, ndp.getId(), ndp.getNroCorreccion(), ndp.getUsuarioConfirmacion()));
 		}
 		Collections.sort(operaciones);
 		return operaciones;

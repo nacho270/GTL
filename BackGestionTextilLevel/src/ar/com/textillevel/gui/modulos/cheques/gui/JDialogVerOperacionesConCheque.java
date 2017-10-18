@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,9 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-
-import ar.com.fwcommon.boss.BossError;
-import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
@@ -29,10 +25,12 @@ import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.ordendedeposito.OrdenDeDeposito;
 import ar.com.textillevel.entidades.documentos.ordendepago.OrdenDePago;
+import ar.com.textillevel.entidades.documentos.pagopersona.NotaDebitoPersona;
 import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
+import ar.com.textillevel.facade.api.remote.CorreccionFacturaPersonaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.OrdenDeDepositoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
@@ -42,6 +40,7 @@ import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDePago;
 import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDePagoAPersona;
 import ar.com.textillevel.gui.acciones.JDialogCargaOrdenDeposito;
 import ar.com.textillevel.gui.acciones.JDialogCargaRecibo;
+import ar.com.textillevel.gui.acciones.JDialogEditarNDPersona;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.LinkableLabel;
 import ar.com.textillevel.util.GTLBeanFactory;
@@ -216,7 +215,15 @@ public class JDialogVerOperacionesConCheque extends JDialog {
 				if(tipoDoc == ETipoDocumento.ORDEN_PAGO_PERSONA) {
 					showOPP(idDoc);
 				}
+				if(tipoDoc == ETipoDocumento.NOTA_DEBITO_PERSONA) {
+					showNDP(idDoc);
+				}
 			}
+		}
+
+		private void showNDP(Integer idDoc) {
+			NotaDebitoPersona ndp = GTLBeanFactory.getInstance().getBean2(CorreccionFacturaPersonaFacadeRemote.class).getNDPersonaByIdEager(idDoc);
+			new JDialogEditarNDPersona(JDialogVerOperacionesConCheque.this.padre, ndp, true).setVisible(true);
 		}
 
 		private void showOPP(Integer nroOrden) {
@@ -246,14 +253,10 @@ public class JDialogVerOperacionesConCheque extends JDialog {
 		}
 
 		private void showND(Integer idND) {
-			try {
-				CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
-				CorreccionFactura correccion = cfr.getCorreccionById(idND);
-				JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(JDialogVerOperacionesConCheque.this.padre, correccion, true);
-				dialogCargaFactura.setVisible(true);
-			} catch (FWException e) {
-				BossError.gestionarError(e);
-			}
+			CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean2(CorreccionFacadeRemote.class);
+			CorreccionFactura correccion = cfr.getCorreccionById(idND);
+			JDialogCargaFactura dialogCargaFactura = new JDialogCargaFactura(JDialogVerOperacionesConCheque.this.padre, correccion, true);
+			dialogCargaFactura.setVisible(true);
 		}
 
 		public void setOperacionSobreChequeTO(OperacionSobreChequeTO op) {
