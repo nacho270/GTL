@@ -12,6 +12,7 @@ import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class AccionQuitarClienteDibujo extends Accion<DibujoEstampado> {
 
@@ -26,16 +27,17 @@ public class AccionQuitarClienteDibujo extends Accion<DibujoEstampado> {
 	@Override
 	public boolean ejecutar(AccionEvent<DibujoEstampado> e) throws FWException {
 		if (FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea quitarle el cliente al dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
+			String usrName = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
 			if (FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Asignar a 01?", "Confirmación") == FWJOptionPane.YES_OPTION) {
-				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).modificarCliente(e.getSelectedElements().get(0), null);
+				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).modificarCliente(e.getSelectedElements().get(0), null, usrName);
 				return true;
 			} else {
-				JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(null, EModoDialogo.MODO_ID);
+				JDialogSeleccionarCliente dialogSeleccionarCliente = new JDialogSeleccionarCliente(e.getSource().getFrame(), EModoDialogo.MODO_ID);
 				GuiUtil.centrar(dialogSeleccionarCliente);
 				dialogSeleccionarCliente.setVisible(true);
 				Cliente clienteElegido = dialogSeleccionarCliente.getCliente();
 				if (clienteElegido != null) {
-					GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).modificarCliente(e.getSelectedElements().get(0), clienteElegido);
+					GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).modificarCliente(e.getSelectedElements().get(0), clienteElegido, usrName);
 					return true;
 				}
 			}

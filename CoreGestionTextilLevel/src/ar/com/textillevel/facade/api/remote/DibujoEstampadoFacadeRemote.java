@@ -15,7 +15,7 @@ public interface DibujoEstampadoFacadeRemote {
 	
 	public List<DibujoEstampado> getAllOrderByNombre();
 	
-	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal) throws ValidacionException;
+	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal, String user) throws ValidacionException;
 
 	public void remove(DibujoEstampado dibujoEstampado, boolean force, boolean generarNC, String user) throws ValidacionException, ValidacionExceptionSinRollback;
 
@@ -25,7 +25,7 @@ public interface DibujoEstampadoFacadeRemote {
 
 	public List<DibujoEstampado> getByNroClienteYEstado(Integer nroCliente, EEstadoDibujo estadoDibujo, Boolean incluir01);
 
-	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente);
+	public void modificarCliente(DibujoEstampado dibujoEstampado, Cliente cliente, String user);
 
 	public List<DibujoEstampado> getAllByClienteAndClienteDefault(Cliente cliente);
 
@@ -34,5 +34,7 @@ public interface DibujoEstampadoFacadeRemote {
 	public List<DibujoEstampado> getAllByEstadoYCliente(EEstadoDibujo salida, Cliente cliente);
 
 	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados, String user) throws ValidacionException;
-
+	
+	public DibujoEstampado actualizarEstado(DibujoEstampado dibujo, EEstadoDibujo estadoUntil, String user);
+	
 }

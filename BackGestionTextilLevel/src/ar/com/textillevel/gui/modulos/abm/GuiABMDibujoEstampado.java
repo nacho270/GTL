@@ -187,7 +187,7 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 			capturarSetearDatos();
 			DibujoEstampado dibujoRefresh;
 			try {
-				dibujoRefresh = getDibujoEstampadoFacadeRemote().save(getDibujoActual(), getDibujoActual().getNroDibujo());
+				dibujoRefresh = getDibujoEstampadoFacadeRemote().save(getDibujoActual(), getDibujoActual().getNroDibujo(), null);
 				lista.setSelectedValue(dibujoRefresh, true);
 			} catch (ValidacionException e) {
 				// TODO Auto-generated catch block

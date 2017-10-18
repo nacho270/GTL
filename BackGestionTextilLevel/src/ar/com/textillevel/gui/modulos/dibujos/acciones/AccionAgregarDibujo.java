@@ -11,6 +11,7 @@ import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.gui.modulos.dibujos.gui.JDialogAgregarModificarDibujoEstampado;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
 
 public class AccionAgregarDibujo extends Accion<DibujoEstampado>{
 
@@ -28,7 +29,7 @@ public class AccionAgregarDibujo extends Accion<DibujoEstampado>{
 		dialog.setVisible(true);
 		if (dialog.isAcepto()) {
 			try {
-				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual(), dialog.getNroDibujoOriginal());
+				GTLBeanFactory.getInstance().getBean2(DibujoEstampadoFacadeRemote.class).save(dialog.getDibujoActual(), dialog.getNroDibujoOriginal(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
 				return true;
 			} catch (ValidacionException e1) {
 				e1.printStackTrace();
