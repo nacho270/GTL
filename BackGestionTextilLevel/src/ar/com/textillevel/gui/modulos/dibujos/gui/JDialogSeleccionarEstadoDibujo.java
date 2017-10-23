@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -147,7 +148,7 @@ public class JDialogSeleccionarEstadoDibujo extends JDialog {
 	private JComboBox getCmbEstadosPosibles() {
 		if(cmbEstadosPosibles == null) {
 			cmbEstadosPosibles = new JComboBox();
-			GuiUtil.llenarCombo(cmbEstadosPosibles, CambioEstadoDibujoHelper.getInstance().getEstadosPosibles(dibujo.getEstado()), true);
+			GuiUtil.llenarCombo(cmbEstadosPosibles, new ArrayList<EEstadoDibujo>(CambioEstadoDibujoHelper.getInstance().getEstadosPosibles(dibujo.getEstado())), true);
 			cmbEstadosPosibles.setSelectedIndex(-1);
 		}
 		return cmbEstadosPosibles;

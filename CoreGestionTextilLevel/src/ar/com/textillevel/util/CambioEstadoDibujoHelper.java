@@ -1,15 +1,15 @@
 package ar.com.textillevel.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 
 public class CambioEstadoDibujoHelper {
 
 	private static CambioEstadoDibujoHelper instance = new CambioEstadoDibujoHelper();
-	private Map<EEstadoDibujo, List<EEstadoDibujo>> mapTransicionesPosibles;
+	private Multimap<EEstadoDibujo, EEstadoDibujo> mapTransicionesPosibles;
 
 	private CambioEstadoDibujoHelper() {
 		initMap();
@@ -19,33 +19,27 @@ public class CambioEstadoDibujoHelper {
 		return instance;
 	}
 	
-	private Map<EEstadoDibujo, List<EEstadoDibujo>> getMapTransicionesPosibles() {
+	private Multimap<EEstadoDibujo, EEstadoDibujo> getMapTransicionesPosibles() {
 		if(this.mapTransicionesPosibles == null) {
-			this.mapTransicionesPosibles = new HashMap<EEstadoDibujo, List<EEstadoDibujo>>();
+			this.mapTransicionesPosibles = ArrayListMultimap.create();
 		}
 		return this.mapTransicionesPosibles;
 	}
 
 	private void initMap() {
-		for(EEstadoDibujo e : EEstadoDibujo.values()) {
-			getMapTransicionesPosibles().put(e, new ArrayList<EEstadoDibujo>());
-		}
-		List<EEstadoDibujo> tmp = getMapTransicionesPosibles().get(EEstadoDibujo.EN_STOCK);
-		tmp.add(EEstadoDibujo.GRABADO);
-		tmp.add(EEstadoDibujo.ROTO);
+		getMapTransicionesPosibles().put(EEstadoDibujo.EN_STOCK, EEstadoDibujo.GRABADO);
+		getMapTransicionesPosibles().put(EEstadoDibujo.EN_STOCK,EEstadoDibujo.ROTO);
 		
-		tmp = getMapTransicionesPosibles().get(EEstadoDibujo.ROTO);
-		tmp.add(EEstadoDibujo.GRABADO);
+		getMapTransicionesPosibles().put(EEstadoDibujo.ROTO,EEstadoDibujo.GRABADO);
 
-		tmp = getMapTransicionesPosibles().get(EEstadoDibujo.GRABADO);
-		tmp.add(EEstadoDibujo.EN_STOCK);
+		getMapTransicionesPosibles().put(EEstadoDibujo.GRABADO, EEstadoDibujo.EN_STOCK);
 	}
 
 	public boolean puedeCambiarEstado(EEstadoDibujo estado) {
 		return !getMapTransicionesPosibles().get(estado).isEmpty();
 	}
 
-	public List<EEstadoDibujo> getEstadosPosibles(EEstadoDibujo estado) {
+	public Collection<EEstadoDibujo> getEstadosPosibles(EEstadoDibujo estado) {
 		return getMapTransicionesPosibles().get(estado);
 	}
 
