@@ -203,8 +203,9 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 		return (nroDibujo - nroDibujo % 1000)/1000;
 	}
 
-	public void seleccionDibujoExistente(Cliente cliente) {
-		List<DibujoEstampado> dibujosCliente = getDibujoEstampadoFacadeRemote().getByNroClienteYEstado(cliente.getNroCliente(), EEstadoDibujo.SALIDA, false);
+	public void seleccionDibujoExistente(Cliente cliente, List<DibujoEstampado> yaUsados) {
+		List<DibujoEstampado> dibujosCliente = getDibujoEstampadoFacadeRemote().getByNroClienteYEstado(cliente.getNroCliente(), EEstadoDibujo.DEVUELTO, false);
+		dibujosCliente.removeAll(yaUsados);
 		if (dibujosCliente != null && !dibujosCliente.isEmpty()) {
 			for (Iterator<DibujoEstampado> it = dibujosCliente.iterator(); it.hasNext();) {
 				DibujoEstampado de = it.next();
@@ -217,7 +218,10 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 				if (opcion != null) {
 					setDibujoActual((DibujoEstampado) opcion);
 					setAcepto(true);
+					dispose();
 				}
+			} else {
+				setAcepto(false);
 			}
 		}
 	}
@@ -469,12 +473,7 @@ public class JDialogAgregarModificarDibujoEstampado extends JDialog {
 
 	private FWJNumericTextField getTxtNroDibujo() {
 		if (txtNroDibujo == null) {
-			if (cantidadColores == null) {
-				txtNroDibujo = new FWJNumericTextField();
-			} else {
-				txtNroDibujo = new FWJNumericTextField(0l, ((cantidadColores + 1) * 1000) - 1);
-			}
-			txtNroDibujo.setMaxLength(4);
+			txtNroDibujo = new FWJNumericTextField();
 			txtNroDibujo.setEditable(false);
 		}
 		return txtNroDibujo;

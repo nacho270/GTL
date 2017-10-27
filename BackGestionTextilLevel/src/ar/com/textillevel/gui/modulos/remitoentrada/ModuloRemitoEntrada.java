@@ -11,9 +11,10 @@ import ar.com.fwcommon.templates.modulo.model.ModuloModel;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.gui.modulos.remitoentrada.cabecera.CabeceraRemitoEntrada;
 import ar.com.textillevel.gui.modulos.remitoentrada.cabecera.ModeloCabeceraRemitoEntrada;
+import ar.com.textillevel.gui.modulos.remitoentrada.to.RemitoEntradaModuloTO;
 import ar.com.textillevel.gui.util.GenericUtils;
 
-public class ModuloRemitoEntrada extends ModuloTemplate<RemitoEntrada, ModeloCabeceraRemitoEntrada> {
+public class ModuloRemitoEntrada extends ModuloTemplate<RemitoEntradaModuloTO, ModeloCabeceraRemitoEntrada> {
 
 	private static final long serialVersionUID = 7002425448395339601L;
 
@@ -32,8 +33,8 @@ public class ModuloRemitoEntrada extends ModuloTemplate<RemitoEntrada, ModeloCab
 	}
 
 	@Override
-	protected List<ModuloModel<RemitoEntrada, ModeloCabeceraRemitoEntrada>> createModulosModel() throws FWException {
-		List<ModuloModel<RemitoEntrada, ModeloCabeceraRemitoEntrada>> modulosModel = new ArrayList<ModuloModel<RemitoEntrada, ModeloCabeceraRemitoEntrada>>();
+	protected List<ModuloModel<RemitoEntradaModuloTO, ModeloCabeceraRemitoEntrada>> createModulosModel() throws FWException {
+		List<ModuloModel<RemitoEntradaModuloTO, ModeloCabeceraRemitoEntrada>> modulosModel = new ArrayList<ModuloModel<RemitoEntradaModuloTO, ModeloCabeceraRemitoEntrada>>();
 		modulosModel.add(new ModuloRemitoEntradaModel(getIdModulo()));
 		return modulosModel;	
 	}

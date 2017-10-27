@@ -957,11 +957,10 @@ public class JFrameVerMovimientos extends JFrame {
 								}
 								JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
 								Integer nroRemito = null;
-								if (documentoContable2.getTipoDocumento() == ETipoDocumento.FACTURA) {
+								if (documentoContable2.getTipoDocumento() == ETipoDocumento.FACTURA && !((Factura)documentoContable2).getRemitos().isEmpty()) {
 									nroRemito = ((Factura)documentoContable2).getRemitos().get(0).getNroRemito();
 								}
-								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(),
-										nroRemito, jasperPrint, to, cc);
+								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), nroRemito, jasperPrint, to, cc);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();

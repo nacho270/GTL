@@ -6,7 +6,7 @@ import java.util.Map;
 public enum EEstadoDibujo {
 	
 	EN_STOCK ( 1, "EN STOCK"),
-	SALIDA ( 2, "DEVUELTO"),
+	DEVUELTO ( 2, "DEVUELTO"),
 	GRABADO ( 3, "GRABADO"),
 	ROTO ( 4, "ROTO");
 

@@ -61,6 +61,7 @@ public enum EValidacionException {
 	ORDEN_DE_PAGO_PERSONA_DUPLICADA					(156, "Ya existe una orden de pago con orden '{0}'."),
 	DIBUJO_IMPOSIBLE_ELIMINAR					    (157, "No se ha podido eliminar el dibujo debido a que se esta utilizando."),
 	DIBUJO_USADO_EN_LISTAS_DE_PRECIOS			    (158, "El dibujo está siendo usado en algunas listas de precios ¿Desea borrarlo de todas maneras?."),
+	DIBUJO_IMPOSIBLE_COMBINAR			    		(159, "Los dibujos no se pueden combinar: asegúrese que estén en estado EN_STOCK y que sean del mismo cliente."),
 	
 	_											(000, "");
 	

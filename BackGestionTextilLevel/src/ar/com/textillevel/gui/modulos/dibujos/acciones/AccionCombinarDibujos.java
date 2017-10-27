@@ -51,7 +51,7 @@ public class AccionCombinarDibujos extends Accion<DibujoEstampado> {
 		if(e.getSelectedElements().size() == 2) {
 			DibujoEstampado d1 = e.getSelectedElements().get(0);
 			DibujoEstampado d2 = e.getSelectedElements().get(1);
-			//mismo cliente y estado en_stock
+			//mismo cliente && estado en_stock
 			return d1.getCliente() != null && d2.getCliente() != null && d1.getCliente().getId() != null && d1.getCliente().getId() != null && d1.getCliente().getId().equals(d2.getCliente().getId()) && d1.getEstado() == EEstadoDibujo.EN_STOCK && d2.getEstado() == EEstadoDibujo.EN_STOCK;
 		}
 		return false;

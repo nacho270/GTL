@@ -30,23 +30,20 @@ public final class EmailSender {
 		file.delete();
 	}
 
-	public static void enviarDocumentoContablePorEmail(ETipoDocumento tipoDocContable, Integer nroDoc, Integer nroRemito,
-			JasperPrint jasperDocumento, List<String> to, List<String> cc) throws JRException,
-			FileNotFoundException, AddressException, MessagingException {
+	public static void enviarDocumentoContablePorEmail(ETipoDocumento tipoDocContable, Integer nroDoc, Integer nroRemito, JasperPrint jasperDocumento, List<String> to, List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
+		String nroRemitoStr = nroRemito == null ? "" : (nroRemito+"");
 		boolean facturaB = GenericUtils.isSistemaTest() && tipoDocContable == ETipoDocumento.FACTURA;
 		String strTipoDoc = facturaB ? "Importe RTO" : tipoDocContable.toString();
 		String strDocumento = strTipoDoc.toLowerCase()
 				.replaceAll("_", " de ")
 				.replaceAll("debito", "débito")
 				.replaceAll("credito", "crédito");
-		File file = new File(System.getProperty("java.io.tmpdir") + strTipoDoc.toLowerCase() + "_" + (facturaB ? nroRemito : nroDoc) + ".pdf");
+		File file = new File(System.getProperty("java.io.tmpdir") + strTipoDoc.toLowerCase() + "_" + (facturaB ? nroRemitoStr : nroDoc) + ".pdf");
 		JasperHelper.exportarAPDF(jasperDocumento, file);
-		String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + (facturaB ? nroRemito : nroDoc);
+		String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + (facturaB ? nroRemitoStr : nroDoc);
 		GenericUtils.enviarEmail(asunto,
 				"<html><b>Estimado cliente:<br><br>Por medio de la presente, adjuntamos " +
-						(facturaB ?
-								"importe correspondiente al remito  N° " + nroRemito :
-								"la " + asunto) + ".<br><br>" +
+						(facturaB ? "importe correspondiente al remito  N° " + nroRemitoStr : "la " + asunto) + ".<br><br>" +
 				firma(), Collections.singletonList(file), to, cc);
 		file.delete();
 	}

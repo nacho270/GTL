@@ -9,10 +9,12 @@ import ar.com.fwcommon.templates.modulo.model.acciones.Accion;
 import ar.com.fwcommon.templates.modulo.model.listeners.AccionEvent;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
+import ar.com.textillevel.gui.modulos.remitoentrada.to.RemitoEntradaModuloTO;
+import ar.com.textillevel.gui.modulos.remitoentrada.to.RemitoEntradaModuloTO.ETipoREModulo;
 import ar.com.textillevel.util.GTLBeanFactory;
 import main.GTLGlobalCache;
 
-public class AccionEliminarRemitoEntrada extends Accion<RemitoEntrada> {
+public class AccionEliminarRemitoEntrada extends Accion<RemitoEntradaModuloTO> {
 
 	private RemitoEntradaFacadeRemote reFacade;
 
@@ -25,26 +27,29 @@ public class AccionEliminarRemitoEntrada extends Accion<RemitoEntrada> {
 	}
 
 	@Override
-	public boolean ejecutar(AccionEvent<RemitoEntrada> e) throws FWException {
-		RemitoEntrada remitoEntrada = e.getSelectedElements().get(0);
-		if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), StringW.wordWrap("¿Está seguro que desea eliminar el remito?"), "Confirmación") == FWJOptionPane.YES_OPTION) { 
-			try {
-				if(remitoEntrada.getArticuloStock() != null || remitoEntrada.getPrecioMatPrima() != null) {
-					getRemitoEntradaFacade().eliminarRemitoEntrada01OrCompraDeTela(remitoEntrada.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
-				} else {
-					getRemitoEntradaFacade().eliminarRemitoEntrada(remitoEntrada.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+	public boolean ejecutar(AccionEvent<RemitoEntradaModuloTO> e) throws FWException {
+		RemitoEntradaModuloTO reTO = e.getSelectedElements().get(0);
+		if(reTO.getTipoRE() == ETipoREModulo.RE_CON_PIEZAS) {
+			RemitoEntrada remitoEntrada = getRemitoEntradaFacade().getByIdEager(reTO.getId());
+			if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), StringW.wordWrap("¿Está seguro que desea eliminar el remito?"), "Confirmación") == FWJOptionPane.YES_OPTION) { 
+				try {
+					if(remitoEntrada.getArticuloStock() != null || remitoEntrada.getPrecioMatPrima() != null) {
+						getRemitoEntradaFacade().eliminarRemitoEntrada01OrCompraDeTela(remitoEntrada.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+					} else {
+						getRemitoEntradaFacade().eliminarRemitoEntrada(remitoEntrada.getId(), GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName());
+					}
+					FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "Remito borrado éxitosamente.", "Información");				
+				} catch (ValidacionException ex) {
+					FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(ex.getMensajeError()), "Imposible Eliminar");
+					return false;
 				}
-				FWJOptionPane.showInformationMessage(e.getSource().getFrame(), "Remito borrado éxitosamente.", "Información");				
-			} catch (ValidacionException ex) {
-				FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(ex.getMensajeError()), "Imposible Eliminar");
-				return false;
 			}
 		}
 		return true;
 	}
 
 	@Override
-	public boolean esValida(AccionEvent<RemitoEntrada> e) {
+	public boolean esValida(AccionEvent<RemitoEntradaModuloTO> e) {
 		return e.getSelectedElements().size() == 1;
 	}
 

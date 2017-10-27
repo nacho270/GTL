@@ -21,7 +21,6 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRoll
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
-import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
@@ -32,6 +31,7 @@ import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaPercepcion;
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaPrecioMateriaPrima;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntradaDibujo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.ETipoFactura;
@@ -40,7 +40,6 @@ import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.to.ivaventas.DescripcionFacturaIVAVentasTO;
 import ar.com.textillevel.entidades.to.ivaventas.IVAVentasTO;
 import ar.com.textillevel.entidades.to.ivaventas.TotalesIVAVentasTO;
-import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
@@ -49,6 +48,7 @@ import ar.com.textillevel.facade.api.local.FacturaFacadeLocal;
 import ar.com.textillevel.facade.api.local.MovimientoStockFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.local.PrecioMateriaPrimaFacadeLocal;
+import ar.com.textillevel.facade.api.local.RemitoEntradaDibujoFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoEntradaFacadeLocal;
 import ar.com.textillevel.facade.api.local.RemitoSalidaFacadeLocal;
 import ar.com.textillevel.facade.api.local.UsuarioSistemaFacadeLocal;
@@ -112,8 +112,8 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 	private NotificacionUsuarioFacadeLocal notificacionesFacadeFacade;
 	
 	@EJB
-	private DibujoEstampadoDAOLocal dibujoDaoLocal;
-	
+	private RemitoEntradaDibujoFacadeLocal reDibujoFacade;
+
 	public Integer getLastNumeroFactura(ETipoFactura tipoFactura, ETipoDocumento tipoDoc){
 		return facturaDao.getLastNumeroFactura(tipoFactura, tipoDoc, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
 	}
@@ -140,38 +140,34 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 //			correccionDao.save(nc);
 			throw new ValidacionException(EValidacionException.FACTURA_TIENE_NOTA_CREDITO.getInfoValidacion());
 		}
-		if(factura.getRemitos()==null){ //Si es factura sin remito, tengo que borrar los movimientos de stock y aumentar el stock
+		if(factura.getRemitos() != null && factura.getRemitos().isEmpty()) { //Si es factura sin remito, tengo que borrar los movimientos de stock y aumentar el stock
 			factura = getByIdEager(factura.getId());
 			movimientoStockFacade.borrarMovientoStock(factura);
 		}
+		reDibujoFacade.borrarREDibujoRelacionadoFC(factura);
 		facturaDao.removeById(factura.getId());
 		return factura;
 	}
 
-	public Factura guardarFacturaYGenerarMovimiento(Factura factura, List<DibujoEstampado> dibujos, String usuario) throws ValidacionException, ValidacionExceptionSinRollback  {
+	public Factura guardarFacturaYGenerarMovimiento(Factura factura, RemitoEntradaDibujo reDibujo, String usuario) throws ValidacionException, ValidacionExceptionSinRollback {
 		Factura f = guardarInterno(factura,usuario);
 		auditoriaFacade.auditar(usuario, "Creación de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.ALTA, f);
-		if (dibujos != null && !dibujos.isEmpty()) {
-			for(DibujoEstampado de : dibujos) {
-				de.setIdFactura(f.getId());
-				dibujoDaoLocal.save(de);
-			}
+		if(!reDibujo.getItems().isEmpty()) { //tengo que persistir el RE Entrada Dibujo
+			reDibujo.setFactura(f);
+			reDibujoFacade.grabarREDibujo(reDibujo, usuario);
 		}
 		return docContableFacade.autorizarDocumentoContableAFIP(f); 
 	}
 
-	public Factura editarFactura(Factura factura,List<DibujoEstampado> dibujos, String usuario) throws ValidacionException {
+	public Factura editarFactura(Factura factura, RemitoEntradaDibujo remitoEntradaDibujo, String usuario) throws ValidacionException {
 		docContableFacade.checkAutorizacionAFIP(factura);
 		Factura facturaAnterior = getByIdEager(factura.getId());
 //		factura = guardarInterno(factura);
 		cuentaFacade.actualizarMovimientoFacturaCliente(factura,facturaAnterior.getMontoTotal());
 		factura = facturaDao.save(factura);
-		auditoriaFacade.auditar(usuario, "Edición de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.MODIFICACION,factura);
-		if (dibujos != null && !dibujos.isEmpty()) {
-			for(DibujoEstampado de : dibujos) {
-				dibujoDaoLocal.save(de);
-			}
-		}
+		auditoriaFacade.auditar(usuario, "Edición de factura Nº: " + factura.getNroFactura(), EnumTipoEvento.MODIFICACION, factura);
+		//grabo el RE dibujo
+		reDibujoFacade.grabarREDibujo(remitoEntradaDibujo, usuario);
 		return factura;
 	}
 

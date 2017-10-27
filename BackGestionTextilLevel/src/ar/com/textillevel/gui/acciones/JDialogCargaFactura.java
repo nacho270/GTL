@@ -36,9 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
 
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.boss.BossError;
@@ -74,6 +71,7 @@ import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTe
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaTubo;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntradaDibujo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EPosicionIVA;
@@ -94,6 +92,7 @@ import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.RemitoEntradaDibujoFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoSalidaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
@@ -108,8 +107,8 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
-
-import com.google.common.collect.Lists;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
 
 public class JDialogCargaFactura extends JDialog {
 
@@ -171,6 +170,7 @@ public class JDialogCargaFactura extends JDialog {
 	private ParametrosGeneralesFacadeRemote parametrosGeneralesFacade;
 	private PrecioMateriaPrimaFacadeRemote precioMatariaPrimaFacade;
 	private RemitoEntradaFacadeRemote remitoEntradaFacade;
+	private RemitoEntradaDibujoFacadeRemote remitoEntradaDibujoFacade;
 
 	private ParametrosGenerales parametrosGenerales;
 
@@ -193,6 +193,9 @@ public class JDialogCargaFactura extends JDialog {
 	private DocumentoContableFacadeRemote docContableFacade;
 	
 	private Map<Integer, Float> gramajes = new HashMap<Integer, Float>();
+	private NroDibujoEstampadoTracker nroDibujoTracker;
+
+	private RemitoEntradaDibujo reDibujo;
 	
 	/**
 	 * Constructor para consulta de correcciones
@@ -1447,9 +1450,7 @@ public class JDialogCargaFactura extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 					if(isFactura()) {
-						JDialogAgregarItemFactura jdaif = new JDialogAgregarItemFactura(JDialogCargaFactura.this, getRemitos()==null?1:getCantidadPiezasRemito(), 
-								getCliente(), getParametrosGenerales().getPrecioPorTubo(), 
-								getParametrosGenerales().getPorcentajeSeguro());
+						JDialogAgregarItemFactura jdaif = new JDialogAgregarItemFactura(JDialogCargaFactura.this, getRemitos()==null?1:getCantidadPiezasRemito(), getCliente(), getParametrosGenerales().getPrecioPorTubo(), getParametrosGenerales().getPorcentajeSeguro());
 						GuiUtil.centrar(jdaif);
 						jdaif.setVisible(true);
 						if (jdaif.isAcepto()) {
@@ -1475,7 +1476,6 @@ public class JDialogCargaFactura extends JDialog {
 									return;
 								}
 							}
-							
 							List<ItemFactura> items = new ArrayList<ItemFactura>(getFactura().getItems());
 							getFactura().getItems().clear();
 							ItemFacturaSeguro its = null;
@@ -1542,13 +1542,24 @@ public class JDialogCargaFactura extends JDialog {
 						getTablaProductos().removeRow(getTablaProductos().getSelectedRow());
 						actualizarSeguro();
 						calcularSubTotal();
+
+						if(itemIsCilindro(itf)) {
+							getRemitoEntradaDibujo().getItems().clear();
+							getNroDibujoTracker().clear();
+						}
+
 					} else {
 						getBtnQuitarProducto().setEnabled(false);
 					}
 				}
+
 			});
 		}
 		return btnQuitarProducto;
+	}
+
+	private boolean itemIsCilindro(ItemFactura itf) {
+		return (itf instanceof ItemFacturaPrecioMateriaPrima) && ((ItemFacturaPrecioMateriaPrima)itf).getPrecioMateriaPrima().getMateriaPrima().getTipo() == ETipoMateriaPrima.CILINDRO;
 	}
 
 	private DocumentoContableCliente getDocContable() {
@@ -1748,15 +1759,9 @@ public class JDialogCargaFactura extends JDialog {
 	}
 
 	private boolean guardarFactura() {
-		// getFactura().setMontoFaltantePorPagar(new
-		// BigDecimal(getTxtTotal().getText().trim().replace(',', '.')));
-		// getFactura().setMontoTotal(new
-		// BigDecimal(getTxtTotal().getText().trim().replace(',', '.')));
 		if (getTxtPorcentajeIVA().getText().trim().length() > 0) {
 			getFactura().setPorcentajeIVAInscripto(getFactura().getPorcentajeIVAInscripto());
 		}
-		// getFactura().setPorcentajeIVANoInscripto(new
-		// BigDecimal(getTxtPorcentajeIVANoInscripto().getText()));
 		long longFecha = 0;
 		if(GenericUtils.esHoy(new java.sql.Date(getPanelFecha().getDate().getTime()))){//hoy
 			longFecha = DateUtil.getAhora().getTime();
@@ -1765,56 +1770,49 @@ public class JDialogCargaFactura extends JDialog {
 		}
 		getFactura().setFechaEmision(new Timestamp(longFecha));
 		getFactura().setCondicionDeVenta((CondicionDeVenta)getCmbCondicionVenta().getSelectedItem());
-		// getFactura().setMontoImpuestos(new
-		// BigDecimal(getTxtImpuestos().getText().trim().replace(',',
-		// '.')));
-
-		// si es factura sin remito, analizo si puso cilindros
 		boolean cilindrosValidos = true;
-		List<DibujoEstampado> dibujosAPersistir = Lists.newArrayList();
 		if (getRemitos() == null || getRemitos().isEmpty()) {
-			
 			int contador = 0;
+			ItemFacturaPrecioMateriaPrima itemCilindro = null;
 			for (ItemFactura itf : getFactura().getItems()) {
-				if ( (itf instanceof ItemFacturaPrecioMateriaPrima) && ((ItemFacturaPrecioMateriaPrima)itf).getPrecioMateriaPrima().getMateriaPrima().getTipo() == ETipoMateriaPrima.CILINDRO) {
+				if (itemIsCilindro(itf)) {
 					contador += itf.getCantidad().intValue();
+					itemCilindro = (ItemFacturaPrecioMateriaPrima)itf;
 				}
 			}
 			if (contador > 0) {
-				NroDibujoEstampadoTracker nroDibujoTracker = new NroDibujoEstampadoTracker();
 				FWJOptionPane.showWarningMessage(JDialogCargaFactura.this, "Se han detectado " + contador + " cilindro/s. Debe cargar los dibujos.", "Advertencia");
 				do {
-					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador, null, nroDibujoTracker);
-					dialog.seleccionDibujoExistente(getFactura().getCliente());
+					JDialogAgregarModificarDibujoEstampado dialog = new JDialogAgregarModificarDibujoEstampado(GuiUtil.getFrameForComponent(JDialogCargaFactura.this), contador, null, getNroDibujoTracker());
+					dialog.seleccionDibujoExistente(getFactura().getCliente(), getRemitoEntradaDibujo().getDibujosPersited());
 					dialog.setVisible(true);
 					if (dialog.isAcepto()) {
 						DibujoEstampado de = dialog.getDibujoActual();
 						de.setEstado(EEstadoDibujo.EN_STOCK);
-						dibujosAPersistir.add(de);
 						contador -= de.getCantidadColores();
-						nroDibujoTracker.putNro(de.getNroDibujo());
+						getNroDibujoTracker().putNro(de.getNroDibujo());
+						getRemitoEntradaDibujo().addItem(itemCilindro, de);
 					} else {
 						if (dialog.isAcepto()) {
 							DibujoEstampado de = dialog.getDibujoActual();
-							de.setCliente(getFactura().getCliente());
-							dibujosAPersistir.add(de);
+							getRemitoEntradaDibujo().addItem(itemCilindro, de);
 							contador -= de.getCantidadColores();
 						} else {
 							cilindrosValidos = false;
 						}
 					}
 				}while(contador > 0 && cilindrosValidos);
-				nroDibujoTracker.clear(); //por las dudas!
+				getNroDibujoTracker().clear(); //por las dudas!
 			}
 		}
 		if (!cilindrosValidos) {
 			FWJOptionPane.showErrorMessage(this, "Debe cargar todos los cilindros para guardar esta factura.", "Error");
 			throw new FaltanCargarDibujosException();
 		}
-		
+
 		String usuario = GTLGlobalCache.getInstance().getUsuarioSistema().getUsrName();
 		try {
-			setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(),dibujosAPersistir,usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(),dibujosAPersistir, usuario));
+			setFactura(isEdicion()?getFacturaFacade().editarFactura(getFactura(), getRemitoEntradaDibujo() ,usuario):getFacturaFacade().guardarFacturaYGenerarMovimiento(getFactura(), getRemitoEntradaDibujo(), usuario));
 		} catch (ValidacionException e) {
 			FWJOptionPane.showErrorMessage(this, StringW.wordWrap(e.getMensajeError()), "Error");
 			return false;
@@ -1828,7 +1826,7 @@ public class JDialogCargaFactura extends JDialog {
 	private class FaltanCargarDibujosException extends RuntimeException {
 
 		private static final long serialVersionUID = -2248855494604124346L;
-		
+
 	}
 	
 	private JButton getBtnImprimir() {
@@ -2247,13 +2245,20 @@ public class JDialogCargaFactura extends JDialog {
 		return precioMatariaPrimaFacade;
 	}
 
-	private RemitoEntradaFacadeRemote getRemitoEntradaFacade(){
+	private RemitoEntradaFacadeRemote getRemitoEntradaFacade() {
 		if(remitoEntradaFacade == null){
 			remitoEntradaFacade = GTLBeanFactory.getInstance().getBean2(RemitoEntradaFacadeRemote.class);
 		}
 		return remitoEntradaFacade;
 	}
-	
+
+	private RemitoEntradaDibujoFacadeRemote getRemitoEntradaDibujoFacade() {
+		if(remitoEntradaDibujoFacade == null){
+			remitoEntradaDibujoFacade = GTLBeanFactory.getInstance().getBean2(RemitoEntradaDibujoFacadeRemote.class);
+		}
+		return remitoEntradaDibujoFacade;
+	}
+
 	public String getStrFacturasRelacionadas() {
 		return strFacturasRelacionadas;
 	}
@@ -2282,6 +2287,27 @@ public class JDialogCargaFactura extends JDialog {
 
 		private static final long serialVersionUID = 1L;
 
+	}
+
+	private NroDibujoEstampadoTracker getNroDibujoTracker() {
+		if(nroDibujoTracker == null) {
+			nroDibujoTracker = new NroDibujoEstampadoTracker();
+		}
+		return nroDibujoTracker;
+	}
+
+	private RemitoEntradaDibujo getRemitoEntradaDibujo() {
+		if(reDibujo == null) {
+			if(getFactura().getId() != null) {
+				reDibujo = getRemitoEntradaDibujoFacade().getByFCRelacionada(getFactura());
+			}
+			if(reDibujo == null) {
+				reDibujo = new RemitoEntradaDibujo();
+				reDibujo.setCliente(cliente);
+				reDibujo.setFactura(getFactura());
+			}
+		}
+		return reDibujo;
 	}
 
 }

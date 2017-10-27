@@ -17,7 +17,7 @@ public interface DibujoEstampadoFacadeRemote {
 	
 	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal, String user) throws ValidacionException;
 
-	public void remove(DibujoEstampado dibujoEstampado, boolean force, boolean generarNC, String user) throws ValidacionException, ValidacionExceptionSinRollback;
+	public void remove(DibujoEstampado dibujoEstampado, boolean force, String user) throws ValidacionException, ValidacionExceptionSinRollback;
 
 	public DibujoEstampado getByIdEager(Integer idDibujoEstampado);
 

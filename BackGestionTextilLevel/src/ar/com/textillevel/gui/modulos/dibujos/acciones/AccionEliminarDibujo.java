@@ -33,7 +33,7 @@ public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 		try {
 			if (FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				try {
-					dibujoFacade.remove(dibujoEstampado, false, true, usuario);
+					dibujoFacade.remove(dibujoEstampado, false, usuario);
 				} catch (ValidacionExceptionSinRollback e1) {
 					FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMensajeError()), "Error");
 					return false;
@@ -44,7 +44,7 @@ public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 				if(FWJOptionPane.showQuestionMessage(e.getSource().getFrame(), StringW.wordWrap(e2.getMensajeError()), "Confirmación") == FWJOptionPane.YES_OPTION) {
 					try {
 						try {
-							dibujoFacade.remove(dibujoEstampado, true, true, usuario);
+							dibujoFacade.remove(dibujoEstampado, true, usuario);
 						} catch (ValidacionExceptionSinRollback e1) {
 							FWJOptionPane.showErrorMessage(e.getSource().getFrame(), StringW.wordWrap(e1.getMensajeError()), "Error");
 							return false;
@@ -66,7 +66,7 @@ public class AccionEliminarDibujo extends Accion<DibujoEstampado> {
 
 	@Override
 	public boolean esValida(AccionEvent<DibujoEstampado> e) {
-		return e.getSelectedElements().size() == 1 && e.getSelectedElements().get(0).getEstado() != EEstadoDibujo.SALIDA;
+		return e.getSelectedElements().size() == 1 && e.getSelectedElements().get(0).getEstado() != EEstadoDibujo.DEVUELTO;
 	}
 
 }

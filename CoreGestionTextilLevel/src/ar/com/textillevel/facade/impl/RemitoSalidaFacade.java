@@ -748,7 +748,7 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 		boolean isAlta = remitoSalida.getId() == null;
 		remitoSalida = remitoSalidaDAOLocal.save(remitoSalida);
 		for(DibujoEstampado de : remitoSalida.getDibujoEstampados()) {
-			de.setEstado(EEstadoDibujo.SALIDA);
+			de.setEstado(EEstadoDibujo.DEVUELTO);
 			dibujoDao.save(de);
 		}
 		if(isAlta) {

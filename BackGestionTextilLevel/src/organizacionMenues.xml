@@ -121,6 +121,9 @@
 						class="main.acciones.facturacion.AgregarRemitoEntradaAction"
 						nombre="Entrada" id="19" action="true"/>
 					<newItem
+						class="main.acciones.facturacion.AgregarRemitoEntradaDibujosAction"
+						nombre="Entrada de Dibujos" id="117" action="true"/>
+					<newItem
 						class="main.acciones.facturacion.AgregarRemitoSalidaAction"
 						nombre="Salida" id="20" action="true"/>
 					<newItem

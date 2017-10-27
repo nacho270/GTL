@@ -1,6 +1,5 @@
 package ar.com.textillevel.facade.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,26 +11,22 @@ import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
-import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.ChequeDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionDAOLocal;
 import ar.com.textillevel.dao.api.local.CorreccionFacturaProveedorDAOLocal;
 import ar.com.textillevel.dao.api.local.FacturaDAOLocal;
 import ar.com.textillevel.dao.api.local.PagoOrdenDePagoDAOLocal;
 import ar.com.textillevel.dao.api.local.ParametrosGeneralesDAOLocal;
+import ar.com.textillevel.dao.api.local.RemitoEntradaDibujoDAOLocal;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.Factura;
 import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
-import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaCorreccion;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.NotaDebitoProveedor;
 import ar.com.textillevel.entidades.documentos.to.CorreccionFacturaMobTO;
-import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
 import ar.com.textillevel.entidades.enums.ETipoCorreccionFactura;
-import ar.com.textillevel.entidades.enums.EUnidad;
-import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaProveedorFacadeLocal;
@@ -79,9 +74,12 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 	@EJB
 	private FacturaDAOLocal facturaDAO;
 	
+	@EJB
+	private RemitoEntradaDibujoDAOLocal reDibujoDAO;
+	
 	public CorreccionFactura guardarCorreccionYGenerarMovimiento(CorreccionFactura correccion, String usuario) throws ValidacionException, ValidacionExceptionSinRollback {
 		correccion = guardarYGenerarMovimientoInterno(correccion);
-		auditoriaFacade.auditar(usuario, "Actualización de nota de "+ correccion.getTipo().getDescripcion() + " Nº: " + correccion.getNroFactura(), EnumTipoEvento.ALTA, correccion);
+		auditoriaFacade.auditar(usuario, "Actualización de nota de "+ correccion.getTipo().getDescripcion() + " Nº: " + correccion.getNroFactura() + " Monto " + correccion.getMontoTotal().doubleValue(), EnumTipoEvento.ALTA, correccion);
 		return docContableFacade.autorizarDocumentoContableAFIP(correccion);
 	}
 
@@ -228,35 +226,6 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 
 	public CorreccionFactura getCorreccionById(Integer idCorreccion) {
 		return correccionDao.getCorreccionById(idCorreccion);
-	}
-
-	@Override
-	public NotaCredito generarNCPorBorradoDibujo(DibujoEstampado dibujo, String user) throws ValidacionException, ValidacionExceptionSinRollback {
-		Factura factura = facturaDAO.getById(dibujo.getIdFactura());
-		
-		NotaCredito nc = new NotaCredito();
-		
-		nc.setDescripcion("Eliminación de Dibujo " + dibujo.getNombre());
-		nc.setCliente(dibujo.getCliente());
-		nc.setFechaEmision(DateUtil.getAhora());
-		nc.setMontoTotal(factura.getMontoTotal());
-		nc.setPorcentajeIVAInscripto(factura.getPorcentajeIVAInscripto());
-		nc.setMontoSubtotal(factura.getMontoSubtotal());
-		nc.setEstadoCorreccion(EEstadoCorreccion.IMPAGA);
-		nc.setTipoFactura(factura.getTipoFactura());
-		nc.setNroFactura(docContableFacade.getProximoNroDocumentoContable(dibujo.getCliente().getPosicionIva(), nc.getTipoDocumento()));
-		
-		nc.getFacturasRelacionadas().add(factura);
-
-		ItemFacturaCorreccion itCorrecc = new ItemFacturaCorreccion();
-		itCorrecc.setCantidad(new BigDecimal(1));
-		itCorrecc.setDescripcion(nc.getDescripcion());
-		itCorrecc.setImporte(nc.getMontoSubtotal());
-		itCorrecc.setUnidad(EUnidad.UNIDAD);
-		itCorrecc.setPrecioUnitario(nc.getMontoSubtotal());
-		nc.getItems().add(itCorrecc);
-
-		return (NotaCredito)guardarCorreccionYGenerarMovimiento(nc, user);
 	}
 
 }

@@ -325,7 +325,8 @@ public class JDialogEditarNDPersona extends JDialog {
 						
 						getTabla().setValueAt(elemento.getImporteImpuestos().doubleValue(), selectedRows[indexRows], COL_IMPUESTOS);
 						getTabla().setValueAt(elemento.getImporteTotalConImpuestos().doubleValue(), selectedRows[indexRows], COL_TOTAL);
-						
+						getTabla().setValueAt(StringUtil.getCadena(elemento.getImpuestos(), " - "), selectedRows[indexRows], COL_DETALLE_IMPUESTOS);
+
 						indexRows++;
 					}
 					updateTotales();
@@ -337,7 +338,7 @@ public class JDialogEditarNDPersona extends JDialog {
 		protected void agregarElemento(ItemCorreccionFacturaPersona elemento) {
 			Object[] row = new Object[CANT_COLS];
 			row[COL_DESCR] = elemento.getDescripcion();
-			row[COL_DETALLE_IMPUESTOS] = StringUtil.getCadena(elemento.getImpuestos(), "-");
+			row[COL_DETALLE_IMPUESTOS] = StringUtil.getCadena(elemento.getImpuestos(), " - ");
 			row[COL_MONTO] = elemento.getImporte().doubleValue();
 			row[COL_IMPUESTOS] = elemento.getImporteImpuestos().doubleValue();
 			row[COL_TOTAL] = elemento.getImporteTotalConImpuestos().doubleValue();

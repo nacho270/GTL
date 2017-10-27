@@ -1,6 +1,10 @@
 package ar.com.textillevel.facade.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -8,22 +12,35 @@ import javax.ejb.Stateless;
 import ar.com.fwcommon.auditoria.evento.enumeradores.EnumTipoEvento;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
+import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.dao.api.local.DibujoEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.GrupoArticuloDAOLocal;
 import ar.com.textillevel.dao.api.local.PrecioBaseEstampadoDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoArticuloDAOLocal;
+import ar.com.textillevel.dao.api.local.RemitoEntradaDibujoDAOLocal;
 import ar.com.textillevel.dao.api.local.RemitoSalidaDAOLocal;
+import ar.com.textillevel.entidades.documentos.factura.Factura;
+import ar.com.textillevel.entidades.documentos.factura.NotaCredito;
+import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaCorreccion;
+import ar.com.textillevel.entidades.documentos.remito.ItemDibujoRemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.RemitoEntradaDibujo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
+import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
+import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.gente.Cliente;
+import ar.com.textillevel.entidades.to.ResultadoEliminacionDibujosTO;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
 import ar.com.textillevel.entidades.ventas.cotizacion.PrecioBaseEstampado;
 import ar.com.textillevel.excepciones.EValidacionException;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
+import ar.com.textillevel.facade.api.local.DocumentoContableFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.util.CambioEstadoDibujoHelper;
+import edu.emory.mathcs.backport.java.util.Collections;
 
 @Stateless
 public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
@@ -42,9 +59,15 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	
 	@EJB
 	private RemitoSalidaDAOLocal remitoSalidaDAOLocal;
-	
+
+	@EJB
+	private RemitoEntradaDibujoDAOLocal reDibujoDAOLocal;
+
 	@EJB
 	private CorreccionFacadeLocal correccionFacade;
+	
+	@EJB
+	private DocumentoContableFacadeLocal documentoContableFacade;
 	
 	@EJB
 	private AuditoriaFacadeLocal<DibujoEstampado> auditoriaFacade;
@@ -60,7 +83,7 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 	public DibujoEstampado save(DibujoEstampado dibujoEstampado, Integer nroDibujoOriginal, String user) throws ValidacionException {
 		if(dibujoEstampado.getId() == null) { //es nuevo, no se hacen validaciones 
 			DibujoEstampado dibujoSaved = dibujoEstampadoDAOLocal.save(dibujoEstampado);
-			auditoriaFacade.auditar(user, "Alta Dibujo " +  dibujoEstampado.toString() , EnumTipoEvento.ALTA, dibujoEstampado);
+			auditoriaFacade.auditar(user, "ALTA DIB " +  dibujoEstampado.toString() , EnumTipoEvento.ALTA, dibujoEstampado);
 			return dibujoSaved;
 		} else {
 			checkEdicionDibujo(dibujoEstampado);
@@ -68,27 +91,88 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 			if(!dibujoEstampado.getNroDibujo().equals(nroDibujoOriginal)) {
 				dibujoEstampadoDAOLocal.fixHuecosNroDibujo(nroDibujoOriginal);
 			}
-			auditoriaFacade.auditar(user, "Edición Dibujo " +  dibujoEstampado.toString() , EnumTipoEvento.MODIFICACION, dibujoEstampado);
+			auditoriaFacade.auditar(user, "MODIF DIB " +  dibujoEstampado.toString() , EnumTipoEvento.MODIFICACION, dibujoEstampado);
 			return dibResult;
 		}
 	}
 
-	public void remove(DibujoEstampado dibujoEstampado, boolean force, boolean generarNC, String user) throws ValidacionException, ValidacionExceptionSinRollback {
-		List<PrecioBaseEstampado> allPrecioBaseByDibujo = pbeDAOLocal.getAllByDibujo(dibujoEstampado);
-		if(!allPrecioBaseByDibujo.isEmpty()) {
-			if(force) {//force
-				deleteDibujo(dibujoEstampado);
-			} else {//!force
-				throw new ValidacionException(EValidacionException.DIBUJO_USADO_EN_LISTAS_DE_PRECIOS.getInfoValidacion());
-			}
-		}
-		deleteDibujo(dibujoEstampado);
-		if(generarNC && dibujoEstampado.getCliente() != null && dibujoEstampado.getIdFactura() != null) {//genero una NC para un cliente si corresponde
-			correccionFacade.generarNCPorBorradoDibujo(dibujoEstampado, user);
-		}
-		auditoriaFacade.auditar(user, "Borrado Dibujo " +  dibujoEstampado.toString() , EnumTipoEvento.BAJA, dibujoEstampado);
+	@SuppressWarnings("unchecked")
+	public void remove(DibujoEstampado dibujoEstampado, boolean force, String user) throws ValidacionException, ValidacionExceptionSinRollback {
+		ResultadoEliminacionDibujosTO result = removeInterno(Collections.singletonList(dibujoEstampado), force, true, user);
+		removeREDibujosVacios(result);
+		auditoriaFacade.auditar(user, "DELETE DIB " +  dibujoEstampado.toString() , EnumTipoEvento.BAJA, dibujoEstampado);
 	}
 
+	private void removeREDibujosVacios(ResultadoEliminacionDibujosTO result) {
+		for(RemitoEntradaDibujo reDibujoAsociado : result.getReDibujosInvolucrados()) {
+			if(reDibujoAsociado != null && reDibujoAsociado.getItems().isEmpty()) {//borro el RE si es que se quedó sin dibujos!
+				reDibujoDAOLocal.removeById(reDibujoAsociado.getId());
+			}
+		}
+	}
+
+	private ResultadoEliminacionDibujosTO removeInterno(List<DibujoEstampado> dibujos, boolean force, boolean intentarGenerarNC, String user) throws ValidacionException, ValidacionExceptionSinRollback {
+		Set<RemitoEntradaDibujo> reDibujosInvolucrados = new HashSet<RemitoEntradaDibujo>();
+		double importePorDibujos = 0;
+		Cliente cl = null;
+		for(DibujoEstampado dibujo : dibujos) {
+			cl = dibujo.getCliente(); //deberían ser todos del mismo
+			RemitoEntradaDibujo reByDibujo = reDibujoDAOLocal.getREByDibujo(dibujo);
+			if(reByDibujo != null) {
+				ItemDibujoRemitoEntrada item = reByDibujo.getItem(dibujo);
+				importePorDibujos += item.getPrecio() == null ? 0 : item.getPrecio().doubleValue();
+				reByDibujo.getItems().remove(item);
+				reDibujosInvolucrados.add(reDibujoDAOLocal.save(reByDibujo));
+			}
+			
+			List<PrecioBaseEstampado> allPrecioBaseByDibujo = pbeDAOLocal.getAllByDibujo(dibujo);
+			if(!allPrecioBaseByDibujo.isEmpty()) {
+				if(force) {//force
+					deleteDibujo(dibujo);
+				} else {//!force
+					throw new ValidacionException(EValidacionException.DIBUJO_USADO_EN_LISTAS_DE_PRECIOS.getInfoValidacion());
+				}
+			}
+			deleteDibujo(dibujo);
+		}
+		if(intentarGenerarNC && importePorDibujos>0) {//genero una NC para un cliente si corresponde
+
+			NotaCredito nc = new NotaCredito();
+			Set<Factura> fcSet = new HashSet<Factura>();
+			for(RemitoEntradaDibujo re : reDibujosInvolucrados) {
+				fcSet.add(re.getFactura());
+			}
+
+			nc.setDescripcion("Borrado Dibujos " + StringUtil.getCadena(dibujos, " | "));
+
+			Factura unaFC = fcSet.iterator().next();
+			nc.setCliente(cl);
+			nc.setFechaEmision(DateUtil.getAhora());
+			BigDecimal porcIVAInscripto = unaFC.getPorcentajeIVAInscripto();
+			BigDecimal total = new BigDecimal(importePorDibujos + (porcIVAInscripto == null ? 0 : porcIVAInscripto.doubleValue()/100 * importePorDibujos));
+			nc.setMontoTotal(total);
+			nc.setPorcentajeIVAInscripto(porcIVAInscripto);
+			nc.setMontoSubtotal(new BigDecimal(importePorDibujos));
+			nc.setEstadoCorreccion(EEstadoCorreccion.IMPAGA);
+			nc.setTipoFactura(unaFC.getTipoFactura());
+			nc.setNroFactura(documentoContableFacade.getProximoNroDocumentoContable(cl.getPosicionIva(), nc.getTipoDocumento()));
+
+			nc.getFacturasRelacionadas().addAll(fcSet);
+
+			ItemFacturaCorreccion itCorrecc = new ItemFacturaCorreccion();
+			itCorrecc.setCantidad(new BigDecimal(1));
+			itCorrecc.setDescripcion(nc.getDescripcion());
+			itCorrecc.setImporte(nc.getMontoTotal());
+			itCorrecc.setUnidad(EUnidad.UNIDAD);
+			itCorrecc.setPrecioUnitario(nc.getMontoSubtotal());
+			nc.getItems().add(itCorrecc);
+
+			correccionFacade.guardarCorreccionYGenerarMovimiento(nc, user);
+		}
+		//armar el TO y devolverlo
+		return new ResultadoEliminacionDibujosTO(new ArrayList<RemitoEntradaDibujo>(reDibujosInvolucrados), importePorDibujos);
+	}
+	
 	private void deleteDibujo(DibujoEstampado dibujoEstampado) throws ValidacionException {
 		Integer nroDibujo = dibujoEstampado.getNroDibujo();
 		checkEliminarCombinarDibujo(dibujoEstampado);
@@ -112,7 +196,7 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 		gaDAOLocal.deleteGruposArtEstampadoByDibujo(dibujoEstampado); //en realidad intenta borrar para todos los clientes pero sólo tendría que estar asignado a una sola lista de precios		
 		dibujoEstampado.setCliente(cliente);
 		dibujoEstampadoDAOLocal.save(dibujoEstampado);
-		auditoriaFacade.auditar(user, "Asignación CLI " + cliente.getNroCliente() + " a Dib " + dibujoEstampado.toString(), EnumTipoEvento.MODIFICACION, dibujoEstampado);
+		auditoriaFacade.auditar(user, "ASIG CLI " + cliente.getNroCliente() + " a DIB " + dibujoEstampado.toString(), EnumTipoEvento.MODIFICACION, dibujoEstampado);
 	}
 
 	@Override
@@ -151,21 +235,38 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 
 	@Override
 	public void combinarDibujos(DibujoEstampado dibujoActual, List<DibujoEstampado> dibujosCombinados, String user) throws ValidacionException {
-		Cliente cl = null;
-		Integer idFactura = null;
-		for(DibujoEstampado de : dibujosCombinados) {
-			cl = de.getCliente(); //deberían ser lo mismo así q puedo setearlo en cada vuelta del for
-			idFactura = de.getIdFactura();
-			try {
-				remove(de, true, false, user);
-			} catch (ValidacionExceptionSinRollback e) {
-				e.printStackTrace(); //no va a pasar xq no fuerza el remove
-			}
-		}
+		checkCombinarDibujos(dibujosCombinados);
+		ResultadoEliminacionDibujosTO result = null;
+		Cliente cl = dibujosCombinados.get(0).getCliente(); //deberían ser lo mismo así q puedo setearlo en cada vuelta del for
 		dibujoActual.setCliente(cl);
-		dibujoActual.setIdFactura(idFactura);
-		save(dibujoActual, null, user);
-		auditoriaFacade.auditar(user, "Combinar dibujo " + dibujoActual.toString(), EnumTipoEvento.MODIFICACION, dibujoActual);
+		try {
+			result = removeInterno(dibujosCombinados, true, false, user);
+		} catch (ValidacionExceptionSinRollback e) {
+			e.printStackTrace(); //no va a pasar porque fuerza el remove
+		}
+		//grabo el dibujo en el primero de los REs involucrados
+		DibujoEstampado dibSaved = save(dibujoActual, null, user);
+		RemitoEntradaDibujo unREDibujo = result.findAny();
+		unREDibujo.addItem(result.getImportePorDibujos(), dibSaved);
+		reDibujoDAOLocal.save(unREDibujo);
+		
+		auditoriaFacade.auditar(user, "COMB DIB " + dibSaved.toString(), EnumTipoEvento.MODIFICACION, dibujoActual);
+	}
+
+	private void checkCombinarDibujos(List<DibujoEstampado> dibujosCombinados) throws ValidacionException {
+		Set<Cliente> clientes = new HashSet<Cliente>();
+		for(DibujoEstampado de : dibujosCombinados) {
+			if(de.getEstado() != EEstadoDibujo.EN_STOCK) {
+				throw new ValidacionException(EValidacionException.DIBUJO_IMPOSIBLE_COMBINAR.getInfoValidacion());
+			}
+			if(de.getCliente() == null) {
+				throw new ValidacionException(EValidacionException.DIBUJO_IMPOSIBLE_COMBINAR.getInfoValidacion());
+			}
+			clientes.add(de.getCliente());
+		}
+		if(clientes.size() != 1) {
+			throw new ValidacionException(EValidacionException.DIBUJO_IMPOSIBLE_COMBINAR.getInfoValidacion());
+		}
 	}
 
 	@Override
@@ -176,7 +277,7 @@ public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {
 		}
 		dibujo.setEstado(estadoUntil);
 		DibujoEstampado dibujoSaved = dibujoEstampadoDAOLocal.save(dibujo);
-		auditoriaFacade.auditar(user, "Cambio estado Dibujo " + dibujo.toString() + ", de " + estadoOrig + " a " + estadoUntil , EnumTipoEvento.MODIFICACION, dibujo);
+		auditoriaFacade.auditar(user, "CAMB ESTADO DIB " + dibujo.toString() + ", de " + estadoOrig + " a " + estadoUntil , EnumTipoEvento.MODIFICACION, dibujo);
 		return dibujoSaved;
 	}
 

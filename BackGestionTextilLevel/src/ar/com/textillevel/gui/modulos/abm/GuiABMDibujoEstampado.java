@@ -168,7 +168,7 @@ public class GuiABMDibujoEstampado extends GuiABMListaTemplate {
 			if(FWJOptionPane.showQuestionMessage(GuiABMDibujoEstampado.this, "¿Está seguro que desea eliminar el dibujo seleccionado?", "Confirmación") == FWJOptionPane.YES_OPTION) {
 				try {
 					try {
-						getDibujoEstampadoFacadeRemote().remove(getDibujoActual(), false, false, null);
+						getDibujoEstampadoFacadeRemote().remove(getDibujoActual(), false,  null);
 					} catch (ValidacionExceptionSinRollback e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

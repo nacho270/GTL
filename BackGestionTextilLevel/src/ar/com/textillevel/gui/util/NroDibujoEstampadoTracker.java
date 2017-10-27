@@ -34,6 +34,12 @@ public class NroDibujoEstampadoTracker {
 		return setExistentes == null ? 0 : setExistentes.size();
 	}
 
+	public boolean removeNro(Integer nroDibujo) {
+		Integer nroComienzo = getNroComienzoDibujo(nroDibujo);
+		Set<Integer> setExistentes = trackMapNrosPedidos.get(nroComienzo);
+		return setExistentes != null && setExistentes.remove(nroDibujo); 
+	}
+
 	private int getNroComienzoDibujo(Integer nroDibujo) {
 		return (nroDibujo - nroDibujo % 1000)/1000;
 	}

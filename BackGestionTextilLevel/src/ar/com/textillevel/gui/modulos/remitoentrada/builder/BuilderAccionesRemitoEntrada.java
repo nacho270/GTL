@@ -15,7 +15,6 @@ import ar.com.fwcommon.templates.modulo.model.tabla.IBuilderTabla;
 import ar.com.fwcommon.templates.modulo.model.tabla.Tabla;
 import ar.com.fwcommon.templates.modulo.model.totales.IBuilderTotales;
 import ar.com.fwcommon.templates.modulo.model.totales.Totales;
-import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.gui.modulos.remitoentrada.acciones.AccionCambiarClienteRE;
 import ar.com.textillevel.gui.modulos.remitoentrada.acciones.AccionDobleClickRemitoEntrada;
 import ar.com.textillevel.gui.modulos.remitoentrada.acciones.AccionEliminarRemitoEntrada;
@@ -24,12 +23,13 @@ import ar.com.textillevel.gui.modulos.remitoentrada.columnas.ColumnaClienteRE;
 import ar.com.textillevel.gui.modulos.remitoentrada.columnas.ColumnaFechaRE;
 import ar.com.textillevel.gui.modulos.remitoentrada.columnas.ColumnaNroRE;
 import ar.com.textillevel.gui.modulos.remitoentrada.columnas.ColumnaProductosRE;
+import ar.com.textillevel.gui.modulos.remitoentrada.to.RemitoEntradaModuloTO;
 
-public class BuilderAccionesRemitoEntrada implements IBuilderAcciones<RemitoEntrada>,
-										   IBuilderFiltros<RemitoEntrada>, 
-										   IBuilderTabla<RemitoEntrada>, 
-										   IBuilderTotales<RemitoEntrada>,
-										   IBuilderAccionAdicional<RemitoEntrada> {
+public class BuilderAccionesRemitoEntrada implements IBuilderAcciones<RemitoEntradaModuloTO>,
+										   IBuilderFiltros<RemitoEntradaModuloTO>, 
+										   IBuilderTabla<RemitoEntradaModuloTO>, 
+										   IBuilderTotales<RemitoEntradaModuloTO>,
+										   IBuilderAccionAdicional<RemitoEntradaModuloTO> {
 
 	private static BuilderAccionesRemitoEntrada instance = new BuilderAccionesRemitoEntrada();
 
@@ -37,9 +37,9 @@ public class BuilderAccionesRemitoEntrada implements IBuilderAcciones<RemitoEntr
 		return instance;
 	}
 	
-	public Acciones<RemitoEntrada> construirAcciones(int idModel) throws FWException {
-		Acciones<RemitoEntrada> acciones = new Acciones<RemitoEntrada>();
-		List<Accion<RemitoEntrada>> accionesCreacion = new ArrayList<Accion<RemitoEntrada>>();
+	public Acciones<RemitoEntradaModuloTO> construirAcciones(int idModel) throws FWException {
+		Acciones<RemitoEntradaModuloTO> acciones = new Acciones<RemitoEntradaModuloTO>();
+		List<Accion<RemitoEntradaModuloTO>> accionesCreacion = new ArrayList<Accion<RemitoEntradaModuloTO>>();
 		accionesCreacion.add(new AccionEliminarRemitoEntrada());
 		accionesCreacion.add(new AccionModificarRemitoEntrada());
 		accionesCreacion.add(new AccionCambiarClienteRE());
@@ -47,12 +47,12 @@ public class BuilderAccionesRemitoEntrada implements IBuilderAcciones<RemitoEntr
 		return acciones;
 	}
 
-	public Filtros<RemitoEntrada> construirFiltros(int idModel) {
+	public Filtros<RemitoEntradaModuloTO> construirFiltros(int idModel) {
 		return null;
 	}
 
-	public Tabla<RemitoEntrada> construirTabla(int idModel) {
-		Tabla<RemitoEntrada> tabla = new Tabla<RemitoEntrada>();
+	public Tabla<RemitoEntradaModuloTO> construirTabla(int idModel) {
+		Tabla<RemitoEntradaModuloTO> tabla = new Tabla<RemitoEntradaModuloTO>();
 		tabla.addColumna(new ColumnaNroRE());
 		tabla.addColumna(new ColumnaFechaRE());
 		tabla.addColumna(new ColumnaClienteRE());
@@ -60,12 +60,12 @@ public class BuilderAccionesRemitoEntrada implements IBuilderAcciones<RemitoEntr
 		return tabla;
 	}
 
-	public Totales<RemitoEntrada> construirTotales(int idModel) {
+	public Totales<RemitoEntradaModuloTO> construirTotales(int idModel) {
 		return null;
 	}
 
-	public AccionesAdicionales<RemitoEntrada> construirAccionAdicional(int idModel) throws FWException {
-		AccionesAdicionales<RemitoEntrada> acciones = new AccionesAdicionales<RemitoEntrada>();
+	public AccionesAdicionales<RemitoEntradaModuloTO> construirAccionAdicional(int idModel) throws FWException {
+		AccionesAdicionales<RemitoEntradaModuloTO> acciones = new AccionesAdicionales<RemitoEntradaModuloTO>();
 		acciones.addSingleElement(new AccionDobleClickRemitoEntrada());
 		return acciones;
 	}
