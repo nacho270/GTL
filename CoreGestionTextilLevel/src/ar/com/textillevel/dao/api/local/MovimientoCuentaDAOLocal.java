@@ -33,7 +33,7 @@ public interface MovimientoCuentaDAOLocal extends DAOLocal<MovimientoCuenta, Int
 	public int borrarMovimientoNotaDebitoProveedor(Integer id);
 	public BigDecimal getSaldoCuentaHastaFecha(Cuenta cc, Date fechaTope);
 	public List<MovimientoCuenta> getMovimientosProveedorByIdCuentaYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta
-																				/*, boolean masAntiguoPrimero*/, boolean ultimosMovimientos);
+																				/*, boolean masAntiguoPrimero*/, boolean ultimosMovimientos, ETipoDocumento tipoDocumento);
 
 	public MovimientoHaberProveedor getMovimientoHPByNC(Integer idNC);
 	public MovimientoDebeProveedor getMovimientoDPByND(Integer idND);

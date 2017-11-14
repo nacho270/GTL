@@ -202,12 +202,18 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 
 		@Override
 		public void visit(MovimientoHaberProveedor movimiento) {
-			
+			if ( (tipoDocumento == ETipoDocumento.ORDEN_PAGO && movimiento.getOrdenDePago() != null) || 
+					 (tipoDocumento == ETipoDocumento.NOTA_CREDITO_PROV && movimiento.getNotaCredito() != null)) {
+					movimientosFiltrados.add(movimiento);
+				}
 		}
 
 		@Override
 		public void visit(MovimientoDebeProveedor movimiento) {
-			
+			if ( (tipoDocumento == ETipoDocumento.FACTURA_PROV && movimiento.getFacturaProveedor() != null) ||
+					 (tipoDocumento == ETipoDocumento.NOTA_DEBITO_PROV && movimiento.getNotaDebitoProveedor() != null) ) {
+					movimientosFiltrados.add(movimiento);
+				}
 		}
 
 		@Override
@@ -310,7 +316,7 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 	}
 
 	public List<MovimientoCuenta> getMovimientosProveedorByIdCuentaYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta
-		/*, boolean masAntiguoPrimero*/, boolean ultimosMovimientos) {
+		/*, boolean masAntiguoPrimero*/, boolean ultimosMovimientos, ETipoDocumento tipoDocumento) {
 		List<MovimientoCuenta> movsRet = new ArrayList<MovimientoCuenta>();
 		List<MovimientoCuenta> movs = getMovimientosPorCuentaYFecha(idCuenta, fechaDesde, fechaHasta);
 		MovimientosLazyInitializer mli = new MovimientosLazyInitializer();
@@ -334,7 +340,14 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 				movsRet.add(m);
 			}
 		}
-		return movsRet;
+		if(tipoDocumento == null) {
+			return movsRet;
+		}
+		MovimientosFilterVisitor mfv = new MovimientosFilterVisitor(tipoDocumento);
+		for (MovimientoCuenta mc : movsRet) {
+			mc.aceptarVisitor(mfv);
+		}
+		return mfv.movimientosFiltrados;
 	}
 
 	@SuppressWarnings("unchecked")

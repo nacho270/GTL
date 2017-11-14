@@ -31,7 +31,7 @@ public interface CuentaFacadeRemote {
 	public BigDecimal getTransporteCuenta(Integer idCliente, Date fechaTope, boolean menorEstricto) throws ValidacionException;
 	
 	public BigDecimal getTransporteCuentaProveedor(Integer idProveedor, Date fechaTope);
-	public List<MovimientoCuenta> getMovimientosByIdProveedorYFecha(Integer id, Date fechaDesde, Date fechaHasta, boolean ultimosMovimientos);
+	public List<MovimientoCuenta> getMovimientosByIdProveedorYFecha(Integer id, Date fechaDesde, Date fechaHasta, boolean ultimosMovimientos, ETipoDocumento tipoDocumento);
 	public CuentaProveedor getCuentaProveedorByIdProveedor(Integer idProveedor);
 	
 	public CuentaBanco getCuentaBancoByIdBanco(Integer idBanco);

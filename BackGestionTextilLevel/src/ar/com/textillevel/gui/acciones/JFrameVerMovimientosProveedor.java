@@ -32,6 +32,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -62,6 +63,7 @@ import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoCuenta;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebeProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoHaberProveedor;
 import ar.com.textillevel.entidades.cuenta.movimientos.visitor.IFilaMovimientoVisitor;
+import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.CorreccionFacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.FacturaProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionCheque;
@@ -133,6 +135,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 	private JLabel lblTelefono;
 	private LinkableLabel lblElegirProveedor;
 	private JCheckBox chkUltimosMovimientos;
+	private JComboBox cmbFiltroTipoDocumento;
 	
 	private JButton btnAgregarRemitoCompraTela;
 	private JButton btnAgregarRemitoVentaTela;
@@ -416,6 +419,8 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			JPanel panelFiltros = new JPanel();
 			panelFiltros.setLayout(new FlowLayout());
 			//panelFiltros.add(getCmbOrdenMovimientos());
+			panelFiltros.add(new JLabel("Tipo documento: "));
+			panelFiltros.add(getCmbFiltroTipoDocumento());
 			
 			panel.add(panelProveedor);
 			panel.add(panelFechas);
@@ -468,10 +473,11 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 						//BigDecimal transporteCuenta = getCuentaFacade().getTransporteCuentaProveedor(proveedor.getId(),fechaDesde);
 						
 						List<MovimientoCuenta> movs = null;
+						ETipoDocumento filtroTipoDocumento = getCmbFiltroTipoDocumento().getSelectedItem().equals("TODOS") ? null : (ETipoDocumento) getCmbFiltroTipoDocumento().getSelectedItem();
 						if(getChkUltimosMovimientos().isSelected()){
-							movs = getCuentaFacade().getMovimientosByIdProveedorYFecha(proveedor.getId(),null,null,true	/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
+							movs = getCuentaFacade().getMovimientosByIdProveedorYFecha(proveedor.getId(),null,null,true,filtroTipoDocumento	/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
 						}else{
-							movs =getCuentaFacade().getMovimientosByIdProveedorYFecha(proveedor.getId(),fechaDesde,fechaHasta,false	/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
+							movs =getCuentaFacade().getMovimientosByIdProveedorYFecha(proveedor.getId(),fechaDesde,fechaHasta,false,filtroTipoDocumento	/*,getCmbOrdenMovimientos().getSelectedItem().equals("MAS ANTIGUO PRIMERO")*/);
 						}
 						getPanelTablaMovimientos().getTabla().removeAllRows();
 						if (movs != null && !movs.isEmpty()) {
@@ -486,11 +492,13 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 							llenarTablaMovimientos(movs,transporteCuenta);
 							setSaldoCuenta();
 							getBtnAgregarRemitoCompraTela().setEnabled(true);
-							Map<Integer, Color> mapaColores = filaMovimientoVisitor.getMapaColores();
-							InfoCuentaTO infoCuentaTO = getCuentaFacade().getInfoOrdenDePagoYPagosRecibidos(proveedor.getId());
-							pintarOrdenesDePago(mapaColores);
-							pintarFacturasPagadas(mapaColores, infoCuentaTO);
-							pintarOrdenesDePagoSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
+							if(filtroTipoDocumento == null) {
+								Map<Integer, Color> mapaColores = filaMovimientoVisitor.getMapaColores();
+								InfoCuentaTO infoCuentaTO = getCuentaFacade().getInfoOrdenDePagoYPagosRecibidos(proveedor.getId());
+								pintarOrdenesDePago(mapaColores);
+								pintarFacturasPagadas(mapaColores, infoCuentaTO);
+								pintarOrdenesDePagoSecondPass(filaMovimientoVisitor.getRowsPagosSaldoAFavor());
+							}
 						} else {
 							getBtnAnular().setEnabled(false);
 							getBtnCompletarDatosNotaDebitoCredito().setEnabled(false);
@@ -1549,5 +1557,17 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 			});
 		}
 		return btnAgregarRemitoSalidaProveedor;
+	}
+	
+	private JComboBox getCmbFiltroTipoDocumento() {
+		if (cmbFiltroTipoDocumento == null) {
+			cmbFiltroTipoDocumento = new JComboBox();
+			cmbFiltroTipoDocumento.addItem("TODOS");
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.FACTURA_PROV);
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.NOTA_DEBITO_PROV);
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.ORDEN_PAGO);
+			cmbFiltroTipoDocumento.addItem(ETipoDocumento.NOTA_CREDITO_PROV);
+		}
+		return cmbFiltroTipoDocumento;
 	}
 }

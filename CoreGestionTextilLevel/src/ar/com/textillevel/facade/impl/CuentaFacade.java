@@ -502,9 +502,9 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		return movimientoDao.getMovimientosDeTransporte(cb, fechaTope);
 	}
 	
-	public List<MovimientoCuenta> getMovimientosByIdProveedorYFecha(Integer idProveedor, Date fechaDesde, Date fechaHasta, boolean ultimosMovimientos) {
+	public List<MovimientoCuenta> getMovimientosByIdProveedorYFecha(Integer idProveedor, Date fechaDesde, Date fechaHasta, boolean ultimosMovimientos, ETipoDocumento tipoDocumento) {
 		CuentaProveedor cp = getCuentaProveedorByIdProveedor(idProveedor);
-		return movimientoDao.getMovimientosProveedorByIdCuentaYFecha(cp.getId(), fechaDesde, fechaHasta, ultimosMovimientos);
+		return movimientoDao.getMovimientosProveedorByIdCuentaYFecha(cp.getId(), fechaDesde, fechaHasta, ultimosMovimientos, tipoDocumento);
 	}
 
 	public BigDecimal getTransporteCuentaProveedor(Integer idProveedor, Date fechaTope) {
