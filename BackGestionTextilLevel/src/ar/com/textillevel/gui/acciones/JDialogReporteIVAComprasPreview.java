@@ -726,25 +726,46 @@ public class JDialogReporteIVAComprasPreview extends JDialog {
 
 			});
 			
+			
+			Map<Integer, Double> mapImpuestosConValorMayorCero = new HashMap<Integer, Double>();
+			for(DescripcionFacturaIVAComprasTO item : itemsFacturaProveedor) {
+				for(DetalleImpuestoFacturaIVAComprasTO detalle : item.getDetalleImpuestoList()) {
+					Double total = mapImpuestosConValorMayorCero.get(detalle.getIdImpuesto());
+					if(detalle.getImporte() > 0) {
+						if(total == null) {
+							total = detalle.getImporte();
+						} else {
+							total += detalle.getImporte();
+						}
+						mapImpuestosConValorMayorCero.put(detalle.getIdImpuesto(), total);
+					}
+				}
+			}
+			//el mapImpuestosConValorMayorCero queda con los impuestos con importe (total) > 0 => lo utilizo abajo para filtrar
+
 			int i = 1;
 			for(ImpuestoItemProveedor iip : allImpuestos) {
 				if(iip.getTipoImpuesto() == tipoImpuesto) {
 					if(tipoImpuesto == ETipoImpuesto.INGRESOS_BRUTOS) {
 						Provincia provincia = iip.getProvincia();
 						ImpuestoWrapper impuestoWrapper = impuestosMap.get(provincia.getId());
-						if(impuestoWrapper == null) {
-							impuestoWrapper = new ImpuestoWrapper(provincia, iip);
+							if(impuestoWrapper == null) {
+								impuestoWrapper = new ImpuestoWrapper(provincia, iip);
+								if(mapImpuestosConValorMayorCero.containsKey(iip.getId())) {
+									impuestosMap.put(impuestoWrapper.getId(), impuestoWrapper);
+									getImpuestosColMap().put(COL_TOTAL_COMPRAS + i, impuestoWrapper);
+									i++;
+								}
+							} else {
+								impuestoWrapper.addImpuestoItem(iip);
+							}
+					} else {
+						ImpuestoWrapper impuestoWrapper = new ImpuestoWrapper(iip);
+						if(mapImpuestosConValorMayorCero.containsKey(iip.getId())) {
 							impuestosMap.put(impuestoWrapper.getId(), impuestoWrapper);
 							getImpuestosColMap().put(COL_TOTAL_COMPRAS + i, impuestoWrapper);
 							i++;
-						} else {
-							impuestoWrapper.addImpuestoItem(iip);
 						}
-					} else {
-						ImpuestoWrapper impuestoWrapper = new ImpuestoWrapper(iip);
-						impuestosMap.put(impuestoWrapper.getId(), impuestoWrapper);
-						getImpuestosColMap().put(COL_TOTAL_COMPRAS + i, impuestoWrapper);
-						i++;
 					}
 				}
 			}
