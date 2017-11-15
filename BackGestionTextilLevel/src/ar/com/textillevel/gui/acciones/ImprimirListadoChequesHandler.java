@@ -61,7 +61,6 @@ public class ImprimirListadoChequesHandler {
 		private String banco;
 		private String fechaDeposito;
 		private String fechaVencimiento;
-		private String diasFaltantes;
 
 		public String getNumero() {
 			return numero;
@@ -109,14 +108,6 @@ public class ImprimirListadoChequesHandler {
 
 		public void setFechaVencimiento(String fechaVencimiento) {
 			this.fechaVencimiento = fechaVencimiento;
-		}
-
-		public String getDiasFaltantes() {
-			return diasFaltantes;
-		}
-
-		public void setDiasFaltantes(String diasFaltantes) {
-			this.diasFaltantes = diasFaltantes;
 		}
 	}
 }
