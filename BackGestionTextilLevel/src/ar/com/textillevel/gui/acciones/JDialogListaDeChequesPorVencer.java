@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import ar.com.fwcommon.boss.BossEstilos;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.componentes.PanelTablaSinBotones;
 import ar.com.fwcommon.util.DateUtil;
@@ -57,14 +59,27 @@ public class JDialogListaDeChequesPorVencer extends JDialog{
 	
 	private JPanel getPanelSur() {
 		JButton btnSalir = new JButton("Aceptar");
+		JButton btnImprimirCheques = BossEstilos.createButton("ar/com/textillevel/imagenes/b_imp_listado.png", "ar/com/textillevel/imagenes/b_imp_listado_des.png");
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
+		btnImprimirCheques.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ImprimirListadoChequesHandler.imprimirChequesPorVencer(getCheques(), getDiasVencimiento());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					FWJOptionPane.showErrorMessage(JDialogListaDeChequesPorVencer.this, "Error al imprimir el reporte de cheques por vencer", "Error");
+				}
+			}
+		});
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panel.add(btnSalir);
+		panel.add(btnImprimirCheques);
 		return panel;
 	}
 
