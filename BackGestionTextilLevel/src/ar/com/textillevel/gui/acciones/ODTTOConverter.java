@@ -12,6 +12,7 @@ import com.google.common.collect.FluentIterable;
 
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
+import ar.com.textillevel.entidades.documentos.remito.enums.ELugarTarima;
 import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.documentos.remito.to.DetalleRemitoEntradaNoFacturado;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
@@ -196,6 +197,9 @@ public final class ODTTOConverter {
 		}
 		if (remitoTO.getIdTarima() != null) {
 			remitoEntrada.setTarima(tarimaFacade.getById(remitoTO.getIdTarima()));
+		}
+		if(remitoTO.getIdLugarTarima() != null) {
+			remitoEntrada.setLugarTarima(ELugarTarima.getById(remitoTO.getIdLugarTarima()));
 		}
 		if (remitoTO.getPiezas() != null && remitoTO.getPiezas().length > 0) {
 			List<PiezaRemito> piezasRemito = new ArrayList<PiezaRemito>();
@@ -444,6 +448,7 @@ public final class ODTTOConverter {
 		remitoTO.setIdPrecioMatPrima(re.getPrecioMatPrima() != null ? re.getPrecioMatPrima().getId() : null);
 		remitoTO.setIdProveedor(re.getProveedor() != null ? re.getProveedor().getId() : null);
 		remitoTO.setIdTarima(re.getTarima() != null ? re.getTarima().getId() : null);
+		remitoTO.setIdLugarTarima(re.getLugarTarima() != null ? re.getLugarTarima().getId() : null);
 		remitoTO.setNroRemito(re.getNroRemito());
 		remitoTO.setPesoTotal(re.getPesoTotal());
 		remitoTO.setObservacionesODT(re.getObservacionesODT());

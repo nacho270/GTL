@@ -31,6 +31,7 @@ public class RemitoEntradaTO implements Serializable {
 	private BigDecimal anchoCrudo;
 	private BigDecimal anchoFinal;
 	private Integer idTarima; // Tarima esta federada
+	private Integer idLugarTarima;
 	private Boolean enPalet;
 	private String control;
 	private String observacionesODT;
@@ -75,6 +76,9 @@ public class RemitoEntradaTO implements Serializable {
 		}
 		if (re.getTarima() != null) {
 			this.idTarima = re.getId();
+		}
+		if (re.getLugarTarima() != null) {
+			this.idLugarTarima = re.getLugarTarima().getId();
 		}
 		if (re.getPiezas() != null && !re.getPiezas().isEmpty()) {
 			this.piezas = new ArrayList<PiezaRemitoTO>();
@@ -248,6 +252,14 @@ public class RemitoEntradaTO implements Serializable {
 
 	public void setIdSituacionODT(Integer idSituacionODT) {
 		this.idSituacionODT = idSituacionODT;
+	}
+
+	public Integer getIdLugarTarima() {
+		return idLugarTarima;
+	}
+
+	public void setIdLugarTarima(Integer idLugarTarima) {
+		this.idLugarTarima = idLugarTarima;
 	}
 
 }

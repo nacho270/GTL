@@ -16,13 +16,14 @@ public class ODTDatosMostradoHelper {
 	}
 
 	public String getDescTarima() {
-		String descrTarima = odt.getRemito().getTarima() != null ? odt.getRemito().getTarima().toString() : null;
+		String descrLugarTarima = odt.getRemito().getLugarTarima() == null ? "" : (" (" + odt.getRemito().getLugarTarima().getDescrCorta()+") ");
+		String descrTarima = (odt.getRemito().getTarima() != null ? odt.getRemito().getTarima().toString() : null) + descrLugarTarima;
 		String descrEnPalet = odt.getRemito().getEnPalet() != null && odt.getRemito().getEnPalet() ? "EN PALET" : null;
 		if(descrTarima != null && descrEnPalet != null) {
 			return descrTarima + " / " + descrEnPalet;
 		} else if(descrTarima != null && descrEnPalet == null) {
 			return descrTarima;
-		} else if(descrTarima == null && descrEnPalet != null) {
+		} else if(descrTarima.trim().length()==0 && descrEnPalet != null) {
 			return descrEnPalet;
 		} else {
 			return "";

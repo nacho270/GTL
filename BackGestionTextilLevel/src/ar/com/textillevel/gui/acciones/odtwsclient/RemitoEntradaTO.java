@@ -29,6 +29,8 @@ public class RemitoEntradaTO  implements java.io.Serializable {
 
     private java.lang.Integer idCondicionDeVenta;
 
+    private java.lang.Integer idLugarTarima;
+
     private java.lang.Integer idPrecioMatPrima;
 
     private java.lang.Integer idProveedor;
@@ -63,6 +65,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            java.lang.Integer idArticuloStock,
            java.lang.Integer idCliente,
            java.lang.Integer idCondicionDeVenta,
+           java.lang.Integer idLugarTarima,
            java.lang.Integer idPrecioMatPrima,
            java.lang.Integer idProveedor,
            java.lang.Integer idSituacionODT,
@@ -83,6 +86,7 @@ public class RemitoEntradaTO  implements java.io.Serializable {
            this.idArticuloStock = idArticuloStock;
            this.idCliente = idCliente;
            this.idCondicionDeVenta = idCondicionDeVenta;
+           this.idLugarTarima = idLugarTarima;
            this.idPrecioMatPrima = idPrecioMatPrima;
            this.idProveedor = idProveedor;
            this.idSituacionODT = idSituacionODT;
@@ -293,6 +297,26 @@ public class RemitoEntradaTO  implements java.io.Serializable {
      */
     public void setIdCondicionDeVenta(java.lang.Integer idCondicionDeVenta) {
         this.idCondicionDeVenta = idCondicionDeVenta;
+    }
+
+
+    /**
+     * Gets the idLugarTarima value for this RemitoEntradaTO.
+     * 
+     * @return idLugarTarima
+     */
+    public java.lang.Integer getIdLugarTarima() {
+        return idLugarTarima;
+    }
+
+
+    /**
+     * Sets the idLugarTarima value for this RemitoEntradaTO.
+     * 
+     * @param idLugarTarima
+     */
+    public void setIdLugarTarima(java.lang.Integer idLugarTarima) {
+        this.idLugarTarima = idLugarTarima;
     }
 
 
@@ -561,6 +585,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
             ((this.idCondicionDeVenta==null && other.getIdCondicionDeVenta()==null) || 
              (this.idCondicionDeVenta!=null &&
               this.idCondicionDeVenta.equals(other.getIdCondicionDeVenta()))) &&
+            ((this.idLugarTarima==null && other.getIdLugarTarima()==null) || 
+             (this.idLugarTarima!=null &&
+              this.idLugarTarima.equals(other.getIdLugarTarima()))) &&
             ((this.idPrecioMatPrima==null && other.getIdPrecioMatPrima()==null) || 
              (this.idPrecioMatPrima!=null &&
               this.idPrecioMatPrima.equals(other.getIdPrecioMatPrima()))) &&
@@ -631,6 +658,9 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         }
         if (getIdCondicionDeVenta() != null) {
             _hashCode += getIdCondicionDeVenta().hashCode();
+        }
+        if (getIdLugarTarima() != null) {
+            _hashCode += getIdLugarTarima().hashCode();
         }
         if (getIdPrecioMatPrima() != null) {
             _hashCode += getIdPrecioMatPrima().hashCode();
@@ -762,6 +792,13 @@ public class RemitoEntradaTO  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("idCondicionDeVenta");
         elemField.setXmlName(new javax.xml.namespace.QName("", "idCondicionDeVenta"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("idLugarTarima");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "idLugarTarima"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

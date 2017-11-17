@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -56,6 +57,7 @@ import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
 import ar.com.textillevel.entidades.documentos.remito.PiezaRemito;
 import ar.com.textillevel.entidades.documentos.remito.RemitoEntrada;
 import ar.com.textillevel.entidades.documentos.remito.Tarima;
+import ar.com.textillevel.entidades.documentos.remito.enums.ELugarTarima;
 import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.IProductoParaODT;
@@ -71,6 +73,7 @@ import ar.com.textillevel.modulos.odt.entidades.OrdenDeTrabajo;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.modulos.odt.facade.api.remote.OrdenDeTrabajoFacadeRemote;
 import ar.com.textillevel.util.GTLBeanFactory;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import main.GTLGlobalCache;
 
 public class JDialogAgregarRemitoEntrada extends JDialog {
@@ -95,6 +98,7 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 	private JCheckBox chkEnPalet;
 	private FWJTextField txtControl;
 	private JPanel panTarimaEnPalet;
+	private JComboBox cmbLugarTarima;
 
 	private JButton btnSelProductos;
 	private JTextField txtProductos;
@@ -246,16 +250,15 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		if(panDetalle == null) {
 			panDetalle = new JPanel();
 			panDetalle.setLayout(new GridBagLayout());
-			panDetalle.add(getPanelDatosCliente(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
-			panDetalle.add(getPanelDatosFactura(), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
-			panDetalle.add(getPanDatosMisc(), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
-			panDetalle.add(getPanOpcionPiezasODT(), GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 1, 1, 0.3, 0));
-			panDetalle.add(new JLabel("Control:"), GenericUtils.createGridBagConstraints(1, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
-			panDetalle.add(getTxtControl(), GenericUtils.createGridBagConstraints(2, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.4, 0));
-			panDetalle.add(getPanTarimaEnPalet(), GenericUtils.createGridBagConstraints(3, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.3, 0));
-
-			panDetalle.add(getPanelSituacionODT(), GenericUtils.createGridBagConstraints(0, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 0, 0));
-			panDetalle.add(getPanTablaPieza(), GenericUtils.createGridBagConstraints(0, 5, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 4, 1, 1, 1));
+			panDetalle.add(getPanelDatosCliente(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 0, 0));
+			panDetalle.add(getPanelDatosFactura(), GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 0, 0));
+			panDetalle.add(getPanDatosMisc(), GenericUtils.createGridBagConstraints(0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 3, 1, 1, 0));
+			panDetalle.add(new JLabel("Control:"), GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panDetalle.add(getTxtControl(), GenericUtils.createGridBagConstraints(1, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.5, 0));
+			panDetalle.add(getPanTarimaEnPalet(), GenericUtils.createGridBagConstraints(2, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0.5, 0));
+			panDetalle.add(getPanOpcionPiezasODT(), GenericUtils.createGridBagConstraints(0, 4,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 3, 1, 0.3, 0));
+			panDetalle.add(getPanelSituacionODT(), GenericUtils.createGridBagConstraints(0, 5,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 3, 1, 0, 0));
+			panDetalle.add(getPanTablaPieza(), GenericUtils.createGridBagConstraints(0, 6, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(10, 10, 5, 5), 3, 1, 1, 1));
 		}
 		GuiUtil.setEstadoPanel(panDetalle, !modoConsulta);
 		return panDetalle;
@@ -592,13 +595,28 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		if(panTarimaEnPalet == null) {
 			panTarimaEnPalet = new JPanel();
 			panTarimaEnPalet.setLayout(new GridBagLayout());
-			panTarimaEnPalet.add(getPanComboTarima(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
-			panTarimaEnPalet.add(getChkEnPalet(), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 0.5, 0));
+			panTarimaEnPalet.add(getPanComboTarima(), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 1, 0));
+			panTarimaEnPalet.add(new JLabel("UBICACIÓN:"), GenericUtils.createGridBagConstraints(1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panTarimaEnPalet.add(getCmbLugarTarima(), GenericUtils.createGridBagConstraints(2, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			panTarimaEnPalet.add(getChkEnPalet(), GenericUtils.createGridBagConstraints(3, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 1, 1, 0, 0));
+			
 		}
 		return panTarimaEnPalet;
 	}
 
-	
+	private JComboBox getCmbLugarTarima() {
+		if(cmbLugarTarima == null) {
+			cmbLugarTarima = new JComboBox();
+			GuiUtil.llenarCombo(cmbLugarTarima, Arrays.asList(ELugarTarima.values()), false);
+			if(remitoEntrada.getLugarTarima() == null) {
+				cmbLugarTarima.setSelectedIndex(-1);
+			} else {
+				cmbLugarTarima.setSelectedItem(remitoEntrada.getLugarTarima());
+			}
+		}
+		return cmbLugarTarima;
+	}
+
 	private FWDateField getTxtFechaEmision() {
 		if(txtFechaEmision == null) {
 			txtFechaEmision = new FWDateField();
@@ -753,8 +771,12 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 		remitoEntrada.setCondicionDeVenta(condicionDeVenta);
 		remitoEntrada.setNroRemito(getTxtNroRemito().getValue());
 		remitoEntrada.setTarima(getPanComboTarima().getSelectedItem());
+		if(getPanComboTarima().getSelectedItem() != null && getCmbLugarTarima().getSelectedItem() != null) {
+			remitoEntrada.setLugarTarima((ELugarTarima)getCmbLugarTarima().getSelectedItem());
+		}
 		remitoEntrada.setEnPalet(getChkEnPalet().isSelected());
 		remitoEntrada.setControl(getTxtControl().getText().trim());
+		
 		
 		if (!StringUtil.isNullOrEmpty(getTxtObservacionesODT().getText())) {
 			remitoEntrada.setObservacionesODT(getTxtObservacionesODT().getText().trim());
@@ -827,6 +849,18 @@ public class JDialogAgregarRemitoEntrada extends JDialog {
 			if(FWJOptionPane.showQuestionMessage(JDialogAgregarRemitoEntrada.this, StringW.wordWrap("El ancho final es mayor que el ancho crudo. ¿Desea Continuar?"), "Confirmación") == FWJOptionPane.NO_OPTION) {
 				return false;
 			}
+		}
+		if(getPanComboTarima().getSelectedItem() != null && getCmbLugarTarima().getSelectedIndex() == -1) {
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Falta elegir el lugar de la 'Tarima'", "Error");
+			return false;
+		}
+		if(getCmbLugarTarima().getSelectedIndex() != -1 && getPanComboTarima().getSelectedItem() == null) {
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "Falta elegir la 'Tarima'", "Error");
+			return false;
+		}
+		if(getPanComboTarima().getSelectedItem() != null && chkEnPalet.isSelected()) {
+			FWJOptionPane.showErrorMessage(JDialogAgregarRemitoEntrada.this, "No se puede elegir 'en palet' y 'Tarima' al mismo tiempo.", "Error");
+			return false;
 		}
 		return true;
 	}

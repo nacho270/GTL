@@ -17,6 +17,7 @@ import javax.persistence.Transient;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.documentos.factura.CondicionDeVenta;
+import ar.com.textillevel.entidades.documentos.remito.enums.ELugarTarima;
 import ar.com.textillevel.entidades.documentos.remito.enums.ESituacionODTRE;
 import ar.com.textillevel.entidades.gente.Proveedor;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
@@ -37,6 +38,7 @@ public class RemitoEntrada extends Remito {
 	private BigDecimal anchoCrudo;
 	private BigDecimal anchoFinal;
 	private Tarima tarima;
+	private Integer idLugarTarima;
 	private Boolean enPalet;
 	private String control;
 	private String observacionesODT;
@@ -230,6 +232,30 @@ public class RemitoEntrada extends Remito {
 			this.setIdSituacionODT(null);
 		}
 		setIdSituacionODT(situacion.getId());
+	}
+
+	@Column(name = "A_ID_LUGAR_TARIMA", nullable=true)
+	private Integer getIdLugarTarima() {
+		return idLugarTarima;
+	}
+
+	private void setIdLugarTarima(Integer idLugarTarima) {
+		this.idLugarTarima = idLugarTarima;
+	}
+
+	@Transient
+	public ELugarTarima getLugarTarima() {
+		if(getIdLugarTarima() == null) {
+			return null;
+		}
+		return ELugarTarima.getById(getIdLugarTarima());
+	}
+
+	public void setLugarTarima(ELugarTarima lugarTarima) {
+		if (lugarTarima == null) {
+			setIdLugarTarima(null);
+		}
+		setIdLugarTarima(lugarTarima.getId());
 	}
 
 }
