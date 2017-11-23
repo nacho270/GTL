@@ -40,6 +40,7 @@ import ar.com.fwcommon.componentes.FWTxtComboBoxBusqueda;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.fwcommon.util.ImageUtil;
 import ar.com.fwcommon.util.NumUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cheque.Banco;
@@ -91,6 +92,7 @@ public class JDialogAgregarCheque extends JDialog {
 	private ComboBusquedaBanco comboBusquedaBanco;
 	private JDialogIntellisense dialogIntellisense;
 	private LinkableLabel lblElegirBanco;
+	private JButton btnEscanearCheque;
 	
 	private Cheque cheque;
 	private boolean acepto;
@@ -257,7 +259,7 @@ public class JDialogAgregarCheque extends JDialog {
 	}
 
 	private void setUpScreen() {
-		setSize(new Dimension(640, 460));
+		setSize(new Dimension(590, 460));
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setTitle("Alta de cheque");
 		GuiUtil.centrar(this);
@@ -296,8 +298,9 @@ public class JDialogAgregarCheque extends JDialog {
 			panelGeneral = new JPanel();
 			panelGeneral.setLayout(new GridBagLayout());
 			panelGeneral.add(new JLabel("Número interno: "), GenericUtils.createGridBagConstraints(0, 0,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 10, 0, 5), 1, 1, 0, 0));
-			panelGeneral.add(getTxtNumeracionCheque(),  GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 5), 1, 1, 1, 0));
-			panelGeneral.add(getFechaEntrada(),  GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
+			panelGeneral.add(getTxtNumeracionCheque(),  GenericUtils.createGridBagConstraints(1, 0,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 5), 2, 1, 1, 0));
+			panelGeneral.add(getFechaEntrada(),  GenericUtils.createGridBagConstraints(0, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 2, 1, 1, 0));
+			panelGeneral.add(getBtnEscanearCheque(),  GenericUtils.createGridBagConstraints(2, 1,GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 0, 5, 5), 1, 1, 1, 0));
 			panelGeneral.add(getPanelElegirCliente(), GenericUtils.createGridBagConstraints(0, 2,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
 			
 			panelGeneral.add(getPanelElegirBanco(),  GenericUtils.createGridBagConstraints(0, 3,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 4, 1, 1, 0));
@@ -376,6 +379,23 @@ public class JDialogAgregarCheque extends JDialog {
 			}
 		}
 		return txtBanco;
+	}
+
+	private JButton getBtnEscanearCheque() {
+		if (btnEscanearCheque == null) {
+			btnEscanearCheque = new JButton("     Escanear cheque", ImageUtil.loadIcon("ar/com/textillevel/imagenes/b_buscar.png"));
+			btnEscanearCheque.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JDialogEscanearCheque d = new JDialogEscanearCheque(JDialogAgregarCheque.this);
+					if(d.isAcepto()) {
+						String codigoEscaneado = d.getCodigoEscaneado();
+						System.out.println("Codigo leido: " + codigoEscaneado);
+					}
+				}
+			});
+		}
+		return btnEscanearCheque;
 	}
 
 	public JTextField getTxtNroCuenta() {
