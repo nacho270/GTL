@@ -390,7 +390,10 @@ public class JDialogAgregarCheque extends JDialog {
 					JDialogEscanearCheque d = new JDialogEscanearCheque(JDialogAgregarCheque.this);
 					if(d.isAcepto()) {
 						String codigoEscaneado = d.getCodigoEscaneado();
-						System.out.println("Codigo leido: " + codigoEscaneado);
+						getComboBusquedaBanco().buscar(InterpreteCodigoCheque.getCodigoBanco(codigoEscaneado));
+						getTxtNroCheque().setText(InterpreteCodigoCheque.getNroCheque(codigoEscaneado));
+						getTxtNroCuenta().setText(InterpreteCodigoCheque.getNroCuenta(codigoEscaneado));
+						getComboBusquedaCliente().foco();
 					}
 				}
 			});
@@ -834,6 +837,10 @@ public class JDialogAgregarCheque extends JDialog {
 
 		private static final long serialVersionUID = -8069636605971687535L;
 
+		public void foco() {
+			searchField.requestFocus();
+		}
+		
 		@Override
 		protected List<Cliente> buscar(String text) {
 			List<Cliente> clientes = new ArrayList<Cliente>();
@@ -874,6 +881,15 @@ public class JDialogAgregarCheque extends JDialog {
 
 		private static final long serialVersionUID = 1L;
 
+		public void buscar(int codigoBanco) {
+			Banco banco = getBancoFacade().getBancoByCodigo(codigoBanco);
+			if(banco!=null){
+				searchField.setText(String.valueOf(codigoBanco));
+				JDialogAgregarCheque.this.banco = banco;
+				getTxtBanco().setText(banco.getNombre());
+			}
+		}
+		
 		@Override
 		protected List<Banco> buscar(String text) throws FWException {
 			List<Banco> bancos = new ArrayList<Banco>();
@@ -946,5 +962,28 @@ public class JDialogAgregarCheque extends JDialog {
 
 	private Set<String> getCuits() {
 		return cuits;
+	}
+
+	private static class InterpreteCodigoCheque {
+		
+		public static int getCodigoBanco(String codigo) {
+			return Integer.valueOf(codigo.substring(0, 3));
+		}
+
+		public static int getSucursal(String codigo) {
+			return Integer.valueOf(codigo.substring(3, 6));
+		}
+
+		public static int getCodigoPostal(String codigo) {
+			return Integer.valueOf(codigo.substring(6,10));
+		}
+
+		public static String getNroCheque(String codigo) {
+			return codigo.substring(10, 18);
+		}
+
+		public static String getNroCuenta(String codigo) {
+			return codigo.substring(18);
+		}
 	}
 }

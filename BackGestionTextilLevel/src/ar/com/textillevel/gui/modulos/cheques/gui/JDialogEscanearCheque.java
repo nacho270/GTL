@@ -16,6 +16,8 @@ public class JDialogEscanearCheque extends JDialog {
 
 	private static final long serialVersionUID = 6005951655684335470L;
 
+	private static final int LENGTH_CODIGO = 29;
+	
 	private boolean acepto = false;
 	private FWJNumericTextField fakeTextFieldCodigo;
 	private String codigoEscaneado;
@@ -52,11 +54,20 @@ public class JDialogEscanearCheque extends JDialog {
 	
 	public FWJNumericTextField getFakeTextFieldCodigo() {
 		if(fakeTextFieldCodigo == null) {
-			fakeTextFieldCodigo = new FWJNumericTextField(0l, 999999999l);
+			fakeTextFieldCodigo = new FWJNumericTextField();
 			fakeTextFieldCodigo.addKeyListener(new KeyAdapter() {
 	            @Override
 	            public void keyPressed(final KeyEvent e) {
-	                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+	                if (e.getKeyCode() == KeyEvent.VK_ENTER || fakeTextFieldCodigo.getText().trim().length() == LENGTH_CODIGO) {
+	                	codigoEscaneado = fakeTextFieldCodigo.getText().trim();
+	                	acepto = true;
+	                	dispose();
+	                }
+	            }
+	            
+	            @Override
+	            public void keyReleased(KeyEvent e) {
+	            	if (e.getKeyCode() == KeyEvent.VK_ENTER || fakeTextFieldCodigo.getText().trim().length() == LENGTH_CODIGO) {
 	                	codigoEscaneado = fakeTextFieldCodigo.getText().trim();
 	                	acepto = true;
 	                	dispose();
