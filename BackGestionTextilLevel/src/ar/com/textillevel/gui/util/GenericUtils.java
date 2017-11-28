@@ -21,10 +21,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +62,7 @@ import ar.com.fwcommon.util.StringUtil;
 import ar.com.fwcommon.util.SwingWorker;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
+import ar.com.textillevel.facade.api.remote.DestinatarioEmailFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
 import ar.com.textillevel.gui.util.dialogs.WaitDialog;
@@ -92,7 +95,8 @@ public class GenericUtils {
 	public static final int DIA_SABADO = 7;
 	
 	private static ParametrosGeneralesFacadeRemote paramGenFacade;
-	
+	private static DestinatarioEmailFacadeRemote destEmailFacade;
+
 	static{
 		df = DecimalFormat.getNumberInstance(new Locale("es_AR"));
 		df.setMaximumFractionDigits(2);
@@ -447,6 +451,14 @@ public class GenericUtils {
 		return provider.getBufferedImage();
 	}
 
+	public static void enviarEmailAndPersistContacts(String asunto, String cuerpo, List<File> files, List<String> to, List<String> cc) throws AddressException, MessagingException {
+		enviarEmail(asunto, cuerpo, files, to, cc);
+		Set<String> contacts = new HashSet<String>();
+		contacts.addAll(to);
+		contacts.addAll(cc);
+		getDestinatarioEmailFacade().persistContactsSiNoExisten(contacts);
+	}
+
 	public static void enviarEmail(String asunto, String cuerpo, List<File> files, List<String> to, List<String> cc) throws AddressException, MessagingException {
 		Properties mailServerProperties = System.getProperties();
 		mailServerProperties.put("mail.smtp.port", "587");
@@ -568,6 +580,13 @@ public class GenericUtils {
 			paramGenFacade = GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class);
 		}
 		return paramGenFacade;
+	}
+
+	private static DestinatarioEmailFacadeRemote getDestinatarioEmailFacade() {
+		if(destEmailFacade == null) {
+			destEmailFacade = GTLBeanFactory.getInstance().getBean2(DestinatarioEmailFacadeRemote.class);
+		}
+		return destEmailFacade;
 	}
 
 }

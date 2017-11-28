@@ -23,7 +23,7 @@ public final class EmailSender {
 			List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
 		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
-		GenericUtils.enviarEmail("Cotización",
+		GenericUtils.enviarEmailAndPersistContacts("Cotización",
 				"<html><b>Estimado cliente:<br><br>" + 
 				"En esta oportunidad, nos dirigimos a Ud. a fin de comunicarle los nuevos precios sobre nuestros servicios.<br><br>"+
 				firma(), Collections.singletonList(file), to, cc);
@@ -41,7 +41,7 @@ public final class EmailSender {
 		File file = new File(System.getProperty("java.io.tmpdir") + strTipoDoc.toLowerCase() + "_" + (facturaB ? nroRemitoStr : nroDoc) + ".pdf");
 		JasperHelper.exportarAPDF(jasperDocumento, file);
 		String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + (facturaB ? nroRemitoStr : nroDoc);
-		GenericUtils.enviarEmail(asunto,
+		GenericUtils.enviarEmailAndPersistContacts(asunto,
 				"<html><b>Estimado cliente:<br><br>Por medio de la presente, adjuntamos " +
 						(facturaB ? "importe correspondiente al remito  N° " + nroRemitoStr : "la " + asunto) + ".<br><br>" +
 				firma(), Collections.singletonList(file), to, cc);
@@ -58,7 +58,7 @@ public final class EmailSender {
 		}
 		String asunto = GenericUtils.isSistemaTest() ? "Remito N° " + nrosRemito.get(0) :
 			"Remito/s N° " + StringUtil.getCadena(nrosRemito, ",");
-		GenericUtils.enviarEmail(asunto,
+		GenericUtils.enviarEmailAndPersistContacts(asunto,
 				"<html><b>Estimado cliente:<br><br>" +
 				"Por medio de la presente, " +
 					(GenericUtils.isSistemaTest() ? "adjuntamos el remito N° " + nrosRemito.get(0) :
@@ -74,7 +74,7 @@ public final class EmailSender {
 			List<String> cc) throws JRException, FileNotFoundException, AddressException, MessagingException {
 		File file = new File(System.getProperty("java.io.tmpdir") + "resumen.pdf");
 		JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
-		GenericUtils.enviarEmail("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE),
+		GenericUtils.enviarEmailAndPersistContacts("Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE),
 				"<html><b>Estimado cliente:<br><br>" + 
 				"Por medio de la presente, adjuntamos resumen de cuenta.<br><br>" +
 				firma(), Collections.singletonList(file), to, cc);
@@ -86,7 +86,7 @@ public final class EmailSender {
 		File file = new File(System.getProperty("java.io.tmpdir") + "recibo.pdf");
 		JasperHelper.exportarAPDF(jasper, file);
 		String asunto = "Recibo N° " + nroRecibo;
-		GenericUtils.enviarEmail(asunto,
+		GenericUtils.enviarEmailAndPersistContacts(asunto,
 				"<html><b>Estimado cliente:<br><br>" + 
 				"Por medio de la presente, adjuntamos el " + asunto + ".<br><br>" +
 				firma(), Collections.singletonList(file), to, cc);

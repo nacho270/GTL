@@ -20,12 +20,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.batik.ext.swing.GridBagConstants;
 
-import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.gui.util.GenericUtils;
 
@@ -109,19 +107,11 @@ public class JDialogDestinatariosEmail extends JDialog {
 	}
 
 	private void internalAddEmail(PanelListaEmails txt) {
-		boolean ok = false;
-		do {
-			String input = JOptionPane.showInputDialog(JDialogDestinatariosEmail.this, "Ingrese destinatario: ", "Agregar email", JOptionPane.INFORMATION_MESSAGE);
-			if(input == null){
-				break;
-			}
-			if (input.trim().length()==0 || !GenericUtils.isEmailValido(input)) {
-				FWJOptionPane.showErrorMessage(JDialogDestinatariosEmail.this, "Ingreso incorrecto", "error");
-			} else {
-				ok = true;
-				txt.agregarEmail(input);
-			}
-		} while (!ok);
+		JDialogInputEmail dialog  = new JDialogInputEmail(GuiUtil.getFrameForComponent(JDialogDestinatariosEmail.this), "Busque el contacto");
+		dialog.setVisible(true);
+		if(dialog.getEmail() != null) {
+			txt.agregarEmail(dialog.getEmail());
+		}
 	}
 	
 	public JButton getBtnAceptar() {
