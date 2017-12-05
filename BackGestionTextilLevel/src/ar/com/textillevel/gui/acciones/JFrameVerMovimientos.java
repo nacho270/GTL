@@ -47,11 +47,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileFilter;
 
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.boss.BossError;
@@ -82,6 +77,7 @@ import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
 import ar.com.textillevel.entidades.enums.EEstadoRecibo;
+import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
@@ -123,6 +119,10 @@ import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 public class JFrameVerMovimientos extends JFrame {
 
@@ -900,7 +900,7 @@ public class JFrameVerMovimientos extends JFrame {
 								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 									public void perform() {
 										try {
-											EmailSender.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc);
+											EmailSender.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 											String textoMensaje = "Se ha enviado la cotización por correo a: " + StringUtil.getCadena(to, ", ");
 											if (to != null && !to.isEmpty()) {
 												textoMensaje +=  "\nCon copia a: " + StringUtil.getCadena(cc, ", ");
@@ -913,7 +913,7 @@ public class JFrameVerMovimientos extends JFrame {
 									}
 								});
 							}
-						}).setVisible(true);
+						}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
 					}
 				}
 			});
@@ -960,7 +960,7 @@ public class JFrameVerMovimientos extends JFrame {
 								if (documentoContable2.getTipoDocumento() == ETipoDocumento.FACTURA && !((Factura)documentoContable2).getRemitos().isEmpty()) {
 									nroRemito = ((Factura)documentoContable2).getRemitos().get(0).getNroRemito();
 								}
-								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), nroRemito, jasperPrint, to, cc);
+								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), nroRemito, jasperPrint, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();
@@ -968,7 +968,7 @@ public class JFrameVerMovimientos extends JFrame {
 						}
 					});
 				}
-			}).setVisible(true);
+			}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
 		}
 	}
 
@@ -987,7 +987,7 @@ public class JFrameVerMovimientos extends JFrame {
 								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 									public void perform() {
 										try {
-											EmailSender.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc);
+											EmailSender.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 											String textoMensaje = "Se ha enviado la cotización por correo a: " + StringUtil.getCadena(to, ", ");
 											if (to != null && !to.isEmpty()) {
 												textoMensaje +=  "\nCon copia a: " + StringUtil.getCadena(cc, ", ");
@@ -1000,7 +1000,7 @@ public class JFrameVerMovimientos extends JFrame {
 									}
 								});
 							}
-						}).setVisible(true);
+						}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
 					}
 				}
 			});
@@ -2039,7 +2039,7 @@ public class JFrameVerMovimientos extends JFrame {
 								}
 								List<RemitoSalida> remitosEager = getRemitoSalidaFacade().getByIdsConPiezasYProductos(ids);
 								List<JasperPrint> jasperPrints = ImprimirRemitoHandler.getJasperPrints(remitosEager, nroSucursal);
-								EmailSender.enviarRemitoPorEmail(nroFactura, nros, jasperPrints, to, cc);
+								EmailSender.enviarRemitoPorEmail(nroFactura, nros, jasperPrints, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();
@@ -2047,7 +2047,7 @@ public class JFrameVerMovimientos extends JFrame {
 						}
 					});
 				}
-			}).setVisible(true);
+			}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
 		}
 	}
 
@@ -2062,7 +2062,7 @@ public class JFrameVerMovimientos extends JFrame {
 							Recibo reciboEager = getReciboFacade().getByIdEager(recibo.getId());
 							JasperPrint jasper = ImprimirReciboHandler.getJasperPrint(reciboEager, GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getNroSucursal());
 							try{
-								EmailSender.enviarReciboPorEmail(recibo.getNroRecibo(), jasper, to, cc);
+								EmailSender.enviarReciboPorEmail(recibo.getNroRecibo(), jasper, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();
@@ -2070,7 +2070,7 @@ public class JFrameVerMovimientos extends JFrame {
 						}
 					});
 				}
-			}).setVisible(true);
+			}, clienteBuscado.getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
 		}
 	}
 

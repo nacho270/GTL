@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.documentos.DestinatarioEmail;
+import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.facade.api.remote.DestinatarioEmailFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.componentes.AutocompleteJComboBox;
@@ -29,9 +30,13 @@ public class JDialogInputEmail extends JDialog {
 	
 	private String email;
 	private DestinatarioEmailFacadeRemote destEmailFacade;
+	private Integer idEntidad;
+	private ETipoBusquedaAgenda tipoEntidad;
 	
-	public JDialogInputEmail(Frame padre, String title) {
+	public JDialogInputEmail(Frame padre, String title, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
 		super(padre);
+		this.idEntidad = idEntidad;
+		this.tipoEntidad = tipoEntidad;
 		setTitle(title);
 		setUpComponentes();
 		setUpScreen();
@@ -68,7 +73,7 @@ public class JDialogInputEmail extends JDialog {
 	public AutocompleteJComboBox<DestinatarioEmail> getCmbContacto() {
 		if(cmbContacto == null){
 
-			cmbContacto = new AutocompleteJComboBox<DestinatarioEmail>(getDestEmailFacade().getAll()) {
+			cmbContacto = new AutocompleteJComboBox<DestinatarioEmail>(getDestEmailFacade().getAllByEntidad(idEntidad, tipoEntidad)) {
 
 				private static final long serialVersionUID = 1L;
 

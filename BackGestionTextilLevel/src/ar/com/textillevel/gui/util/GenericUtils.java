@@ -62,6 +62,7 @@ import ar.com.fwcommon.util.StringUtil;
 import ar.com.fwcommon.util.SwingWorker;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
+import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.facade.api.remote.DestinatarioEmailFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.gui.util.dialogs.JDialogSiNoNoVolverAPreguntar;
@@ -451,12 +452,12 @@ public class GenericUtils {
 		return provider.getBufferedImage();
 	}
 
-	public static void enviarEmailAndPersistContacts(String asunto, String cuerpo, List<File> files, List<String> to, List<String> cc) throws AddressException, MessagingException {
+	public static void enviarEmailAndPersistContacts(String asunto, String cuerpo, List<File> files, List<String> to, List<String> cc, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) throws AddressException, MessagingException {
 		enviarEmail(asunto, cuerpo, files, to, cc);
 		Set<String> contacts = new HashSet<String>();
 		contacts.addAll(to);
 		contacts.addAll(cc);
-		getDestinatarioEmailFacade().persistContactsSiNoExisten(contacts);
+		getDestinatarioEmailFacade().persistContactsSiNoExisten(contacts, idEntidad, tipoEntidad);
 	}
 
 	public static void enviarEmail(String asunto, String cuerpo, List<File> files, List<String> to, List<String> cc) throws AddressException, MessagingException {

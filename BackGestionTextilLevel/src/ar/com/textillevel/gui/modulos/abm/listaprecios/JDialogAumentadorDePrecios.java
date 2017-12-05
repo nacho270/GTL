@@ -40,6 +40,7 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.ImageUtil;
 import ar.com.textillevel.entidades.config.ParametrosGenerales;
+import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.portal.UsuarioSistema;
@@ -511,7 +512,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 												public void perform() {
 													try{
 														EmailSender.enviarCotizacionPorEmail(new ImprimirListaDePreciosHandler(c, cotizacionEmail.getVersionListaPrecio())
-																.createJasperPrint(cotizacionEmail.getValidez() + "", cotizacionEmail.getNumero()), to, cc);
+																.createJasperPrint(cotizacionEmail.getValidez() + "", cotizacionEmail.getNumero()), to, cc, c.getId(), ETipoBusquedaAgenda.CLIENTE);
 													} catch (Exception ex) {
 														FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
 														ex.printStackTrace();
@@ -519,7 +520,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 												}
 											});
 										}
-									}).setVisible(true);
+									}, c.getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
 								} catch (Exception ex) {
 									FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
 									ex.printStackTrace();

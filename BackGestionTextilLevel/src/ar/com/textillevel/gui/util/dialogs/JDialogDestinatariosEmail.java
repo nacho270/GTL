@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import org.apache.batik.ext.swing.GridBagConstants;
 
 import ar.com.fwcommon.util.GuiUtil;
+import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.gui.util.GenericUtils;
 
 public class JDialogDestinatariosEmail extends JDialog {
@@ -39,19 +40,25 @@ public class JDialogDestinatariosEmail extends JDialog {
 	private JButton btnCancelar;
 	private PerformEnvioEmailHandler handler;
 	private String defaultTO;
+	private Integer idEntidad;
+	private ETipoBusquedaAgenda tipoEntidad;
 
-	public JDialogDestinatariosEmail(JDialog owner, String defaultTo, PerformEnvioEmailHandler handler) {
+	public JDialogDestinatariosEmail(JDialog owner, String defaultTo, PerformEnvioEmailHandler handler, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
 		super(owner);
 		this.handler = handler;
 		this.defaultTO = defaultTo;
+		this.idEntidad = idEntidad;
+		this.tipoEntidad = tipoEntidad;
 		setUpComponentes();
 		setUpScreen();
 	}
 	
-	public JDialogDestinatariosEmail(Frame owner, String defaultTo, PerformEnvioEmailHandler handler) {
+	public JDialogDestinatariosEmail(Frame owner, String defaultTo, PerformEnvioEmailHandler handler, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
 		super(owner);
 		this.handler = handler;
 		this.defaultTO = defaultTo;
+		this.idEntidad = idEntidad;
+		this.tipoEntidad = tipoEntidad;
 		setUpComponentes();
 		setUpScreen();
 	}
@@ -107,7 +114,7 @@ public class JDialogDestinatariosEmail extends JDialog {
 	}
 
 	private void internalAddEmail(PanelListaEmails txt) {
-		JDialogInputEmail dialog  = new JDialogInputEmail(GuiUtil.getFrameForComponent(JDialogDestinatariosEmail.this), "Busque el contacto");
+		JDialogInputEmail dialog  = new JDialogInputEmail(GuiUtil.getFrameForComponent(JDialogDestinatariosEmail.this), "Busque el contacto", idEntidad, tipoEntidad);
 		dialog.setVisible(true);
 		if(dialog.getEmail() != null) {
 			txt.agregarEmail(dialog.getEmail());

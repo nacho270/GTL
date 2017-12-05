@@ -5,12 +5,13 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import ar.com.textillevel.entidades.documentos.DestinatarioEmail;
+import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 
 @Remote
 public interface DestinatarioEmailFacadeRemote {
 
-	public List<DestinatarioEmail> getAll();
+	public List<DestinatarioEmail> getAllByEntidad(Integer idEntidad, ETipoBusquedaAgenda tipoEntidad);
 
-	public void persistContactsSiNoExisten(Set<String> contacts);
+	public void persistContactsSiNoExisten(Set<String> contacts, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad);
 
 }
