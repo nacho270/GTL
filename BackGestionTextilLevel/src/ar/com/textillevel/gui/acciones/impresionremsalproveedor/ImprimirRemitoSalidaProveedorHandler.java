@@ -92,7 +92,7 @@ public class ImprimirRemitoSalidaProveedorHandler {
 
 		private void cargarMap(RemitoSalida remito) {
 			this.parameters  = new HashMap();
-			parameters.put("FECHA_REMITO", DateUtil.dateToString(DateUtil.getManiana(remito.getFechaEmision())));
+			parameters.put("FECHA_REMITO", DateUtil.dateToString(remito.getFechaEmision()));
 			parameters.put("RAZON_SOCIAL", remito.getProveedor().getRazonSocial());
 			parameters.put("DOMICILIO", remito.getProveedor().getDireccionFiscal().getDireccion());
 			parameters.put("LOCALIDAD", remito.getProveedor().getDireccionFiscal().getLocalidad().getNombreLocalidad());
