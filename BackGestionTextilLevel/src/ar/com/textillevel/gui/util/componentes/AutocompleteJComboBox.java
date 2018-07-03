@@ -68,6 +68,7 @@ public abstract class AutocompleteJComboBox<E> extends JComboBox {
 							setEditable(true);
 							setPopupVisible(true);
 							c.requestFocus();
+							
 						}
 
 					});
@@ -88,6 +89,7 @@ public abstract class AutocompleteJComboBox<E> extends JComboBox {
 
 				@Override
 				public void focusLost(FocusEvent arg0) {
+					tc.setCaretPosition(tc.getText().length());
 				}
 
 			});
