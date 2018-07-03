@@ -2,7 +2,6 @@ package ar.com.textillevel.gui.acciones.visitor.proveedor;
 
 import java.awt.Color;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +31,6 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 	private Map<Integer, Color> mapaColores;
 	private final List<InfoSecondPass> rowsPagosSaldoAFavor;
 	private BigDecimal transporte;
-	private DecimalFormat df;
 
 	public GenerarFilaMovimientoVisitor(FWJTable tabla, Integer cantCols, BigDecimal transporte) {
 		this.tabla = tabla;
@@ -89,10 +87,10 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		}
 		row[1] = descripcionResumen;
 		row[2] =  null;
-		row[3] =getDecimalFormat().format(movimiento.getMonto().doubleValue() > 0?movimiento.getMonto().negate():movimiento.getMonto());
+		row[3] =GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto().doubleValue() > 0?movimiento.getMonto().negate():movimiento.getMonto());
 		double valorMovimiento = movimiento.getMonto().doubleValue();
 		setSaldo(getSaldo() + valorMovimiento);
-		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":getDecimalFormat().format( Double.valueOf(getSaldo()).floatValue());
+		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
 		row[5] = movimiento;
 		row[6] = false;
 		row[7] = "";
@@ -128,10 +126,10 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 		Object[] row = new Object[size];
 		row[0] = "";
 		row[1] = movimiento.getDescripcionResumen();
-		row[2] =  getDecimalFormat().format(movimiento.getMonto().negate());
+		row[2] =  GenericUtils.getDecimalFormatTablaMovimientos().format(movimiento.getMonto().negate());
 		row[3] = null;
 		setSaldo(getSaldo() + (movimiento.getMonto().doubleValue()));
-		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":getDecimalFormat().format( Double.valueOf(getSaldo()).floatValue());
+		row[4] = GenericUtils.esCero(Double.valueOf(getSaldo()))?"0.00":GenericUtils.getDecimalFormatTablaMovimientos().format( Double.valueOf(getSaldo()).floatValue());
 		row[5] = movimiento;
 		row[6] = false;
 		row[7] = "";
@@ -190,15 +188,6 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 
 	public void setMapaColores(Map<Integer, Color> mapaColores) {
 		this.mapaColores = mapaColores;
-	}
-
-	private DecimalFormat getDecimalFormat() {
-		if(df == null) {
-			df = new DecimalFormat("#,###.000");
-			df.setMaximumFractionDigits(3);
-			df.setGroupingUsed(true);
-		}
-		return df;
 	}
 
 	public List<InfoSecondPass> getRowsPagosSaldoAFavor() {

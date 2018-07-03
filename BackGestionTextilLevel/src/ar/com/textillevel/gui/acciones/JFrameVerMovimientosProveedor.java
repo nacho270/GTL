@@ -992,8 +992,8 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 	}
 
 	private DecimalFormat getDecimalFormat() {
-		DecimalFormat df = new DecimalFormat("#,###.000");
-		df.setMaximumFractionDigits(3);
+		DecimalFormat df = new DecimalFormat("#,###.00");
+		df.setMaximumFractionDigits(2);
 		df.setGroupingUsed(true);
 		return df;
 	}
