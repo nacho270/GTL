@@ -219,7 +219,7 @@ public class RemitoSalidaDAO extends GenericDAO<RemitoSalida, Integer> implement
 	}
 
 	public List<RemitoSalida> getRemitosByNroRemitoConPiezasYProductos(Integer nroRemito) {
-		String hql = "SELECT rs FROM RemitoSalida rs WHERE rs.nroRemito = :nroRemito";
+		String hql = "SELECT rs FROM RemitoSalida rs WHERE rs.nroRemito = :nroRemito ORDER BY rs.fechaEmision DESC";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("nroRemito", nroRemito);
 		List<RemitoSalida> remitos = q.getResultList();
