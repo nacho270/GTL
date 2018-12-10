@@ -7,9 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -478,13 +476,13 @@ public class PanSeleccionProductoArticulo extends JPanel {
 	}
 
 	private List<ETipoProducto> getTipoProductos() {
-		Set<ETipoProducto> tpSet = new HashSet<ETipoProducto>();
-		for(ETipoProducto tp : ETipoProducto.values()) {
+		List<ETipoProducto> tiposProd = new ArrayList<ETipoProducto>();
+		for(ETipoProducto tp : ETipoProducto.getValuesAsSortedList()) {
 			if(tp != ETipoProducto.ESTAMPADO_SOBRE_CRUDO) {
-				tpSet.add(tp);
+				tiposProd.add(tp);
 			}
 		}
-		return new ArrayList<ETipoProducto>(tpSet);
+		return tiposProd;
 	}
 
 	private ArticuloFacadeRemote getArticuloFacade() {

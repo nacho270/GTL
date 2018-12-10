@@ -53,7 +53,7 @@ public class GuiABMSecuencias extends GuiABMListaTemplate{
 
 	@Override
 	public void cargarLista() {
-		for(ETipoProducto etp : ETipoProducto.values()){
+		for(ETipoProducto etp : ETipoProducto.getValuesAsSortedList()){
 			if(etp.getSector()!=null){
 				lista.addItem(etp);
 			}

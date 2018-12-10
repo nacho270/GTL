@@ -1,6 +1,8 @@
 package ar.com.textillevel.entidades.enums;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,6 +189,25 @@ public enum ETipoProducto {
 
 	public static boolean dependienteDeArticulo(ETipoProducto tipoProducto) {
 		return tipoProducto != REPROCESO_SIN_CARGO; 
+	}
+
+
+	public static List<ETipoProducto> getValuesAsSortedList() {
+		List<ETipoProducto> tiposProductos = new ArrayList<ETipoProducto>();
+		for(ETipoProducto etp : ETipoProducto.values()) {
+			tiposProductos.add(etp);
+		}
+		
+		Collections.sort(tiposProductos, new Comparator<ETipoProducto>() {
+
+			@Override
+			public int compare(ETipoProducto o1, ETipoProducto o2) {
+				return o1.getDescripcion().compareToIgnoreCase(o2.getDescripcion());
+			}
+
+			
+		});
+		return tiposProductos;
 	}
 
 }

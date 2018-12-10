@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -205,7 +204,7 @@ public class GuiABMProductos extends GuiABMListaTemplate {
 	private JComboBox getCmbTipoProducto() {
 		if(cmbTipoProducto == null){
 			cmbTipoProducto = new JComboBox();
-			GuiUtil.llenarCombo(cmbTipoProducto, Arrays.asList(ETipoProducto.values()), true);
+			GuiUtil.llenarCombo(cmbTipoProducto, ETipoProducto.getValuesAsSortedList(), true);
 			cmbTipoProducto.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent evt) {
 					if (evt.getStateChange() == ItemEvent.SELECTED){
