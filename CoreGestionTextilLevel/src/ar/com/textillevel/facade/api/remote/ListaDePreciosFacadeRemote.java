@@ -25,6 +25,8 @@ public interface ListaDePreciosFacadeRemote {
 
 	public Float getPrecioProducto(ProductoArticulo productoArticulo, Cliente cliente) throws ValidacionException;
 
+	public Float getPrecioProductoPorVersion(ProductoArticulo productoArticulo, Integer idVersion);
+
 	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException;
 
 	public Cotizacion generarCotizacion(Cliente cliente, VersionListaDePrecios versionListaDePrecios, Integer validez) throws ValidacionException;
@@ -40,6 +42,5 @@ public interface ListaDePreciosFacadeRemote {
 	public void aumentarPrecios(Cliente cliente, Date inicioValidez, List<DatosAumentoTO> datosAumento, boolean actualizarCotizacion) throws ValidacionException;
 	
 	public void borrarCotizacion(Cotizacion cotizacion);
-
 }
 

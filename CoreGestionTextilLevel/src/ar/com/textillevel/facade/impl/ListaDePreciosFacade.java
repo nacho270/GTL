@@ -14,6 +14,7 @@ import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.dao.api.local.CotizacionDAOLocal;
 import ar.com.textillevel.dao.api.local.ListaDePreciosDAOLocal;
 import ar.com.textillevel.dao.api.local.ProductoDAOLocal;
+import ar.com.textillevel.dao.api.local.VersionListaDePreciosDAOLocal;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
 import ar.com.textillevel.entidades.ventas.ProductoArticulo;
@@ -48,6 +49,9 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 	
 	@EJB
 	private ListaDePreciosFacadeLocal self;
+	
+	@EJB
+	private VersionListaDePreciosDAOLocal vldpDAO;
 	
 	public ListaDePrecios getListaByIdCliente(Integer idCliente) {
 		ListaDePrecios listaByIdCliente = listaDePreciosDAOLocal.getListaByIdCliente(idCliente);
@@ -100,6 +104,18 @@ public class ListaDePreciosFacade implements ListaDePreciosFacadeRemote, ListaDe
 			return null;
 		}
 		return definicion.getPrecio(productoArticulo);
+	}
+	
+	public Float getPrecioProductoPorVersion(ProductoArticulo productoArticulo, Integer idVersion) {
+		DefinicionPrecio definicion = null;
+		VersionListaDePrecios version  = vldpDAO.getById(idVersion);
+		if(version != null) {
+			definicion = version.getDefinicionPorTipoProducto(productoArticulo.getTipo());
+			if(definicion != null) {
+				return definicion.getPrecio(productoArticulo);
+			}
+		}
+		return null;
 	}
 
 	public VersionListaDePrecios getVersionListaPrecioActual(Cliente cliente) throws ValidacionException {

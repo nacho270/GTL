@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import ar.com.fwcommon.util.DateUtil;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 
 @Entity
@@ -134,5 +135,9 @@ public class VersionListaDePrecios implements Serializable {
 		}
 		getPrecios().set(index, nuevaDefinicion);
 	}
-
+	
+	@Override
+	public String toString() {
+		return DateUtil.dateToString(inicioValidez, DateUtil.SHORT_DATE);
+	}
 }

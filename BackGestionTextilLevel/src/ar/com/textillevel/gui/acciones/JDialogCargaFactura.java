@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
+
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
 
 import org.apache.taglibs.string.util.StringW;
 
@@ -85,11 +90,15 @@ import ar.com.textillevel.entidades.ventas.ProductoArticulo;
 import ar.com.textillevel.entidades.ventas.articulos.Articulo;
 import ar.com.textillevel.entidades.ventas.articulos.DibujoEstampado;
 import ar.com.textillevel.entidades.ventas.articulos.EEstadoDibujo;
+import ar.com.textillevel.entidades.ventas.cotizacion.DefinicionPrecio;
+import ar.com.textillevel.entidades.ventas.cotizacion.ListaDePrecios;
+import ar.com.textillevel.entidades.ventas.cotizacion.VersionListaDePrecios;
 import ar.com.textillevel.entidades.ventas.materiaprima.PrecioMateriaPrima;
 import ar.com.textillevel.facade.api.remote.CondicionDeVentaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.CorreccionFacadeRemote;
 import ar.com.textillevel.facade.api.remote.DocumentoContableFacadeRemote;
 import ar.com.textillevel.facade.api.remote.FacturaFacadeRemote;
+import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
 import ar.com.textillevel.facade.api.remote.PrecioMateriaPrimaFacadeRemote;
 import ar.com.textillevel.facade.api.remote.RemitoEntradaDibujoFacadeRemote;
@@ -107,8 +116,6 @@ import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.modulos.odt.entidades.PiezaODT;
 import ar.com.textillevel.util.GTLBeanFactory;
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
 
 public class JDialogCargaFactura extends JDialog {
 
@@ -158,6 +165,9 @@ public class JDialogCargaFactura extends JDialog {
 	private JButton btnSalir;
 	private JButton btnAgregarProducto;
 	private JButton btnQuitarProducto;
+	private JButton btnBuscarListaDePrecios;
+	private JButton btnQuitarListaDePrecios;
+	private JLabel lblVersionListaPrecios;
 
 	private List<RemitoSalida> remitos;
 	private ETipoCorreccionFactura tipoCorrecion;
@@ -196,6 +206,9 @@ public class JDialogCargaFactura extends JDialog {
 	private NroDibujoEstampadoTracker nroDibujoTracker;
 
 	private RemitoEntradaDibujo reDibujo;
+	
+	private ListaDePrecios listaDePrecios;
+	private VersionListaDePrecios versionListaPreciosActual;
 	
 	/**
 	 * Constructor para consulta de correcciones
@@ -621,7 +634,16 @@ public class JDialogCargaFactura extends JDialog {
 	private void calcularSubTotal() {
 		double suma = 0;
 		for (ItemFactura it : getDocContable().getItems()) {
-			suma += it.getImporte().doubleValue();
+			if(it instanceof ItemFacturaProducto) {
+				BigDecimal precioProductoLista = getPrecioProducto((ItemFacturaProducto) it);
+				if(precioProductoLista == null) {
+					suma += it.getImporte().doubleValue();
+				} else {
+					suma += precioProductoLista.doubleValue();
+				}
+			}else {
+				suma += it.getImporte().doubleValue();
+			}
 		}
 		getDocContable().setMontoSubtotal(new BigDecimal(String.valueOf(Math.abs(suma))));
 		getTxtSubTotal().setText((getCorrecionFactura() instanceof NotaCredito && suma >0?"-":"") +  getDecimalFormat().format(suma));
@@ -825,10 +847,28 @@ public class JDialogCargaFactura extends JDialog {
 		fila[COL_CANTIDAD] =itf.getCantidad();// getDecimalFormat().format(itf.getCantidad());
 		fila[COL_DESCRIPCION] = itf.getDescripcion();
 		fila[COL_UNIDAD] = itf.getUnidad().getDescripcion();
-		fila[COL_PRECIO_UNITARIO] = itf.getPrecioUnitario();
+		BigDecimal precioProducto = getPrecioProducto(itf);
+		itf.setImporte(precioProducto.multiply(itf.getCantidad()));
+		fila[COL_PRECIO_UNITARIO] = getDecimalFormat().format(precioProducto.doubleValue());
 		fila[COL_IMPORTE] = getDecimalFormat().format(itf.getImporte().doubleValue());
 		fila[COL_OBJ_FACTURA] = itf;
 		return fila;
+	}
+	
+	private BigDecimal getPrecioProducto(ItemFacturaProducto itf) {
+		ListaDePreciosFacadeRemote listaDePreciosFacadeRemote = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class);
+		if(versionListaPreciosActual == null) {
+			versionListaPreciosActual = listaDePrecios.getVersionActual();
+		}
+		DefinicionPrecio definicionPorTipoProducto = versionListaPreciosActual.getDefinicionPorTipoProducto(itf.getProductoArticulo().getProducto().getTipo());
+		if(definicionPorTipoProducto == null) {
+			return itf.getPrecioUnitario();
+		}
+		Float precioLista = listaDePreciosFacadeRemote.getPrecioProductoPorVersion(itf.getProductoArticulo(), versionListaPreciosActual.getId());
+		if(precioLista == null){
+			return itf.getPrecioUnitario();
+		}
+		return new BigDecimal(precioLista);
 	}
 
 	private Object[] getFilaBonificacion(ItemFacturaBonificacion itf) {
@@ -1022,7 +1062,10 @@ public class JDialogCargaFactura extends JDialog {
 								Object valueAt = getValueAt(row, COL_PRECIO_UNITARIO);
 								BigDecimal newValue = null;
 								if(valueAt instanceof String){
-									newValue = new BigDecimal(Double.valueOf((String)valueAt));
+									String s = (String) valueAt;
+									int lastIndexOf = s.lastIndexOf(",");
+									String s2 = s.substring(0, lastIndexOf) + "." + s.substring(lastIndexOf + 1);
+									newValue = new BigDecimal(Double.valueOf(s2));
 								}else{
 									newValue = (BigDecimal)valueAt;
 								}
@@ -1432,6 +1475,8 @@ public class JDialogCargaFactura extends JDialog {
 		panel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 2, 2));
 		panel.add(getBtnAgregarProducto());
 		panel.add(getBtnQuitarProducto());
+		panel.add(getBtnBuscarListaDePrecios());
+		panel.add(getBtnQuitarListaDePrecios());
 		return panel;
 	}
 
@@ -1443,6 +1488,62 @@ public class JDialogCargaFactura extends JDialog {
 		return suma;
 	}
 	
+	private JButton getBtnQuitarListaDePrecios() {
+		if(btnQuitarListaDePrecios == null) {
+			btnQuitarListaDePrecios =BossEstilos.createButton("ar/com/textillevel/imagenes/b_quitar_lista_precios.png", "ar/com/textillevel/imagenes/b_quitar_lista_precios_des.png");
+			btnQuitarListaDePrecios.setEnabled(false);
+			btnQuitarListaDePrecios.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					btnQuitarListaDePrecios.setEnabled(false);
+					versionListaPreciosActual = null;
+					lblVersionListaPrecios.setText(DateUtil.dateToString(listaDePrecios.getVersiones().get(listaDePrecios.getVersiones().size() - 1).getInicioValidez(), DateUtil.SHORT_DATE));
+					llenarTablaProductos();
+				}
+			});
+		}
+		return btnQuitarListaDePrecios;
+	}
+	
+	private JButton getBtnBuscarListaDePrecios(){
+		if(btnBuscarListaDePrecios == null){
+			btnBuscarListaDePrecios = BossEstilos.createButton("ar/com/textillevel/imagenes/b_buscar_lista_precios.png", "ar/com/textillevel/imagenes/b_buscar_lista_precios_des.png");
+			btnBuscarListaDePrecios.setEnabled(false);
+			btnBuscarListaDePrecios.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(listaDePrecios == null || listaDePrecios.getVersiones() == null || listaDePrecios.getVersiones().isEmpty()){
+						FWJOptionPane.showWarningMessage(JDialogCargaFactura.this, "El cliente no tiene cargada una lista de precios", "Advertencia");
+						return;
+					}
+					
+					List<VersionListaDePrecios> versiones = new ArrayList<VersionListaDePrecios>(listaDePrecios.getVersiones());
+					Collections.sort(versiones, new Comparator<VersionListaDePrecios>() {
+
+						@Override
+						public int compare(VersionListaDePrecios v1, VersionListaDePrecios v2) {
+							return v2.getInicioValidez().compareTo(v1.getInicioValidez());
+						}
+					});
+					
+					VersionListaDePrecios[] versionesArray= new VersionListaDePrecios[versiones.size()];
+					for(int i = 0 ; i< versiones.size();i++){
+						versionesArray[i] = versiones.get(i);
+					}
+					Object opcion = JOptionPane.showInputDialog(null, "Seleccione la versión que desea utilizar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, versionesArray,versionesArray[0]);
+					if(opcion!=null){
+						versionListaPreciosActual = (VersionListaDePrecios) opcion;
+						lblVersionListaPrecios.setText(DateUtil.dateToString(versionListaPreciosActual.getInicioValidez(), DateUtil.SHORT_DATE));
+						getBtnQuitarListaDePrecios().setEnabled(true);
+						llenarTablaProductos();
+					}
+				}
+			});
+		}
+		return btnBuscarListaDePrecios;
+	}
 	private JButton getBtnAgregarProducto() {
 		if (btnAgregarProducto == null) {
 			btnAgregarProducto = BossEstilos.createButton("ar/com/fwcommon/imagenes/b_agregar.png", "ar/com/fwcommon/imagenes/b_agregar_des.png");
@@ -1611,9 +1712,30 @@ public class JDialogCargaFactura extends JDialog {
 		panBotones.add(getBtnGuardar());
 		panBotones.add(getBtnImprimir());
 		panBotones.add(getBtnSalir());
+		if(!consulta) {
+			panBotones.add(new JLabel("Versión de lista de precios: "));
+			panBotones.add(getLblVersionListaPrecios());
+		}
 		return panBotones;
 	}
 
+	private JLabel getLblVersionListaPrecios() {
+		if(lblVersionListaPrecios == null) {
+			lblVersionListaPrecios = new JLabel(" --- ");
+			lblVersionListaPrecios.setForeground(Color.RED);
+			lblVersionListaPrecios.setFont(lblVersionListaPrecios.getFont().deriveFont(Font.BOLD));
+			listaDePrecios = GTLBeanFactory.getInstance().getBean2(ListaDePreciosFacadeRemote.class).getListaByIdCliente(getCliente().getId());
+			if(listaDePrecios != null && listaDePrecios.getVersiones() != null && !listaDePrecios.getVersiones().isEmpty()) {
+				VersionListaDePrecios versionListaDePrecios = listaDePrecios.getVersiones().get(listaDePrecios.getVersiones().size()-1);
+				versionListaPreciosActual = versionListaDePrecios;
+				getBtnBuscarListaDePrecios().setEnabled(true);
+				lblVersionListaPrecios.setText(DateUtil.dateToString(versionListaDePrecios.getInicioValidez(), DateUtil.SHORT_DATE));
+				return lblVersionListaPrecios;
+			}
+			
+		}
+		return lblVersionListaPrecios;
+	}
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar e imprimir");
