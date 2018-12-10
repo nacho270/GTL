@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ar.com.fwcommon.componentes.FWJTable;
 import ar.com.fwcommon.util.DateUtil;
@@ -101,7 +103,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 			}
 		}
 		if(((MovimientoDebe) movimiento).getFactura() != null){
-			List<String> odts = new ArrayList<String>();
+			Set<String> odts = new HashSet<String>();
 			for(RemitoSalida rs : ((MovimientoDebe) movimiento).getFactura().getRemitos()) {
 				for (OrdenDeTrabajo odt : rs.getOdts()) {
 					odts.add(ODTCodigoHelper.getInstance().formatCodigo(odt.getCodigo()));
@@ -109,7 +111,7 @@ public class GenerarFilaMovimientoVisitor implements IFilaMovimientoVisitor {
 			}
 			row[1] = StringUtil.getCadena(odts, " - ");
 		} else if (((MovimientoDebe) movimiento).getRemitoSalida() != null) {
-			List<String> odts = new ArrayList<String>();
+			Set<String> odts = new HashSet<String>();
 			for (OrdenDeTrabajo odt : ((MovimientoDebe) movimiento).getRemitoSalida().getOdts()) {
 				odts.add(ODTCodigoHelper.getInstance().formatCodigo(odt.getCodigo()));
 			}

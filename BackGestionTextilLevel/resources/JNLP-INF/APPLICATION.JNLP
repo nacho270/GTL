@@ -121,7 +121,7 @@
     <property name="applicationName" value="GTL"/>
 	<property name="textillevel.chat.server.ip" value="192.168.1.250"/>
     <property name="textillevel.chat.server.port" value="7777"/>
-	<property name="textillevel.ipintercambio" value="http://192.168.1.13:8080/"/>
+	<property name="textillevel.ipintercambio" value="http://192.168.1.13:8180/"/>
 	<property name="textillevel.odt.wsendpoint" value="GTL-gtlback-server/ODTService"/>
 	<property name="textillevel.entregingdoc.wsendpoint" value="GTL-gtlback-server/TerminalService"/>	
     <property name="textillevel.activemq.url" value="tcp://192.168.1.250:61616" />

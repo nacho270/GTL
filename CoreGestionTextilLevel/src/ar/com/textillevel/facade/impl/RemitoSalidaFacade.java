@@ -148,7 +148,8 @@ public class RemitoSalidaFacade implements RemitoSalidaFacadeRemote, RemitoSalid
 				&& (odts.get(0).getIProductoParaODT().getTipo() == ETipoProducto.REPROCESO_SIN_CARGO ||
 						odts.get(0).getIProductoParaODT().getTipo()==ETipoProducto.DEVOLUCION);
 		if (esReproceso) {
-			cuentaFacade.crearMovimientoDebeRemitoSalidaDevolucion(remitoSalida);
+			ETipoProducto tipoProducto = odts.get(0).getIProductoParaODT().getTipo();
+			cuentaFacade.crearMovimientoDebeRemitoSalidaDevolucion(remitoSalida, tipoProducto);
 			for (OrdenDeTrabajo odt : odts) {
 				odt.setEstadoODT(EEstadoODT.FACTURADA);
 				odtDAO.save(odt);

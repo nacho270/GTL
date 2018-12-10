@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp codebase="http://192.168.1.13:8080/BackGTL" href="start.jnlp">
+<jnlp codebase="http://192.168.1.13:8180/BackGTL" href="start.jnlp">
   <information>
     <title>Sistema de Gestion - TEST</title>
     <vendor>Textil Level S.A.</vendor>
@@ -115,7 +115,7 @@
     <property name="runningUnderJWS" value="true" />
     <property name="java.naming.factory.initial" value="org.jnp.interfaces.NamingContextFactory"/>
     <property name="java.naming.factory.url.pkgs" value="org.jboss.naming:org.jnp.interfaces"/>
-    <property name="java.naming.provider.url" value="192.168.1.13:1099"/>
+    <property name="java.naming.provider.url" value="192.168.1.13:1199"/>
     <property name="test" value="1"/>
   </resources>
   <resources os="Windows">

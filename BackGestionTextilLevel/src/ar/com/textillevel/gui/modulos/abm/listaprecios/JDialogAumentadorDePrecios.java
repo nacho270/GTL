@@ -43,12 +43,10 @@ import ar.com.textillevel.entidades.config.ParametrosGenerales;
 import ar.com.textillevel.entidades.enums.ETipoBusquedaAgenda;
 import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
-import ar.com.textillevel.entidades.portal.UsuarioSistema;
 import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
-import ar.com.textillevel.facade.api.remote.UsuarioSistemaFacadeRemote;
 import ar.com.textillevel.gui.util.EmailSender;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
@@ -56,7 +54,6 @@ import ar.com.textillevel.gui.util.GenericUtils.SiNoResponse;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
 import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail;
 import ar.com.textillevel.gui.util.dialogs.JDialogDestinatariosEmail.PerformEnvioEmailHandler;
-import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.util.GTLBeanFactory;
 
 public class JDialogAumentadorDePrecios extends JDialog {
@@ -226,16 +223,19 @@ public class JDialogAumentadorDePrecios extends JDialog {
 					}
 					if (FWJOptionPane.showQuestionMessage(JDialogAumentadorDePrecios.this, "Va a aumentar las listas de precios de " + getClientesSeleccionados().size() +
 							" clientes.\nDesea continuar?", "Pregunta") == FWJOptionPane.YES_OPTION) {
-						JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JDialogAumentadorDePrecios.this, "Aumentar precios");
-						if (jDialogPasswordInput.isAcepto()) {
-							String pass = new String(jDialogPasswordInput.getPassword());
-							UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
-							if (usrAdmin != null) {
-								new ThreadAumentador(getClientesSeleccionados()).start();
-							} else {
-								FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La clave ingresada no peternece a un usuario administrador", "Error");
-							}
-						}
+						new ThreadAumentador(getClientesSeleccionados()).start();
+						
+//						JDialogPasswordInput jDialogPasswordInput = new JDialogPasswordInput(JDialogAumentadorDePrecios.this, "Aumentar precios");
+//						if (jDialogPasswordInput.isAcepto()) {
+//							String pass = new String(jDialogPasswordInput.getPassword());
+//							UsuarioSistema usrAdmin = GTLBeanFactory.getInstance().getBean2(UsuarioSistemaFacadeRemote.class).esPasswordDeAdministrador(pass);
+//							if (usrAdmin != null) {
+//								new ThreadAumentador(getClientesSeleccionados()).start();
+//							} else {
+//								FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "La clave ingresada no peternece a un usuario administrador", "Error");
+//							}
+//						}
+						
 					}
 				}
 			});

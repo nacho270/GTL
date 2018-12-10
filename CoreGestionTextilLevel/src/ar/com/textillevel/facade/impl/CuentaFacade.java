@@ -63,6 +63,7 @@ import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 import ar.com.textillevel.entidades.enums.EEstadoCorreccion;
 import ar.com.textillevel.entidades.enums.EEstadoFactura;
+import ar.com.textillevel.entidades.enums.ETipoProducto;
 import ar.com.textillevel.entidades.gente.Cliente;
 import ar.com.textillevel.entidades.gente.IAgendable;
 import ar.com.textillevel.entidades.gente.Proveedor;
@@ -223,11 +224,11 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		movimientoDao.save(md);
 		return nd;
 	}
-	
-	public void crearMovimientoDebeRemitoSalidaDevolucion(RemitoSalida remitoSalida) {
-		crearMovimientoDebeRemitoSalida(remitoSalida, DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - DEVOLUCION - RTO " + remitoSalida.getNroRemito());
+
+	public void crearMovimientoDebeRemitoSalidaDevolucion(RemitoSalida remitoSalida, ETipoProducto tipoProducto) {
+		crearMovimientoDebeRemitoSalida(remitoSalida, DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - "  + tipoProducto.getDescripcion().toUpperCase() + " - RTO " + remitoSalida.getNroRemito());
 	}
-	
+
 	public void crearMovimientoDebeRemitoSalidaDibujo(RemitoSalida remitoSalida) {
 		final String dibujos = FluentIterable.from(remitoSalida.getDibujoEstampados()).transform(new Function<DibujoEstampado, String>() {
 			@Override

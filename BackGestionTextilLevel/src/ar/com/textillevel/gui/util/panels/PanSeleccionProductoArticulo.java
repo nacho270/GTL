@@ -480,7 +480,9 @@ public class PanSeleccionProductoArticulo extends JPanel {
 	private List<ETipoProducto> getTipoProductos() {
 		Set<ETipoProducto> tpSet = new HashSet<ETipoProducto>();
 		for(ETipoProducto tp : ETipoProducto.values()) {
-			tpSet.add(tp);
+			if(tp != ETipoProducto.ESTAMPADO_SOBRE_CRUDO) {
+				tpSet.add(tp);
+			}
 		}
 		return new ArrayList<ETipoProducto>(tpSet);
 	}
