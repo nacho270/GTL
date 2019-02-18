@@ -639,7 +639,7 @@ public class JDialogCargaFactura extends JDialog {
 				if(precioProductoLista == null) {
 					suma += it.getImporte().doubleValue();
 				} else {
-					suma += precioProductoLista.doubleValue();
+					suma += it.getCantidad().multiply(precioProductoLista).doubleValue();
 				}
 			}else {
 				suma += it.getImporte().doubleValue();
@@ -1528,8 +1528,8 @@ public class JDialogCargaFactura extends JDialog {
 						}
 					});
 					
-					VersionListaDePrecios[] versionesArray= new VersionListaDePrecios[versiones.size()];
-					for(int i = 0 ; i< versiones.size();i++){
+					VersionListaDePrecios[] versionesArray= new VersionListaDePrecios[Math.min(3, versiones.size())];
+					for(int i = 0 ; i< Math.min(3, versiones.size());i++){
 						versionesArray[i] = versiones.get(i);
 					}
 					Object opcion = JOptionPane.showInputDialog(null, "Seleccione la versión que desea utilizar:", "Lista de opciones", JOptionPane.INFORMATION_MESSAGE, null, versionesArray,versionesArray[0]);
