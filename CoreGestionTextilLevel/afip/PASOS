@@ -1,3 +1,22 @@
+Pasos realizados el 25/02/2019 para actualizar el certificado:
+-------------------------------------------------------------
+
+1) generar empresa.key
+
+openssl genrsa -out empresa.key 2048
+
+2) generar pedido.csr usando empresa.key
+
+openssl req -new -key empresa.key -subj "/C=AR/O=TEXTIL LEVEL S.A/CN=Diego Salem/serialNumber=CUIT 20319632264" -out pedido.csr 
+
+3) BAJAR clave-publica.crt de la AFIP (para ello subir pedido.csr)
+
+4) Generar archivo p12 usando empresa.key y clave-publica.crt
+
+openssl pkcs12 -export -in clave-publica.crt  -inkey empresa.key -name "Diego Salem" -out salem.p12
+
+=========================================================================================================================================================
+
 Archivo guia: http://www.afip.gob.ar/ws/WSAA/WSAA.ObtenerCertificado.pdf
 http://www.sistemasagiles.com.ar/trac/wiki/ManualPyAfipWs#Certificados
 
