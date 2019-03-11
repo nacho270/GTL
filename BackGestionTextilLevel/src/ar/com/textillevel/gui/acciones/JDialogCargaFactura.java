@@ -219,6 +219,7 @@ public class JDialogCargaFactura extends JDialog {
 	 */
 	public JDialogCargaFactura(Frame padre, CorreccionFactura correccion, boolean consulta) {
 		super(padre);
+		setConsulta(consulta);
 		ParametrosGenerales parametrosGenerales2 = getParametrosGeneralesFacade().getParametrosGenerales();
 		if (parametrosGenerales2 == null) {
 			FWJOptionPane.showErrorMessage(this, "Faltan configurar los parametros generales", "Error");
@@ -253,7 +254,6 @@ public class JDialogCargaFactura extends JDialog {
 			getPanelFecha().setEnabled(!consulta);
 			getBtnImprimir().setVisible(consulta);
 		}
-		setConsulta(consulta);
 		setTitle("Consultar " + getTipoCorrecion().getDescripcion());
 		getPanelFecha().setSelectedDate(correccion.getFechaEmision());
 		GuiUtil.setEstadoPanel(getPanelTablaProductos(), !consulta);
@@ -322,6 +322,7 @@ public class JDialogCargaFactura extends JDialog {
 	 */
 	public JDialogCargaFactura(Frame padre, Factura factura, boolean consulta) {
 		super(padre);
+		setConsulta(consulta);
 		setFactura(factura);
 		setCliente(factura.getCliente());
 		setRemitos(GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdsConPiezasYProductos(extractIds(factura.getRemitos())));
@@ -362,7 +363,6 @@ public class JDialogCargaFactura extends JDialog {
 			}
 			GuiUtil.setEstadoPanel(getPanelTablaProductos(), !consulta);
 			calcularSubTotal();
-			setConsulta(consulta);
 			getBtnGuardar().setVisible(!consulta);
 			setTitle("Consultar factura");
 			getPanelFecha().setSelectedDate(factura.getFechaEmision());
@@ -635,7 +635,12 @@ public class JDialogCargaFactura extends JDialog {
 		double suma = 0;
 		for (ItemFactura it : getDocContable().getItems()) {
 			if(it instanceof ItemFacturaProducto) {
-				BigDecimal precioProductoLista = getPrecioProducto((ItemFacturaProducto) it);
+				BigDecimal precioProductoLista = null;
+				if(isConsulta()) {
+					precioProductoLista = it.getPrecioUnitario();
+				} else {
+					precioProductoLista = getPrecioProducto((ItemFacturaProducto) it);
+				}
 				if(precioProductoLista == null) {
 					suma += it.getImporte().doubleValue();
 				} else {
@@ -847,9 +852,14 @@ public class JDialogCargaFactura extends JDialog {
 		fila[COL_CANTIDAD] =itf.getCantidad();// getDecimalFormat().format(itf.getCantidad());
 		fila[COL_DESCRIPCION] = itf.getDescripcion();
 		fila[COL_UNIDAD] = itf.getUnidad().getDescripcion();
-		BigDecimal precioProducto = getPrecioProducto(itf);
-		itf.setImporte(precioProducto.multiply(itf.getCantidad()));
-		fila[COL_PRECIO_UNITARIO] = getDecimalFormat().format(precioProducto.doubleValue());
+		if(isConsulta()) {
+			fila[COL_PRECIO_UNITARIO] = itf.getPrecioUnitario();
+		} else {
+			BigDecimal precioProducto = getPrecioProducto(itf);
+			itf.setPrecioUnitario(precioProducto);
+			itf.setImporte(precioProducto.multiply(itf.getCantidad()));
+			fila[COL_PRECIO_UNITARIO] = getDecimalFormat().format(precioProducto.doubleValue());
+		}
 		fila[COL_IMPORTE] = getDecimalFormat().format(itf.getImporte().doubleValue());
 		fila[COL_OBJ_FACTURA] = itf;
 		return fila;
