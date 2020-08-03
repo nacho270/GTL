@@ -624,10 +624,10 @@ public class JDialogAgregarRemitoSalida extends JDialog {
 			setModoConsulta(modoConsulta);
 			initializePopupMenu();
 			//no agrego los botones de combinar piezas porque la idea es que eso se haga desde el sistema GTLLite
-//			agregarBoton(getBtnAgregarSubPiezas());
-//			agregarBoton(getBtnCombinarPiezas());
-//			agregarBoton(getBtnDescombinarPiezas());
-			getBotonAgregar().setVisible(false);
+			agregarBoton(getBtnAgregarSubPiezas());
+			agregarBoton(getBtnCombinarPiezas());
+			agregarBoton(getBtnDescombinarPiezas());
+			//			getBotonAgregar().setVisible(false);
 			this.remitoSalida = remitoSalida;
 			if(remitoSalida.getPiezas().isEmpty()) {
 				addRowsInTabla(CANT_PIEZAS_INICIALES, false);
