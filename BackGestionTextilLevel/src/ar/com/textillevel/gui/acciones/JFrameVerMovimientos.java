@@ -47,6 +47,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileFilter;
 
+import main.GTLGlobalCache;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+
 import org.apache.taglibs.string.util.StringW;
 
 import ar.com.fwcommon.boss.BossError;
@@ -119,10 +124,6 @@ import ar.com.textillevel.gui.util.dialogs.JDialogPasswordInput;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente;
 import ar.com.textillevel.gui.util.dialogs.JDialogSeleccionarCliente.EModoDialogo;
 import ar.com.textillevel.util.GTLBeanFactory;
-import main.GTLGlobalCache;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 public class JFrameVerMovimientos extends JFrame {
 
@@ -1510,16 +1511,13 @@ public class JFrameVerMovimientos extends JFrame {
 			btnListadoPDF.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					if (getPanelTablaMovimientos().getTabla().getRowCount() > 0) {
-						FWJTable tabla = getPanelTablaMovimientos().getTabla();
-						mostrarFileChooser("Listado de Movimientos - Cliente Nro - " + getTxtBusquedaCliente().getText(), EXTENSION_PDF);
-						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
-						if (archivoIngresado != null) {
-							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
-								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));
-							}
-							JasperHelper.listadoAPDF(tabla, "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - " + getLblDireccion().getText() + " - "
-									+ getLblCuit().getText() + " - " + getLblTelefono().getText() + " " + getLblCondicionVenta().getText(), null, false, archivoIngresado.getAbsolutePath());
+					try {
+						JasperHelper.imprimirReporte(createJasperResumenCuenta(loadClienteBuscado()), true, false, 1);
+					} catch (JRException e1) {
+						e1.printStackTrace();
+						if (FWJOptionPane.showQuestionMessage(JFrameVerMovimientos.this, StringW.wordWrap("Ha ocurrido un error al imprimir el nuevo extracto de cuenta. Desea imprimir de la forma anterior ?"), "Pregunta") == FWJOptionPane.YES_OPTION) {
+							JasperHelper.imprimirListado(getPanelTablaMovimientos().getTabla(), "  Saldo: " + getTxtTotalCuenta().getText(), "  " + getLblNombre().getText() + " - "
+									+ getLblDireccion().getText() + " - " + getLblCuit().getText() + " - " + getLblTelefono().getText()+ " " + getLblCondicionVenta().getText(), null, false);
 						}
 					}
 				}
