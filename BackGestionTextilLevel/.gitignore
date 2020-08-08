@@ -2,3 +2,5 @@
 /tmp
 /.settings
 .settings
+build.properties
+backgtl-client.jar
