@@ -2,9 +2,13 @@ package ar.com.textillevel.entidades.documentos.factura;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
@@ -25,13 +29,15 @@ public abstract class CorreccionFactura extends DocumentoContableCliente impleme
 	private Boolean verificada;
 	private String usuarioVerificador;
 	private Boolean anulada;
+	private List<Factura> facturasRelacionadas;
 
 	public CorreccionFactura(){
 		this.idEstado = EEstadoCorreccion.IMPAGA.getId();
 		setIdEstadoImpresion(EEstadoImpresionDocumento.PENDIENTE.getId());
 		this.verificada = false;
 		this.anulada = false;
-		this.items = new ArrayList<ItemFactura>(); 
+		this.items = new ArrayList<ItemFactura>();
+		this.facturasRelacionadas = new ArrayList<Factura>();
 	}
 
 	@Column(name="A_DESCRIPCION", nullable=false)
@@ -52,6 +58,7 @@ public abstract class CorreccionFactura extends DocumentoContableCliente impleme
 		return idEstado;
 	}
 
+	
 	public void setIdEstado(Integer idEstado) {
 		this.idEstado = idEstado;
 	}
@@ -116,5 +123,21 @@ public abstract class CorreccionFactura extends DocumentoContableCliente impleme
 
 	@Transient
 	public abstract ETipoCorreccionFactura getTipo();
+	
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "F_NOTA_CREDITO_P_ID")
+	public List<Factura> getFacturasRelacionadas() {
+		return facturasRelacionadas;
+	}
+
+	public void setFacturasRelacionadas(List<Factura> facturasRelacionadas) {
+		this.facturasRelacionadas = facturasRelacionadas;
+	}
+
+	@Override
+	@Transient
+	public List<DocumentoContableCliente> getDocsContableRelacionados() {
+		return new ArrayList<DocumentoContableCliente>(getFacturasRelacionadas());
+	}
 
 }

@@ -1,5 +1,7 @@
 package ar.com.textillevel.facade.impl;
 
+import java.util.Collections;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -20,7 +22,6 @@ import ar.com.textillevel.facade.api.local.OrdenDePagoPersonaFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.OrdenDePagoPersonaFacadeRemote;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 @Stateless
 public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote, OrdenDePagoPersonaFacadeLocal {
@@ -63,7 +64,7 @@ public class OrdenDePagoPersonaFacade implements OrdenDePagoPersonaFacadeRemote,
 			cuentaFacade.crearMovimientoHaberPersona(orden);
 		} catch(Exception e) {
 			if(e.getMessage().contains("ConstraintViolationException")) {
-				throw new ValidacionException(EValidacionException.getEnum(EValidacionException.ORDEN_DE_PAGO_PERSONA_DUPLICADA.getCodigo()).getInfoValidacion(), Collections.singletonList(orden.getNroOrden().toString()));
+				throw new ValidacionException(EValidacionException.getEnum(EValidacionException.ORDEN_DE_PAGO_PERSONA_DUPLICADA.getCodigo()).getInfoValidacion(), java.util.Collections.singletonList(orden.getNroOrden().toString()));
 			} else {
 				throw e;
 			}

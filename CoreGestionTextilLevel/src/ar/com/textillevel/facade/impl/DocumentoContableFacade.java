@@ -101,7 +101,7 @@ public class DocumentoContableFacade implements DocumentoContableFacadeLocal, Do
 	public <D extends DocumentoContableCliente> D autorizarDocumentoContableAFIP(D docContable) throws ValidacionExceptionSinRollback {
 		if (ConfiguracionAFIPHolder.getInstance().isHabilitado()) {
 			try {
-				logger.info("Autorizando " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura());
+				logger.info("Autorizando " + docContable.getTipoDocumento().getDescripcion() + " Nro: " + docContable.getNroFactura() + " Cant. Docs Relacionados: "+ docContable.getDocsContableRelacionados().size());
 				DatosRespuestaAFIP respAFIP = AFIPConnector.getInstance().autorizarDocumento(docContable, paramGeneralesDAO.getParametrosGenerales().getNroSucursal(), docContable.getTipoDocumento().getIdTipoDocAFIP(docContable.getTipoFactura()));
 				boolean autorizada = respAFIP.isAutorizada();
 				String observaciones = respAFIP.getObservaciones() == null ? null : respAFIP.getObservaciones().substring(0, Math.min(DocumentoContableCliente.LONG_OBS_AFIP - 1, respAFIP.getObservaciones().length()));

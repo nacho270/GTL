@@ -2,6 +2,7 @@ package ar.com.textillevel.facade.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +41,6 @@ import ar.com.textillevel.facade.api.local.DocumentoContableFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.DibujoEstampadoFacadeRemote;
 import ar.com.textillevel.util.CambioEstadoDibujoHelper;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 @Stateless
 public class DibujoEstampadoFacade implements DibujoEstampadoFacadeRemote {

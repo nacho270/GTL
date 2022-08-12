@@ -1,8 +1,6 @@
 package ar.com.textillevel.entidades.documentos.factura;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -99,12 +97,6 @@ public class NotaDebito extends CorreccionFactura {
 	@Transient
 	public ETipoDocumento getTipoDocumento() {
 		return ETipoDocumento.NOTA_DEBITO;
-	}
-
-	@Override
-	@Transient
-	public List<DocumentoContableCliente> getDocsContableRelacionados() {
-		return Collections.emptyList();
 	}
 
 	@Override

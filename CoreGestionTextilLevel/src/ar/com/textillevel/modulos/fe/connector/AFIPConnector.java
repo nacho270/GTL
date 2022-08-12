@@ -47,6 +47,7 @@ public class AFIPConnector {
 		AuthAFIPData authData = ConfiguracionAFIPHolder.getInstance().getAuthData();
 		checkAuthDataAndServiceAFIP(authData);
 		FECAERequest request = AFIPConverter.crearRequest(documento, nroSucursal, idTipoComprobanteAFIP);
+		logger.info(moreInfoString(request));
 		FECAEResponse response = servicios.FECAESolicitar(new FEAuthRequest(authData.getToken(), authData.getHash(), authData.getCuitEmpresa()), request);
 		return new DatosRespuestaAFIP(response);
 	}
@@ -97,4 +98,21 @@ public class AFIPConnector {
 			throw new RemoteException("");
 		}
 	}
+	
+	private String moreInfoString(FECAERequest request) {
+		StringBuilder sb = new StringBuilder("");
+		if(request.getFeDetReq().length > 0) {
+			if(request.getFeDetReq() != null) {
+				for(ar.com.textillevel.modulos.fe.cliente.requests.FECAEDetRequest det : request.getFeDetReq()) {
+					if(det.getCbtesAsoc() != null && det.getCbtesAsoc().length > 0) {
+						sb = sb.append("Nro. ->" + det.getDocNro() + ", Tipo ->" + det.getDocTipo() + "\n")
+							       .append("Comp. Asociados: " + (det.getCbtesAsoc().length == 0 ? "Sin Comp.": det.getCbtesAsoc()[0].getNro()));
+						
+					}
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 }

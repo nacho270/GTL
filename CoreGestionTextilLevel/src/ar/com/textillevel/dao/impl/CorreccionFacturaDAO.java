@@ -130,9 +130,7 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 	private void doEager(CorreccionFactura c) {
 		c.getCliente().getRazonSocial();
 		c.getItems().size();
-		if(c instanceof NotaCredito){
-			((NotaCredito)c).getFacturasRelacionadas().size();
-		}
+		c.getFacturasRelacionadas().size();
 	}
 
 }
