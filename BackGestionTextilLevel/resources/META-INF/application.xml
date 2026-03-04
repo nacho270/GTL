@@ -10,12 +10,14 @@
 		<ejb>gtlback-server.jar</ejb>
 	</module>
 	
+	<!-- 
 	<module>
 		<web>
 			<web-uri>GTL-Web.war</web-uri>
 			<context-root>gtl</context-root>
 		</web>
 	</module>
+ 	-->	
 
 	<module>
 		<java>commons-collections-3.2.1.jar</java>

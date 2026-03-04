@@ -26,7 +26,6 @@ import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionExceptionSinRollback;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cheque.Cheque;
-import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.controles.PanelDatePicker;
@@ -139,8 +138,8 @@ public class JDialogInputDatosRechazaCheque extends JDialog {
 								gastos = new BigDecimal(getTxtGastos().getText());
 							}
 							java.sql.Date fecha = new java.sql.Date(getPanelFecha().getDate().getTime());
-							CorreccionFactura correccionFactura = cfr.rechazarCheque(getCheque(), fecha, getTxtMotivo().getText(),gastos, getUsrAdmin(), !GenericUtils.isSistemaTest());
-							FWJOptionPane.showInformationMessage(JDialogInputDatosRechazaCheque.this, "El cheque ha sido rechazado correctamente.\n\nSe generó la nota de débito " + correccionFactura.getNroFactura(), "Información");
+							cfr.rechazarCheque(getCheque(), fecha, getTxtMotivo().getText(),gastos, getUsrAdmin(), !GenericUtils.isSistemaTest());
+							FWJOptionPane.showInformationMessage(JDialogInputDatosRechazaCheque.this, "El cheque ha sido rechazado correctamente.\n\nNo se generó documento asociado.", "Información");
 							setAcepto(true);
 							dispose();
 						}

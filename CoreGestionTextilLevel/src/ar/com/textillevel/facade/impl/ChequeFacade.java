@@ -32,9 +32,7 @@ import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.cheque.to.OperacionSobreChequeTO;
 import ar.com.textillevel.entidades.cuenta.to.ETipoDocumento;
-import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.documentos.factura.NotaDebito;
-import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFacturaCorreccion;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ImpuestoItemProveedor;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionCheque;
 import ar.com.textillevel.entidades.documentos.factura.proveedor.ItemCorreccionFacturaProveedor;
@@ -50,7 +48,6 @@ import ar.com.textillevel.entidades.documentos.pagopersona.OrdenDePagoAPersona;
 import ar.com.textillevel.entidades.documentos.recibo.Recibo;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.ETipoImpuesto;
-import ar.com.textillevel.entidades.enums.EUnidad;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 import ar.com.textillevel.entidades.gente.Persona;
 import ar.com.textillevel.entidades.gente.Proveedor;
@@ -59,6 +56,7 @@ import ar.com.textillevel.facade.api.local.ChequeFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaPersonaFacadeLocal;
 import ar.com.textillevel.facade.api.local.CorreccionFacturaProveedorFacadeLocal;
+import ar.com.textillevel.facade.api.local.CuentaFacadeLocal;
 import ar.com.textillevel.facade.api.local.ParametrosGeneralesFacadeLocal;
 import ar.com.textillevel.facade.api.remote.AuditoriaFacadeLocal;
 import ar.com.textillevel.facade.api.remote.ChequeFacadeRemote;
@@ -104,6 +102,9 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 
 	@EJB
 	private CorreccionFacturaPersonaDAOLocal correccionFacturaPersonaDAO;
+	
+	@EJB
+	private CuentaFacadeLocal cuentaFacade;
 	
 	/* BUSQUEDAS */
 	public List<Cheque> getChequesPorFechaYPaginado(Integer nroCliente, EEstadoCheque eEstadoCheque, Date fechaDesde, Date fechaHasta, Integer paginaActual, Integer maxRows, EnumTipoFecha tipoFecha, Integer idBanco, Double montoDesde, Double montoHasta) {
@@ -194,7 +195,7 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 		return chequeDAO.getChequesByCliente(idCliente, estadoCheque);
 	}
 
-	public CorreccionFactura rechazarCheque (Cheque chequeElegido, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback {
+	public void rechazarCheque (Cheque chequeElegido, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback {
 		Cheque cheque = chequeDAO.getById(chequeElegido.getId());
 		checkPrecondicionesRechazar(cheque);
 		
@@ -203,45 +204,24 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 			gastos = BigDecimal.ZERO;
 		}
 		
-		if(cheque.getEstadoCheque() == EEstadoCheque.SALIDA_PROVEEDOR) {
-			generarNotaDebitoProveedor(cheque, usuario, gastos, debeDiscriminarIVA);
-		} else if(cheque.getEstadoCheque() == EEstadoCheque.SALIDA_PERSONA) {
-			generarNotaDebitoPersona(cheque, usuario, gastos, debeDiscriminarIVA);
-		}
 		EEstadoCheque estadoAnterior = cheque.getEstadoCheque();
 		cheque.setEstadoCheque(EEstadoCheque.RECHAZADO);
 		//cheque.setFechaSalida(DateUtil.getHoy());
 		cheque = chequeDAO.save(cheque);
-		Integer lastNumeroFactura = facturaDao.getLastNumeroFactura(cheque.getCliente().getPosicionIva().getTipoFactura(), ETipoDocumento.NOTA_DEBITO, parametrosGeneralesFacade.getParametrosGenerales().getNroSucursal());
-		if(lastNumeroFactura == null){
-			lastNumeroFactura = parametrosGeneralesFacade.getParametrosGenerales().getNroComienzoFactura();
-		}else{
-			lastNumeroFactura+=1;
-		}
-		NotaDebito correccion = new NotaDebito();
-		correccion.setChequeRechazado(cheque);
-		correccion.setEstadoAnteriorCheque(estadoAnterior);
-		correccion.setIsParaRechazarCheque(true);
-		correccion.setCliente(cheque.getCliente());
+
 		double importe = cheque.getImporte().doubleValue();
 		String descripcion = "Cheque rechazado - N°: " + cheque.getNumero() + " - Banco: " + cheque.getBanco().getNombre() + " - Importe: $" + importe + " - Motivo: " + motivoRechazo;
 		Double subTotal = importe;
 		if(gastos!=null){ //Si tiene gastos, calcular IVA.
 			descripcion +=" - Gastos: $" + gastos;
 			subTotal += gastos.doubleValue();
-			correccion.setMontoSubtotal(new BigDecimal(subTotal));
-			correccion.setGastos(gastos);
 			if(debeDiscriminarIVA){
 				BigDecimal porcentajeIVAInscr = parametrosGeneralesFacade.getParametrosGenerales().getPorcentajeIVAInscripto();
 				Double montoIva = porcentajeIVAInscr.doubleValue()/100 * gastos.doubleValue();
-				correccion.setPorcentajeIVAInscripto(porcentajeIVAInscr);
 				subTotal += montoIva;
 			}
-		}else{
-			correccion.setMontoSubtotal(new BigDecimal(subTotal));
 		}
 		Double total = subTotal;
-		correccion.setDescripcion(descripcion);
 		
 		long longFecha = 0;
 		if(esHoy(new java.sql.Date(fecha.getTime()))){//hoy
@@ -250,23 +230,12 @@ public class ChequeFacade implements ChequeFacadeRemote, ChequeFacadeLocal {
 			longFecha=fecha.getTime();
 		}
 		
-		correccion.setFechaEmision(new Timestamp(longFecha));
-		correccion.setMontoTotal(new BigDecimal(total));
-		correccion.setMontoFaltantePorPagar(new BigDecimal(total));
-		correccion.setNroFactura(lastNumeroFactura);
-		correccion.setTipoFactura(cheque.getCliente().getPosicionIva().getTipoFactura());
-
-		ItemFacturaCorreccion ifCorrecc = new ItemFacturaCorreccion();
-		ifCorrecc.setCantidad(new BigDecimal(1));
-		ifCorrecc.setDescripcion(correccion.getDescripcion());
-		ifCorrecc.setImporte(correccion.getMontoSubtotal());
-		ifCorrecc.setUnidad(EUnidad.UNIDAD);
-		ifCorrecc.setPrecioUnitario(correccion.getMontoSubtotal());
-		correccion.getItems().add(ifCorrecc);
-
-		CorreccionFactura correccionNueva = correccionFacade.guardarCorreccionYGenerarMovimiento(correccion,usuario);
+		Timestamp fechaEmision = new Timestamp(longFecha);
+		BigDecimal montoTotal = new BigDecimal(total);
+		
+		cuentaFacade.guardarMovimientoDebeSinDoc(cheque.getCliente().getId(), montoTotal, descripcion, fechaEmision);
+		
 		auditoriaFacade.auditar(usuario, "Rechazo del cheque N°: " + cheque.getNumeracion() + ". Motivo: " + motivoRechazo, EnumTipoEvento.ANULACION, cheque);
-		return correccionNueva;
 	}
 
 	private void checkPrecondicionesRechazar(Cheque cheque) throws ValidacionException {

@@ -225,6 +225,20 @@ public class CuentaFacade implements CuentaFacadeLocal, CuentaFacadeRemote {
 		return nd;
 	}
 
+	public void guardarMovimientoDebeSinDoc(Integer idCliente, BigDecimal monto, String descripcion, Timestamp fechaEmision) {
+		CuentaCliente cuenta = getCuentaClienteByIdCliente(idCliente);
+		double saldo = cuenta.getSaldo().doubleValue();
+		cuenta.setSaldo(new BigDecimal(saldo - monto.doubleValue()));
+		cuentaDao.save(cuenta);
+		MovimientoDebe md = new MovimientoDebe();
+		md.setMonto(monto);
+		md.setCuenta(cuenta);
+		md.setDescripcionResumen(DateUtil.dateToString(fechaEmision, DateUtil.SHORT_DATE) + ". " + descripcion );
+		md.setFechaHora(fechaEmision);
+		movimientoDao.save(md);
+	}
+
+	
 	public void crearMovimientoDebeRemitoSalidaDevolucion(RemitoSalida remitoSalida, ETipoProducto tipoProducto) {
 		crearMovimientoDebeRemitoSalida(remitoSalida, DateUtil.dateToString(DateUtil.getAhora(),DateUtil.SHORT_DATE) + " - "  + tipoProducto.getDescripcion().toUpperCase() + " - RTO " + remitoSalida.getNroRemito());
 	}

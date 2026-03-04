@@ -24,12 +24,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,7 @@ import ar.com.fwcommon.componentes.VerticalFlowLayout;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.componentes.error.validaciones.ValidacionException;
 import ar.com.fwcommon.util.DateUtil;
+import ar.com.fwcommon.util.FileUtil;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.fwcommon.util.StringUtil;
 import ar.com.textillevel.entidades.cuenta.CuentaCliente;
@@ -895,13 +898,22 @@ public class JFrameVerMovimientos extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					createJasperPrintCotizacion();
 					if (jasperPrintCotizacion != null) {
-						new JDialogDestinatariosEmail(JFrameVerMovimientos.this, getClienteBuscado().getEmail(), new PerformEnvioEmailHandler() {
+						
+						
+						FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, StringW.wordWrap("Se procederá a visualizar el mismo."), "Cotización");
+						JasperHelper.visualizarReporte(jasperPrintCotizacion);						
+
+						/*	
+						List<File> files = getCotizacionFilesToPrint();
+						String cuerpoMail = "<html><b>Estimado cliente:<br><br> En esta oportunidad, nos dirigimos a Ud. a fin de comunicarle los nuevos precios sobre nuestros servicios.<br><br>" + firma();
+						new JDialogDestinatariosEmail(JFrameVerMovimientos.this, getClienteBuscado().getEmail(), files, "Cotización", cuerpoMail, new PerformEnvioEmailHandler() {
+
 							@Override
-							public void performEnvio(final List<String> to, final List<String> cc) {
+							public void performEnvio(final List<String> to, final List<String> cc, final List<File> files, final String subject, final String cuerpoMail) {
 								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando cotización a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 									public void perform() {
 										try {
-											EmailSender.enviarCotizacionPorEmail(jasperPrintCotizacion, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
+											EmailSender.enviarCotizacionPorEmail(subject, cuerpoMail, files, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 											String textoMensaje = "Se ha enviado la cotización por correo a: " + StringUtil.getCadena(to, ", ");
 											if (to != null && !to.isEmpty()) {
 												textoMensaje +=  "\nCon copia a: " + StringUtil.getCadena(cc, ", ");
@@ -915,7 +927,19 @@ public class JFrameVerMovimientos extends JFrame {
 								});
 							}
 						}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
+						*/	
+						
 					}
+				}
+
+				private List<File> getCotizacionFilesToPrint() {
+					File file = new File(System.getProperty("java.io.tmpdir") + "cotizacion.pdf");
+					try {
+						JasperHelper.exportarAPDF(jasperPrintCotizacion, file);
+					} catch (FileNotFoundException | JRException e) {
+						e.printStackTrace();
+					}
+					return Collections.singletonList(file);
 				}
 			});
 		}
@@ -941,27 +965,73 @@ public class JFrameVerMovimientos extends JFrame {
 
 	public void enviarDocumentoContablePorEmail(final DocumentoContableCliente documentoContable) {
 		final Cliente clienteBuscado = getClienteBuscado();
+		FacturaFacadeRemote ffr = null;
+		CorreccionFacadeRemote cfr = null;
+		JasperPrint jasperPrint = null;
+		ETipoDocumento tipoDocContable = null;
+
 		if (clienteBuscado != null) {
-			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
+
+			DocumentoContableCliente documentoContable2 = null;
+			if (documentoContable instanceof Factura) {
+				try {
+					ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
+				} catch (FWException e) {
+					e.printStackTrace();
+				}
+				documentoContable2 = ffr.getByIdEager(documentoContable.getId());
+			} else if (documentoContable instanceof CorreccionFactura) {
+				try {
+					cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
+				} catch (FWException e) {
+					e.printStackTrace();
+				}
+				documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
+			}
+			try {
+				jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
+			} catch (IOException | ValidacionException e1) {
+				e1.printStackTrace();
+			}
+			Integer nroRemito = null;
+			if (documentoContable2.getTipoDocumento() == ETipoDocumento.FACTURA && !((Factura)documentoContable2).getRemitos().isEmpty()) {
+				nroRemito = ((Factura)documentoContable2).getRemitos().get(0).getNroRemito();
+			}
+
+			String nroRemitoStr = nroRemito == null ? "" : (nroRemito+"");
+			tipoDocContable = documentoContable.getTipoDocumento();
+			Integer nroDoc = documentoContable.getNroFactura();
+			boolean facturaB = GenericUtils.isSistemaTest() && tipoDocContable == ETipoDocumento.FACTURA;
+			String strTipoDoc = facturaB ? "Importe RTO" : tipoDocContable.toString();
+			String strDocumento = strTipoDoc.toLowerCase()
+					.replaceAll("_", " de ")
+					.replaceAll("debito", "débito")
+					.replaceAll("credito", "crédito");
+			String asunto = StringUtil.ponerMayuscula(strDocumento) + " N° " + (facturaB ? nroRemitoStr : nroDoc);
+			String cuerpoMail = "<html><b>Estimado cliente:<br><br>Por medio de la presente, adjuntamos " +
+					(facturaB ? "importe correspondiente al remito  N° " + nroRemitoStr : "la " + asunto) + firma() + ".<br><br>";
+			
+			File file = new File(System.getProperty("java.io.tmpdir") + strTipoDoc.toLowerCase() + "_" + (facturaB ? nroRemitoStr : nroDoc) + ".pdf");
+			
+			try {
+				JasperHelper.exportarAPDF(jasperPrint, file);
+			} catch (FileNotFoundException | JRException e) {
+				e.printStackTrace();
+			}
+			
+			FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, StringW.wordWrap("Se procederá a visualizar el mismo."), "Resumen de cuenta por email");
+			JasperHelper.visualizarReporte(jasperPrint);
+			
+			/*
+			List<File> files = Collections.singletonList(file);
+			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), files, asunto, cuerpoMail, new PerformEnvioEmailHandler() {
+
 				@Override
-				public void performEnvio(final List<String> to, final List<String> cc) {
-					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando " + documentoContable.getTipoDocumento().toString().toLowerCase().replaceAll("_", " ") + " a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+				public void performEnvio(final List<String> to, final List<String> cc, final List<File> files, final String subject, final String cuerpoMail) {
+					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando " + subject + " a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 						public void perform() {
 							try {
-								DocumentoContableCliente documentoContable2 = null;
-								if (documentoContable instanceof Factura) {
-									FacturaFacadeRemote ffr = GTLBeanFactory.getInstance().getBean(FacturaFacadeRemote.class);
-									documentoContable2 = ffr.getByIdEager(documentoContable.getId());
-								} else if (documentoContable instanceof CorreccionFactura) {
-									CorreccionFacadeRemote cfr = GTLBeanFactory.getInstance().getBean(CorreccionFacadeRemote.class);
-									documentoContable2 = cfr.getCorreccionById(documentoContable.getId());
-								}
-								JasperPrint jasperPrint = new ImpresionFacturaHandler(documentoContable2, "1").getJasperPrint();
-								Integer nroRemito = null;
-								if (documentoContable2.getTipoDocumento() == ETipoDocumento.FACTURA && !((Factura)documentoContable2).getRemitos().isEmpty()) {
-									nroRemito = ((Factura)documentoContable2).getRemitos().get(0).getNroRemito();
-								}
-								EmailSender.enviarDocumentoContablePorEmail(documentoContable.getTipoDocumento(), documentoContable.getNroFactura(), nroRemito, jasperPrint, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
+								EmailSender.enviarDocumentoContablePorEmail(subject, cuerpoMail, files.get(0), to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();
@@ -969,7 +1039,10 @@ public class JFrameVerMovimientos extends JFrame {
 						}
 					});
 				}
+
 			}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
+			*/				
+
 		}
 	}
 
@@ -982,13 +1055,36 @@ public class JFrameVerMovimientos extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					final Cliente cliente = loadClienteBuscado();
 					if (cliente != null) {
-						new JDialogDestinatariosEmail(JFrameVerMovimientos.this, cliente.getEmail(), new PerformEnvioEmailHandler() {
+						
+						FWJOptionPane.showInformationMessage(JFrameVerMovimientos.this, StringW.wordWrap("Se procederá a visualizar el mismo."), "Resumen de cuenta por email");
+
+						JasperPrint jasperResumen = createJasperResumenCuenta(cliente);
+						JasperHelper.visualizarReporte(jasperResumen);						
+						
+						/*
+						File file = new File(System.getProperty("java.io.tmpdir") + "resumen.pdf");
+						try {
+							JasperHelper.exportarAPDF(jasperResumen, file);
+						} catch (FileNotFoundException | JRException e1) {
+							e1.printStackTrace();
+						}
+						List<File> files = Collections.singletonList(file);
+						
+						String cuerpoMail = "Resumen de cuenta al " + DateUtil.dateToString(DateUtil.getHoy(), DateUtil.SHORT_DATE) +
+											"<html><b>Estimado cliente:<br><br>" + 
+											"Por medio de la presente, adjuntamos resumen de cuenta.<br><br>" + firma();
+
+						String subject = "Enviando resumen de cuenta a: " + getClienteBuscado().getRazonSocial();
+						
+						
+						new JDialogDestinatariosEmail(JFrameVerMovimientos.this, cliente.getEmail(), files, subject, cuerpoMail, new PerformEnvioEmailHandler() {
+
 							@Override
-							public void performEnvio(final List<String> to, final List<String> cc) {
+							public void performEnvio(final List<String> to, final List<String> cc, final List<File> files, final String subject, final String cuerpoMail) {
 								GenericUtils.realizarOperacionConDialogoDeEspera("Enviando resumen de cuenta a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 									public void perform() {
 										try {
-											EmailSender.enviarResumenCuentaPorEmail(createJasperResumenCuenta(cliente), to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
+											EmailSender.enviarResumenCuentaPorEmail(files.get(0), subject, cuerpoMail, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 											String textoMensaje = "Se ha enviado la cotización por correo a: " + StringUtil.getCadena(to, ", ");
 											if (to != null && !to.isEmpty()) {
 												textoMensaje +=  "\nCon copia a: " + StringUtil.getCadena(cc, ", ");
@@ -1002,6 +1098,9 @@ public class JFrameVerMovimientos extends JFrame {
 								});
 							}
 						}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
+						*/
+						
+						
 					}
 				}
 			});
@@ -1034,6 +1133,21 @@ public class JFrameVerMovimientos extends JFrame {
 		mapa.put("IS_TEST", GenericUtils.isSistemaTest());
 		return mapa;
 	}
+	
+	private static String firma() {
+		String firma = "Sin otro particular, lo saludamos muy atentamente.</b><br><br>";
+		if (!GenericUtils.isSistemaTest()) {
+			return firma +
+			   "<img src=\"cid:AbcXyz123\"><br>" +
+			   "<font style=\"font-size:12.8px;text-align:center\" color=\"#999999\">" + 
+			   		"<b>Administraci&oacute;n Textil Level S.A<br>"
+			   		+ "Tel: (+54) 11 4454-2395 / 2279<br>"
+			   		+ "Av. San Martin 4215 Lomas Del Mirador</b>" +
+			   "</font></html>";
+		}
+		return firma;
+	}
+	
 
 	public static class MovimientoTO implements Serializable {
 
@@ -1455,6 +1569,7 @@ public class JFrameVerMovimientos extends JFrame {
 		return btnExportarAExcel;
 	}
 
+	
 	private static class FiltroArchivosExcel extends FileFilter {
 
 		@Override
@@ -2019,25 +2134,46 @@ public class JFrameVerMovimientos extends JFrame {
 	private void enviarRemitosPorMail(final List<RemitoSalida> remitos) {
 		final Cliente clienteBuscado = getClienteBuscado();
 		if (clienteBuscado != null) {
-			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
+
+			List<File> files = getRemitosFilesToPrint(remitos);
+			
+			List<Integer> ids = new ArrayList<Integer>();
+			List<Integer> nros = new ArrayList<Integer>();
+			Integer nroFactura = null;
+			for(RemitoSalida rs : remitos) {
+				ids.add(rs.getId());
+				nros.add(rs.getNroRemito());
+				nroFactura = rs.getNroFactura();
+			}
+			String subject = GenericUtils.isSistemaTest() ? "Remito N° " + nros.get(0) : "Remito/s N° " + StringUtil.getCadena(nros, ",");
+			String cuerpoMail = "<html><b>Estimado cliente:<br><br> Por medio de la presente, " +
+					(GenericUtils.isSistemaTest() ? "adjuntamos el remito N° " + nros.get(0) :
+						"adjuntamos lo/s " + subject + " correspondientes a la Factura N° " + nroFactura)
+					+ ".<br><br>" + firma();
+			
+			File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.OPEN, FWFileSelector.DIRECTORIES_ONLY, new FiltroArchivosPDF(), null);
+			if(archivoIngresado != null) {
+				for(File file : files) {
+					try {
+						FileUtil.copiarArchivo(file, new File(archivoIngresado.getAbsolutePath() + "\\" + file.getName()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			// TODO: JAVI
+			
+			/*
+			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), files, subject, cuerpoMail, new PerformEnvioEmailHandler() {
+
 				@Override
-				public void performEnvio(final List<String> to, final List<String> cc) {
+				public void performEnvio(final List<String> to, final List<String> cc, final List<File> files, final String subject, final String cuerpoMail) {
+					
 					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando remito/s a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
 						public void perform() {
 							try {
-								List<Integer> ids = new ArrayList<Integer>();
-								List<Integer> nros = new ArrayList<Integer>();
-								Integer nroSucursal = null;
-								Integer nroFactura = null;
-								for(RemitoSalida rs : remitos) {
-									ids.add(rs.getId());
-									nros.add(rs.getNroRemito());
-									nroSucursal = rs.getNroSucursal();
-									nroFactura = rs.getNroFactura();
-								}
-								List<RemitoSalida> remitosEager = getRemitoSalidaFacade().getByIdsConPiezasYProductos(ids);
-								List<JasperPrint> jasperPrints = ImprimirRemitoHandler.getJasperPrints(remitosEager, nroSucursal);
-								EmailSender.enviarRemitoPorEmail(nroFactura, nros, jasperPrints, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
+								EmailSender.enviarRemitoPorEmail(subject, cuerpoMail, files, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();
@@ -2046,21 +2182,61 @@ public class JFrameVerMovimientos extends JFrame {
 					});
 				}
 			}, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE).setVisible(true);
+			*/
 		}
+	}
+
+	private List<File> getRemitosFilesToPrint(final List<RemitoSalida> remitos)  {
+		List<Integer> ids = new ArrayList<Integer>();
+		List<Integer> nros = new ArrayList<Integer>();
+		Integer nroSucursal = null;
+		for(RemitoSalida rs : remitos) {
+			ids.add(rs.getId());
+			nros.add(rs.getNroRemito());
+			nroSucursal = rs.getNroSucursal();
+		}
+		List<RemitoSalida> remitosEager = getRemitoSalidaFacade().getByIdsConPiezasYProductos(ids);
+		List<JasperPrint> jasperPrints = ImprimirRemitoHandler.getJasperPrints(remitosEager, nroSucursal);
+		List<File> files = new ArrayList<File>();
+		for(int i = 0; i < jasperPrints.size(); i++) {
+			File file = new File(System.getProperty("java.io.tmpdir") + "remito_" + nros.get(i) + ".pdf");
+			try {
+				JasperHelper.exportarAPDF(jasperPrints.get(i), file);
+			} catch (FileNotFoundException | JRException e) {
+				e.printStackTrace();
+			}
+			files.add(file);
+		}
+		return files;
 	}
 
 	public void enviarReciboPorMail(final Recibo recibo) {
 		final Cliente clienteBuscado = getClienteBuscado();
 		if (clienteBuscado != null) {
-			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), new PerformEnvioEmailHandler() {
+			
+			Recibo reciboEager = getReciboFacade().getByIdEager(recibo.getId());
+			
+			JasperPrint jasper = ImprimirReciboHandler.getJasperPrint(reciboEager, GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getNroSucursal());
+			File file = new File(System.getProperty("java.io.tmpdir") + "recibo.pdf");
+			try {
+				JasperHelper.exportarAPDF(jasper, file);
+			} catch (FileNotFoundException | JRException e) {
+				e.printStackTrace();
+			}
+			List<File> files = Collections.singletonList(file);
+			
+			String subject = "Recibo N° " + recibo.getNroRecibo();
+			String cuerpoMail = "<html><b>Estimado cliente:<br><br> Por medio de la presente, adjuntamos el " + subject + ".<br><br>" + firma();
+			
+			new JDialogDestinatariosEmail(this, clienteBuscado.getEmail(), files, subject, cuerpoMail, new PerformEnvioEmailHandler() {
+				
 				@Override
-				public void performEnvio(final List<String> to, final List<String> cc) {
-					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando recibo a: " + getClienteBuscado().getRazonSocial(), new BackgroundTask() {
+				public void performEnvio(final List<String> to, final List<String> cc, final List<File> files, final String subject, final String cuerpoMail) {
+
+					GenericUtils.realizarOperacionConDialogoDeEspera("Enviando recibo a: " + clienteBuscado.getRazonSocial(), new BackgroundTask() {
 						public void perform() {
-							Recibo reciboEager = getReciboFacade().getByIdEager(recibo.getId());
-							JasperPrint jasper = ImprimirReciboHandler.getJasperPrint(reciboEager, GTLBeanFactory.getInstance().getBean2(ParametrosGeneralesFacadeRemote.class).getParametrosGenerales().getNroSucursal());
 							try{
-								EmailSender.enviarReciboPorEmail(recibo.getNroRecibo(), jasper, to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
+								EmailSender.enviarReciboPorEmail(subject, cuerpoMail, files.get(0), to, cc, getClienteBuscado().getId(), ETipoBusquedaAgenda.CLIENTE);
 							} catch (Exception ex) {
 								FWJOptionPane.showErrorMessage(JFrameVerMovimientos.this, "Ha ocurrido un error al enviar el email", "Error");
 								ex.printStackTrace();

@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,23 +43,32 @@ public class JDialogDestinatariosEmail extends JDialog {
 	private String defaultTO;
 	private Integer idEntidad;
 	private ETipoBusquedaAgenda tipoEntidad;
+	private List<File> files;
+	private String subject;
+	private String cuerpoMail;
 
-	public JDialogDestinatariosEmail(JDialog owner, String defaultTo, PerformEnvioEmailHandler handler, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
+	public JDialogDestinatariosEmail(JDialog owner, String defaultTo,  List<File> files, String subject, String cuerpoMail, PerformEnvioEmailHandler handler, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
 		super(owner);
 		this.handler = handler;
 		this.defaultTO = defaultTo;
 		this.idEntidad = idEntidad;
 		this.tipoEntidad = tipoEntidad;
+		this.files = files;
+		this.subject = subject;
+		this.cuerpoMail = cuerpoMail;
 		setUpComponentes();
 		setUpScreen();
 	}
 	
-	public JDialogDestinatariosEmail(Frame owner, String defaultTo, PerformEnvioEmailHandler handler, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
+	public JDialogDestinatariosEmail(Frame owner, String defaultTo, List<File> files, String subject,  String cuerpoMail, PerformEnvioEmailHandler handler, Integer idEntidad, ETipoBusquedaAgenda tipoEntidad) {
 		super(owner);
 		this.handler = handler;
 		this.defaultTO = defaultTo;
 		this.idEntidad = idEntidad;
 		this.tipoEntidad = tipoEntidad;
+		this.files = files;
+		this.subject = subject;
+		this.cuerpoMail = cuerpoMail;		
 		setUpComponentes();
 		setUpScreen();
 	}
@@ -127,7 +137,7 @@ public class JDialogDestinatariosEmail extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JDialogDestinatariosEmail.this.dispose();
-					JDialogDestinatariosEmail.this.handler.performEnvio(getTxtTO().getEmails(), getTxtCC().getEmails());
+					JDialogDestinatariosEmail.this.handler.performEnvio(getTxtTO().getEmails(), getTxtCC().getEmails(), files, subject, cuerpoMail);
 				}
 			});
 		}
@@ -265,7 +275,7 @@ public class JDialogDestinatariosEmail extends JDialog {
 	}
 
 	public static abstract class PerformEnvioEmailHandler {
-		public abstract void performEnvio(final List<String> to, final List<String> cc);
+		public abstract void performEnvio(final List<String> to, final List<String> cc, final List<File> files, final String subject, final String cuerpoMail);
 	}
 
 }

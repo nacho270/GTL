@@ -69,7 +69,7 @@ public class NotificacionUsuarioFacade implements NotificacionUsuarioFacadeRemot
 			notificacionesDAO.save(nc);
 		}
 		// el usuario es transient, asique no importa que usuario se haya asignado al final
-		mensajeriaFacade.enviarNotificaciones(nc, nombreDestino, tipoDestino);
+		//mensajeriaFacade.enviarNotificaciones(nc, nombreDestino, tipoDestino);
 	}
 
 	@Override

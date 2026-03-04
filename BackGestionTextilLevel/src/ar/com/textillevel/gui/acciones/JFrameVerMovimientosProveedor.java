@@ -1083,6 +1083,7 @@ public class JFrameVerMovimientosProveedor extends JFrame {
 						FWJTable tabla = getPanelTablaMovimientos().getTabla();
 						mostrarFileChooser("Listado de Movimientos - Cliente Nro - " + getTxtBusquedaProveedor().getText(), EXTENSION_PDF);
 						File archivoIngresado = FWFileSelector.obtenerArchivo(FWFileSelector.SAVE, FWFileSelector.FILES_ONLY, new FiltroArchivosPDF(), null);
+						
 						if (archivoIngresado != null) {
 							if (!archivoIngresado.getAbsolutePath().toLowerCase().endsWith(EXTENSION_PDF)) {
 								archivoIngresado = new File(archivoIngresado.getAbsolutePath().concat(EXTENSION_PDF));

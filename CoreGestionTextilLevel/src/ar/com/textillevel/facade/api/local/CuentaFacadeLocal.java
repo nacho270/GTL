@@ -1,6 +1,7 @@
 package ar.com.textillevel.facade.api.local;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import javax.ejb.Local;
 
@@ -74,5 +75,6 @@ public interface CuentaFacadeLocal {
 	public void crearMovimientoDebeRemitoSalidaDibujo(RemitoSalida remitoSalida);
 	
 	public void crearMovimientoDebePersona(NotaDebitoPersona ndp, String obsMovimiento);
-	public void borrarMovimientoNotaDebitoPersona(NotaDebitoPersona ndp);	
+	public void borrarMovimientoNotaDebitoPersona(NotaDebitoPersona ndp);
+	public void guardarMovimientoDebeSinDoc(Integer idCliente, BigDecimal monto, String descripcion, Timestamp fechaEmision);	
 }

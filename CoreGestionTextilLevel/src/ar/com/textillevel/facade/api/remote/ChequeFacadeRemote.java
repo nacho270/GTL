@@ -13,7 +13,6 @@ import ar.com.textillevel.entidades.cheque.Banco;
 import ar.com.textillevel.entidades.cheque.Cheque;
 import ar.com.textillevel.entidades.cheque.NumeracionCheque;
 import ar.com.textillevel.entidades.cheque.to.OperacionSobreChequeTO;
-import ar.com.textillevel.entidades.documentos.factura.CorreccionFactura;
 import ar.com.textillevel.entidades.enums.EEstadoCheque;
 import ar.com.textillevel.entidades.enums.EnumTipoFecha;
 
@@ -40,7 +39,7 @@ public interface ChequeFacadeRemote {
 	public Cheque getChequeByNumeroCuitYBanco(String nroCheque, String cuit, Banco banco);
 	public Integer getUltimoNumeroInternoCheque(Character letra);
 	public List<Cheque> getChequesByCliente(Integer idCliente, EEstadoCheque estadoCheque);
-	public CorreccionFactura rechazarCheque(Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback;
+	public void rechazarCheque(Cheque cheque, Date fecha, String motivoRechazo, BigDecimal gastos, String usuario, boolean debeDiscriminarIVA) throws ValidacionException, ValidacionExceptionSinRollback;
 	public void eliminarCheque(Integer id, String usuario) throws ValidacionException;
 	public List<Cheque> obtenerChequesVencidos(Integer toleraciaDias);
 	public List<Cheque> getListaDeChequesProximosAVencer(Integer diasAntes, Integer diasEnQueVencen);

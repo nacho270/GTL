@@ -30,6 +30,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.taglibs.string.util.StringW;
+
 import ar.com.fwcommon.componentes.FWCheckBoxList;
 import ar.com.fwcommon.componentes.FWCursor;
 import ar.com.fwcommon.componentes.FWJOptionPane;
@@ -47,6 +49,7 @@ import ar.com.textillevel.entidades.ventas.DatosAumentoTO;
 import ar.com.textillevel.entidades.ventas.cotizacion.Cotizacion;
 import ar.com.textillevel.facade.api.remote.ListaDePreciosFacadeRemote;
 import ar.com.textillevel.facade.api.remote.ParametrosGeneralesFacadeRemote;
+import ar.com.textillevel.gui.acciones.JFrameVerMovimientos;
 import ar.com.textillevel.gui.util.EmailSender;
 import ar.com.textillevel.gui.util.GenericUtils;
 import ar.com.textillevel.gui.util.GenericUtils.BackgroundTask;
@@ -498,12 +501,16 @@ public class JDialogAumentadorDePrecios extends JDialog {
 								if (preguntaCotizacion.isNoVolverAPreguntar()) {
 									volverAPreguntarEnviarEmail = false;
 								}
-							}
+							}	
 							if (enviarEmail) {
+								
+								
 								// actualizo la configuracion actual que ahora deberia ser nueva
 								cotizacionActual = getListaDePreciosFacade().getCotizacionVigente(c);
 								final Cotizacion cotizacionEmail = cotizacionActual;
 								actualizarUltimaFila(EEstadoAumentoPrecioCliente.EMAIL);
+								FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Operación de envio de mail no disponible", "Error");
+								/*
 								try {
 									new JDialogDestinatariosEmail(JDialogAumentadorDePrecios.this, c.getEmail(), new PerformEnvioEmailHandler() {
 										@Override
@@ -525,6 +532,7 @@ public class JDialogAumentadorDePrecios extends JDialog {
 									FWJOptionPane.showErrorMessage(JDialogAumentadorDePrecios.this, "Ha ocurrido un error al enviar el email", "Error");
 									ex.printStackTrace();
 								}
+								*/
 							}
 						}
 					}

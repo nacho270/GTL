@@ -4,6 +4,7 @@ import java.awt.Frame;
 
 import main.acciones.facturacion.OperacionSobreRemitoSalidaHandler;
 import ar.com.fwcommon.boss.BossError;
+import ar.com.fwcommon.componentes.FWJOptionPane;
 import ar.com.fwcommon.componentes.error.FWException;
 import ar.com.fwcommon.util.GuiUtil;
 import ar.com.textillevel.entidades.cuenta.movimientos.MovimientoDebe;
@@ -66,10 +67,13 @@ public class ConsultaDocumentoVisitor implements IFilaMovimientoVisitor{
 			}
 		}else if(movimiento.getNotaDebito() != null){
 			consultarCorreccion(movimiento.getNotaDebito());
-		} else {
+		} else if(movimiento.getRemitoSalida() != null) {
 			RemitoSalida rsEager = GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdConPiezasYProductos(movimiento.getRemitoSalida().getId());
 			OperacionSobreRemitoSalidaHandler handler = new OperacionSobreRemitoSalidaHandler(padre, rsEager, true);
 			handler.showRemitoEntradaDialog();
+		} else {
+			FWJOptionPane.showErrorMessage(padre, "Este movimiento no tiene un documento asociado.", "Error");
+			return;
 		}
 	}
 	

@@ -849,7 +849,7 @@ public class JDialogCargaFactura extends JDialog {
 		}else{
 			fila[COL_ARTICULO] = " - ";
 		}
-		fila[COL_CANTIDAD] =itf.getCantidad();// getDecimalFormat().format(itf.getCantidad());
+		fila[COL_CANTIDAD] =itf.getCantidad(); //getDecimalFormat().format(itf.getCantidad())
 		fila[COL_DESCRIPCION] = itf.getDescripcion();
 		fila[COL_UNIDAD] = itf.getUnidad().getDescripcion();
 		if(isConsulta()) {
@@ -1068,14 +1068,20 @@ public class JDialogCargaFactura extends JDialog {
 									cantErrorFila--;
 									getMapFilaCantidadErrores().put(celda, cantErrorFila);
 								}
+								
+								
 								double cantidad = Double.valueOf(valor);
+								
 								Object valueAt = getValueAt(row, COL_PRECIO_UNITARIO);
 								BigDecimal newValue = null;
 								if(valueAt instanceof String){
 									String s = (String) valueAt;
-									int lastIndexOf = s.lastIndexOf(",");
-									String s2 = s.substring(0, lastIndexOf) + "." + s.substring(lastIndexOf + 1);
-									newValue = new BigDecimal(Double.valueOf(s2));
+									s = s.replaceAll("\\.", "");
+									s = s.replaceAll(",", "\\.");
+									//int lastIndexOf = s.lastIndexOf(",");
+									//String s2 = s.substring(0, lastIndexOf) + "." + s.substring(lastIndexOf + 1);
+									//newValue = new BigDecimal(Double.valueOf(s2));
+									newValue = new BigDecimal(Double.valueOf(s));
 								}else{
 									newValue = (BigDecimal)valueAt;
 								}
@@ -1126,6 +1132,7 @@ public class JDialogCargaFactura extends JDialog {
 					}catch(NumberFormatException nfe){
 						FWJOptionPane.showErrorMessage(JDialogCargaFactura.this, StringW.wordWrap("Ha ocurrido un error en la conversión de precios. Por favor, revise si los datos son correctos."), "Error");
 						System.out.println("error de formateo de numerooooooooooooooooo");
+						nfe.printStackTrace();
 					}
 				}
 			};

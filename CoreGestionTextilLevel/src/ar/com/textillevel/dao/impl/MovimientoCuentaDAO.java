@@ -39,35 +39,33 @@ import ar.com.textillevel.entidades.documentos.remito.RemitoSalida;
 public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> implements MovimientoCuentaDAOLocal {
 
 	public Integer getCantMovimientosByIdClienteYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta) {
-		String query = " SELECT COUNT(*) From MovimientoCuenta mov " +
-					   " WHERE mov.cuenta.id = :idCuenta "+
-					   (fechaDesde!=null? " AND :fechaDesde <= mov.fechaHora " : "")+
-					   (fechaHasta!=null? " AND :fechaHasta >= mov.fechaHora " : "");
+		String query = " SELECT COUNT(*) From MovimientoCuenta mov " + " WHERE mov.cuenta.id = :idCuenta "
+				+ (fechaDesde != null ? " AND :fechaDesde <= mov.fechaHora " : "")
+				+ (fechaHasta != null ? " AND :fechaHasta >= mov.fechaHora " : "");
 		Query q = getEntityManager().createQuery(query);
 		q.setParameter("idCuenta", idCuenta);
-		if(fechaDesde!=null){
+		if (fechaDesde != null) {
 			q.setParameter("fechaDesde", fechaDesde);
 		}
-		
-		if(fechaHasta != null){
+
+		if (fechaHasta != null) {
 			q.setParameter("fechaHasta", fechaHasta);
 		}
-		
+
 		return NumUtil.toInteger(q.getSingleResult());
 	}
 
 	private static final int CANT_MAX_MOVS = 20;
-	
-	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta, 
-																boolean ultimosMovimientos/*, boolean masAntiguoPrimero*/,
-																ETipoDocumento filtroTipoDocumento) {
-		
+
+	public List<MovimientoCuenta> getMovimientosByIdClienteYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta,
+			boolean ultimosMovimientos/* , boolean masAntiguoPrimero */, ETipoDocumento filtroTipoDocumento) {
+
 		List<MovimientoCuenta> movsRet = new ArrayList<MovimientoCuenta>();
-		
+
 		List<MovimientoCuenta> movs = getMovimientosPorCuentaYFecha(idCuenta, fechaDesde, fechaHasta);
 		MovimientosLazyInitializer mli = new MovimientosLazyInitializer();
-		if(ultimosMovimientos){
-			if(movs.size()>CANT_MAX_MOVS){
+		if (ultimosMovimientos) {
+			if (movs.size() > CANT_MAX_MOVS) {
 //				int index = movs.size()-1;
 //				for(;index>0;index--){
 //					if((index-1)>0){
@@ -86,25 +84,25 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 //					movsRet.add(m);
 //
 //				}
-				List<MovimientoCuenta> subList = movs.subList(movs.size()-CANT_MAX_MOVS, movs.size());
-				for(MovimientoCuenta mov : subList){
+				List<MovimientoCuenta> subList = movs.subList(movs.size() - CANT_MAX_MOVS, movs.size());
+				for (MovimientoCuenta mov : subList) {
 					mov.aceptarVisitor(mli);
 					movsRet.add(mov);
 				}
-			}else{
-				for(int i = 0;i<movs.size();i++){
+			} else {
+				for (int i = 0; i < movs.size(); i++) {
 					MovimientoCuenta m = movs.get(i);
 					m.aceptarVisitor(mli);
 					movsRet.add(m);
 				}
 			}
-		}else{
-			for(MovimientoCuenta m : movs){
+		} else {
+			for (MovimientoCuenta m : movs) {
 				m.aceptarVisitor(mli);
 				movsRet.add(m);
 			}
 		}
-		
+
 //		ESTO ES LO VIEJO, LO COMENTO POR LAS DUDAS
 //		for(MovimientoCuenta m : movs){
 //			m.aceptarVisitor(mli);
@@ -123,7 +121,7 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 //				movsRet.add(m);
 //			}
 //		}
-		if(filtroTipoDocumento == null) {
+		if (filtroTipoDocumento == null) {
 			return movsRet;
 		}
 		MovimientosFilterVisitor mfv = new MovimientosFilterVisitor(filtroTipoDocumento);
@@ -135,22 +133,21 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 
 	@SuppressWarnings("unchecked")
 	private List<MovimientoCuenta> getMovimientosPorCuentaYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta) {
-		String query = " SELECT mov From MovimientoCuenta mov " +
-					   " WHERE mov.cuenta.id = :idCuenta "+
-					   (fechaDesde!=null? " AND :fechaDesde <= mov.fechaHora " : "")+
-					   (fechaHasta!=null? " AND :fechaHasta >= mov.fechaHora " : "") +
-					   " ORDER BY mov.fechaHora ASC " /*+ (masAntiguoPrimero?" ASC ": " DESC ")*/;
+		String query = " SELECT mov From MovimientoCuenta mov " + " WHERE mov.cuenta.id = :idCuenta "
+				+ (fechaDesde != null ? " AND :fechaDesde <= mov.fechaHora " : "")
+				+ (fechaHasta != null ? " AND :fechaHasta >= mov.fechaHora " : "")
+				+ " ORDER BY mov.fechaHora ASC " /* + (masAntiguoPrimero?" ASC ": " DESC ") */;
 		Query q = getEntityManager().createQuery(query);
 		q.setParameter("idCuenta", idCuenta);
-		if(fechaDesde!=null){
+		if (fechaDesde != null) {
 			q.setParameter("fechaDesde", fechaDesde);
 		}
-		
-		if(fechaHasta != null){
+
+		if (fechaHasta != null) {
 			q.setParameter("fechaHasta", fechaHasta);
 		}
 		List<MovimientoCuenta> movs = q.getResultList();
-		if(movs == null || movs.isEmpty()){
+		if (movs == null || movs.isEmpty()) {
 			return Collections.emptyList();
 		}
 		return movs;
@@ -169,126 +166,127 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		q.setParameter("id", id);
 		return q.executeUpdate();
 	}
-	
+
 	private static class MovimientosFilterVisitor implements IFilaMovimientoVisitor {
 
 		private final ETipoDocumento tipoDocumento;
 		private final List<MovimientoCuenta> movimientosFiltrados = Lists.newArrayList();
-		
+
 		public MovimientosFilterVisitor(ETipoDocumento tipoDocumento) {
 			this.tipoDocumento = tipoDocumento;
 		}
 
 		@Override
 		public void visit(MovimientoHaber movimiento) {
-			if ( (tipoDocumento == ETipoDocumento.RECIBO && movimiento.getRecibo() != null) || 
-				 (tipoDocumento == ETipoDocumento.NOTA_CREDITO && movimiento.getNotaCredito() != null)) {
+			if ((tipoDocumento == ETipoDocumento.RECIBO && movimiento.getRecibo() != null)
+					|| (tipoDocumento == ETipoDocumento.NOTA_CREDITO && movimiento.getNotaCredito() != null)) {
 				movimientosFiltrados.add(movimiento);
 			}
 		}
 
 		@Override
 		public void visit(MovimientoDebe movimiento) {
-			if ( (tipoDocumento == ETipoDocumento.FACTURA && movimiento.getFactura() != null) ||
-				 (tipoDocumento == ETipoDocumento.NOTA_DEBITO && movimiento.getNotaDebito() != null) ) {
+			if ((tipoDocumento == ETipoDocumento.FACTURA && movimiento.getFactura() != null)
+					|| (tipoDocumento == ETipoDocumento.NOTA_DEBITO && movimiento.getNotaDebito() != null)) {
 				movimientosFiltrados.add(movimiento);
 			}
 		}
 
 		@Override
 		public void visit(MovimientoInternoCuenta movimiento) {
-			
+
 		}
 
 		@Override
 		public void visit(MovimientoHaberProveedor movimiento) {
-			if ( (tipoDocumento == ETipoDocumento.ORDEN_PAGO && movimiento.getOrdenDePago() != null) || 
-					 (tipoDocumento == ETipoDocumento.NOTA_CREDITO_PROV && movimiento.getNotaCredito() != null)) {
-					movimientosFiltrados.add(movimiento);
-				}
+			if ((tipoDocumento == ETipoDocumento.ORDEN_PAGO && movimiento.getOrdenDePago() != null)
+					|| (tipoDocumento == ETipoDocumento.NOTA_CREDITO_PROV && movimiento.getNotaCredito() != null)) {
+				movimientosFiltrados.add(movimiento);
+			}
 		}
 
 		@Override
 		public void visit(MovimientoDebeProveedor movimiento) {
-			if ( (tipoDocumento == ETipoDocumento.FACTURA_PROV && movimiento.getFacturaProveedor() != null) ||
-					 (tipoDocumento == ETipoDocumento.NOTA_DEBITO_PROV && movimiento.getNotaDebitoProveedor() != null) ) {
-					movimientosFiltrados.add(movimiento);
-				}
+			if ((tipoDocumento == ETipoDocumento.FACTURA_PROV && movimiento.getFacturaProveedor() != null)
+					|| (tipoDocumento == ETipoDocumento.NOTA_DEBITO_PROV
+							&& movimiento.getNotaDebitoProveedor() != null)) {
+				movimientosFiltrados.add(movimiento);
+			}
 		}
 
 		@Override
 		public void visit(MovimientoHaberBanco movimiento) {
-			
+
 		}
 
 		@Override
 		public void visit(MovimientoDebeBanco movimiento) {
-			
+
 		}
 
 		@Override
 		public void visit(MovimientoDebePersona movimientoDebePersona) {
-			
+
 		}
 
 		@Override
 		public void visit(MovimientoHaberPersona movimientoHaberPersona) {
-			
+
 		}
 	}
 
 	private static class MovimientosLazyInitializer implements IFilaMovimientoVisitor {
 
 		public void visit(MovimientoHaber movimiento) {
-			if(movimiento.getRecibo()!=null){
+			if (movimiento.getRecibo() != null) {
 				movimiento.getRecibo().getNroRecibo();
-			}else{
+			} else {
 				movimiento.getNotaCredito().getNroFactura();
 			}
 		}
 
 		public void visit(MovimientoDebe movimiento) {
-			if(movimiento.getFactura()!=null){
+			if (movimiento.getFactura() != null) {
 				movimiento.getFactura().getNroFactura();
-				if(movimiento.getFactura().getRemitos()!=null){
+				if (movimiento.getFactura().getRemitos() != null) {
 					movimiento.getFactura().getRemitos().size();
-					for(RemitoSalida r : movimiento.getFactura().getRemitos()){
+					for (RemitoSalida r : movimiento.getFactura().getRemitos()) {
 						r.getCliente().getCelular();
 						if (r.getOdts() != null) {
 							r.getOdts().size();
 						}
 					}
-					if(movimiento.getFactura().getCliente()!=null){
+					if (movimiento.getFactura().getCliente() != null) {
 						movimiento.getFactura().getCliente().getCelular();
 					}
-				}else if(movimiento.getFactura().getCliente()!=null){
+				} else if (movimiento.getFactura().getCliente() != null) {
 					movimiento.getFactura().getCliente().getCelular();
 				}
-			}else if (movimiento.getNotaDebito() != null){
+			} else if (movimiento.getNotaDebito() != null) {
 				movimiento.getNotaDebito().getNroFactura();
-			} else {
+			} else if (movimiento.getRemitoSalida() != null) {
 				movimiento.getRemitoSalida().getCantidadPiezas();
 				movimiento.getRemitoSalida().getOdts().size();
 			}
 		}
 
 		public void visit(MovimientoInternoCuenta movimiento) {
-			
+
 		}
 
 		public void visit(MovimientoHaberProveedor movimiento) {
-			if(movimiento.getOrdenDePago()!=null){
+			if (movimiento.getOrdenDePago() != null) {
 				movimiento.getOrdenDePago().getMonto();
-			}else if(movimiento.getNotaCredito()!=null){
+			} else if (movimiento.getNotaCredito() != null) {
 				movimiento.getNotaCredito().getMontoTotal();
 			}
 		}
 
 		public void visit(MovimientoDebeProveedor movimiento) {
-			if(movimiento.getFacturaProveedor() != null) {
+			if (movimiento.getFacturaProveedor() != null) {
 				movimiento.getFacturaProveedor().getMontoSubtotal();
 			}
-			if(movimiento.getNotaDebitoProveedor()!=null) {
+			if (movimiento.getNotaDebitoProveedor() != null) {
 				movimiento.getNotaDebitoProveedor().getMontoFaltantePorPagar();
 			}
 		}
@@ -298,14 +296,14 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		}
 
 		public void visit(MovimientoDebeBanco movimiento) {
-			
+
 		}
 
 		public void visit(MovimientoDebePersona movimientoDebePersona) {
-			if(movimientoDebePersona.getFacturaPersona() != null) {
+			if (movimientoDebePersona.getFacturaPersona() != null) {
 				movimientoDebePersona.getFacturaPersona().getImpuestos().size();
 			}
-			if(movimientoDebePersona.getNotaDebitoPersona() != null) {
+			if (movimientoDebePersona.getNotaDebitoPersona() != null) {
 				movimientoDebePersona.getNotaDebitoPersona().getItemsCorreccion().size();
 			}
 		}
@@ -315,32 +313,33 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		}
 	}
 
-	public List<MovimientoCuenta> getMovimientosProveedorByIdCuentaYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta
-		/*, boolean masAntiguoPrimero*/, boolean ultimosMovimientos, ETipoDocumento tipoDocumento) {
+	public List<MovimientoCuenta> getMovimientosProveedorByIdCuentaYFecha(Integer idCuenta, Date fechaDesde,
+			Date fechaHasta
+			/* , boolean masAntiguoPrimero */, boolean ultimosMovimientos, ETipoDocumento tipoDocumento) {
 		List<MovimientoCuenta> movsRet = new ArrayList<MovimientoCuenta>();
 		List<MovimientoCuenta> movs = getMovimientosPorCuentaYFecha(idCuenta, fechaDesde, fechaHasta);
 		MovimientosLazyInitializer mli = new MovimientosLazyInitializer();
-		if(ultimosMovimientos){
-			if(movs.size()>CANT_MAX_MOVS){
-				List<MovimientoCuenta> subList = movs.subList(movs.size()-CANT_MAX_MOVS, movs.size());
-				for(MovimientoCuenta mov : subList){
+		if (ultimosMovimientos) {
+			if (movs.size() > CANT_MAX_MOVS) {
+				List<MovimientoCuenta> subList = movs.subList(movs.size() - CANT_MAX_MOVS, movs.size());
+				for (MovimientoCuenta mov : subList) {
 					mov.aceptarVisitor(mli);
 					movsRet.add(mov);
 				}
-			}else{
-				for(int i = 0;i<movs.size();i++){
+			} else {
+				for (int i = 0; i < movs.size(); i++) {
 					MovimientoCuenta m = movs.get(i);
 					m.aceptarVisitor(mli);
 					movsRet.add(m);
 				}
 			}
-		}else{
-			for(MovimientoCuenta m : movs){
+		} else {
+			for (MovimientoCuenta m : movs) {
 				m.aceptarVisitor(mli);
 				movsRet.add(m);
 			}
 		}
-		if(tipoDocumento == null) {
+		if (tipoDocumento == null) {
 			return movsRet;
 		}
 		MovimientosFilterVisitor mfv = new MovimientosFilterVisitor(tipoDocumento);
@@ -356,8 +355,9 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idRecibo", idRecibo);
 		List<MovimientoHaber> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. El recibo con id " + idRecibo + " no tiene un movimiento haber registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. El recibo con id " + idRecibo
+					+ " no tiene un movimiento haber registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
@@ -369,8 +369,9 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idNC", idNC);
 		List<MovimientoHaber> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La NC con id " + idNC + " no tiene un movimiento haber registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La NC con id " + idNC
+					+ " no tiene un movimiento haber registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
@@ -382,21 +383,23 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idND", idND);
 		List<MovimientoDebe> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La ND con id " + idND + " no tiene un movimiento debe registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La ND con id " + idND
+					+ " no tiene un movimiento debe registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public MovimientoHaberProveedor getMovimientoHPByNC(Integer idNC) {
 		String hql = " SELECT m FROM MovimientoHaberProveedor m WHERE m.notaCredito.id = :idNC ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idNC", idNC);
 		List<MovimientoHaberProveedor> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La nota de crédito con id " + idNC + " no tiene un movimiento haber registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La nota de crédito con id " + idNC
+					+ " no tiene un movimiento haber registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
@@ -408,29 +411,32 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idND", idND);
 		List<MovimientoDebeProveedor> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La nota de débito con id " + idND + " no tiene un movimiento haber registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La nota de débito con id " + idND
+					+ " no tiene un movimiento haber registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
 	}
 
-	public List<MovimientoCuenta> getMovimientosBancoByIdCuentaYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta) {
+	public List<MovimientoCuenta> getMovimientosBancoByIdCuentaYFecha(Integer idCuenta, Date fechaDesde,
+			Date fechaHasta) {
 		List<MovimientoCuenta> movsRet = new ArrayList<MovimientoCuenta>();
 		List<MovimientoCuenta> movs = getMovimientosPorCuentaYFecha(idCuenta, fechaDesde, fechaHasta);
 		MovimientosLazyInitializer mli = new MovimientosLazyInitializer();
-		for(MovimientoCuenta m : movs){
+		for (MovimientoCuenta m : movs) {
 			m.aceptarVisitor(mli);
 			movsRet.add(m);
 		}
 		return movsRet;
 	}
-	
-	public List<MovimientoCuenta> getMovimientosPersonaByIdCuentaYFecha(Integer idCuenta, Date fechaDesde, Date fechaHasta) {
+
+	public List<MovimientoCuenta> getMovimientosPersonaByIdCuentaYFecha(Integer idCuenta, Date fechaDesde,
+			Date fechaHasta) {
 		List<MovimientoCuenta> movsRet = new ArrayList<MovimientoCuenta>();
 		List<MovimientoCuenta> movs = getMovimientosPorCuentaYFecha(idCuenta, fechaDesde, fechaHasta);
 		MovimientosLazyInitializer mli = new MovimientosLazyInitializer();
-		for(MovimientoCuenta m : movs){
+		for (MovimientoCuenta m : movs) {
 			m.aceptarVisitor(mli);
 			movsRet.add(m);
 		}
@@ -443,6 +449,7 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		q.setParameter("id", id);
 		return q.executeUpdate();
 	}
+
 	public int borrarMovimientoNotaDebitoProveedor(Integer id) {
 		String hql = " DELETE FROM MovimientoDebeProveedor m WHERE m.notaDebitoProveedor.id = :id ";
 		Query q = getEntityManager().createQuery(hql);
@@ -482,7 +489,7 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		String hql = " DELETE FROM MovimientoDebePersona m WHERE m.facturaPersona.id = :id ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("id", id);
-		q.executeUpdate();		
+		q.executeUpdate();
 	}
 
 	public MovimientoCuenta getMovimientoDebePersonaByFactura(FacturaPersona factura) {
@@ -522,12 +529,12 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		q.setParameter("fechaTope", fechaTope);
 		List<MovimientoCuenta> lista = q.getResultList();
 		BigDecimal saldo = new BigDecimal(0d);
-		for(MovimientoCuenta m : lista){
+		for (MovimientoCuenta m : lista) {
 			saldo = saldo.add(m.getMonto());
 		}
 		return saldo.negate();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public BigDecimal getSaldoCuentaHastaFechaByIdMovimiento(Cuenta cc, Date fechaTope, Integer idMovimiento) {
 		String hql = " SELECT m FROM MovimientoCuenta m WHERE m.cuenta.id = :idCuenta AND m.fechaHora <= :fechaTope ";
@@ -536,14 +543,14 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		q.setParameter("fechaTope", fechaTope);
 		List<MovimientoCuenta> lista = q.getResultList();
 		BigDecimal saldo = new BigDecimal(0d);
-		for(MovimientoCuenta m : lista){
-			if(!m.getId().equals(idMovimiento)){
+		for (MovimientoCuenta m : lista) {
+			if (!m.getId().equals(idMovimiento)) {
 				saldo = saldo.add(m.getMonto());
 			}
 		}
 		return saldo.negate();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<MovimientoCuenta> getMovimientosDeTransporte(Cuenta cc, Date fechaTope) {
 		String hql = " SELECT m FROM MovimientoCuenta m WHERE m.cuenta.id = :idCuenta AND m.fechaHora <= :fechaTope ";
@@ -552,18 +559,19 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		q.setParameter("fechaTope", fechaTope);
 		return q.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public BigDecimal getSaldoCuentaHastaFecha2(CuentaCliente cc, Date fechaTope, boolean menorEstricto) {
-		String hql = " SELECT m FROM MovimientoCuenta m WHERE m.cuenta.id = :idCuenta AND m.fechaHora " + (menorEstricto? " < " : " <= ") + " :fechaTope ";
+		String hql = " SELECT m FROM MovimientoCuenta m WHERE m.cuenta.id = :idCuenta AND m.fechaHora "
+				+ (menorEstricto ? " < " : " <= ") + " :fechaTope ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idCuenta", cc.getId());
 		q.setParameter("fechaTope", fechaTope);
 		List<MovimientoCuenta> lista = q.getResultList();
 		BigDecimal saldo = new BigDecimal(0d);
-		for(MovimientoCuenta m : lista){
+		for (MovimientoCuenta m : lista) {
 			saldo = saldo.add(m.getMonto());
-		} 
+		}
 		return saldo.negate();
 	}
 
@@ -575,7 +583,7 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		q.setParameter("fechaTope", fechaTope);
 		List<MovimientoCuenta> lista = q.getResultList();
 		BigDecimal saldo = new BigDecimal(0d);
-		for(MovimientoCuenta m : lista){
+		for (MovimientoCuenta m : lista) {
 			saldo = saldo.add(m.getMonto());
 		}
 		return saldo;
@@ -587,8 +595,9 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idNC", idNC);
 		List<MovimientoHaberProveedor> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La NC con id " + idNC + " no tiene un movimiento haber registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La NC con id " + idNC
+					+ " no tiene un movimiento haber registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
@@ -600,21 +609,23 @@ public class MovimientoCuentaDAO extends GenericDAO<MovimientoCuenta, Integer> i
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idFact", factura.getId());
 		List<MovimientoDebeProveedor> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La Factura con id " + factura.getId() + " no tiene un movimiento debe registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La Factura con id " + factura.getId()
+					+ " no tiene un movimiento debe registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public MovimientoHaberProveedor getMovimientoHaberProveedorByODP(Integer idOdp) {
 		String hql = " SELECT m FROM MovimientoHaberProveedor m WHERE m.ordenDePago.id = :idOdp ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("idOdp", idOdp);
 		List<MovimientoHaberProveedor> resultList = q.getResultList();
-		if(resultList.size() == 0 || resultList.size() > 1) {
-			throw new RuntimeException("Datos inconsistentes. La orden de pago con id " + idOdp + " no tiene un movimiento haber registrado o tiene más de uno.");
+		if (resultList.size() == 0 || resultList.size() > 1) {
+			throw new RuntimeException("Datos inconsistentes. La orden de pago con id " + idOdp
+					+ " no tiene un movimiento haber registrado o tiene más de uno.");
 		} else {
 			return resultList.get(0);
 		}
