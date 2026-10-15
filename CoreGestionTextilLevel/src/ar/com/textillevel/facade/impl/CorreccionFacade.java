@@ -116,16 +116,16 @@ public class CorreccionFacade implements CorreccionFacadeLocal, CorreccionFacade
 		auditoriaFacade.auditar(usrName, "Cambio de verificación nota de "+correccion.getTipo().getDescripcion() +" Nº: ", EnumTipoEvento.MODIFICACION, correccion);
 	}
 
-	public NotaCredito getNotaDeCreditoByFacturaRelacionada(Factura factura) {
-		return correccionDao.getNotaDeCreditoByFacturaRelacionada(factura);
+	public List<CorreccionFactura> getCorreccionesByFacturaRelacionada(Factura factura) {
+		return correccionDao.getCorreccionesByFacturaRelacionada(factura);
 	}
 
-	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException {
+	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException, ValidacionExceptionSinRollback {
 		docContableFacade.checkAutorizacionAFIP(correccion);		
 		eliminarCorreccionInterno(correccion);
 		correccion = guardarYGenerarMovimientoInterno(correccion);
 		auditoriaFacade.auditar(usuario, "Edición de nota de "+correccion.getTipo().getDescripcion() +" Nº: " + correccion.getNroFactura(), EnumTipoEvento.MODIFICACION, correccion);
-		return correccion;
+		return docContableFacade.autorizarDocumentoContableAFIP(correccion);
 	}
 
 	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws FWException, ValidacionException {

@@ -8,7 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import ar.com.textillevel.entidades.documentos.factura.itemfactura.ItemFactura;
@@ -124,8 +125,10 @@ public abstract class CorreccionFactura extends DocumentoContableCliente impleme
 	@Transient
 	public abstract ETipoCorreccionFactura getTipo();
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "F_NOTA_CREDITO_P_ID")
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "T_CORRECCION_FACTURA_REL",
+			   joinColumns = @JoinColumn(name = "F_CORRECCION_P_ID"),
+			   inverseJoinColumns = @JoinColumn(name = "F_FACTURA_P_ID"))
 	public List<Factura> getFacturasRelacionadas() {
 		return facturasRelacionadas;
 	}

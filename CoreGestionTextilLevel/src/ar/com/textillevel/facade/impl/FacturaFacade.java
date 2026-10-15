@@ -133,11 +133,7 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			throw new ValidacionException(EValidacionException.FACTURA_YA_TIENE_RECIBO.getInfoValidacion());
 		}
 		cuentaFacade.borrarMovimientoFactura(factura);
-		NotaCredito nc = correccionDao.getNotaDeCreditoByFacturaRelacionada(factura);
-		if(nc!=null){
-//			nc.getFacturasRelacionadas().remove(factura);
-//			//TODO: Si la nota de credito, se queda sin facturas relacionadas, se borra?
-//			correccionDao.save(nc);
+		if(!correccionDao.getCorreccionesByFacturaRelacionada(factura).isEmpty()){
 			throw new ValidacionException(EValidacionException.FACTURA_TIENE_NOTA_CREDITO.getInfoValidacion());
 		}
 		if(factura.getRemitos() != null && factura.getRemitos().isEmpty()) { //Si es factura sin remito, tengo que borrar los movimientos de stock y aumentar el stock
@@ -236,10 +232,9 @@ public class FacturaFacade implements FacturaFacadeRemote, FacturaFacadeLocal {
 			}
 		}
 		cuentaFacade.borrarMovimientoFactura(factura);
-		NotaCredito nc = correccionDao.getNotaDeCreditoByFacturaRelacionada(factura);
-		if(nc!=null){
-			nc.getFacturasRelacionadas().remove(factura);
-			correccionDao.save(nc);
+		for(CorreccionFactura correccion : correccionDao.getCorreccionesByFacturaRelacionada(factura)) {
+			correccion.getFacturasRelacionadas().remove(factura);
+			correccionDao.save(correccion);
 		}
 		factura.setRemitos(null);
 		factura = facturaDao.save(factura);
