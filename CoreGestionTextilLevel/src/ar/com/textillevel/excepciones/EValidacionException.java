@@ -22,7 +22,7 @@ public enum EValidacionException {
 	RECIBO_IMPOSIBLE_ELIMINAR_NO_ES_EL_ULTIMO	(116, "El recibo no puede eliminarse porque no es el último."),
 	RECIBO_CHEQUES_INCONSISTENTES				(117, "El recibo tiene cheques de otro(s) cliente(s)."),
 	RECIBO_IMPOSIBLE_EDITAR_NO_ES_EL_ULTIMO_BY_CLIENTE						(118, "El recibo no puede editarse porque no es el último para el cliente."),
-	FACTURA_TIENE_NOTA_CREDITO					(119,"No se puede eliminar la factura ya que ya esta siendo utilizada en una nota de crédito"),
+	FACTURA_TIENE_NOTA_CREDITO					(119,"No se puede eliminar la factura ya que ya esta siendo utilizada en una nota de crédito o débito"),
 	RECIBO_NRO_RECIBO_EXISTENTE					(120,"Ya existe otro recibo con el mismo número {0}"),
 	REMITO_ENTRADA_IMPOSIBLE_BORRAR_O_EDITAR_EXISTE_RE_PROV(121, "No se puede borrar/editar el remito de entrada de proveedor porque existe una dependencia con el remito de proveedor con Nro. {0} y fecha {1}. Proceda a borrar dicho remito de entrada de proveedor y reintente la operación."),
 	REMITO_SALIDA_VTA_OR_SAL_01_IMP_ELIMINAR	(122, "Este tipo de remito de salida no puede eliminarse desde esta operación."),

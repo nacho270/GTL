@@ -48,11 +48,8 @@ public class CorreccionFacturaMobTO implements Serializable {
 
 	private List<DocumentoRelMobTO> calcularFacturasRelacionadas(CorreccionFactura cf) {
 		List<DocumentoRelMobTO> result = new ArrayList<DocumentoRelMobTO>();
-		if(cf instanceof NotaCredito) {
-			List<Factura> facturas = ((NotaCredito)cf).getFacturasRelacionadas();
-			for(Factura f : facturas){
-				result.add(new DocumentoRelMobTO(f.getId(), ETipoDocumento.FACTURA.getId(), StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(cf.getNroFactura()), 8)));
-			}
+		for(Factura f : cf.getFacturasRelacionadas()){
+			result.add(new DocumentoRelMobTO(f.getId(), ETipoDocumento.FACTURA.getId(), StringUtil.fillLeftWithZeros(String.valueOf(f.getNroSucursal()), 4) + "-" + StringUtil.fillLeftWithZeros(String.valueOf(f.getNroFactura()), 8)));
 		}
 		return result;
 	}	

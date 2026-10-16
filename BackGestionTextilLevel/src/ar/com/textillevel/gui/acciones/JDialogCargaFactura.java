@@ -233,9 +233,7 @@ public class JDialogCargaFactura extends JDialog {
 			getPanelBotonesFactura().setVisible(false);
 		}
 		llenarDatosCliente(correccion.getCliente());
-		if(correccion instanceof NotaCredito){
-			getTxtNrosGenericos().setText(getNrosFacturasRelacionadas( ((NotaCredito) correccion).getFacturasRelacionadas()));
-		}
+		getTxtNrosGenericos().setText(getNrosFacturasRelacionadas(correccion.getFacturasRelacionadas()));
 		getCmbCondicionVenta().setEnabled(!consulta);
 		getPanelTotales().setVisible(true);
 
@@ -1398,13 +1396,13 @@ public class JDialogCargaFactura extends JDialog {
 			JLabel label = null;
 			if(getFactura()!=null && getFactura().getRemitos()!=null){
 				label = new JLabel("Remito Nº: ");
-			}else if((getCorrecionFactura()!= null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_DEBITO) || (getFactura()!=null && getFactura().getRemitos()==null)){
-				label = new JLabel("");
-			}else if(getCorrecionFactura()!= null && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_CREDITO){
+			}else if(getCorrecionFactura()!= null){
 				label = getLblElegirFactura();
+			}else{
+				label = new JLabel("");
 			}
 			panelDatosFactura.add(label, GenericUtils.createGridBagConstraints(2, 1, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(10, 10, 5, 5), 1, 1, 0, 0));
-			if ((!isFactura() && getTipoCorrecion() == ETipoCorreccionFactura.NOTA_DEBITO) || (getFactura()!=null && getFactura().getRemitos()!=null) ) {
+			if (getFactura()!=null && getFactura().getRemitos()!=null) {
 				panelDatosFactura.add(getPnlNroRemito(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
 			}else{
 				panelDatosFactura.add(getTxtNrosGenericos(), GenericUtils.createGridBagConstraints(3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 10, 5, 5), 1, 1, 1, 0));
@@ -1423,14 +1421,14 @@ public class JDialogCargaFactura extends JDialog {
 				public void labelClickeada(MouseEvent e) {
 					if (e.getClickCount() == 1) {
 						JDialogSeleccionarFacturasImpagasCliente dialogSeleccionarFacturas =  new JDialogSeleccionarFacturasImpagasCliente(JDialogCargaFactura.this, 
-								((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas(),getCliente().getId());
+								getCorrecionFactura().getFacturasRelacionadas(),getCliente().getId());
 						
 						GuiUtil.centrar(dialogSeleccionarFacturas);
 						dialogSeleccionarFacturas.setVisible(true);
 						if(dialogSeleccionarFacturas.isAcepto()) {
 							List<Factura> facturas = dialogSeleccionarFacturas.getFacturaSelectedList();
-							((NotaCredito)getCorrecionFactura()).setFacturasRelacionadas(new ArrayList<Factura>());
-							((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().addAll(facturas);
+							getCorrecionFactura().setFacturasRelacionadas(new ArrayList<Factura>());
+							getCorrecionFactura().getFacturasRelacionadas().addAll(facturas);
 							getTxtNrosGenericos().setText(getNrosFacturasRelacionadas(facturas));
 						}
 					}
@@ -1828,7 +1826,7 @@ public class JDialogCargaFactura extends JDialog {
 			FWJOptionPane.showErrorMessage(this, "Debe especificar el monto", "Error");
 			return false;
 		}
-		if(getCorrecionFactura() instanceof NotaCredito && ((NotaCredito)getCorrecionFactura()).getFacturasRelacionadas().isEmpty()){
+		if(getCorrecionFactura().getFacturasRelacionadas().isEmpty()){
 			FWJOptionPane.showErrorMessage(this, "Debe elegir las facturas relacionadas", "Error");
 			return false;
 		}

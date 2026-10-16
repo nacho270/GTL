@@ -20,9 +20,9 @@ public interface CorreccionFacadeRemote {
 	public CorreccionFactura actualizarCorreccion(CorreccionFactura correccion) throws FWException;
 	public List<NotaCredito> getNotaCreditoPendienteUsarList(Integer idCliente);
 	public void cambiarVerificacionCorreccion(CorreccionFactura correccion, boolean verificada, String usrName);
-	public NotaCredito getNotaDeCreditoByFacturaRelacionada(Factura factura);
+	public List<CorreccionFactura> getCorreccionesByFacturaRelacionada(Factura factura);
 	public void eliminarCorreccion(CorreccionFactura correccion, String usrName) throws FWException, ValidacionException;
-	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException;
+	public CorreccionFactura editarCorreccion(CorreccionFactura correccion, String usuario) throws ValidacionException, ValidacionExceptionSinRollback;
 	public void anularCorreccion(CorreccionFactura correccion, String usrName) throws FWException, ValidacionException;
 	public CorreccionFactura getCorreccionById(Integer idCorreccion);
 

@@ -72,10 +72,12 @@ public class ImpresionFacturaHandler {
 				setRemitos(GTLBeanFactory.getInstance().getBean2(RemitoSalidaFacadeRemote.class).getByIdsConPiezasYProductos(extractIds(getFactura().getRemitos())));
 			}
 		}else{
-			setCorreccionFactura((CorreccionFactura)documento);
-			if(getCorreccionFactura() instanceof NotaCredito){
-				setStrFacturasRelacionadas(getNrosFacturasRelacionadas( ((NotaCredito) getCorreccionFactura()).getFacturasRelacionadas()));
+			CorreccionFactura correccion = (CorreccionFactura)documento;
+			if(correccion.getId() != null) { // la recargo para tener las facturas relacionadas (lazy)
+				correccion = correccionFacade.getCorreccionById(correccion.getId());
 			}
+			setCorreccionFactura(correccion);
+			setStrFacturasRelacionadas(getNrosFacturasRelacionadas(getCorreccionFactura().getFacturasRelacionadas()));
 		}
 	}
 	

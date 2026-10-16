@@ -106,8 +106,10 @@ public class AFIPConnector {
 				for(ar.com.textillevel.modulos.fe.cliente.requests.FECAEDetRequest det : request.getFeDetReq()) {
 					if(det.getCbtesAsoc() != null && det.getCbtesAsoc().length > 0) {
 						sb = sb.append("Nro. ->" + det.getDocNro() + ", Tipo ->" + det.getDocTipo() + "\n")
-							       .append("Comp. Asociados: " + (det.getCbtesAsoc().length == 0 ? "Sin Comp.": det.getCbtesAsoc()[0].getNro()));
-						
+							       .append("Comp. Asociados:");
+						for(ar.com.textillevel.modulos.fe.cliente.dto.CbteAsoc cbteAsoc : det.getCbtesAsoc()) {
+							sb.append(" [Tipo " + cbteAsoc.getTipo() + ", PtoVta " + cbteAsoc.getPtoVta() + ", Nro " + cbteAsoc.getNro() + "]");
+						}
 					}
 				}
 			}

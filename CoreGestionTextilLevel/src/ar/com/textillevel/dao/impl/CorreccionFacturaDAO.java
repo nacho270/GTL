@@ -78,17 +78,15 @@ public class CorreccionFacturaDAO extends GenericDAO<CorreccionFactura, Integer>
 		return q.getResultList();
 	}
 
-	public NotaCredito getNotaDeCreditoByFacturaRelacionada(Factura factura) {
-		String hql = " SELECT nc FROM NotaCredito nc WHERE :factura in elements (nc.facturasRelacionadas) ";
+	public List<CorreccionFactura> getCorreccionesByFacturaRelacionada(Factura factura) {
+		String hql = " SELECT c FROM CorreccionFactura c WHERE :factura in elements (c.facturasRelacionadas) ";
 		Query q = getEntityManager().createQuery(hql);
 		q.setParameter("factura", factura);
-		List<NotaCredito> lista = q.getResultList();
-		if(lista != null && !lista.isEmpty()){
-			NotaCredito notaCredito = lista.get(0);
-			doEager(notaCredito);
-			return notaCredito;
+		List<CorreccionFactura> lista = q.getResultList();
+		for(CorreccionFactura c : lista) {
+			doEager(c);
 		}
-		return null;
+		return lista;
 	}
 
 	public boolean notaCreditoSeUsaEnRecibo(NotaCredito nc) {
